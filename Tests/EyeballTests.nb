@@ -1,0 +1,276 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     10586,        268]
+NotebookOptionsPosition[      8333,        224]
+NotebookOutlinePosition[      8674,        239]
+CellTagsIndexPosition[      8631,        236]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Quit", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.751039431488028*^9, 3.7510394322064543`*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"24daa338-12ed-4617-9e12-c0616662a617"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrependTo", "[", 
+   RowBox[{
+   "$Path", ",", "\"\</Users/brenton/development/asttools/lint/\>\""}], "]"}],
+   ";"}]], "Input",
+ CellLabel->"In[1]:=",ExpressionUUID->"a9ae0c99-b6b3-46c3-a395-91427881d213"],
+
+Cell[CellGroupData[{
+
+Cell["Implicit Multiplication", "Section",
+ CellChangeTimes->{{3.750878414666772*^9, 
+  3.750878418802506*^9}},ExpressionUUID->"c318bf45-50ca-458c-97d0-\
+29e1d02aac47"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Lint`ImplicitMultiplication`\>\"", "]"}]], "Input",\
+
+ CellChangeTimes->{{3.751038045031434*^9, 3.7510380700431128`*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
+
+Cell[CellGroupData[{
+
+Cell["Regression tests", "Subsection",
+ CellChangeTimes->{{3.750878439249364*^9, 
+  3.7508784418897057`*^9}},ExpressionUUID->"92bf7584-3663-4c3f-958e-\
+73e5c69ac282"],
+
+Cell["Nov 10, 2018", "Text",
+ CellChangeTimes->{{3.750878519641981*^9, 
+  3.7508785216894627`*^9}},ExpressionUUID->"6ed1568a-d2a9-413d-a447-\
+7e1d02abfb89"],
+
+Cell["\<\
+These are tests where the implicit multiplication reporting failed.\
+\>", "Text",
+ CellChangeTimes->{{3.750878421090506*^9, 
+  3.7508784485192537`*^9}},ExpressionUUID->"5d4373d2-c84f-4c86-b1d4-\
+82d576a67d80"],
+
+Cell["Perhaps these can be automated in the future.", "Text",
+ CellChangeTimes->{{3.750878451614704*^9, 
+  3.7508784587265263`*^9}},ExpressionUUID->"bc1ec463-5eb7-42c9-bee6-\
+32f561be207a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"\"\<1(*,\\\"Size\\\"->size_,*) \\\"Zoom\\\"\>\"", 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ImplicitMultiplicationString", "[", "%", "]"}], ";"}], "\n", 
+ RowBox[{"ImplicitMultiplicationStringReport", "[", 
+  RowBox[{"%%", ",", "%"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.750877036461362*^9, 3.750877044430888*^9}, {
+   3.7508782345053883`*^9, 3.750878241505371*^9}, {3.7508783429045477`*^9, 
+   3.75087836222117*^9}, {3.751039362049346*^9, 3.75103936336657*^9}, 
+   3.751042442168944*^9, 3.751042481710712*^9},
+ CellLabel->"In[25]:=",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","1","\": \"",
+   "\"\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, \
+False]]\\)1(*,\\\"Size\\\"->size_,*)\\!\\(\\*StyleBox[\\\"\\\\\\\"\[Times]\\\\\
+\\\"\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, \
+False]]\\)\\\"Zoom\\\"\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", \
+RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, False]]\\)\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{
+  3.751039522441269*^9, {3.751041580080636*^9, 3.75104160832337*^9}, {
+   3.7510417612194233`*^9, 3.751041780110536*^9}, {3.751042261101441*^9, 
+   3.751042266359984*^9}, {3.751042430970788*^9, 3.7510424490761757`*^9}, 
+   3.751042483519759*^9},
+ CellLabel->
+  "During evaluation of \
+In[25]:=",ExpressionUUID->"a019f8f5-738d-4518-88ce-4ce9b1fb4b13"]
+}, Open  ]],
+
+Cell["The original report looked like this:", "Text",
+ CellChangeTimes->{{3.750878474550025*^9, 3.750878483861787*^9}, {
+  3.7510380852218857`*^9, 
+  3.75103808560501*^9}},ExpressionUUID->"1169e067-8067-4021-bd69-\
+050d2b185390"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","1","\": \"",
+   "\"\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, \
+False]]\\)1(*,\\\"Size\\\"-\\!\\(\\*StyleBox[\\\"\\\\\\\"\[Times]\\\\\\\"\\\",\
+ RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, False]]\\)>size_,*) \
+\\\"Zoom\\\"\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", RGBColor[1, 0, 0], \
+Bold, Larger, Rule[StripOnInput, False]]\\)\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{{3.750878353444743*^9, 3.750878363088566*^9}},
+ CellLabel->
+  "During evaluation of \
+In[24]:=",ExpressionUUID->"762067b2-e2b0-4eba-8ea5-853c52cc550b"],
+
+Cell["\<\
+The red x is simply put between 1 and \[OpenCurlyDoubleQuote]Zoom\
+\[CloseCurlyDoubleQuote] without consideration of the comment\
+\>", "Text",
+ CellChangeTimes->{{3.7508784900185328`*^9, 
+  3.750878511641769*^9}},ExpressionUUID->"780a8211-5367-4e99-bff9-\
+e5f0aac6a468"],
+
+Cell["Some related tests:", "Text",
+ CellChangeTimes->{{3.750878595026683*^9, 
+  3.750878598017926*^9}},ExpressionUUID->"9dda7360-67fa-4d21-b4e7-\
+86123696ed62"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"\"\<1(**)2\>\"", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ImplicitMultiplicationString", "[", "%", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ImplicitMultiplicationStringReport", "[", 
+  RowBox[{"%%", ",", "%"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7508786045787067`*^9, 3.750878623577409*^9}},
+ CellLabel->"In[28]:=",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","1","\": \"",
+   "\"\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, False]]\\)1(**)\\!\\(\\*StyleBox[\\\"\\\\\\\"\
+\[Times]\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, \
+False]]\\)2\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", RGBColor[1, 0, 0], \
+Bold, Larger, Rule[StripOnInput, False]]\\)\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{{3.7508786129636917`*^9, 3.750878625083714*^9}, 
+   3.751042458615*^9, 3.751042501840311*^9},
+ CellLabel->
+  "During evaluation of \
+In[28]:=",ExpressionUUID->"2e611480-a629-487b-a2d0-b9dd22244cf9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"\"\<1  (**)  2\>\"", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ImplicitMultiplicationString", "[", "%", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ImplicitMultiplicationStringReport", "[", 
+  RowBox[{"%%", ",", "%"}], "]"}]}], "Input",
+ CellLabel->"In[31]:=",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","1","\": \"",
+   "\"\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, False]]\\)1  (**)\\!\\(\\*StyleBox[\\\"\\\\\\\"\
+\[Times]\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, \
+False]]\\) 2\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", RGBColor[1, 0, 0], \
+Bold, Larger, Rule[StripOnInput, False]]\\)\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{3.750878626240982*^9, 3.751042461016955*^9, 
+  3.751042502735495*^9},
+ CellLabel->
+  "During evaluation of \
+In[31]:=",ExpressionUUID->"0ecdac9b-329b-4a01-9429-0a59efe4fb08"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"\"\<1  (**)2\>\"", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ImplicitMultiplicationString", "[", "%", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ImplicitMultiplicationStringReport", "[", 
+  RowBox[{"%%", ",", "%"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.750878634489091*^9, 3.750878648027087*^9}},
+ CellLabel->"In[34]:=",ExpressionUUID->"4caa1575-8793-4370-adac-d8e00f1c2eea"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","1","\": \"",
+   "\"\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, False]]\\)1  (**)\\!\\(\\*StyleBox[\\\"\\\\\\\"\
+\[Times]\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, \
+False]]\\)2\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", RGBColor[1, 0, 0], \
+Bold, Larger, Rule[StripOnInput, False]]\\)\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{{3.750878635111033*^9, 3.750878648435676*^9}, 
+   3.751042469170623*^9, 3.75104250349093*^9},
+ CellLabel->
+  "During evaluation of \
+In[34]:=",ExpressionUUID->"b8e56575-82ff-4a56-9209-486a6da36138"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1221, 751},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (November 7, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 199, 3, 30, "Input",ExpressionUUID->"24daa338-12ed-4617-9e12-c0616662a617"],
+Cell[760, 25, 241, 6, 30, "Input",ExpressionUUID->"a9ae0c99-b6b3-46c3-a395-91427881d213"],
+Cell[CellGroupData[{
+Cell[1026, 35, 168, 3, 67, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
+Cell[1197, 40, 241, 4, 30, "Input",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
+Cell[CellGroupData[{
+Cell[1463, 48, 166, 3, 54, "Subsection",ExpressionUUID->"92bf7584-3663-4c3f-958e-73e5c69ac282"],
+Cell[1632, 53, 156, 3, 35, "Text",ExpressionUUID->"6ed1568a-d2a9-413d-a447-7e1d02abfb89"],
+Cell[1791, 58, 219, 5, 35, "Text",ExpressionUUID->"5d4373d2-c84f-4c86-b1d4-82d576a67d80"],
+Cell[2013, 65, 189, 3, 35, "Text",ExpressionUUID->"bc1ec463-5eb7-42c9-bee6-32f561be207a"],
+Cell[CellGroupData[{
+Cell[2227, 72, 631, 11, 73, "Input",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
+Cell[2861, 85, 842, 17, 24, "Print",ExpressionUUID->"a019f8f5-738d-4518-88ce-4ce9b1fb4b13"]
+}, Open  ]],
+Cell[3718, 105, 229, 4, 35, "Text",ExpressionUUID->"1169e067-8067-4021-bd69-050d2b185390"],
+Cell[3950, 111, 643, 13, 24, "Print",ExpressionUUID->"762067b2-e2b0-4eba-8ea5-853c52cc550b"],
+Cell[4596, 126, 280, 6, 35, "Text",ExpressionUUID->"780a8211-5367-4e99-bff9-e5f0aac6a468"],
+Cell[4879, 134, 161, 3, 35, "Text",ExpressionUUID->"9dda7360-67fa-4d21-b4e7-86123696ed62"],
+Cell[CellGroupData[{
+Cell[5065, 141, 421, 8, 73, "Input",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
+Cell[5489, 151, 655, 13, 24, "Print",ExpressionUUID->"2e611480-a629-487b-a2d0-b9dd22244cf9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6181, 169, 357, 7, 73, "Input",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
+Cell[6541, 178, 634, 13, 24, "Print",ExpressionUUID->"0ecdac9b-329b-4a01-9429-0a59efe4fb08"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7212, 196, 421, 8, 73, "Input",ExpressionUUID->"4caa1575-8793-4370-adac-d8e00f1c2eea"],
+Cell[7636, 206, 657, 13, 24, "Print",ExpressionUUID->"b8e56575-82ff-4a56-9209-486a6da36138"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

@@ -1,0 +1,592 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     24318,        584]
+NotebookOptionsPosition[     19886,        504]
+NotebookOutlinePosition[     20273,        521]
+CellTagsIndexPosition[     20230,        518]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Lint", "Title",
+ CellChangeTimes->{{3.749557173482274*^9, 3.7495571769382544`*^9}, 
+   3.749573442702365*^9, 3.7500085207598667`*^9, {3.750624449752659*^9, 
+   3.750624450919639*^9}},ExpressionUUID->"96b6bf52-402c-4d76-b290-\
+5851195c6a5b"],
+
+Cell["\<\
+Brenton Bostick
+brenton@wolfram.com\
+\>", "Subtitle",
+ CellChangeTimes->{{3.749557182570023*^9, 
+  3.7495571911217537`*^9}},ExpressionUUID->"57f95c3e-f449-492d-9cd2-\
+a78bbdee003d"],
+
+Cell[CellGroupData[{
+
+Cell["Lint", "Section",
+ CellChangeTimes->{{3.745248937736137*^9, 3.7452489390167637`*^9}, {
+  3.745249474231401*^9, 3.745249477791132*^9}, {3.745350713392672*^9, 
+  3.745350720265458*^9}, {3.745513907246986*^9, 3.745513910942835*^9}, {
+  3.749556997000228*^9, 3.749556999615148*^9}, {3.749557061078776*^9, 
+  3.749557061246011*^9}},ExpressionUUID->"9307e12b-4629-43ec-8737-\
+5432ce0d5d00"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrependTo", "[", 
+   RowBox[{"$Path", ",", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}], "]"}], ";"}]], "Input",
+ CellLabel->"In[2]:=",ExpressionUUID->"37c1a1d4-35e5-42e6-b6d7-2c1947ea62b0"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Lint`\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.749556742283807*^9, 3.7495567425703573`*^9}, {
+  3.750624466611171*^9, 3.750624467152903*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"ca704a0f-04c6-4f26-8d70-25b4db756ab1"],
+
+Cell[CellGroupData[{
+
+Cell["Report example", "Subsection",
+ CellChangeTimes->{{3.749809352369711*^9, 
+  3.7498093542899923`*^9}},ExpressionUUID->"e6d1f021-c7b3-4250-949c-\
+37b595915e39"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"LintString", "[", "\"\<1+1\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.7498093621481543`*^9, 3.7498093750895042`*^9}, 
+   3.749809423338725*^9, {3.749809668966703*^9, 3.749809675311894*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"24edd5d5-b9b5-4c32-85aa-42f8d6b41c89"],
+
+Cell[BoxData[
+ RowBox[{"{", "}"}]], "Output",
+ CellChangeTimes->{3.749809670456377*^9, 3.749810207504878*^9, 
+  3.74981059709737*^9, 3.7498130707738037`*^9, 3.7506244987444057`*^9},
+ CellLabel->"Out[4]=",ExpressionUUID->"8e270612-a0ee-4ae7-af4b-399c0dcccfd5"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"string", "=", "\"\<1+f[,2]\>\""}], ";"}]], "Input",
+ CellChangeTimes->{{3.749810222751512*^9, 3.749810232939115*^9}},
+ CellLabel->"In[5]:=",ExpressionUUID->"6008861a-3f0e-435f-b7bb-79a836195b65"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"lints", "=", 
+  RowBox[{"LintString", "[", "string", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7498096779155283`*^9, 3.749809695047488*^9}, {
+  3.7498102276388283`*^9, 3.7498102282271347`*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"1de0de29-83e7-4c9a-b8f1-d8729dbdcd00"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"Lint", "[", 
+   RowBox[{"\<\"Comma encountered with no adjacent expression. The expression \
+will be treated as Null\"\>", ",", "\<\"Error\"\>", ",", 
+    RowBox[{"\[LeftAssociation]", 
+     RowBox[{"AST`Source", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "5"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "5"}], "}"}]}], "}"}]}], "\[RightAssociation]"}]}],
+    "]"}], "}"}]], "Output",
+ CellChangeTimes->{{3.749809685646641*^9, 3.749809695643195*^9}, {
+   3.749810208649808*^9, 3.749810234235243*^9}, 3.7498105989101954`*^9, 
+   3.749811429408873*^9, 3.749813073200259*^9, 3.75062450131011*^9},
+ CellLabel->"Out[6]=",ExpressionUUID->"84e24828-f21d-46fb-99df-b234576dd27b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"LintStringReport", "[", 
+  RowBox[{"string", ",", "lints"}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.7498093621481543`*^9, 3.749809425401882*^9, {3.749809700296831*^9, 
+   3.749809700903572*^9}, {3.749809738434214*^9, 3.749809739184875*^9}, {
+   3.749810219380164*^9, 3.749810220075468*^9}},
+ CellLabel->"In[7]:=",ExpressionUUID->"8450a7bf-4a71-4ddb-9a1a-34a3b95f4b41"],
+
+Cell[BoxData[
+ TemplateBox[{"\"line \"","1","\": \"",TagBox[
+    GridBox[{{
+      "\" \"", "\"1\"", "\"+\"", "\"f\"", "\"[\"", "\",\"", "\"2\"", "\"]\"", 
+       "\" \""}, {
+      "\" \"", "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       TagBox[
+        TooltipBox[
+         StyleBox["\"\[ErrorIndicator]\"", 
+          RGBColor[1, 0, 0], StripOnInput -> False], 
+         "\"Error\\nComma encountered with no adjacent expression. The \
+expression will be treated as Null\"", LabelStyle -> "TextStyling"], 
+        Annotation[#, 
+         "Error\nComma encountered with no adjacent expression. The \
+expression will be treated as Null", "Tooltip"]& ], "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\" \""}}, AutoDelete -> False, 
+     GridBoxItemSize -> {"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+      GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{3.749810599893059*^9, 3.749811434505714*^9, 
+  3.74981307429196*^9, 3.750624502632194*^9},
+ CellLabel->
+  "During evaluation of \
+In[7]:=",ExpressionUUID->"b19bd8e4-30cb-4220-9c26-a47cbf81cc14"]
+}, Open  ]],
+
+Cell["Hover over the \[ErrorIndicator] to see the tool tip for the error.", \
+"Text",
+ CellChangeTimes->{{3.749810638611614*^9, 
+  3.74981065301895*^9}},ExpressionUUID->"8f97f553-ff46-40b5-8472-\
+2e0dc9d9280e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Report", "Subsection",
+ CellChangeTimes->{{3.749808699472404*^9, 3.749808701712285*^9}, {
+   3.749809347659232*^9, 3.7498093499690228`*^9}, 3.749810138373685*^9, {
+   3.750624515852868*^9, 
+   3.750624516012248*^9}},ExpressionUUID->"234752f0-3a7c-4ca9-b2d4-\
+04f53094e4e1"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"examplesDir", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"ParentDirectory", "[", 
+       RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ",", 
+      "\"\<examples\>\""}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PrependTo", "[", 
+   RowBox[{"$Path", ",", "examplesDir"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7506159327992992`*^9, 3.750615941332835*^9}, {
+   3.750616006678925*^9, 3.750616013518215*^9}, {3.750616045733548*^9, 
+   3.7506161108420486`*^9}, {3.750624621394064*^9, 3.750624623571763*^9}, 
+   3.750624661924325*^9},
+ CellLabel->"In[30]:=",ExpressionUUID->"31ad62c1-7931-44d8-9570-29611f84aea5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"collatzFile", "=", 
+  RowBox[{"FindFile", "[", "\"\<Collatz`\>\"", "]"}]}]], "Input",
+ CellChangeTimes->{{3.75062466712003*^9, 3.750624682911913*^9}},
+ CellLabel->"In[32]:=",ExpressionUUID->"9f441772-94fb-4516-9ea0-6cd03ab405f0"],
+
+Cell[BoxData["\<\"/Users/brenton/development/asttools/examples/Collatz/\
+Collatz.m\"\>"], "Output",
+ CellChangeTimes->{{3.7506246754381113`*^9, 3.750624683305356*^9}, 
+   3.750625101055345*^9},
+ CellLabel->"Out[32]=",ExpressionUUID->"545bb0e8-1592-4297-a098-990a67baa3b0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"LintFile", "[", "collatzFile", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"LintFileReport", "[", 
+  RowBox[{"collatzFile", ",", "%"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7506245335474463`*^9, 3.7506245492461653`*^9}, {
+  3.7506246892459183`*^9, 3.75062470351866*^9}},
+ CellLabel->"In[33]:=",ExpressionUUID->"50347aae-5eee-4eff-a689-f88754830401"],
+
+Cell[BoxData[
+ TemplateBox[{"\"line \"","11","\": \"",TagBox[
+    GridBox[{{
+      "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", "\"z\"", 
+       "\"[\"", "\"n\"", "\"_\"", "\"I\"", "\"n\"", "\"t\"", "\"e\"", "\"g\"",
+        "\"e\"", "\"r\"", "\"]\"", "\" \"", "\" \"", "\":\"", "\"=\"", 
+       "\" \"", "\"P\"", "\"r\"", "\"e\"", "\"p\"", "\"e\"", "\"n\"", "\"d\"",
+        "\"[\"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+       "\"z\"", "\"[\"", "\"(\"", "\"3\"", "\" \"", "\"n\"", "\" \"", "\"+\"",
+        "\" \"", "\"1\"", "\")\"", "\"/\"", "\"2\"", "\"]\"", "\",\"", 
+       "\" \"", "\"n\"", "\"]\"", "\" \"", "\"/\"", "\";\"", "\" \"", "\"O\"",
+        "\"d\"", "\"d\"", "\"Q\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", 
+       "\"&\"", "\"&\"", "\" \"", "\"n\"", "\" \"", "\">\"", "\" \"", "\"0\"",
+        "\";\"", "\";\"", "\" \""}, {
+      "\" \"", "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+       TagBox[
+        TooltipBox[
+         StyleBox["\"\[ErrorIndicator]\"", 
+          RGBColor[1, 0.5, 0], StripOnInput -> False], 
+         "\"Warning\\nWeird Span\"", LabelStyle -> "TextStyling"], 
+        Annotation[#, "Warning\nWeird Span", "Tooltip"]& ], 
+       TagBox[
+        TooltipBox[
+         StyleBox["\"\[ErrorIndicator]\"", 
+          RGBColor[1, 0.5, 0], StripOnInput -> False], 
+         "\"Warning\\nWeird Span\"", LabelStyle -> "TextStyling"], 
+        Annotation[#, "Warning\nWeird Span", "Tooltip"]& ], 
+       TagBox[
+        TooltipBox[
+         StyleBox["\"\[ErrorIndicator]\"", 
+          RGBColor[1, 0.5, 0], StripOnInput -> False], 
+         "\"Warning\\nWeird Span\"", LabelStyle -> "TextStyling"], 
+        Annotation[#, "Warning\nWeird Span", "Tooltip"]& ], "\" \""}}, 
+     AutoDelete -> False, 
+     GridBoxItemSize -> {"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+      GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{3.750625101981069*^9},
+ CellLabel->
+  "During evaluation of \
+In[33]:=",ExpressionUUID->"dc4a70a5-2a20-4493-823c-d187469da42d"]
+}, Open  ]],
+
+Cell["\<\
+The linter has caught an accidental usage of the Span operator ;;\
+\>", "Text",
+ CellChangeTimes->{{3.7506252166684837`*^9, 
+  3.7506252277966747`*^9}},ExpressionUUID->"9a096811-09c2-4e21-a61f-\
+e5f88165749f"],
+
+Cell["The code should be this:", "Text",
+ CellChangeTimes->{{3.750625231428918*^9, 3.750625232172819*^9}, {
+  3.750625275817005*^9, 
+  3.750625278367983*^9}},ExpressionUUID->"83b2d911-2dad-4638-8229-\
+1ba25be3bd58"],
+
+Cell["\<\
+Collatz[n_Integer]  := Prepend[Collatz[(3 n + 1)/2], n] /; OddQ[n] && n > 0;\
+\>", "Program",
+ CellChangeTimes->{{3.7506252700469637`*^9, 
+  3.750625271064453*^9}},ExpressionUUID->"0fd24910-46e7-41e7-b2ec-\
+c52220a1664b"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Line (Implicit Multiplication)", "Section",
+ CellChangeTimes->{{3.745248937736137*^9, 3.7452489390167637`*^9}, {
+  3.745249474231401*^9, 3.745249477791132*^9}, {3.745350713392672*^9, 
+  3.745350720265458*^9}, {3.74955555905202*^9, 3.7495555600273438`*^9}, {
+  3.749557292179631*^9, 
+  3.7495572948432493`*^9}},ExpressionUUID->"fea4aeb8-11a9-470c-81d5-\
+5b7e6b78a49f"],
+
+Cell["Report uses of implicit multiplication.", "Text",
+ CellChangeTimes->{{3.749573217295479*^9, 3.749573262451446*^9}, {
+  3.7498090933187323`*^9, 
+  3.7498090956876583`*^9}},ExpressionUUID->"f4eff369-51e7-4801-b2c2-\
+910749d84b71"],
+
+Cell["\<\
+This is a source of bugs but it is hard to automatically determine whether it \
+is incorrect.\
+\>", "Text",
+ CellChangeTimes->{{3.749573217295479*^9, 
+  3.749573262451446*^9}},ExpressionUUID->"7a06b21a-0203-4ba0-86d3-\
+af365a1adbf3"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Lint`ImplicitMultiplication`\>\"", "]"}]], "Input",\
+
+ CellChangeTimes->{{3.7506247535615807`*^9, 3.7506247650160427`*^9}},
+ CellLabel->"In[18]:=",ExpressionUUID->"88ebfb27-f6f1-4575-8547-b455e1343635"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"examplesDir", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"ParentDirectory", "[", 
+       RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ",", 
+      "\"\<examples\>\""}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PrependTo", "[", 
+   RowBox[{"$Path", ",", "examplesDir"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7506159327992992`*^9, 3.750615941332835*^9}, {
+   3.750616006678925*^9, 3.750616013518215*^9}, {3.750616045733548*^9, 
+   3.7506161108420486`*^9}, {3.750624621394064*^9, 3.750624623571763*^9}, 
+   3.750624661924325*^9},
+ CellLabel->"In[19]:=",ExpressionUUID->"658da515-bc75-4dea-8961-83125edadceb"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"collatzFile", "=", 
+  RowBox[{"FindFile", "[", "\"\<Collatz`\>\"", "]"}]}]], "Input",
+ CellChangeTimes->{{3.75062466712003*^9, 3.750624682911913*^9}},
+ CellLabel->"In[21]:=",ExpressionUUID->"ab012ed7-2d8b-4f84-bf10-35d0c6e9ee3d"],
+
+Cell[BoxData["\<\"/Users/brenton/development/asttools/examples/Collatz/\
+Collatz.m\"\>"], "Output",
+ CellChangeTimes->{{3.7506246754381113`*^9, 3.750624683305356*^9}, 
+   3.750624780410265*^9},
+ CellLabel->"Out[21]=",ExpressionUUID->"437c0b18-0c82-4a3f-9eee-37cf75a988cc"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ImplicitMultiplicationRun", "[", "collatzFile", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ImplicitMultiplicationReport", "[", 
+  RowBox[{"collatzFile", ",", "%"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7506245335474463`*^9, 3.7506245492461653`*^9}, {
+  3.7506246892459183`*^9, 3.75062470351866*^9}, {3.750624742544579*^9, 
+  3.750624776314753*^9}},
+ CellLabel->"In[35]:=",ExpressionUUID->"b3e6eb61-0f3c-4c23-b6c6-94294d16aa7b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"/Users/brenton/development/asttools/examples/Collatz/\
+Collatz.m\"\>"], "Print",
+ CellChangeTimes->{
+  3.750624781107045*^9, {3.750624836125815*^9, 3.7506248468028507`*^9}, 
+   3.750625200688211*^9},
+ CellLabel->
+  "During evaluation of \
+In[35]:=",ExpressionUUID->"cc73dde2-4134-4c9a-88f5-90338ce32b88"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","3","\": \"",
+   "\"\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, False]]\\)Collatz::usage\\!\\(\\*StyleBox[\\\"\\\\\
+\\\"\[Times]\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, \
+False]]\\)\\\"Collatz[n] gives a list of the iterates in the 3n+1 problem,\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{
+  3.750624781107045*^9, {3.750624836125815*^9, 3.7506248468028507`*^9}, 
+   3.7506252006894836`*^9},
+ CellLabel->
+  "During evaluation of \
+In[35]:=",ExpressionUUID->"13ebdae1-8e29-4090-9b1f-762a8acefd45"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","4","\": \"",
+   "\"        starting from n. The conjecture is that this sequence always\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{
+  3.750624781107045*^9, {3.750624836125815*^9, 3.7506248468028507`*^9}, 
+   3.750625200692762*^9},
+ CellLabel->
+  "During evaluation of \
+In[35]:=",ExpressionUUID->"e8d0bd69-1f80-4c9b-a155-00e88fb4d35c"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","5","\": \"",
+   "\"        terminates.\\\"\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", \
+RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, False]]\\)\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{
+  3.750624781107045*^9, {3.750624836125815*^9, 3.7506248468028507`*^9}, 
+   3.750625200693797*^9},
+ CellLabel->
+  "During evaluation of \
+In[35]:=",ExpressionUUID->"df6b9a60-b4fa-4ca3-bf42-2b50677a21da"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","11","\": \"",
+   "\"Collatz[n_Integer]  := Prepend[Collatz[(\\!\\(\\*StyleBox[\\\"\\\\\\\"(\
+\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, False]]\\)3\
+\\!\\(\\*StyleBox[\\\"\\\\\\\"\[Times]\\\\\\\"\\\", RGBColor[1, 0, 0], Bold, \
+Larger, Rule[StripOnInput, False]]\\)n\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\
+\\\", RGBColor[1, 0, 0], Bold, Larger, Rule[StripOnInput, False]]\\) + 1)/2], \
+n] /; OddQ[n] && n > 0;;\""},
+  "RowDefault"]], "Print",
+ CellChangeTimes->{
+  3.750624781107045*^9, {3.750624836125815*^9, 3.7506248468028507`*^9}, 
+   3.7506252006949387`*^9},
+ CellLabel->
+  "During evaluation of \
+In[35]:=",ExpressionUUID->"15724250-a145-4dc4-ba4f-b1cd11e2f940"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"line \"","17","\": \"",
+   "\"Collatz[n_Integer]  := \
+Prepend[Collatz[\\!\\(\\*StyleBox[\\\"\\\\\\\"(\\\\\\\"\\\", RGBColor[1, 0, \
+0], Bold, Larger, Rule[StripOnInput, \
+False]]\\)3\\!\\(\\*StyleBox[\\\"\\\\\\\"\[Times]\\\\\\\"\\\", RGBColor[1, 0, \
+0], Bold, Larger, Rule[StripOnInput, \
+False]]\\)n\\!\\(\\*StyleBox[\\\"\\\\\\\")\\\\\\\"\\\", RGBColor[1, 0, 0], \
+Bold, Larger, Rule[StripOnInput, False]]\\) + 1], n] /; OddQ[n] && n > 0;\""},
+  
+  "RowDefault"]], "Print",
+ CellChangeTimes->{
+  3.750624781107045*^9, {3.750624836125815*^9, 3.7506248468028507`*^9}, 
+   3.750625200696432*^9},
+ CellLabel->
+  "During evaluation of \
+In[35]:=",ExpressionUUID->"15220933-ad38-46c7-b400-fd7769671d07"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["\<\
+The linter has caught an accidental use of implicit multiplication. The equal \
+sign is missing in the usage message assignment.\
+\>", "Text",
+ CellChangeTimes->{{3.750625141392407*^9, 
+  3.750625185931183*^9}},ExpressionUUID->"ae601058-74d8-4157-82b9-\
+007ef29fbb56"],
+
+Cell["The code should be this:", "Text",
+ CellChangeTimes->{{3.750625188563293*^9, 
+  3.750625194339506*^9}},ExpressionUUID->"70397786-98f6-4f7b-a968-\
+da79ef7e3a12"],
+
+Cell["\<\
+Collatz::usage = \"Collatz[n] gives a list of the iterates in the 3n+1 problem,
+        starting from n. The conjecture is that this sequence always
+        terminates.\"\
+\>", "Program",
+ CellChangeTimes->{{3.7506251377194023`*^9, 
+  3.7506251477528057`*^9}},ExpressionUUID->"10447875-3e60-4748-a07c-\
+e54d8cfab886"]
+}, Open  ]]
+}, Open  ]]
+},
+PageWidth->WindowWidth,
+WindowSize->{1440, 851},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowStatusArea->None,
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (October 28, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 246, 4, 98, "Title",ExpressionUUID->"96b6bf52-402c-4d76-b290-5851195c6a5b"],
+Cell[829, 28, 191, 6, 85, "Subtitle",ExpressionUUID->"57f95c3e-f449-492d-9cd2-a78bbdee003d"],
+Cell[CellGroupData[{
+Cell[1045, 38, 390, 6, 67, "Section",ExpressionUUID->"9307e12b-4629-43ec-8737-5432ce0d5d00"],
+Cell[1438, 46, 227, 5, 30, "Input",ExpressionUUID->"37c1a1d4-35e5-42e6-b6d7-2c1947ea62b0"],
+Cell[1668, 53, 265, 4, 30, "Input",ExpressionUUID->"ca704a0f-04c6-4f26-8d70-25b4db756ab1"],
+Cell[CellGroupData[{
+Cell[1958, 61, 164, 3, 54, "Subsection",ExpressionUUID->"e6d1f021-c7b3-4250-949c-37b595915e39"],
+Cell[CellGroupData[{
+Cell[2147, 68, 293, 4, 30, "Input",ExpressionUUID->"24edd5d5-b9b5-4c32-85aa-42f8d6b41c89"],
+Cell[2443, 74, 259, 4, 34, "Output",ExpressionUUID->"8e270612-a0ee-4ae7-af4b-399c0dcccfd5"]
+}, Open  ]],
+Cell[2717, 81, 230, 4, 30, "Input",ExpressionUUID->"6008861a-3f0e-435f-b7bb-79a836195b65"],
+Cell[CellGroupData[{
+Cell[2972, 89, 294, 5, 30, "Input",ExpressionUUID->"1de0de29-83e7-4c9a-b8f1-d8729dbdcd00"],
+Cell[3269, 96, 786, 17, 37, "Output",ExpressionUUID->"84e24828-f21d-46fb-99df-b234576dd27b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4092, 118, 394, 7, 30, "Input",ExpressionUUID->"8450a7bf-4a71-4ddb-9a1a-34a3b95f4b41"],
+Cell[4489, 127, 1204, 24, 34, "Print",ExpressionUUID->"b19bd8e4-30cb-4220-9c26-a47cbf81cc14"]
+}, Open  ]],
+Cell[5708, 154, 210, 4, 35, "Text",ExpressionUUID->"8f97f553-ff46-40b5-8472-2e0dc9d9280e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5955, 163, 279, 5, 54, "Subsection",ExpressionUUID->"234752f0-3a7c-4ca9-b2d4-04f53094e4e1"],
+Cell[6237, 170, 722, 16, 52, "Input",ExpressionUUID->"31ad62c1-7931-44d8-9570-29611f84aea5"],
+Cell[CellGroupData[{
+Cell[6984, 190, 253, 4, 30, "Input",ExpressionUUID->"9f441772-94fb-4516-9ea0-6cd03ab405f0"],
+Cell[7240, 196, 272, 4, 34, "Output",ExpressionUUID->"545bb0e8-1592-4297-a098-990a67baa3b0"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7549, 205, 391, 7, 52, "Input",ExpressionUUID->"50347aae-5eee-4eff-a689-f88754830401"],
+Cell[7943, 214, 4188, 76, 34, "Print",ExpressionUUID->"dc4a70a5-2a20-4493-823c-d187469da42d"]
+}, Open  ]],
+Cell[12146, 293, 219, 5, 35, "Text",ExpressionUUID->"9a096811-09c2-4e21-a61f-e5f88165749f"],
+Cell[12368, 300, 215, 4, 35, "Text",ExpressionUUID->"83b2d911-2dad-4638-8229-1ba25be3bd58"],
+Cell[12586, 306, 231, 5, 50, "Program",ExpressionUUID->"0fd24910-46e7-41e7-b2ec-c52220a1664b"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12866, 317, 373, 6, 67, "Section",ExpressionUUID->"fea4aeb8-11a9-470c-81d5-5b7e6b78a49f"],
+Cell[13242, 325, 234, 4, 35, "Text",ExpressionUUID->"f4eff369-51e7-4801-b2c2-910749d84b71"],
+Cell[13479, 331, 243, 6, 35, "Text",ExpressionUUID->"7a06b21a-0203-4ba0-86d3-af365a1adbf3"],
+Cell[13725, 339, 244, 4, 30, "Input",ExpressionUUID->"88ebfb27-f6f1-4575-8547-b455e1343635"],
+Cell[13972, 345, 722, 16, 52, "Input",ExpressionUUID->"658da515-bc75-4dea-8961-83125edadceb"],
+Cell[CellGroupData[{
+Cell[14719, 365, 253, 4, 30, "Input",ExpressionUUID->"ab012ed7-2d8b-4f84-bf10-35d0c6e9ee3d"],
+Cell[14975, 371, 272, 4, 34, "Output",ExpressionUUID->"437c0b18-0c82-4a3f-9eee-37cf75a988cc"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15284, 380, 474, 9, 52, "Input",ExpressionUUID->"b3e6eb61-0f3c-4c23-b6c6-94294d16aa7b"],
+Cell[CellGroupData[{
+Cell[15783, 393, 322, 7, 24, "Print",ExpressionUUID->"cc73dde2-4134-4c9a-88f5-90338ce32b88"],
+Cell[16108, 402, 626, 13, 24, "Print",ExpressionUUID->"13ebdae1-8e29-4090-9b1f-762a8acefd45"],
+Cell[16737, 417, 387, 10, 24, "Print",ExpressionUUID->"e8d0bd69-1f80-4c9b-a155-00e88fb4d35c"],
+Cell[17127, 429, 451, 11, 24, "Print",ExpressionUUID->"df6b9a60-b4fa-4ca3-bf42-2b50677a21da"],
+Cell[17581, 442, 736, 15, 24, "Print",ExpressionUUID->"15724250-a145-4dc4-ba4f-b1cd11e2f940"],
+Cell[18320, 459, 734, 17, 24, "Print",ExpressionUUID->"15220933-ad38-46c7-b400-fd7769671d07"]
+}, Open  ]]
+}, Open  ]],
+Cell[19081, 480, 278, 6, 35, "Text",ExpressionUUID->"ae601058-74d8-4157-82b9-007ef29fbb56"],
+Cell[19362, 488, 166, 3, 35, "Text",ExpressionUUID->"70397786-98f6-4f7b-a968-da79ef7e3a12"],
+Cell[19531, 493, 327, 7, 84, "Program",ExpressionUUID->"10447875-3e60-4748-a07c-e54d8cfab886"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
