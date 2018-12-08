@@ -5,9 +5,7 @@
 Paclet[
     Name -> "Lint",
     Version -> "@PACLET_VERSION@",
-    WolframVersion -> "12+",
-    Loading -> Automatic,
-    Updating -> Automatic,
+    WolframVersion -> "11.0+",
     Extensions -> 
         {
             {"Kernel", Context -> 

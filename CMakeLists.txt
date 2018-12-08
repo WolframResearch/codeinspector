@@ -5,7 +5,7 @@ project(lint)
 
 set(PACLET "Lint")
 
-set(PACLET_VERSION "0.5" CACHE STRING "Paclet Version")
+set(PACLET_VERSION "0.6" CACHE STRING "Paclet Version")
 
 set(WOLFRAMKERNEL /Applications/Mathematica.app/Contents/MacOS/WolframKernel CACHE FILEPATH "Path to WolframKernel")
 
@@ -13,9 +13,12 @@ set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
 
 set(WL_SOURCES
 	${CMAKE_SOURCE_DIR}/PacletInfo.m
-	${CMAKE_SOURCE_DIR}/Lint/ImplicitMultiplication.wl
+	${CMAKE_SOURCE_DIR}/Lint/Format.wl
+	${CMAKE_SOURCE_DIR}/Lint/ImplicitTimes.wl
 	${CMAKE_SOURCE_DIR}/Lint/Lint.wl
-	${CMAKE_SOURCE_DIR}/Lint/Run.wl
+	${CMAKE_SOURCE_DIR}/Lint/Report.wl
+	${CMAKE_SOURCE_DIR}/Lint/Rules.wl
+	${CMAKE_SOURCE_DIR}/Lint/Utils.wl
 )
 
 set(DOCUMENTATION_NOTEBOOKS
