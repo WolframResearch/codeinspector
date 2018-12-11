@@ -2,9 +2,9 @@ BeginPackage["Lint`"]
 
 Lint::usage = "Lint[tag, description, severity, data] is a problem found in Wolfram Language source code."
 
-LintFile::usage = "LintFile[file] returns a list of Lints in file."
+LintFile::usage = "LintFile[file, options] returns a list of Lints in file."
 
-LintString::usage = "LintString[string] returns a list of Lints in string."
+LintString::usage = "LintString[string, options] returns a list of Lints in string."
 
 LintAST::usage = "LintAST[ast] returns a list of Lints in ast."
 
@@ -16,9 +16,9 @@ LintedCharacter::usage = "LintedCharacter[char, lintList, options] represents a 
 
 
 
-LintFileReport::usage = "LintFileReport[file, lints] returns a list of LintedLines in file."
+LintFileReport::usage = "LintFileReport[file, lints, options] returns a list of LintedLines in file."
 
-LintStringReport::usage = "LintStringReport[string, lints] returns a LintedLines in string."
+LintStringReport::usage = "LintStringReport[string, lints, options] returns a LintedLines in string."
 
 
 
@@ -39,8 +39,6 @@ Options[LintFile] = {
 
 
 
-longestParseTime = 0
-longestLintTime = 0
 
 LintFile[file_String, OptionsPattern[]] :=
 Catch[
@@ -71,7 +69,7 @@ Catch[
 
 
 Options[LintString] = {
-
+  PerformanceGoal -> "Speed"
 }
 
 LintString[string_String, OptionsPattern[]] :=

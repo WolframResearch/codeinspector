@@ -1,14 +1,14 @@
 BeginPackage["Lint`ImplicitTimes`"]
 
-ImplicitTimesFile::usage = "ImplicitTimesFile[file] returns a list of implicit times in file."
+ImplicitTimesFile::usage = "ImplicitTimesFile[file, options] returns a list of implicit times in file."
 
-ImplicitTimesString::usage = "ImplicitTimesString[string] returns a list of implicit times in string."
+ImplicitTimesString::usage = "ImplicitTimesString[string, options] returns a list of implicit times in string."
 
 
 
-ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes] returns a list of LintedLines in file."
+ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes, options] returns a list of LintedLines in file."
 
-ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes] returns a list of LintedLines in string."
+ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes, options] returns a list of LintedLines in string."
 
 
 
@@ -19,6 +19,8 @@ Needs["AST`"]
 Needs["Lint`"]
 Needs["Lint`Report`"]
 Needs["Lint`Format`"]
+Needs["Lint`Utils`"]
+
 
 Options[ImplicitTimesFile] = {
   PerformanceGoal -> "Speed"
@@ -26,15 +28,19 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
- Module[{lines, lints},
+ Module[{lines, lints, performanceGoal},
+
+ performanceGoal = OptionValue[PerformanceGoal];
 
    If[FileType[file] =!= File,
    Throw[Failure["NotAFile", <|"FileName"->file|>]]
    ];
 
-  If[FileByteCount[file] > 1*^6,
-   Throw[Failure["FileTooLarge", <|"FileName"->file, "FileSize"->FileSize[file]|>]]
-   ];
+   If[performanceGoal == "Speed",
+    If[FileByteCount[file] > 1*^6,
+     Throw[Failure["FileTooLarge", <|"FileName"->file, "FileSize"->FileSize[file]|>]]
+     ];
+    ];
 
    If[FileByteCount[file] == 0,
    Throw[Failure["EmptyFile", <|"FileName"->file|>]]
@@ -97,18 +103,20 @@ Catch[
 
 
 
+Options[ImplicitTimesFileReport] = {
+  "LineNumberExclusions" -> <||>,
+  "LineHashExclusions" -> {}
+}
 
-
-ImplicitTimesFileReport[file_String, implicitTimes:{___InfixNode}] :=
+ImplicitTimesFileReport[file_String, implicitTimes:{___InfixNode}, OptionsPattern[]] :=
 Catch[
- Module[{lines},
+ Module[{lines, lineNumberExclusions, lineHashExclusions},
+
+ lineNumberExclusions = OptionValue["LineNumberExclusions"];
+ lineHashExclusions = OptionValue["LineHashExclusions"];
 
    If[FileType[file] =!= File,
    Throw[Failure["NotAFile", <|"FileName"->file|>]]
-   ];
-
-  If[FileByteCount[file] > 1*^6,
-   Throw[Failure["FileTooLarge", <|"FileName"->file, "FileSize"->FileSize[file]|>]]
    ];
 
    If[FileByteCount[file] == 0,
@@ -120,12 +128,22 @@ Catch[
     *)
    lines = Import[file, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-   implicitTimesLinesReport[lines, implicitTimes]
+   implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions]
 ]]
 
-ImplicitTimesStringReport[string_String, implicitTimes:{___InfixNode}] :=
+
+
+Options[ImplicitTimesStringReport] = {
+  "LineNumberExclusions" -> <||>,
+  "LineHashExclusions" -> {}
+}
+
+ImplicitTimesStringReport[string_String, implicitTimes:{___InfixNode}, OptionsPattern[]] :=
 Catch[
- Module[{lines},
+ Module[{lines, lineNumberExclusions, lineHashExclusions},
+
+ lineNumberExclusions = OptionValue["LineNumberExclusions"];
+ lineHashExclusions = OptionValue["LineHashExclusions"];
 
  If[StringLength[string] == 0,
   Throw[Failure["EmptyString", <||>]]
@@ -136,7 +154,7 @@ Catch[
     *)
    lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-   implicitTimesLinesReport[lines, implicitTimes]
+   implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions]
 ]]
 
 
@@ -236,17 +254,46 @@ processChildren[nodes_List] :=
   processPair /@ pars
   ]
 
-implicitTimesLinesReport[linesIn_List, implicitTimes:{___InfixNode}] :=
+implicitTimesLinesReport[linesIn_List, implicitTimesIn:{___InfixNode}, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
- Module[{sources, starts, ends, infixsIn, infixs, lines, hashes},
+ Module[{implicitTimes, sources, starts, ends, infixsIn, infixs, lines, hashes,
+  lineNumberExclusions, lineHashExclusions, implicitTimesExcludedByLineNumber, tmp},
 
-    If[lints === {},
+    If[implicitTimes === {},
       Throw[{}]
     ];
+
+    implicitTimes = implicitTimesIn;
 
     lines = linesIn;
     hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
     lines = StringTake[#, UpTo[$columnLimit]]& /@ lines;
+
+    lineNumberExclusions = lineNumberExclusionsIn;
+
+    lineNumberExclusions = expandLineNumberExclusions[lineNumberExclusions];
+
+    lineHashExclusions = lineHashExclusionsIn;
+
+    (* Association of lineNumber -> All *)
+    tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]]], i -> All, Nothing], {i, 1, Length[lines]}]];
+    lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
+
+
+    (*
+    implicitTimes that match the line numbers and tags in lineNumberExclusions
+    *)
+    implicitTimesExcludedByLineNumber = Catenate[KeyValueMap[Function[{line, tags},
+        If[tags === All,
+          Cases[implicitTimes, InfixNode[_, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
+          ,
+          (* warn? *)
+          {}
+        ]
+      ],
+      lineNumberExclusions]];
+
+    implicitTimes = Complement[implicitTimes, implicitTimesExcludedByLineNumber];
 
 
     sources = #[Source]& /@ implicitTimes[[All, 3]];

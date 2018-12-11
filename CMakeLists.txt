@@ -5,7 +5,7 @@ project(lint)
 
 set(PACLET "Lint")
 
-set(PACLET_VERSION "0.6" CACHE STRING "Paclet Version")
+set(PACLET_VERSION "0.7" CACHE STRING "Paclet Version")
 
 set(WOLFRAMKERNEL /Applications/Mathematica.app/Contents/MacOS/WolframKernel CACHE FILEPATH "Path to WolframKernel")
 
