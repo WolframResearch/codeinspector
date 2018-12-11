@@ -91,7 +91,7 @@ CallNode[SymbolNode["Switch", _, _], _, _] -> scanSwitchs,
 (*
 Tags: DuplicateKeys
 *)
-GroupNode[Association, _, _] -> scanAssocs,
+GroupNode[Association, {BinaryNode[Rule | RuleDelayed, {_, _}, _] ...}, _] -> scanAssocs,
 
 (*
 Tags: DotDifferentLine
@@ -217,19 +217,9 @@ scanAssocs[pos_List, astIn_] :=
   data = node[[3]];
   opLocation = data[Source];
   Which[
-   !MatchQ[children, {BinaryNode[Rule | RuleDelayed, {_, _}, _] ...}],
-   (*{Warning["Malformed Association","Warning",<|Source->
-   opLocation|>]}*)
-   {}
-   ,
-   duplicates = 
-    Keys[Select[
-      CountsBy[children[[All, 2, 1]], ToInputFormString], # > 1&]];
+   duplicates = Keys[Select[CountsBy[children[[All, 2, 1]], ToInputFormString], # > 1&]];
    duplicates =!= {},
-   selected = 
-    Flatten[Select[children[[All, 2, 1]], 
-        Function[{key}, ToInputFormString[key] === #]]& /@ 
-      duplicates, 1];
+   selected = Flatten[Select[children[[All, 2, 1]], Function[{key}, ToInputFormString[key] === #]]& /@ duplicates, 1];
    {Lint["DuplicateKeys", "Duplicate keys in Association: " <> ToInputFormString[#], "Error", <|Source -> (#[[3]][Source])|>]}& /@ selected
    ,
    True,
@@ -301,12 +291,13 @@ scanOuts[pos_List, astIn_] :=
 Attributes[scanWhichs] = {HoldRest}
 
 scanWhichs[pos_List, astIn_] :=
- Module[{ast, node, children, data, opSpan, warnings = {}, span},
+ Module[{ast, node, children, data, opSpan, warnings, span, duplicates},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
   opSpan = data[Source];
+  warnings = {};
   Which[
    Length[children] == 0,
    AppendTo[warnings, 
@@ -325,6 +316,11 @@ scanWhichs[pos_List, astIn_] :=
    span = children[[-2]][[3]];
    AppendTo[warnings, 
     Lint["SwitchWhichConfusion", {LintMarkup["Which", FontWeight->Bold], " has ", LintMarkup["_", FontWeight->Bold], " in last place. Did you mean ", LintMarkup["True", FontWeight->Bold], "?"}, "Error", span]];
+   ,
+   duplicates = Keys[Select[CountsBy[children[[;; ;; 2]], ToInputFormString], # > 1&]];
+   duplicates =!= {},
+   selected = Flatten[Select[children[[;; ;; 2]], Function[{c}, ToInputFormString[c] === #]]& /@ duplicates, 1];
+   warnings = warnings ~Join~ {Lint["DuplicateClauses", "Duplicate clauses in Which: " <> ToInputFormString[#], "Error", <|Source -> (#[[3]][Source])|>]}& /@ selected;
    ];
   warnings
   ]
@@ -335,12 +331,13 @@ scanWhichs[pos_List, astIn_] :=
 Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
- Module[{ast, node, children, data, opSpan, warnings = {}, span, cases},
+ Module[{ast, node, children, data, opSpan, warnings, span, cases, duplicates},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
   opSpan = data[Source];
+  warnings = {};
   Which[
    Length[children] == 1,
    AppendTo[warnings, 
@@ -362,6 +359,11 @@ scanSwitchs[pos_List, astIn_] :=
    span = children[[-2]][[3]];
    AppendTo[warnings, 
     Lint["SwitchWhichConfusion", {LintMarkup["Switch", FontWeight->Bold], " has ", LintMarkup["True", FontWeight->Bold], " in last place. Did you mean ", LintMarkup["_", FontWeight->Bold], "?"}, "Warning", span]];
+   ,
+   duplicates = Keys[Select[CountsBy[children[[2;; ;; 2]], ToInputFormString], # > 1&]];
+   duplicates =!= {},
+   selected = Flatten[Select[children[[2;; ;; 2]], Function[{c}, ToInputFormString[c] === #]]& /@ duplicates, 1];
+   warnings = warnings ~Join~ {Lint["DuplicateClauses", "Duplicate clauses in Switch: " <> ToInputFormString[#], "Error", <|Source -> (#[[3]][Source])|>]}& /@ selected;
    ];
   warnings
   ]
