@@ -6,11 +6,11 @@ LintFile::usage = "LintFile[file, options] returns a list of Lints in file."
 
 LintString::usage = "LintString[string, options] returns a list of Lints in string."
 
-LintAST::usage = "LintAST[ast] returns a list of Lints in ast."
+LintAST
 
 
 
-LintedLine::usage = "LintedLine[lineNumber, hash, content, lintList, options] represents a formatted line of output."
+LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList, options] represents a formatted line of output."
 
 LintedCharacter::usage = "LintedCharacter[char, lintList, options] represents a formatted character of output."
 
@@ -27,6 +27,7 @@ LintStringReport::usage = "LintStringReport[string, lints, options] returns a Li
 Begin["`Private`"]
 
 Needs["AST`"]
+Needs["AST`Abstract`"]
 Needs["Lint`Report`"]
 Needs["Lint`Rules`"]
 Needs["Lint`Format`"]
@@ -42,7 +43,7 @@ Options[LintFile] = {
 
 LintFile[file_String, OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, lints},
+ Module[{performanceGoal, lints, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
@@ -56,13 +57,13 @@ Catch[
      ];
     ];
 
-  ast = ParseFile[file];
+  cst = ConcreteParseFile[file];
 
-  If[FailureQ[ast],
-    Throw[ast]
+  If[FailureQ[cst],
+    Throw[cst]
   ];
 
-  lints = LintAST[ast];
+  lints = LintCST[cst];
 
   lints
 ]]
@@ -74,29 +75,54 @@ Options[LintString] = {
 
 LintString[string_String, OptionsPattern[]] :=
 Catch[
- Module[{},
+ Module[{cst},
 
-  ast = ParseString[string];
+  cst = ConcreteParseString[string];
 
-  If[FailureQ[ast],
-    Throw[ast]
+  If[FailureQ[cst],
+    Throw[cst]
   ];
 
-  LintAST[ast]
+  LintCST[cst]
 ]]
 
 
 
-LintAST[astIn_, OptionsPattern[]] :=
-Module[{ast, pat, func, poss},
-  ast = astIn;
-  Flatten[
-  KeyValueMap[(
-    pat = #1;
-    func = #2;
-    poss = Position[ast, pat];
-    Map[(func[#, ast])&, poss]
-    )&, $DefaultRules]]
+LintCST[cstIn_, OptionsPattern[]] :=
+Module[{cst, ast, pat, func, poss, lints},
+  cst = cstIn;
+
+  lints = {};
+
+  AppendTo[lints,
+    KeyValueMap[(
+      If[$Debug,
+        Print[#];
+      ];
+      pat = #1;
+      func = #2;
+      poss = Position[cst, pat];
+      Map[(func[#, cst])&, poss]
+      )&, $DefaultConcreteRules]
+  ];
+
+  ast = Abstract[cst];
+
+  AppendTo[lints, 
+    KeyValueMap[(
+      If[$Debug,
+        Print[#];
+      ];
+      pat = #1;
+      func = #2;
+      poss = Position[ast, pat];
+      Map[(func[#, ast])&, poss]
+      )&, $DefaultAbstractRules]
+  ];
+
+  lints = Flatten[lints];
+
+  lints
 ]
 
 

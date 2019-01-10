@@ -6,11 +6,9 @@ Paclet[
     Name -> "Lint",
     Version -> "@PACLET_VERSION@",
     WolframVersion -> "11.0+",
-    Extensions -> 
-        {
-            {"Kernel", Context -> 
-                {"Lint`"}
-            }
+    Extensions -> {
+            {"Kernel", Context -> "Lint`"},
+            {"Documentation", Language -> "English"}
         }
 ]
 

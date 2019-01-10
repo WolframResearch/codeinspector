@@ -2,6 +2,8 @@ BeginPackage["Lint`Format`"]
 
 LintMarkup
 
+LintBold
+
 
 LintSpaceIndicator::usage = "LintSpaceIndicator represents a space indicator in formatted output."
 
@@ -17,6 +19,7 @@ LintEOF::usage = "LintEOF represents an EOF in formatted output."
 Begin["`Private`"]
 
 Needs["AST`"]
+Needs["AST`Utils`"]
 Needs["Lint`"]
 
 
@@ -50,10 +53,8 @@ Style[Underscript[line, under], ScriptSizeMultipliers->1]
 But there is no guarantee that monospace fonts will be respected
 So brute-force it with Grid so that it looks good
 *)
-Format[LintedLine[lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
-Module[{},
-  Row[{Underscript[Row[{"line ", lineNumber, ": "}], Row[{"hash: ", hash}]], Grid[{lineList, underlineList}, Spacings -> {0, 0}]}]
-]
+Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
+  Row[{formatLeftColumn[lineSource, lineNumber, hash, opts], Grid[{lineList, underlineList}, Spacings -> {0, 0}]}]
 
 (*
 Grid has too much space in OutputForm, so use Column[{Row[], Row[]}]
@@ -63,7 +64,10 @@ Not possible to construct: ab
 
 with Grid in OutputForm. bug?
 *)
-Format[LintedLine[lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
+(*
+underlineList is not used in OutputForm
+*)
+Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
 Module[{maxLineNumberLength, paddedLineNumber, endingLints},
 	maxLineNumberLength = OptionValue[LintedLine, {opts}, "MaxLineNumberLength"];
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
@@ -83,10 +87,10 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints},
 
 
 
-Format[LintedLine[lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], StandardForm] :=
-  Row[{Underscript[Row[{"line ", lineNumber, ": "}], Row[{"hash: ", hash}]], lineList}]
+Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], StandardForm] :=
+  Row[{formatLeftColumn[lineSource, lineNumber, hash, opts], lineList}]
 
-Format[LintedLine[lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], OutputForm] :=
+Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], OutputForm] :=
 Module[{maxLineNumberLength, paddedLineNumber, endingLints},
 	maxLineNumberLength = OptionValue[LintedLine, {opts}, "MaxLineNumberLength"];
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
@@ -101,6 +105,26 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints},
 ]
 
 
+
+
+Options[formatLeftColumn] = {
+	"MaxLineNumberLength" -> 5
+}
+
+formatLeftColumn[lineSource_String, lineNumber_Integer, hash_String, opts___] :=
+Module[{maxLineNumberLength},
+	
+	maxLineNumberLength = OptionValue[formatLeftColumn, {opts}, "MaxLineNumberLength"];
+	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
+
+	ActionMenu[
+		Tooltip[
+			Framed[Row[{"line", " ", paddedLineNumber, ":"}], FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95]],
+			"Click to open menu...", TooltipDelay -> Automatic],
+		{"Copy line source" :> CopyToClipboard[lineSource],
+		"Copy line number" :> CopyToClipboard[lineNumber],
+		"Copy line hash" :> CopyToClipboard[escapeString[hash]]}, Appearance -> None, Method -> "Queued", DefaultBaseStyle -> {}]
+]
 
 
 
@@ -138,7 +162,7 @@ Module[{maxSeverity},
 
 
 (*
-bugs 351153
+bug 351153
 Cannot use characters like \[SpaceIndicator] and \[ErrorIndicator] in OutputForm and
 get Grid alignment
 *)
@@ -176,13 +200,31 @@ Options[LintMarkup] = {
 Windows console doesn't support ANSI escape sequences by default
 But MacOSX and Unix should be fine
 *)
-$UseANSI = ($OperatingSystem != "Windows")
+$UseANSI = Switch[$OperatingSystem,
+				"Windows",
+				Catch[
+				Module[{vals, level, ret},
+					(*
+					https://blogs.msdn.microsoft.com/commandline/2017/06/20/understanding-windows-console-host-settings/
+					*)
+					vals = Developer`ReadRegistryKeyValues["HKEY_CURRENT_USER\\Console"];
+					If[FailureQ[vals],
+						Throw[False]
+					];
+					level = "VirtualTerminalLevel" /. vals /. {"VirtualTerminalLeve1" -> 0};
+					ret = (level != 0);
+					ret
+				]]
+				,
+				_,
+				True
+			]
 
 Format[LintMarkup[content_, opts___], StandardForm] := Style[content, opts]
 
 Format[LintMarkup[content_, opts___], OutputForm] :=
 Catch[
-Module[{s, color, weight, variations},
+Module[{s, color, weight, setup},
 	
 	s = ToString[content, OutputForm];
 
@@ -195,13 +237,26 @@ Module[{s, color, weight, variations},
 
 	color = OptionValue[LintMarkup, {opts}, FontColor];
 	weight = OptionValue[LintMarkup, {opts}, FontWeight];
-	variations = OptionValue[LintMarkup, {opts}, FontVariations];
-	(* FontSize is ignored *)
+	(* FontVariations is ignored for now *)
+	(* FontSize is ignored for now *)
 
-	StringJoin[{colorANSICode[color], weightANSICode[weight], variationsANSICode[variations], s, resetANSICode[]}]
+	(*
+	The possibility of 38;5; sequences affecting the bold bit on Windows means that 
+	weight should be set first.
+	Still would like to completely understand the differences between platforms.
+	*)
+	setup = StringJoin[{weightANSICode[weight], colorANSICode[color]}];
+	If[setup != "",
+		(* only print reset if there is anything to reset *)
+		s = StringJoin[{setup, s, resetANSICode[]}];
+	];
+	s
 ]]
 
 
+
+
+LintBold[content_] := LintMarkup[content, FontWeight->Bold]
 
 
 
@@ -213,6 +268,21 @@ colorANSICode[RGBColor[r_, g_, b_]] :=
 	With[{code = ToString[16 + 36*Round[5*r] + 6*Round[5*g] + Round[5*b]]},
 		"\[RawEscape][38;5;"<>code<>"m"
 	]
+
+(*
+Use simpler sequences for common cases
+
+This also works around an issue on Windows where the 38;5; sequences affect the bold bit
+*)
+colorANSICode[Black] := "\[RawEscape][30m"
+colorANSICode[Red] := "\[RawEscape][31m"
+colorANSICode[Green] := "\[RawEscape][32m"
+colorANSICode[Yellow] := "\[RawEscape][33m"
+colorANSICode[Blue] := "\[RawEscape][34m"
+colorANSICode[Magenta] := "\[RawEscape][35m"
+colorANSICode[Cyan] := "\[RawEscape][36m"
+colorANSICode[White] := "\[RawEscape][37m"
+
 colorANSICode[Automatic] = ""
 
 

@@ -28,7 +28,7 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
- Module[{lines, lints, performanceGoal},
+ Module[{lines, lints, performanceGoal, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
@@ -51,13 +51,13 @@ Catch[
     *)
    lines = Import[file, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-    ast = ParseFile[file];
+    cst = ConcreteParseFile[file];
 
-    If[FailureQ[ast],
-      Throw[ast]
+    If[FailureQ[cst],
+      Throw[cst]
     ];
 
-    lints = implicitTimes[ast];
+    lints = implicitTimes[cst];
 
    lints
 ]]
@@ -69,7 +69,7 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesString[string_, OptionsPattern[]] :=
 Catch[
- Module[{lines, lints},
+ Module[{lines, lints, cst},
 
  If[StringLength[string] == 0,
   Throw[Failure["EmptyString", <||>]]
@@ -80,13 +80,13 @@ Catch[
     *)
    lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-   ast = ParseString[string];
+   cst = ConcreteParseString[string];
 
-   If[FailureQ[ast],
-    Throw[ast]
+   If[FailureQ[cst],
+    Throw[cst]
   ];
 
-    lints = implicitTimes[ast];
+    lints = implicitTimes[cst];
 
    lints
 ]]
@@ -107,6 +107,15 @@ Options[ImplicitTimesFileReport] = {
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
+
+
+
+(*
+cannot have
+ImplicitTimesFileReport[file_String, opts:OptionsPattern[]]
+
+because ImplicitTimesFileReport[file, {}] leads to infinite recursion
+*)
 
 ImplicitTimesFileReport[file_String, implicitTimes:{___InfixNode}, OptionsPattern[]] :=
 Catch[
@@ -165,7 +174,7 @@ implicitTimes[ast_] :=
 Catch[
 Module[{implicitTimes, sources, starts, ends, infixs},
 
-  implicitTimes = Cases[ast, InfixNode[InfixImplicitTimes, nodes_, opts_], {0, Infinity}];
+  implicitTimes = Cases[ast, InfixNode[ImplicitTimes, nodes_, opts_], {0, Infinity}];
 
    implicitTimes
 ]]
@@ -321,7 +330,7 @@ Catch[
 
    Table[
 
-     LintedLine[i, hashes[[i]], {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
+     LintedLine[lines[[i]], i, hashes[[i]], {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
                                   modify[lines[[i]], {starts, ends, infixs}, i]},
                                   {}]
     ,

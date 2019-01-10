@@ -10,31 +10,16 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    219043,       4477]
-NotebookOptionsPosition[    213889,       4384]
-NotebookOutlinePosition[    214231,       4399]
-CellTagsIndexPosition[    214188,       4396]
+NotebookDataLength[    217575,       4427]
+NotebookOptionsPosition[    212606,       4336]
+NotebookOutlinePosition[    212948,       4351]
+CellTagsIndexPosition[    212905,       4348]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
- RowBox[{"Quit", "[", "]"}]], "Input",
- CellChangeTimes->{{3.751039431488028*^9, 3.7510394322064543`*^9}},
- CellLabel->"In[56]:=",ExpressionUUID->"24daa338-12ed-4617-9e12-c0616662a617"],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"PrependTo", "[", 
-   RowBox[{
-   "$Path", ",", "\"\</Users/brenton/development/codetools/lint/\>\""}], 
-   "]"}], ";"}]], "Input",
- CellChangeTimes->{{3.7527776290340233`*^9, 3.75277763188111*^9}, 
-   3.7527797851718197`*^9},
- CellLabel->"In[1]:=",ExpressionUUID->"a9ae0c99-b6b3-46c3-a395-91427881d213"],
 
 Cell[CellGroupData[{
-
 Cell["Lint", "Section",
  CellChangeTimes->{{3.75300978149541*^9, 
   3.753009781870798*^9}},ExpressionUUID->"b87a18f2-7a81-4639-aa3b-\
@@ -43,7 +28,7 @@ Cell["Lint", "Section",
 Cell[BoxData[
  RowBox[{"Needs", "[", "\"\<Lint`\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.75300979121483*^9, 3.753009794469636*^9}},
- CellLabel->"In[2]:=",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
+ CellLabel->"In[8]:=",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
 
 Cell[CellGroupData[{
 
@@ -73,7 +58,7 @@ Cell[BoxData[{
    3.7530146120157423`*^9, 3.753014612189309*^9}, {3.7530155944276037`*^9, 
    3.753015626573682*^9}, {3.753016019337678*^9, 3.753016032776876*^9}, {
    3.753019689199402*^9, 3.753019689867543*^9}},
- CellLabel->"In[6]:=",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
+ CellLabel->"In[9]:=",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -748,8 +733,8 @@ Cell[BoxData[
    3.753019344439478*^9, 3.75301941214389*^9, {3.753019674340971*^9, 
    3.753019690266076*^9}, 3.753019817681498*^9, {3.753019985095155*^9, 
    3.753020007587514*^9}, 3.753215717490699*^9, 3.753215887857751*^9, 
-   3.753217742999131*^9, 3.753275018456573*^9},
- CellLabel->"Out[8]=",ExpressionUUID->"e6dfdf81-9e43-4bfd-878b-1c4229a5e4a7"]
+   3.753217742999131*^9, 3.753275018456573*^9, 3.7549309351207542`*^9},
+ CellLabel->"Out[11]=",ExpressionUUID->"805ad2b7-5dfb-4cfe-b083-440c295dde51"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -772,7 +757,7 @@ Cell[BoxData[{
    3.753019689199402*^9, 3.753019689867543*^9}, {3.7532159002977467`*^9, 
    3.753215902929572*^9}, {3.753217773435586*^9, 3.753217777641789*^9}, {
    3.753217815011982*^9, 3.753217816154101*^9}},
- CellLabel->"In[3]:=",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
+ CellLabel->"In[12]:=",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
 
 Cell[OutputFormData["\<\
 Column[{LintedLine[1, \"53d0e03ed07e131d\", 
@@ -783,15 +768,13 @@ closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]},
         <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\"a\", 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], 
-         \" are on different lines. Did you mean \", \
-Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
-\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
-       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold], 
-     LintedCharacter[\".\", {Lint[\"DotDifferentLine\", {\"Operands for \", \
-Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
+\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
+        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+      FontWeight -> Bold], LintedCharacter[\".\", {Lint[\"DotDifferentLine\", \
+{\"Operands for \", Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
          \" are on different lines. Did you mean \", \
 Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
          Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
@@ -806,40 +789,35 @@ Larger], LintedCharacter[Lint`Format`LintErrorIndicator,
 <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
       FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], 
-         \" are on different lines. Did you mean \", \
-Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
-\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
-       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
+        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], 
-         \" are on different lines. Did you mean \", \
-Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
-\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
-       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, 
+\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
+        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintContinuation, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], 
-         \" are on different lines. Did you mean \", \
-Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
-\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
-       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger]}}, {Lint[\"DotDifferentLine\", {\"Operands for \", \
-Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
-      \" are on different lines. Did you mean \", \
-Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-      Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", \
-<|AST`Source -> {{1, 3}, {2, 1}}|>], 
-    Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, \"MaxLineNumberLength\" -> 1], 
-  LintedLine[2, \"09cb8cd0c476a5dc\", 
+\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
+        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger]}}, 
+   {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\".\
+\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+      Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
+     <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+   \"MaxLineNumberLength\" -> 1], LintedLine[2, \"09cb8cd0c476a5dc\", 
    {{\" \", LintedCharacter[\"b\", {Lint[\"DotDifferentLine\", {\"Operands \
 for \", Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
          \" are on different lines. Did you mean \", \
@@ -859,30 +837,30 @@ Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \",
 <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
       FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], 
-         \" are on different lines. Did you mean \", \
-Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
-\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
-       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, \
-{Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", 
-        <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, FontSize -> \
-Larger]}}, 
-   {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\".\
-\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-      Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-     <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
 group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-   \"MaxLineNumberLength\" -> 1], LintedLine[3, \"022148488940c43e\", 
-   {{\" \", \" \"}, {LintedCharacter[Lint`Format`LintEOF, {Lint[\"SyntaxError\
-\", \"Missing group closer: }\", \"Fatal\", 
-        <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, FontSize -> \
-Larger], \" \"}}, 
-   {Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, \"MaxLineNumberLength\" -> 1]}]\
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintContinuation, 
+      {Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger]}}, {Lint[\"DotDifferentLine\", {\"Operands for \", \
+Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
+      \" are on different lines. Did you mean \", \
+Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+      Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", \
+<|AST`Source -> {{1, 3}, {2, 1}}|>], 
+    Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, \"MaxLineNumberLength\" -> 1], 
+  LintedLine[3, \"022148488940c43e\", {{\" \", \" \"}, \
+{LintedCharacter[Lint`Format`LintEOF, 
+      {Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], \" \"}}, {Lint[\"SyntaxError\", \"Missing group \
+closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+   \"MaxLineNumberLength\" -> 1]}]\
 \>", "\<\
 line 1:  { a. 
          ^^^^\\
@@ -909,10 +887,11 @@ line 3:
    3.753019690266076*^9}, 3.753019817681498*^9, {3.753019985095155*^9, 
    3.753020007587514*^9}, 3.753215717490699*^9, {3.753215887857751*^9, 
    3.753215905767993*^9}, 3.753215938944027*^9, 3.753217746195695*^9, 
-   3.753217780041877*^9, 3.753217816689981*^9, 3.753275004036208*^9},
+   3.753217780041877*^9, 3.753217816689981*^9, 3.753275004036208*^9, 
+   3.7549309366155653`*^9},
  CellLabel->
-  "Out[5]//OutputForm=",ExpressionUUID->"94eb0dff-c749-40b3-abac-\
-420588b5ade3"]
+  "Out[14]//OutputForm=",ExpressionUUID->"41f6d02a-0a36-4c39-bad5-\
+12371228b07d"]
 }, Open  ]]
 }, Open  ]],
 
@@ -943,7 +922,7 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.753012440276095*^9, 3.753012440510915*^9}, 
    3.753015654472356*^9, 3.753016273979617*^9, 3.753020011712543*^9},
- CellLabel->"In[13]:=",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
+ CellLabel->"In[15]:=",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -2949,8 +2928,9 @@ Cell[BoxData[
   3.753012441094483*^9, 3.753012479171562*^9, 3.753015654912705*^9, 
    3.7530160049297457`*^9, 3.753016098395265*^9, 3.753016132166615*^9, 
    3.753016196695917*^9, 3.753016274409092*^9, 3.7530172742494183`*^9, {
-   3.753020000504651*^9, 3.753020012064856*^9}, 3.753215979947445*^9},
- CellLabel->"Out[15]=",ExpressionUUID->"d69f53d4-a473-4460-a7d0-c7a9c2c81e6c"]
+   3.753020000504651*^9, 3.753020012064856*^9}, 3.753215979947445*^9, 
+   3.754930954282618*^9},
+ CellLabel->"Out[17]=",ExpressionUUID->"d15942a9-bf9a-464a-9ffd-f5c105315194"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -2966,7 +2946,7 @@ Cell[BoxData[
  RowBox[{"Needs", "[", "\"\<Lint`ImplicitTimes`\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.751038045031434*^9, 3.7510380700431128`*^9}, {
    3.7527776573488007`*^9, 3.752777660932123*^9}, 3.752779790347845*^9},
- CellLabel->"In[2]:=",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
+ CellLabel->"In[18]:=",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
 
 Cell[CellGroupData[{
 
@@ -3009,7 +2989,7 @@ Cell[BoxData[{
    3.751042442168944*^9, 3.751042481710712*^9, {3.752777666484868*^9, 
    3.752777671624596*^9}, {3.752784189714411*^9, 3.75278421203951*^9}, {
    3.753215995115109*^9, 3.753216021399331*^9}},
- CellLabel->"In[3]:=",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
+ CellLabel->"In[19]:=",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -3121,8 +3101,9 @@ Cell[BoxData[
    3.75278332152671*^9, {3.752783477770808*^9, 3.752783495923789*^9}, 
    3.752783567410932*^9, 3.752783762101472*^9, {3.7527840626923323`*^9, 
    3.7527840914743423`*^9}, {3.752784191296767*^9, 3.7527842130493917`*^9}, {
-   3.753215989470842*^9, 3.753216021953721*^9}, 3.7532180446563063`*^9},
- CellLabel->"Out[5]=",ExpressionUUID->"aea84c4d-cfc8-494b-81a0-b9d1798e39f9"]
+   3.753215989470842*^9, 3.753216021953721*^9}, 3.7532180446563063`*^9, 
+   3.754930961196438*^9},
+ CellLabel->"Out[21]=",ExpressionUUID->"58de56c4-3eed-425c-878a-3962b2d40410"]
 }, Open  ]],
 
 Cell["The original report looked like this:", "Text",
@@ -3166,7 +3147,7 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.7532178910693903`*^9, 3.753217921471027*^9}, {
   3.753218052633794*^9, 3.753218052983568*^9}},
- CellLabel->"In[9]:=",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
+ CellLabel->"In[22]:=",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -3277,8 +3258,8 @@ Cell[BoxData[
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
  CellChangeTimes->{{3.753217884439424*^9, 3.753217922522736*^9}, {
-  3.7532180470999203`*^9, 3.753218053672647*^9}},
- CellLabel->"Out[11]=",ExpressionUUID->"9ff54ce1-1e3f-4637-8bed-441a5877008e"]
+   3.7532180470999203`*^9, 3.753218053672647*^9}, 3.754930965341941*^9},
+ CellLabel->"Out[24]=",ExpressionUUID->"80657d21-380a-4f98-850c-ff2222e01449"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3292,7 +3273,7 @@ Cell[BoxData[{
   RowBox[{"ImplicitTimesStringReport", "[", 
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.753218101460298*^9, 3.753218133207535*^9}},
- CellLabel->"In[24]:=",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
+ CellLabel->"In[25]:=",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -3442,8 +3423,9 @@ Cell[BoxData[
    GridBoxAlignment->{"Columns" -> {{Left}}},
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
- CellChangeTimes->{{3.7532181021977043`*^9, 3.7532181338167877`*^9}},
- CellLabel->"Out[26]=",ExpressionUUID->"ad666ca4-eb2f-42f0-bdab-e99902d2cd38"]
+ CellChangeTimes->{{3.7532181021977043`*^9, 3.7532181338167877`*^9}, 
+   3.754930966405163*^9},
+ CellLabel->"Out[27]=",ExpressionUUID->"23aabd2c-847e-42ed-92ee-9d9528f6ff28"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3459,25 +3441,25 @@ Cell[BoxData[{
     RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}], "//", 
   "OutputForm"}]}], "Input",
  CellChangeTimes->{{3.7532181577113323`*^9, 3.753218174866192*^9}},
- CellLabel->"In[27]:=",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
+ CellLabel->"In[28]:=",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
 
 Cell[OutputFormData["\<\
-Column[{Lint`LintedLine[1, \"556bbf89cea2b70f\", {{\" \", \"{\", \"a\", \
-\"(\", \"*\", \"*\", \")\", \" \"}, 
-    {\" \", \" \", Lint`LintedCharacter[\"(\", {Lint`Lint[\"ImplicitTimes\", \
+Column[{LintedLine[1, \"556bbf89cea2b70f\", {{\" \", \"{\", \"a\", \"(\", \"*\
+\", \"*\", \")\", \" \"}, 
+    {\" \", \" \", LintedCharacter[\"(\", {Lint[\"ImplicitTimes\", \
 \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, FontWeight -> Bold, 
       FontSize -> Larger], \" \", \" \", \" \", \" \", \
-Lint`LintedCharacter[Lint`Format`LintTimes, 
-      {Lint`Lint[\"ImplicitTimes\", \"ImplicitTimes\", \"ImplicitTimes\", \
-<||>]}, FontWeight -> Bold, FontSize -> Larger]}}, {}], 
-  Lint`LintedLine[2, \"3cd6479b0e84f9fa\", {{\" \", \" \", \" \", \" \", \" \
-\", \" \", \" \", \" \", \" \", \"b\", \" \"}, 
+LintedCharacter[Lint`Format`LintTimes, 
+      {Lint[\"ImplicitTimes\", \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, \
+FontWeight -> Bold, FontSize -> Larger]}}, {}], 
+  LintedLine[2, \"3cd6479b0e84f9fa\", {{\" \", \" \", \" \", \" \", \" \", \" \
+\", \" \", \" \", \" \", \"b\", \" \"}, 
     {\" \", \" \", \" \", \" \", \" \", \" \", \" \", \" \", \" \", \" \", \
-Lint`LintedCharacter[Lint`Format`LintTimes, 
-      {Lint`Lint[\"ImplicitTimes\", \"ImplicitTimes\", \"ImplicitTimes\", \
-<||>]}, FontWeight -> Bold, FontSize -> Larger]}}, {}], 
-  Lint`LintedLine[4, \"4971a12132b36b6a\", {{\" \", \"c\", \"}\", \" \"}, 
-    {\" \", \" \", Lint`LintedCharacter[\")\", {Lint`Lint[\"ImplicitTimes\", \
+LintedCharacter[Lint`Format`LintTimes, 
+      {Lint[\"ImplicitTimes\", \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, \
+FontWeight -> Bold, FontSize -> Larger]}}, {}], 
+  LintedLine[4, \"4971a12132b36b6a\", {{\" \", \"c\", \"}\", \" \"}, 
+    {\" \", \" \", LintedCharacter[\")\", {Lint[\"ImplicitTimes\", \
 \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, FontWeight -> Bold, 
       FontSize -> Larger], \" \"}}, {}]}]\
 \>", "\<\
@@ -3488,10 +3470,10 @@ line     2:          b
 line     4:  c} 
               )\
 \>"], "Output",
- CellChangeTimes->{3.753218175540059*^9},
+ CellChangeTimes->{3.753218175540059*^9, 3.75493097001826*^9},
  CellLabel->
-  "Out[29]//OutputForm=",ExpressionUUID->"f8a5002a-c7a6-43cb-83c2-\
-d9de66c903b5"]
+  "Out[30]//OutputForm=",ExpressionUUID->"25738016-323e-4eab-a641-\
+f3b58d0dcd0c"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3506,7 +3488,7 @@ Cell[BoxData[{
     RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}], "//", 
   "OutputForm"}]}], "Input",
  CellChangeTimes->{{3.7532182242050323`*^9, 3.753218332261818*^9}},
- CellLabel->"In[53]:=",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
+ CellLabel->"In[31]:=",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
 
 Cell[OutputFormData["\<\
 Column[{LintedLine[1, \"556bbf89cea2b70f\", 
@@ -3514,249 +3496,217 @@ Column[{LintedLine[1, \"556bbf89cea2b70f\",
 {\"Implicit times across lines. Did you mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\"(\", 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\"*\", \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\"*\", 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\")\", \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \" \"}, \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \" \"}, \
 {\" \", Lint`Format`LintSpaceIndicator, 
      LintedCharacter[Lint`Format`LintErrorIndicator, \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold, FontSize -> \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, FontSize -> \
 Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintContinuation, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger]}}, \
-{Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
-mean \", 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger]}}, {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit \
+times across lines. Did you mean \", 
       Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-     <|AST`Source -> {{1, 2}, {2, 9}}|>]}, \"MaxLineNumberLength\" -> 1], \
+     <|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
 LintedLine[2, \"3cd6479b0e84f9fa\", 
    {{\" \", LintedCharacter[\" \", {Lint[\"ImplicitTimesAcrossLines\", \
 {\"Implicit times across lines. Did you mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\" \", 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\" \", \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\" \", 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\" \", \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\" \", 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\" \", \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold], \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\" \", 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\"b\", \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>], \
-Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
-mean \", 
-         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{2, 9}, {4, 1}}|>]}, FontWeight -> Bold], \" \"}, 
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \" \"}, 
     {LintedCharacter[Lint`Format`LintContinuation, \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 2}, {2, 9}}|>]}, FontWeight -> Bold, FontSize -> \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, FontSize -> \
 Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {2, 9}}|>], 
-       Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
-you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
-         \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{2, 9}, {4, 1}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintContinuation, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{2, 9}, {4, 1}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger]}}, \
-{Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
-mean \", 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger]}}, {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit \
+times across lines. Did you mean \", 
       Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-     <|AST`Source -> {{1, 2}, {2, 9}}|>], Lint[\"ImplicitTimesAcrossLines\", \
-{\"Implicit times across lines. Did you mean \", 
-      Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-     <|AST`Source -> {{2, 9}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
+     <|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
 LintedLine[3, \"022148488940c43e\", 
    {{\" \", \" \"}, {LintedCharacter[Lint`Format`LintContinuation, \
 {Lint[\"ImplicitTimesAcrossLines\", 
         {\"Implicit times across lines. Did you mean \", \
 Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
          Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
-\", <|AST`Source -> {{2, 9}, {4, 1}}|>]}, FontWeight -> Bold, 
+\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
       FontSize -> Larger], \" \"}}, {Lint[\"ImplicitTimesAcrossLines\", \
 {\"Implicit times across lines. Did you mean \", 
       Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-     <|AST`Source -> {{2, 9}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
+     <|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
 LintedLine[4, \"4971a12132b36b6a\", 
    {{\" \", LintedCharacter[\"c\", {Lint[\"ImplicitTimesAcrossLines\", \
 {\"Implicit times across lines. Did you mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{2, 9}, {4, 1}}|>]}, FontWeight -> Bold], \"}\", \" \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold], \"}\", \" \
 \"}, 
     {LintedCharacter[Lint`Format`LintContinuation, \
 {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
 mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{2, 9}, {4, 1}}|>]}, FontWeight -> Bold, FontSize -> \
+        <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, FontSize -> \
 Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{2, 9}, {4, 1}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-Lint`Format`LintSpaceIndicator, \" \"}}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], Lint`Format`LintSpaceIndicator, \" \"}}, 
    {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
-you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
-      \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{2, 9}, {4, 1}}|>]}, 
-   \"MaxLineNumberLength\" -> 1]}]\
+you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+      Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", \
+<|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1]}]\
 \>", "\<\
 line 1:  {a(**) 
          ~^^^^^\\
 line 2:          b 
         \\^^^^^^^^^\\
-        ImplicitTimesAcrossLines Severity: Warning Implicit times across \
-lines. Did you mean ; or ,?
 line 3:   
         \\ 
 line 4:  c} 
@@ -3764,10 +3714,11 @@ line 4:  c}
         ImplicitTimesAcrossLines Severity: Warning Implicit times across \
 lines. Did you mean ; or ,?\
 \>"], "Output",
- CellChangeTimes->{{3.7532182254751472`*^9, 3.753218332728229*^9}},
+ CellChangeTimes->{{3.7532182254751472`*^9, 3.753218332728229*^9}, 
+   3.754930971576343*^9},
  CellLabel->
-  "Out[55]//OutputForm=",ExpressionUUID->"70687b69-bb19-4c8f-90f5-\
-d1263f6c0a80"]
+  "Out[33]//OutputForm=",ExpressionUUID->"9144bb94-4179-4f63-8003-\
+052ed7e2ea92"]
 }, Open  ]],
 
 Cell["Some related tests:", "Text",
@@ -3793,7 +3744,7 @@ Cell[BoxData[{
  CellChangeTimes->{{3.7508786045787067`*^9, 3.750878623577409*^9}, {
   3.752777690730426*^9, 3.752777695798749*^9}, {3.7530105198774023`*^9, 
   3.753010521652961*^9}, {3.753216030857129*^9, 3.753216033457224*^9}},
- CellLabel->"In[26]:=",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
+ CellLabel->"In[34]:=",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -3897,8 +3848,8 @@ Cell[BoxData[
   3.752777711292494*^9, 3.752779797765729*^9, 3.752781339647187*^9, 
    3.752781382845758*^9, {3.752781470885469*^9, 3.75278149664375*^9}, 
    3.7527819952615*^9, {3.752784098080627*^9, 3.752784117367494*^9}, 
-   3.752784216609147*^9, 3.753216034174611*^9},
- CellLabel->"Out[28]=",ExpressionUUID->"aee937b2-7b7f-4dcb-8b85-95efd6b13460"]
+   3.752784216609147*^9, 3.753216034174611*^9, 3.754930975454988*^9},
+ CellLabel->"Out[36]=",ExpressionUUID->"da93e42e-4712-4452-8b99-d886d9056e8d"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3913,7 +3864,7 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.7527776977315073`*^9, 3.752777702344309*^9}, 
    3.753010524689694*^9, {3.753216038834076*^9, 3.753216041793868*^9}},
- CellLabel->"In[29]:=",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
+ CellLabel->"In[37]:=",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -4018,8 +3969,8 @@ Cell[BoxData[
    3.752781474478613*^9, 3.752781497764765*^9}, {3.752781996742838*^9, 
    3.752781999112444*^9}, {3.752782034659431*^9, 3.752782048963509*^9}, {
    3.75278410447174*^9, 3.7527841196236343`*^9}, {3.752784220777945*^9, 
-   3.752784223935882*^9}, 3.753216042779162*^9},
- CellLabel->"Out[31]=",ExpressionUUID->"42ca5901-6ccc-45c6-a290-6238a7f779dc"]
+   3.752784223935882*^9}, 3.753216042779162*^9, 3.7549309764224157`*^9},
+ CellLabel->"Out[39]=",ExpressionUUID->"82c70827-742f-466c-b70b-c62a8148bfe8"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4034,7 +3985,7 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.752784130954743*^9, 3.752784133509852*^9}, 
    3.7530105255361843`*^9, {3.7532160473232927`*^9, 3.753216050194565*^9}},
- CellLabel->"In[32]:=",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
+ CellLabel->"In[40]:=",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -4136,8 +4087,8 @@ Cell[BoxData[
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
  CellChangeTimes->{3.7527841341316767`*^9, 3.752784224698237*^9, 
-  3.753216051095194*^9},
- CellLabel->"Out[34]=",ExpressionUUID->"993507c2-9cf9-44e0-9eaa-48b7b9c34184"]
+  3.753216051095194*^9, 3.754930977453764*^9},
+ CellLabel->"Out[42]=",ExpressionUUID->"5a301a75-13d8-4707-8527-4f23720784e4"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4152,7 +4103,7 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.752784139636476*^9, 3.752784140178893*^9}, 
    3.7530105263940783`*^9, {3.753216058484436*^9, 3.7532160658944387`*^9}},
- CellLabel->"In[38]:=",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
+ CellLabel->"In[43]:=",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -4256,8 +4207,8 @@ Cell[BoxData[
   "Column"]], "Output",
  CellChangeTimes->{
   3.7527841408009872`*^9, 3.7527842253585453`*^9, {3.7532160619446373`*^9, 
-   3.7532160662891703`*^9}},
- CellLabel->"Out[40]=",ExpressionUUID->"e04a6bf6-5332-4bb4-8747-f16b767f9bfa"]
+   3.7532160662891703`*^9}, 3.75493097819211*^9},
+ CellLabel->"Out[45]=",ExpressionUUID->"a2800d7f-5fcf-4b77-8a55-a933b2ba7837"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4272,7 +4223,7 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.752784145952463*^9, 3.752784166438814*^9}, 
    3.753010527225288*^9, {3.75321607061987*^9, 3.753216077405274*^9}},
- CellLabel->"In[44]:=",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
+ CellLabel->"In[46]:=",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
 
 Cell[BoxData[
  TagBox[GridBox[{
@@ -4376,15 +4327,16 @@ Cell[BoxData[
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
  CellChangeTimes->{{3.752784146384613*^9, 3.7527841669568377`*^9}, 
-   3.752784226074201*^9, {3.753216074070681*^9, 3.753216077770762*^9}},
- CellLabel->"Out[46]=",ExpressionUUID->"7e6e3ab0-7ae6-43de-b40e-a7a0929a0924"]
+   3.752784226074201*^9, {3.753216074070681*^9, 3.753216077770762*^9}, 
+   3.7549309802521048`*^9},
+ CellLabel->"Out[48]=",ExpressionUUID->"9eabceee-4703-44ce-82e6-8dfbf8bc7ef8"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
 },
 WindowSize->{1221, 751},
 WindowMargins->{{12, Automatic}, {Automatic, 24}},
-FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (November 30, 2018)",
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (December 18, 2018)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -4398,84 +4350,82 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 199, 3, 30, "Input",ExpressionUUID->"24daa338-12ed-4617-9e12-c0616662a617"],
-Cell[760, 25, 338, 8, 30, "Input",ExpressionUUID->"a9ae0c99-b6b3-46c3-a395-91427881d213"],
 Cell[CellGroupData[{
-Cell[1123, 37, 148, 3, 67, "Section",ExpressionUUID->"b87a18f2-7a81-4639-aa3b-632ac1775d19"],
-Cell[1274, 42, 213, 3, 30, "Input",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
+Cell[580, 22, 148, 3, 67, "Section",ExpressionUUID->"b87a18f2-7a81-4639-aa3b-632ac1775d19"],
+Cell[731, 27, 213, 3, 30, "Input",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
 Cell[CellGroupData[{
-Cell[1512, 49, 162, 3, 54, "Subsection",ExpressionUUID->"5d2abfc5-68dc-4c77-bd17-78753f0d1bc6"],
-Cell[1677, 54, 163, 3, 35, "Text",ExpressionUUID->"39bb9112-0dd1-43fa-a8fb-a2cf7ec37908"],
+Cell[969, 34, 162, 3, 54, "Subsection",ExpressionUUID->"5d2abfc5-68dc-4c77-bd17-78753f0d1bc6"],
+Cell[1134, 39, 163, 3, 35, "Text",ExpressionUUID->"39bb9112-0dd1-43fa-a8fb-a2cf7ec37908"],
 Cell[CellGroupData[{
-Cell[1865, 61, 834, 14, 73, "Input",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
-Cell[2702, 77, 33690, 674, 111, "Output",ExpressionUUID->"e6dfdf81-9e43-4bfd-878b-1c4229a5e4a7"]
+Cell[1322, 46, 834, 14, 73, "Input",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
+Cell[2159, 62, 33715, 674, 111, "Output",ExpressionUUID->"805ad2b7-5dfb-4cfe-b083-440c295dde51"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[36429, 756, 1020, 18, 73, "Input",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
-Cell[37452, 776, 8186, 138, 126, "Output",ExpressionUUID->"94eb0dff-c749-40b3-abac-420588b5ade3"]
+Cell[35911, 741, 1021, 18, 73, "Input",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
+Cell[36935, 761, 8171, 132, 126, "Output",ExpressionUUID->"41f6d02a-0a36-4c39-bad5-12371228b07d"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[45687, 920, 164, 3, 54, "Subsection",ExpressionUUID->"44d1d2b5-27ae-4cf5-ad95-a957fd32cb23"],
-Cell[45854, 925, 252, 6, 35, "Text",ExpressionUUID->"119745e4-b11a-4a25-8864-19c418f51a4a"],
+Cell[45155, 899, 164, 3, 54, "Subsection",ExpressionUUID->"44d1d2b5-27ae-4cf5-ad95-a957fd32cb23"],
+Cell[45322, 904, 252, 6, 35, "Text",ExpressionUUID->"119745e4-b11a-4a25-8864-19c418f51a4a"],
 Cell[CellGroupData[{
-Cell[46131, 935, 511, 10, 73, "Input",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
-Cell[46645, 947, 98839, 2005, 113, "Output",ExpressionUUID->"d69f53d4-a473-4460-a7d0-c7a9c2c81e6c"]
+Cell[45599, 914, 511, 10, 73, "Input",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
+Cell[46113, 926, 98865, 2006, 113, "Output",ExpressionUUID->"d15942a9-bf9a-464a-9ffd-f5c105315194"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[145545, 2959, 168, 3, 67, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
-Cell[145716, 2964, 304, 4, 30, "Input",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
+Cell[145039, 2939, 168, 3, 67, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
+Cell[145210, 2944, 305, 4, 30, "Input",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
 Cell[CellGroupData[{
-Cell[146045, 2972, 166, 3, 54, "Subsection",ExpressionUUID->"92bf7584-3663-4c3f-958e-73e5c69ac282"],
-Cell[146214, 2977, 156, 3, 35, "Text",ExpressionUUID->"6ed1568a-d2a9-413d-a447-7e1d02abfb89"],
-Cell[146373, 2982, 219, 5, 35, "Text",ExpressionUUID->"5d4373d2-c84f-4c86-b1d4-82d576a67d80"],
-Cell[146595, 2989, 189, 3, 35, "Text",ExpressionUUID->"bc1ec463-5eb7-42c9-bee6-32f561be207a"],
+Cell[145540, 2952, 166, 3, 54, "Subsection",ExpressionUUID->"92bf7584-3663-4c3f-958e-73e5c69ac282"],
+Cell[145709, 2957, 156, 3, 35, "Text",ExpressionUUID->"6ed1568a-d2a9-413d-a447-7e1d02abfb89"],
+Cell[145868, 2962, 219, 5, 35, "Text",ExpressionUUID->"5d4373d2-c84f-4c86-b1d4-82d576a67d80"],
+Cell[146090, 2969, 189, 3, 35, "Text",ExpressionUUID->"bc1ec463-5eb7-42c9-bee6-32f561be207a"],
 Cell[CellGroupData[{
-Cell[146809, 2996, 807, 15, 73, "Input",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
-Cell[147619, 3013, 5580, 111, 47, "Output",ExpressionUUID->"aea84c4d-cfc8-494b-81a0-b9d1798e39f9"]
+Cell[146304, 2976, 808, 15, 73, "Input",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
+Cell[147115, 2993, 5607, 112, 47, "Output",ExpressionUUID->"58de56c4-3eed-425c-878a-3962b2d40410"]
 }, Open  ]],
-Cell[153214, 3127, 229, 4, 35, "Text",ExpressionUUID->"1169e067-8067-4021-bd69-050d2b185390"],
-Cell[153446, 3133, 643, 13, 24, "Print",ExpressionUUID->"762067b2-e2b0-4eba-8ea5-853c52cc550b"],
-Cell[154092, 3148, 280, 6, 35, "Text",ExpressionUUID->"780a8211-5367-4e99-bff9-e5f0aac6a468"],
+Cell[152737, 3108, 229, 4, 35, "Text",ExpressionUUID->"1169e067-8067-4021-bd69-050d2b185390"],
+Cell[152969, 3114, 643, 13, 24, "Print",ExpressionUUID->"762067b2-e2b0-4eba-8ea5-853c52cc550b"],
+Cell[153615, 3129, 280, 6, 35, "Text",ExpressionUUID->"780a8211-5367-4e99-bff9-e5f0aac6a468"],
 Cell[CellGroupData[{
-Cell[154397, 3158, 488, 10, 73, "Input",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
-Cell[154888, 3170, 5322, 110, 81, "Output",ExpressionUUID->"9ff54ce1-1e3f-4637-8bed-441a5877008e"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[160247, 3285, 451, 9, 73, "Input",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
-Cell[160701, 3296, 7175, 149, 113, "Output",ExpressionUUID->"ad666ca4-eb2f-42f0-bdab-e99902d2cd38"]
+Cell[153920, 3139, 489, 10, 73, "Input",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
+Cell[154412, 3151, 5345, 110, 81, "Output",ExpressionUUID->"80657d21-380a-4f98-850c-ff2222e01449"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[167913, 3450, 491, 11, 73, "Input",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
-Cell[168407, 3463, 1449, 30, 104, "Output",ExpressionUUID->"f8a5002a-c7a6-43cb-83c2-d9de66c903b5"]
+Cell[159794, 3266, 451, 9, 73, "Input",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
+Cell[160248, 3277, 7201, 150, 113, "Output",ExpressionUUID->"23aabd2c-847e-42ed-92ee-9d9528f6ff28"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[169893, 3498, 470, 10, 73, "Input",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
-Cell[170366, 3510, 15349, 259, 148, "Output",ExpressionUUID->"70687b69-bb19-4c8f-90f5-d1263f6c0a80"]
-}, Open  ]],
-Cell[185730, 3772, 161, 3, 35, "Text",ExpressionUUID->"9dda7360-67fa-4d21-b4e7-86123696ed62"],
-Cell[185894, 3777, 195, 3, 35, "Text",ExpressionUUID->"3e664557-5454-4432-bb14-588fd8b122fe"],
-Cell[CellGroupData[{
-Cell[186114, 3784, 579, 11, 73, "Input",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
-Cell[186696, 3797, 4939, 103, 47, "Output",ExpressionUUID->"aee937b2-7b7f-4dcb-8b85-95efd6b13460"]
+Cell[167486, 3432, 491, 11, 73, "Input",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
+Cell[167980, 3445, 1415, 30, 104, "Output",ExpressionUUID->"25738016-323e-4eab-a641-f3b58d0dcd0c"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[191672, 3905, 509, 10, 73, "Input",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
-Cell[192184, 3917, 5095, 104, 47, "Output",ExpressionUUID->"42ca5901-6ccc-45c6-a290-6238a7f779dc"]
+Cell[169432, 3480, 470, 10, 73, "Input",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
+Cell[169905, 3492, 14410, 228, 137, "Output",ExpressionUUID->"9144bb94-4179-4f63-8003-052ed7e2ea92"]
+}, Open  ]],
+Cell[184330, 3723, 161, 3, 35, "Text",ExpressionUUID->"9dda7360-67fa-4d21-b4e7-86123696ed62"],
+Cell[184494, 3728, 195, 3, 35, "Text",ExpressionUUID->"3e664557-5454-4432-bb14-588fd8b122fe"],
+Cell[CellGroupData[{
+Cell[184714, 3735, 579, 11, 73, "Input",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
+Cell[185296, 3748, 4961, 103, 47, "Output",ExpressionUUID->"da93e42e-4712-4452-8b99-d886d9056e8d"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[197316, 4026, 511, 10, 73, "Input",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
-Cell[197830, 4038, 4836, 101, 47, "Output",ExpressionUUID->"993507c2-9cf9-44e0-9eaa-48b7b9c34184"]
+Cell[190294, 3856, 509, 10, 73, "Input",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
+Cell[190806, 3868, 5119, 104, 47, "Output",ExpressionUUID->"82c70827-742f-466c-b70b-c62a8148bfe8"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[202703, 4144, 515, 10, 73, "Input",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
-Cell[203221, 4156, 4954, 103, 47, "Output",ExpressionUUID->"e04a6bf6-5332-4bb4-8747-f16b767f9bfa"]
+Cell[195962, 3977, 511, 10, 73, "Input",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
+Cell[196476, 3989, 4858, 101, 47, "Output",ExpressionUUID->"5a301a75-13d8-4707-8527-4f23720784e4"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[208212, 4264, 518, 10, 73, "Input",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
-Cell[208733, 4276, 5116, 103, 47, "Output",ExpressionUUID->"7e6e3ab0-7ae6-43de-b40e-a7a0929a0924"]
+Cell[201371, 4095, 515, 10, 73, "Input",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
+Cell[201889, 4107, 4975, 103, 47, "Output",ExpressionUUID->"a2800d7f-5fcf-4b77-8a55-a933b2ba7837"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[206901, 4215, 518, 10, 73, "Input",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
+Cell[207422, 4227, 5144, 104, 47, "Output",ExpressionUUID->"9eabceee-4703-44ce-82e6-8dfbf8bc7ef8"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

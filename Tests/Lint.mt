@@ -1,9 +1,12 @@
 
+Needs["AST`"]
 Needs["Lint`"]
 
-Test[
-	LintString["Which[a==b,1,a==b,2]"]
+TestMatch[
+	lints = LintString["Which[a==b,1,a==b,2]"];
+	lints
 	,
-	{Lint["DuplicateClauses", "Duplicate clauses in Which: a==b", "Error", <|AST`Source -> {{1, 7}, {1, 10}}|>],
-	Lint["DuplicateClauses", "Duplicate clauses in Which: a==b", "Error", <|AST`Source -> {{1, 14}, {1, 17}}|>]}
+	{Lint["DuplicateClauses", _, _, _], Lint["DuplicateClauses", _, _, _]}
+	,
+	TestID->"Lint-20181215-L4E3M5"
 ]

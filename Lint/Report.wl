@@ -7,6 +7,7 @@ ListifyLine
 Begin["`Private`"]
 
 Needs["AST`"]
+Needs["AST`Utils`"]
 Needs["Lint`"]
 Needs["Lint`Format`"]
 Needs["Lint`Utils`"]
@@ -14,15 +15,26 @@ Needs["Lint`Utils`"]
 
 Options[LintFileReport] = {
   "TagExclusions" -> {},
+  "SeverityExclusions" -> {"Remark"},
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
 
+
+(*
+cannot have
+LintFileReport[file_String, opts:OptionsPattern[]]
+
+because LintFileReport[file, {}] leads to infinite recursion
+*)
+
+
 LintFileReport[file_String, lints:{___Lint}, OptionsPattern[]] :=
 Catch[
- Module[{lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline},
+ Module[{lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
 
  tagExclusions = OptionValue["TagExclusions"];
+ severityExclusions = OptionValue["SeverityExclusions"];
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  lineHashExclusions = OptionValue["LineHashExclusions"];
 
@@ -53,21 +65,31 @@ Catch[
     lines = Append[lines, ""];
   ];
 
-  lintLinesReport[lines, lints, tagExclusions, lineNumberExclusions, lineHashExclusions]
+  lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions]
 ]]
 
 
 Options[LintStringReport] = {
   "TagExclusions" -> {},
+  "SeverityExclusions" -> {"Remark"},
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
 
+(*
+cannot have
+LintStringReport[string, opts:OptionsPattern[]]
+
+because LintStringReport[string, {}] leads to infinite loop
+*)
+
 LintStringReport[string_String, lints:{___Lint}, OptionsPattern[]] :=
 Catch[
- Module[{lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline},
+ Module[{lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
+
 
  tagExclusions = OptionValue["TagExclusions"];
+ severityExclusions = OptionValue["SeverityExclusions"];
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  lineHashExclusions = OptionValue["LineHashExclusions"];
 
@@ -93,7 +115,7 @@ Catch[
     lines = Append[lines, ""];
   ];
 
-  lintLinesReport[lines, lints, tagExclusions, lineNumberExclusions, lineHashExclusions]
+  lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions]
 ]]
 
 
@@ -104,10 +126,9 @@ Catch[
 
 
 
-lintLinesReport[linesIn_List, lintsIn:{___Lint}, tagExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
+lintLinesReport[linesIn_List, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp},
-  
   lints = lintsIn;
   
   (*
@@ -126,7 +147,6 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
   lines = StringTake[#, UpTo[$lineWidth]]& /@ lines;
 
-
   lineNumberExclusions = lineNumberExclusionsIn;
 
   lineNumberExclusions = expandLineNumberExclusions[lineNumberExclusions];
@@ -139,8 +159,12 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
 
 
-  If[!AST`Utils`empty[tagExclusions],
+  If[!empty[tagExclusions],
     lints = DeleteCases[lints, Lint[Alternatives @@ tagExclusions, _, _, _]];
+  ];
+
+  If[!empty[severityExclusions],
+    lints = DeleteCases[lints, Lint[_, _, Alternatives @@ severityExclusions, _]];
   ];
 
   (*
@@ -167,7 +191,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     sources = DeleteCases[sources, {{line1_, _}, {_, _}} /; MemberQ[Keys[lineNumberExclusions], line1]];
     *)
 
-    If[AST`Utils`empty[sources],
+    If[empty[sources],
       Throw[{}]
     ];
 
@@ -181,7 +205,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
    	lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])];
 
-    	LintedLine[i, hashes[[i]], { ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+    	LintedLine[lines[[i]], i, hashes[[i]], { ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
     											createUnderlineList[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])]},
     				Union[Flatten[Values[lintsPerColumn]]], "MaxLineNumberLength" -> maxLineNumberLength]
     ,
