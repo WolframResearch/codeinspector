@@ -146,7 +146,7 @@ severityToInteger["Fatal"] = 4
 (*
 return the highest severity from list of Lints
 *)
-severityColor[lints_List] :=
+severityColor[lints:{_Lint..}] :=
 Module[{maxSeverity},
   maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
   Switch[maxSeverity,
