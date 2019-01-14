@@ -85,8 +85,10 @@ a_?b[x]& is handled here
 *)
 PostfixNode[Function, {CallNode[BinaryNode[PatternTest, _, _], {_}, _]}, _] -> scanPatternTestCallFunctions,
 
-
+(*
+too noisy for now
 BinaryNode[Pattern, {_, InfixNode[Alternatives, _, _]}, _] -> scanAlternativesPatterns,
+*)
 
 Nothing
 |>
@@ -341,11 +343,11 @@ Catch[
   patternTestArg2 = patternTest[[2]][[2]];
   args = children[[1]];
   data = node[[3]];
-  {Lint["SuspiciousPatternTestCall", {"Suspicious use of ", LintBold["?"], ". PatternTest ", LintBold[ToInputFormString[patternTest]],
+  {Lint["SuspiciousPatternTestCall", {"Suspicious use of ", LintBold["?"], ". The precedence of ", LintBold["?"], " is surprisingly high. PatternTest ", LintBold[ToInputFormString[patternTest]],
     " is calling arguments ", LintBold[ToInputFormString[args]],
     ". Did you mean ", LintBold[ToInputFormString[BinaryNode[PatternTest,
         {patternTestArg1, GroupNode[GroupParen, {CallNode[patternTestArg2, {args}, <||>]}, <||>]}, <||>]]],
-        " ? If it is correct, consider using ", LintBold["()"], " around ", LintBold[ToInputFormString[patternTest]], " to reduce ambiguity."}, "Warning", data]}
+        " or ", LintBold[ToInputFormString[CallNode[GroupNode[GroupParen, {patternTest}, <||>], children, <||>]]], " ?"}, "Warning", data]}
 ]]
 
 
@@ -386,10 +388,10 @@ Catch[
 
   ruleChild2 = rule[[2]][[2]];
 
-  {Lint["SuspiciousRuleFunction", {"Suspicious use of ", LintBold["&"], ". ", SymbolName[ruleHead], " ", LintBold[ToInputFormString[rule]],
+  {Lint["SuspiciousRuleFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low. ", SymbolName[ruleHead], " ", LintBold[ToInputFormString[rule]],
     " is inside a ", LintBold["Function"], ". Did you mean ", LintBold[ToInputFormString[BinaryNode[ruleHead, {ruleChild1,
-      GroupNode[GroupParen, {PostfixNode[Function, {ruleChild2}, <||>]}, <||>]}, <||>]]], " ? If it is correct, consider using ", LintBold["()"], " around ",
-      LintBold[ToInputFormString[rule]], " to reduce ambiguity."}, "Warning", data]}
+      GroupNode[GroupParen, {PostfixNode[Function, {ruleChild2}, <||>]}, <||>]}, <||>]]], " or ",
+      LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, {rule}, <||>]}, <||>]]], " ?"}, "Warning", data]}
 ]]
 
 
@@ -411,9 +413,9 @@ Catch[
   patternTestChildren = patternTest[[2]];
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[2]];
-  {Lint["SuspiciousPatternTestFunction", {"Suspicious use of ", LintBold["&"], ". ", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
+  {Lint["SuspiciousPatternTestFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low and the precedence of ", LintBold["?"], " is surprisingly high. ", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
           LintBold[ToInputFormString[BinaryNode[PatternTest, {patternTestArg1, GroupNode[GroupParen, {PostfixNode[Function, {patternTestArg2}, <||>]}, <||>]}, <||>]]],
-          " ? If it is correct, consider using ", LintBold["()"], " around ", LintBold[ToInputFormString[patternTest]], " to reduce ambiguity."}, "Warning", data]}
+          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, patternTest, <||>]}, <||>]]], " ?"}, "Warning", data]}
 ]]
 
 
@@ -439,13 +441,17 @@ Catch[
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[2]];
 
-  {Lint["SuspiciousPatternTestCallFunction", {"Suspicious use of ", LintBold["&"], ". ", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
+  {Lint["SuspiciousPatternTestCallFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low and the precedence of ", LintBold["?"], " is surprisingly high.", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
           LintBold[ToInputFormString[BinaryNode[PatternTest, {patternTestArg1, GroupNode[GroupParen, {PostfixNode[Function, {CallNode[patternTestArg2, {args}, <||>]}, <||>]}, <||>]}, <||>]]],
-          " ? If it is correct, consider using ", LintBold["()"], " around ", LintBold[ToInputFormString[patternTest]], " to reduce ambiguity."}, "Warning", data]}
+          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, patternTest, <||>]}, <||>]]], " ?"}, "Warning", data]}
 ]]
 
 
 
+
+(*
+
+too noisy for now
 
 Attributes[scanAlternativesPatterns] = {HoldRest}
 
@@ -466,12 +472,12 @@ Catch[
   alternativesFirst = First[alternativesChildren];
   alternativesRest = Rest[alternativesChildren];
 
-  {Lint["SuspiciousAlternativesPattern", {"Suspicious use of ", LintBold["|"], ". Did you mean ",
+  {Lint["SuspiciousAlternativesPattern", {"Suspicious use of ", LintBold["|"], ". The precedence of ", Lintbold["|"], " is higher than ", LintBold[":"], ". Did you mean ",
           LintBold[ToInputFormString[InfixNode[Alternatives, {GroupNode[GroupParen, {BinaryNode[Pattern, {patternArg1, alternativesFirst}, <||>]}, <||>]}~Join~alternativesRest, <||>]]],
-          " ? If it is correct, consider using ", LintBold["()"], " around ", LintBold[ToInputFormString[alternatives]], " to reduce ambiguity."}, "Remark", data]}
+          " or ", LintBold[ToInputFormString[GroupNode[GroupParen, alternatives, <||>]]], " ?"}, "Remark", data]}
 ]]
 
-
+*)
 
 
 
