@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    217575,       4427]
-NotebookOptionsPosition[    212606,       4336]
-NotebookOutlinePosition[    212948,       4351]
-CellTagsIndexPosition[    212905,       4348]
+NotebookDataLength[    278997,       5796]
+NotebookOptionsPosition[    273342,       5693]
+NotebookOutlinePosition[    273682,       5708]
+CellTagsIndexPosition[    273639,       5705]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -28,7 +28,1140 @@ Cell["Lint", "Section",
 Cell[BoxData[
  RowBox[{"Needs", "[", "\"\<Lint`\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.75300979121483*^9, 3.753009794469636*^9}},
- CellLabel->"In[8]:=",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
+ CellLabel->"In[1]:=",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
+
+Cell[CellGroupData[{
+
+Cell["Formatting", "Subsection",
+ CellChangeTimes->{{3.756137528405982*^9, 
+  3.7561375300211887`*^9}},ExpressionUUID->"138585d7-a7f1-4d26-b1c2-\
+6f85db85613e"],
+
+Cell["\<\
+Jan 10 2019
+Unreported bug from Stefan showed ?Lint giving messages\
+\>", "Text",
+ CellChangeTimes->{{3.756137553997048*^9, 
+  3.7561375907865267`*^9}},ExpressionUUID->"8d2f4d18-8648-40df-9625-\
+2df89f04e4aa"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "Lint"}]], "Input",
+ CellChangeTimes->{{3.75613745674732*^9, 3.7561374576902037`*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"01a8dd2e-9439-4cfa-8976-49b406740780"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = False, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"Lint[tag, description, severity, data] is a problem \
+found in Wolfram Language source code.\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    
+                    StyleBox["\<\" Format Definitions\"\>", 
+                    "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FormatValues\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "FormatValues", "Tooltip"]& ], GridBox[{
+                    {
+                    StyleBox[
+                    RowBox[{"Lint", " ", "/:", " ", 
+                    RowBox[{"MakeBoxes", "[", 
+                    RowBox[{
+                    RowBox[{"Lint`Format`Private`lint", ":", 
+                    RowBox[{"Lint", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`tag_String", ",", " ", 
+                    "Lint`Format`Private`description_String", ",", " ", 
+                    "Lint`Format`Private`severity_String", ",", " ", 
+                    "Lint`Format`Private`data_Association"}], "]"}]}], ",", 
+                    " ", "StandardForm"}], "]"}], " ", ":=", " ", 
+                    RowBox[{"TagBox", "[", 
+                    RowBox[{
+                    RowBox[{"GridBox", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", "\"\<Lint`Format`Private`tag\>\"", "}"}], 
+                    ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"StyleBox", "[", 
+                    RowBox[{
+                    RowBox[{"TemplateBox", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<\\\"Severity: \\\"\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`severity\>\""}], "}"}], ",", 
+                    " ", "\"\<RowDefault\>\""}], "]"}], ",", " ", 
+                    RowBox[{"FontColor", " ", "->", " ", 
+                    RowBox[{"Lint`Format`Private`severityColor", "[", 
+                    RowBox[{"{", "Lint`Format`Private`lint", "}"}], "]"}]}], 
+                    ",", " ", 
+                    RowBox[{"FontWeight", " ", "->", " ", "Bold"}], ",", " ", 
+                    
+                    RowBox[{"StripOnInput", " ", "->", " ", "False"}]}], 
+                    "]"}], "}"}], ",", " ", 
+                    RowBox[{
+                    "{", "\"\<Lint`Format`Private`description\>\"", "}"}]}], 
+                    "}"}], ",", " ", 
+                    RowBox[{"GridBoxAlignment", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"\"\<Columns\>\"", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"{", "Left", "}"}], "}"}]}], "}"}]}], ",", " ", 
+                    RowBox[{
+                    "DefaultBaseStyle", " ", "->", " ", "\"\<Column\>\""}], 
+                    ",", " ", 
+                    RowBox[{"GridBoxItemSize", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"\"\<Columns\>\"", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"{", "Automatic", "}"}], "}"}]}], ",", " ", 
+                    RowBox[{"\"\<Rows\>\"", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"{", "Automatic", "}"}], "}"}]}]}], "}"}]}]}], 
+                    "]"}], ",", " ", "\"\<Column\>\""}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]},
+                    {
+                    StyleBox[
+                    RowBox[{"Lint", " ", "/:", " ", 
+                    RowBox[{"MakeBoxes", "[", 
+                    RowBox[{
+                    RowBox[{"Lint`Format`Private`lint", ":", 
+                    RowBox[{"Lint", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`tag_String", ",", " ", 
+                    "Lint`Format`Private`description_List", ",", " ", 
+                    "Lint`Format`Private`severity_String", ",", " ", 
+                    "Lint`Format`Private`data_Association"}], "]"}]}], ",", 
+                    " ", "StandardForm"}], "]"}], " ", ":=", " ", 
+                    RowBox[{"TagBox", "[", 
+                    RowBox[{
+                    RowBox[{"GridBox", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", "\"\<Lint`Format`Private`tag\>\"", "}"}], 
+                    ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"StyleBox", "[", 
+                    RowBox[{
+                    RowBox[{"TemplateBox", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<\\\"Severity: \\\"\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`severity\>\""}], "}"}], ",", 
+                    " ", "\"\<RowDefault\>\""}], "]"}], ",", " ", 
+                    RowBox[{"FontColor", " ", "->", " ", 
+                    RowBox[{"Lint`Format`Private`severityColor", "[", 
+                    RowBox[{"{", "Lint`Format`Private`lint", "}"}], "]"}]}], 
+                    ",", " ", 
+                    RowBox[{"FontWeight", " ", "->", " ", "Bold"}], ",", " ", 
+                    
+                    RowBox[{"StripOnInput", " ", "->", " ", "False"}]}], 
+                    "]"}], "}"}], ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Row\>\"", ",", " ", "\"\<[\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`description\>\"", ",", " ", 
+                    "\"\<]\>\""}], "}"}], "]"}], "}"}]}], "}"}], ",", " ", 
+                    RowBox[{"GridBoxAlignment", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"\"\<Columns\>\"", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"{", "Left", "}"}], "}"}]}], "}"}]}], ",", " ", 
+                    RowBox[{
+                    "DefaultBaseStyle", " ", "->", " ", "\"\<Column\>\""}], 
+                    ",", " ", 
+                    RowBox[{"GridBoxItemSize", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"\"\<Columns\>\"", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"{", "Automatic", "}"}], "}"}]}], ",", " ", 
+                    RowBox[{"\"\<Rows\>\"", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"{", "Automatic", "}"}], "}"}]}]}], "}"}]}]}], 
+                    "]"}], ",", " ", "\"\<Column\>\""}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]},
+                    {
+                    StyleBox[
+                    RowBox[{
+                    RowBox[{"Lint`Format`Private`lint", ":", 
+                    RowBox[{"Lint", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`tag_String", ",", " ", 
+                    "Lint`Format`Private`description_String", ",", " ", 
+                    "Lint`Format`Private`severity_String", ",", " ", 
+                    "Lint`Format`Private`data_Association"}], "]"}]}], " ", ":=",
+                     " ", 
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "Lint`Format`Private`tag", ",", " ", "\"\< \>\"", ",", 
+                    " ", 
+                    RowBox[{"Lint`Format`LintMarkup", "[", 
+                    RowBox[{
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Severity: \>\"", ",", " ", 
+                    "Lint`Format`Private`severity"}], "}"}], "]"}], ",", " ", 
+                    
+                    RowBox[{"FontColor", " ", "->", " ", 
+                    RowBox[{"Lint`Format`Private`severityColor", "[", 
+                    RowBox[{"{", "Lint`Format`Private`lint", "}"}], "]"}]}], 
+                    ",", " ", 
+                    RowBox[{"FontWeight", " ", "->", " ", "Bold"}]}], "]"}], 
+                    ",", " ", "\"\< \>\"", ",", " ", 
+                    "Lint`Format`Private`description"}], "}"}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]},
+                    {
+                    StyleBox[
+                    RowBox[{
+                    RowBox[{"Lint`Format`Private`lint", ":", 
+                    RowBox[{"Lint", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`tag_String", ",", " ", 
+                    "Lint`Format`Private`description_List", ",", " ", 
+                    "Lint`Format`Private`severity_String", ",", " ", 
+                    "Lint`Format`Private`data_Association"}], "]"}]}], " ", ":=",
+                     " ", 
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "Lint`Format`Private`tag", ",", " ", "\"\< \>\"", ",", 
+                    " ", 
+                    RowBox[{"Lint`Format`LintMarkup", "[", 
+                    RowBox[{
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Severity: \>\"", ",", " ", 
+                    "Lint`Format`Private`severity"}], "}"}], "]"}], ",", " ", 
+                    
+                    RowBox[{"FontColor", " ", "->", " ", 
+                    RowBox[{"Lint`Format`Private`severityColor", "[", 
+                    RowBox[{"{", "Lint`Format`Private`lint", "}"}], "]"}]}], 
+                    ",", " ", 
+                    RowBox[{"FontWeight", " ", "->", " ", "Bold"}]}], "]"}], 
+                    ",", " ", "\"\< \>\"", ",", " ", 
+                    RowBox[{
+                    "Sequence", " ", "@@", " ", 
+                    "Lint`Format`Private`description"}]}], "}"}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]}
+                    },
+                    BaselinePosition->{Baseline, {1, 1}},
+                    
+                    GridBoxAlignment->{
+                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], "\<\"Lint`Lint\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"]], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"Lint[tag, description, severity, data] is a problem \
+found in Wolfram Language source code.\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"],
+               ImageSizeCache->{10., {2., 8.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> 
+    "Lint[tag, description, severity, data] is a problem found in Wolfram \
+Language source code.", "Documentation" -> None, "OwnValues" -> None, 
+    "UpValues" -> None, "DownValues" -> None, "SubValues" -> None, 
+    "DefaultValues" -> None, "NValues" -> None, "FormatValues" -> 
+    Information`InformationValueForm[FormatValues, Lint`Lint, {MakeBoxes[
+         Pattern[Lint`Format`Private`lint, 
+          Lint`Lint[
+           Pattern[Lint`Format`Private`tag, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`description, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`severity, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`data, 
+            Blank[Association]]]], StandardForm] :> Format[
+         Column[{Lint`Format`Private`tag, 
+           Lint`Format`LintMarkup[
+            Row[{"Severity: ", Lint`Format`Private`severity}], FontColor -> 
+            Lint`Format`Private`severityColor[{Lint`Format`Private`lint}], 
+            FontWeight -> Bold], Lint`Format`Private`description}], 
+         StandardForm], MakeBoxes[
+         Pattern[Lint`Format`Private`lint, 
+          Lint`Lint[
+           Pattern[Lint`Format`Private`tag, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`description, 
+            Blank[List]], 
+           Pattern[Lint`Format`Private`severity, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`data, 
+            Blank[Association]]]], StandardForm] :> Format[
+         Column[{Lint`Format`Private`tag, 
+           Lint`Format`LintMarkup[
+            Row[{"Severity: ", Lint`Format`Private`severity}], FontColor -> 
+            Lint`Format`Private`severityColor[{Lint`Format`Private`lint}], 
+            FontWeight -> Bold], 
+           Row[Lint`Format`Private`description]}], StandardForm], Format[
+         Pattern[Lint`Format`Private`lint, 
+          Lint`Lint[
+           Pattern[Lint`Format`Private`tag, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`description, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`severity, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`data, 
+            Blank[Association]]]]] :> Row[{Lint`Format`Private`tag, " ", 
+          Lint`Format`LintMarkup[
+           Row[{"Severity: ", Lint`Format`Private`severity}], FontColor -> 
+           Lint`Format`Private`severityColor[{Lint`Format`Private`lint}], 
+           FontWeight -> Bold], " ", Lint`Format`Private`description}], Format[
+         Pattern[Lint`Format`Private`lint, 
+          Lint`Lint[
+           Pattern[Lint`Format`Private`tag, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`description, 
+            Blank[List]], 
+           Pattern[Lint`Format`Private`severity, 
+            Blank[String]], 
+           Pattern[Lint`Format`Private`data, 
+            Blank[Association]]]]] :> Row[{Lint`Format`Private`tag, " ", 
+          Lint`Format`LintMarkup[
+           Row[{"Severity: ", Lint`Format`Private`severity}], FontColor -> 
+           Lint`Format`Private`severityColor[{Lint`Format`Private`lint}], 
+           FontWeight -> Bold], " ", 
+          Apply[Sequence, Lint`Format`Private`description]}]}], "Options" -> 
+    None, "Attributes" -> {}, "FullName" -> "Lint`Lint"], False]]], "Output",
+ CellChangeTimes->{3.756137464548863*^9, 3.7561375122883453`*^9},
+ CellLabel->"Out[2]=",ExpressionUUID->"cf97ce4d-0f32-4fe9-9535-9f29e23b62b4"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "LintedLine"}]], "Input",
+ CellChangeTimes->{{3.756137469194253*^9, 3.7561374756023483`*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"34af2de0-eff1-4fbd-b8de-1a0ae2385e29"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = False, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"LintedLine[lineSource, lineNumber, hash, content, \
+lintList, options] represents a formatted line of output.\"\>", 
+             "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    
+                    StyleBox["\<\" Format Definitions\"\>", 
+                    "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FormatValues\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "FormatValues", "Tooltip"]& ], GridBox[{
+                    {
+                    StyleBox[
+                    RowBox[{"LintedLine", " ", "/:", " ", 
+                    RowBox[{"MakeBoxes", "[", 
+                    RowBox[{
+                    RowBox[{"LintedLine", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`lineSource_String", ",", " ", 
+                    "Lint`Format`Private`lineNumber_Integer", ",", " ", 
+                    "Lint`Format`Private`hash_String", ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "Lint`Format`Private`lineList_List", ",", " ", 
+                    "Lint`Format`Private`underlineList_List"}], "}"}], ",", 
+                    " ", 
+                    RowBox[{"Lint`Format`Private`lints", ":", 
+                    RowBox[{"{", "___Lint", "}"}]}], ",", " ", 
+                    "Lint`Format`Private`opts___"}], "]"}], ",", " ", 
+                    "StandardForm"}], "]"}], " ", ":=", " ", 
+                    RowBox[{"TemplateBox", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Lint`Format`Private`formatLeftColumn\>\"", ",", " ", 
+                    "\"\<[\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Lint`Format`Private`lineSource\>\"", ",", " ", 
+                    "\"\<,\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`lineNumber\>\"", ",", " ", 
+                    "\"\<,\>\"", ",", " ", "\"\<Lint`Format`Private`hash\>\"",
+                     ",", " ", "\"\<,\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`opts\>\""}], "}"}], "]"}], ",", 
+                    " ", "\"\<]\>\""}], "}"}], "]"}], ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"\"\<Grid\>\"", ",", " ", "\"\<[\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"\"\<{\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Lint`Format`Private`lineList\>\"", ",", " ", 
+                    "\"\<,\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`underlineList\>\""}], "}"}], 
+                    "]"}], ",", " ", "\"\<}\>\""}], "}"}], "]"}], ",", " ", 
+                    "\"\<,\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Spacings\>\"", ",", " ", "\"\<\[Rule]\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"\"\<{\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<0\>\"", ",", " ", "\"\<,\>\"", ",", " ", 
+                    "\"\<0\>\""}], "}"}], "]"}], ",", " ", "\"\<}\>\""}], 
+                    "}"}], "]"}]}], "}"}], "]"}]}], "}"}], "]"}], ",", " ", 
+                    "\"\<]\>\""}], "}"}], "]"}]}], "}"}], ",", " ", 
+                    "\"\<RowDefault\>\""}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]},
+                    {
+                    StyleBox[
+                    RowBox[{
+                    RowBox[{"LintedLine", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`lineSource_String", ",", " ", 
+                    "Lint`Format`Private`lineNumber_Integer", ",", " ", 
+                    "Lint`Format`Private`hash_String", ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "Lint`Format`Private`lineList_List", ",", " ", 
+                    "Lint`Format`Private`underlineList_List"}], "}"}], ",", 
+                    " ", 
+                    RowBox[{"Lint`Format`Private`lints", ":", 
+                    RowBox[{"{", "___Lint", "}"}]}], ",", " ", 
+                    "Lint`Format`Private`opts___"}], "]"}], " ", ":=", " ", 
+                    RowBox[{"Module", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    "Lint`Format`Private`maxLineNumberLength", ",", " ", 
+                    "Lint`Format`Private`paddedLineNumber", ",", " ", 
+                    "Lint`Format`Private`endingLints"}], "}"}], ",", " ", 
+                    RowBox[{
+                    RowBox[{
+                    "Lint`Format`Private`maxLineNumberLength", " ", "=", " ", 
+                    
+                    RowBox[{"OptionValue", "[", 
+                    RowBox[{"LintedLine", ",", " ", 
+                    RowBox[{"{", "Lint`Format`Private`opts", "}"}], ",", " ", 
+                    "\"\<MaxLineNumberLength\>\""}], "]"}]}], ";", " ", 
+                    RowBox[{
+                    "Lint`Format`Private`paddedLineNumber", " ", "=", " ", 
+                    RowBox[{"StringPadLeft", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "ToString", "[", "Lint`Format`Private`lineNumber", "]"}], 
+                    ",", " ", "Lint`Format`Private`maxLineNumberLength", ",", 
+                    " ", "\"\< \>\""}], "]"}]}], ";", " ", 
+                    RowBox[{
+                    "Lint`Format`Private`endingLints", " ", "=", " ", 
+                    RowBox[{"Cases", "[", 
+                    RowBox[{"Lint`Format`Private`lints", ",", " ", 
+                    RowBox[{"Lint", "[", 
+                    RowBox[{"_", ",", " ", "_", ",", " ", "_", ",", " ", 
+                    RowBox[{"KeyValuePattern", "[", 
+                    RowBox[{"AST`Source", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"_", ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"Lint`Format`Private`lineNumber", ",", " ", "_"}],
+                     "}"}]}], "}"}]}], "]"}]}], "]"}]}], "]"}]}], ";", " ", 
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<line \>\"", ",", " ", 
+                    "Lint`Format`Private`paddedLineNumber", ",", " ", 
+                    "\"\<: \>\""}], "}"}], "]"}], ",", " ", 
+                    RowBox[{"Column", "[", 
+                    RowBox[{"Join", "[", 
+                    RowBox[{
+                    RowBox[{"Row", " ", "/@", " ", 
+                    RowBox[{"Partition", "[", 
+                    RowBox[{"Lint`Format`Private`lineList", ",", " ", 
+                    RowBox[{"UpTo", "[", "150", "]"}]}], "]"}]}], ",", " ", 
+                    RowBox[{"Row", " ", "/@", " ", 
+                    RowBox[{"Partition", "[", 
+                    RowBox[{"Lint`Format`Private`underlineList", ",", " ", 
+                    RowBox[{"UpTo", "[", "150", "]"}]}], "]"}]}], ",", " ", 
+                    "Lint`Format`Private`endingLints"}], "]"}], "]"}]}], 
+                    "}"}], "]"}]}]}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]},
+                    {
+                    StyleBox[
+                    RowBox[{"LintedLine", " ", "/:", " ", 
+                    RowBox[{"MakeBoxes", "[", 
+                    RowBox[{
+                    RowBox[{"LintedLine", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`lineSource_String", ",", " ", 
+                    "Lint`Format`Private`lineNumber_Integer", ",", " ", 
+                    "Lint`Format`Private`hash_String", ",", " ", 
+                    "Lint`Format`Private`lineList_List", ",", " ", 
+                    RowBox[{"Lint`Format`Private`lints", ":", 
+                    RowBox[{"{", "___Lint", "}"}]}], ",", " ", 
+                    "Lint`Format`Private`opts___"}], "]"}], ",", " ", 
+                    "StandardForm"}], "]"}], " ", ":=", " ", 
+                    RowBox[{"TemplateBox", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Lint`Format`Private`formatLeftColumn\>\"", ",", " ", 
+                    "\"\<[\>\"", ",", " ", 
+                    RowBox[{"RowBox", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Lint`Format`Private`lineSource\>\"", ",", " ", 
+                    "\"\<,\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`lineNumber\>\"", ",", " ", 
+                    "\"\<,\>\"", ",", " ", "\"\<Lint`Format`Private`hash\>\"",
+                     ",", " ", "\"\<,\>\"", ",", " ", 
+                    "\"\<Lint`Format`Private`opts\>\""}], "}"}], "]"}], ",", 
+                    " ", "\"\<]\>\""}], "}"}], "]"}], ",", " ", 
+                    "\"\<Lint`Format`Private`lineList\>\""}], "}"}], ",", 
+                    " ", "\"\<RowDefault\>\""}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]},
+                    {
+                    StyleBox[
+                    RowBox[{
+                    RowBox[{"LintedLine", "[", 
+                    RowBox[{
+                    "Lint`Format`Private`lineSource_String", ",", " ", 
+                    "Lint`Format`Private`lineNumber_Integer", ",", " ", 
+                    "Lint`Format`Private`hash_String", ",", " ", 
+                    "Lint`Format`Private`lineList_List", ",", " ", 
+                    RowBox[{"Lint`Format`Private`lints", ":", 
+                    RowBox[{"{", "___Lint", "}"}]}], ",", " ", 
+                    "Lint`Format`Private`opts___"}], "]"}], " ", ":=", " ", 
+                    RowBox[{"Module", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    "Lint`Format`Private`maxLineNumberLength", ",", " ", 
+                    "Lint`Format`Private`paddedLineNumber", ",", " ", 
+                    "Lint`Format`Private`endingLints"}], "}"}], ",", " ", 
+                    RowBox[{
+                    RowBox[{
+                    "Lint`Format`Private`maxLineNumberLength", " ", "=", " ", 
+                    
+                    RowBox[{"OptionValue", "[", 
+                    RowBox[{"LintedLine", ",", " ", 
+                    RowBox[{"{", "Lint`Format`Private`opts", "}"}], ",", " ", 
+                    "\"\<MaxLineNumberLength\>\""}], "]"}]}], ";", " ", 
+                    RowBox[{
+                    "Lint`Format`Private`paddedLineNumber", " ", "=", " ", 
+                    RowBox[{"StringPadLeft", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "ToString", "[", "Lint`Format`Private`lineNumber", "]"}], 
+                    ",", " ", "Lint`Format`Private`maxLineNumberLength", ",", 
+                    " ", "\"\< \>\""}], "]"}]}], ";", " ", 
+                    RowBox[{
+                    "Lint`Format`Private`endingLints", " ", "=", " ", 
+                    RowBox[{"Cases", "[", 
+                    RowBox[{"Lint`Format`Private`lints", ",", " ", 
+                    RowBox[{"Lint", "[", 
+                    RowBox[{"_", ",", " ", "_", ",", " ", "_", ",", " ", 
+                    RowBox[{"KeyValuePattern", "[", 
+                    RowBox[{"AST`Source", " ", "->", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"_", ",", " ", 
+                    RowBox[{"{", 
+                    RowBox[{"Lint`Format`Private`lineNumber", ",", " ", "_"}],
+                     "}"}]}], "}"}]}], "]"}]}], "]"}]}], "]"}]}], ";", " ", 
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Row", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<line \>\"", ",", " ", 
+                    "Lint`Format`Private`paddedLineNumber", ",", " ", 
+                    "\"\<: \>\""}], "}"}], "]"}], ",", " ", 
+                    RowBox[{"Column", "[", 
+                    RowBox[{"Join", "[", 
+                    RowBox[{
+                    RowBox[{"Row", " ", "/@", " ", 
+                    RowBox[{"Partition", "[", 
+                    RowBox[{"Lint`Format`Private`lineList", ",", " ", 
+                    RowBox[{"UpTo", "[", "150", "]"}]}], "]"}]}], ",", " ", 
+                    "Lint`Format`Private`endingLints"}], "]"}], "]"}]}], 
+                    "}"}], "]"}]}]}], "]"}]}],
+                    ShowStringCharacters->True,
+                    NumberMarks->True]}
+                    },
+                    BaselinePosition->{Baseline, {1, 1}},
+                    
+                    GridBoxAlignment->{
+                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Options\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Options\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Options", "Tooltip"]& ], 
+                   RowBox[{"\<\"MaxLineNumberLength\"\>", "\[Rule]", "5"}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], "\<\"Lint`LintedLine\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"]], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"LintedLine[lineSource, lineNumber, hash, content, \
+lintList, options] represents a formatted line of output.\"\>", 
+             "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"],
+               ImageSizeCache->{10., {2., 8.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> 
+    "LintedLine[lineSource, lineNumber, hash, content, lintList, options] \
+represents a formatted line of output.", "Documentation" -> None, "OwnValues" -> 
+    None, "UpValues" -> None, "DownValues" -> None, "SubValues" -> None, 
+    "DefaultValues" -> None, "NValues" -> None, "FormatValues" -> 
+    Information`InformationValueForm[FormatValues, Lint`LintedLine, {MakeBoxes[
+         Lint`LintedLine[
+          Pattern[Lint`Format`Private`lineSource, 
+           Blank[String]], 
+          Pattern[Lint`Format`Private`lineNumber, 
+           Blank[Integer]], 
+          Pattern[Lint`Format`Private`hash, 
+           Blank[String]], {
+           Pattern[Lint`Format`Private`lineList, 
+            Blank[List]], 
+           Pattern[Lint`Format`Private`underlineList, 
+            Blank[List]]}, 
+          Pattern[Lint`Format`Private`lints, {
+            BlankNullSequence[Lint`Lint]}], 
+          Pattern[Lint`Format`Private`opts, 
+           BlankNullSequence[]]], StandardForm] :> Format[
+         Row[{
+           Lint`Format`Private`formatLeftColumn[
+           Lint`Format`Private`lineSource, Lint`Format`Private`lineNumber, 
+            Lint`Format`Private`hash, Lint`Format`Private`opts], 
+           
+           Grid[{Lint`Format`Private`lineList, 
+             Lint`Format`Private`underlineList}, Spacings -> {0, 0}]}], 
+         StandardForm], Format[
+         Lint`LintedLine[
+          Pattern[Lint`Format`Private`lineSource, 
+           Blank[String]], 
+          Pattern[Lint`Format`Private`lineNumber, 
+           Blank[Integer]], 
+          Pattern[Lint`Format`Private`hash, 
+           Blank[String]], {
+           Pattern[Lint`Format`Private`lineList, 
+            Blank[List]], 
+           Pattern[Lint`Format`Private`underlineList, 
+            Blank[List]]}, 
+          Pattern[Lint`Format`Private`lints, {
+            BlankNullSequence[Lint`Lint]}], 
+          Pattern[Lint`Format`Private`opts, 
+           BlankNullSequence[]]]] :> 
+       Module[{Lint`Format`Private`maxLineNumberLength, 
+          Lint`Format`Private`paddedLineNumber, 
+          Lint`Format`Private`endingLints}, 
+         Lint`Format`Private`maxLineNumberLength = 
+          OptionValue[
+           Lint`LintedLine, {Lint`Format`Private`opts}, 
+            "MaxLineNumberLength"]; 
+         Lint`Format`Private`paddedLineNumber = StringPadLeft[
+            ToString[Lint`Format`Private`lineNumber], 
+            Lint`Format`Private`maxLineNumberLength, " "]; 
+         Lint`Format`Private`endingLints = Cases[Lint`Format`Private`lints, 
+            Lint`Lint[
+             Blank[], 
+             Blank[], 
+             Blank[], 
+             KeyValuePattern[AST`Source -> {
+                Blank[], {Lint`Format`Private`lineNumber, 
+                 Blank[]}}]]]; Row[{
+            Row[{"line ", Lint`Format`Private`paddedLineNumber, ": "}], 
+            Column[
+             Join[
+              Map[Row, 
+               Partition[Lint`Format`Private`lineList, 
+                UpTo[150]]], 
+              Map[Row, 
+               Partition[Lint`Format`Private`underlineList, 
+                UpTo[150]]], Lint`Format`Private`endingLints]]}]], MakeBoxes[
+         Lint`LintedLine[
+          Pattern[Lint`Format`Private`lineSource, 
+           Blank[String]], 
+          Pattern[Lint`Format`Private`lineNumber, 
+           Blank[Integer]], 
+          Pattern[Lint`Format`Private`hash, 
+           Blank[String]], 
+          Pattern[Lint`Format`Private`lineList, 
+           Blank[List]], 
+          Pattern[Lint`Format`Private`lints, {
+            BlankNullSequence[Lint`Lint]}], 
+          Pattern[Lint`Format`Private`opts, 
+           BlankNullSequence[]]], StandardForm] :> Format[
+         Row[{
+           Lint`Format`Private`formatLeftColumn[
+           Lint`Format`Private`lineSource, Lint`Format`Private`lineNumber, 
+            Lint`Format`Private`hash, Lint`Format`Private`opts], 
+           Lint`Format`Private`lineList}], StandardForm], Format[
+         Lint`LintedLine[
+          Pattern[Lint`Format`Private`lineSource, 
+           Blank[String]], 
+          Pattern[Lint`Format`Private`lineNumber, 
+           Blank[Integer]], 
+          Pattern[Lint`Format`Private`hash, 
+           Blank[String]], 
+          Pattern[Lint`Format`Private`lineList, 
+           Blank[List]], 
+          Pattern[Lint`Format`Private`lints, {
+            BlankNullSequence[Lint`Lint]}], 
+          Pattern[Lint`Format`Private`opts, 
+           BlankNullSequence[]]]] :> 
+       Module[{Lint`Format`Private`maxLineNumberLength, 
+          Lint`Format`Private`paddedLineNumber, 
+          Lint`Format`Private`endingLints}, 
+         Lint`Format`Private`maxLineNumberLength = 
+          OptionValue[
+           Lint`LintedLine, {Lint`Format`Private`opts}, 
+            "MaxLineNumberLength"]; 
+         Lint`Format`Private`paddedLineNumber = StringPadLeft[
+            ToString[Lint`Format`Private`lineNumber], 
+            Lint`Format`Private`maxLineNumberLength, " "]; 
+         Lint`Format`Private`endingLints = Cases[Lint`Format`Private`lints, 
+            Lint`Lint[
+             Blank[], 
+             Blank[], 
+             Blank[], 
+             KeyValuePattern[AST`Source -> {
+                Blank[], {Lint`Format`Private`lineNumber, 
+                 Blank[]}}]]]; Row[{
+            Row[{"line ", Lint`Format`Private`paddedLineNumber, ": "}], 
+            Column[
+             Join[
+              Map[Row, 
+               Partition[Lint`Format`Private`lineList, 
+                UpTo[150]]], Lint`Format`Private`endingLints]]}]]}], 
+    "Options" -> {"MaxLineNumberLength" -> 5}, "Attributes" -> {}, "FullName" -> 
+    "Lint`LintedLine"], False]]], "Output",
+ CellChangeTimes->{3.756137476378537*^9, 3.756137513346736*^9},
+ CellLabel->"Out[3]=",ExpressionUUID->"1369168e-9718-4ed6-a0c9-765c454d3d17"]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -58,15 +1191,25 @@ Cell[BoxData[{
    3.7530146120157423`*^9, 3.753014612189309*^9}, {3.7530155944276037`*^9, 
    3.753015626573682*^9}, {3.753016019337678*^9, 3.753016032776876*^9}, {
    3.753019689199402*^9, 3.753019689867543*^9}},
- CellLabel->"In[9]:=",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
+ CellLabel->"In[6]:=",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"53d0e03ed07e131d\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"1\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["{ a."], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["53d0e03ed07e131d"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", 
            TagBox[
             TooltipBox[
@@ -210,6 +1353,7 @@ Cell[BoxData[
                  TagBox[
                   GridBox[{{"\"SyntaxError\""}, {
                     StyleBox[
+                    
                     TemplateBox[{"\"Severity: \"", "\"Fatal\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
                     Bold, StripOnInput -> False]}, {
@@ -467,10 +1611,20 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "2", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"09cb8cd0c476a5dc\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"2\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["b"], 
+         "\"Copy line number\"" :> CopyToClipboard[2], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["09cb8cd0c476a5dc"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", 
            TagBox[
             TooltipBox[
@@ -540,6 +1694,7 @@ Cell[BoxData[
                  TagBox[
                   GridBox[{{"\"DotDifferentLine\""}, {
                     StyleBox[
+                    
                     TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
                     FontWeight -> Bold, StripOnInput -> False]}, {
@@ -676,10 +1831,19 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "3", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"022148488940c43e\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"3\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard[""], "\"Copy line number\"" :> 
+         CopyToClipboard[3], "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["022148488940c43e"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", "\" \""}, {
            TagBox[
             TooltipBox[
@@ -733,8 +1897,9 @@ Cell[BoxData[
    3.753019344439478*^9, 3.75301941214389*^9, {3.753019674340971*^9, 
    3.753019690266076*^9}, 3.753019817681498*^9, {3.753019985095155*^9, 
    3.753020007587514*^9}, 3.753215717490699*^9, 3.753215887857751*^9, 
-   3.753217742999131*^9, 3.753275018456573*^9, 3.7549309351207542`*^9},
- CellLabel->"Out[11]=",ExpressionUUID->"805ad2b7-5dfb-4cfe-b083-440c295dde51"]
+   3.753217742999131*^9, 3.753275018456573*^9, 3.7549309351207542`*^9, 
+   3.756137400962822*^9},
+ CellLabel->"Out[8]=",ExpressionUUID->"610a7b7d-cf0a-47e8-a140-23b6c000af35"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -757,10 +1922,10 @@ Cell[BoxData[{
    3.753019689199402*^9, 3.753019689867543*^9}, {3.7532159002977467`*^9, 
    3.753215902929572*^9}, {3.753217773435586*^9, 3.753217777641789*^9}, {
    3.753217815011982*^9, 3.753217816154101*^9}},
- CellLabel->"In[12]:=",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
+ CellLabel->"In[9]:=",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
 
 Cell[OutputFormData["\<\
-Column[{LintedLine[1, \"53d0e03ed07e131d\", 
+Column[{LintedLine[\"{ a.\", 1, \"53d0e03ed07e131d\", 
    {{\" \", LintedCharacter[\"{\", {Lint[\"SyntaxError\", \"Missing group \
 closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
       FontWeight -> Bold], LintedCharacter[\" \", {Lint[\"SyntaxError\", \
@@ -768,13 +1933,15 @@ closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]},
         <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold], \
 LintedCharacter[\"a\", 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
-group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-      FontWeight -> Bold], LintedCharacter[\".\", {Lint[\"DotDifferentLine\", \
-{\"Operands for \", Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
+\".\", FontWeight -> Bold], 
+         \" are on different lines. Did you mean \", \
+Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
+\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
+       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold], 
+     LintedCharacter[\".\", {Lint[\"DotDifferentLine\", {\"Operands for \", \
+Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
          \" are on different lines. Did you mean \", \
 Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
          Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
@@ -789,35 +1956,40 @@ Larger], LintedCharacter[Lint`Format`LintErrorIndicator,
 <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
       FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
-group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintErrorIndicator, 
+\".\", FontWeight -> Bold], 
+         \" are on different lines. Did you mean \", \
+Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
+\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
+       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
-group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintContinuation, 
+\".\", FontWeight -> Bold], 
+         \" are on different lines. Did you mean \", \
+Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
+\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
+       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
-group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger]}}, 
-   {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\".\
-\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-      Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-     <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
-group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-   \"MaxLineNumberLength\" -> 1], LintedLine[2, \"09cb8cd0c476a5dc\", 
+\".\", FontWeight -> Bold], 
+         \" are on different lines. Did you mean \", \
+Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
+\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
+       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
+      FontSize -> Larger]}}, {Lint[\"DotDifferentLine\", {\"Operands for \", \
+Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
+      \" are on different lines. Did you mean \", \
+Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
+      Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", \
+<|AST`Source -> {{1, 3}, {2, 1}}|>], 
+    Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, \"MaxLineNumberLength\" -> 1], 
+  LintedLine[\"b\", 2, \"09cb8cd0c476a5dc\", 
    {{\" \", LintedCharacter[\"b\", {Lint[\"DotDifferentLine\", {\"Operands \
 for \", Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
          \" are on different lines. Did you mean \", \
@@ -837,30 +2009,30 @@ Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \",
 <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
       FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\
-\".\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
-         Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
-Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
-        <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
-group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-      FontWeight -> Bold, FontSize -> Larger], \
-LintedCharacter[Lint`Format`LintContinuation, 
-      {Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger]}}, {Lint[\"DotDifferentLine\", {\"Operands for \", \
-Lint`Format`LintMarkup[\".\", FontWeight -> Bold], 
-      \" are on different lines. Did you mean \", \
+\".\", FontWeight -> Bold], 
+         \" are on different lines. Did you mean \", \
 Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-      Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", \
-<|AST`Source -> {{1, 3}, {2, 1}}|>], 
-    Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
-<|AST`Source -> {{1, 1}, {3, 0}}|>]}, \"MaxLineNumberLength\" -> 1], 
-  LintedLine[3, \"022148488940c43e\", {{\" \", \" \"}, \
-{LintedCharacter[Lint`Format`LintEOF, 
-      {Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+         Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\
+\", <|AST`Source -> {{1, 3}, {2, 1}}|>], 
+       Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
 <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], \" \"}}, {Lint[\"SyntaxError\", \"Missing group \
-closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
-   \"MaxLineNumberLength\" -> 1]}]\
+      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, \
+{Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", 
+        <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, FontSize -> \
+Larger]}}, 
+   {Lint[\"DotDifferentLine\", {\"Operands for \", Lint`Format`LintMarkup[\".\
+\", FontWeight -> Bold], \" are on different lines. Did you mean \", 
+      Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
+Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
+     <|AST`Source -> {{1, 3}, {2, 1}}|>], Lint[\"SyntaxError\", \"Missing \
+group closer: }\", \"Fatal\", <|AST`Source -> {{1, 1}, {3, 0}}|>]}, 
+   \"MaxLineNumberLength\" -> 1], LintedLine[\"\", 3, \"022148488940c43e\", 
+   {{\" \", \" \"}, {LintedCharacter[Lint`Format`LintEOF, {Lint[\"SyntaxError\
+\", \"Missing group closer: }\", \"Fatal\", 
+        <|AST`Source -> {{1, 1}, {3, 0}}|>]}, FontWeight -> Bold, FontSize -> \
+Larger], \" \"}}, 
+   {Lint[\"SyntaxError\", \"Missing group closer: }\", \"Fatal\", \
+<|AST`Source -> {{1, 1}, {3, 0}}|>]}, \"MaxLineNumberLength\" -> 1]}]\
 \>", "\<\
 line 1:  { a. 
          ^^^^\\
@@ -888,10 +2060,10 @@ line 3:
    3.753020007587514*^9}, 3.753215717490699*^9, {3.753215887857751*^9, 
    3.753215905767993*^9}, 3.753215938944027*^9, 3.753217746195695*^9, 
    3.753217780041877*^9, 3.753217816689981*^9, 3.753275004036208*^9, 
-   3.7549309366155653`*^9},
+   3.7549309366155653`*^9, 3.756137405603166*^9},
  CellLabel->
-  "Out[14]//OutputForm=",ExpressionUUID->"41f6d02a-0a36-4c39-bad5-\
-12371228b07d"]
+  "Out[11]//OutputForm=",ExpressionUUID->"5247983e-0b81-43b7-ab0b-\
+5b2b1b45c2de"]
 }, Open  ]]
 }, Open  ]],
 
@@ -922,15 +2094,25 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.753012440276095*^9, 3.753012440510915*^9}, 
    3.753015654472356*^9, 3.753016273979617*^9, 3.753020011712543*^9},
- CellLabel->"In[15]:=",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
+ CellLabel->"In[12]:=",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "2", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"0868e102bcc757ff\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"2\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["  { aa . "], 
+         "\"Copy line number\"" :> CopyToClipboard[2], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["0868e102bcc757ff"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", "\" \"", "\" \"", 
            TagBox[
             TooltipBox[
@@ -1255,7 +2437,6 @@ Cell[BoxData[
                     TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
                     FontWeight -> Bold, StripOnInput -> False]}, {
-                    
                     TemplateBox[{
                     "\"Implicit times across lines. Did you mean \"", 
                     StyleBox[
@@ -1415,6 +2596,7 @@ Cell[BoxData[
                     TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
                     FontWeight -> Bold, StripOnInput -> False]}, {
+                    
                     TemplateBox[{
                     "\"Implicit times across lines. Did you mean \"", 
                     StyleBox[
@@ -1451,7 +2633,6 @@ Cell[BoxData[
                  TagBox[
                   GridBox[{{"\"DotDifferentLine\""}, {
                     StyleBox[
-                    
                     TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
                     FontWeight -> Bold, StripOnInput -> False]}, {
@@ -1866,10 +3047,20 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "3", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"3a5f934a47f18925\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"3\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["  bb }"], 
+         "\"Copy line number\"" :> CopyToClipboard[3], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["3a5f934a47f18925"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", 
            TagBox[
             TooltipBox[
@@ -2331,75 +3522,6 @@ Cell[BoxData[
                  TagBox[
                   GridBox[{{"\"ImplicitTimesAcrossLines\""}, {
                     StyleBox[
-                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
-                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
-                    FontWeight -> Bold, StripOnInput -> False]}, {
-                    
-                    TemplateBox[{
-                    "\"Implicit times across lines. Did you mean \"", 
-                    StyleBox[
-                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
-                    "\" or \"", 
-                    StyleBox[
-                    "\",\"", FontWeight -> Bold, StripOnInput -> False], 
-                    "\"?\""}, "RowDefault"]}}, 
-                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
-                   DefaultBaseStyle -> "Column", 
-                   GridBoxItemSize -> {
-                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
-                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
-               DefaultBaseStyle -> "Column", 
-               GridBoxItemSize -> {
-                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
-              "Column"]], Annotation[#, 
-             Column[{
-               Lint`Lint["DotDifferentLine", {"Operands for ", 
-                 Lint`Format`LintMarkup[".", FontWeight -> Bold], 
-                 " are on different lines. Did you mean ", 
-                 Lint`Format`LintMarkup[";", FontWeight -> Bold], " or ", 
-                 Lint`Format`LintMarkup[",", FontWeight -> Bold], "?"}, 
-                "Warning", 
-                Association[AST`Source -> {{2, 5}, {3, 4}}]], "", 
-               Lint`Lint[
-               "ImplicitTimesAcrossLines", {
-                "Implicit times across lines. Did you mean ", 
-                 Lint`Format`LintMarkup[";", FontWeight -> Bold], " or ", 
-                 Lint`Format`LintMarkup[",", FontWeight -> Bold], "?"}, 
-                "Warning", 
-                Association[AST`Source -> {{2, 3}, {4, 2}}]]}], "Tooltip"]& ], 
-           TagBox[
-            TooltipBox[
-             StyleBox[
-             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0.5, 0], 
-              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
-             
-             TagBox[
-              GridBox[{{
-                 TagBox[
-                  GridBox[{{"\"DotDifferentLine\""}, {
-                    StyleBox[
-                    
-                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
-                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
-                    FontWeight -> Bold, StripOnInput -> False]}, {
-                    TemplateBox[{"\"Operands for \"", 
-                    StyleBox[
-                    "\".\"", FontWeight -> Bold, StripOnInput -> False], 
-                    "\" are on different lines. Did you mean \"", 
-                    StyleBox[
-                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
-                    "\" or \"", 
-                    StyleBox[
-                    "\",\"", FontWeight -> Bold, StripOnInput -> False], 
-                    "\"?\""}, "RowDefault"]}}, 
-                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
-                   DefaultBaseStyle -> "Column", 
-                   GridBoxItemSize -> {
-                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
-                  "Column"]}, {"\"\""}, {
-                 TagBox[
-                  GridBox[{{"\"ImplicitTimesAcrossLines\""}, {
-                    StyleBox[
                     
                     TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
@@ -2474,6 +3596,76 @@ Cell[BoxData[
                     TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
                     FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{
+                    "\"Implicit times across lines. Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\" or \"", 
+                    StyleBox[
+                    "\",\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["DotDifferentLine", {"Operands for ", 
+                 Lint`Format`LintMarkup[".", FontWeight -> Bold], 
+                 " are on different lines. Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], " or ", 
+                 Lint`Format`LintMarkup[",", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{2, 5}, {3, 4}}]], "", 
+               Lint`Lint[
+               "ImplicitTimesAcrossLines", {
+                "Implicit times across lines. Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], " or ", 
+                 Lint`Format`LintMarkup[",", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{2, 3}, {4, 2}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0.5, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"DotDifferentLine\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Operands for \"", 
+                    StyleBox[
+                    "\".\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\" are on different lines. Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\" or \"", 
+                    StyleBox[
+                    "\",\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}, {"\"\""}, {
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimesAcrossLines\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    
                     TemplateBox[{
                     "\"Implicit times across lines. Did you mean \"", 
                     StyleBox[
@@ -2705,10 +3897,20 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "4", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"77c9a7e1c2137996\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"4\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard[" c"], 
+         "\"Copy line number\"" :> CopyToClipboard[4], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["77c9a7e1c2137996"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", 
            TagBox[
             TooltipBox[
@@ -2929,8 +4131,8 @@ Cell[BoxData[
    3.7530160049297457`*^9, 3.753016098395265*^9, 3.753016132166615*^9, 
    3.753016196695917*^9, 3.753016274409092*^9, 3.7530172742494183`*^9, {
    3.753020000504651*^9, 3.753020012064856*^9}, 3.753215979947445*^9, 
-   3.754930954282618*^9},
- CellLabel->"Out[17]=",ExpressionUUID->"d15942a9-bf9a-464a-9ffd-f5c105315194"]
+   3.754930954282618*^9, 3.7561374124598827`*^9},
+ CellLabel->"Out[14]=",ExpressionUUID->"81d465a8-9f50-4782-a0ab-1ab1239dd575"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -2946,7 +4148,7 @@ Cell[BoxData[
  RowBox[{"Needs", "[", "\"\<Lint`ImplicitTimes`\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.751038045031434*^9, 3.7510380700431128`*^9}, {
    3.7527776573488007`*^9, 3.752777660932123*^9}, 3.752779790347845*^9},
- CellLabel->"In[18]:=",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
+ CellLabel->"In[15]:=",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
 
 Cell[CellGroupData[{
 
@@ -2989,15 +4191,28 @@ Cell[BoxData[{
    3.751042442168944*^9, 3.751042481710712*^9, {3.752777666484868*^9, 
    3.752777671624596*^9}, {3.752784189714411*^9, 3.75278421203951*^9}, {
    3.753215995115109*^9, 3.753216021399331*^9}},
- CellLabel->"In[19]:=",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
+ CellLabel->"In[16]:=",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"40c68ff524e235c5\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard["1(*,\"Size\"->size_,*) \"Zoom\""], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["40c68ff524e235c5"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"1\"", "\"(\"", "\"*\"", "\",\"", "\"\\\"\"", "\"S\"", 
            "\"i\"", "\"z\"", "\"e\"", "\"\\\"\"", "\"-\"", "\">\"", "\"s\"", 
@@ -3102,8 +4317,8 @@ Cell[BoxData[
    3.752783567410932*^9, 3.752783762101472*^9, {3.7527840626923323`*^9, 
    3.7527840914743423`*^9}, {3.752784191296767*^9, 3.7527842130493917`*^9}, {
    3.753215989470842*^9, 3.753216021953721*^9}, 3.7532180446563063`*^9, 
-   3.754930961196438*^9},
- CellLabel->"Out[21]=",ExpressionUUID->"58de56c4-3eed-425c-878a-3962b2d40410"]
+   3.754930961196438*^9, 3.756137420508801*^9},
+ CellLabel->"Out[18]=",ExpressionUUID->"590474e1-b810-4a5c-a63a-7a6a68dc32ee"]
 }, Open  ]],
 
 Cell["The original report looked like this:", "Text",
@@ -3147,15 +4362,27 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.7532178910693903`*^9, 3.753217921471027*^9}, {
   3.753218052633794*^9, 3.753218052983568*^9}},
- CellLabel->"In[22]:=",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
+ CellLabel->"In[19]:=",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"6476ed82d9f57c9f\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["{a  (**)"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["6476ed82d9f57c9f"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"{\"", "\"a\"", "\" \"", "\" \"", "\"(\"", "\"*\"", 
            "\"*\"", "\")\"", "\" \""}, {"\" \"", "\" \"", 
@@ -3217,10 +4444,22 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "2", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"68bc0b4c44b922d8\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    2\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["b}"], 
+         "\"Copy line number\"" :> CopyToClipboard[2], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["68bc0b4c44b922d8"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", "\"b\"", "\"}\"", "\" \""}, {"\" \"", "\" \"", 
            TagBox[
             TooltipBox[
@@ -3258,8 +4497,9 @@ Cell[BoxData[
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
  CellChangeTimes->{{3.753217884439424*^9, 3.753217922522736*^9}, {
-   3.7532180470999203`*^9, 3.753218053672647*^9}, 3.754930965341941*^9},
- CellLabel->"Out[24]=",ExpressionUUID->"80657d21-380a-4f98-850c-ff2222e01449"]
+   3.7532180470999203`*^9, 3.753218053672647*^9}, 3.754930965341941*^9, 
+   3.756137428403742*^9},
+ CellLabel->"Out[21]=",ExpressionUUID->"6446de5b-fc7e-4dbf-bef8-ed8f9ae9b946"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3273,15 +4513,27 @@ Cell[BoxData[{
   RowBox[{"ImplicitTimesStringReport", "[", 
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.753218101460298*^9, 3.753218133207535*^9}},
- CellLabel->"In[25]:=",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
+ CellLabel->"In[22]:=",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"556bbf89cea2b70f\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["{a(**)"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["556bbf89cea2b70f"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"{\"", "\"a\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", 
            "\" \""}, {"\" \"", "\" \"", 
@@ -3343,10 +4595,22 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "2", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"3cd6479b0e84f9fa\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    2\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["        b"], 
+         "\"Copy line number\"" :> CopyToClipboard[2], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["3cd6479b0e84f9fa"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
            "\" \"", "\" \"", "\"b\"", "\" \""}, {
@@ -3383,10 +4647,22 @@ Cell[BoxData[
          GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
       "RowDefault"]},
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "4", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"4971a12132b36b6a\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    4\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["c}"], 
+         "\"Copy line number\"" :> CopyToClipboard[4], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["4971a12132b36b6a"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{"\" \"", "\"c\"", "\"}\"", "\" \""}, {"\" \"", "\" \"", 
            TagBox[
             TooltipBox[
@@ -3424,8 +4700,8 @@ Cell[BoxData[
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
  CellChangeTimes->{{3.7532181021977043`*^9, 3.7532181338167877`*^9}, 
-   3.754930966405163*^9},
- CellLabel->"Out[27]=",ExpressionUUID->"23aabd2c-847e-42ed-92ee-9d9528f6ff28"]
+   3.754930966405163*^9, 3.756137436002301*^9},
+ CellLabel->"Out[24]=",ExpressionUUID->"7087d148-6759-497b-be2f-375d55212999"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3441,24 +4717,24 @@ Cell[BoxData[{
     RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}], "//", 
   "OutputForm"}]}], "Input",
  CellChangeTimes->{{3.7532181577113323`*^9, 3.753218174866192*^9}},
- CellLabel->"In[28]:=",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
+ CellLabel->"In[25]:=",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
 
 Cell[OutputFormData["\<\
-Column[{LintedLine[1, \"556bbf89cea2b70f\", {{\" \", \"{\", \"a\", \"(\", \"*\
-\", \"*\", \")\", \" \"}, 
+Column[{LintedLine[\"{a(**)\", 1, \"556bbf89cea2b70f\", {{\" \", \"{\", \
+\"a\", \"(\", \"*\", \"*\", \")\", \" \"}, 
     {\" \", \" \", LintedCharacter[\"(\", {Lint[\"ImplicitTimes\", \
 \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, FontWeight -> Bold, 
       FontSize -> Larger], \" \", \" \", \" \", \" \", \
 LintedCharacter[Lint`Format`LintTimes, 
       {Lint[\"ImplicitTimes\", \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, \
 FontWeight -> Bold, FontSize -> Larger]}}, {}], 
-  LintedLine[2, \"3cd6479b0e84f9fa\", {{\" \", \" \", \" \", \" \", \" \", \" \
-\", \" \", \" \", \" \", \"b\", \" \"}, 
+  LintedLine[\"        b\", 2, \"3cd6479b0e84f9fa\", {{\" \", \" \", \" \", \
+\" \", \" \", \" \", \" \", \" \", \" \", \"b\", \" \"}, 
     {\" \", \" \", \" \", \" \", \" \", \" \", \" \", \" \", \" \", \" \", \
 LintedCharacter[Lint`Format`LintTimes, 
       {Lint[\"ImplicitTimes\", \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, \
 FontWeight -> Bold, FontSize -> Larger]}}, {}], 
-  LintedLine[4, \"4971a12132b36b6a\", {{\" \", \"c\", \"}\", \" \"}, 
+  LintedLine[\"c}\", 4, \"4971a12132b36b6a\", {{\" \", \"c\", \"}\", \" \"}, 
     {\" \", \" \", LintedCharacter[\")\", {Lint[\"ImplicitTimes\", \
 \"ImplicitTimes\", \"ImplicitTimes\", <||>]}, FontWeight -> Bold, 
       FontSize -> Larger], \" \"}}, {}]}]\
@@ -3470,10 +4746,11 @@ line     2:          b
 line     4:  c} 
               )\
 \>"], "Output",
- CellChangeTimes->{3.753218175540059*^9, 3.75493097001826*^9},
+ CellChangeTimes->{3.753218175540059*^9, 3.75493097001826*^9, 
+  3.756137438802145*^9},
  CellLabel->
-  "Out[30]//OutputForm=",ExpressionUUID->"25738016-323e-4eab-a641-\
-f3b58d0dcd0c"]
+  "Out[27]//OutputForm=",ExpressionUUID->"37f1d5e9-c556-4a06-9c2c-\
+c2bf12131e1e"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3488,10 +4765,10 @@ Cell[BoxData[{
     RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}], "//", 
   "OutputForm"}]}], "Input",
  CellChangeTimes->{{3.7532182242050323`*^9, 3.753218332261818*^9}},
- CellLabel->"In[31]:=",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
+ CellLabel->"In[28]:=",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
 
 Cell[OutputFormData["\<\
-Column[{LintedLine[1, \"556bbf89cea2b70f\", 
+Column[{LintedLine[\"{a(**)\", 1, \"556bbf89cea2b70f\", 
    {{\" \", \"{\", LintedCharacter[\"a\", {Lint[\"ImplicitTimesAcrossLines\", \
 {\"Implicit times across lines. Did you mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
@@ -3530,33 +4807,38 @@ Larger], LintedCharacter[Lint`Format`LintErrorIndicator,
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintContinuation, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger]}}, {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit \
-times across lines. Did you mean \", 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger]}}, \
+{Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
+mean \", 
       Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
      <|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
-LintedLine[2, \"3cd6479b0e84f9fa\", 
+LintedLine[\"        b\", 2, \"3cd6479b0e84f9fa\", 
    {{\" \", LintedCharacter[\" \", {Lint[\"ImplicitTimesAcrossLines\", \
 {\"Implicit times across lines. Did you mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
@@ -3616,58 +4898,68 @@ Larger], LintedCharacter[Lint`Format`LintErrorIndicator,
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintErrorIndicator, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintErrorIndicator, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], LintedCharacter[Lint`Format`LintContinuation, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+LintedCharacter[Lint`Format`LintContinuation, 
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger]}}, {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit \
-times across lines. Did you mean \", 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger]}}, \
+{Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did you \
+mean \", 
       Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
      <|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
-LintedLine[3, \"022148488940c43e\", 
+LintedLine[\"\", 3, \"022148488940c43e\", 
    {{\" \", \" \"}, {LintedCharacter[Lint`Format`LintContinuation, \
 {Lint[\"ImplicitTimesAcrossLines\", 
         {\"Implicit times across lines. Did you mean \", \
@@ -3679,7 +4971,7 @@ Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \",
       Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
 Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", 
      <|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1], \
-LintedLine[4, \"4971a12132b36b6a\", 
+LintedLine[\"c}\", 4, \"4971a12132b36b6a\", 
    {{\" \", LintedCharacter[\"c\", {Lint[\"ImplicitTimesAcrossLines\", \
 {\"Implicit times across lines. Did you mean \", 
          Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", \
@@ -3696,12 +4988,14 @@ Larger], LintedCharacter[Lint`Format`LintErrorIndicator,
       {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
 you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
          \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
-\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, FontWeight -> Bold, 
-      FontSize -> Larger], Lint`Format`LintSpaceIndicator, \" \"}}, 
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+      FontWeight -> Bold, FontSize -> Larger], \
+Lint`Format`LintSpaceIndicator, \" \"}}, 
    {Lint[\"ImplicitTimesAcrossLines\", {\"Implicit times across lines. Did \
-you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], \" or \", 
-      Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \"Warning\", \
-<|AST`Source -> {{1, 2}, {4, 1}}|>]}, \"MaxLineNumberLength\" -> 1]}]\
+you mean \", Lint`Format`LintMarkup[\";\", FontWeight -> Bold], 
+      \" or \", Lint`Format`LintMarkup[\",\", FontWeight -> Bold], \"?\"}, \
+\"Warning\", <|AST`Source -> {{1, 2}, {4, 1}}|>]}, 
+   \"MaxLineNumberLength\" -> 1]}]\
 \>", "\<\
 line 1:  {a(**) 
          ~^^^^^\\
@@ -3715,10 +5009,10 @@ line 4:  c}
 lines. Did you mean ; or ,?\
 \>"], "Output",
  CellChangeTimes->{{3.7532182254751472`*^9, 3.753218332728229*^9}, 
-   3.754930971576343*^9},
+   3.754930971576343*^9, 3.756137441235734*^9},
  CellLabel->
-  "Out[33]//OutputForm=",ExpressionUUID->"9144bb94-4179-4f63-8003-\
-052ed7e2ea92"]
+  "Out[30]//OutputForm=",ExpressionUUID->"7b16db0f-af50-4dd4-bf6a-\
+84e2c50bc7da"]
 }, Open  ]],
 
 Cell["Some related tests:", "Text",
@@ -3744,15 +5038,27 @@ Cell[BoxData[{
  CellChangeTimes->{{3.7508786045787067`*^9, 3.750878623577409*^9}, {
   3.752777690730426*^9, 3.752777695798749*^9}, {3.7530105198774023`*^9, 
   3.753010521652961*^9}, {3.753216030857129*^9, 3.753216033457224*^9}},
- CellLabel->"In[34]:=",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
+ CellLabel->"In[31]:=",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"5803a4c17cbfc63b\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["1(**)2"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["5803a4c17cbfc63b"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"1\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", "\"2\"", 
            "\" \""}, {"\" \"", 
@@ -3848,8 +5154,9 @@ Cell[BoxData[
   3.752777711292494*^9, 3.752779797765729*^9, 3.752781339647187*^9, 
    3.752781382845758*^9, {3.752781470885469*^9, 3.75278149664375*^9}, 
    3.7527819952615*^9, {3.752784098080627*^9, 3.752784117367494*^9}, 
-   3.752784216609147*^9, 3.753216034174611*^9, 3.754930975454988*^9},
- CellLabel->"Out[36]=",ExpressionUUID->"da93e42e-4712-4452-8b99-d886d9056e8d"]
+   3.752784216609147*^9, 3.753216034174611*^9, 3.754930975454988*^9, 
+   3.756137443583547*^9},
+ CellLabel->"Out[33]=",ExpressionUUID->"9ca8cda8-24a8-4554-9885-6788f9133c66"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3864,15 +5171,27 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.7527776977315073`*^9, 3.752777702344309*^9}, 
    3.753010524689694*^9, {3.753216038834076*^9, 3.753216041793868*^9}},
- CellLabel->"In[37]:=",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
+ CellLabel->"In[34]:=",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"7aab5b2fb7803f4f\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["1  (**)  2"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["7aab5b2fb7803f4f"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"1\"", "\" \"", "\" \"", "\"(\"", "\"*\"", "\"*\"", 
            "\")\"", "\" \"", "\" \"", "\"2\"", "\" \""}, {"\" \"", 
@@ -3969,8 +5288,9 @@ Cell[BoxData[
    3.752781474478613*^9, 3.752781497764765*^9}, {3.752781996742838*^9, 
    3.752781999112444*^9}, {3.752782034659431*^9, 3.752782048963509*^9}, {
    3.75278410447174*^9, 3.7527841196236343`*^9}, {3.752784220777945*^9, 
-   3.752784223935882*^9}, 3.753216042779162*^9, 3.7549309764224157`*^9},
- CellLabel->"Out[39]=",ExpressionUUID->"82c70827-742f-466c-b70b-c62a8148bfe8"]
+   3.752784223935882*^9}, 3.753216042779162*^9, 3.7549309764224157`*^9, 
+   3.756137446058504*^9},
+ CellLabel->"Out[36]=",ExpressionUUID->"9e8992fd-b7c9-4290-97a2-66bc5c1aabe9"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3985,15 +5305,27 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.752784130954743*^9, 3.752784133509852*^9}, 
    3.7530105255361843`*^9, {3.7532160473232927`*^9, 3.753216050194565*^9}},
- CellLabel->"In[40]:=",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
+ CellLabel->"In[37]:=",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"0e231100ddd91813\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["1(**)(**)2"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["0e231100ddd91813"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"1\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", "\"(\"", 
            "\"*\"", "\"*\"", "\")\"", "\"2\"", "\" \""}, {"\" \"", 
@@ -4087,8 +5419,8 @@ Cell[BoxData[
    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
   "Column"]], "Output",
  CellChangeTimes->{3.7527841341316767`*^9, 3.752784224698237*^9, 
-  3.753216051095194*^9, 3.754930977453764*^9},
- CellLabel->"Out[42]=",ExpressionUUID->"5a301a75-13d8-4707-8527-4f23720784e4"]
+  3.753216051095194*^9, 3.754930977453764*^9, 3.756137448317829*^9},
+ CellLabel->"Out[39]=",ExpressionUUID->"04c7ac64-4cc9-405e-b299-b47150d7399e"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4103,15 +5435,27 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.752784139636476*^9, 3.752784140178893*^9}, 
    3.7530105263940783`*^9, {3.753216058484436*^9, 3.7532160658944387`*^9}},
- CellLabel->"In[43]:=",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
+ CellLabel->"In[40]:=",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"341a256dc5366ad0\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["1(**)(**)(**)2"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["341a256dc5366ad0"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"1\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", "\"(\"", 
            "\"*\"", "\"*\"", "\")\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", 
@@ -4207,8 +5551,8 @@ Cell[BoxData[
   "Column"]], "Output",
  CellChangeTimes->{
   3.7527841408009872`*^9, 3.7527842253585453`*^9, {3.7532160619446373`*^9, 
-   3.7532160662891703`*^9}, 3.75493097819211*^9},
- CellLabel->"Out[45]=",ExpressionUUID->"a2800d7f-5fcf-4b77-8a55-a933b2ba7837"]
+   3.7532160662891703`*^9}, 3.75493097819211*^9, 3.756137449853774*^9},
+ CellLabel->"Out[42]=",ExpressionUUID->"3285e7ec-7b87-41fb-8b53-b4f87baade5a"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4223,15 +5567,27 @@ Cell[BoxData[{
    RowBox[{"%%", ",", "%"}], "]"}], "//", "Column"}]}], "Input",
  CellChangeTimes->{{3.752784145952463*^9, 3.752784166438814*^9}, 
    3.753010527225288*^9, {3.75321607061987*^9, 3.753216077405274*^9}},
- CellLabel->"In[46]:=",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
+ CellLabel->"In[43]:=",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
 
 Cell[BoxData[
  TagBox[GridBox[{
     {
-     TemplateBox[{UnderscriptBox[
-        TemplateBox[{"\"line \"", "1", "\": \""}, "RowDefault"], 
-        TemplateBox[{"\"hash: \"", "\"71a467d7cef656a9\""}, "RowDefault"]],
-       TagBox[
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    1\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["1(**)(**)(**)    (**)2"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["71a467d7cef656a9"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
         GridBox[{{
           "\" \"", "\"1\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", "\"(\"", 
            "\"*\"", "\"*\"", "\")\"", "\"(\"", "\"*\"", "\"*\"", "\")\"", 
@@ -4274,6 +5630,7 @@ Cell[BoxData[
                  TagBox[
                   GridBox[{{"\"ImplicitTimes\""}, {
                     StyleBox[
+                    
                     TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
                     "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
                     Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
@@ -4328,15 +5685,15 @@ Cell[BoxData[
   "Column"]], "Output",
  CellChangeTimes->{{3.752784146384613*^9, 3.7527841669568377`*^9}, 
    3.752784226074201*^9, {3.753216074070681*^9, 3.753216077770762*^9}, 
-   3.7549309802521048`*^9},
- CellLabel->"Out[48]=",ExpressionUUID->"9eabceee-4703-44ce-82e6-8dfbf8bc7ef8"]
+   3.7549309802521048`*^9, 3.756137451371025*^9},
+ CellLabel->"Out[45]=",ExpressionUUID->"70d1116b-6fe1-4680-8d22-088effb64b8c"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
 },
 WindowSize->{1221, 751},
 WindowMargins->{{12, Automatic}, {Automatic, 24}},
-FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (December 18, 2018)",
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (January 6, 2019)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -4354,78 +5711,90 @@ Cell[CellGroupData[{
 Cell[580, 22, 148, 3, 67, "Section",ExpressionUUID->"b87a18f2-7a81-4639-aa3b-632ac1775d19"],
 Cell[731, 27, 213, 3, 30, "Input",ExpressionUUID->"a24d6190-d115-4147-b2f9-37ba463a95cf"],
 Cell[CellGroupData[{
-Cell[969, 34, 162, 3, 54, "Subsection",ExpressionUUID->"5d2abfc5-68dc-4c77-bd17-78753f0d1bc6"],
-Cell[1134, 39, 163, 3, 35, "Text",ExpressionUUID->"39bb9112-0dd1-43fa-a8fb-a2cf7ec37908"],
+Cell[969, 34, 160, 3, 54, "Subsection",ExpressionUUID->"138585d7-a7f1-4d26-b1c2-6f85db85613e"],
+Cell[1132, 39, 219, 6, 58, "Text",ExpressionUUID->"8d2f4d18-8648-40df-9625-2df89f04e4aa"],
 Cell[CellGroupData[{
-Cell[1322, 46, 834, 14, 73, "Input",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
-Cell[2159, 62, 33715, 674, 111, "Output",ExpressionUUID->"805ad2b7-5dfb-4cfe-b083-440c295dde51"]
+Cell[1376, 49, 192, 3, 30, "Input",ExpressionUUID->"01a8dd2e-9439-4cfa-8976-49b406740780"],
+Cell[1571, 54, 21649, 484, 95, "Output",ExpressionUUID->"cf97ce4d-0f32-4fe9-9535-9f29e23b62b4"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[35911, 741, 1021, 18, 73, "Input",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
-Cell[36935, 761, 8171, 132, 126, "Output",ExpressionUUID->"41f6d02a-0a36-4c39-bad5-12371228b07d"]
+Cell[23257, 543, 199, 3, 30, "Input",ExpressionUUID->"34af2de0-eff1-4fbd-b8de-1a0ae2385e29"],
+Cell[23459, 548, 27782, 613, 95, "Output",ExpressionUUID->"1369168e-9718-4ed6-a0c9-765c454d3d17"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[45155, 899, 164, 3, 54, "Subsection",ExpressionUUID->"44d1d2b5-27ae-4cf5-ad95-a957fd32cb23"],
-Cell[45322, 904, 252, 6, 35, "Text",ExpressionUUID->"119745e4-b11a-4a25-8864-19c418f51a4a"],
+Cell[51290, 1167, 162, 3, 54, "Subsection",ExpressionUUID->"5d2abfc5-68dc-4c77-bd17-78753f0d1bc6"],
+Cell[51455, 1172, 163, 3, 35, "Text",ExpressionUUID->"39bb9112-0dd1-43fa-a8fb-a2cf7ec37908"],
 Cell[CellGroupData[{
-Cell[45599, 914, 511, 10, 73, "Input",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
-Cell[46113, 926, 98865, 2006, 113, "Output",ExpressionUUID->"d15942a9-bf9a-464a-9ffd-f5c105315194"]
+Cell[51643, 1179, 834, 14, 73, "Input",ExpressionUUID->"36756d91-c863-47a8-98dd-973a3b9a4db1"],
+Cell[52480, 1195, 35439, 706, 105, "Output",ExpressionUUID->"610a7b7d-cf0a-47e8-a140-23b6c000af35"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[87956, 1906, 1020, 18, 73, "Input",ExpressionUUID->"264cf061-1ad8-43c1-8e4e-39e0cc18419b"],
+Cell[88979, 1926, 8260, 139, 126, "Output",ExpressionUUID->"5247983e-0b81-43b7-ab0b-5b2b1b45c2de"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[97288, 2071, 164, 3, 54, "Subsection",ExpressionUUID->"44d1d2b5-27ae-4cf5-ad95-a957fd32cb23"],
+Cell[97455, 2076, 252, 6, 35, "Text",ExpressionUUID->"119745e4-b11a-4a25-8864-19c418f51a4a"],
+Cell[CellGroupData[{
+Cell[97732, 2086, 511, 10, 73, "Input",ExpressionUUID->"e112c549-90d7-4c96-8bde-7dd6daa2da50"],
+Cell[98246, 2098, 100568, 2036, 107, "Output",ExpressionUUID->"81d465a8-9f50-4782-a0ab-1ab1239dd575"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[145039, 2939, 168, 3, 67, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
-Cell[145210, 2944, 305, 4, 30, "Input",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
+Cell[198875, 4141, 168, 3, 67, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
+Cell[199046, 4146, 305, 4, 30, "Input",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
 Cell[CellGroupData[{
-Cell[145540, 2952, 166, 3, 54, "Subsection",ExpressionUUID->"92bf7584-3663-4c3f-958e-73e5c69ac282"],
-Cell[145709, 2957, 156, 3, 35, "Text",ExpressionUUID->"6ed1568a-d2a9-413d-a447-7e1d02abfb89"],
-Cell[145868, 2962, 219, 5, 35, "Text",ExpressionUUID->"5d4373d2-c84f-4c86-b1d4-82d576a67d80"],
-Cell[146090, 2969, 189, 3, 35, "Text",ExpressionUUID->"bc1ec463-5eb7-42c9-bee6-32f561be207a"],
+Cell[199376, 4154, 166, 3, 54, "Subsection",ExpressionUUID->"92bf7584-3663-4c3f-958e-73e5c69ac282"],
+Cell[199545, 4159, 156, 3, 35, "Text",ExpressionUUID->"6ed1568a-d2a9-413d-a447-7e1d02abfb89"],
+Cell[199704, 4164, 219, 5, 35, "Text",ExpressionUUID->"5d4373d2-c84f-4c86-b1d4-82d576a67d80"],
+Cell[199926, 4171, 189, 3, 35, "Text",ExpressionUUID->"bc1ec463-5eb7-42c9-bee6-32f561be207a"],
 Cell[CellGroupData[{
-Cell[146304, 2976, 808, 15, 73, "Input",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
-Cell[147115, 2993, 5607, 112, 47, "Output",ExpressionUUID->"58de56c4-3eed-425c-878a-3962b2d40410"]
+Cell[200140, 4178, 808, 15, 73, "Input",ExpressionUUID->"bfe05fd6-ce67-41cb-b90c-ddefec7db537"],
+Cell[200951, 4195, 6252, 125, 47, "Output",ExpressionUUID->"590474e1-b810-4a5c-a63a-7a6a68dc32ee"]
 }, Open  ]],
-Cell[152737, 3108, 229, 4, 35, "Text",ExpressionUUID->"1169e067-8067-4021-bd69-050d2b185390"],
-Cell[152969, 3114, 643, 13, 24, "Print",ExpressionUUID->"762067b2-e2b0-4eba-8ea5-853c52cc550b"],
-Cell[153615, 3129, 280, 6, 35, "Text",ExpressionUUID->"780a8211-5367-4e99-bff9-e5f0aac6a468"],
+Cell[207218, 4323, 229, 4, 35, "Text",ExpressionUUID->"1169e067-8067-4021-bd69-050d2b185390"],
+Cell[207450, 4329, 643, 13, 24, "Print",ExpressionUUID->"762067b2-e2b0-4eba-8ea5-853c52cc550b"],
+Cell[208096, 4344, 280, 6, 35, "Text",ExpressionUUID->"780a8211-5367-4e99-bff9-e5f0aac6a468"],
 Cell[CellGroupData[{
-Cell[153920, 3139, 489, 10, 73, "Input",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
-Cell[154412, 3151, 5345, 110, 81, "Output",ExpressionUUID->"80657d21-380a-4f98-850c-ff2222e01449"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[159794, 3266, 451, 9, 73, "Input",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
-Cell[160248, 3277, 7201, 150, 113, "Output",ExpressionUUID->"23aabd2c-847e-42ed-92ee-9d9528f6ff28"]
+Cell[208401, 4354, 489, 10, 73, "Input",ExpressionUUID->"3fca0420-016d-4b79-aebb-b20b13d22ae4"],
+Cell[208893, 4366, 6545, 135, 79, "Output",ExpressionUUID->"6446de5b-fc7e-4dbf-bef8-ed8f9ae9b946"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[167486, 3432, 491, 11, 73, "Input",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
-Cell[167980, 3445, 1415, 30, 104, "Output",ExpressionUUID->"25738016-323e-4eab-a641-f3b58d0dcd0c"]
+Cell[215475, 4506, 451, 9, 73, "Input",ExpressionUUID->"546a3211-320b-490c-bc0c-ccc87d52b46e"],
+Cell[215929, 4517, 8986, 186, 109, "Output",ExpressionUUID->"7087d148-6759-497b-be2f-375d55212999"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[169432, 3480, 470, 10, 73, "Input",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
-Cell[169905, 3492, 14410, 228, 137, "Output",ExpressionUUID->"9144bb94-4179-4f63-8003-052ed7e2ea92"]
-}, Open  ]],
-Cell[184330, 3723, 161, 3, 35, "Text",ExpressionUUID->"9dda7360-67fa-4d21-b4e7-86123696ed62"],
-Cell[184494, 3728, 195, 3, 35, "Text",ExpressionUUID->"3e664557-5454-4432-bb14-588fd8b122fe"],
-Cell[CellGroupData[{
-Cell[184714, 3735, 579, 11, 73, "Input",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
-Cell[185296, 3748, 4961, 103, 47, "Output",ExpressionUUID->"da93e42e-4712-4452-8b99-d886d9056e8d"]
+Cell[224952, 4708, 491, 11, 73, "Input",ExpressionUUID->"88c31c9f-26e3-40ed-a329-a66c4a772077"],
+Cell[225446, 4721, 1475, 31, 104, "Output",ExpressionUUID->"37f1d5e9-c556-4a06-9c2c-c2bf12131e1e"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[190294, 3856, 509, 10, 73, "Input",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
-Cell[190806, 3868, 5119, 104, 47, "Output",ExpressionUUID->"82c70827-742f-466c-b70b-c62a8148bfe8"]
+Cell[226958, 4757, 470, 10, 73, "Input",ExpressionUUID->"6ecdfe84-44ac-47c1-91c0-c19afebe87a7"],
+Cell[227431, 4769, 14509, 245, 137, "Output",ExpressionUUID->"7b16db0f-af50-4dd4-bf6a-84e2c50bc7da"]
+}, Open  ]],
+Cell[241955, 5017, 161, 3, 35, "Text",ExpressionUUID->"9dda7360-67fa-4d21-b4e7-86123696ed62"],
+Cell[242119, 5022, 195, 3, 35, "Text",ExpressionUUID->"3e664557-5454-4432-bb14-588fd8b122fe"],
+Cell[CellGroupData[{
+Cell[242339, 5029, 579, 11, 73, "Input",ExpressionUUID->"78e4b05f-4766-4180-88c4-ee90a115e6e9"],
+Cell[242921, 5042, 5575, 116, 47, "Output",ExpressionUUID->"9ca8cda8-24a8-4554-9885-6788f9133c66"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[195962, 3977, 511, 10, 73, "Input",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
-Cell[196476, 3989, 4858, 101, 47, "Output",ExpressionUUID->"5a301a75-13d8-4707-8527-4f23720784e4"]
+Cell[248533, 5163, 509, 10, 73, "Input",ExpressionUUID->"2ea784e7-9d05-4a48-9fa5-d50e87a80dd8"],
+Cell[249045, 5175, 5737, 117, 47, "Output",ExpressionUUID->"9e8992fd-b7c9-4290-97a2-66bc5c1aabe9"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[201371, 4095, 515, 10, 73, "Input",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
-Cell[201889, 4107, 4975, 103, 47, "Output",ExpressionUUID->"a2800d7f-5fcf-4b77-8a55-a933b2ba7837"]
+Cell[254819, 5297, 511, 10, 73, "Input",ExpressionUUID->"d0caca55-0ddf-4374-a114-4abcc29c1b87"],
+Cell[255333, 5309, 5472, 113, 47, "Output",ExpressionUUID->"04c7ac64-4cc9-405e-b299-b47150d7399e"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[206901, 4215, 518, 10, 73, "Input",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
-Cell[207422, 4227, 5144, 104, 47, "Output",ExpressionUUID->"9eabceee-4703-44ce-82e6-8dfbf8bc7ef8"]
+Cell[260842, 5427, 515, 10, 73, "Input",ExpressionUUID->"98f48bf5-8a46-4fdf-b9f5-96679c970655"],
+Cell[261360, 5439, 5593, 115, 47, "Output",ExpressionUUID->"3285e7ec-7b87-41fb-8b53-b4f87baade5a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[266990, 5559, 518, 10, 73, "Input",ExpressionUUID->"6f0298c8-e8e8-496d-9705-feacde56cf34"],
+Cell[267511, 5571, 5791, 117, 47, "Output",ExpressionUUID->"70d1116b-6fe1-4680-8d22-088effb64b8c"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

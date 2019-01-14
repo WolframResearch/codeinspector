@@ -1,24 +1,24 @@
 BeginPackage["Lint`"]
 
-Lint::usage = "Lint[tag, description, severity, data] is a problem found in Wolfram Language source code."
+Lint::usage = "Lint[tag, description, severity, data] is a problem found in WL source code."
 
-LintFile::usage = "LintFile[file, options] returns a list of Lints in file."
+LintFile::usage = "LintFile[file] returns a list of Lints found in file."
 
-LintString::usage = "LintString[string, options] returns a list of Lints in string."
+LintString::usage = "LintString[string] returns a list of Lints found in string."
 
-LintAST
+LintCST
 
 
 
-LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList, options] represents a formatted line of output."
+LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
 
 LintedCharacter::usage = "LintedCharacter[char, lintList, options] represents a formatted character of output."
 
 
 
-LintFileReport::usage = "LintFileReport[file, lints, options] returns a list of LintedLines in file."
+LintFileReport::usage = "LintFileReport[file, lints] returns a list of LintedLines found in file."
 
-LintStringReport::usage = "LintStringReport[string, lints, options] returns a LintedLines in string."
+LintStringReport::usage = "LintStringReport[string, lints] returns a list of LintedLines found in string."
 
 
 
