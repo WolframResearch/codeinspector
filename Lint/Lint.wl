@@ -43,21 +43,22 @@ Options[LintFile] = {
 
 LintFile[file_String, OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, lints, cst},
+ Module[{performanceGoal, full, lints, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
-  If[FileType[file] =!= File,
-   Throw[Failure["NotAFile", <|"FileName"->file|>]]
-   ];
+  full = FindFile[file];
+  If[FailureQ[full],
+    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+  ];
 
    If[performanceGoal == "Speed",
-    If[FileByteCount[file] > 1*^6,
-     Throw[Failure["FileTooLarge", <|"FileName"->file, "FileSize"->FileSize[file]|>]]
+    If[FileByteCount[full] > 1*^6,
+     Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
      ];
     ];
 
-  cst = ConcreteParseFile[file];
+  cst = ConcreteParseFile[full];
 
   If[FailureQ[cst],
     Throw[cst]

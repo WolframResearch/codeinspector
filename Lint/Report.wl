@@ -31,26 +31,27 @@ because LintFileReport[file, {}] leads to infinite recursion
 
 LintFileReport[file_String, lints:{___Lint}, OptionsPattern[]] :=
 Catch[
- Module[{lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
+ Module[{full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
 
  tagExclusions = OptionValue["TagExclusions"];
  severityExclusions = OptionValue["SeverityExclusions"];
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  lineHashExclusions = OptionValue["LineHashExclusions"];
 
-  If[FileType[file] =!= File,
-   Throw[Failure["NotAFile", <|"FileName"->file|>]]
-   ];
+  full = FindFile[file];
+  If[FailureQ[full],
+    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+  ];
 
-   If[FileByteCount[file] == 0,
-   Throw[Failure["EmptyFile", <|"FileName"->file|>]]
+   If[FileByteCount[full] == 0,
+   Throw[Failure["EmptyFile", <|"FileName"->full|>]]
    ];
 
    (*
     bug 163988
     Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
     *)
-   lines = Import[file, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+   lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
    (*
   Add a fake line
@@ -60,7 +61,7 @@ Catch[
   So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
   bug ?
    *)
-  endsWithNewline = (Import[file, {"Byte", -1}] == 10);
+  endsWithNewline = (Import[full, {"Byte", -1}] == 10);
   If[endsWithNewline,
     lines = Append[lines, ""];
   ];

@@ -28,30 +28,31 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
- Module[{lines, lints, performanceGoal, cst},
+ Module[{full, lines, lints, performanceGoal, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
-   If[FileType[file] =!= File,
-   Throw[Failure["NotAFile", <|"FileName"->file|>]]
-   ];
+   full = FindFile[file];
+  If[FailureQ[full],
+    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+  ];
 
    If[performanceGoal == "Speed",
-    If[FileByteCount[file] > 1*^6,
-     Throw[Failure["FileTooLarge", <|"FileName"->file, "FileSize"->FileSize[file]|>]]
+    If[FileByteCount[full] > 1*^6,
+     Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
      ];
     ];
 
-   If[FileByteCount[file] == 0,
-   Throw[Failure["EmptyFile", <|"FileName"->file|>]]
+   If[FileByteCount[full] == 0,
+   Throw[Failure["EmptyFile", <|"FileName"->full|>]]
    ];
    (*
     bug 163988
     Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
     *)
-   lines = Import[file, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+   lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-    cst = ConcreteParseFile[file];
+    cst = ConcreteParseFile[full];
 
     If[FailureQ[cst],
       Throw[cst]
@@ -119,23 +120,24 @@ because ImplicitTimesFileReport[file, {}] leads to infinite recursion
 
 ImplicitTimesFileReport[file_String, implicitTimes:{___InfixNode}, OptionsPattern[]] :=
 Catch[
- Module[{lines, lineNumberExclusions, lineHashExclusions},
+ Module[{full, lines, lineNumberExclusions, lineHashExclusions},
 
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  lineHashExclusions = OptionValue["LineHashExclusions"];
 
-   If[FileType[file] =!= File,
-   Throw[Failure["NotAFile", <|"FileName"->file|>]]
-   ];
+   full = FindFile[file];
+  If[FailureQ[full],
+    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+  ];
 
-   If[FileByteCount[file] == 0,
-   Throw[Failure["EmptyFile", <|"FileName"->file|>]]
+   If[FileByteCount[full] == 0,
+   Throw[Failure["EmptyFile", <|"FileName"->full|>]]
    ];
    (*
     bug 163988
     Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
     *)
-   lines = Import[file, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+   lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
    implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions]
 ]]
