@@ -30,25 +30,25 @@ set(WL_SOURCES
 )
 
 set(DOCUMENTATION_NOTEBOOKS
-	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/LintFile.nb
-	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/LintString.nb
-	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/LintFileReport.nb
-	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/LintStringReport.nb
-	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/Tutorials/LintExamples.nb
+	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/Symbols/LintFile.nb
+	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/Symbols/LintString.nb
+	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/Symbols/LintFileReport.nb
+	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/ReferencePages/Symbols/LintStringReport.nb
+	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/Tutorials/LintTutorial.nb
 )
 
 set(BUILT_DOCUMENTATION
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/_0.cfs
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/segments.gen
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/segments_3
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/LintFile.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/LintString.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/LintFileReport.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/LintStringReport.nb
+	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintFile.nb
+	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintString.nb
+	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintFileReport.nb
+	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintStringReport.nb
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/SpellIndex/_0.cfs
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/SpellIndex/segments.gen
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/SpellIndex/segments_3
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Tutorials/LintExamples.nb
+	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Tutorials/LintTutorial.nb
 )
 
 

@@ -1,0 +1,1642 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     73936,       1634]
+NotebookOptionsPosition[     66370,       1470]
+NotebookOutlinePosition[     66785,       1486]
+CellTagsIndexPosition[     66742,       1483]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[{
+ "New in: ",
+ Cell["XX", "HistoryData",
+  CellTags->"New",ExpressionUUID->"82279252-2d04-42ab-8a22-2bc338d14f3d"],
+ " | Modified in: ",
+ Cell[" ", "HistoryData",
+  CellTags->"Modified",ExpressionUUID->"7f132638-8315-4875-aaaa-b1c9908a5b45"],
+ " | Obsolete in: ",
+ Cell[" ", "HistoryData",
+  CellTags->"Obsolete",ExpressionUUID->"af642c2c-86fc-4f96-95c2-eb85e3f772f0"],
+ " | Excised in: ",
+ Cell[" ", "HistoryData",
+  CellTags->"Excised",ExpressionUUID->"14b8e4fa-7c2c-41ef-ab83-e5160e502fee"]
+}], "History",
+ CellID->1247902091,ExpressionUUID->"0f2c6a2b-205f-4cfb-a6c9-796c89d8e4ec"],
+
+Cell[CellGroupData[{
+
+Cell["Categorization", "CategorizationSection",
+ CellID->1122911449,ExpressionUUID->"fea22ff7-57d6-426a-ae5e-e0006f20bcbb"],
+
+Cell["Tutorial", "Categorization",
+ CellLabel->"Entity Type",
+ CellID->686433507,ExpressionUUID->"3e210c7f-31c7-4ecc-92c1-1b0e1c625603"],
+
+Cell["Lint Package", "Categorization",
+ CellLabel->"Paclet Name",
+ CellID->605800465,ExpressionUUID->"627b634b-8139-4e22-b2bc-79b382c9484a"],
+
+Cell["Lint`", "Categorization",
+ CellLabel->"Context",
+ CellID->468444828,ExpressionUUID->"95defca3-e4f9-4844-9dd9-c6a2e37505ee"],
+
+Cell["Lint/tutorial/LintTutorial", "Categorization",
+ CellLabel->"URI",ExpressionUUID->"d39c4701-beae-40cd-a985-6b5e42241983"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Keywords", "KeywordsSection",
+ CellID->1427428552,ExpressionUUID->"48b88e89-39dd-44cf-a2f4-12817fefccb1"],
+
+Cell["XXXX", "Keywords",
+ CellID->1251852827,ExpressionUUID->"84a78cad-4cbd-4157-9817-ff033587a486"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Details", "DetailsSection",
+ CellID->307771771,ExpressionUUID->"977f41db-6c7c-40f5-9c38-a67fb7c132b1"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Lead",
+ CellID->218895918,ExpressionUUID->"bd3b4bf2-40ef-463e-8041-a3ff00c51882"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Developers",
+ CellID->350963985,ExpressionUUID->"5bdd0993-bf8a-4a53-9d8a-42341a1df8b0"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Authors",
+ CellID->795871300,ExpressionUUID->"8e508360-2bf4-4c88-bcb4-0226f3c8fff4"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Feature Name",
+ CellID->199739161,ExpressionUUID->"dae12b1d-6edb-4300-99a0-44fb2b3094aa"],
+
+Cell["XXXX", "Details",
+ CellLabel->"QA",
+ CellID->40625308,ExpressionUUID->"7bcd9a91-d13b-4858-8ac9-7926cd0221c9"],
+
+Cell["XXXX", "Details",
+ CellLabel->"DA",
+ CellID->357121918,ExpressionUUID->"eba6ea5e-7418-477f-be91-6e7828f2300a"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Docs",
+ CellID->35949532,ExpressionUUID->"e723592c-504d-434e-809c-31ec2d5ebc64"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Features Page Notes",
+ CellID->929432370,ExpressionUUID->"af97266e-63ad-4709-baa5-1ff345bb2d46"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Comments",
+ CellID->240026365,ExpressionUUID->"332a4cc1-b3eb-4f98-bd05-3f7a12f8e29e"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Lint Tutorial", "Title",
+ CellChangeTimes->{3.756408471534739*^9},
+ CellID->509267359,ExpressionUUID->"3718a8fb-8a69-4280-a9fc-db0844015d11"],
+
+Cell["\<\
+The functions in the Lint` context provide functionality for linting of WL \
+code.\
+\>", "Text",
+ CellChangeTimes->{{3.756408476318542*^9, 3.7564084987111683`*^9}},
+ CellID->1534169418,ExpressionUUID->"fbf971f5-8e6c-4398-95b2-7f0e8135f523"],
+
+Cell[BoxData[GridBox[{
+   {
+    RowBox[{"LintString", "[", "string", "]"}], Cell[
+    "returns a list of Lints in string", "TableText",ExpressionUUID->
+     "39057987-87ab-45d0-b96b-0ae01ff068bd"]},
+   {
+    RowBox[{"LintFile", "[", "file", "]"}], Cell[
+    "returns a list of Lints in file", "TableText",ExpressionUUID->
+     "ed63d44b-91c8-44cf-9c56-b66337f1f01f"]},
+   {
+    RowBox[{"LintStringReport", "[", 
+     RowBox[{"string", ",", "lints"}], "]"}], Cell[
+    "returns a list of LintedLines in string", "TableText",ExpressionUUID->
+     "41434d02-3b28-470e-887e-43470b8d68f7"]},
+   {
+    RowBox[{"LintFileReport", "[", 
+     RowBox[{"file", ",", "lints"}], "]"}], Cell[
+    "returns a list of LintedLines in file", "TableText",ExpressionUUID->
+     "68dbd8dd-66fc-436c-aefa-493799696af2"]}
+  }]], "DefinitionBox",
+ CellChangeTimes->{{3.7564085045923367`*^9, 3.756408608322991*^9}},
+ CellID->2096742444,ExpressionUUID->"47571219-7c51-4d5d-b2a4-51543409aed0"],
+
+Cell["Linting WL code.", "Caption",
+ CellChangeTimes->{{3.75640861509157*^9, 3.7564086178669367`*^9}},
+ CellID->1891092685,ExpressionUUID->"29f65765-0904-450a-900c-b4044870e2e1"],
+
+Cell[CellGroupData[{
+
+Cell["First we need to load the Lint` package", "MathCaption",
+ CellChangeTimes->{
+  3.756408646867611*^9, {3.756409236538945*^9, 3.75640923723275*^9}},
+ CellID->836781195,ExpressionUUID->"855adb52-3a87-47ec-a2be-db42ed6ffe53"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Lint`\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.756408648278659*^9, 3.756408652062694*^9}},
+ CellLabel->"In[1]:=",
+ CellID->2058623809,ExpressionUUID->"f7523b60-f111-4c9f-9398-3c6c2c9658fa"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["See lints in a piece of WL code.", "MathCaption",
+ CellChangeTimes->{{3.756408677957814*^9, 3.7564086893417177`*^9}, {
+  3.756408740043303*^9, 3.756408740394554*^9}},
+ CellID->577773108,ExpressionUUID->"afb77939-b18c-4e3a-87d9-9f5efedd5374"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"str", "=", "\"\<1+f[,2]\>\""}], ";"}]], "Input",
+ CellChangeTimes->{{3.756408713041026*^9, 3.756408714607912*^9}},
+ CellLabel->"In[1]:=",
+ CellID->1285539883,ExpressionUUID->"8baac6a9-d51a-4cb3-9794-b72306215ae6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"lints", "=", 
+  RowBox[{"LintString", "[", "str", "]"}]}]], "Input",
+ CellChangeTimes->{{3.756408691830105*^9, 3.756408717344022*^9}},
+ CellLabel->"In[2]:=",
+ CellID->1307936235,ExpressionUUID->"725563f8-f341-46f7-91c7-d508e266aaae"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  TagBox[GridBox[{
+     {"\<\"SyntaxError\"\>"},
+     {
+      StyleBox[
+       TemplateBox[{"\"Severity: \"","\"Error\""},
+        "RowDefault"],
+       StripOnInput->False,
+       FontWeight->Bold,
+       FontColor->RGBColor[1, 0, 0]]},
+     {"\<\"Comma encountered with no adjacent expression. The expression will \
+be treated as Null\"\>"}
+    },
+    DefaultBaseStyle->"Column",
+    GridBoxAlignment->{"Columns" -> {{Left}}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Column"], "}"}]], "Output",
+ CellChangeTimes->{{3.756408695561631*^9, 3.756408717778944*^9}, 
+   3.756409069217732*^9, 3.756409242498288*^9},
+ CellLabel->"Out[2]=",
+ CellID->1649674029,ExpressionUUID->"4a8d96b2-6b90-4f6d-b115-ba3d779d5b9b"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Format the lints by lines", "MathCaption",
+ CellChangeTimes->{{3.756408743762595*^9, 3.756408750275074*^9}},
+ CellID->855542086,ExpressionUUID->"5df81aee-813e-4e77-b11d-0abbfc2e1cfd"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LintStringReport", "[", 
+   RowBox[{"str", ",", "lints"}], "]"}], "//", "Column"}]], "Input",
+ CellChangeTimes->{{3.756408719664187*^9, 3.7564087239035997`*^9}},
+ CellLabel->"In[3]:=",
+ CellID->1007615328,ExpressionUUID->"3dad53b2-3b30-40b6-bf8b-761b75f66965"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           TemplateBox[{"\"line\"", "\" \"", "\"1\"", "\":\""}, "RowDefault"],
+            FrameMargins -> {{5, 5}, {1, 1}}, Background -> GrayLevel[0.95], 
+           StripOnInput -> False], "\"Click to open menu...\"", TooltipDelay -> 
+          Automatic, LabelStyle -> "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["1+f[,2]"], 
+         "\"Copy line number\"" :> CopyToClipboard[1], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["069af0fd0304fa5b"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{"\" \"", "\"1\"", "\"+\"", "\"f\"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"[\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\",\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"2\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ],
+            "\" \""}, {
+          "\" \"", "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SyntaxError\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Error\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {
+                    "\"Comma encountered with no adjacent expression. The \
+expression will be treated as Null\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint[
+               "SyntaxError", 
+                "Comma encountered with no adjacent expression. The \
+expression will be treated as Null", "Error", 
+                Association[AST`Source -> {{1, 4}, {1, 7}}]]}], "Tooltip"]& ],
+            "\" \""}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]}
+   },
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output",
+ CellChangeTimes->{{3.756408720674735*^9, 3.7564087244530487`*^9}, 
+   3.7564090705724382`*^9, 3.756409244031427*^9},
+ CellLabel->"Out[3]=",
+ CellID->1506895981,ExpressionUUID->"88ca0ddf-6837-414d-97a8-dc261f1de0d4"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Next we lint code in an example package. This tutorial assumes that the \
+codetoolsexamples repo is next to the lint repo in your setup.\
+\>", "MathCaption",
+ CellChangeTimes->{{3.756405975566804*^9, 3.756405977693439*^9}, {
+  3.756406268620192*^9, 3.756406309261456*^9}, {3.756406860975806*^9, 
+  3.756406861862772*^9}, {3.756406952965509*^9, 3.756406958269087*^9}, {
+  3.756408780832786*^9, 3.75640879194419*^9}},
+ CellID->216740014,ExpressionUUID->"e736bb90-4f7b-406b-b2c8-76a7ceb78b83"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"codetoolsExamplesDir", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"ParentDirectory", "[", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", "5"}], "]"}], ",", 
+      "\"\<codetoolsexamples\>\""}], "}"}], "]"}]}], ";"}]], "Input",
+ CellLabel->"In[4]:=",
+ CellID->176260392,ExpressionUUID->"0e0fa6c5-66f0-4379-947e-c00ef3d3e18a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrependTo", "[", 
+   RowBox[{"$Path", ",", "codetoolsExamplesDir"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{3.756408821831646*^9},
+ CellLabel->"In[5]:=",
+ CellID->546602460,ExpressionUUID->"d2509ecc-9861-498e-988c-065b4972afc6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"LintFile", "[", "\"\<Collatz`\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.756408825186997*^9, 3.756408827530254*^9}},
+ CellLabel->"In[8]:=",
+ CellID->1152290958,ExpressionUUID->"554221c6-0665-49c8-8f61-732cdce48e96"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  TagBox[GridBox[{
+     {"\<\"SuspiciousSpan\"\>"},
+     {
+      StyleBox[
+       TemplateBox[{"\"Severity: \"","\"Warning\""},
+        "RowDefault"],
+       StripOnInput->False,
+       FontWeight->Bold,
+       FontColor->RGBColor[1, 0.5, 0]]},
+     {
+      TemplateBox[{
+       "\"Suspicious use of \"",StyleBox[
+        "\";;\"", FontWeight -> Bold, StripOnInput -> False],
+        "\". Did you mean \"",StyleBox[
+        "\";\"", FontWeight -> Bold, StripOnInput -> False],"\"?\""},
+       "RowDefault"]}
+    },
+    DefaultBaseStyle->"Column",
+    GridBoxAlignment->{"Columns" -> {{Left}}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Column"], "}"}]], "Output",
+ CellChangeTimes->{
+  3.756408828208044*^9, {3.756409076033883*^9, 3.7564091013664923`*^9}, {
+   3.7564092492941093`*^9, 3.756409255754414*^9}},
+ CellLabel->"Out[8]=",
+ CellID->2012898070,ExpressionUUID->"37e83eb8-bc26-4ca7-ae1c-4c1d3517f42d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LintFileReport", "[", 
+   RowBox[{"\"\<Collatz`\>\"", ",", "%"}], "]"}], "//", "Column"}]], "Input",
+ CellChangeTimes->{{3.756409095767641*^9, 3.756409098854842*^9}, {
+  3.756409252524683*^9, 3.756409253858829*^9}},
+ CellLabel->"In[9]:=",
+ CellID->1451995309,ExpressionUUID->"f9287502-455a-45df-9027-b1bac8e6e6ee"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"12\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz[n_Integer]  := Prepend[Collatz[(3 n + 1)/2], n] /; OddQ[n] \
+&& n > 0;;"], "\"Copy line number\"" :> CopyToClipboard[12], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["7f945bdb61000730"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\"[\"", "\"n\"", "\"_\"", "\"I\"", "\"n\"", "\"t\"", 
+           "\"e\"", "\"g\"", "\"e\"", "\"r\"", "\"]\"", "\" \"", "\" \"", 
+           "\":\"", "\"=\"", "\" \"", "\"P\"", "\"r\"", "\"e\"", "\"p\"", 
+           "\"e\"", "\"n\"", "\"d\"", "\"[\"", "\"C\"", "\"o\"", "\"l\"", 
+           "\"l\"", "\"a\"", "\"t\"", "\"z\"", "\"[\"", "\"(\"", "\"3\"", 
+           "\" \"", "\"n\"", "\" \"", "\"+\"", "\" \"", "\"1\"", "\")\"", 
+           "\"/\"", "\"2\"", "\"]\"", "\",\"", "\" \"", "\"n\"", "\"]\"", 
+           "\" \"", "\"/\"", "\";\"", "\" \"", "\"O\"", "\"d\"", "\"d\"", 
+           "\"Q\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", "\"&\"", "\"&\"", 
+           "\" \"", "\"n\"", "\" \"", "\">\"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"0\"", FontColor -> RGBColor[1, 0.5, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SuspiciousSpan\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Suspicious use of \"", 
+                    StyleBox[
+                    "\";;\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\". Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["SuspiciousSpan", {"Suspicious use of ", 
+                 Lint`Format`LintMarkup[";;", FontWeight -> Bold], 
+                 ". Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{12, 75}, {12, 77}}]]}], 
+             "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\";\"", FontColor -> RGBColor[1, 0.5, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SuspiciousSpan\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Suspicious use of \"", 
+                    StyleBox[
+                    "\";;\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\". Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["SuspiciousSpan", {"Suspicious use of ", 
+                 Lint`Format`LintMarkup[";;", FontWeight -> Bold], 
+                 ". Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{12, 75}, {12, 77}}]]}], 
+             "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\";\"", FontColor -> RGBColor[1, 0.5, 0], FontWeight -> Bold, 
+              StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SuspiciousSpan\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Suspicious use of \"", 
+                    StyleBox[
+                    "\";;\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\". Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["SuspiciousSpan", {"Suspicious use of ", 
+                 Lint`Format`LintMarkup[";;", FontWeight -> Bold], 
+                 ". Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{12, 75}, {12, 77}}]]}], 
+             "Tooltip"]& ], "\" \""}, {
+          "\" \"", "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           "\"\[SpaceIndicator]\"", "\"\[SpaceIndicator]\"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0.5, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SuspiciousSpan\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Suspicious use of \"", 
+                    StyleBox[
+                    "\";;\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\". Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["SuspiciousSpan", {"Suspicious use of ", 
+                 Lint`Format`LintMarkup[";;", FontWeight -> Bold], 
+                 ". Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{12, 75}, {12, 77}}]]}], 
+             "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0.5, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SuspiciousSpan\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Suspicious use of \"", 
+                    StyleBox[
+                    "\";;\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\". Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["SuspiciousSpan", {"Suspicious use of ", 
+                 Lint`Format`LintMarkup[";;", FontWeight -> Bold], 
+                 ". Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{12, 75}, {12, 77}}]]}], 
+             "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[ErrorIndicator]\"", FontColor -> RGBColor[1, 0.5, 0], 
+              FontWeight -> Bold, FontSize -> Larger, StripOnInput -> False], 
+             
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"SuspiciousSpan\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"Warning\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0.5, 0], 
+                    FontWeight -> Bold, StripOnInput -> False]}, {
+                    TemplateBox[{"\"Suspicious use of \"", 
+                    StyleBox[
+                    "\";;\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\". Did you mean \"", 
+                    StyleBox[
+                    "\";\"", FontWeight -> Bold, StripOnInput -> False], 
+                    "\"?\""}, "RowDefault"]}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["SuspiciousSpan", {"Suspicious use of ", 
+                 Lint`Format`LintMarkup[";;", FontWeight -> Bold], 
+                 ". Did you mean ", 
+                 Lint`Format`LintMarkup[";", FontWeight -> Bold], "?"}, 
+                "Warning", 
+                Association[AST`Source -> {{12, 75}, {12, 77}}]]}], 
+             "Tooltip"]& ], "\" \""}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]}
+   },
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output",
+ CellChangeTimes->{
+  3.756409102509055*^9, {3.7564092502130413`*^9, 3.756409256521989*^9}},
+ CellLabel->"Out[9]=",
+ CellID->2031921579,ExpressionUUID->"48913d2d-229b-4ba0-aacb-471bc8540150"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The linter has caught an accidental usage of the Span operator ;;. The code \
+should be this:\
+\>", "MathCaption",
+ CellChangeTimes->{{3.756409286508494*^9, 3.756409302829833*^9}},
+ CellID->1221023659,ExpressionUUID->"cf1052d1-3129-4b17-83b7-6463edfd8d27"],
+
+Cell["\<\
+Collatz[n_Integer]  := Prepend[Collatz[(3 n + 1)/2], n] /; OddQ[n] && n > 0;\
+\>", "Program",
+ CellChangeTimes->{{3.7506252700469637`*^9, 3.750625271064453*^9}},
+ CellID->605596308,ExpressionUUID->"b00737cc-3b4c-4999-b150-eed474cfe725"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implicit Times", "Section",
+ CellChangeTimes->{{3.7564093431874743`*^9, 3.7564093453545094`*^9}},
+ CellID->1332145423,ExpressionUUID->"13779ca2-08b8-4df6-930f-9a588a50519a"],
+
+Cell[BoxData[GridBox[{
+   {
+    RowBox[{"ImplicitTimesString", "[", "string", "]"}], Cell[
+    "returns a list of implicit times in string", "TableText",ExpressionUUID->
+     "b9fec29d-9ec5-4246-9b87-05a5d8c263de"]},
+   {
+    RowBox[{"ImplicitTimesFile", "[", "file", "]"}], Cell[
+    "returns a list of implict times in file", "TableText",ExpressionUUID->
+     "21703947-ebd3-4c6b-9dfc-97fac7e498ca"]},
+   {
+    RowBox[{"ImplicitTimesStringReport", "[", 
+     RowBox[{"string", ",", "times"}], "]"}], Cell[
+    "returns a list of implicit times LintedLines in string", "TableText",
+     ExpressionUUID->"9fabda27-daec-4670-a862-7ee1d60cf448"]},
+   {
+    RowBox[{"ImplicitTimesFileReport", "[", 
+     RowBox[{"file", ",", "times"}], "]"}], Cell[
+    "returns a list of implicit times LintedLines in file", "TableText",
+     ExpressionUUID->"34ec3b28-f581-4b02-abee-1780b63049dc"]}
+  }]], "DefinitionBox",
+ CellChangeTimes->{{3.756409514445806*^9, 3.7564096553701963`*^9}},
+ CellID->1818228175,ExpressionUUID->"609e0ad3-0aa5-4a87-8324-3e5c320daa5e"],
+
+Cell["Finding implicit times in WL code.", "Caption",
+ CellChangeTimes->{{3.7564095794711943`*^9, 3.7564095848546667`*^9}},
+ CellID->268640415,ExpressionUUID->"61665f46-9878-4e7d-b3b4-8c229a1046e0"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Report uses of implicit multiplication. This is a source of bugs but it is \
+hard to automatically determine whether it is incorrect.\
+\>", "MathCaption",
+ CellChangeTimes->{
+  3.756409356753059*^9, {3.756409453051682*^9, 3.756409453422822*^9}},
+ CellID->1660928616,ExpressionUUID->"aeb8ccf3-5a47-4112-829e-67b584d6f065"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Lint`ImplicitTimes`\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.756409363062416*^9, 3.756409372636406*^9}},
+ CellLabel->"In[10]:=",
+ CellID->885472612,ExpressionUUID->"5e4006d6-059f-4c20-93a6-2ce111eec595"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"times", "=", 
+   RowBox[{"ImplicitTimesFile", "[", "\"\<Collatz`\>\"", "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.756409391313341*^9, 3.7564094130784082`*^9}},
+ CellLabel->"In[12]:=",
+ CellID->1353075314,ExpressionUUID->"07cf56c7-7353-49d4-9a90-401fee9bf14b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ImplicitTimesFileReport", "[", 
+   RowBox[{"\"\<Collatz`\>\"", ",", "times"}], "]"}], "//", 
+  "Column"}]], "Input",
+ CellChangeTimes->{{3.756409396825465*^9, 3.756409423487047*^9}},
+ CellLabel->"In[14]:=",
+ CellID->403819275,ExpressionUUID->"fe97c4ec-dbfd-47b0-ae3d-08f97a915990"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    3\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz::usage \"Collatz[n] gives a list of the iterates in the \
+3n+1 problem,"], "\"Copy line number\"" :> CopyToClipboard[3], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["7ac84f8da1c4b38e"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\":\"", "\":\"", "\"u\"", "\"s\"", "\"a\"", "\"g\"", 
+           "\"e\"", "\" \"", "\"\\\"\"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", 
+           "\"a\"", "\"t\"", "\"z\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", 
+           "\"g\"", "\"i\"", "\"v\"", "\"e\"", "\"s\"", "\" \"", "\"a\"", 
+           "\" \"", "\"l\"", "\"i\"", "\"s\"", "\"t\"", "\" \"", "\"o\"", 
+           "\"f\"", "\" \"", "\"t\"", "\"h\"", "\"e\"", "\" \"", "\"i\"", 
+           "\"t\"", "\"e\"", "\"r\"", "\"a\"", "\"t\"", "\"e\"", "\"s\"", 
+           "\" \"", "\"i\"", "\"n\"", "\" \"", "\"t\"", "\"h\"", "\"e\"", 
+           "\" \"", "\"3\"", "\"n\"", "\"+\"", "\"1\"", "\" \"", "\"p\"", 
+           "\"r\"", "\"o\"", "\"b\"", "\"l\"", "\"e\"", "\"m\"", "\",\"", 
+           "\" \""}, {"\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"(\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[Times]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+              Bold, FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \""}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    5\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["        terminates.\""], 
+         "\"Copy line number\"" :> CopyToClipboard[5], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["0501989acbc46476"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\"t\"", "\"e\"", "\"r\"", "\"m\"", "\"i\"", 
+           "\"n\"", "\"a\"", "\"t\"", "\"e\"", "\"s\"", "\".\"", "\"\\\"\"", 
+           "\" \""}, {
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\")\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ]}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"   12\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz[n_Integer]  := Prepend[Collatz[(3 n + 1)/2], n] /; OddQ[n] \
+&& n > 0;;"], "\"Copy line number\"" :> CopyToClipboard[12], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["7f945bdb61000730"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\"[\"", "\"n\"", "\"_\"", "\"I\"", "\"n\"", "\"t\"", 
+           "\"e\"", "\"g\"", "\"e\"", "\"r\"", "\"]\"", "\" \"", "\" \"", 
+           "\":\"", "\"=\"", "\" \"", "\"P\"", "\"r\"", "\"e\"", "\"p\"", 
+           "\"e\"", "\"n\"", "\"d\"", "\"[\"", "\"C\"", "\"o\"", "\"l\"", 
+           "\"l\"", "\"a\"", "\"t\"", "\"z\"", "\"[\"", "\"(\"", "\"3\"", 
+           "\" \"", "\"n\"", "\" \"", "\"+\"", "\" \"", "\"1\"", "\")\"", 
+           "\"/\"", "\"2\"", "\"]\"", "\",\"", "\" \"", "\"n\"", "\"]\"", 
+           "\" \"", "\"/\"", "\";\"", "\" \"", "\"O\"", "\"d\"", "\"d\"", 
+           "\"Q\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", "\"&\"", "\"&\"", 
+           "\" \"", "\"n\"", "\" \"", "\">\"", "\" \"", "\"0\"", "\";\"", 
+           "\";\"", "\" \""}, {
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"(\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[Times]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+              Bold, FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\")\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \""}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"   29\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz[n_Integer] := (DummyFunction1[];Prepend[Collatz[3 n + 1], \
+n]) /; OddQ[n] && n > 0;"], "\"Copy line number\"" :> CopyToClipboard[29], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["0a09153d841023ed"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\"[\"", "\"n\"", "\"_\"", "\"I\"", "\"n\"", "\"t\"", 
+           "\"e\"", "\"g\"", "\"e\"", "\"r\"", "\"]\"", "\" \"", "\":\"", 
+           "\"=\"", "\" \"", "\"(\"", "\"D\"", "\"u\"", "\"m\"", "\"m\"", 
+           "\"y\"", "\"F\"", "\"u\"", "\"n\"", "\"c\"", "\"t\"", "\"i\"", 
+           "\"o\"", "\"n\"", "\"1\"", "\"[\"", "\"]\"", "\";\"", "\"P\"", 
+           "\"r\"", "\"e\"", "\"p\"", "\"e\"", "\"n\"", "\"d\"", "\"[\"", 
+           "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", "\"z\"", 
+           "\"[\"", "\"3\"", "\" \"", "\"n\"", "\" \"", "\"+\"", "\" \"", 
+           "\"1\"", "\"]\"", "\",\"", "\" \"", "\"n\"", "\"]\"", "\")\"", 
+           "\" \"", "\"/\"", "\";\"", "\" \"", "\"O\"", "\"d\"", "\"d\"", 
+           "\"Q\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", "\"&\"", "\"&\"", 
+           "\" \"", "\"n\"", "\" \"", "\">\"", "\" \"", "\"0\"", "\";\"", 
+           "\" \""}, {
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"(\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[Times]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+              Bold, FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\")\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \""}}, 
+         AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]}
+   },
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output",
+ CellChangeTimes->{{3.756409420188154*^9, 3.7564094240317783`*^9}},
+ FontSize->10,
+ CellLabel->"Out[14]=",
+ CellID->967597892,ExpressionUUID->"bd058bcc-b661-49ac-88f0-e3708da15af0"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The linter has caught an accidental use of implicit multiplication. The equal \
+sign is missing in the usage message assignment. The code should be this:\
+\>", "MathCaption",
+ CellChangeTimes->{{3.75640946440408*^9, 3.756409477628767*^9}},
+ CellID->1128868266,ExpressionUUID->"cdff7f13-8cb1-439c-84d6-f32188cd8757"],
+
+Cell["\<\
+Collatz::usage = \"Collatz[n] gives a list of the iterates in the 3n+1 problem,
+        starting from n. The conjecture is that this sequence always
+        terminates.\"\
+\>", "Program",
+ CellChangeTimes->{{3.7506251377194023`*^9, 3.7506251477528057`*^9}},
+ CellID->1749450636,ExpressionUUID->"05d03a3a-c534-4083-8f6d-18cfad1fd52d"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["More About", "TutorialMoreAboutSection",
+ CellID->23220180,ExpressionUUID->"3dcd39ee-8bfd-444b-91d8-65624418e4e9"],
+
+Cell["XXXX", "TutorialMoreAbout",
+ CellID->1567025153,ExpressionUUID->"f84fa8b8-5bbc-45d8-8197-c43650e1a939"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Related Tutorials", "RelatedTutorialsSection",
+ CellID->415694126,ExpressionUUID->"b77d5af4-0072-4829-8104-d43423a42fb5"],
+
+Cell["XXXX", "RelatedTutorials",
+ CellID->806871991,ExpressionUUID->"ec3032c9-e4f9-44af-abfa-d765d1d7b421"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Related Wolfram Education Group Courses", "TutorialRelatedLinksSection",
+ CellID->415694148,ExpressionUUID->"ed15d1e5-cab2-4fdc-aa43-0fc45f590254"],
+
+Cell["XXXX", "TutorialRelatedLinks",
+ CellID->415694149,ExpressionUUID->"d1b2a5ce-eb06-48be-bfa4-cbaf20b8f0d8"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1048, 751},
+WindowMargins->{{30, Automatic}, {2, Automatic}},
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (January 6, 2019)",
+StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "TutorialPageStyles.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 599, 14, 24, "History",ExpressionUUID->"0f2c6a2b-205f-4cfb-a6c9-796c89d8e4ec",
+ CellID->1247902091],
+Cell[CellGroupData[{
+Cell[1182, 38, 123, 1, 29, "CategorizationSection",ExpressionUUID->"fea22ff7-57d6-426a-ae5e-e0006f20bcbb",
+ CellID->1122911449],
+Cell[1308, 41, 136, 2, 70, "Categorization",ExpressionUUID->"3e210c7f-31c7-4ecc-92c1-1b0e1c625603",
+ CellID->686433507],
+Cell[1447, 45, 140, 2, 70, "Categorization",ExpressionUUID->"627b634b-8139-4e22-b2bc-79b382c9484a",
+ CellID->605800465],
+Cell[1590, 49, 129, 2, 70, "Categorization",ExpressionUUID->"95defca3-e4f9-4844-9dd9-c6a2e37505ee",
+ CellID->468444828],
+Cell[1722, 53, 126, 1, 70, "Categorization",ExpressionUUID->"d39c4701-beae-40cd-a985-6b5e42241983"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1885, 59, 111, 1, 19, "KeywordsSection",ExpressionUUID->"48b88e89-39dd-44cf-a2f4-12817fefccb1",
+ CellID->1427428552],
+Cell[1999, 62, 100, 1, 70, "Keywords",ExpressionUUID->"84a78cad-4cbd-4157-9817-ff033587a486",
+ CellID->1251852827]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2136, 68, 108, 1, 19, "DetailsSection",ExpressionUUID->"977f41db-6c7c-40f5-9c38-a67fb7c132b1",
+ CellID->307771771],
+Cell[2247, 71, 118, 2, 70, "Details",ExpressionUUID->"bd3b4bf2-40ef-463e-8041-a3ff00c51882",
+ CellID->218895918],
+Cell[2368, 75, 124, 2, 70, "Details",ExpressionUUID->"5bdd0993-bf8a-4a53-9d8a-42341a1df8b0",
+ CellID->350963985],
+Cell[2495, 79, 121, 2, 70, "Details",ExpressionUUID->"8e508360-2bf4-4c88-bcb4-0226f3c8fff4",
+ CellID->795871300],
+Cell[2619, 83, 126, 2, 70, "Details",ExpressionUUID->"dae12b1d-6edb-4300-99a0-44fb2b3094aa",
+ CellID->199739161],
+Cell[2748, 87, 115, 2, 70, "Details",ExpressionUUID->"7bcd9a91-d13b-4858-8ac9-7926cd0221c9",
+ CellID->40625308],
+Cell[2866, 91, 116, 2, 70, "Details",ExpressionUUID->"eba6ea5e-7418-477f-be91-6e7828f2300a",
+ CellID->357121918],
+Cell[2985, 95, 117, 2, 70, "Details",ExpressionUUID->"e723592c-504d-434e-809c-31ec2d5ebc64",
+ CellID->35949532],
+Cell[3105, 99, 133, 2, 70, "Details",ExpressionUUID->"af97266e-63ad-4709-baa5-1ff345bb2d46",
+ CellID->929432370],
+Cell[3241, 103, 122, 2, 70, "Details",ExpressionUUID->"332a4cc1-b3eb-4f98-bd05-3f7a12f8e29e",
+ CellID->240026365]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3400, 110, 147, 2, 106, "Title",ExpressionUUID->"3718a8fb-8a69-4280-a9fc-db0844015d11",
+ CellID->509267359],
+Cell[3550, 114, 250, 5, 23, "Text",ExpressionUUID->"fbf971f5-8e6c-4398-95b2-7f0e8135f523",
+ CellID->1534169418],
+Cell[3803, 121, 965, 21, 109, "DefinitionBox",ExpressionUUID->"47571219-7c51-4d5d-b2a4-51543409aed0",
+ CellID->2096742444],
+Cell[4771, 144, 178, 2, 29, "Caption",ExpressionUUID->"29f65765-0904-450a-900c-b4044870e2e1",
+ CellID->1891092685],
+Cell[CellGroupData[{
+Cell[4974, 150, 227, 3, 40, "MathCaption",ExpressionUUID->"855adb52-3a87-47ec-a2be-db42ed6ffe53",
+ CellID->836781195],
+Cell[5204, 155, 235, 4, 27, "Input",ExpressionUUID->"f7523b60-f111-4c9f-9398-3c6c2c9658fa",
+ CellID->2058623809]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5476, 164, 247, 3, 40, "MathCaption",ExpressionUUID->"afb77939-b18c-4e3a-87d9-9f5efedd5374",
+ CellID->577773108],
+Cell[5726, 169, 248, 5, 27, "Input",ExpressionUUID->"8baac6a9-d51a-4cb3-9794-b72306215ae6",
+ CellID->1285539883],
+Cell[CellGroupData[{
+Cell[5999, 178, 257, 5, 27, "Input",ExpressionUUID->"725563f8-f341-46f7-91c7-d508e266aaae",
+ CellID->1307936235],
+Cell[6259, 185, 779, 21, 82, "Output",ExpressionUUID->"4a8d96b2-6b90-4f6d-b115-ba3d779d5b9b",
+ CellID->1649674029]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7087, 212, 189, 2, 40, "MathCaption",ExpressionUUID->"5df81aee-813e-4e77-b11d-0abbfc2e1cfd",
+ CellID->855542086],
+Cell[CellGroupData[{
+Cell[7301, 218, 295, 6, 27, "Input",ExpressionUUID->"3dad53b2-3b30-40b6-bf8b-761b75f66965",
+ CellID->1007615328],
+Cell[7599, 226, 13412, 286, 38, "Output",ExpressionUUID->"88ca0ddf-6837-414d-97a8-dc261f1de0d4",
+ CellID->1506895981]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21060, 518, 500, 8, 56, "MathCaption",ExpressionUUID->"e736bb90-4f7b-406b-b2c8-76a7ceb78b83",
+ CellID->216740014],
+Cell[21563, 528, 425, 11, 47, "Input",ExpressionUUID->"0e0fa6c5-66f0-4379-947e-c00ef3d3e18a",
+ CellID->176260392],
+Cell[21991, 541, 267, 6, 27, "Input",ExpressionUUID->"d2509ecc-9861-498e-988c-065b4972afc6",
+ CellID->546602460],
+Cell[CellGroupData[{
+Cell[22283, 551, 241, 4, 27, "Input",ExpressionUUID->"554221c6-0665-49c8-8f61-732cdce48e96",
+ CellID->1152290958],
+Cell[22527, 557, 975, 27, 58, "Output",ExpressionUUID->"37e83eb8-bc26-4ca7-ae1c-4c1d3517f42d",
+ CellID->2012898070]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23539, 589, 349, 7, 27, "Input",ExpressionUUID->"f9287502-455a-45df-9027-b1bac8e6e6ee",
+ CellID->1451995309],
+Cell[23891, 598, 15701, 313, 64, "Output",ExpressionUUID->"48913d2d-229b-4ba0-aacb-471bc8540150",
+ CellID->2031921579]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[39641, 917, 266, 5, 56, "MathCaption",ExpressionUUID->"cf1052d1-3129-4b17-83b7-6463edfd8d27",
+ CellID->1221023659],
+Cell[39910, 924, 246, 4, 41, "Program",ExpressionUUID->"b00737cc-3b4c-4999-b150-eed474cfe725",
+ CellID->605596308]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40193, 933, 179, 2, 43, "Section",ExpressionUUID->"13779ca2-08b8-4df6-930f-9a588a50519a",
+ CellID->1332145423],
+Cell[40375, 937, 1048, 21, 147, "DefinitionBox",ExpressionUUID->"609e0ad3-0aa5-4a87-8324-3e5c320daa5e",
+ CellID->1818228175],
+Cell[41426, 960, 198, 2, 29, "Caption",ExpressionUUID->"61665f46-9878-4e7d-b3b4-8c229a1046e0",
+ CellID->268640415],
+Cell[CellGroupData[{
+Cell[41649, 966, 331, 6, 56, "MathCaption",ExpressionUUID->"aeb8ccf3-5a47-4112-829e-67b584d6f065",
+ CellID->1660928616],
+Cell[41983, 974, 249, 4, 27, "Input",ExpressionUUID->"5e4006d6-059f-4c20-93a6-2ce111eec595",
+ CellID->885472612],
+Cell[42235, 980, 302, 7, 27, "Input",ExpressionUUID->"07cf56c7-7353-49d4-9a90-401fee9bf14b",
+ CellID->1353075314],
+Cell[CellGroupData[{
+Cell[42562, 991, 316, 7, 27, "Input",ExpressionUUID->"fe97c4ec-dbfd-47b0-ae3d-08f97a915990",
+ CellID->403819275],
+Cell[42881, 1000, 21882, 419, 137, "Output",ExpressionUUID->"bd058bcc-b661-49ac-88f0-e3708da15af0",
+ CellID->967597892]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64812, 1425, 325, 5, 56, "MathCaption",ExpressionUUID->"cdff7f13-8cb1-439c-84d6-f32188cd8757",
+ CellID->1128868266],
+Cell[65140, 1432, 343, 6, 75, "Program",ExpressionUUID->"05d03a3a-c534-4083-8f6d-18cfad1fd52d",
+ CellID->1749450636]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[65532, 1444, 120, 1, 72, "TutorialMoreAboutSection",ExpressionUUID->"3dcd39ee-8bfd-444b-91d8-65624418e4e9",
+ CellID->23220180],
+Cell[65655, 1447, 109, 1, 22, "TutorialMoreAbout",ExpressionUUID->"f84fa8b8-5bbc-45d8-8197-c43650e1a939",
+ CellID->1567025153]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[65801, 1453, 127, 1, 72, "RelatedTutorialsSection",ExpressionUUID->"b77d5af4-0072-4829-8104-d43423a42fb5",
+ CellID->415694126],
+Cell[65931, 1456, 107, 1, 22, "RelatedTutorials",ExpressionUUID->"ec3032c9-e4f9-44af-abfa-d765d1d7b421",
+ CellID->806871991]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[66075, 1462, 153, 1, 72, "TutorialRelatedLinksSection",ExpressionUUID->"ed15d1e5-cab2-4fdc-aa43-0fc45f590254",
+ CellID->415694148],
+Cell[66231, 1465, 111, 1, 22, "TutorialRelatedLinks",ExpressionUUID->"d1b2a5ce-eb06-48be-bfa4-cbaf20b8f0d8",
+ CellID->415694149]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
