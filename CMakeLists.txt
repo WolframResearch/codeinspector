@@ -5,11 +5,19 @@ project(lint)
 
 set(PACLET "Lint")
 
-set(PACLET_VERSION "0.7" CACHE STRING "Paclet Version")
+message(STATUS "PACLET: ${PACLET}")
+
+set(PACLET_VERSION "0.8" CACHE STRING "Paclet Version")
+
+message(STATUS "PACLET_VERSION: ${PACLET_VERSION}")
 
 set(WOLFRAMKERNEL /Applications/Mathematica.app/Contents/MacOS/WolframKernel CACHE FILEPATH "Path to WolframKernel")
 
+message(STATUS "WOLFRAMKERNEL: ${WOLFRAMKERNEL}")
+
 set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
+
+message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 
 set(WL_SOURCES
 	${CMAKE_SOURCE_DIR}/PacletInfo.m
@@ -29,7 +37,7 @@ set(DOCUMENTATION_NOTEBOOKS
 	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/Tutorials/LintExamples.nb
 )
 
-set(BUILT_DOCUMENTATION_NOTEBOOKS
+set(BUILT_DOCUMENTATION
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/_0.cfs
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/segments.gen
 	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/segments_3
@@ -78,7 +86,7 @@ set(PACLET_SOURCES
 if(BUILD_DOCS)
 
 list(APPEND PACLET_SOURCES
-	${BUILT_DOCUMENTATION_NOTEBOOKS}
+	${BUILT_DOCUMENTATION}
 )
 
 endif(BUILD_DOCS)
@@ -94,9 +102,11 @@ endif(BUILD_DOCS)
 # docs target
 #
 
+if(BUILD_DOCS)
+
 add_custom_target(docs
 	DEPENDS
-		${BUILT_DOCUMENTATION_NOTEBOOKS}
+		${BUILT_DOCUMENTATION}
 )
 
 set(DOCS_APPPATH /Applications/Eclipse.app/Contents/Eclipse/configuration/org.eclipse.osgi/525/0/.cp/MathematicaSource/ CACHE PATH "Path of MathematicaSource inside Workbench installation")
@@ -107,19 +117,22 @@ set(DOCS_JLINKPATH /Applications/Mathematica.app/Contents/SystemFiles/Links/JLin
 
 message(STATUS "DOCS_JLINKPATH: ${DOCS_JLINKPATH}")
 
+
 #
 # build the docs
 #
 add_custom_command(
 	OUTPUT
-		${BUILT_DOCUMENTATION_NOTEBOOKS}
+		${BUILT_DOCUMENTATION}
 	DEPENDS
 		${DOCUMENTATION_NOTEBOOKS}
 	COMMAND
-		ant -DmathExe=${WOLFRAMKERNEL} -DappPath=${DOCS_APPPATH} -Djlinkpath=${DOCS_JLINKPATH} -DinputDir=${CMAKE_SOURCE_DIR}/Lint/Documentation/ -DoutputDir=${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/ -file ${DOCS_APPPATH}/DocumentationBuild/SystemFiles/ant/Build/notebook.xml
+		ant -DmathExe=${WOLFRAMKERNEL} -DappPath=${DOCS_APPPATH} -Djlinkpath=${DOCS_JLINKPATH} -DinputDir=${CMAKE_SOURCE_DIR}/${PACLET}/Documentation/ -DoutputDir=${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/ -file ${DOCS_APPPATH}/DocumentationBuild/SystemFiles/ant/Build/notebook.xml
 	WORKING_DIRECTORY
 		${CMAKE_SOURCE_DIR}
 )
+
+endif(BUILD_DOCS)
 
 
 
