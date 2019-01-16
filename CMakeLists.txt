@@ -20,13 +20,16 @@ set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
 message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 
 set(WL_SOURCES
-	${CMAKE_SOURCE_DIR}/PacletInfo.m
 	${CMAKE_SOURCE_DIR}/Lint/Format.wl
 	${CMAKE_SOURCE_DIR}/Lint/ImplicitTimes.wl
 	${CMAKE_SOURCE_DIR}/Lint/Lint.wl
 	${CMAKE_SOURCE_DIR}/Lint/Report.wl
 	${CMAKE_SOURCE_DIR}/Lint/Rules.wl
 	${CMAKE_SOURCE_DIR}/Lint/Utils.wl
+)
+
+set(PACLETINFO_SOURCE
+	${CMAKE_SOURCE_DIR}/Lint/PacletInfo.m
 )
 
 set(DOCUMENTATION_NOTEBOOKS
@@ -37,18 +40,22 @@ set(DOCUMENTATION_NOTEBOOKS
 	${CMAKE_SOURCE_DIR}/Lint/Documentation/English/Tutorials/LintTutorial.nb
 )
 
+set(BUILT_PACLETINFO
+	${CMAKE_BINARY_DIR}/paclet/Lint/PacletInfo.m
+)
+
 set(BUILT_DOCUMENTATION
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/_0.cfs
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/segments.gen
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Index/segments_3
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintFile.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintString.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintFileReport.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/ReferencePages/Symbols/LintStringReport.nb
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/SpellIndex/_0.cfs
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/SpellIndex/segments.gen
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/SpellIndex/segments_3
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/English/Tutorials/LintTutorial.nb
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/Index/_0.cfs
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/Index/segments.gen
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/Index/segments_3
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/ReferencePages/Symbols/LintFile.nb
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/ReferencePages/Symbols/LintString.nb
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/ReferencePages/Symbols/LintFileReport.nb
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/ReferencePages/Symbols/LintStringReport.nb
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/SpellIndex/_0.cfs
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/SpellIndex/segments.gen
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/SpellIndex/segments_3
+	${CMAKE_BINARY_DIR}/paclet/Lint/Documentation/English/Tutorials/LintTutorial.nb
 )
 
 
@@ -81,6 +88,7 @@ set(PACLET_SOURCES
 	# Pack script
 	${CMAKE_SOURCE_DIR}/scripts/Pack.wl
 	${CONFIGURED_WL_SOURCES}
+	${BUILT_PACLETINFO}
 )
 
 if(BUILD_DOCS)
@@ -93,6 +101,22 @@ endif(BUILD_DOCS)
 
 
 
+
+
+#
+# Build PacletInfo.m
+#
+# Run the BuildPacletInfo.wl script to build a PacletInfo.m appropriate for including in the paclet
+#
+add_custom_command(
+	OUTPUT
+		${BUILT_PACLETINFO}
+	DEPENDS
+		${CMAKE_SOURCE_DIR}/scripts/BuildPacletInfo.wl
+		${PACLETINFO_SOURCE}
+	COMMAND ${WOLFRAMKERNEL} -noinit -script ${CMAKE_SOURCE_DIR}/scripts/BuildPacletInfo.wl -source ${PACLETINFO_SOURCE} -built ${BUILT_PACLETINFO} -pacletVersion "${PACLET_VERSION}"
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 
 
 
