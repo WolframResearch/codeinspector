@@ -102,6 +102,7 @@ $DefaultAbstractRules = <|
 CallNode[SymbolNode["String", _, _], _, _] -> scanStringCalls,
 CallNode[SymbolNode["Integer", _, _], _, _] -> scanIntegerCalls,
 CallNode[SymbolNode["Real", _, _], _, _] -> scanRealCalls,
+CallNode[SymbolNode["Failure", _, _], _, _] -> scanFailureCalls,
 
 (*
 Tags: Control
@@ -533,6 +534,21 @@ scanRealCalls[pos_List, astIn_] :=
   children = node[[2]];
   data = node[[3]];
   {Lint["RealCall", {"Calling ", LintBold["Real"], " as a function. This may be ok if ", LintBold["Real"], " is used as a pattern."}, "Error", data]}
+  ]
+
+Attributes[scanFailureCalls] = {HoldRest}
+
+scanFailureCalls[pos_List, astIn_] :=
+ Module[{ast, node, children, data},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+  If[Length[children] == 1,
+  	{Lint["FailureCall", {"Calling ", LintBold["Failure"], " as a function. Did you mean ", LintBold["FailureQ"], "? This may be ok if ", LintBold["Failure"], " is used as a pattern."}, "Error", data]}
+  	,
+  	{}
+  ];
   ]
 
 
