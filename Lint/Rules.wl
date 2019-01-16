@@ -232,7 +232,7 @@ Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, cstIn_] :=
 Catch[
- Module[{cst, node, data, parentPos, parent, span, opts, issues},
+ Module[{cst, node, children, data, parentPos, parent, issues, line, nextLine},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
@@ -317,7 +317,7 @@ Module[{cst, node, children, data, issues, internalNulls},
 Attributes[scanOuts] = {HoldRest}
 
 scanOuts[pos_List, cstIn_] :=
- Module[{cst, node, data, opSpan, s},
+ Module[{cst, node, data, s},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   s = node[[1]];
@@ -503,7 +503,7 @@ Abstract rules
 Attributes[scanStringCalls] = {HoldRest}
 
 scanStringCalls[pos_List, astIn_] :=
- Module[{ast, node, children, data, opLocation, duplicates, selected},
+ Module[{ast, node, children, data},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -515,7 +515,7 @@ scanStringCalls[pos_List, astIn_] :=
 Attributes[scanIntegerCalls] = {HoldRest}
 
 scanIntegerCalls[pos_List, astIn_] :=
- Module[{ast, node, children, data, opLocation, duplicates, selected},
+ Module[{ast, node, children, data},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -527,7 +527,7 @@ scanIntegerCalls[pos_List, astIn_] :=
 Attributes[scanRealCalls] = {HoldRest}
 
 scanRealCalls[pos_List, astIn_] :=
- Module[{ast, node, children, data, opLocation, duplicates, selected},
+ Module[{ast, node, children, data},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -563,7 +563,7 @@ Attributes[scanWhichs] = {HoldRest}
 
 scanWhichs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, warnings, span, duplicates},
+ Module[{ast, node, children, data, warnings, span, duplicates, selected},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -621,8 +621,8 @@ Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, opSpan, span, cases, duplicates, issues, patterns, pairs, form, value,
-    formPatternNames},
+ Module[{ast, node, children, data, span, cases, duplicates, issues, pairs, form, value,
+    formPatternNames, selected, valuePatterns},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -703,7 +703,7 @@ Catch[
 Attributes[scanPatterns] = {HoldRest}
 
 scanPatterns[pos_List, astIn_] :=
- Module[{ast, node, patSymbol, name, children, patterns, issues},
+ Module[{ast, node, patSymbol, name, rhs, children, patterns, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   
@@ -731,7 +731,7 @@ Attributes[scanControls] = {HoldRest}
 
 scanControls[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, data, parentPos, parent, span, opts, s},
+ Module[{ast, node, data, parentPos, parent, s},
   If[pos == {},
     (* top node, no parent *)
     Throw[{}]
@@ -760,7 +760,7 @@ Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, opSpan, span, cases, duplicates, selected, params, warnings},
+ Module[{ast, node, children, data, duplicates, selected, params, warnings, vars},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -804,7 +804,7 @@ Attributes[scanWiths] = {HoldRest}
 
 scanWiths[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, opSpan, span, cases, duplicates, selected, paramLists, warnings},
+ Module[{ast, node, children, data, duplicates, selected, paramLists, warnings, vars},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -840,7 +840,7 @@ Attributes[scanBlocks] = {HoldRest}
 
 scanBlocks[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, opSpan, span, cases, duplicates, selected, params, warnings},
+ Module[{ast, node, children, data, duplicates, selected, params, warnings, vars},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -904,7 +904,7 @@ scanOptionals[pos_List, astIn_] :=
 Attributes[scanSyntaxErrorNodes] = {HoldRest}
 
 scanSyntaxErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, token, data, span},
+ Module[{cst, node, token, data},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   token = node[[1]];
@@ -917,7 +917,7 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
 Attributes[scanMissingCloserNodes] = {HoldRest}
 
 scanMissingCloserNodes[pos_List, cstIn_] :=
- Module[{cst, node, token, data, span},
+ Module[{cst, node, token, data},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   token = node[[1]];
