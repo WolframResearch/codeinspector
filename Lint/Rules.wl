@@ -416,7 +416,7 @@ Catch[
   patternTestArg2 = patternTestChildren[[2]];
   {Lint["SuspiciousPatternTestFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low and the precedence of ", LintBold["?"], " is surprisingly high. ", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
           LintBold[ToInputFormString[BinaryNode[PatternTest, {patternTestArg1, GroupNode[GroupParen, {PostfixNode[Function, {patternTestArg2}, <||>]}, <||>]}, <||>]]],
-          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, patternTest, <||>]}, <||>]]], " ?"}, "Warning", data]}
+          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, {patternTest}, <||>]}, <||>]]], " ?"}, "Warning", data]}
 ]]
 
 
@@ -444,7 +444,7 @@ Catch[
 
   {Lint["SuspiciousPatternTestCallFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low and the precedence of ", LintBold["?"], " is surprisingly high.", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
           LintBold[ToInputFormString[BinaryNode[PatternTest, {patternTestArg1, GroupNode[GroupParen, {PostfixNode[Function, {CallNode[patternTestArg2, {args}, <||>]}, <||>]}, <||>]}, <||>]]],
-          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, patternTest, <||>]}, <||>]]], " ?"}, "Warning", data]}
+          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, {patternTest}, <||>]}, <||>]]], " ?"}, "Warning", data]}
 ]]
 
 
