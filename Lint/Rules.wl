@@ -50,7 +50,7 @@ TernaryNode[Span, _, _] -> scanSpans,
 
 
 (*
-Tags: 
+Tags: StraySemicolon
 *)
 InfixNode[CompoundExpression, _, _] -> scanCompoundExpressions,
 
@@ -287,7 +287,7 @@ Catch[
 
 (*
 
-SuspiciousSemicolon is to find things like this:
+StraySemicolon is to find things like this:
 
 (f[];
 ; Throw[$Failed, $tag])
@@ -307,10 +307,16 @@ Module[{cst, node, children, data, issues, internalNulls},
 
   (*
   say Most because we don't care about the last ;
+
+  But if Most[children] does have InternalNullNodes, then we also want to include the last child, because
+  that is the ; that is most likely to be incorrect.
   *)
   internalNulls = Cases[Most[children], InternalNullNode[Null, _, _]];
+  If[!empty[internalNulls],
+    internalNulls = Cases[children, InternalNullNode[Null, _, _]];
+  ];
 
-  Scan[(AppendTo[issues, Lint["SuspiciousSemicolon", {"Suspicious use of ", LintBold[";"]}, "Warning", #[[3]]]])&, internalNulls];
+  Scan[(AppendTo[issues, Lint["StraySemicolon", {LintBold[";"], " may not be needed."}, "Warning", #[[3]]]])&, internalNulls];
 
   issues
 ]
@@ -344,11 +350,12 @@ Catch[
   patternTestArg2 = patternTest[[2]][[2]];
   args = children[[1]];
   data = node[[3]];
-  {Lint["SuspiciousPatternTestCall", {"Suspicious use of ", LintBold["?"], ". The precedence of ", LintBold["?"], " is surprisingly high. PatternTest ", LintBold[ToInputFormString[patternTest]],
+
+  {Lint["SuggestParentheses", {"Suspicious use of ", LintBold["?"], ". The precedence of ", LintBold["?"], " is surprisingly high. PatternTest ", LintBold[ToInputFormString[patternTest]],
     " is calling arguments ", LintBold[ToInputFormString[args]],
     ". Did you mean ", LintBold[ToInputFormString[BinaryNode[PatternTest,
         {patternTestArg1, GroupNode[GroupParen, {CallNode[patternTestArg2, {args}, <||>]}, <||>]}, <||>]]],
-        " or ", LintBold[ToInputFormString[CallNode[GroupNode[GroupParen, {patternTest}, <||>], children, <||>]]], " ?"}, "Warning", data]}
+        " or ", LintBold[ToInputFormString[CallNode[GroupNode[GroupParen, {patternTest}, <||>], children, <||>]]], " ?"}, "Remark", data]}
 ]]
 
 
@@ -356,10 +363,6 @@ Attributes[scanRuleFunctions] = {HoldRest}
 
 (*
 warn about a->b& which parses as (a->b)& and not a->(b&)
-
-we want to reduce the number of false positives so here are some heuristics:
-1. if # or ## occur in LHS of Rule, then there is no problem, (a->b)& is the intended parse
-2. if surrounded with (), then assume it is intentional, i.e., (a->b&) is intentional
 *)
 scanRuleFunctions[pos_List, cstIn_] :=
 Catch[
@@ -372,18 +375,51 @@ Catch[
   ruleHead = rule[[1]];
   ruleChild1 = rule[[2]][[1]];
 
+  (*
+  we want to reduce the number of false positives so here are some heuristics:
+  *)
+
+  (*
+  heuristic
+  if # or ## occur in LHS of Rule, then there is no problem, (a->b)& is the intended parse
+  *)
   If[!FreeQ[ruleChild1, _SlotNode | _SlotSequenceNode],
     Throw[{}]
   ];
 
   parentPos = Most[pos];
   parent = Extract[cst, {parentPos}][[1]];
-  While[ListQ[parent],
+  While[parentPos != {} && (ListQ[parent] || MatchQ[parent, GroupNode[GroupSquare, _, _]]),
    parentPos = Most[parentPos];
    parent = Extract[cst, {parentPos}][[1]];
    ];
 
+   (*
+   heuristic
+   if surrounded with (), then assume it is intentional, i.e., (a->b&) is intentional
+   *)
    If[MatchQ[parent, GroupNode[GroupParen, _, _]],
+    Throw[{}]
+   ];
+
+   (*
+   heuristic
+    if inside @, then assume it is intentional, i.e., a->b& @ x is intentional
+    if inside /@, then assume it is intentional, i.e., a->b& /@ x is intentional
+   *)
+   If[MatchQ[parent, BinaryNode[BinaryAt | Map, {node, _}, _]],
+    Throw[{}]
+   ];
+
+   If[$Debug,
+    Print[parent]
+   ];
+
+   (*
+   heuristic
+    if inside Map[], then assume it is intentional, i.e., Map[a->b&, x] is intentional
+   *)
+   If[MatchQ[parent, CallNode[SymbolNode["Map", _, _], {GroupNode[GroupSquare, {node, _, _}, _]}, _]],
     Throw[{}]
    ];
 
