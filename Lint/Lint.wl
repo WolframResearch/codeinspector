@@ -35,7 +35,9 @@ Needs["Lint`Format`"]
 
 
 Options[LintFile] = {
-  PerformanceGoal -> "Speed"
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AbstractRules" :> $DefaultAbstractRules
 }
 
 
@@ -43,9 +45,11 @@ Options[LintFile] = {
 
 LintFile[file_String, OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, full, lints, cst},
+ Module[{performanceGoal, concreteRules, abstractRules, full, lints, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
+ concreteRules = OptionValue["ConcreteRules"];
+ abstractRules = OptionValue["AbstractRules"];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -64,19 +68,24 @@ Catch[
     Throw[cst]
   ];
 
-  lints = LintCST[cst];
+  lints = LintCST[cst, "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules];
 
   lints
 ]]
 
 
 Options[LintString] = {
-  PerformanceGoal -> "Speed"
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AbstractRules" :> $DefaultAbstractRules
 }
 
 LintString[string_String, OptionsPattern[]] :=
 Catch[
- Module[{cst},
+ Module[{concreteRules, abstractRules, cst},
+
+  concreteRules = OptionValue["ConcreteRules"];
+  abstractRules = OptionValue["AbstractRules"];
 
   cst = ConcreteParseString[string];
 
@@ -84,14 +93,24 @@ Catch[
     Throw[cst]
   ];
 
-  LintCST[cst]
+  LintCST[cst, "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules]
 ]]
 
 
 
+
+Options[LintCST] = {
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AbstractRules" :> $DefaultAbstractRules
+}
+
 LintCST[cstIn_, OptionsPattern[]] :=
-Module[{cst, ast, pat, func, poss, lints},
+Module[{cst, concreteRules, abstractRules, ast, pat, func, poss, lints},
+
   cst = cstIn;
+
+  concreteRules = OptionValue["ConcreteRules"];
+  abstractRules = OptionValue["AbstractRules"];
 
   lints = {};
 
@@ -104,7 +123,7 @@ Module[{cst, ast, pat, func, poss, lints},
       func = #2;
       poss = Position[cst, pat];
       Map[(func[#, cst])&, poss]
-      )&, $DefaultConcreteRules]
+      )&, concreteRules]
   ];
 
   ast = Abstract[cst];
@@ -118,7 +137,7 @@ Module[{cst, ast, pat, func, poss, lints},
       func = #2;
       poss = Position[ast, pat];
       Map[(func[#, ast])&, poss]
-      )&, $DefaultAbstractRules]
+      )&, abstractRules]
   ];
 
   lints = Flatten[lints];

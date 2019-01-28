@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     73936,       1634]
+NotebookDataLength[     73938,       1634]
 NotebookOptionsPosition[     66370,       1470]
-NotebookOutlinePosition[     66785,       1486]
-CellTagsIndexPosition[     66742,       1483]
+NotebookOutlinePosition[     66787,       1486]
+CellTagsIndexPosition[     66744,       1483]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1469,8 +1469,8 @@ Cell["XXXX", "TutorialRelatedLinks",
 }, Open  ]]
 },
 WindowSize->{1048, 751},
-WindowMargins->{{30, Automatic}, {2, Automatic}},
-FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (January 6, 2019)",
+WindowMargins->{{41, Automatic}, {Automatic, 36}},
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (January 17, 2019)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "TutorialPageStyles.nb", 
   CharacterEncoding -> "UTF-8"]
 ]
