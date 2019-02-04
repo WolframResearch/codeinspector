@@ -28,7 +28,7 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
- Module[{full, lines, lints, performanceGoal, cst},
+ Module[{full, lines, times, performanceGoal, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
@@ -43,24 +43,15 @@ Catch[
      ];
     ];
 
-   If[FileByteCount[full] == 0,
-   Throw[Failure["EmptyFile", <|"FileName"->full|>]]
-   ];
-   (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-   lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
-
     cst = ConcreteParseFile[full];
 
     If[FailureQ[cst],
       Throw[cst]
     ];
 
-    lints = implicitTimes[cst];
+    times = implicitTimes[cst];
 
-   lints
+   times
 ]]
 
 
@@ -70,16 +61,7 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesString[string_, OptionsPattern[]] :=
 Catch[
- Module[{lines, lints, cst},
-
- If[StringLength[string] == 0,
-  Throw[Failure["EmptyString", <||>]]
- ];
-    (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-   lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+ Module[{times, cst},
 
    cst = ConcreteParseString[string];
 
@@ -87,9 +69,9 @@ Catch[
     Throw[cst]
   ];
 
-    lints = implicitTimes[cst];
+    times = implicitTimes[cst];
 
-   lints
+   times
 ]]
 
 
@@ -172,11 +154,11 @@ Catch[
 
 
 
-implicitTimes[ast_] :=
+implicitTimes[cst_] :=
 Catch[
 Module[{implicitTimes, sources, starts, ends, infixs},
 
-  implicitTimes = Cases[ast, InfixNode[ImplicitTimes, nodes_, opts_], {0, Infinity}];
+  implicitTimes = Cases[cst, InfixNode[ImplicitTimes, nodes_, opts_], {0, Infinity}];
 
    implicitTimes
 ]]
