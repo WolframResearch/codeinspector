@@ -452,7 +452,7 @@ Catch[
      heuristic
       if inside Map[], then assume it is intentional, i.e., Map[a->b&, x] is intentional
      *)
-     If[MatchQ[parent, CallNode[SymbolNode["Map", _, _], {GroupNode[GroupSquare, {node, _, _}, _]}, _]],
+     If[MatchQ[parent, CallNode[SymbolNode["Map" | "MapAt", _, _], {GroupNode[GroupSquare, {node, _, _}, _]}, _]],
       Throw[{}]
      ];
 
