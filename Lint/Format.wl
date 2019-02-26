@@ -211,7 +211,7 @@ $UseANSI = Switch[$OperatingSystem,
 					If[FailureQ[vals],
 						Throw[False]
 					];
-					level = "VirtualTerminalLevel" /. vals /. {"VirtualTerminalLeve1" -> 0};
+					level = "VirtualTerminalLevel" /. vals /. {"VirtualTerminalLevel" -> 0};
 					ret = (level != 0);
 					ret
 				]]
