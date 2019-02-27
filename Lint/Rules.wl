@@ -182,7 +182,7 @@ CallNode[SymbolNode["Optional", _, _], {_, _}, _] -> scanOptionals,
 (*
 Scan all symbols that are intuitive, yet do not exist
 *)
-SymbolNode["AnyFalse"(*|"Boolean"*), _, _] -> scanBadSymbols,
+SymbolNode["AnyFalse" | "Failed"(*|"Boolean"*), _, _] -> scanBadSymbols,
 
 
 
