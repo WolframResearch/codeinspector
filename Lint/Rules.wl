@@ -916,7 +916,10 @@ scanPatterns[pos_List, astIn_] :=
   patterns = Cases[rhs, CallNode[SymbolNode["Pattern", _, _], _, _], {0, Infinity}];
   Scan[(
     If[#[[2]][[1]][[1]] == name,
-      AppendTo[issues, Lint["DuplicateNamedPattern", {"Duplicate named pattern ", LintBold[name], " in RHS of ", LintBold["Pattern"]}, "Error", #[[3]]]];
+      (*
+      This is never correct code, but make a Warning for now because it is noisy
+      *)
+      AppendTo[issues, Lint["DuplicateNamedPattern", {"Duplicate named pattern ", LintBold[name], " in RHS of ", LintBold["Pattern"]}, "Warning", #[[3]]]];
     ];
   )&, patterns];
 
