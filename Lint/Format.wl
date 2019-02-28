@@ -112,7 +112,7 @@ Options[formatLeftColumn] = {
 }
 
 formatLeftColumn[lineSource_String, lineNumber_Integer, hash_String, opts___] :=
-Module[{maxLineNumberLength},
+Module[{maxLineNumberLength, paddedLineNumber},
 	
 	maxLineNumberLength = OptionValue[formatLeftColumn, {opts}, "MaxLineNumberLength"];
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];

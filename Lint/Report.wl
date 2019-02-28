@@ -129,7 +129,9 @@ Catch[
 
 lintLinesReport[linesIn_List, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
-Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp},
+Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
+	linesToModify, maxLineNumberLength, lintsPerColumn},
+	
   lints = lintsIn;
   
   (*
@@ -233,7 +235,7 @@ Options[createUnderlineList] = {
 
 createUnderlineList[line_String, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Catch[
- Module[{warningsCols, under, warningInserters, lintsPerColumn, sorted, endOfFile, lineIsEmpty, keys},
+ Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, keys, startChar, endChar, startMarker, endMarker},
 
  lineIsEmpty = (line == "");
 

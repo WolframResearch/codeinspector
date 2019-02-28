@@ -28,7 +28,7 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
- Module[{full, lines, times, performanceGoal, cst},
+ Module[{full, times, performanceGoal, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
@@ -156,7 +156,7 @@ Catch[
 
 implicitTimes[cst_] :=
 Catch[
-Module[{implicitTimes, sources, starts, ends, infixs},
+Module[{implicitTimes},
 
   implicitTimes = Cases[cst, InfixNode[ImplicitTimes, nodes_, opts_], {0, Infinity}];
 
@@ -249,8 +249,8 @@ processChildren[nodes_List] :=
 
 implicitTimesLinesReport[linesIn_List, implicitTimesIn:{___InfixNode}, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
- Module[{implicitTimes, sources, starts, ends, infixsIn, infixs, lines, hashes,
-  lineNumberExclusions, lineHashExclusions, implicitTimesExcludedByLineNumber, tmp},
+ Module[{implicitTimes, sources, starts, ends, infixs, lines, hashes,
+  lineNumberExclusions, lineHashExclusions, implicitTimesExcludedByLineNumber, tmp, linesToModify},
 
     If[implicitTimes === {},
       Throw[{}]
@@ -326,7 +326,8 @@ Catch[
 
 
 resolveInfix[BestImplicitTimesPlacement[span_], lines_] :=
-Module[{lineNumber, line, tokens, goalLine, goalCol, tokenSource, spaces, spaceRanges, candidates, edges, offset, intersection},
+Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candidates, edges, offset, intersection,
+	mean, comments, gaps, excludes, goals},
 
   Which[
     span[[1, 1]] != span[[2, 1]],
