@@ -111,7 +111,7 @@ SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
 CallMissingCloserNode[_, _, _] -> scanMissingCloserNodes,
 
 (*
-Tags: SyntaxError NotContiguous MaxExpressionDepth etc.
+Tags: SyntaxError MaxExpressionDepth etc.
 *)
 KeyValuePattern[SyntaxIssues -> _] -> scanSyntaxIssues,
 
@@ -183,6 +183,13 @@ CallNode[SymbolNode["Optional", _, _], {_, _}, _] -> scanOptionals,
 Scan all symbols that are intuitive, yet do not exist
 *)
 SymbolNode["AnyFalse" | "Failed"(*|"Boolean"*), _, _] -> scanBadSymbols,
+
+
+
+(*
+Tags: SyntaxError NotContiguous
+*)
+KeyValuePattern[AbstractSyntaxIssues -> _] -> scanAbstractSyntaxIssues,
 
 
 
@@ -1106,6 +1113,23 @@ scanBadSymbols[pos_List, astIn_] :=
   token = node[[1]];
   data = node[[3]];
   {Lint["BadSymbol", ToString[token], "Error", data]}
+]
+
+
+
+
+Attributes[scanAbstractSyntaxIssues] = {HoldRest}
+
+(*
+Just directly convert SyntaxIssues to Lints
+*)
+scanAbstractSyntaxIssues[pos_List, cstIn_] :=
+Module[{cst, data, issues},
+  cst = cstIn;
+  data = Extract[cst, {pos}][[1]];
+  issues = data[AbstractSyntaxIssues];
+
+  Lint @@@ issues
 ]
 
 
