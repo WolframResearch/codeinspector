@@ -37,11 +37,24 @@ If[FailureQ[importedPacletInfo],
   Quit[1]
 ]
 
-replacedPacletInfo = importedPacletInfo /. {(Version -> _) -> (Version -> pacletVersion)}
+replacedPacletInfo = importedPacletInfo /. {
+  (Version -> _) -> (Version -> pacletVersion),
+  (*
+  Use $VersionNumber of build system
+  *)
+  (WolframVersion -> _) -> (WolframVersion -> ToString[$VersionNumber]<>"+")
+}
 
+builtPacletInfoM = {
+"
+(*
+AUTO GENERATED FILE
+DO NOT MODIFY
+*)
+"} ~Join~ { ToString[replacedPacletInfo, InputForm, PageWidth->80] } ~Join~ {""}
 
 Print["exporting built PacletInfo.m"]
-res = Put[replacedPacletInfo, built]
+res = Export[built, Column[builtPacletInfoM], "String"]
 
 If[FailureQ[res],
   Print[res];
