@@ -29,7 +29,7 @@ because LintFileReport[file, {}] leads to infinite recursion
 *)
 
 
-LintFileReport[file_String, lints:{___Lint}, OptionsPattern[]] :=
+LintFileReport[file_String | File[file_String], lints:{___Lint}, OptionsPattern[]] :=
 Catch[
  Module[{full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
 

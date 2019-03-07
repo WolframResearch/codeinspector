@@ -43,7 +43,7 @@ Options[LintFile] = {
 
 
 
-LintFile[file_String, OptionsPattern[]] :=
+LintFile[file_String | File[file_String], OptionsPattern[]] :=
 Catch[
  Module[{performanceGoal, concreteRules, abstractRules, full, lints, cst},
 
