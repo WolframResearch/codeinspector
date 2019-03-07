@@ -85,10 +85,7 @@ a_?b[x]& is handled here
 *)
 PostfixNode[Function, {CallNode[BinaryNode[PatternTest, _, _], {_}, _]}, _] -> scanPatternTestCallFunctions,
 
-(*
-too noisy for now
 BinaryNode[Pattern, {_, InfixNode[Alternatives, _, _]}, _] -> scanAlternativesPatterns,
-*)
 
 BinaryNode[Optional, {PatternBlankNode[PatternBlank, {_}, _], _}, _] -> scanPatternBlankOptionals,
 BinaryNode[Optional, {PatternBlankSequenceNode[PatternBlankSequence, {_}, _], _}, _] -> scanPatternBlankOptionals,
@@ -537,10 +534,6 @@ Catch[
 
 
 
-(*
-
-too noisy for now
-
 Attributes[scanAlternativesPatterns] = {HoldRest}
 
 (*
@@ -560,12 +553,10 @@ Catch[
   alternativesFirst = First[alternativesChildren];
   alternativesRest = Rest[alternativesChildren];
 
-  {Lint["SuspiciousAlternativesPattern", {"Suspicious use of ", LintBold["|"], ". The precedence of ", Lintbold["|"], " is higher than ", LintBold[":"], ". Did you mean ",
+  {Lint["SuspiciousAlternativesPattern", {"Suspicious use of ", LintBold["|"], ". The precedence of ", LintBold["|"], " is higher than ", LintBold[":"], ". Did you mean ",
           LintBold[ToInputFormString[InfixNode[Alternatives, {GroupNode[GroupParen, {BinaryNode[Pattern, {patternArg1, alternativesFirst}, <||>]}, <||>]}~Join~alternativesRest, <||>]]],
-          " or ", LintBold[ToInputFormString[GroupNode[GroupParen, alternatives, <||>]]], " ?"}, "Remark", data]}
+          " or ", LintBold[ToInputFormString[BinaryNode[Pattern, {patternArg1, GroupNode[GroupParen, {alternatives}, <||>]}, <||>]]], " ?"}, "Remark", data]}
 ]]
-
-*)
 
 
 
