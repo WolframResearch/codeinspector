@@ -353,23 +353,27 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       line = StringTake[line, {span[[1,2]]+1, span[[2,2]]-1}];
 
       tokens = TokenizeString[line];
+
+      (*
+      EOF
       tokens = Most[tokens];
+      *)
 
       offset = span[[1, 2]];
       
       (*
       any space is a candidate
       *)
-      spaces = Cases[tokens, Token[Token`Space, _, _]];
+      spaces = Cases[tokens, TokenNode[Token`Space, _, _]];
       spaceRanges = offset + Flatten[Range @@ #[[3]][Source][[All, 2]]& /@ spaces];
       
       (*
       the gaps on either side of a comment are only candidates if they are not next to a space (because the space
       itself is preferred) 
       *)
-      comments = Cases[tokens, Token[Token`Comment, _, _]];
+      comments = Cases[tokens, TokenNode[Token`Comment, _, _]];
       gaps = #[[3]][Source][[1, 2]]& /@ comments;
-      excludes = SequenceCases[tokens, {Token[Token`Space, _, _], c:Token[Token`Comment, _, _]} :> c];
+      excludes = SequenceCases[tokens, {TokenNode[Token`Space, _, _], c:TokenNode[Token`Comment, _, _]} :> c];
       gaps = offset + Complement[gaps, excludes];
 
       edges = offset + {1, StringLength[line]+1};
