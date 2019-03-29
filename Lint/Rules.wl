@@ -955,11 +955,14 @@ Catch[
                       LintBold[s<>"[]"], "? This may be ok if ", LintBold[s], " is used as a symbol."}, "Warning", data]}
   ]]
 
+
+
+
 Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, params, warnings, vars},
+ Module[{ast, node, children, data, duplicates, selected, params, warnings, vars, used, unusedParams},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -988,6 +991,10 @@ Catch[
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
     Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["Module"], ": ", ToFullFormString[#]}, "Error", #[[3]]]]&, selected];
 
+  used = ToFullFormString /@ Cases[children[[2]], _SymbolNode, {0, Infinity}];
+  unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
+  Scan[AppendTo[warnings, Lint["UnusedVariables", {"Unused variables in ", LintBold["Module"], ": ", ToFullFormString[#]}, "Warning", #[[3]]]]&, unusedParams];
+
   warnings
 ]]
 
@@ -1003,7 +1010,7 @@ Attributes[scanWiths] = {HoldRest}
 
 scanWiths[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, paramLists, warnings, vars},
+ Module[{ast, node, children, data, duplicates, selected, paramLists, warnings, vars, used, unusedParams},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1029,6 +1036,15 @@ Catch[
     duplicates = Keys[Select[CountsBy[#, ToFullFormString], # > 1 &]]& /@ vars;
       selected = Flatten[Function[{duplicates, vars}, (Select[vars, Function[{c}, ToFullFormString[c] === #]])& /@ duplicates] @@@ Transpose[{duplicates, vars}]];
   Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["With"], ": ", ToFullFormString[#]}, "Error", #[[3]]]]&, selected];
+
+  (*
+  TODO: handle reporting with nested:
+  With[{a = 1}, {b = a}, b]
+  *)
+
+  used = ToFullFormString /@ Cases[Last[children], _SymbolNode, {0, Infinity}];
+  unusedParams = Select[Flatten[vars], Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
+  Scan[AppendTo[warnings, Lint["UnusedVariables", {"Unused variables in ", LintBold["With"], ": ", ToFullFormString[#]}, "Warning", #[[3]]]]&, unusedParams];
 
   warnings
 ]]
@@ -1066,6 +1082,10 @@ Catch[
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
     Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["Block"], ": ", ToFullFormString[#]}, "Error", #[[3]]]]&, selected];
+
+    (*
+    Do not scan for unused variables in Block
+    *)
 
   warnings
 ]]
