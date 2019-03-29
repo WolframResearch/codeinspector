@@ -364,7 +364,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       (*
       any space is a candidate
       *)
-      spaces = Cases[tokens, TokenNode[Token`Space, _, _]];
+      spaces = Cases[tokens, TokenNode[Token`WhiteSpace, _, _]];
       spaceRanges = offset + Flatten[Range @@ #[[3]][Source][[All, 2]]& /@ spaces];
       
       (*
@@ -373,7 +373,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       *)
       comments = Cases[tokens, TokenNode[Token`Comment, _, _]];
       gaps = #[[3]][Source][[1, 2]]& /@ comments;
-      excludes = SequenceCases[tokens, {TokenNode[Token`Space, _, _], c:TokenNode[Token`Comment, _, _]} :> c];
+      excludes = SequenceCases[tokens, {TokenNode[Token`WhiteSpace, _, _], c:TokenNode[Token`Comment, _, _]} :> c];
       gaps = offset + Complement[gaps, excludes];
 
       edges = offset + {1, StringLength[line]+1};
