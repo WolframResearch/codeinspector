@@ -26,10 +26,14 @@ Needs["Lint`"]
 
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], StandardForm] :=
-  Column[{tag, LintMarkup[Row[{"Severity: ", severity}], FontColor->severityColor[{lint}], FontWeight->Bold], description}]
+  Interpretation[
+  	Column[{tag, LintMarkup[Row[{"Severity: ", severity}], FontColor->severityColor[{lint}], FontWeight->Bold], description}],
+  	lint]
 
 Format[lint:Lint[tag_String, description_List, severity_String, data_Association], StandardForm] :=
-  Column[{tag, LintMarkup[Row[{"Severity: ", severity}], FontColor->severityColor[{lint}], FontWeight->Bold], Row[description]}]
+  Interpretation[
+  	Column[{tag, LintMarkup[Row[{"Severity: ", severity}], FontColor->severityColor[{lint}], FontWeight->Bold], Row[description]}],
+  	lint]
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], OutputForm] :=
   Row[{tag, " ", LintMarkup[Row[{"Severity: ", severity}], FontColor->severityColor[{lint}], FontWeight->Bold], " ", description}]
