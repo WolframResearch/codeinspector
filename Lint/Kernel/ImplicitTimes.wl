@@ -26,6 +26,10 @@ Options[ImplicitTimesFile] = {
   PerformanceGoal -> "Speed"
 }
 
+$fileByteCountLimit = 1*^6
+
+
+
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
  Module[{full, times, performanceGoal, cst},
@@ -38,7 +42,7 @@ Catch[
   ];
 
    If[performanceGoal == "Speed",
-    If[FileByteCount[full] > 1*^6,
+    If[FileByteCount[full] > $fileByteCountLimit,
      Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
      ];
     ];
@@ -353,11 +357,6 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       line = StringTake[line, {span[[1,2]]+1, span[[2,2]]-1}];
 
       tokens = TokenizeString[line];
-
-      (*
-      EOF
-      tokens = Most[tokens];
-      *)
 
       offset = span[[1, 2]];
       

@@ -13,9 +13,16 @@ Needs["Lint`Format`"]
 Needs["Lint`Utils`"]
 
 
+
+$DefaultTagExclusions = {"SuspiciousAlternativesPattern", "UnusedBlockVariables"}
+
+$DefaultSeverityExclusions = {"Remark"}
+
+
+
 Options[LintFileReport] = {
-  "TagExclusions" -> {},
-  "SeverityExclusions" -> {"Remark"},
+  "TagExclusions" -> $DefaultTagExclusions,
+  "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
@@ -33,10 +40,31 @@ LintFileReport[file_String | File[file_String], lints:{___Lint}, OptionsPattern[
 Catch[
  Module[{full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
 
+
+ (*
+  Support None for the various exclusion options
+ *)
  tagExclusions = OptionValue["TagExclusions"];
+ If[tagExclusions === None,
+  tagExclusions = {}
+ ];
+
  severityExclusions = OptionValue["SeverityExclusions"];
+ If[severityExclusions === None,
+  severityExclusions = {}
+ ];
+
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
+ If[lineNumberExclusions === None,
+  lineNumberExclusions = {}
+ ];
+
  lineHashExclusions = OptionValue["LineHashExclusions"];
+ If[lineHashExclusions === None,
+  lineHashExclusions = {}
+ ];
+
+
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -59,7 +87,7 @@ Catch[
   ImportString["\n", {"Text", "Lines"}, CharacterEncoding -> "ASCII"] returns {""} and I argue that it should return {"", ""}
   That is, there are implied lines both *before* and *after* a \n.
   So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
-  bug ?
+  discussed at length in bug 363161
    *)
   endsWithNewline = (Import[full, {"Byte", -1}] == 10);
   If[endsWithNewline,
@@ -71,8 +99,8 @@ Catch[
 
 
 Options[LintStringReport] = {
-  "TagExclusions" -> {},
-  "SeverityExclusions" -> {"Remark"},
+  "TagExclusions" -> $DefaultTagExclusions,
+  "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
@@ -89,10 +117,29 @@ Catch[
  Module[{lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions},
 
 
+ (*
+  Support None for the various exclusion options
+ *)
  tagExclusions = OptionValue["TagExclusions"];
+ If[tagExclusions === None,
+  tagExclusions = {}
+ ];
+
  severityExclusions = OptionValue["SeverityExclusions"];
+ If[severityExclusions === None,
+  severityExclusions = {}
+ ];
+
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
+ If[lineNumberExclusions === None,
+  lineNumberExclusions = {}
+ ];
+
  lineHashExclusions = OptionValue["LineHashExclusions"];
+ If[lineHashExclusions === None,
+  lineHashExclusions = {}
+ ];
+
 
  If[StringLength[string] == 0,
   Throw[Failure["EmptyString", <||>]]
@@ -110,6 +157,7 @@ Catch[
   ImportString["\n", {"Text", "Lines"}, CharacterEncoding -> "ASCII"] returns {""} and I argue that it should return {"", ""}
   That is, there are implied lines both *before* and *after* a \n.
   So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
+  discussed at length in bug 363161
    *)
   endsWithNewline = (ImportString[string, {"Byte", -1}] == 10);
   If[endsWithNewline,
@@ -124,16 +172,36 @@ Catch[
 
 
 
+Lint::sourceless = "There are Lints without Source data. This can happen when abstract syntax is linted. \
+These Lints cannot be reported. `1`"
+
 
 
 
 lintLinesReport[linesIn_List, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
-	linesToModify, maxLineNumberLength, lintsPerColumn},
-	
+  linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints},
+  
   lints = lintsIn;
   
+  (*
+  in the course of abstracting syntax, Source information may be lost
+  Certain Lints may not have Source information attached
+  That is fine, but those Lints cannot be reported
+  *)
+  sourceLessLints = Cases[lints, Lint[_, _, _, data_ /; !MemberQ[Keys[data], Source]]];
+
+  If[!empty[sourceLessLints],
+    Message[Lint::sourceless, sourceLessLints]
+  ];
+
+  lints = Complement[lints, sourceLessLints];
+
+  If[empty[lints],
+    Throw[{}]
+  ];
+
   (*
   Add a fake line.
 
@@ -166,8 +234,16 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     lints = DeleteCases[lints, Lint[Alternatives @@ tagExclusions, _, _, _]];
   ];
 
+  If[empty[lints],
+    Throw[{}]
+  ];
+
   If[!empty[severityExclusions],
     lints = DeleteCases[lints, Lint[_, _, Alternatives @@ severityExclusions, _]];
+  ];
+
+  If[empty[lints],
+    Throw[{}]
   ];
 
   (*
@@ -184,7 +260,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
   lints = Complement[lints, lintsExcludedByLineNumber];
 
-  If[lints == {},
+  If[empty[lints],
     Throw[{}]
   ];
 
@@ -206,11 +282,17 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
    Table[
 
-   	lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])];
-
-    	LintedLine[lines[[i]], i, hashes[[i]], { ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-    											createUnderlineList[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])]},
-    				Union[Flatten[Values[lintsPerColumn]]], "MaxLineNumberLength" -> maxLineNumberLength]
+      With[
+        {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
+        ,
+        {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
+          lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+          underlineList = createUnderlineList[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+          lints = Union[Flatten[Values[lintsPerColumn]]]
+        }
+        ,
+        LintedLine[lineSource, lineNumber, hash, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+      ]
     ,
     {i, linesToModify}
     ]
@@ -246,12 +328,12 @@ Catch[
   lintsPerColumn = Map[LintedCharacter[LintErrorIndicator, #, FontWeight->Bold, FontSize->Larger]&, lintsPerColumn];
 
   If[KeyExistsQ[lintsPerColumn, 0],
-  	startChar = lintsPerColumn[0];
-  	(*
+    startChar = lintsPerColumn[0];
+    (*
    Mark hitting EOF with \[FilledSquare]
    *)
-  	startMarker = If[endOfFile, LintEOF, LintContinuation];
-  	AssociateTo[lintsPerColumn, 0 -> LintedCharacter[startMarker, startChar[[2]], FontWeight->Bold, FontSize->Larger]];
+    startMarker = If[endOfFile, LintEOF, LintContinuation];
+    AssociateTo[lintsPerColumn, 0 -> LintedCharacter[startMarker, startChar[[2]], FontWeight->Bold, FontSize->Larger]];
   ];
 
   (*
@@ -260,17 +342,17 @@ Catch[
   This ensures a single \[Continuation] on blank lines
   *)
   If[KeyExistsQ[lintsPerColumn, StringLength[line]+1] && !(lineIsEmpty && KeyExistsQ[lintsPerColumn, 0]),
-  	endChar = lintsPerColumn[StringLength[line]+1];
-  	endMarker = LintContinuation;
-  	AssociateTo[lintsPerColumn, StringLength[line]+1 -> LintedCharacter[endMarker, endChar[[2]], FontWeight->Bold, FontSize->Larger]];
-  	,
-  	KeyDropFrom[lintsPerColumn, StringLength[line]+1]
+    endChar = lintsPerColumn[StringLength[line]+1];
+    endMarker = LintContinuation;
+    AssociateTo[lintsPerColumn, StringLength[line]+1 -> LintedCharacter[endMarker, endChar[[2]], FontWeight->Bold, FontSize->Larger]];
+    ,
+    KeyDropFrom[lintsPerColumn, StringLength[line]+1]
   ];
 
   (* and make sure nothing past $lineWidth is left *)
   keys = Keys[lintsPerColumn];
   Scan[(If[# > $lineWidth, KeyDropFrom[lintsPerColumn, #]])&, keys];
-	
+  
 
 
   under = Table[LintSpaceIndicator, {StringLength[line]}];
@@ -363,6 +445,7 @@ pad with " " on either side to allow for \[Continuation] markers and \[Times] ma
 *)
 ListifyLine[lineIn_String, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Module[{line, lintsPerColumn, keys},
+
   line = lineIn;
 
   lintsPerColumn = lintsPerColumnIn;

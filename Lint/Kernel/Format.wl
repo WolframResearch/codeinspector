@@ -142,6 +142,7 @@ Format[LintedCharacter[char_, lintList_List, opts___], OutputForm] :=
 
 
 severityToInteger["ImplicitTimes"] = 0
+severityToInteger["Formatting"] = 0
 severityToInteger["Remark"] = 1
 severityToInteger["Warning"] = 2
 severityToInteger["Error"] = 3
@@ -152,14 +153,15 @@ return the highest severity from list of Lints
 *)
 severityColor[lints:{_Lint..}] :=
 Module[{maxSeverity},
-  maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
-  Switch[maxSeverity,
-    "Remark", Blue,
-    "Warning", Orange,
-    "Error", Red,
-    "Fatal", Red,
-    "ImplicitTimes", Red
-  ]
+	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
+	Switch[maxSeverity,
+		"Formatting", Blue,
+		"Remark", Blue,
+		"Warning", Orange,
+		"Error", Red,
+		"Fatal", Red,
+		"ImplicitTimes", Red
+	]
 ]
 
 

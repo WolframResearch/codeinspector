@@ -34,22 +34,49 @@ Needs["Lint`Format`"]
 
 
 
+
+(*
+provide some selectors for Lint and LintedLine objects
+*)
+
+Lint[tag_,     _,         _, _]["Tag"] := tag
+Lint[   _, desc_,         _, _]["Description"] := desc
+Lint[   _,     _, severity_, _]["Severity"] := severity
+
+
+
+LintedLine[_, lineNumber_,     _, _,      _]["LineNumber"] := lineNumber
+LintedLine[_,           _, hash_, _,      _]["Hash"] := hash
+LintedLine[_,           _,     _, _, lints_]["Lints"] := lints
+
+
+
+
+
+
 Options[LintFile] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
-  "AbstractRules" :> $DefaultAbstractRules
+  "AbstractRules" :> $DefaultAbstractRules,
+  CharacterEncoding -> "UTF-8"
 }
 
+$fileByteCountLimit = 1*^6
 
 
 
 LintFile[file_String | File[file_String], OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, concreteRules, abstractRules, full, lints, cst},
+ Module[{performanceGoal, concreteRules, abstractRules, encoding, full, lints, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
  concreteRules = OptionValue["ConcreteRules"];
  abstractRules = OptionValue["AbstractRules"];
+
+ encoding = OptionValue[CharacterEncoding];
+  If[encoding =!= "UTF-8",
+    Throw[Failure["OnlyUTF8Supported", <|"CharacterEncoding"->encoding|>]]
+  ];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -57,7 +84,7 @@ Catch[
   ];
 
    If[performanceGoal == "Speed",
-    If[FileByteCount[full] > 1*^6,
+    If[FileByteCount[full] > $fileByteCountLimit,
      Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
      ];
     ];
