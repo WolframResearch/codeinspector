@@ -6,9 +6,9 @@ ImplicitTimesString::usage = "ImplicitTimesString[string, options] returns a lis
 
 
 
-ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes, options] returns a list of LintedLines in file."
+ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes, options] returns a LintedFile object."
 
-ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes, options] returns a list of LintedLines in string."
+ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes, options] returns a LintedString object."
 
 
 
@@ -26,7 +26,7 @@ Options[ImplicitTimesFile] = {
   PerformanceGoal -> "Speed"
 }
 
-$fileByteCountLimit = 1*^6
+$fileByteCountLimit = 2*^6
 
 
 
@@ -97,16 +97,12 @@ Options[ImplicitTimesFileReport] = {
 
 
 
-(*
-cannot have
-ImplicitTimesFileReport[file_String, opts:OptionsPattern[]]
 
-because ImplicitTimesFileReport[file, {}] leads to infinite recursion
-*)
-
-ImplicitTimesFileReport[file_String, implicitTimes:{___InfixNode}, OptionsPattern[]] :=
+ImplicitTimesFileReport[file_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{full, lines, lineNumberExclusions, lineHashExclusions},
+ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
+
+ implicitTimes = implicitTimesIn;
 
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  lineHashExclusions = OptionValue["LineHashExclusions"];
@@ -119,13 +115,19 @@ Catch[
    If[FileByteCount[full] == 0,
    Throw[Failure["EmptyFile", <|"FileName"->full|>]]
    ];
+
+   If[implicitTimes === Automatic,
+    implicitTimes = ImplicitTimesFile[full];
+    ];
+
    (*
     bug 163988
     Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
     *)
    lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-   implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions]
+   lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+   LintedFile[full, lintedLines]
 ]]
 
 
@@ -135,9 +137,11 @@ Options[ImplicitTimesStringReport] = {
   "LineHashExclusions" -> {}
 }
 
-ImplicitTimesStringReport[string_String, implicitTimes:{___InfixNode}, OptionsPattern[]] :=
+ImplicitTimesStringReport[string_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lines, lineNumberExclusions, lineHashExclusions},
+ Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
+
+ implicitTimes = implicitTimesIn;
 
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  lineHashExclusions = OptionValue["LineHashExclusions"];
@@ -145,13 +149,19 @@ Catch[
  If[StringLength[string] == 0,
   Throw[Failure["EmptyString", <||>]]
  ];
+
+  If[implicitTimes === Automatic,
+    implicitTimes = ImplicitTimesString[string];
+  ];
+
     (*
     bug 163988
     Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
     *)
    lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-   implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions]
+   lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+   LintedString[string, lintedLines]
 ]]
 
 
@@ -181,6 +191,9 @@ $lineLimit = 20
 $markupLimit = 100
 
 
+$color = severityColor[{Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}];
+
+
 modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
  Module[{line, startCols, endCols, infixCols, startInserters, endInserters, infixInserters, under,
   rules, underLength},
@@ -191,9 +204,9 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
 
   line = lineIn;
 
-  startInserters = AssociationMap[LintedCharacter["(", {Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}, FontWeight->Bold, FontSize->Larger]&, startCols];
-  endInserters = AssociationMap[LintedCharacter[")", {Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}, FontWeight->Bold, FontSize->Larger]&, endCols];
-  infixInserters = AssociationMap[LintedCharacter[LintTimes, {Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}, FontWeight->Bold, FontSize->Larger]&, infixCols];
+  startInserters = AssociationMap[LintMarkup["(", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, startCols];
+  endInserters = AssociationMap[LintMarkup[")", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, endCols];
+  infixInserters = AssociationMap[LintMarkup[LintTimes, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, infixCols];
 
   If[Intersection[Keys[startInserters], Keys[endInserters]] =!= {},
     Throw["intersection start and end", "Unhandled"]
@@ -245,13 +258,23 @@ processPair[{left_, right_}] :=
    BestImplicitTimesPlacement[{leftSource[[2]], rightSource[[1]]}]
    ]
 
+(*
+nodes is something like { 1, ImplicitTimes, 2 } and we just want {1, 2} pairs
+
+we will disregard the ImplicitTimes tokens that come in, because they may not have Source that looks good
+*)
 processChildren[nodes_List] :=
  Module[{pars},
-  pars = Partition[nodes, 2, 1];
+
+  If[$Debug,
+    Print["processChildren nodes: ", nodes];
+  ];
+
+  pars = Partition[nodes[[;;;;2]], 2, 1];
   processPair /@ pars
   ]
 
-implicitTimesLinesReport[linesIn_List, implicitTimesIn:{___InfixNode}, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
+implicitTimesLinesReport[linesIn:{___String}, implicitTimesIn:{___InfixNode}, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
  Module[{implicitTimes, sources, starts, ends, infixs, lines, hashes,
   lineNumberExclusions, lineHashExclusions, implicitTimesExcludedByLineNumber, tmp, linesToModify},
@@ -265,6 +288,10 @@ Catch[
     lines = linesIn;
     hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
     lines = StringTake[#, UpTo[$columnLimit]]& /@ lines;
+
+    If[$Debug,
+      Print["lines: ", lines];
+    ];
 
     lineNumberExclusions = lineNumberExclusionsIn;
 
@@ -300,7 +327,15 @@ Catch[
 
    infixs = processChildren /@ implicitTimes[[All, 2]];
 
+   If[$Debug,
+    Print["infixs: ", infixs];
+   ];
+
    infixs = Flatten[infixs, 1];
+
+   If[$Debug,
+    Print["infixs: ", infixs];
+   ];
 
    (*
     resolve BestImplicitTimesPlacement with actual columns now
@@ -328,10 +363,17 @@ Catch[
 
 
 
+(*
 
-resolveInfix[BestImplicitTimesPlacement[span_], lines_] :=
+BestImplicitTimesPlacement[span_] is something like {{startLine_, startCol_}, {endLine_, endCol_}}
+*)
+resolveInfix[BestImplicitTimesPlacement[span_], lines:{___String}] :=
 Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candidates, edges, offset, intersection,
 	mean, comments, gaps, excludes, goals},
+
+  If[$Debug,
+    Print["resolveInfix: ", {BestImplicitTimesPlacement[span], lines}];
+  ];
 
   Which[
     span[[1, 1]] != span[[2, 1]],
@@ -403,7 +445,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       {goalLine, goalCol}
   ]]
 
-resolveInfix[infix_, lines_] :=
+resolveInfix[infix_, lines:{___String}] :=
   infix
 
 

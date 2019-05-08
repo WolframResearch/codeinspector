@@ -12,6 +12,8 @@ Needs["AST`Utils`"]
 Needs["Lint`"]
 Needs["Lint`Format`"]
 
+
+
 (*
 
 Rules are of the form: pat -> func where pat is the node pattern to match on and func is the processing function for the node.
@@ -36,7 +38,7 @@ Concrete lints
 Tags: ImplicitTimesAcrossLines
 *)
 InfixNode[ImplicitTimes, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanImplicitTimes,
-InfixNode[ImplicitTimes, { BlankNullSequenceNode[_, _, _], BlankNode[_, _, _] }, _] -> scanImplicitTimesBlanks,
+InfixNode[ImplicitTimes, { BlankNullSequenceNode[_, _, _], _, BlankNode[_, _, _] }, _] -> scanImplicitTimesBlanks,
 
 (*
 Tags: DotDifferentLine
@@ -53,7 +55,9 @@ TernaryNode[Span, _, _] -> scanSpans,
 (*
 Tags: StraySemicolon
 *)
+(*
 InfixNode[CompoundExpression, _, _] -> scanCompoundExpressions,
+*)
 
 (*
 Tags: SuspiciousOut
@@ -64,49 +68,60 @@ OutNode[_, _, _] -> scanOuts,
 
 a_?b[x]
 probably meant to have a_?(b[x])
+
+will also scan for:
+a_?b[x]&
+
 *)
 CallNode[BinaryNode[PatternTest, _, _], {_}, _] -> scanPatternTestCalls,
 
-BinaryNode[PatternTest, {_, SymbolNode["Association"|"String"|"Integer"|"Real"|"Failure", _, _]}, _] -> scanBadSymbolPatternTests,
+BinaryNode[PatternTest, {_, _, SymbolNode[Symbol, "Association"|"String"|"Integer"|"Real"|"Failure", _]}, _] -> scanBadSymbolPatternTests,
 
 
 (*
 a->b&
 probably meant to have a->(b&)
 *)
-PostfixNode[Function, {BinaryNode[Rule|RuleDelayed, _, _]}, _] -> scanRuleFunctions,
+PostfixNode[Function, {BinaryNode[Rule|RuleDelayed, _, _], _}, _] -> scanRuleFunctions,
 
 (*
 a?b&
 probably meant to have a?(b&)
 *)
-PostfixNode[Function, {BinaryNode[PatternTest, _, _]}, _] -> scanPatternTestFunctions,
+PostfixNode[Function, {BinaryNode[PatternTest, _, _], _}, _] -> scanPatternTestFunctions,
 
 (*
 
 a_?b[x]& is handled here
 *)
-PostfixNode[Function, {CallNode[BinaryNode[PatternTest, _, _], {_}, _]}, _] -> scanPatternTestCallFunctions,
+(*
+PostfixNode[Function, {CallNode[BinaryNode[PatternTest, _, _], {_}, _], _}, _] -> scanPatternTestCallFunctions,
+*)
 
+(*
+
+experimental
 
 BinaryNode[Pattern, {_, InfixNode[Alternatives, _, _]}, _] -> scanAlternativesPatterns,
+*)
+
+BinaryNode[Optional, {PatternBlankNode[PatternBlank, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
+BinaryNode[Optional, {PatternBlankSequenceNode[PatternBlankSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
+BinaryNode[Optional, {PatternBlankNullSequenceNode[PatternBlankNullSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
 
 
-BinaryNode[Optional, {PatternBlankNode[PatternBlank, {_}, _], _}, _] -> scanPatternBlankOptionals,
-BinaryNode[Optional, {PatternBlankSequenceNode[PatternBlankSequence, {_}, _], _}, _] -> scanPatternBlankOptionals,
-BinaryNode[Optional, {PatternBlankNullSequenceNode[PatternBlankNullSequence, {_}, _], _}, _] -> scanPatternBlankOptionals,
 
+PrefixNode[Information, _, _] -> scanInformation,
 
 
 (*
+
+bad scan
+
 BinaryNode[Optional, {BlankNode[Blank, _, _], _}, _] -> scanBlankOptionals,
 BinaryNode[Optional, {BlankSequenceNode[BlankSequence, _, _], _}, _] -> scanBlankOptionals,
 BinaryNode[Optional, {BlankNullSequenceNode[BlankNullSequence, _, _], _}, _] -> scanBlankOptionals,
 *)
-
-
-CallNode[SymbolNode["Begin", {}, _], {GroupNode[GroupSquare, {StringNode["\"Private`\"", {}, _]}, _]}, _] -> scanPrivateContextNode,
-
 
 
 
@@ -115,16 +130,13 @@ Tags: SyntaxError
 *)
 SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
 
-(*
-CallMissingCloserNode[_, _, _] -> scanMissingCloserNodes,
-*)
-
 
 (*
 Tags: SyntaxError MaxExpressionDepth etc.
 *)
+(*
 KeyValuePattern[SyntaxIssues -> _] -> scanSyntaxIssues,
-
+*)
 
 
 Nothing
@@ -137,55 +149,58 @@ Nothing
 $DefaultAbstractRules = <|
 
 
-CallNode[SymbolNode["String", _, _], _, _] -> scanStringCalls,
-CallNode[SymbolNode["Integer", _, _], _, _] -> scanIntegerCalls,
-CallNode[SymbolNode["Real", _, _], _, _] -> scanRealCalls,
+CallNode[SymbolNode[Symbol, "String", _], _, _] -> scanStringCalls,
+CallNode[SymbolNode[Symbol, "Integer", _], _, _] -> scanIntegerCalls,
+CallNode[SymbolNode[Symbol, "Real", _], _, _] -> scanRealCalls,
 (*
+
+not a good scan
+
 CallNode[SymbolNode["Failure", _, _], _, _] -> scanFailureCalls,
 *)
 
 (*
 Tags: Control
 *)
-SymbolNode["Return" | "Break" | "Continue", _, _] -> scanControls,
+SymbolNode[Symbol, "Return" | "Break" | "Continue", _] -> scanControls,
 
 
-CallNode[SymbolNode["Pattern", _, _], _, _] -> scanPatterns,
+CallNode[SymbolNode[Symbol, "Pattern", _], _, _] -> scanPatterns,
 
 (*
 Tags: WhichArguments SwitchWhichConfusion
 *)
-CallNode[SymbolNode["Which", _, _], _, _] -> scanWhichs,
+CallNode[SymbolNode[Symbol, "Which", _], _, _] -> scanWhichs,
 
 (*
 Tags: SwitchArguments SwitchWhichConfusion OperatingSystemLinux
 *)
-CallNode[SymbolNode["Switch", _, _], _, _] -> scanSwitchs,
+CallNode[SymbolNode[Symbol, "Switch", _], _, _] -> scanSwitchs,
 
 (*
 Tags: DuplicateKeys
 *)
-CallNode[SymbolNode["Association", _, _], {CallNode[SymbolNode["Rule" | "RuleDelayed", _, _], _, _] ...}, _] -> scanAssocs,
+CallNode[SymbolNode[Symbol, "Association", _], {CallNode[SymbolNode[Symbol, "Rule" | "RuleDelayed", _], _, _] ...}, _] -> scanAssocs,
 
 (*
 Tags: 
 *)
-CallNode[SymbolNode["Module", _, _], _, _] -> scanModules,
+CallNode[SymbolNode[Symbol, "Module", _], _, _] -> scanModules,
 
 (*
 Tags: 
 *)
-CallNode[SymbolNode["DynamicModule", _, _], _, _] -> scanDynamicModules,
+CallNode[SymbolNode[Symbol, "DynamicModule", _], _, _] -> scanDynamicModules,
 
 (*
 Tags: 
 *)
-CallNode[SymbolNode["With", _, _], _, _] -> scanWiths,
+CallNode[SymbolNode[Symbol, "With", _], _, _] -> scanWiths,
 
 (*
 Tags: 
 *)
-CallNode[SymbolNode["Block", _, _], _, _] -> scanBlocks,
+CallNode[SymbolNode[Symbol, "Block", _], _, _] -> scanBlocks,
 
 (*
 Tags: 
@@ -194,13 +209,34 @@ Tags:
 1-arg Optional[] is ok to have named patterns
 Only scan 2-arg Optionals
 *)
-CallNode[SymbolNode["Optional", _, _], {_, _}, _] -> scanOptionals,
+CallNode[SymbolNode[Symbol, "Optional", _], {_, _}, _] -> scanOptionals,
 
 
 (*
 Scan all symbols that are intuitive, yet do not exist
 *)
-SymbolNode["AnyFalse" | "Failed"(*|"Boolean"*), _, _] -> scanBadSymbols,
+SymbolNode[Symbol, "AnyFalse" | "AllFalse" | "Failed"(*|"Boolean"*), _] -> scanBadSymbols,
+
+(*
+
+If LoadJavaClass["java.lang.System"] is called, then these symbols are created in System`
+
+It is therefore dangerous to use these symbols in production code where it is unknown whether JLink will be used.
+
+
+too noisy
+
+
+SymbolNode[Symbol, "arraycopy" | "clearProperty" | "console" | "currentTimeMillis" | "err" | "exit" | "gc" |
+                      "getenv" | "getProperties" | "getProperty" | "getSecurityManager" | "identityHashCode" |
+                      "in" | "inheritedChannel" | "lineSeparator" | "load" | "loadLibrary" | "mapLibraryName" |
+                      "nanoTime" | "out" | "runFinalization" | "runFinalizersOnExit" | "setErr" | "setIn" |
+                      "setOut" | "setProperties" | "setProperty" | "setSecurityManager", _] -> scanJavaSystemSymbols,
+*)
+
+CallNode[SymbolNode[Symbol, "LoadJavaClass" | "JLink`LoadJavaClass", _], { StringNode[String, "\"java.lang.System\"", _] }, _] -> scanLoadJavaClassSystem,
+
+
 
 
 
@@ -208,10 +244,40 @@ SymbolNode["AnyFalse" | "Failed"(*|"Boolean"*), _, _] -> scanBadSymbols,
 scan for a := a  and  a = a
 possible results from batch renaming symbols
 *)
-CallNode[SymbolNode["Set" | "SetDelayed", {}, _], { SymbolNode[token_, {}, _], SymbolNode[token_, {}, _] }, _] -> scanSelfAssignments,
+CallNode[SymbolNode[Symbol, "Set" | "SetDelayed", _], { SymbolNode[Symbol, token_, _], SymbolNode[Symbol, token_, _] }, _] -> scanSelfAssignments,
+
+
+ContextNode[{StringNode[String, "\"Private`\"", _]}, _, _] -> scanPrivateContextNode,
+
+
+(*
+
+experimental
+
+detect a?fooQ  when you meant a_?fooQ
+
+currently too difficult to determine what is a pattern
+
+CallNode[SymbolNode[Symbol, "PatternTest", _], {
+                      lhs_ /; FreeQ[lhs, CallNode[SymbolNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _]],
+                      _}, _] -> scanPatternTestMissingPattern,
+*)
 
 
 
+(*
+
+experimental
+
+detect calls like f[a_] := a_
+
+
+TODO: A clever thing to do would be to detet when inside of Quiet[ ,{Rule::rhs, RuleDelayed::rhs}] and turn off this check
+
+CallNode[SymbolNode[Symbol, "Set" | "SetDelayed", _], { lhs_, rhs_ } /;
+            Intersection[Cases[lhs, CallNode[SymbolNode[Symbol, "Pattern", _], {SymbolNode[Symbol, name_, _], _}, _] :> name, {0, Infinity}],
+                          Cases[rhs, CallNode[SymbolNode[Symbol, "Pattern", _], {SymbolNode[Symbol, name_, _], _}, _] :> name, {0, Infinity}]] != {}, _] -> scanRHSPatterns,
+*)
 
 
 
@@ -253,8 +319,8 @@ Module[{cst, node, children, data, warnings, line, nextLine},
     nextLine = n[[3]][Source][[1,1]];
     If[line != nextLine,
       AppendTo[warnings,
-        Lint["ImplicitTimesAcrossLines", {"Implicit Times across lines. Did you mean ", LintBold[";"], " or ",
-                                            LintBold[","], "?"}, "Warning", data]];
+        Lint["ImplicitTimesAcrossLines", "Implicit Times across lines.\n\
+Did you mean ``;`` or ``,``?", "Warning", data]];
       Break[];
     ];
     line = n[[3]][Source][[2,1]];
@@ -273,8 +339,8 @@ Module[{cst, node, data},
   node = Extract[cst, {pos}][[1]];
   data = node[[3]];
 
-  {Lint["ImplicitTimesBlanks", {"Implicit Times between ", LintBold["___"], " and ", LintBold["_"],
-      ". Did you mean ", LintBold["___"], " ?"}, "Error", data]}
+  {Lint["ImplicitTimesBlanks", "Implicit Times between ``___`` and ``_``.\n\
+Did you mean ``___``?", "Error", data]}
 ]
 
 
@@ -283,29 +349,29 @@ Module[{cst, node, data},
 Attributes[scanDots] = {HoldRest}
 
 scanDots[pos_List, cstIn_] :=
-Module[{cst, node, children, data, warnings, line, nextLine},
+Module[{cst, node, children, data, issues, line, nextLine},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
-  warnings = {};
+  issues = {};
 
   line = children[[1]][[3]][Source][[2,1]];
   Do[
     nextLine = n[[3]][Source][[1,1]];
     If[line != nextLine,
-      AppendTo[warnings,
-        Lint["DotDifferentLine", {"Operands for ", LintBold["."], " are on different lines. Did you mean ",
-                                    LintBold[";"], " or ", LintBold[","], "?"}, "Warning", data]];
+      AppendTo[issues,
+        Lint["DotDifferentLine", "Operands for ``.`` are on different lines.\n\
+Did you mean ``;`` or ``,``?", "Warning", data]];
       Break[];
     ];
     line = n[[3]][Source][[2,1]];
     ,
-    {n, children[[2;;]]}
+    {n, children[[3;;;;2]]}
   ];
 
-  warnings
+  issues
 ]
 
 
@@ -313,63 +379,53 @@ Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, cstIn_] :=
 Catch[
- Module[{cst, node, children, data, parentPos, parent, issues},
+ Module[{cst, node, children, data, issues},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
-  If[pos == {},
-    (* top node, no parent *)
-    Throw[{Lint["SuspiciousSpan", {"Suspicious use of ", LintBold[";;"], " at top-level. Did you mean ", LintBold[";"], "?"}, "Warning", data]}]
-  ];
-
   issues = {};
 
-  parentPos = Most[pos];
-  parent = Extract[cst, {parentPos}][[1]];
-  While[ListQ[parent] || MatchQ[parent, GroupNode[GroupParen, _, _]],
-   parentPos = Most[parentPos];
-   parent = Extract[cst, {parentPos}][[1]];
-   ];
+  (*
+  The position {2, _} tests for top-level, because the cst looks like FileNode[File, { SpanNode }, <||>]
+  *)
+  If[MatchQ[pos, {2, _}],
+    (* top node, no parent *)
 
-   If[MatchQ[parent, GroupNode[GroupSquare, _, _]],
-    (*
-    any Span inside of [] is ok
-    this means any Span inside of [[]] is also ok
-    also any Span inside of any Call is ok
+    AppendTo[issues, Lint["SuspiciousSpan", "Suspicious use of ``;;`` at top-level.\n\
+Did you mean ``;``?", "Warning", data]];
+  ];
 
-    it is currently too difficult to determine good/bad syntax for Span
-    *)
-    Throw[issues]
-   ];
 
-   Switch[node,
-      BinaryNode[Span, {_, InternalAllNode[All, {}, _]}, _],
-        AppendTo[issues, Lint["SuspiciousSpan", {"Suspicious use of ", LintBold[";;"], ". Did you mean ", LintBold[";"], "?"}, "Warning", data]];
-      ,
-      _,
-        (*
-        line = children[[1]][[3]][Source][[2,1]];
-        Do[
-          nextLine = n[[3]][Source][[1,1]];
-          If[line != nextLine,
-            AppendTo[issues, Lint["SuspiciousSpan", {"Suspicious use of ", LintBold[";;"], ". Did you mean ", LintBold[";"], "?"}, "Warning", data]];
-          ];
-          line = n[[3]][Source][[2,1]];
-          ,
-          {n, children[[2;;]]}
-        ];
-        *)
-        Null
-    ];
+  (*
   
+  The parser returns a Warning about different lines
+
+  *)
+  (*
+  line = children[[1]][[3]][Source][[2,1]];
+  Do[
+    nextLine = n[[3]][Source][[1,1]];
+    If[line != nextLine,
+      AppendTo[issues, Lint["SuspiciousSpan", "Suspicious use of ``;;``.\n\
+Did you mean ``;``?", "Warning", data]];
+      Break[];
+    ];
+    line = n[[3]][Source][[2,1]];
+    ,
+    {n, children[[3;;;;2]]}
+  ];
+  *)
+
   issues
 ]]
 
 
 
 (*
+
+the parser returns a Warning
 
 StraySemicolon is to find things like this:
 
@@ -378,6 +434,7 @@ StraySemicolon is to find things like this:
 
 *)
 
+(*
 Attributes[scanCompoundExpressions] = {HoldRest}
 
 scanCompoundExpressions[pos_List, cstIn_] :=
@@ -404,10 +461,13 @@ Module[{cst, node, children, data, issues, internalNulls},
   a bit noisy. Remark for now
   *)
 
-  Scan[(AppendTo[issues, Lint["StraySemicolon", {LintBold[";"], " may not be needed."}, "Remark", #[[3]]]])&, internalNulls];
+  Scan[(AppendTo[issues, Lint["StraySemicolon", "``;`` may not be needed.", "Warning", #[[3]]]])&, internalNulls];
 
   issues
 ]
+*)
+
+
 
 Attributes[scanOuts] = {HoldRest}
 
@@ -415,9 +475,9 @@ scanOuts[pos_List, cstIn_] :=
  Module[{cst, node, data, s},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
-  s = node[[1]];
+  s = node["String"];
   data = node[[3]];
-  {Lint["SuspiciousOut", {"Suspicious use of ", LintBold[s], " in file."}, "Warning", data]}
+  {Lint["SuspiciousOut", "Suspicious use of ``" <> s <> "`` in file.", "Warning", data]}
 ]
 
 
@@ -428,16 +488,28 @@ warn about a_?b[x] which actually parses as (a_?b)[x] and not a_?(b[x])
 *)
 scanPatternTestCalls[pos_List, cstIn_] :=
 Catch[
- Module[{cst, node, data, children, patternTest, args, patternTestArg1, patternTestArg2, issues},
+ Module[{cst, node, data, children, patternTest, args, patternTestChildren, patternTestArg1, patternTestArg2, issues,
+  parent, parentPos},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   patternTest = node[[1]];
   children = node[[2]];
 
-  patternTestArg1 = patternTest[[2]][[1]];
-  patternTestArg2 = patternTest[[2]][[2]];
+  patternTestChildren = patternTest[[2]];
+  patternTestArg1 = patternTestChildren[[1]];
+  patternTestArg2 = patternTestChildren[[3]];
   args = children[[1]];
   data = node[[3]];
+
+
+  If[Length[pos] >= 2,
+    parentPos = Drop[pos, -2];
+    parent = Extract[cst, {parentPos}][[1]];
+
+    If[MatchQ[parent, PostfixNode[Function, _, _]],
+      Throw[scanPatternTestCallFunctions[parentPos, cst]]
+     ];
+  ];
 
   issues = {};
 
@@ -447,11 +519,20 @@ Catch[
 
   *)
 
-  AppendTo[issues, Lint["SuggestParentheses", {"Suspicious use of ", LintBold["?"], ". The precedence of ", LintBold["?"], " is surprisingly high. PatternTest ", LintBold[ToInputFormString[patternTest]],
-    " is calling arguments ", LintBold[ToInputFormString[args]],
-    ". Did you mean ", LintBold[ToInputFormString[BinaryNode[PatternTest,
-        {patternTestArg1, GroupNode[GroupParen, {CallNode[patternTestArg2, {args}, <||>]}, <||>]}, <||>]]],
-        " or ", LintBold[ToInputFormString[CallNode[GroupNode[GroupParen, {patternTest}, <||>], children, <||>]]], " ?"}, "Remark", data]];
+  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``.\n\
+The precedence of ``?`` is surprisingly high.\n\
+``PatternTest`` ``" <> ToInputFormString[patternTest] <> "`` is calling arguments ``" <> ToInputFormString[args] <> "``.\n\
+Did you mean ``" <> ToInputFormString[BinaryNode[PatternTest, {
+                                        patternTestArg1,
+                                        TokenNode[Token`Question, "?", <||>],
+                                        GroupNode[GroupParen, {
+                                          TokenNode[Token`OpenParen, "(", <||>],
+                                          CallNode[patternTestArg2, {args}, <||>],
+                                          TokenNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]] <>
+        "`` or ``" <> ToInputFormString[CallNode[GroupNode[GroupParen, {
+                                                    TokenNode[Token`OpenParen, "(", <||>],
+                                                    patternTest,
+                                                    TokenNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>]] <> "``?", "Remark", data]];
 
   issues
 
@@ -469,7 +550,7 @@ Catch[
   children = node[[2]];
 
   patternTestArg1 = children[[1]];
-  patternTestArg2 = children[[2]];
+  patternTestArg2 = children[[3]];
   data = node[[3]];
 
   issues = {};
@@ -478,20 +559,25 @@ Catch[
   catch cases like a_?Association  when it should have been a_?AssociationQ
   *)
   Switch[patternTestArg2,
-    SymbolNode["Association", _, _],
-      AppendTo[issues, Lint["AssociationCall", {"Calling ", LintBold["Association"], " as a function. Did you mean ", LintBold["AssociationQ"], " ?"}, "Error", patternTestArg2[[3]]]];
+    SymbolNode[Symbol, "Association", _],
+      AppendTo[issues, Lint["AssociationCall", "Calling ``Association`` as a function.\n\
+Did you mean ``AssociationQ``?", "Error", patternTestArg2[[3]]]];
     ,
-    SymbolNode["String", _, _],
-      AppendTo[issues, Lint["StringCall", {"Calling ", LintBold["String"], " as a function. Did you mean ", LintBold["StringQ"], " ?"}, "Error", patternTestArg2[[3]]]];
+    SymbolNode[Symbol, "String", _],
+      AppendTo[issues, Lint["StringCall", "Calling ``String`` as a function.\n\
+Did you mean ``StringQ``?", "Error", patternTestArg2[[3]]]];
     ,
-    SymbolNode["Integer", _, _],
-      AppendTo[issues, Lint["IntegerCall", {"Calling ", LintBold["Integer"], " as a function. Did you mean ", LintBold["IntegerQ"], " ?"}, "Error", patternTestArg2[[3]]]];
+    SymbolNode[Symbol, "Integer", _],
+      AppendTo[issues, Lint["IntegerCall", "Calling ``Integer`` as a function.\n\
+Did you mean ``IntegerQ``?", "Error", patternTestArg2[[3]]]];
     ,
-    SymbolNode["Real", _, _],
-      AppendTo[issues, Lint["RealCall", {"Calling ", LintBold["Real"], " as a function. Did you mean ", LintBold["RealQ"], " ?"}, "Error", patternTestArg2[[3]]]];
+    SymbolNode[Symbol, "Real", _],
+      AppendTo[issues, Lint["RealCall", "Calling ``Real`` as a function.\n\
+Did you mean ``RealQ``?", "Error", patternTestArg2[[3]]]];
     ,
-    SymbolNode["Failure", _, _],
-      AppendTo[issues, Lint["FailureCall", {"Calling ", LintBold["Failure"], " as a function. Did you mean ", LintBold["FailureQ"], " ?"}, "Error", patternTestArg2[[3]]]];
+    SymbolNode[Symbol, "Failure", _],
+      AppendTo[issues, Lint["FailureCall", "Calling ``Failure`` as a function.\n\
+Did you mean ``FailureQ``?", "Error", patternTestArg2[[3]]]];
     ,
     _,
       Throw[Failure["Internal", <||>]]
@@ -516,7 +602,6 @@ Catch[
   children = node[[2]];
   data = node[[3]];
   rule = children[[1]];
-  ruleHead = rule[[1]];
   ruleChild1 = rule[[2]][[1]];
 
   (*
@@ -552,7 +637,7 @@ Catch[
       if inside @, then assume it is intentional, i.e., a->b& @ x is intentional
       if inside /@, then assume it is intentional, i.e., a->b& /@ x is intentional
      *)
-     If[MatchQ[parent, BinaryNode[BinaryAt | Map | Composition | RightComposition | Apply, {node, _}, _]],
+     If[MatchQ[parent, BinaryNode[BinaryAt | Map | Composition | RightComposition | Apply, {node, _, _}, _]],
       Throw[{}]
      ];
 
@@ -563,8 +648,10 @@ Catch[
      (*
      heuristic
       if inside Map[], then assume it is intentional, i.e., Map[a->b&, x] is intentional
+
+      Map and MapAt can have multiple arguments
      *)
-     If[MatchQ[parent, CallNode[SymbolNode["Map" | "MapAt", _, _], {GroupNode[GroupSquare, {node, _, _}, _]}, _]],
+     If[MatchQ[parent, CallNode[SymbolNode[Symbol, "Map" | "MapAt", _], {GroupNode[GroupSquare, {_, node, __}, _]}, _]],
       Throw[{}]
      ];
 
@@ -577,12 +664,28 @@ Catch[
      ];
     ];
 
-  ruleChild2 = rule[[2]][[2]];
+  ruleHead = rule[[1]];
+  ruleChild2 = rule[[2]][[3]];
 
-  {Lint["SuspiciousRuleFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low. ", SymbolName[ruleHead], " ", LintBold[ToInputFormString[rule]],
-    " is inside a ", LintBold["Function"], ". Did you mean ", LintBold[ToInputFormString[BinaryNode[ruleHead, {ruleChild1,
-      GroupNode[GroupParen, {PostfixNode[Function, {ruleChild2}, <||>]}, <||>]}, <||>]]], " or ",
-      LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, {rule}, <||>]}, <||>]]], " ?"}, "Warning", data]}
+  {Lint["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
+The precedence of ``&`` is surprisingly low.\n\
+``" <> SymbolName[ruleHead] <> "`` ``" <> ToInputFormString[rule] <> "`` is inside a ``Function``.\n\
+Did you mean ``" <>
+      ToInputFormString[BinaryNode[ruleHead, {
+        ruleChild1,
+        rule[[2]][[2]],
+        GroupNode[GroupParen, {
+          TokenNode[Token`OpenParen, "(", <||>],
+          PostfixNode[Function, {
+            ruleChild2,
+            TokenNode[Token`Amp, "&", <||>] }, <||>],
+          TokenNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]] <> "`` or ``" <>
+      ToInputFormString[PostfixNode[Function, {
+                          GroupNode[GroupParen, {
+                            TokenNode[Token`OpenParen, "(", <||>],
+                            rule,
+                            TokenNode[Token`CloseParen, ")", <||>] }, <||>],
+                          TokenNode[Token`Amp, "&", <||>] }, <||>]] <> "``?", "Warning", data]}
 ]]
 
 
@@ -603,13 +706,36 @@ Catch[
   patternTest = children[[1]];
   patternTestChildren = patternTest[[2]];
   patternTestArg1 = patternTestChildren[[1]];
-  patternTestArg2 = patternTestChildren[[2]];
-  {Lint["SuspiciousPatternTestFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"], " is surprisingly low and the precedence of ", LintBold["?"], " is surprisingly high. ", LintBold["?"], " is inside a ", LintBold["Function"], ". Did you mean ",
-          LintBold[ToInputFormString[BinaryNode[PatternTest, {patternTestArg1, GroupNode[GroupParen, {PostfixNode[Function, {patternTestArg2}, <||>]}, <||>]}, <||>]]],
-          " or ", LintBold[ToInputFormString[PostfixNode[Function, {GroupNode[GroupParen, {patternTest}, <||>]}, <||>]]], " ?"}, "Warning", data]}
+  patternTestArg2 = patternTestChildren[[3]];
+  {Lint["SuspiciousPatternTestFunction", "Suspicious use of ``&``.\n\
+The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
+``?`` is inside a ``Function``.\n\
+Did you mean ``" <>
+  ToInputFormString[BinaryNode[PatternTest, {
+                        patternTestArg1,
+                        TokenNode[Token`Question, "?", <||>],
+                        GroupNode[GroupParen, {
+                          TokenNode[Token`OpenParen, "(", <||>],
+                          PostfixNode[Function, {
+                            patternTestArg2,
+                            TokenNode[Token`Amp, "&", <||>] }, <||>],
+                          TokenNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]] <> 
+          "`` or ``" <> ToInputFormString[PostfixNode[Function, {
+                                            GroupNode[GroupParen, {
+                                              TokenNode[Token`OpenParen, "(", <||>],
+                                              patternTest,
+                                              TokenNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]] <> "``?", "Warning", data]}
 ]]
 
 
+
+
+
+(*
+
+this is called from scanPatternTestCalls and not the dispatcher
+
+*)
 
 Attributes[scanPatternTestCallFunctions] = {HoldRest}
 
@@ -631,13 +757,57 @@ Catch[
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[2]];
 
-  {Lint["SuspiciousPatternTestCallFunction", {"Suspicious use of ", LintBold["&"], ". The precedence of ", LintBold["&"],
-    " is surprisingly low and the precedence of ", LintBold["?"], " is surprisingly high. Call to PatternTest ",
-    LintBold[ToInputFormString[call]], " is inside a ", LintBold["Function"], ". Did you mean ",
-    LintBold[ToInputFormString[BinaryNode[PatternTest, {patternTestArg1, GroupNode[GroupParen, {PostfixNode[Function, {CallNode[patternTestArg2, callChildren, <||>]}, <||>]}, <||>]}, <||>]]],
-          " or ", LintBold[ToInputFormString[PostfixNode[Function, {CallNode[GroupNode[GroupParen, {patternTest}, <||>], callChildren, <||>]}, <||>]]], " ?"},
+  {Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
+The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
+Call to ``PatternTest`` ``" <> ToInputFormString[call] <> "`` is inside a ``Function``.\n\
+Did you mean ``" <> ToInputFormString[BinaryNode[PatternTest, {
+                                        patternTestArg1,
+                                        TokenNode[Token`Question, "?", <||>],
+                                        GroupNode[GroupParen, {
+                                          TokenNode[Token`OpenParen, "(", <||>],
+                                          PostfixNode[Function, {
+                                            CallNode[patternTestArg2, callChildren, <||>],
+                                            TokenNode[Token`Amp, "&", <||>] }, <||>],
+                                          TokenNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]] <>
+  "`` or ``" <> ToInputFormString[PostfixNode[Function, {
+                                    CallNode[GroupNode[GroupParen, {
+                                      TokenNode[Token`OpenParen, "(", <||>],
+                                      patternTest,
+                                      TokenNode[Token`CloseParen, ")", <||>] }, <||>], callChildren, <||>],
+                                    TokenNode[Token`Amp, "&", <||>] }, <||>]] <> "``?",
     "Warning", data]}
 ]]
+
+
+
+
+(*
+
+experimental
+
+still need to nail down heuristics
+
+
+
+rough algorithm to use for SuspiciousAlternativesPattern:
+
+in the rules list:
+alt_Alternatives /; !FreeQ[alt, Pattern | PatternBlank | etc]
+
+in the function:
+collect candidate patterns
+   scan through all candidate:
+       if of the form x_ /; blahQ[x], then do not need to add x to candidates
+if there are candidates:
+    go to parent node and see if something like x:f[]|{x:f[]}
+        keep track of this parent pattern for further diagnostics
+    scan through all branches of Alternatives:
+        if a branch does not have every candidate:
+            there will be a warning
+            if candidate is parent pattern
+                then issue special warning
+            else:
+                then issue warning
 
 
 
@@ -666,7 +836,7 @@ Catch[
           LintBold[ToInputFormString[InfixNode[Alternatives, {GroupNode[GroupParen, {BinaryNode[Pattern, {patternArg1, alternativesFirst}, <||>]}, <||>]}~Join~alternativesRest, <||>]]],
           " or ", LintBold[ToInputFormString[BinaryNode[Pattern, {patternArg1, GroupNode[GroupParen, {alternatives}, <||>]}, <||>]]], " ?"}, "Remark", data]}
 ]]
-
+*)
 
 
 Attributes[scanPatternBlankOptionals] = {HoldRest}
@@ -685,7 +855,7 @@ Catch[
   patternBlank = children[[1]];
   patternBlankChildren = patternBlank[[2]];
   pattern = patternBlankChildren[[1]];
-  opt = children[[2]];
+  opt = children[[3]];
 
   (*
   bring in heuristics for when a_:b is valid
@@ -697,37 +867,46 @@ Catch[
                 PatternBlankNode[PatternBlank, _, _] |
                 PatternBlankSequenceNode[PatternBlankSequence, _, _] |
                 PatternBlankNullSequenceNode[PatternBlankNullSequence, _, _] |
-                BinaryNode[Pattern, _, _]
+                BinaryNode[Pattern, _, _] |
+                (* also check for Alternatives *)
+                InfixNode[Alternatives, _, _]
                 ],
     Throw[{}]
   ];
 
-  {Lint["SuspiciousPatternBlankOptional", {"Suspicious use of ", LintBold[":"], ". Did you mean ",
-          LintBold[ToInputFormString[BinaryNode[Pattern, {pattern, opt}, <||>]]], " ? This may be ok if ", LintBold[ToInputFormString[pattern]], " is used as a pattern."}, "Warning", data]}
+  {Lint["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
+Did you mean ``" <> ToInputFormString[BinaryNode[Pattern, {
+                        pattern,
+                        TokenNode[Token`Fake`PatternColon, ":", <||>],
+                        opt}, <||>]] <> "``?\n\
+This may be ok if ``" <> ToInputFormString[pattern] <> "`` is used as a pattern.", "Warning", data]}
 ]]
 
 
 
 
 
+Attributes[scanInformation] = {HoldRest}
 
-Attributes[scanPrivateContextNode] = {HoldRest}
-
-scanPrivateContextNode[pos_List, cstIn_] :=
-Catch[
- Module[{cst, node, data},
+scanInformation[pos_List, cstIn_] :=
+Module[{cst, node, data, children, tok},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
   data = node[[3]];
 
-  {Lint["SuspiciousPrivateContext", {"Suspicious context: ", LintBold["\"Private`\""],
-    ". Did you mean ", LintBold["\"`Private`\""], " ?"}, "Error", data]}
-]]
+  tok = children[[1]];
+
+  {Lint["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "`` syntax in file.", "Error", data]}
+]
+
 
 
 
 
 (*
+
+bad scan
 
 Using 2-arg Optional is needed sometimes
 
@@ -777,30 +956,20 @@ Catch[
 Attributes[scanSyntaxErrorNodes] = {HoldRest}
 
 scanSyntaxErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, token, data},
+ Module[{cst, node, tag, data, tagString},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
-  token = node[[1]];
+  tag = node[[1]];
   data = node[[3]];
-  {Lint["SyntaxError", ToString[token], "Fatal", data]}
+
+  tagString = Block[{$ContextPath = {"AST`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+
+  {Lint["SyntaxError", "``" <> tagString <> "``", "Fatal", data]}
 ]
 
 
 
 (*
-Attributes[scanMissingCloserNodes] = {HoldRest}
-
-scanMissingCloserNodes[pos_List, cstIn_] :=
- Module[{cst, node, token, data},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  token = node[[1]];
-  data = node[[3]];
-  {Lint["SyntaxError", "Missing closer.", "Fatal", data]}
-]
-*)
-
-
 Attributes[scanSyntaxIssues] = {HoldRest}
 
 (*
@@ -814,7 +983,7 @@ Module[{cst, data, issues},
 
   Lint @@@ issues
 ]
-
+*)
 
 
 
@@ -837,8 +1006,9 @@ scanStringCalls[pos_List, astIn_] :=
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
-  {Lint["StringCall", {"Calling ", LintBold["String"], " as a function. Did you mean ", LintBold["StringQ"],
-    " ? This may be ok if ", LintBold["String"], " is handled programmatically."}, "Error", data]}
+  {Lint["StringCall", "Calling ``String`` as a function.\n\
+Did you mean ``StringQ``?\n\
+This may be ok if ``String`` is handled programmatically.", "Error", data]}
   ]
 
 Attributes[scanIntegerCalls] = {HoldRest}
@@ -849,8 +1019,9 @@ scanIntegerCalls[pos_List, astIn_] :=
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
-  {Lint["IntegerCall", {"Calling ", LintBold["Integer"], " as a function. Did you mean ", LintBold["IntegerQ"],
-      " ? This may be ok if ", LintBold["Integer"], " is handled programmatically."}, "Error", data]}
+  {Lint["IntegerCall", "Calling ``Integer`` as a function.\n\
+Did you mean ``IntegerQ``?\n\
+This may be ok if ``Integer`` is handled programmatically.", "Error", data]}
   ]
 
 Attributes[scanRealCalls] = {HoldRest}
@@ -861,10 +1032,14 @@ scanRealCalls[pos_List, astIn_] :=
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
-  {Lint["RealCall", {"Calling ", LintBold["Real"], " as a function. This may be ok if ", LintBold["Real"], " is handled programmatically."}, "Error", data]}
+  {Lint["RealCall", "Calling ``Real`` as a function.\n\
+Did you mean ``RealQ``?\n\
+This may be ok if ``Real`` is handled programmatically.", "Error", data]}
   ]
 
 (*
+
+not a good scan
 
 Attributes[scanFailureCalls] = {HoldRest}
 
@@ -900,7 +1075,7 @@ scanAssocs[pos_List, astIn_] :=
     duplicates = Keys[Select[CountsBy[children[[All, 2, 1]], ToFullFormString], # > 1&]];
    selected = Flatten[Select[children[[All, 2, 1]], Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
 
-   {Lint["DuplicateKeys", {"Duplicate keys in ", LintBold["Association"], "."}, "Error", #[[3]]]}& /@ selected
+   {Lint["DuplicateKeys", "Duplicate keys in ``Association``.", "Error", #[[3]]]}& /@ selected
 
   ]
 
@@ -920,38 +1095,38 @@ Catch[
 
   If[empty[children],
     AppendTo[warnings, 
-     Lint["WhichArguments", {LintBold["Which"], " does not have any arguments. This may be ok if ",
-                              LintBold["Which"], " has pattern arguments."}, "Warning", data]];
+     Lint["WhichArguments", "``Which`` does not have any arguments.\n\
+This may be ok if ``Which`` has pattern arguments.", "Error", data]];
     Throw[warnings]
   ];
 
   If[!EvenQ[Length[children]],
     AppendTo[warnings, 
-     Lint["WhichArguments", {LintBold["Which"], " does not have even number of arguments. This may be ok if ",
-                              LintBold["Which"], " has pattern arguments."}, "Warning", data]];
+     Lint["WhichArguments", "``Which`` does not have even number of arguments.\n\
+This may be ok if ``Which`` has pattern arguments.", "Error", data]];
     Throw[warnings]
   ];
 
 
-  If[MatchQ[children[[1]], SymbolNode["$OperatingSystem", _, _]],
+  If[MatchQ[children[[1]], SymbolNode[Symbol, "$OperatingSystem", _]],
     span = children[[1]][[3]];
    AppendTo[warnings, 
-    Lint["SwitchWhichConfusion", {LintBold["Which"], " has ", LintBold["$OperatingSystem"] , " in first place. Did you mean ",
-                                  LintBold["."], "?"}, "Warning", span]];
+    Lint["SwitchWhichConfusion", "``Which`` has ``$OperatingSystem`` in first place.\n\
+Did you mean ``Switch``?", "Error", span]];
   ];
 
-  If[MatchQ[children[[-2]], CallNode[SymbolNode["Blank", _, _], _, _]],
+  If[MatchQ[children[[-2]], CallNode[SymbolNode[Symbol, "Blank", _], _, _]],
     span = children[[-2]][[3]];
    AppendTo[warnings, 
-    Lint["SwitchWhichConfusion", {LintBold["Which"], " has ", LintBold["_"], " in last place. Did you mean ",
-                                    LintBold["True"], "?"}, "Error", span]];
+    Lint["SwitchWhichConfusion", "``Which`` has ``_`` in last place.\n\
+Did you mean ``True``?", "Error", span]];
   ];
 
     duplicates = Keys[Select[CountsBy[children[[;;;;2]], ToFullFormString], # > 1&]];
    selected = Flatten[Select[children[[;;;;2]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
    Scan[
     AppendTo[warnings,
-      Lint["DuplicateClauses", {"Duplicate clauses in ", LintBold["Which"], "."}, "Error", #[[3]]]
+      Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", #[[3]]]
     ]&
     ,
     selected
@@ -978,42 +1153,42 @@ Catch[
   issues = {};
 
   If[Length[children] == 1,
-   AppendTo[issues, Lint["SwitchArguments", {LintBold["Switch"], " only has one argument. This may be ok if ",
-                              LintBold["Switch"], " has pattern arguments."}, "Warning", data]];
+   AppendTo[issues, Lint["SwitchArguments", "``Switch`` only has one argument.\n\
+This may be ok if ``Switch`` has pattern arguments.", "Error", data]];
    Throw[issues];
   ];
 
 
   If[!OddQ[Length[children]],
-   AppendTo[issues, Lint["SwitchArguments", {LintBold["Switch"], " does not have odd number of arguments. This may be ok if ",
-                              LintBold["Switch"], " has pattern arguments."}, "Warning", data]];
+   AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not have odd number of arguments.\n\
+This may be ok if ``Switch`` has pattern arguments.", "Error", data]];
    Throw[issues];
   ];
 
-  If[MatchQ[children[[1]], SymbolNode["$OperatingSystem", _, _]],
-   cases = Cases[children[[2;;-1;;2]], StringNode["\"Linux\"", _, _], {0, Infinity}];
+  If[MatchQ[children[[1]], SymbolNode[Symbol, "$OperatingSystem", _]],
+   cases = Cases[children[[2;;-1;;2]], StringNode[String, "\"Linux\"", _], {0, Infinity}];
    If[cases =!= {},
     span = cases[[1]][[3]];
-    AppendTo[issues, Lint["OperatingSystemLinux", {LintBold["\"Linux\""], " is not a value of ",
-                                    LintBold["$OperatingSystem"], ". Did you mean ", LintBold["\"Unix\""], "?"}, "Warning", span]];
+    AppendTo[issues, Lint["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.\n\
+Did you mean ``\"Unix\"``?", "Error", span]];
    ]
   ];
 
   (*
    Switch has True in last place like this: Switch[a,1,b,True,c]
    *)
-  If[MatchQ[children[[-2]], SymbolNode["True", _, _]],
+  If[MatchQ[children[[-2]], SymbolNode[Symbol, "True", _]],
    (* presence of False makes it less likely that True is unintended *)
-   If[FreeQ[children[[2;;-4;;2]], SymbolNode["False", _, _]],
+   If[FreeQ[children[[2;;-4;;2]], SymbolNode[Symbol, "False", _]],
     span = children[[-2]][[3]];
-    AppendTo[issues, Lint["SwitchWhichConfusion", {LintBold["Switch"], " has ", LintBold["True"], " in last place. Did you mean ",
-                                    LintBold["_"], "?"}, "Warning", span]];
+    AppendTo[issues, Lint["SwitchWhichConfusion", "``Switch`` has ``True`` in last place.\n\
+Did you mean ``_``?", "Warning", span]];
    ]
   ];
 
   duplicates = Keys[Select[CountsBy[children[[2;;;;2]], ToFullFormString], # > 1&]];
   selected = Flatten[Select[children[[2;;;;2]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-  Scan[(AppendTo[issues, Lint["DuplicateClauses", {"Duplicate clauses in ", LintBold["Switch"], "."}, "Error", #[[3]]]])&, selected];
+  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error", #[[3]]]])&, selected];
 
 
   pairs = Partition[children[[2;;]], 2];
@@ -1021,20 +1196,27 @@ Catch[
   Scan[(
     form = #[[1]];
     value = #[[2]];
-    formPatternNames = Cases[form, CallNode[SymbolNode["Pattern", _, _], {SymbolNode[n_, _, _], _}, _] :> n, {0, Infinity}];
+    formPatternNames = Cases[form, CallNode[SymbolNode[Symbol, "Pattern", _], {SymbolNode[Symbol, n_, _], _}, _] :> n, {0, Infinity}];
 
     Scan[(
       
-      valuePatterns = Cases[value, SymbolNode[#, _, _], {0, Infinity}];
+      valuePatterns = Cases[value, SymbolNode[Symbol, #, _], {0, Infinity}];
       If[empty[valuePatterns],
         (*
         too noisy
         add a Remark about unused named pattern in Switch? *)
         Null
         ,
-        Scan[(AppendTo[issues, Lint["NamedPattern", {"Named pattern in ", LintBold["Switch"], ": ", LintBold[ToFullFormString[#]],
-          ". The pattern ", LintBold[ToFullFormString[#]], " occurs in the matching form, but ", LintBold["Switch"],
-          " does not support pattern replacement. Consider removing the named pattern ", LintBold[ToFullFormString[#]], "."}, "Warning", #[[3]]]])&, valuePatterns]
+        (*
+        too many false positives, so make this a Remark for now
+        
+        experimental
+
+        Scan[(AppendTo[issues, Lint["NamedPatternInSwitch", "Named pattern in ``Switch``: ``" <> ToFullFormString[#] <> "``.\n\
+The pattern ``" <> ToFullFormString[#] <> "`` occurs in the matching form, but ``Switch`` does not support pattern replacement.\n\
+This may be ok if ``" <> ToFullFormString[#] <> "`` is set before being used.\n\
+Consider removing the named pattern ``" <> ToFullFormString[#] <> "``.", "Remark", #[[3]]]])&, valuePatterns]*)
+        Null
       ]
 
       )&, formPatternNames];
@@ -1055,18 +1237,18 @@ scanPatterns[pos_List, astIn_] :=
   children = node[[2]];
   
   patSymbol = children[[1]];
-  name = patSymbol[[1]];
+  name = patSymbol["String"];
   rhs = children[[2]];
 
   issues = {};
 
-  patterns = Cases[rhs, CallNode[SymbolNode["Pattern", _, _], _, _], {0, Infinity}];
+  patterns = Cases[rhs, CallNode[SymbolNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
-    If[#[[2]][[1]][[1]] == name,
+    If[#[[2]][[1]]["String"] == name,
       (*
       This is never correct code, but make a Warning for now because it is noisy
       *)
-      AppendTo[issues, Lint["DuplicateNamedPattern", {"Duplicate named pattern ", LintBold[name], " in RHS of ", LintBold["Pattern"], "."}, "Warning", #[[3]]]];
+      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern ``" <> name <> "`` in RHS of ``Pattern``.", "Warning", #[[3]]]];
     ];
   )&, patterns];
 
@@ -1086,7 +1268,7 @@ Catch[
   ];
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
-  s = node[[1]];
+  s = node["String"];
   data = node[[3]];
   
   parentPos = Most[pos];
@@ -1100,8 +1282,9 @@ Catch[
     Throw[{}]
    ];
 
-  {Lint["Control", {LintBold[s], " appears but is not called. Did you mean ",
-                      LintBold[s<>"[]"], "? This may be ok if ", LintBold[s], " is used as a symbol."}, "Warning", data]}
+  {Lint["Control", "``" <> s <> "`` appears but is not called.\n\
+Did you mean ``" <> s<>"[]``?\n\
+This may be ok if ``" <> s <> "`` is used as a symbol.", "Warning", data]}
   ]]
 
 
@@ -1119,20 +1302,20 @@ Catch[
   warnings = {};
 
   If[Length[children] != 2,
-    AppendTo[warnings, Lint["ModuleArguments", {LintBold["Module"], " does not have 2 arguments. This may be ok if ",
-                              LintBold["Module"], " is handled programmatically."}, "Error", data]];
+    AppendTo[warnings, Lint["ModuleArguments", "``Module`` does not have 2 arguments.\n\
+This may be ok if ``Module`` is handled programmatically.", "Error", data]];
     Throw[warnings]
   ];
 
-  If[!MatchQ[children[[1]], CallNode[SymbolNode["List", _, _], _, _]],
-    AppendTo[warnings, Lint["ModuleArguments", {LintBold["Module"], " does not have a List for argument 1. This may be ok if ",
-                              LintBold["Module"], " is handled programmatically."}, "Error", data]];
+  If[!MatchQ[children[[1]], CallNode[SymbolNode[Symbol, "List", _], _, _]],
+    AppendTo[warnings, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.\n\
+This may be ok if ``Module`` is handled programmatically.", "Error", data]];
     Throw[warnings]
   ];
 
 
   params = children[[1,2]];
-   vars = # /. {CallNode[SymbolNode["Set"|"SetDelayed", _, _], {sym:SymbolNode[_, _, _], _}, _] :> sym,
+   vars = # /. {CallNode[SymbolNode[Symbol, "Set"|"SetDelayed", _], {sym:SymbolNode[_, _, _], _}, _] :> sym,
             sym:SymbolNode[_, _, _] :> sym,
             (*
 
@@ -1143,16 +1326,17 @@ Catch[
 
             CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
             *)
-            err_ :> (AppendTo[warnings, Lint["ModuleArguments", {"Variable ", ToFullFormString[err],
-                        " does not have proper form. This may be ok if ", LintBold["Module"], " is handled programmatically."}, "Error", #[[3]]]]; Nothing)}& /@ params;
+            err_ :> (AppendTo[warnings, Lint["ModuleArguments", "Variable ``" <> ToFullFormString[err] <>
+              "`` does not have proper form.\n\
+This may be ok if ``Module`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ params;
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-    Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["Module"], ": ", ToFullFormString[#], "."}, "Error", #[[3]]]]&, selected];
+    Scan[AppendTo[warnings, Lint["DuplicateVariables", "Duplicate variables in ``Module``: ``" <> ToFullFormString[#] <> "``.", "Error", #[[3]]]]&, selected];
 
   used = ToFullFormString /@ Cases[children[[2]], _SymbolNode, {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[warnings, Lint["UnusedVariables", {"Unused variables in ", LintBold["Module"], ": ", ToFullFormString[#], "."}, "Warning", #[[3]]]]&, unusedParams];
+  Scan[AppendTo[warnings, Lint["UnusedVariables", "Unused variables in ``Module``: ``" <> ToFullFormString[#] <> "``.", "Warning", #[[3]]]]&, unusedParams];
 
   warnings
 ]]
@@ -1169,6 +1353,12 @@ Catch[
   data = node[[3]];
   warnings = {};
 
+  If[!(Length[children] >= 2),
+    AppendTo[warnings, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.\n\
+This may be ok if ``DynamicModule`` is handled programmatically.", "Error", data]];
+    Throw[warnings]
+  ];
+
   (*
 
   DynamicModule takes options
@@ -1180,26 +1370,27 @@ Catch[
   ];
   *)
 
-  If[!MatchQ[children[[1]], CallNode[SymbolNode["List", _, _], _, _]],
-    AppendTo[warnings, Lint["DynamicModuleArguments", {LintBold["DynamicModule"], " does not have a List for argument 1. This may be ok if ",
-                              LintBold["DynamicModule"], " is handled programmatically."}, "Error", data]];
+  If[!MatchQ[children[[1]], CallNode[SymbolNode[Symbol, "List", _], _, _]],
+    AppendTo[warnings, Lint["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.\n\
+This may be ok if ``DynamicModule`` is handled programmatically.", "Error", data]];
     Throw[warnings]
   ];
 
 
   params = children[[1,2]];
-   vars = # /. {CallNode[SymbolNode["Set"|"SetDelayed", _, _], {sym:SymbolNode[_, _, _], _}, _] :> sym,
+   vars = # /. {CallNode[SymbolNode[Symbol, "Set"|"SetDelayed", _], {sym:SymbolNode[_, _, _], _}, _] :> sym,
             sym:SymbolNode[_, _, _] :> sym,
-            err_ :> (AppendTo[warnings, Lint["DynamicModuleArguments", {"Variable ", ToFullFormString[err],
-                        " does not have proper form. This may be ok if ", LintBold["DynamicModule"], " is handled programmatically."}, "Error", #[[3]]]]; Nothing)}& /@ params;
+            err_ :> (AppendTo[warnings, Lint["DynamicModuleArguments", "Variable ``" <> ToFullFormString[err] <>
+              "`` does not have proper form.\n\
+This may be ok if ``DynamicModule`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ params;
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-    Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["DynamicModule"], ": ", ToFullFormString[#], "."}, "Error", #[[3]]]]&, selected];
+    Scan[AppendTo[warnings, Lint["DuplicateVariables", "Duplicate variables in ``DynamicModule``: ``" <> ToFullFormString[#] <> "``.", "Error", #[[3]]]]&, selected];
 
   used = ToFullFormString /@ Cases[children[[2]], _SymbolNode, {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[warnings, Lint["UnusedVariables", {"Unused variables in ", LintBold["DynamicModule"], ": ", ToFullFormString[#], "."}, "Warning", #[[3]]]]&, unusedParams];
+  Scan[AppendTo[warnings, Lint["UnusedVariables", "Unused variables in ``DynamicModule``: ``" <> ToFullFormString[#] <> "``.", "Warning", #[[3]]]]&, unusedParams];
 
   warnings
 ]]
@@ -1225,22 +1416,22 @@ Catch[
   warnings = {};
 
   If[Length[children] < 2,
-    AppendTo[warnings, Lint["WithArguments", {LintBold["With"], " does not have 2 or more arguments. This may be ok if ",
-                              LintBold["With"], " is handled programmatically."}, "Error", data]];
+    AppendTo[warnings, Lint["WithArguments", "``With`` does not have 2 or more arguments.\n\
+This may be ok if ``With`` is handled programmatically.", "Error", data]];
     Throw[warnings];
   ];
 
-  If[!MatchQ[Most[children], {CallNode[SymbolNode["List", _, _], _, _]...}],
-    AppendTo[warnings, Lint["WithArguments", {LintBold["With"], " does not have a List for most arguments. This may be ok if ",
-                              LintBold["With"], " is handled programmatically."}, "Error", data]];
+  If[!MatchQ[Most[children], {CallNode[SymbolNode[Symbol, "List", _], _, _]...}],
+    AppendTo[warnings, Lint["WithArguments", "``With`` does not have a ``List`` for most arguments.\n\
+This may be ok if ``With`` is handled programmatically.", "Error", data]];
     Throw[warnings];
   ];
 
   paramLists = Most[children][[All, 2]];
    
-   varsAndVals = Function[{list}, # /. {CallNode[SymbolNode["Set"|"SetDelayed", _, _], {sym:SymbolNode[_, _, _], val_}, _] :> {sym, val},
-            err_ :> (AppendTo[warnings, Lint["WithArguments", {"Variable ", ToFullFormString[err], " does not have proper form. This may be ok if ",
-                              LintBold["With"], " is handled programmatically."}, "Error", #[[3]]]]; Nothing)}& /@ list] /@ paramLists;
+   varsAndVals = Function[{list}, # /. {CallNode[SymbolNode[Symbol, "Set"|"SetDelayed", _], {sym:SymbolNode[_, _, _], val_}, _] :> {sym, val},
+            err_ :> (AppendTo[warnings, Lint["WithArguments", "Variable ``" <> ToFullFormString[err] <> "`` does not have proper form.\n\
+This may be ok if ``With`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ list] /@ paramLists;
 
   If[varsAndVals == {{}},
     Throw[warnings];
@@ -1250,17 +1441,17 @@ Catch[
 
     duplicates = Keys[Select[CountsBy[#, ToFullFormString], # > 1 &]]& /@ vars;
       selected = Flatten[Function[{duplicates, vars}, (Select[vars, Function[{c}, ToFullFormString[c] === #]])& /@ duplicates] @@@ Transpose[{duplicates, vars}]];
-  Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["With"], ": ", ToFullFormString[#], "."}, "Error", #[[3]]]]&, selected];
+  Scan[AppendTo[warnings, Lint["DuplicateVariables", "Duplicate variables in ``With``: ``" <> ToFullFormString[#] <> "``.", "Error", #[[3]]]]&, selected];
 
   usedBody = ToFullFormString /@ Cases[Last[children], _SymbolNode, {0, Infinity}];
 
-  usedAtVariousScopes = FoldList[Join[#1, ToFullFormString /@ Cases[#2, _SymbolNode, Infinity]]&, usedBody, vals // Reverse] // Reverse;
+  usedAtVariousScopes = FoldList[Join[#1, ToFullFormString /@ Cases[#2, _SymbolNode, {0, Infinity}]]&, usedBody, vals // Reverse] // Reverse;
 
   unusedParams = Function[{vars, useds}, Select[vars, Function[{c}, !MemberQ[useds, ToFullFormString[c]]]]] @@@ Transpose[{vars, Most[usedAtVariousScopes]}];
 
   unusedParams = Flatten[unusedParams];
 
-  Scan[AppendTo[warnings, Lint["UnusedVariables", {"Unused variables in ", LintBold["With"], ": ", ToFullFormString[#], "."}, "Warning", #[[3]]]]&, unusedParams];
+  Scan[AppendTo[warnings, Lint["UnusedVariables", "Unused variables in ``With``: ``" <> ToFullFormString[#] <> "``.", "Warning", #[[3]]]]&, unusedParams];
 
   warnings
 ]]
@@ -1271,7 +1462,7 @@ Attributes[scanBlocks] = {HoldRest}
 
 scanBlocks[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, params, warnings, vars},
+ Module[{ast, node, children, data, duplicates, selected, params, warnings, varsWithSet, varsWithoutSet, toDelete},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1279,37 +1470,81 @@ Catch[
   warnings = {};
 
   If[Length[children] != 2,
-    AppendTo[warnings, Lint["BlockArguments", {LintBold["Block"], " does not have 2 arguments. This may be ok if ",
-                              LintBold["Block"], " is handled programmatically."}, "Error", data]];
+    AppendTo[warnings, Lint["BlockArguments", "``Block`` does not have 2 arguments.\n\
+This may be ok if ``Block`` is handled programmatically.", "Error", data]];
     Throw[warnings]
   ];
 
-  If[!MatchQ[children[[1]], CallNode[SymbolNode["List", _, _], _, _]],
-    AppendTo[warnings, Lint["BlockArguments", {LintBold["Block"], " does not have a List for argument 1. This may be ok if ",
-                              LintBold["Block"], " is handled programmatically."}, "Error", data]];
+  If[!MatchQ[children[[1]], CallNode[SymbolNode[Symbol, "List", _], _, _]],
+    AppendTo[warnings, Lint["BlockArguments", "``Block`` does not have a ``List`` for argument 1.\n\
+This may be ok if ``Block`` is handled programmatically.", "Error", data]];
     Throw[warnings]
   ];
 
   params = children[[1,2]];
-   vars = # /. {CallNode[SymbolNode["Set"|"SetDelayed", _, _], {sym:SymbolNode[_, _, _], _}, _] :> sym,
-            sym:SymbolNode[_, _, _] :> sym,
-            err_ :> (AppendTo[warnings, Lint["BlockArguments", {"Variable ", ToFullFormString[err], " does not have proper form. This may be ok if ",
-                              LintBold["Block"], " is handled programmatically."}, "Error", #[[3]]]]; Nothing)}& /@ params;
-    duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
-    selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-    Scan[AppendTo[warnings, Lint["DuplicateVariables", {"Duplicate variables in ", LintBold["Block"], ": ", ToFullFormString[#], "."}, "Error", #[[3]]]]&, selected];
 
-    (*
-    Give unused Block variables its own tag
-    *)
+  varsWithSet = {};
+  varsWithoutSet = {};
 
-    used = ToFullFormString /@ Cases[children[[2]], _SymbolNode, {0, Infinity}];
-    unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
+  Scan[# /. {
+    CallNode[SymbolNode[Symbol, "Set"|"SetDelayed", _], {sym:SymbolNode[_, _, _], _}, _] :> (AppendTo[varsWithSet, sym]),
+    sym:SymbolNode[_, _, _] :> (AppendTo[varsWithoutSet, sym]),
+    err_ :> (AppendTo[warnings, Lint["BlockArguments", "Variable ``" <> ToFullFormString[err] <> "`` does not have proper form.\n\
+This may be ok if ``Block`` is handled programmatically.", "Error", #[[3]]]])}&, params];
 
-    Scan[AppendTo[warnings, Lint["UnusedBlockVariables", {"Unused variables in ", LintBold["Block"], ": ", ToFullFormString[#], "."}, "Warning", #[[3]]]]&, unusedParams];
+  vars = varsWithSet ~Join~ varsWithoutSet;
+
+  duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
+  selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
+  Scan[AppendTo[warnings, Lint["DuplicateVariables", "Duplicate variables in ``Block``: ``" <> ToFullFormString[#] <> "``.", "Error", #[[3]]]]&, selected];
+
+  (*
+  Give unused Block variables its own tag
+  *)
+
+  used = ToFullFormString /@ Cases[children[[2]], _SymbolNode, {0, Infinity}];
+  unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
+
+  (*
+  Now we will use heuristics to pare down the list of unused variables in Block
+  *)
+
+  (*
+  if you have Block[{x = 1}, b]  then it is probably on purpose
+  i.e., setting x to a value shows intention
+  *)
+  toDelete = varsWithSet;
+  unusedParams = Complement[unusedParams, toDelete];
+
+  (*
+  Blocking fully-qualified symbol is probably on purpose
+  *)
+  toDelete = Select[unusedParams, fullQualifiedSymbolQ];
+  unusedParams = Complement[unusedParams, toDelete];
+
+  (*
+  after removing fully-qualified symbols, now scan for lowercase symbols and only let those through
+
+  on the assumption that lowercase symbols will be treated as "local" variables
+  *)
+  unusedParams = Select[unusedParams, lowercaseSymbolQ];
+  
+  Scan[AppendTo[warnings, Lint["UnusedBlockVariables", "Unused variables in ``Block``: ``" <> ToFullFormString[#] <> "``.", "Warning", #[[3]]]]&, unusedParams];
 
   warnings
 ]]
+
+(*
+if there is a ` anywhere in the symbol, then assume it is fully-qualified
+*)
+fullQualifiedSymbolQ[SymbolNode[Symbol, s_, _]] :=
+  StringContainsQ[s, "`"]
+
+lowercaseSymbolQ[SymbolNode[Symbol, s_, _]] :=
+  StringMatchQ[s, RegularExpression["[a-z].*"]]
+
+
+
 
 
 Attributes[scanOptionals] = {HoldRest}
@@ -1327,9 +1562,9 @@ scanOptionals[pos_List, astIn_] :=
   a named pattern in 2nd arg of Optional
   *)
   opt = children[[2]];
-  pats = Cases[opt, CallNode[SymbolNode["Pattern", _, _], _, _], {0, Infinity}];
+  pats = Cases[opt, CallNode[SymbolNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
-    AppendTo[issues, Lint["NamedPattern", {"Named pattern ", LintBold[ToFullFormString[#[[2]][[1]]]], " in ", LintBold["Optional"], "."}, "Error", #[[3]]]]
+    AppendTo[issues, Lint["NamedPatternInOptional", "Named pattern ``" <> ToFullFormString[#[[2]][[1]]] <> "`` in ``Optional``.", "Error", #[[3]]]]
   )&, pats];
 
   issues
@@ -1339,13 +1574,65 @@ scanOptionals[pos_List, astIn_] :=
 Attributes[scanBadSymbols] = {HoldRest}
 
 scanBadSymbols[pos_List, astIn_] :=
- Module[{ast, node, token, data},
+ Module[{ast, node, name, data, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
-  token = node[[1]];
+  name = node["String"];
   data = node[[3]];
-  {Lint["BadSymbol", {"Bad symbol: ", ToString[token], "."}, "Error", data]}
+
+  issues = {};
+
+  Switch[name,
+    "Failed",
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``Failed``.\n\
+Did you mean ``$Failed``?", "Error", data]]
+    ,
+    "AnyFalse",
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``AnyFalse``.\n\
+Did you mean ``AllTrue`` (and also inverting the logic) ?", "Error", data]]
+    ,
+    "AllFalse",
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``AllFalse``.\n\
+Did you mean ``AnyTrue`` (and also inverting the logic) ?", "Error", data]]
+    ,
+    _,
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``" <> name <> "``.", "Error", data]]
+  ];
+
+  issues
 ]
+
+
+
+(*
+
+too noisy
+
+Attributes[scanJavaSystemSymbols] = {HoldRest}
+
+scanJavaSystemSymbols[pos_List, astIn_] :=
+ Module[{ast, node, name, data, issues},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  name = node["Name"];
+  data = node[[3]];
+
+  issues = {};
+
+  AppendTo[issues, Lint["BadJavaSymbol", "Bad Java symbol: ``" <> name <> "``.\n\
+It is possible that JLink can create this symbol in System` and interfere with the symbol's definition.", "Remark", data]];
+
+  issues
+]
+
+*)
+
+
+
+
+
+
+
 
 
 
@@ -1360,20 +1647,119 @@ Catch[
   data = node[[3]];
 
   (*
-  It is a common idiom to do With[{a = a} foo], so do not warn about that
+  It is a common idiom to do With[{a = a}, foo], so do not warn about that
 
   And there are enough occurrences of Block and Module, so add those too
   *)
   If[Length[pos] >= 4,
     parentPos = Drop[pos, -4];
     parent = Extract[ast, {parentPos}][[1]];
-    If[MatchQ[parent, CallNode[SymbolNode["Block" | "DynamicModule" | "Module" | "With", _, _], _, _]],
-      Throw[{}]
+    If[MatchQ[parent, CallNode[SymbolNode[Symbol, "Block" | "DynamicModule" | "Module" | "With", _], _, _]],
+
+      (* and make sure to only skip  With[{a = a}, foo]  and still report   With[{}, a=a] *)
+      If[pos[[-3]] == 1,
+        Throw[{}]
+      ]
     ]
   ];
 
-  {Lint["SelfAssignment", {"Self assignment: ", ToFullFormString[var], "."}, "Warning", data]}
+  {Lint["SelfAssignment", "Self assignment: ``" <> ToFullFormString[var] <> "``.", "Warning", data]}
 ]]
+
+
+
+
+
+Attributes[scanLoadJavaClassSystem] = {HoldRest}
+
+scanLoadJavaClassSystem[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, var, data},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  var = node[[2]][[1]];
+  data = node[[3]];
+
+  {Lint["LoadJavaClassSystem", "``LoadJavaClass[\"java.lang.System\"]`` redefines symbols in **System`** context.\n\
+This can interfere with system functionality.\n\
+Did you mean ``LoadJavaCLass[\"java.lang.System\", AllowShortContext->False]``?", "Warning", data]}
+]]
+
+
+
+Attributes[scanPrivateContextNode] = {HoldRest}
+
+scanPrivateContextNode[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, str, strData},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+
+  str = node[[1]][[1]];
+  strData = str[[3]];
+
+  {Lint["SuspiciousPrivateContext", "Suspicious context: ``\"Private`\"``.\n\
+Did you mean ``\"`Private`\"``?", "Error", strData]}
+]]
+
+
+
+(*
+
+too noisy
+
+experimental
+
+Attributes[scanPatternTestMissingPattern] = {HoldRest}
+
+scanPatternTestMissingPattern[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, data},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  data = node[[3]];
+
+  {Lint["PatternTestMissingPattern", "``PatternTest`` is missing a pattern on the LHS.", "Error", data]}
+]]
+*)
+
+
+
+
+(*
+
+too noisy
+
+experimental
+
+Attributes[scanRHSPatterns] = {HoldRest}
+
+scanRHSPatterns[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, data, children, lhs, rhs, lhsPatNames, rhsPatSyms, badSyms, issues},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  data = node[[3]];
+
+  children = node[[2]];
+  lhs = children[[1]];
+  rhs = children[[2]];
+
+  lhsPatNames = Cases[lhs, CallNode[SymbolNode[Symbol, "Pattern", _], {SymbolNode[Symbol, name_, _], _}, _] :> name, {0, Infinity}];
+  rhsPatSyms = Cases[rhs, CallNode[SymbolNode[Symbol, "Pattern", _], {sym:SymbolNode[Symbol, _, _], _}, _] :> sym, {0, Infinity}];
+
+  badSyms = Select[rhsPatSyms, MemberQ[lhsPatNames, #["Name"]]&];
+
+  issues = {};
+
+  Scan[(
+    AppendTo[issues, Lint["RHSPattern", "Pattern ``" <> #["Name"] <> "`` appears on the RHS.", "Error", #[[3]]]]
+  )&, badSyms];
+
+  issues
+]]
+
+*)
 
 
 
@@ -1384,13 +1770,16 @@ Catch[
 
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
 
-scanAbstractSyntaxErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, token, data},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
+scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
+ Module[{ast, node, token, data, tokString},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
   token = node[[1]];
   data = node[[3]];
-  {Lint["AbstractSyntaxError", {"Abstract syntax error with token: ", ToString[token]}, "Fatal", data]}
+
+  tokString = Block[{$ContextPath = {"AST`", "System`"}, $Context = "Lint`Scratch`"}, ToString[token]];
+
+  {Lint["AbstractSyntaxError", "Abstract syntax error with token: ``" <> tokString <> "``.", "Fatal", data]}
 ]
 
 
@@ -1403,10 +1792,10 @@ Attributes[scanAbstractSyntaxIssues] = {HoldRest}
 (*
 Just directly convert AbstractSyntaxIssues to Lints
 *)
-scanAbstractSyntaxIssues[pos_List, cstIn_] :=
-Module[{cst, data, issues},
-  cst = cstIn;
-  data = Extract[cst, {pos}][[1]];
+scanAbstractSyntaxIssues[pos_List, astIn_] :=
+Module[{ast, data, issues},
+  ast = astIn;
+  data = Extract[ast, {pos}][[1]];
   issues = data[AbstractSyntaxIssues];
 
   Lint @@@ issues

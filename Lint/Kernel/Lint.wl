@@ -12,14 +12,17 @@ LintCST
 
 LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
 
-LintedCharacter::usage = "LintedCharacter[char, lintList, options] represents a formatted character of output."
+
+
+LintFileReport::usage = "LintFileReport[file, lints] returns a LintedFile object."
+
+LintStringReport::usage = "LintStringReport[string, lints] returns a LintedString object."
 
 
 
-LintFileReport::usage = "LintFileReport[file, lints] returns a list of LintedLines found in file."
+LintedFile::usage = "LintedFile[file, lintedLines] represents a formatted object of linted lines found in file."
 
-LintStringReport::usage = "LintStringReport[string, lints] returns a list of LintedLines found in string."
-
+LintedString::usage = "LintedString[string, lintedLines] represents a formatted object of linted lines found in string."
 
 
 
@@ -61,13 +64,13 @@ Options[LintFile] = {
   CharacterEncoding -> "UTF-8"
 }
 
-$fileByteCountLimit = 1*^6
+$fileByteCountLimit = 2*^6
 
 
 
 LintFile[file_String | File[file_String], OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, concreteRules, abstractRules, encoding, full, lints, cst},
+ Module[{performanceGoal, concreteRules, abstractRules, encoding, full, lints, cstAndIssues},
 
  performanceGoal = OptionValue[PerformanceGoal];
  concreteRules = OptionValue["ConcreteRules"];
@@ -89,13 +92,13 @@ Catch[
      ];
     ];
 
-  cst = ConcreteParseFile[full];
+  cstAndIssues = ConcreteParseFile[full, {FileNode[File, #[[1]], <||>], #[[3]]}&];
 
-  If[FailureQ[cst],
-    Throw[cst]
+  If[FailureQ[cstAndIssues],
+    Throw[cstAndIssues]
   ];
 
-  lints = LintCST[cst, "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules];
+  lints = LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules];
 
   lints
 ]]
@@ -109,18 +112,18 @@ Options[LintString] = {
 
 LintString[string_String, OptionsPattern[]] :=
 Catch[
- Module[{concreteRules, abstractRules, cst},
+ Module[{concreteRules, abstractRules, cstAndIssues},
 
   concreteRules = OptionValue["ConcreteRules"];
   abstractRules = OptionValue["AbstractRules"];
 
-  cst = ConcreteParseString[string];
+  cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], #[[3]]}&];
 
-  If[FailureQ[cst],
-    Throw[cst]
+  If[FailureQ[cstAndIssues],
+    Throw[cstAndIssues]
   ];
 
-  LintCST[cst, "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules]
+  LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules]
 ]]
 
 
@@ -131,7 +134,9 @@ Options[LintCST] = {
   "AbstractRules" :> $DefaultAbstractRules
 }
 
-LintCST[cstIn_, OptionsPattern[]] :=
+Attributes[LintCST] = {HoldFirst}
+
+LintCST[cstIn_, issues_, OptionsPattern[]] :=
 Module[{cst, concreteRules, abstractRules, ast, pat, func, poss, lints},
 
   cst = cstIn;
@@ -139,7 +144,7 @@ Module[{cst, concreteRules, abstractRules, ast, pat, func, poss, lints},
   concreteRules = OptionValue["ConcreteRules"];
   abstractRules = OptionValue["AbstractRules"];
 
-  lints = {};
+  lints = Lint @@@ issues;
 
   AppendTo[lints,
     KeyValueMap[(

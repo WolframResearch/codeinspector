@@ -1,6 +1,5 @@
-(* Wolfram Language Test file *)
 
 TestSuite[{
-	"Lint.mt",
-	Nothing
+	"AbstractRules.mt",
+	"ConcreteRules.mt"
 }]
