@@ -31,9 +31,13 @@ Begin["`Private`"]
 
 Needs["AST`"]
 Needs["AST`Abstract`"]
+Needs["AST`Utils`"]
+
 Needs["Lint`Report`"]
-Needs["Lint`Rules`"]
+Needs["Lint`AbstractRules`"]
+Needs["Lint`AggregateRules`"]
 Needs["Lint`Format`"]
+Needs["Lint`Folds`"]
 
 
 
@@ -59,7 +63,7 @@ LintedLine[_,           _,     _, _, lints_]["Lints"] := lints
 
 Options[LintFile] = {
   PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
   CharacterEncoding -> "UTF-8"
 }
@@ -70,10 +74,10 @@ $fileByteCountLimit = 2*^6
 
 LintFile[file_String | File[file_String], OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, concreteRules, abstractRules, encoding, full, lints, cstAndIssues},
+ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cstAndIssues},
 
  performanceGoal = OptionValue[PerformanceGoal];
- concreteRules = OptionValue["ConcreteRules"];
+ aggregateRules = OptionValue["AggregateRules"];
  abstractRules = OptionValue["AbstractRules"];
 
  encoding = OptionValue[CharacterEncoding];
@@ -92,13 +96,13 @@ Catch[
      ];
     ];
 
-  cstAndIssues = ConcreteParseFile[full, {FileNode[File, #[[1]], <||>], #[[3]]}&];
+  cstAndIssues = ConcreteParseFile[full, {FileNode[File, #[[1]], <||>], #[[2]]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
   ];
 
-  lints = LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules];
+  lints = LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "AggregateRules" -> aggregateRules, "AbstractRules" -> abstractRules];
 
   lints
 ]]
@@ -106,45 +110,78 @@ Catch[
 
 Options[LintString] = {
   PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules
 }
 
 LintString[string_String, OptionsPattern[]] :=
 Catch[
- Module[{concreteRules, abstractRules, cstAndIssues},
+ Module[{aggregateRules, abstractRules, cstAndIssues},
 
-  concreteRules = OptionValue["ConcreteRules"];
+  aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
 
-  cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], #[[3]]}&];
+  cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], #[[2]]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
   ];
 
-  LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "ConcreteRules" -> concreteRules, "AbstractRules" -> abstractRules]
+  LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "AggregateRules" -> aggregateRules, "AbstractRules" -> abstractRules]
 ]]
 
 
 
 
 Options[LintCST] = {
-  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules
 }
 
 Attributes[LintCST] = {HoldFirst}
 
 LintCST[cstIn_, issues_, OptionsPattern[]] :=
-Module[{cst, concreteRules, abstractRules, ast, pat, func, poss, lints},
+Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes, ignoredNodesSrcMemberFunc},
 
   cst = cstIn;
 
-  concreteRules = OptionValue["ConcreteRules"];
+  aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
 
   lints = Lint @@@ issues;
+
+  agg = Aggregate[cst];
+
+  ast = Abstract[agg];
+
+  (*
+  Make sure to use Infinity, because StaticAnalysisIgnoreNode may be nested inside of PackageNode or ContextNode
+  *)
+  staticAnalysisIgnoreNodes = Cases[ast[[2]], StaticAnalysisIgnoreNode[_, _, _], Infinity];
+
+  If[$Debug,
+    Print["staticAnalysisIgnoreNodes: ", staticAnalysisIgnoreNodes];
+  ];
+
+  ignoredNodesSrcMemberFunc = SourceMemberQ[staticAnalysisIgnoreNodes[[All, 3, Key[Source]]]];
+
+  agg = removeIgnoredNodes[agg, ignoredNodesSrcMemberFunc];
+
+  ast = removeIgnoredNodes[ast, ignoredNodesSrcMemberFunc];
+
+  (*
+  agg[[2]] = DeleteCases[agg[[2]], node_ /; SourceMemberQ[staticAnalysisIgnoreNodes[[All, 3, Key[Source]]], node[[3]][Source]]];
+
+  ast[[2]] = DeleteCases[ast[[2]], node_ /; SourceMemberQ[staticAnalysisIgnoreNodes[[All, 3, Key[Source]]], node[[3]][Source]]];
+  *)
+
+  If[$Debug,
+    Print["agg: ", agg];
+  ];
+
+  If[$Debug,
+    Print["ast: ", ast];
+  ];
 
   AppendTo[lints,
     KeyValueMap[(
@@ -153,12 +190,10 @@ Module[{cst, concreteRules, abstractRules, ast, pat, func, poss, lints},
       ];
       pat = #1;
       func = #2;
-      poss = Position[cst, pat];
-      Map[(func[#, cst])&, poss]
-      )&, concreteRules]
+      poss = Position[agg, pat];
+      Map[(func[#, agg])&, poss]
+      )&, aggregateRules]
   ];
-
-  ast = Abstract[cst];
 
   AppendTo[lints, 
     KeyValueMap[(

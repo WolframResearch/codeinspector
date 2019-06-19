@@ -181,6 +181,23 @@ TestMatch[
 
 
 
+(*
+DuplicateClauses
+*)
+TestMatch[
+	LintString[" If[a, b, b] "]
+	,
+	{Lint["DuplicateClauses", _, _, _], Lint["DuplicateClauses", _, _, _]}
+	,
+	TestID->"AbstractRules-20190717-B6J9M6"
+]
+
+
+
+
+
+
+
 
 (*
 DuplicateNamedPattern
@@ -607,7 +624,7 @@ TestMatch[
 SuspiciousPrivateContext
 *)
 
-sample = FileNameJoin[{DirectoryName[$CurrentTestSource], "sample.wl"}]
+sample = FileNameJoin[{DirectoryName[$CurrentTestSource], "files", "sample.wl"}]
 
 
 

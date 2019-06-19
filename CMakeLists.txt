@@ -14,11 +14,13 @@ message(STATUS "WOLFRAMKERNEL: ${WOLFRAMKERNEL}")
 message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 
 set(WL_SOURCES
+	${CMAKE_SOURCE_DIR}/Lint/Kernel/AbstractRules.wl
+	${CMAKE_SOURCE_DIR}/Lint/Kernel/AggregateRules.wl
+	${CMAKE_SOURCE_DIR}/Lint/Kernel/Folds.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Format.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/ImplicitTimes.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Lint.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Report.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Rules.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Utils.wl
 )
 

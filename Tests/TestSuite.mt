@@ -1,5 +1,5 @@
 
 TestSuite[{
 	"AbstractRules.mt",
-	"ConcreteRules.mt"
+	"AggregateRules.mt"
 }]

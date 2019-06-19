@@ -29,6 +29,7 @@ $DefaultSeverityExclusions = {"Formatting", "Remark"}
 
 $LintedLineLimit = 10
 
+$LintLimit = 20
 
 
 
@@ -293,6 +294,10 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
   If[empty[lints],
     Throw[{}]
+  ];
+
+  If[Length[lints] > $LintLimit,
+    lints = Take[lints, $LintLimit]
   ];
 
    sources = Cases[lints, Lint[_, _, _, opts_] :> opts[Source]];

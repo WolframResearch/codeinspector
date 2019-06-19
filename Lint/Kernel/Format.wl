@@ -41,6 +41,8 @@ How many ems for characters in the Grid ?
 
 Somewhere between 0.606 and 0.607, \[ErrorIndicator] starts overlapping and actually overflow display on the cloud and looks bad
 
+CLOUD-15903
+
 The desktop FE allows overlapping just fine
 
 *)
@@ -52,7 +54,7 @@ How many characters before partitioning a new line?
 $LintedLineWidth = 120
 
 
-
+$LintDescriptionLimit = 100
 
 
 
@@ -84,22 +86,26 @@ Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], Ou
 
 
 
-
+distrib[s_String] := Characters[s]
+distrib[StringExpression[args___]] := Flatten[distrib[#]& /@ {args}]
+distrib[bold[s_String]] := LintBold[#]& /@ Characters[s]
 
 (*
 replace `` and ** markup
 *)
-boldify[s_String, form_] := StringReplace[s, {
-  RegularExpression["``(.*?)``"] :> ToString[LintBold["$1"], form],
-  RegularExpression["\\*\\*(.*?)\\*\\*"] :> ToString[LintBold["$1"], form]}]
+boldify[s_String] :=
+distrib[
+	StringReplace[s, {
+		RegularExpression["``(.*?)``"] :> bold["$1"],
+		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"]}] ]
 
-gridify[s_String] := List /@ StringSplit[s, "\n", All]
+gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
 
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], StandardForm] :=
 Module[{g, bolded},
 
-	bolded = boldify[description, StandardForm];
+	bolded = boldify[description];
 
 	g = gridify[bolded];
 
@@ -116,7 +122,7 @@ Module[{g, bolded},
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], OutputForm] :=
 Module[{g, bolded},
 
-	bolded = boldify[description, OutputForm];
+	bolded = boldify[description];
 
 	g = gridify[bolded];
 
@@ -166,7 +172,17 @@ Module[{endingLints, elided, startingLints, grid, red, darkerOrange, blue, large
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	grid = Flatten[Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]], 1];
+	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
+
+	(*
+	make sure to remove any partitions that do not have errors in them
+	This helps to have the formatting look good
+	As a test: Create a HUGE single line lint, so that there are hundreds of partitions
+	Make sure that only the partitions with errors are displayed.
+	*)
+	grid = If[MatchQ[#[[2]], {(" " | Lint`Format`LintSpaceIndicator)...}], Nothing, #]& /@ grid;
+
+	grid = Flatten[grid, 1];
 
 	(*
 	All possible styling options
@@ -233,8 +249,8 @@ Not possible to construct: ab
                            cd
 
 with Grid in OutputForm. bug?
-*)
-(*
+
+
 underlineList is not used in OutputForm
 *)
 Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
@@ -256,7 +272,11 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	grid = Flatten[Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]], 1];
+	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
+
+	grid = If[MatchQ[#[[2]], {(" " | Lint`Format`LintSpaceIndicator)...}], Nothing, #]& /@ grid;
+
+	grid = Flatten[grid, 1];
 
 	Row[{Row[{"line ", paddedLineNumber, ": "}],
 			Column[{Column[Row /@ grid]} ~Join~
@@ -285,6 +305,10 @@ Module[{endingLints, elided, startingLints, grid},
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
 	grid = Partition[lineList, UpTo[$LintedLineWidth]];
+
+	(*
+	TODO: properly remove partitions that do not have errors in them
+	*)
 
 	Grid[
 		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
@@ -316,6 +340,10 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 
 	grid = Partition[lineList, UpTo[$LintedLineWidth]];
 
+	(*
+	TODO: properly remove partitions that do not have errors in them
+	*)
+	
 	Row[{Row[{"line ", paddedLineNumber, ": "}], Column[{Column[Row /@ grid]} ~Join~ endingLints] }]
 ]]
 

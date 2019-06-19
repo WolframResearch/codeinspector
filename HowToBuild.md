@@ -9,7 +9,7 @@ Here is an example transcript using the default make generator to build Lint:
 cd lint
 mkdir build
 cd build
-cmake -DWOLFRAMKERNEL=/path/to/wolfram ..
+cmake -DWOLFRAMKERNEL=/path/to/WolframKernel ..
 cmake --build . --target paclet
 ```
 

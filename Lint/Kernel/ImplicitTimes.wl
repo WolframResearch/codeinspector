@@ -16,6 +16,7 @@ ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTi
 Begin["`Private`"]
 
 Needs["AST`"]
+Needs["AST`Abstract`"]
 Needs["Lint`"]
 Needs["Lint`Report`"]
 Needs["Lint`Format`"]
@@ -32,7 +33,7 @@ $fileByteCountLimit = 2*^6
 
 ImplicitTimesFile[file_, OptionsPattern[]] :=
 Catch[
- Module[{full, times, performanceGoal, cst},
+ Module[{full, times, performanceGoal, cst, agg},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
@@ -53,7 +54,9 @@ Catch[
       Throw[cst]
     ];
 
-    times = implicitTimes[cst];
+    agg = Aggregate[cst];
+
+    times = implicitTimes[agg];
 
    times
 ]]
@@ -65,7 +68,7 @@ Options[ImplicitTimesFile] = {
 
 ImplicitTimesString[string_, OptionsPattern[]] :=
 Catch[
- Module[{times, cst},
+ Module[{times, cst, agg},
 
    cst = ConcreteParseString[string];
 
@@ -73,7 +76,9 @@ Catch[
     Throw[cst]
   ];
 
-    times = implicitTimes[cst];
+  agg = Aggregate[cst];
+
+    times = implicitTimes[agg];
 
    times
 ]]
@@ -168,24 +173,18 @@ Catch[
 
 
 
-implicitTimes[cst_] :=
+implicitTimes[agg_] :=
 Catch[
 Module[{implicitTimes},
 
-  implicitTimes = Cases[cst, InfixNode[ImplicitTimes, nodes_, opts_], {0, Infinity}];
+  implicitTimes = Cases[agg, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], opts_], {0, Infinity}];
 
-   implicitTimes
+  implicitTimes
 ]]
 
 
 
 
-
-
-
-
-$columnLimit = 500
-$lineLimit = 20
 
 (* how many (, ), or \[Times] to insert per line *)
 $markupLimit = 100
@@ -207,6 +206,13 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
   startInserters = AssociationMap[LintMarkup["(", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, startCols];
   endInserters = AssociationMap[LintMarkup[")", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, endCols];
   infixInserters = AssociationMap[LintMarkup[LintTimes, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, infixCols];
+
+  If[$Debug,
+    Print["lineNumber: ", lineNumber];
+    Print["startInserters: ", startInserters];
+    Print["endInserters: ", endInserters];
+    Print["infixInserters: ", infixInserters];
+  ];
 
   If[Intersection[Keys[startInserters], Keys[endInserters]] =!= {},
     Throw["intersection start and end", "Unhandled"]
@@ -243,7 +249,7 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
 (*
 return {line, col} for all \[Times] symbols
 *)
-processPair[{left_, right_}] :=
+processPar[{left_, LeafNode[Token`Fake`ImplicitTimes, _, _], right_}] :=
  Module[{leftSource, rightSource},
 
   leftSource = left[[3]][Source];
@@ -259,6 +265,12 @@ processPair[{left_, right_}] :=
    ]
 
 (*
+other tokens in InfixNode[Time, ] such as LeafNode[Token`Star]
+*)
+processPar[_] := Nothing
+
+
+(*
 nodes is something like { 1, ImplicitTimes, 2 } and we just want {1, 2} pairs
 
 we will disregard the ImplicitTimes tokens that come in, because they may not have Source that looks good
@@ -270,8 +282,8 @@ processChildren[nodes_List] :=
     Print["processChildren nodes: ", nodes];
   ];
 
-  pars = Partition[nodes[[;;;;2]], 2, 1];
-  processPair /@ pars
+  pars = Partition[nodes, 3, 2];
+  processPar /@ pars
   ]
 
 implicitTimesLinesReport[linesIn:{___String}, implicitTimesIn:{___InfixNode}, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
@@ -287,7 +299,6 @@ Catch[
 
     lines = linesIn;
     hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
-    lines = StringTake[#, UpTo[$columnLimit]]& /@ lines;
 
     If[$Debug,
       Print["lines: ", lines];
@@ -376,6 +387,10 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
   ];
 
   Which[
+    span[[1]] == span[[2]],
+      (* spans are the same, this can happen in degenerate cases *)
+      span[[1]]
+    ,
     span[[1, 1]] != span[[2, 1]],
       (* different lines, so place \[Times] at end of first line *)
       {span[[1, 1]], StringLength[lines[[span[[1, 1]]]]] + 1}
@@ -405,16 +420,16 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       (*
       any space is a candidate
       *)
-      spaces = Cases[tokens, TokenNode[Token`WhiteSpace, _, _]];
+      spaces = Cases[tokens, LeafNode[Token`WhiteSpace, _, _]];
       spaceRanges = offset + Flatten[Range @@ #[[3]][Source][[All, 2]]& /@ spaces];
       
       (*
       the gaps on either side of a comment are only candidates if they are not next to a space (because the space
       itself is preferred) 
       *)
-      comments = Cases[tokens, TokenNode[Token`Comment, _, _]];
+      comments = Cases[tokens, LeafNode[Token`Comment, _, _]];
       gaps = #[[3]][Source][[1, 2]]& /@ comments;
-      excludes = SequenceCases[tokens, {TokenNode[Token`WhiteSpace, _, _], c:TokenNode[Token`Comment, _, _]} :> c];
+      excludes = SequenceCases[tokens, {LeafNode[Token`WhiteSpace, _, _], c:LeafNode[Token`Comment, _, _]} :> c];
       gaps = offset + Complement[gaps, excludes];
 
       edges = offset + {1, StringLength[line]+1};

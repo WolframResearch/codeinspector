@@ -9,7 +9,7 @@ TestMatch[
 	,
 	{Lint["ImplicitTimesAcrossLines", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-D9Q1R2"
+	TestID->"AggregateRules-20190522-D9Q1R2"
 ]
 
 (*
@@ -18,9 +18,9 @@ ImplicitTimesBlanks
 TestMatch[
 	LintString["{ ____ }"]
 	,
-	{Lint["ImplicitTimesBlanks", _, _, _]}
+	{Lint["ContiguousImplicitTimesBlanks", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-M3F3T8"
+	TestID->"AggregateRules-20190522-M3F3T8"
 ]
 
 
@@ -32,7 +32,7 @@ TestMatch[
 	,
 	{Lint["DotDifferentLine", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-U4K0M9"
+	TestID->"AggregateRules-20190522-U4K0M9"
 ]
 
 
@@ -44,15 +44,15 @@ TestMatch[
 	,
 	{Lint["SuspiciousSpan", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-S9S6W2"
+	TestID->"AggregateRules-20190522-S9S6W2"
 ]
 
 TestMatch[
 	LintString["{ a;;\nb }"]
 	,
-	{ Lint["DifferentLine", _, "Warning", _] }
+	{ Lint["EndOfLine", _, "Warning", _], Lint["DifferentLine", _, "Warning", _] }
 	,
-	TestID->"ConcreteRules-20190522-S2L6J4"
+	TestID->"AggregateRules-20190522-S2L6J4"
 ]
 
 
@@ -63,12 +63,24 @@ TestMatch[
 StraySemicolon
 *)
 TestMatch[
-	LintString["(f[];
+	LintString["f[ a;b; ;x ]"]
+	,
+	{ Lint["StraySemicolon", _, "Warning", _] }
+	,
+	TestID->"AggregateRules-20190630-H1H8N7"
+]
+
+
+(*
+DifferentLine
+*)
+TestMatch[
+	LintString["(f[]
 ; Throw[$Failed, $tag])"]
 	,
-	{ Lint["DifferentLine", _, "Formatting", _] }
+	{ Lint["DifferentLine", _, "Warning", _] }
 	,
-	TestID->"ConcreteRules-20190522-I8L1E6"
+	TestID->"AggregateRules-20190522-I8L1E6"
 ]
 
 
@@ -80,9 +92,9 @@ SuspiciousOut
 TestMatch[
 	LintString["{ % }"]
 	,
-	{Lint["SuspiciousOut", _, _, _]}
+	{Lint["SuspiciousOut", _, _, _], Lint["SessionSymbol", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-O5O0L9"
+	TestID->"AggregateRules-20190522-O5O0L9"
 ]
 
 
@@ -96,7 +108,7 @@ TestMatch[
 	,
 	{Lint["SuspiciousPatternTestCall", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-X8Z0P3"
+	TestID->"AggregateRules-20190522-X8Z0P3"
 ]
 
 
@@ -111,7 +123,7 @@ TestMatch[
 	,
 	{Lint["AssociationCall", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-Y0P7H3"
+	TestID->"AggregateRules-20190522-Y0P7H3"
 ]
 
 (*
@@ -122,7 +134,7 @@ TestMatch[
 	,
 	{Lint["StringCall", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-N1P9K9"
+	TestID->"AggregateRules-20190522-N1P9K9"
 ]
 
 (*
@@ -133,7 +145,7 @@ TestMatch[
 	,
 	{Lint["IntegerCall", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-I2E9A2"
+	TestID->"AggregateRules-20190522-I2E9A2"
 ]
 
 (*
@@ -144,7 +156,7 @@ TestMatch[
 	,
 	{Lint["RealCall", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-S0H6K7"
+	TestID->"AggregateRules-20190522-S0H6K7"
 ]
 
 (*
@@ -155,7 +167,7 @@ TestMatch[
 	,
 	{Lint["FailureCall", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-C8C7F4"
+	TestID->"AggregateRules-20190522-C8C7F4"
 ]
 
 
@@ -170,7 +182,7 @@ TestMatch[
 	,
 	{Lint["SuspiciousRuleFunction", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190522-G2J4D6"
+	TestID->"AggregateRules-20190522-G2J4D6"
 ]
 
 TestMatch[
@@ -178,7 +190,7 @@ TestMatch[
 	,
 	{}
 	,
-	TestID->"ConcreteRules-20190522-N7H5I3"
+	TestID->"AggregateRules-20190522-N7H5I3"
 ]
 
 TestMatch[
@@ -186,7 +198,7 @@ TestMatch[
 	,
 	{}
 	,
-	TestID->"ConcreteRules-20190522-Z0X7E6"
+	TestID->"AggregateRules-20190522-Z0X7E6"
 ]
 
 
@@ -195,7 +207,7 @@ TestMatch[
 	,
 	{}
 	,
-	TestID->"ConcreteRules-20190522-D9J5I0"
+	TestID->"AggregateRules-20190522-D9J5I0"
 ]
 
 TestMatch[
@@ -203,7 +215,7 @@ TestMatch[
 	,
 	{}
 	,
-	TestID->"ConcreteRules-20190522-U2S5F4"
+	TestID->"AggregateRules-20190522-U2S5F4"
 ]
 
 
@@ -222,7 +234,7 @@ TestMatch[
 	,
 	{Lint["SuspiciousPatternTestFunction", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-U6J6X9"
+	TestID->"AggregateRules-20190523-U6J6X9"
 ]
 
 
@@ -236,7 +248,7 @@ TestMatch[
 	,
 	{Lint["SuspiciousPatternTestCallFunction", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-W2H4Z1"
+	TestID->"AggregateRules-20190523-W2H4Z1"
 ]
 
 
@@ -254,7 +266,7 @@ TestMatch[
 	,
 	{Lint["SuspiciousPatternBlankOptional", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-T7Q3D0"
+	TestID->"AggregateRules-20190523-T7Q3D0"
 ]
 
 
@@ -267,7 +279,7 @@ TestMatch[
 	,
 	{Lint["SuspiciousPatternBlankOptional", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-B2O7A2"
+	TestID->"AggregateRules-20190523-B2O7A2"
 ]
 
 
@@ -293,7 +305,7 @@ TestMatch[
 	,
 	{Lint["SyntaxError", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-C2Y2X2"
+	TestID->"AggregateRules-20190523-C2Y2X2"
 ]
 
 
@@ -306,7 +318,7 @@ TestMatch[
 	,
 	{Lint["SyntaxError", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-W9O8V3"
+	TestID->"AggregateRules-20190523-W9O8V3"
 ]
 
 
@@ -319,7 +331,7 @@ TestMatch[
 	,
 	{Lint["SyntaxError", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-N4B7X7"
+	TestID->"AggregateRules-20190523-N4B7X7"
 ]
 
 
@@ -333,7 +345,7 @@ TestMatch[
 	,
 	{Lint["SyntaxError", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-F9Z1T6"
+	TestID->"AggregateRules-20190523-F9Z1T6"
 ]
 
 (*
@@ -345,7 +357,7 @@ TestMatch[
 	,
 	{Lint["SyntaxError", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-A6O0J4"
+	TestID->"AggregateRules-20190523-A6O0J4"
 ]
 
 (*
@@ -357,7 +369,7 @@ TestMatch[
 	,
 	{Lint["SyntaxError", _, _, _]}
 	,
-	TestID->"ConcreteRules-20190523-H9C7R8"
+	TestID->"AggregateRules-20190523-H9C7R8"
 ]
 
 
