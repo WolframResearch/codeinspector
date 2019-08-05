@@ -1,0 +1,97 @@
+<project name='Lint' basedir='..'>
+
+	<property name='component' value='Lint' />
+	<property name='system_id' value='### Must be set by Jenkins ###' />
+
+	<property name='app.name' value='${component}' />
+	<property name='inputDir' value='${basedir}/${app.name}/Documentation' />
+	<property name='language' value='### Must be set by Jenkins ###' />
+
+	<property environment='env' />
+	<import file='${env.RE_ANTLIBRARY_HOME}/ant-lib.xml' />
+
+	<!--
+		Component (platform-independent)
+	-->
+
+	<target name='Component.Lint.execute' extensionOf='Component.execute'>
+
+		<copy todir='${files_directory}'>
+			<fileset dir='${basedir}' >
+			<include name='${component}/**/*.m' />
+			<include name='${component}/**/*.wl' />
+			</fileset>
+		</copy>
+
+	</target>
+	
+	<!--
+			Paclet generation
+	-->
+	
+	<target name='Paclet.Lint.init.custom' extensionOf='Paclet.init.custom'>
+	
+		<!--
+			Prevent Paclet.clean from deleting files_directory,
+			since CopyAndUnarchiveArtifact just put all the paclet
+			files in there....
+		-->
+
+		<property name='keep.files_directory' value='true' />
+	
+	</target>
+	
+	<target name='Paclet.Lint.execute' extensionOf='Paclet.execute'>
+		<mathematica exe="${mathExe}" fresh="true" quit="true"><![CDATA[
+
+			Print["$Version: ", $Version];
+			Print["$InstallationDirectory: ", $InstallationDirectory];
+
+			Unset[$MessagePrePrint];
+			Needs["PacletManager`"];
+
+			src = FileNameJoin[{AntProperty["files_directory"], "Lint"}];
+			dest = FileNameJoin[AntProperty["files_directory"]];
+			PackPaclet[src, dest];
+
+			SetDirectory[dest]
+			If [TrueQ[FileExistsQ[FileNames["Lint*.paclet"][[1]]]],
+				Print[FileNames["Lint*.paclet"][[1]] " ... OK"],
+				AntFail["Paclet not produced" ]];
+
+		]]></mathematica>
+
+	</target>
+	
+    <!--
+            Paclet deployment
+    -->
+	
+	<target name='Deploy.Lint.execute' extensionOf='Deploy.execute'>
+	
+		<path id='file.id'> 
+			<fileset dir='${checkout_directory}'>
+				<include name="Lint*.paclet"/>
+			</fileset>
+		</path>
+
+		<property name='paclet_file' refid='file.id'/> 
+		<property name='src' value='${paclet_file}' />
+		<property name='host' value='buildmgr@paclet-int.wolfram.com' />
+		<property name='dest' value='/mnt/paclets/to-deploy/internal' />
+		
+		<condition property='scp.cmd' value='pscp' else='scp'>
+			<os family='windows'/>
+		</condition>
+		
+		<condition property='args' value='-batch -q -r' else='-Br'>
+			<os family='windows'/>
+		</condition>
+		
+		<echo message="copy ${src} to ${host}:${dest}" />
+		<exec executable='${scp.cmd}' failonerror='true' searchpath='true'>
+			<arg line='${args} ${src} ${host}:${dest}' />
+		</exec>
+	</target>
+
+</project>
