@@ -192,6 +192,15 @@ CallNode[SymbolNode[Symbol, "Set" | "SetDelayed", _], { lhs_, rhs_ } /;
 
 
 
+CallNode[LeafNode[Symbol, "And", _], _, _] -> scanAnds,
+
+CallNode[LeafNode[Symbol, "Or", _], _, _] -> scanOrs,
+
+CallNode[LeafNode[Symbol, "Alternatives", _], _, _] -> scanAlternatives,
+
+
+
+
 (*
 cst of [x] is fine
 ast of [x] is an error
@@ -1218,6 +1227,90 @@ Catch[
   issues
 ]]
 *)
+
+
+
+
+
+Attributes[scanAnds] = {HoldRest}
+
+scanAnds[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, children, data, duplicates, selected, issues, consts},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+  
+  consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
+  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``And``.", "Warning", #[[3]]]])&, consts];
+
+
+  duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
+  selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
+
+  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", #[[3]]]])&, selected];
+
+  issues
+
+  ]]
+
+Attributes[scanOrs] = {HoldRest}
+
+scanOrs[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, children, data, duplicates, selected, issues, consts},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+  
+  consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
+  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``Or``.", "Warning", #[[3]]]])&, consts];
+
+  duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
+  selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
+
+  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error", #[[3]]]])&, selected];
+
+  issues
+
+  ]]
+
+Attributes[scanAlternatives] = {HoldRest}
+
+scanAlternatives[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, children, data, duplicates, selected, issues},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+  
+  duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
+  selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
+
+  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", #[[3]]]])&, selected];
+
+  issues
+
+  ]]
+
+
+
+
+
+
+
+
+
+
 
 
 
