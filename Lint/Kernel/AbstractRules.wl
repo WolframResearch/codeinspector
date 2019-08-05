@@ -111,7 +111,7 @@ CallNode[LeafNode[Symbol, "Replace" | "ReplaceAll" | "ReplaceRepeated", _], _, _
 (*
 Scan all symbols that are intuitive, yet do not exist
 *)
-LeafNode[Symbol, "AnyFalse" | "AllFalse" | "Failed"(*|"Boolean"*), _] -> scanBadSymbols,
+LeafNode[Symbol, "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | "RealQ" | "FalseQ", _] -> scanBadSymbols,
 
 (*
 
@@ -246,7 +246,7 @@ scanRealCalls[pos_List, astIn_] :=
   children = node[[2]];
   data = node[[3]];
   {Lint["RealCall", "Calling ``Real`` as a function.\n\
-Did you mean ``RealQ``?\n\
+Did you mean ``Developer`RealQ``?\n\
 This may be ok if ``Real`` is handled programmatically.", "Error", data]}
   ]
 
@@ -966,11 +966,28 @@ Did you mean ``$Failed``?", "Error", data]]
     ,
     "AnyFalse",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``AnyFalse``.\n\
-Did you mean ``AllTrue`` (and also inverting the logic) ?", "Error", data]]
+Symbol ``AnyFalse`` is intuitive but does not exist in **System`** context.\n\
+Did you mean ``AllTrue`` (and also inverting the logic)?", "Error", data]]
     ,
     "AllFalse",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``AllFalse``.\n\
-Did you mean ``AnyTrue`` (and also inverting the logic) ?", "Error", data]]
+Symbol ``AllFalse`` is intuitive but does not exist in **System`** context.\n\
+Did you mean ``AnyTrue`` (and also inverting the logic)?", "Error", data]]
+    ,
+    "Boolean",
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``Boolean``.\n\
+Symbol ``Boolean`` is intuitive but does not exist in **System`** context.\n\
+Did you mean ``True|False``?", "Error", data]]
+    ,
+    "RealQ",
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``RealQ``.\n\
+Symbol ``RealQ`` is intuitive but does not exist in **System`** context.\n\
+Did you mean ``Developer`RealQ``?", "Error", data]]
+    ,
+    "FalseQ",
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``FalseQ``.\n\
+Symbol ``FalseQ`` is intuitive but does not exist in **System`** context.\n\
+Did you mean ``TrueQ`` (and also inverting the logic)?", "Error", data]]
     ,
     _,
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``" <> name <> "``.", "Error", data]]
