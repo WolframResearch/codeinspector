@@ -26,8 +26,6 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 
 $DefaultAggregateRules = <|
 
-
-
 (*
 Aggregate lints
 *)
@@ -122,13 +120,9 @@ PrefixNode[Information, _, _] -> scanInformation,
 
 
 
-InfixNode[And, _, _] -> scanAnds,
-
-InfixNode[Or, _, _] -> scanOrs,
-
-InfixNode[Alternatives, _, _] -> scanAlternatives,
-
-
+(*
+TODO: maybe should be experimental?
+*)
 
 InfixNode[StringExpression, {InfixNode[Alternatives, _, _], __}, _] -> scanAlternativesStringExpression,
 
@@ -852,67 +846,14 @@ Module[{agg, node, data, children, tok},
 
 
 
-Attributes[scanAnds] = {HoldRest}
-
-scanAnds[pos_List, aggIn_] :=
-Catch[
- Module[{agg, node, children, data, duplicates, selected, issues},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-  
-  duplicates = Keys[Select[CountsBy[children[[;;;;2]], ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children[[;;;;2]], Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
-
-  {Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", #[[3]]]}& /@ selected
-
-  ]]
-
-Attributes[scanOrs] = {HoldRest}
-
-scanOrs[pos_List, aggIn_] :=
-Catch[
- Module[{agg, node, children, data, duplicates, selected, issues},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-  
-  duplicates = Keys[Select[CountsBy[children[[;;;;2]], ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children[[;;;;2]], Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
-
-  {Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error", #[[3]]]}& /@ selected
-
-  ]]
-
-Attributes[scanAlternatives] = {HoldRest}
-
-scanAlternatives[pos_List, aggIn_] :=
-Catch[
- Module[{agg, node, children, data, duplicates, selected, issues},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-  
-  duplicates = Keys[Select[CountsBy[children[[;;;;2]], ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children[[;;;;2]], Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
-
-  {Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", #[[3]]]}& /@ selected
-
-  ]]
 
 
 
 
 
+(*
+TODO: maybe should be experimental?
+*)
 
 Attributes[scanAlternativesStringExpression] = {HoldRest}
 
