@@ -30,6 +30,8 @@ $DefaultAbstractRules = <|
 CallNode[LeafNode[Symbol, "String", _], _, _] -> scanStringCalls,
 CallNode[LeafNode[Symbol, "Integer", _], _, _] -> scanIntegerCalls,
 CallNode[LeafNode[Symbol, "Real", _], _, _] -> scanRealCalls,
+CallNode[LeafNode[Symbol, "True", _], _, _] -> scanTrueCalls,
+
 (*
 
 not a good scan
@@ -247,6 +249,20 @@ scanRealCalls[pos_List, astIn_] :=
 Did you mean ``RealQ``?\n\
 This may be ok if ``Real`` is handled programmatically.", "Error", data]}
   ]
+
+Attributes[scanTrueCalls] = {HoldRest}
+
+scanTrueCalls[pos_List, astIn_] :=
+ Module[{ast, node, children, data},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+  {Lint["TrueCall", "Calling ``True`` as a function.\n\
+Did you mean ``TrueQ``?\n\
+This may be ok if ``True`` is handled programmatically.", "Error", data]}
+  ]
+
 
 (*
 
