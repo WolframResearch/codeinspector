@@ -4,16 +4,19 @@ LintMarkup
 
 LintBold
 
+LintPreserve
 
-LintSpaceIndicator::usage = "LintSpaceIndicator represents a space indicator in formatted output."
 
-LintErrorIndicator::usage = "LintErrorIndicator represented an error indicator in formatted output."
 
-LintContinuation::usage = "LintContinuation represents a continuation in formatted output."
+LintSpaceIndicator
 
-LintTimes::usage = "LintTimes represents a times operator in formatted output."
+LintErrorIndicator
 
-LintEOF::usage = "LintEOF represents an EOF in formatted output."
+LintContinuation
+
+LintTimes
+
+LintEOF
 
 
 Begin["`Private`"]
@@ -62,33 +65,38 @@ $LintDescriptionLimit = 100
 
 
 
+LintedFile::usage = "LintedFile[file, lintedLines] represents a formatted object of linted lines found in file."
 
 Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], StandardForm] :=
 	Interpretation[
-		Column[{Row[{file}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0, Background -> GrayLevel[0.95], Frame -> True]
+		Framed[Column[{Row[{file}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
 		,
 		lintedFile]
 
 Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], OutputForm] :=
-	Column[{Row[{file}]} ~Join~ lintedLines, Left, 0]
+	Column[{Row[{file}]} ~Join~ lintedLines, Left]
 
 
+
+
+LintedString::usage = "LintedString[string, lintedLines] represents a formatted object of linted lines found in string."
 
 Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], StandardForm] :=
 	Interpretation[
-		Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0, Background -> GrayLevel[0.95], Frame -> True]
+		Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
 		,
 		lintedString]
 
 Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], OutputForm] :=
-	Column[{Row[{string}]} ~Join~ lintedLines, Left, 0]
+	Column[{Row[{string}]} ~Join~ lintedLines, Left]
 
 
 
 
-distrib[s_String] := Characters[s]
-distrib[StringExpression[args___]] := Flatten[distrib[#]& /@ {args}]
-distrib[bold[s_String]] := LintBold[#]& /@ Characters[s]
+distrib[s_String] := StringSplit[s, "\n"->"\n"]
+distrib[StringExpression[args___]] := Flatten[distrib /@ {args}]
+distrib[bold[s_String]] := LintBold /@ StringSplit[s, "\n"->"\n"]
+distrib[preserve[s_String]] := LintPreserve[s]
 
 (*
 replace `` and ** markup
@@ -97,26 +105,61 @@ boldify[s_String] :=
 distrib[
 	StringReplace[s, {
 		RegularExpression["``(.*?)``"] :> bold["$1"],
-		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"]}] ]
+		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"],
+		RegularExpression["\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }] ]
 
 gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
 
 
+
+(*
+to be overridden
+*)
+createButton[___] := Failure["Unimplemented", <||>]
+
+
+
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], StandardForm] :=
-Module[{g, bolded},
+Module[{g, bolded, actions, actionButtonsOrFailures, format},
 
 	bolded = boldify[description];
 
 	g = gridify[bolded];
 
-	g[[1]] = {LintBold[tag],
+	g[[1]] = {LintMarkup[tag, FontWeight->Bold],
 					Spacer[20],
-					LintMarkup[Row[{"Severity: ", Row[{severity}]}], FontWeight->Bold, FontColor->severityColor[{lint}]],
+					LintMarkup[severity, FontWeight->Bold, FontColor->severityColor[{lint}]],
 					Spacer[20]} ~Join~ g[[1]];
 
-  Interpretation[
-  	Column[Row[#]& /@ g, {Left, Center}, Frame -> True, Background -> GrayLevel[0.85]],
-  	lint]
+	If[$Interactive,
+		actions = Lookup[data, CodeActions, {}];
+		If[!empty[actions],
+
+			actionButtonsOrFailures = createButton[#, lint]& /@ actions;
+
+			If[$Debug,
+				Print["actionButtonsOrFailures: ", actionButtonsOrFailures];
+			];
+
+			actionButtonsOrFailures = DeleteCases[actionButtonsOrFailures, _?FailureQ];
+
+			If[!empty[actionButtonsOrFailures],
+				g = g ~Join~ { actionButtonsOrFailures };
+			];
+		];
+	];
+
+	g = (Style[#, "Text"]& /@ #)& /@ g;
+
+  format = Interpretation[
+  	Framed[Column[Row /@ g, {Left, Center}], Background -> GrayLevel[0.92], RoundingRadius -> 5],
+  	lint];
+
+  If[$Debug,
+		Print["lint: ", format//InputForm];
+	];
+
+	format
 ]
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], OutputForm] :=
@@ -128,10 +171,10 @@ Module[{g, bolded},
 
 	g[[1]] = {LintBold[tag],
 					" ",
-					LintMarkup[Row[{"Severity: ", Row[{severity}]}], FontWeight->Bold, FontColor->severityColor[{lint}]],
+					LintMarkup[severity, FontWeight->Bold, FontColor->severityColor[{lint}]],
 					" " } ~Join~ g[[1]];
 
-  Column[Row[#]& /@ g]
+  Column[Row /@ g]
 ]
 
 
@@ -140,6 +183,10 @@ Module[{g, bolded},
 
 
 
+
+
+
+LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
 
 Options[LintedLine] = {
 	"MaxLineNumberLength" -> 5,
@@ -157,12 +204,16 @@ So brute-force it with Grid so that it looks good
 *)
 Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
 Catch[
-Module[{endingLints, elided, startingLints, grid, red, darkerOrange, blue, larger},
+Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints, grid, red, darkerOrange, blue, larger},
 
 	elided = OptionValue[LintedLine, {opts}, "Elided"];
 
 	If[elided,
 		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
+	];
+
+	If[$Debug,
+		Print["lineNumber: ", lineNumber];
 	];
 
 	startingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
@@ -171,6 +222,32 @@ Module[{endingLints, elided, startingLints, grid, red, darkerOrange, blue, large
 	format them
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+	If[$Debug,
+		Print["endingLints: ", endingLints];
+	];
+
+	endingAdditionalLintsAny = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
+	If[$Debug,
+		Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
+	];
+
+	endingAdditionalLintsThisLine = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
+	If[$Debug,
+		Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
+	];
+
+	(*
+	Don't double-count Lints that have AdditionalSources
+	*)
+	endingLints = Complement[endingLints, endingAdditionalLintsAny];
+	If[$Debug,
+		Print["endingLints: ", endingLints];
+	];
+
+	endingLints = endingLints ~Join~ endingAdditionalLintsThisLine;
+	If[$Debug,
+		Print["endingLints: ", endingLints];
+	];
 
 	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
 
@@ -221,7 +298,7 @@ Module[{endingLints, elided, startingLints, grid, red, darkerOrange, blue, large
 	Alignment option of Row has no effect: bug 93267
 	So must use Grid in order to have formatLeftColumn[] aligned on top
 	*)
-	Grid[
+	grid = Grid[
 		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
 		{{formatLeftColumn[lineSource, lineNumber, hash, opts], Spacer[10],
 			Column[{Grid[grid,
@@ -234,7 +311,13 @@ Module[{endingLints, elided, startingLints, grid, red, darkerOrange, blue, large
 							(# -> {Bold, Larger}& /@ larger)} ] } ~Join~ endingLints]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
 		,
-		Alignment -> Top, Spacings -> {0, 0}]
+		Alignment -> {Left, Top}, Spacings -> {0, 0}];
+
+	If[$Debug,
+		Print["grid: ", grid//InputForm];
+	];
+
+	grid
 ]]
 
 
@@ -394,17 +477,34 @@ Cannot use characters like \[SpaceIndicator] and \[ErrorIndicator] in OutputForm
 get Grid alignment
 *)
 
+LintSpaceIndicator::usage = "LintSpaceIndicator represents a space indicator in formatted output."
+
 Format[LintSpaceIndicator, StandardForm] := "\[SpaceIndicator]"
 Format[LintSpaceIndicator, OutputForm] := "~"
+
+
+LintErrorIndicator::usage = "LintErrorIndicator represented an error indicator in formatted output."
 
 Format[LintErrorIndicator, StandardForm] := "\[ErrorIndicator]"
 Format[LintErrorIndicator, OutputForm] := "^"
 
+
+
+LintContinuation::usage = "LintContinuation represents a continuation in formatted output."
+
 Format[LintContinuation, StandardForm] := "\[Continuation]"
 Format[LintContinuation, OutputForm] := "\\"
 
+
+
+LintTimes::usage = "LintTimes represents a times operator in formatted output."
+
 Format[LintTimes, StandardForm] := "\[Times]"
 Format[LintTimes, OutputForm] := "x"
+
+
+
+LintEOF::usage = "LintEOF represents an EOF in formatted output."
 
 Format[LintEOF, StandardForm] := "\[FilledSquare]"
 Format[LintEOF, OutputForm] := "EOF"
@@ -446,11 +546,11 @@ $UseANSI = Catch[Switch[$OperatingSystem,
 				True
 			]]
 
-Format[LintMarkup[content_, opts___], StandardForm] := Style[content, opts]
+Format[LintMarkup[content_, specs___], StandardForm] := Style[content, specs]
 
-Format[LintMarkup[content_, opts___], OutputForm] :=
+Format[LintMarkup[content_, specs___], OutputForm] :=
 Catch[
-Module[{s, color, weight, setup},
+Module[{s, color, weight, setup, opts},
 	
 	s = ToString[content, OutputForm];
 
@@ -461,15 +561,17 @@ Module[{s, color, weight, setup},
 		Throw[s]
 	];
 
-	color = OptionValue[LintMarkup, {opts}, FontColor];
-	weight = OptionValue[LintMarkup, {opts}, FontWeight];
+	opts = Cases[{specs}, (Rule | RuleDelayed)[_, _]];
+
+	color = OptionValue[LintMarkup, opts, FontColor];
+	weight = OptionValue[LintMarkup, opts, FontWeight];
 	(* FontVariations is ignored for now *)
 	(* FontSize is ignored for now *)
 
 	(*
 	The possibility of 38;5; sequences affecting the bold bit on Windows means that 
 	weight should be set first.
-	Still would like to completely understand the differences between platforms.
+	FIXME: Still would like to completely understand the differences between platforms.
 	*)
 	setup = StringJoin[{weightANSICode[weight], colorANSICode[color]}];
 	If[setup != "",
@@ -482,7 +584,12 @@ Module[{s, color, weight, setup},
 
 
 
-LintBold[content_] := LintMarkup[content, FontWeight->Bold]
+LintBold[content_] := LintMarkup[content, "Program", FontWeight->Bold]
+
+LintPreserve[content_] := LintMarkup[content]
+
+
+
 
 
 

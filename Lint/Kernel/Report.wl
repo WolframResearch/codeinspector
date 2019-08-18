@@ -33,6 +33,9 @@ $LintLimit = 20
 
 
 
+
+LintFileReport::usage = "LintFileReport[file, lints] returns a LintedFile object."
+
 Options[LintFileReport] = {
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
@@ -54,7 +57,7 @@ bug 338218
 
 LintFileReport[file_String | File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions,
+ Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   lintedLines, unusedLineHashExclusions, hashes},
 
  lints = lintsIn;
@@ -119,15 +122,17 @@ Catch[
   So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
   discussed at length in bug 363161
    *)
-  endsWithNewline = (Import[full, {"Byte", -1}] == 10);
-  If[endsWithNewline,
-    lines = Append[lines, ""];
-  ];
+  lines = Append[lines, ""];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions];
   LintedFile[full, lintedLines]
 ]]
 
+
+
+
+
+LintStringReport::usage = "LintStringReport[string, lints] returns a LintedString object."
 
 Options[LintStringReport] = {
   "TagExclusions" -> $DefaultTagExclusions,
@@ -137,10 +142,9 @@ Options[LintStringReport] = {
 }
 
 
-
 LintStringReport[string_String, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, endsWithNewline, severityExclusions, lintedLines},
+ Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines},
 
  lints = lintsIn;
 
@@ -191,10 +195,7 @@ Catch[
   So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
   discussed at length in bug 363161
    *)
-  endsWithNewline = (ImportString[string, {"Byte", -1}] == 10);
-  If[endsWithNewline,
-    lines = Append[lines, ""];
-  ];
+  lines = Append[lines, ""];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions];
   LintedString[string, lintedLines]
@@ -216,7 +217,8 @@ Return a list of LintedLines
 lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
-  linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines},
+  linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
+  additionalSources},
   
   lints = lintsIn;
   
@@ -300,7 +302,11 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     lints = Take[lints, $LintLimit]
   ];
 
-   sources = Cases[lints, Lint[_, _, _, opts_] :> opts[Source]];
+   sources = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> src_]] :> src];
+
+   additionalSources = Join @@ Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_]] :> srcs];
+
+   sources = sources ~Join~ additionalSources;
 
     (*
     sources = DeleteCases[sources, {{line1_, _}, {_, _}} /; MemberQ[Keys[lineNumberExclusions], line1]];
@@ -472,44 +478,47 @@ Module[{perColumn, endOfFile},
   setup perColumn
   *)
   perColumn = Map[
-    Module[{lint, data},
+    Module[{lint, data, srcs},
     lint = #;
     data = #[[4]];
-    Switch[lint,
+    srcs = { data[Source] } ~Join~ Lookup[data, "AdditionalSources", {}];
+    (
+    Function[src,
+    Switch[src,
 
       (* hitting EOF *)
-      Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber, 0}, {lineNumber, 0}}]] /; endOfFile,
+      {{lineNumber, 0}, {lineNumber, 0}} /; endOfFile,
       Association[0 -> lint]
       ,
 
       (* staying within same line *)
-      Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, {lineNumber, _}}]],
-      Association[Table[i -> lint, {i, data[Source][[1, 2]], data[Source][[2, 2]]}]]
+      {{lineNumber, _}, {lineNumber, _}},
+      Association[Table[i -> lint, {i, src[[1, 2]], src[[2, 2]]}]]
       ,
 
       (* start on this line, but extends into next lines *)
-      Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]],
-      Association[Table[i -> lint, {i, data[Source][[1, 2]], StringLength[line]}], StringLength[line]+1 -> lint]
+      {{lineNumber, _}, _},
+      Association[Table[i -> lint, {i, src[[1, 2]], StringLength[line]}], StringLength[line]+1 -> lint]
       ,
 
       (* extend from previous lines, and end on this line *)
-      Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]],
-      Association[0 -> lint, Table[i -> lint, {i, 1, data[Source][[2, 2]]}]]
+      {_, {lineNumber, _}},
+      Association[0 -> lint, Table[i -> lint, {i, 1, src[[2, 2]]}]]
       ,
 
       (* extend from previous lines, and also extend into next lines  *)
-      Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber1_, _}, {lineNumber2_, _}} /; (lineNumber1 < lineNumber < lineNumber2)]],
+      {{lineNumber1_, _}, {lineNumber2_, _}} /; (lineNumber1 < lineNumber < lineNumber2),
       Association[0 -> lint, Table[i -> lint, {i, 1, StringLength[line]}], StringLength[line]+1 -> lint]
       ,
 
       (* nothing to do on this line *)
       _,
       <||>
-    ]]&
+    ]] /@ srcs)]&
     ,
     lints
   ];
-  perColumn = Merge[perColumn, Identity];
+  perColumn = Merge[Flatten[perColumn], Identity];
 
   perColumn
 ]

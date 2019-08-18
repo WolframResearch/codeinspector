@@ -8,6 +8,9 @@ severityColor
 
 
 
+format
+
+
 Begin["`Private`"]
 
 Needs["Lint`"]
@@ -48,6 +51,33 @@ Module[{maxSeverity},
 	]
 ]
 
+
+
+$shortenLimit = 100
+
+shorten[s_String] /; StringLength[s] < $shortenLimit := s
+
+shorten[s_String] :=
+Module[{toElide, part},
+	toElide = StringLength[s] - $shortenLimit;
+	part = Floor[StringLength[s]/2] + Floor[toElide/2] * {-1, 1};
+	StringReplacePart[s, "\[Ellipsis]", part]
+]
+
+
+
+format[s_String] :=
+Module[{containsDoubleTicks, containsDoubleStars},
+
+	containsDoubleTicks = StringContainsQ[s, "``"];
+	containsDoubleStars = StringContainsQ[s, "**"];
+
+	Which[
+		containsDoubleTicks && containsDoubleStars, Message[Lint::cannotFormat, s];shorten[s],
+		containsDoubleTicks, "**" <> shorten[s] <> "**",
+		True, "``" <> shorten[s] <> "``"
+	]
+]
 
 
 

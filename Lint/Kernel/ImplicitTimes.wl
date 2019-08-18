@@ -1,14 +1,14 @@
 BeginPackage["Lint`ImplicitTimes`"]
 
-ImplicitTimesFile::usage = "ImplicitTimesFile[file, options] returns a list of implicit times in file."
+ImplicitTimesFile
 
-ImplicitTimesString::usage = "ImplicitTimesString[string, options] returns a list of implicit times in string."
+ImplicitTimesString
 
 
 
-ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes, options] returns a LintedFile object."
+ImplicitTimesFileReport
 
-ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes, options] returns a LintedString object."
+ImplicitTimesStringReport
 
 
 
@@ -23,11 +23,17 @@ Needs["Lint`Format`"]
 Needs["Lint`Utils`"]
 
 
+
+
+ImplicitTimesFile::usage = "ImplicitTimesFile[file, options] returns a list of implicit times in file."
+
 Options[ImplicitTimesFile] = {
   PerformanceGoal -> "Speed"
 }
 
-$fileByteCountLimit = 2*^6
+
+$fileByteCountMinLimit = 0*^6
+$fileByteCountMaxLimit = 2*^6
 
 
 
@@ -43,8 +49,11 @@ Catch[
   ];
 
    If[performanceGoal == "Speed",
-    If[FileByteCount[full] > $fileByteCountLimit,
+    If[FileByteCount[full] > $fileByteCountMaxLimit,
      Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+     ];
+    If[FileByteCount[full] < $fileByteCountMinLimit,
+     Throw[Failure["FileTooSmall", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
      ];
     ];
 
@@ -62,7 +71,12 @@ Catch[
 ]]
 
 
-Options[ImplicitTimesFile] = {
+
+
+
+ImplicitTimesString::usage = "ImplicitTimesString[string, options] returns a list of implicit times in string."
+
+Options[ImplicitTimesString] = {
   PerformanceGoal -> "Speed"
 }
 
@@ -94,6 +108,7 @@ Catch[
 
 
 
+ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes, options] returns a LintedFile object."
 
 Options[ImplicitTimesFileReport] = {
   "LineNumberExclusions" -> <||>,
@@ -136,6 +151,9 @@ Catch[
 ]]
 
 
+
+
+ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes, options] returns a LintedString object."
 
 Options[ImplicitTimesStringReport] = {
   "LineNumberExclusions" -> <||>,

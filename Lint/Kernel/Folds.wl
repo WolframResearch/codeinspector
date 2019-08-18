@@ -27,7 +27,7 @@ Module[{children},
 
   children = DeleteCases[children, n_ /; ignoredNodesSrcMemberFunc[n[[3]][Source]]];
 
-  node[tag, removeIgnoredNodes /@ children, data]
+  node[tag, removeIgnoredNodes[#, ignoredNodesSrcMemberFunc]& /@ children, data]
 ]
 
 

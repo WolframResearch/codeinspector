@@ -1,30 +1,38 @@
 BeginPackage["Lint`"]
 
-Lint::usage = "Lint[tag, description, severity, data] is a problem found in WL source code."
+Lint
 
-LintFile::usage = "LintFile[file] returns a list of Lints found in file."
 
-LintString::usage = "LintString[string] returns a list of Lints found in string."
+LintFile
+
+LintString
+
+LintBox
 
 LintCST
 
 
 
-LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
+LintedLine
 
 
 
-LintFileReport::usage = "LintFileReport[file, lints] returns a LintedFile object."
+LintFileReport
 
-LintStringReport::usage = "LintStringReport[string, lints] returns a LintedString object."
-
-
-
-LintedFile::usage = "LintedFile[file, lintedLines] represents a formatted object of linted lines found in file."
-
-LintedString::usage = "LintedString[string, lintedLines] represents a formatted object of linted lines found in string."
+LintStringReport
 
 
+
+
+LintedFile
+
+LintedString
+
+
+
+$Progress
+$Start
+$Time
 
 
 Begin["`Private`"]
@@ -42,6 +50,9 @@ Needs["Lint`Folds`"]
 
 
 
+
+Lint::usage = "Lint[tag, description, severity, data] is a problem found in WL source code."
+
 (*
 provide some selectors for Lint and LintedLine objects
 *)
@@ -52,14 +63,16 @@ Lint[   _,     _, severity_, _]["Severity"] := severity
 
 
 
-LintedLine[_, lineNumber_,     _, _,      _]["LineNumber"] := lineNumber
-LintedLine[_,           _, hash_, _,      _]["Hash"] := hash
-LintedLine[_,           _,     _, _, lints_]["Lints"] := lints
+LintedLine[_, lineNumber_,     _, _,      _, ___]["LineNumber"] := lineNumber
+LintedLine[_,           _, hash_, _,      _, ___]["Hash"] := hash
+LintedLine[_,           _,     _, _, lints_, ___]["Lints"] := lints
 
 
 
 
 
+
+LintFile::usage = "LintFile[file] returns a list of Lints found in file."
 
 Options[LintFile] = {
   PerformanceGoal -> "Speed",
@@ -68,7 +81,9 @@ Options[LintFile] = {
   CharacterEncoding -> "UTF-8"
 }
 
-$fileByteCountLimit = 2*^6
+
+$fileByteCountMinLimit = 0*^6
+$fileByteCountMaxLimit = 3*^6
 
 
 
@@ -91,8 +106,11 @@ Catch[
   ];
 
    If[performanceGoal == "Speed",
-    If[FileByteCount[full] > $fileByteCountLimit,
+    If[FileByteCount[full] > $fileByteCountMaxLimit,
      Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+     ];
+    If[FileByteCount[full] < $fileByteCountMinLimit,
+     Throw[Failure["FileTooSmall", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
      ];
     ];
 
@@ -108,6 +126,10 @@ Catch[
 ]]
 
 
+
+
+LintString::usage = "LintString[string] returns a list of Lints found in string."
+
 Options[LintString] = {
   PerformanceGoal -> "Speed",
   "AggregateRules" :> $DefaultAggregateRules,
@@ -121,6 +143,8 @@ Catch[
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
 
+  $Progress = 0;
+
   cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], #[[2]]}&];
 
   If[FailureQ[cstAndIssues],
@@ -130,6 +154,30 @@ Catch[
   LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "AggregateRules" -> aggregateRules, "AbstractRules" -> abstractRules]
 ]]
 
+
+Options[LintBox] = {
+  PerformanceGoal -> "Speed",
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules
+}
+
+LintBox[box_, OptionsPattern[]] :=
+Catch[
+ Module[{aggregateRules, abstractRules, cstAndIssues},
+
+  aggregateRules = OptionValue["AggregateRules"];
+  abstractRules = OptionValue["AbstractRules"];
+
+  $Progress = 0;
+
+  cstAndIssues = ConcreteParseBox[box, {FileNode[File, #[[1]], <||>], #[[2]]}&];
+
+  If[FailureQ[cstAndIssues],
+    Throw[cstAndIssues]
+  ];
+
+  LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "AggregateRules" -> aggregateRules, "AbstractRules" -> abstractRules]
+]]
 
 
 
@@ -141,7 +189,9 @@ Options[LintCST] = {
 Attributes[LintCST] = {HoldFirst}
 
 LintCST[cstIn_, issues_, OptionsPattern[]] :=
-Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes, ignoredNodesSrcMemberFunc},
+Catch[
+Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes, ignoredNodesSrcMemberFunc,
+  totalRules, prog},
 
   cst = cstIn;
 
@@ -152,7 +202,15 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
 
   agg = Aggregate[cst];
 
+  If[FailureQ[agg],
+    Throw[agg]
+  ];
+
   ast = Abstract[agg];
+
+  If[FailureQ[ast],
+    Throw[ast]
+  ];
 
   (*
   Make sure to use Infinity, because StaticAnalysisIgnoreNode may be nested inside of PackageNode or ContextNode
@@ -183,34 +241,40 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
     Print["ast: ", ast];
   ];
 
-  AppendTo[lints,
-    KeyValueMap[(
-      If[$Debug,
-        Print[#];
-      ];
-      pat = #1;
-      func = #2;
-      poss = Position[agg, pat];
-      Map[(func[#, agg])&, poss]
-      )&, aggregateRules]
-  ];
+  totalRules = Length[aggregateRules] + Length[abstractRules];
+  prog = 0;
+  $Start = Now;
 
-  AppendTo[lints, 
-    KeyValueMap[(
-      If[$Debug,
-        Print[#];
-      ];
-      pat = #1;
-      func = #2;
-      poss = Position[ast, pat];
-      Map[(func[#, ast])&, poss]
-      )&, abstractRules]
-  ];
+  KeyValueMap[(
+    If[$Debug,
+      Print[#];
+    ];
+    pat = #1;
+    func = #2;
+    poss = Position[agg, pat];
+    AppendTo[lints, Map[(func[#, agg])&, poss]];
+    prog++;
+    $Progress = Floor[100 * prog / totalRules];
+    )&, aggregateRules];
+
+  KeyValueMap[(
+    If[$Debug,
+      Print[#];
+    ];
+    pat = #1;
+    func = #2;
+    poss = Position[ast, pat];
+    AppendTo[lints, Map[(func[#, ast])&, poss]];
+    prog++;
+    $Progress = Floor[100 * prog / totalRules];
+    )&, abstractRules];
+
+  $Time = Now - $Start;
 
   lints = Flatten[lints];
 
   lints
-]
+]]
 
 
 End[]

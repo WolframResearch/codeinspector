@@ -9,6 +9,7 @@ Needs["AST`"]
 Needs["AST`Utils`"]
 Needs["Lint`"]
 Needs["Lint`Format`"]
+Needs["Lint`Utils`"]
 
 
 
@@ -252,7 +253,7 @@ Module[{agg, node, data, children, issues, pairs},
     ];
 
     AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Contiguous implicit ``Times`` between ``Blank``s\n\
-Did you mean ``" <> ToInputFormString[p[[1]]] <> "*" <> ToInputFormString[p[[2]]] <> "``?", "Error", <|Source->{p[[1]][[3]][Source][[1]], p[[2]][[3]][Source][[2]]}|>]];
+Did you mean " <> format[ToInputFormString[p[[1]]] <> " * " <> ToInputFormString[p[[2]]]] <> "?", "Error", <|Source->{p[[1]][[3]][Source][[1]], p[[2]][[3]][Source][[2]]}|>]];
 
     ,
     {p, pairs}
@@ -385,7 +386,7 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
 
   issues = {};
 
-  straySemis = SequenceCases[children, {LeafNode[Token`Fake`Null, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
+  straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
   Scan[(AppendTo[issues, Lint["StraySemicolon", "``;`` may not be needed.", "Warning", #[[3]]]])&, straySemis];
 
@@ -415,7 +416,7 @@ scanOuts[pos_List, aggIn_] :=
   node = Extract[agg, {pos}][[1]];
   s = node["String"];
   data = node[[3]];
-  {Lint["SuspiciousOut", "Suspicious use of ``" <> s <> "`` in file.", "Warning", data]}
+  {Lint["SuspiciousOut", "Suspicious use of " <> format[s] <> " in file.", "Warning", data]}
 ]
 
 
@@ -449,7 +450,38 @@ Catch[
      ];
   ];
 
+
+
   issues = {};
+
+  Switch[patternTestArg2,
+    GroupNode[GroupParen, _, _],
+      (*
+      If it is already  a?(b)  then assume intention and do not warn
+      *)
+      Throw[issues]
+    ,
+    LeafNode[Symbol, "Function", _],
+      (*
+      If it is  a?Function[args]  then make it an error
+
+      The chance that (a?Function)[args] was intentional is... miniscule
+
+      TODO: add anything callable like Function here 
+      *)
+      AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.\n\
+The precedence of ``?`` is surprisingly high.\n\
+``PatternTest`` " <> format[ToInputFormString[patternTest]] <> " is calling arguments " <> format[ToInputFormString[args]] <> ".\n\
+Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
+                                          patternTestArg1,
+                                          LeafNode[Token`Question, "?", <||>],
+                                          GroupNode[GroupParen, {
+                                            LeafNode[Token`OpenParen, "(", <||>],
+                                            CallNode[patternTestArg2, {args}, <||>],
+                                            LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <>
+          "?", "Error", data]];
+      Throw[issues]
+  ];
 
   (*
 
@@ -459,18 +491,18 @@ Catch[
 
   AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``.\n\
 The precedence of ``?`` is surprisingly high.\n\
-``PatternTest`` ``" <> ToInputFormString[patternTest] <> "`` is calling arguments ``" <> ToInputFormString[args] <> "``.\n\
-Did you mean ``" <> ToInputFormString[BinaryNode[PatternTest, {
+``PatternTest`` " <> format[ToInputFormString[patternTest]] <> " is calling arguments " <> format[ToInputFormString[args]] <> ".\n\
+Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
                                         patternTestArg1,
                                         LeafNode[Token`Question, "?", <||>],
                                         GroupNode[GroupParen, {
                                           LeafNode[Token`OpenParen, "(", <||>],
                                           CallNode[patternTestArg2, {args}, <||>],
-                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]] <>
-        "`` or ``" <> ToInputFormString[CallNode[GroupNode[GroupParen, {
+                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <>
+        " or " <> format[ToInputFormString[CallNode[GroupNode[GroupParen, {
                                                     LeafNode[Token`OpenParen, "(", <||>],
                                                     patternTest,
-                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>]] <> "``?", "Remark", data]];
+                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>]]] <> "?", "Remark", data]];
 
   issues
 
@@ -548,7 +580,7 @@ Catch[
 
   (*
   heuristic
-  if # or ## occur in LHS of Rule, then there is no problem, (a->b)& is the intended parse
+  if # or ## occur in LHS of Rule, then there is no problem, assume (a->b)& is the intended parse
   *)
   If[!FreeQ[ruleChild1, LeafNode[Slot | SlotSequence, _, _]],
     Throw[{}]
@@ -597,6 +629,16 @@ Catch[
 
      (*
      heuristic
+      if inside Reap[], then assume it is intentional, i.e., Reap[xxx, xxx, a->b&] is intentional
+     *)
+     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Reap", _], {
+                          GroupNode[GroupSquare, { _,
+                            InfixNode[Comma, {_, _, _, _, node}, _ ], _ }, _]}, _]],
+      Throw[{}]
+     ];
+
+     (*
+     heuristic
       if function is immediately applied, then assume it is intentional, i.e., a->b&[x] is intentional
      *)
      If[MatchQ[parent, CallNode[node, _, _]],
@@ -609,9 +651,9 @@ Catch[
 
   {Lint["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low.\n\
-``" <> SymbolName[ruleHead] <> "`` ``" <> ToInputFormString[rule] <> "`` is inside a ``Function``.\n\
-Did you mean ``" <>
-      ToInputFormString[BinaryNode[ruleHead, {
+``" <> SymbolName[ruleHead] <> "`` " <> format[ToInputFormString[rule]] <> " is inside a ``Function``.\n\
+Did you mean " <>
+      format[ToInputFormString[BinaryNode[ruleHead, {
         ruleChild1,
         rule[[2]][[2]],
         GroupNode[GroupParen, {
@@ -619,13 +661,13 @@ Did you mean ``" <>
           PostfixNode[Function, {
             ruleChild2,
             LeafNode[Token`Amp, "&", <||>] }, <||>],
-          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]] <> "`` or ``" <>
-      ToInputFormString[PostfixNode[Function, {
+          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]]] <> " or " <>
+      format[ToInputFormString[PostfixNode[Function, {
                           GroupNode[GroupParen, {
                             LeafNode[Token`OpenParen, "(", <||>],
                             rule,
                             LeafNode[Token`CloseParen, ")", <||>] }, <||>],
-                          LeafNode[Token`Amp, "&", <||>] }, <||>]] <> "``?", "Warning", data]}
+                          LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?", "Warning", data]}
 ]]
 
 
@@ -650,8 +692,8 @@ Catch[
   {Lint["SuspiciousPatternTestFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
 ``?`` is inside a ``Function``.\n\
-Did you mean ``" <>
-  ToInputFormString[BinaryNode[PatternTest, {
+Did you mean " <>
+  format[ToInputFormString[BinaryNode[PatternTest, {
                         patternTestArg1,
                         LeafNode[Token`Question, "?", <||>],
                         GroupNode[GroupParen, {
@@ -659,12 +701,12 @@ Did you mean ``" <>
                           PostfixNode[Function, {
                             patternTestArg2,
                             LeafNode[Token`Amp, "&", <||>] }, <||>],
-                          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]] <> 
-          "`` or ``" <> ToInputFormString[PostfixNode[Function, {
+                          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]]] <> 
+          " or " <> format[ToInputFormString[PostfixNode[Function, {
                                             GroupNode[GroupParen, {
                                               LeafNode[Token`OpenParen, "(", <||>],
                                               patternTest,
-                                              LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]] <> "``?", "Warning", data]}
+                                              LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <> "?", "Warning", data]}
 ]]
 
 
@@ -699,8 +741,8 @@ Catch[
 
   {Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-Call to ``PatternTest`` ``" <> ToInputFormString[call] <> "`` is inside a ``Function``.\n\
-Did you mean ``" <> ToInputFormString[BinaryNode[PatternTest, {
+Call to ``PatternTest`` " <> format[ToInputFormString[call]] <> " is inside a ``Function``.\n\
+Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
                                         patternTestArg1,
                                         LeafNode[Token`Question, "?", <||>],
                                         GroupNode[GroupParen, {
@@ -708,13 +750,13 @@ Did you mean ``" <> ToInputFormString[BinaryNode[PatternTest, {
                                           PostfixNode[Function, {
                                             CallNode[patternTestArg2, callChildren, <||>],
                                             LeafNode[Token`Amp, "&", <||>] }, <||>],
-                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]] <>
-  "`` or ``" <> ToInputFormString[PostfixNode[Function, {
+                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]]] <>
+  " or " <> format[ToInputFormString[PostfixNode[Function, {
                                     CallNode[GroupNode[GroupParen, {
                                       LeafNode[Token`OpenParen, "(", <||>],
                                       patternTest,
                                       LeafNode[Token`CloseParen, ")", <||>] }, <||>], callChildren, <||>],
-                                    LeafNode[Token`Amp, "&", <||>] }, <||>]] <> "``?",
+                                    LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?",
     "Warning", data]}
 ]]
 
@@ -815,11 +857,11 @@ Catch[
   ];
 
   {Lint["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
-Did you mean ``" <> ToInputFormString[BinaryNode[Pattern, {
+Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
                         pattern,
                         LeafNode[Token`Fake`PatternColon, ":", <||>],
-                        opt}, <||>]] <> "``?\n\
-This may be ok if ``" <> ToInputFormString[pattern] <> "`` is used as a pattern.", "Warning", data]}
+                        opt}, <||>]]] <> "?\n\
+This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", data]}
 ]]
 
 
@@ -852,9 +894,11 @@ Module[{agg, node, data, children, tok},
 
 
 (*
-TODO: maybe should be experimental?
-*)
+HIGH FALSE POSITIVES
 
+need better heuristics
+
+*)
 Attributes[scanAlternativesStringExpression] = {HoldRest}
 
 scanAlternativesStringExpression[pos_List, cstIn_] :=
@@ -873,7 +917,7 @@ Catch[
   stringExpArgRest = children[[3;;;;2]];
 
   {Lint["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``. The precedence of ``|`` is higher than ``~~``.\n\
-Did you mean ``" <> ToInputFormString[InfixNode[Alternatives,
+Did you mean " <> format[ToInputFormString[InfixNode[Alternatives,
                                           Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
                                                                     LeafNode[Token`OpenParen, "(", <||>],
                                                                     InfixNode[StringExpression,
@@ -881,14 +925,14 @@ Did you mean ``" <> ToInputFormString[InfixNode[Alternatives,
                                                                         {alternativesLast} ~Join~ stringExpArgRest,
                                                                         LeafNode[Token`TildeTilde, "~~", <||>]], <||>],
                                                                     LeafNode[Token`CloseParen, ")", <||>]}, <||>]},
-                                                  LeafNode[Token`Bar, "|", <||>]], <||>]] <> "``" <>
-" or " <> "``" <> ToInputFormString[InfixNode[StringExpression,
+                                                  LeafNode[Token`Bar, "|", <||>]], <||>]]] <>
+" or " <> format[ToInputFormString[InfixNode[StringExpression,
                                       Riffle[{GroupNode[GroupParen, {
                                                   LeafNode[Token`OpenParen, "(", <||>],
                                                   alternatives,
                                                   LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~
                                                 stringExpArgRest,
-                                              LeafNode[Token`TildeTilde, "~~", <||>]], <||>]] <> "``?", "Remark", data]}
+                                              LeafNode[Token`TildeTilde, "~~", <||>]], <||>]]] <> "?", "Remark", data]}
 ]]
 
 
