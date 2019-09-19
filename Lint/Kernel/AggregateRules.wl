@@ -66,11 +66,6 @@ Tags: StraySemicolon
 InfixNode[CompoundExpression, _, _] -> scanCompoundExpressions,
 
 (*
-Tags: SuspiciousOut
-*)
-LeafNode[Out, _, _] -> scanOuts,
-
-(*
 
 a_?b[x]
 probably meant to have a_?(b[x])
@@ -399,25 +394,6 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
     ];)& /@ Partition[children, 2];
 
   issues
-]
-
-
-
-
-(*
-
-TODO: maybe have a separate rule for matching a % b, where it looks like % is used as Modulo operator
-
-*)
-Attributes[scanOuts] = {HoldRest}
-
-scanOuts[pos_List, aggIn_] :=
- Module[{agg, node, data, s},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  s = node["String"];
-  data = node[[3]];
-  {Lint["SuspiciousOut", "Suspicious use of " <> format[s] <> " in file.", "Warning", data]}
 ]
 
 
