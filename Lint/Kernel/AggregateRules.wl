@@ -885,11 +885,14 @@ need better heuristics
 *)
 Attributes[scanAlternativesStringExpression] = {HoldRest}
 
-scanAlternativesStringExpression[pos_List, cstIn_] :=
+(*
+a | b ~~ c
+*)
+scanAlternativesStringExpression[pos_List, aggIn_] :=
 Catch[
- Module[{cst, node, data, children, stringExpArgRest, alternatives, alternativesChildren, alternativesMost, alternativesLast},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
+ Module[{agg, node, data, children, stringExpArgRest, alternatives, alternativesChildren, alternativesMost, alternativesLast},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
