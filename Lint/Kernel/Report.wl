@@ -114,16 +114,6 @@ Catch[
     ];
   ];
 
-   (*
-  Add a fake line
-
-  ImportString["\n", {"Text", "Lines"}, CharacterEncoding -> "ASCII"] returns {""} and I need it to return {"", ""}
-  That is, there are implied lines both *before* and *after* a \n.
-  So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
-  discussed at length in bug 363161
-   *)
-  lines = Append[lines, ""];
-
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions];
   LintedFile[full, lintedLines]
 ]]
@@ -187,16 +177,6 @@ Catch[
     *)
   lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-  (*
-  Add a fake line
-
-  ImportString["\n", {"Text", "Lines"}, CharacterEncoding -> "ASCII"] returns {""} and I need it to return {"", ""}
-  That is, there are implied lines both *before* and *after* a \n.
-  So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
-  discussed at length in bug 363161
-   *)
-  lines = Append[lines, ""];
-
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions];
   LintedString[string, lintedLines]
 ]]
@@ -244,6 +224,12 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
   Syntax errors may continue to the end of the file (EOF), and the source location of EOF is {lastLine+1, 0}.
   i.e., it is after all content in the file.
+
+  Also,
+  ImportString["\n", {"Text", "Lines"}, CharacterEncoding -> "ASCII"] returns {""} and I need it to return {"", ""}
+  That is, there are implied lines both *before* and *after* a \n.
+  So just fudge it and add a blank line. This gets us in sync with expectations of source locations in other editors, etc.
+  discussed at length in bug 363161
 
   We want to hash the fake line that is added at the end.
   *)
