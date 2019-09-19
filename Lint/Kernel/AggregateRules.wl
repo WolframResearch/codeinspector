@@ -112,7 +112,7 @@ BinaryNode[Optional, {PatternBlankNullSequenceNode[PatternBlankNullSequence, {_,
 
 
 
-PrefixNode[Information, _, _] -> scanInformation,
+StartOfLineNode[Information, _, _] -> scanInformation,
 
 
 
