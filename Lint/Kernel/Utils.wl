@@ -3,16 +3,17 @@ BeginPackage["Lint`Utils`"]
 
 expandLineNumberExclusions
 
-
 severityColor
 
-
-
 format
+
+shadows
 
 
 Begin["`Private`"]
 
+Needs["AST`"]
+Needs["AST`Utils`"]
 Needs["Lint`"]
 
 
@@ -80,6 +81,13 @@ Module[{containsDoubleTicks, containsDoubleStars},
 ]
 
 
+
+
+
+shadows[lint1_Lint, lint2_Lint] :=
+	(severityToInteger[lint1["Severity"]] <= severityToInteger[lint2["Severity"]] &&
+		SourceMemberQ[lint2[[4, Key[Source]]], lint1[[4, Key[Source]]]]) &&
+   	(lint1 =!= lint2)
 
 
 End[]

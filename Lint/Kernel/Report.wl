@@ -198,7 +198,7 @@ lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, seve
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
-  additionalSources},
+  additionalSources, shadowing},
   
   lints = lintsIn;
   
@@ -283,6 +283,17 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   If[empty[lints],
     Throw[{}]
   ];
+
+  (*
+  If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
+  *)
+  shadowing = Select[lints, Function[lint, AnyTrue[lints, shadows[lint, #]&]]];
+
+  If[$Debug,
+    Print["shadowing: ", shadowing];
+  ];
+
+  lints = Complement[lints, shadowing];
 
   If[Length[lints] > $LintLimit,
     lints = Take[lints, $LintLimit]
