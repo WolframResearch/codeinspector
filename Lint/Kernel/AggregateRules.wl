@@ -124,6 +124,11 @@ InfixNode[StringExpression, {InfixNode[Alternatives, _, _], __}, _] -> scanAlter
 
 
 
+
+TernaryNode[TernaryTilde, {_, _, Except[LeafNode[Symbol, _, _]], _, _}, _] -> scanTernaryTildeExpectedSymbol,
+
+
+
 (*
 
 bad scan
@@ -915,6 +920,26 @@ Did you mean " <> format[ToInputFormString[InfixNode[Alternatives,
 ]]
 
 
+
+
+
+
+
+
+Attributes[scanTernaryTildeExpectedSymbol] = {HoldRest}
+
+scanTernaryTildeExpectedSymbol[pos_List, aggIn_] :=
+Catch[
+ Module[{agg, node, data, children, middle},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+
+  middle = children[[3]];
+  data = middle[[3]];
+
+  {Lint["ExpectedSymbol", "Middle expression is usually a symbol.", "Warning", data]}
+]]
 
 
 
