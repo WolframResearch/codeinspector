@@ -36,13 +36,13 @@ Tags: ImplicitTimesAcrossLines
 *)
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanImplicitTimes,
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-                                !FreeQ[children, _BlankNode |
+                                !FreeQ[children, LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+                                                  _BlankNode |
                                                   _BlankSequenceNode |
                                                   _BlankNullSequenceNode |
                                                   _PatternBlankNode |
                                                   _PatternBlankSequenceNode |
                                                   _PatternBlankNullSequenceNode |
-                                                  LeafNode[OptionalDefault, _, _] |
                                                   _OptionalDefaultPatternNode, 1], _] -> scanImplicitTimesBlanks,
 
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
@@ -242,13 +242,14 @@ Module[{agg, node, data, children, issues, pairs},
       Continue[]
     ];
 
-
-    If[(!MatchQ[p[[1]], _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
+    If[(!MatchQ[p[[1]], LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+                        _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
-                        LeafNode[OptionalDefault, _, _] | _OptionalDefaultPatternNode]) &&
-      (!MatchQ[p[[2]], _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
+                        _OptionalDefaultPatternNode]) &&
+      (!MatchQ[p[[2]],  LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+                        _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
-                        LeafNode[OptionalDefault, _, _] | _OptionalDefaultPatternNode]),
+                        _OptionalDefaultPatternNode]),
       Continue[]
     ];
 
@@ -843,12 +844,14 @@ Catch[
   bring in heuristics for when a_:b is valid
   If b has Patterns or Blanks, then b is NOT a valid optional and warn
   *)
-  If[FreeQ[opt, BlankNode[Blank, _, _] |
-                BlankSequenceNode[BlankSequence, _, _] |
-                BlankNullSequenceNode[BlankNullSequence, _, _] |
-                PatternBlankNode[PatternBlank, _, _] |
-                PatternBlankSequenceNode[PatternBlankSequence, _, _] |
-                PatternBlankNullSequenceNode[PatternBlankNullSequence, _, _] |
+  If[FreeQ[opt, LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+                _BlankNode |
+                _BlankSequenceNode |
+                _BlankNullSequenceNode |
+                _PatternBlankNode |
+                _PatternBlankSequenceNode |
+                _PatternBlankNullSequenceNode |
+                _OptionalDefaultPatternNode |
                 BinaryNode[Pattern, _, _] |
                 (* also check for Alternatives *)
                 InfixNode[Alternatives, _, _]
