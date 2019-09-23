@@ -529,7 +529,7 @@ Attributes[scanRules] = {HoldRest}
 
 scanRules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, keys},
+ Module[{ast, node, children, data, duplicates, selected, issues, keys, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -551,13 +551,21 @@ Catch[
     duplicates = Keys[Select[CountsBy[keys, ToFullFormString], # > 1&]];
    selected = Flatten[Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates, 1];
 
-   (*
-    It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
+   If[!empty[selected],
 
-    So make Remark for now
-   *)
+      (*
+      It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
 
-   {Lint["DuplicateKeys", "Duplicate keys in ``List`` of ``Rule``s.", "Remark", #[[2, 1, 3]]]}& /@ selected
+      So make Remark for now
+      *)
+
+      srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in ``List`` of ``Rule``s.", "Remark",
+            <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |>]];
+   ];
+
+   issues
 
   ]]
 
@@ -568,62 +576,61 @@ Attributes[scanWhichs] = {HoldRest}
 
 scanWhichs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, warnings, span, duplicates, selected, lintData},
+ Module[{ast, node, children, data, issues, span, duplicates, selected, lintData, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
   
-  warnings = {};
+  issues = {};
 
   If[empty[children],
-    AppendTo[warnings, 
+    AppendTo[issues, 
      Lint["WhichArguments", "``Which`` does not have any arguments.\n\
 This may be ok if ``Which`` has pattern arguments.", "Error", data]];
-    Throw[warnings]
+    Throw[issues]
   ];
 
   If[!EvenQ[Length[children]],
-    AppendTo[warnings, 
+    AppendTo[issues, 
      Lint["WhichArguments", "``Which`` does not have even number of arguments.\n\
 This may be ok if ``Which`` has pattern arguments.", "Error", data]];
-    Throw[warnings]
+    Throw[issues]
   ];
 
 
   If[MatchQ[children[[1]], LeafNode[Symbol, "$OperatingSystem", _]],
     span = children[[1]][[3]];
-   AppendTo[warnings, 
+   AppendTo[issues, 
     Lint["SwitchWhichConfusion", "``Which`` has ``$OperatingSystem`` in first place.\n\
 Did you mean ``Switch``?", "Error", span]];
   ];
 
   If[MatchQ[children[[-2]], CallNode[LeafNode[Symbol, "Blank", _], _, _]],
     lintData = children[[-2]][[3]];
-   AppendTo[warnings, 
+   AppendTo[issues, 
     Lint["SwitchWhichConfusion", "``Which`` has ``_`` in last place.\n\
 Did you mean ``True``?", "Error", <| lintData, CodeActions->{CodeAction["Replace ``_`` with ``True``", ReplaceNode, <| "ReplacementNode" -> ToNode[True] |>]} |>]];
   ];
 
 
   Scan[(If[MatchQ[#, CallNode[LeafNode[Symbol, "Set", _], _, _]],
-    AppendTo[warnings, Lint["WhichSet", "``Which`` has ``=`` as a clause.\n\
+    AppendTo[issues, Lint["WhichSet", "``Which`` has ``=`` as a clause.\n\
 Did you mean ``==``?", "Error", #[[3]]]];
   ];)&, children[[;;;;2]]];
 
 
     duplicates = Keys[Select[CountsBy[children[[;;;;2]], ToFullFormString], # > 1&]];
    selected = Flatten[Select[children[[;;;;2]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-   Scan[
-    AppendTo[warnings,
-      Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", #[[3]]]
-    ]&
-    ,
-    selected
+
+   If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
    ];
 
-
-  warnings
+  issues
   ]]
 
 
@@ -633,7 +640,7 @@ Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, span, cases, duplicates, issues, selected},
+ Module[{ast, node, children, data, span, cases, duplicates, issues, selected, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -696,7 +703,14 @@ Did you mean ``_``?", "Warning", span]];
 
   duplicates = Keys[Select[CountsBy[children[[2;;;;2]], ToFullFormString], # > 1&]];
   selected = Flatten[Select[children[[2;;;;2]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error", #[[3]]]])&, selected];
+
+  If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+   ];
+
 
   (*
   pairs = Partition[children[[2;;]], 2];
@@ -768,11 +782,13 @@ Did you mean ``==``?", "Warning", children[[1]][[3]]]];
   If[Length[children] >= 3,
       duplicates = Keys[Select[CountsBy[children[[2;;3]], ToFullFormString], # > 1&]];
       selected = Flatten[Select[children[[2;;3]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-      srcs = #[[3, Key[Source]]]& /@ selected;
-  ];
 
-  If[!empty[srcs],
-    AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``If``.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs]|>]]
+      If[!empty[selected],
+
+            srcs = #[[3, Key[Source]]]& /@ selected;
+
+            AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``If``.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs]|>]]
+      ];
   ];
 
   issues
@@ -868,11 +884,12 @@ This may be ok if ``Pattern`` is handled programmatically.", "Error", data]];
 
   patterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
-    If[#[[2]][[1]]["String"] == name,
+    If[#[[2, 1]]["String"] == name,
       (*
       This is never correct code, but make a Warning for now because it is noisy
       *)
-      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> " in RHS of ``Pattern``.", "Warning", #[[3]]]];
+      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> " in RHS of ``Pattern``.",
+            "Warning", <| Source -> #[[2, 1, 3, Key[Source]]], "AdditionalSources" -> { patSymbol[[3, Key[Source]]] } |> ]];
     ];
   )&, patterns];
 
@@ -967,9 +984,16 @@ This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern
             err_ :> (AppendTo[issues, Lint["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
               " does not have proper form.\n\
 This may be ok if ``Module`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ params;
+
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-    Scan[AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Error", #[[3]]]]&, selected];
+
+    If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Module``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
@@ -1037,7 +1061,13 @@ This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern
 This may be ok if ``DynamicModule`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ params;
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-    Scan[AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``DynamicModule``: " <> format[ToFullFormString[#]] <> ".", "Error", #[[3]]]]&, selected];
+
+    If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``DynamicModule``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
@@ -1107,7 +1137,13 @@ This may be ok if ``With`` is handled programmatically.", "Error", #[[3]]]]; Not
 
     duplicates = Keys[Select[CountsBy[#, ToFullFormString], # > 1 &]]& /@ vars;
       selected = Flatten[Function[{duplicates, vars}, (Select[vars, Function[{c}, ToFullFormString[c] === #]])& /@ duplicates] @@@ Transpose[{duplicates, vars}]];
-  Scan[AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``: " <> format[ToFullFormString[#]] <> ".", "Error", #[[3]]]]&, selected];
+
+      If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   usedBody = ToFullFormString /@ Cases[Last[children], LeafNode[Symbol, _, _], {0, Infinity}];
 
@@ -1176,8 +1212,13 @@ This may be ok if " <> format[head["String"]] <> " is handled programmatically."
 
   duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
   selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-  Scan[AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in " <> format[head["String"]] <> ": " <>
-    format[ToFullFormString[#]] <> ".", "Error", #[[3]]]]&, selected];
+  
+  If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   (*
   Give unused Block variables its own tag
@@ -1623,7 +1664,12 @@ Catch[
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
   selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
 
-  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", #[[3]]]])&, selected];
+  If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   issues
 
@@ -1647,7 +1693,12 @@ Catch[
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
   selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
 
-  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error", #[[3]]]])&, selected];
+  If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   issues
 
@@ -1668,7 +1719,12 @@ Catch[
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
   selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
 
-  Scan[(AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", #[[3]]]])&, selected];
+  If[!empty[selected],
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error",
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+      ];
 
   issues
 
@@ -1700,9 +1756,9 @@ scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
   token = node[[1]];
   data = node[[3]];
 
-  tokString = Block[{$ContextPath = {"AST`", "System`"}, $Context = "Lint`Scratch`"}, ToString[token]];
+  tokString = Block[{$ContextPath = {"AbstractSyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[token]];
 
-  {Lint["AbstractSyntaxError", "Abstract syntax error with token: " <> format[tokString] <> ".", "Fatal", data]}
+  {Lint["AbstractSyntaxError", "Abstract syntax error: " <> format[tokString] <> ".", "Fatal", data]}
 ]
 
 

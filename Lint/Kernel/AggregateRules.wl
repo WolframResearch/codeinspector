@@ -1007,9 +1007,9 @@ scanSyntaxErrorNodes[pos_List, aggIn_] :=
   tag = node[[1]];
   data = node[[3]];
 
-  tagString = Block[{$ContextPath = {"AST`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+  tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
-  {Lint["SyntaxError", "``" <> tagString <> "``", "Fatal", data]}
+  {Lint["SyntaxError", "Syntax error: " <> format[tagString] <> ".", "Fatal", data]}
 ]
 
 

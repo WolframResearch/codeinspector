@@ -249,6 +249,14 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 		Print["endingLints: ", endingLints];
 	];
 
+	(*
+	Make sure to sort lints
+	*)
+	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
+	If[$Debug,
+	 Print["endingLints: ", endingLints];
+	];
+
 	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
 
 	(*
@@ -257,7 +265,7 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 	As a test: Create a HUGE single line lint, so that there are hundreds of partitions
 	Make sure that only the partitions with errors are displayed.
 	*)
-	grid = If[MatchQ[#[[2]], {(" " | Lint`Format`LintSpaceIndicator)...}], Nothing, #]& /@ grid;
+	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicator)...}], Nothing, #]& /@ grid;
 
 	grid = Flatten[grid, 1];
 
@@ -355,9 +363,17 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
+	(*
+	Make sure to sort lints
+	*)
+	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
+	If[$Debug,
+	 Print["endingLints: ", endingLints];
+	];
+	
 	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
 
-	grid = If[MatchQ[#[[2]], {(" " | Lint`Format`LintSpaceIndicator)...}], Nothing, #]& /@ grid;
+	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicator)...}], Nothing, #]& /@ grid;
 
 	grid = Flatten[grid, 1];
 

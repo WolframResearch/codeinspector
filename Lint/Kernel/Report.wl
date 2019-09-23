@@ -201,7 +201,10 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   additionalSources, shadowing},
   
   lints = lintsIn;
-  
+  If[$Debug,
+    Print["lints: ", lints];
+  ];
+
   (*
   in the course of abstracting syntax, Source information may be lost
   Certain Lints may not have Source information attached
@@ -214,6 +217,9 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   ];
 
   lints = Complement[lints, sourceLessLints];
+  If[$Debug,
+    Print["lints: ", lints];
+  ];
 
   If[empty[lints],
     Throw[{}]
@@ -252,18 +258,24 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
   If[!empty[tagExclusions],
     lints = DeleteCases[lints, Lint[Alternatives @@ tagExclusions, _, _, _]];
-  ];
+    If[$Debug,
+      Print["lints: ", lints];
+    ];
 
-  If[empty[lints],
-    Throw[{}]
+    If[empty[lints],
+      Throw[{}]
+    ];
   ];
 
   If[!empty[severityExclusions],
     lints = DeleteCases[lints, Lint[_, _, Alternatives @@ severityExclusions, _]];
-  ];
+    If[$Debug,
+      Print["lints: ", lints];
+    ];
 
-  If[empty[lints],
-    Throw[{}]
+    If[empty[lints],
+      Throw[{}]
+    ];
   ];
 
   (*
@@ -279,6 +291,9 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     lineNumberExclusions]];
 
   lints = Complement[lints, lintsExcludedByLineNumber];
+  If[$Debug,
+    Print["lints: ", lints];
+  ];
 
   If[empty[lints],
     Throw[{}]
@@ -294,9 +309,15 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   ];
 
   lints = Complement[lints, shadowing];
+  If[$Debug,
+    Print["lints: ", lints];
+  ];
 
   If[Length[lints] > $LintLimit,
-    lints = Take[lints, $LintLimit]
+    lints = Take[lints, $LintLimit];
+    If[$Debug,
+      Print["lints: ", lints];
+    ];
   ];
 
    sources = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> src_]] :> src];
