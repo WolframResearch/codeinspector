@@ -197,36 +197,45 @@ Nothing
 Attributes[scanImplicitTimes] = {HoldRest}
 
 scanImplicitTimes[pos_List, aggIn_] :=
-Module[{agg, node, children, data, warnings, line, nextLine},
+Catch[
+Module[{agg, node, children, data, issues, line, nextLine},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
-  warnings = {};
+  issues = {};
 
-  line = children[[1]][[3]][Source][[2,1]];
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  line = children[[1, 3, Key[Source], 2, 1]];
   Do[
-    nextLine = n[[3]][Source][[1,1]];
+    nextLine = n[[3, Key[Source], 1, 1]];
     If[n[[1]] === Token`Fake`ImplicitTimes && line != nextLine,
-      AppendTo[warnings,
+      AppendTo[issues,
         Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.\n\
 Did you mean ``;`` or ``,``?", "Warning", data]];
       Break[];
     ];
-    line = n[[3]][Source][[2,1]];
+    line = n[[3, Key[Source], 2, 1]];
     ,
     {n, children[[2;;]]}
   ];
 
-  warnings
-]
+  issues
+]]
 
 
 
 Attributes[scanImplicitTimesBlanks] = {HoldRest}
 
 scanImplicitTimesBlanks[pos_List, aggIn_] :=
+Catch[
 Module[{agg, node, data, children, issues, pairs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
@@ -235,10 +244,17 @@ Module[{agg, node, data, children, issues, pairs},
 
   issues = {};
 
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
   pairs = Partition[children[[;;;;2]], 2, 1];
 
   Do[
-    If[!contiguousQ[p[[1]][[3]][Source], p[[2]][[3]][Source]],
+    If[!contiguousQ[p[[1, 3, Key[Source]]], p[[2, 3, Key[Source]]]],
       Continue[]
     ];
 
@@ -254,14 +270,14 @@ Module[{agg, node, data, children, issues, pairs},
     ];
 
     AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Contiguous implicit ``Times`` between ``Blank``s\n\
-Did you mean " <> format[ToInputFormString[p[[1]]] <> " * " <> ToInputFormString[p[[2]]]] <> "?", "Error", <|Source->{p[[1]][[3]][Source][[1]], p[[2]][[3]][Source][[2]]}|>]];
+Did you mean " <> format[ToInputFormString[p[[1]]] <> " * " <> ToInputFormString[p[[2]]]] <> "?", "Error", <|Source->{p[[1, 3, Key[Source], 1]], p[[2, 3, Key[Source], 2]]}|>]];
 
     ,
     {p, pairs}
   ];
 
   issues
-]
+]]
 
 
 
@@ -287,6 +303,7 @@ Did you mean ``*``?", "Warning", data]];
 Attributes[scanDots] = {HoldRest}
 
 scanDots[pos_List, aggIn_] :=
+Catch[
 Module[{agg, node, children, data, issues, line, nextLine},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
@@ -295,22 +312,29 @@ Module[{agg, node, children, data, issues, line, nextLine},
 
   issues = {};
 
-  line = children[[1]][[3]][Source][[2,1]];
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  line = children[[1, 3, Key[Source], 2, 1]];
   Do[
-    nextLine = n[[3]][Source][[1,1]];
+    nextLine = n[[3, Key[Source], 1, 1]];
     If[line != nextLine,
       AppendTo[issues,
         Lint["DotDifferentLine", "Operands for ``.`` are on different lines.\n\
 Did you mean ``;`` or ``,``?", "Warning", data]];
       Break[];
     ];
-    line = n[[3]][Source][[2,1]];
+    line = n[[3, Key[Source], 2, 1]];
     ,
     {n, children[[3;;;;2]]}
   ];
 
   issues
-]
+]]
 
 
 Attributes[scanSpans] = {HoldRest}
@@ -379,6 +403,7 @@ StraySemicolon is to find things like this:
 Attributes[scanCompoundExpressions] = {HoldRest}
 
 scanCompoundExpressions[pos_List, aggIn_] :=
+Catch[
 Module[{agg, node, children, data, issues, straySemis, rand, semi},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
@@ -391,15 +416,22 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
 
   Scan[(AppendTo[issues, Lint["StraySemicolon", "``;`` may not be needed.", "Warning", #[[3]]]])&, straySemis];
 
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
   (rand = #[[1]];
     semi = #[[2]];
-    If[ rand[[3]][Source][[2,1]] != semi[[3]][Source][[1,1]],
+    If[ rand[[3, Key[Source], 2, 1]] != semi[[3, Key[Source], 1,1]],
       AppendTo[issues,
         Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning", semi[[3]]]];
     ];)& /@ Partition[children, 2];
 
   issues
-]
+]]
 
 
 Attributes[scanPatternTestCalls] = {HoldRest}

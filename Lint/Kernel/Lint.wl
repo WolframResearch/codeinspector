@@ -193,6 +193,10 @@ Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes, ignoredNodesSrcMemberFunc,
   totalRules, prog},
 
+  If[$Debug,
+    Print["LintCST"];
+  ];
+
   cst = cstIn;
 
   aggregateRules = OptionValue["AggregateRules"];
@@ -245,6 +249,10 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   prog = 0;
   $Start = Now;
 
+  If[$Debug,
+    Print["aggregateRules"];
+  ];
+
   KeyValueMap[(
     If[$Debug,
       Print[#];
@@ -256,6 +264,10 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
     prog++;
     $Progress = Floor[100 * prog / totalRules];
     )&, aggregateRules];
+
+  If[$Debug,
+    Print["abstractRules"];
+  ];
 
   KeyValueMap[(
     If[$Debug,
