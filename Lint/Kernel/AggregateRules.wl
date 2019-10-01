@@ -219,7 +219,7 @@ Module[{agg, node, children, data, issues, line, nextLine},
     If[n[[1]] === Token`Fake`ImplicitTimes && line != nextLine,
       AppendTo[issues,
         Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.\n\
-Did you mean ``;`` or ``,``?", "Warning", data]];
+Did you mean ``;`` or ``,``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]];
       Break[];
     ];
     line = n[[3, Key[Source], 2, 1]];
@@ -236,20 +236,13 @@ Attributes[scanImplicitTimesBlanks] = {HoldRest}
 
 scanImplicitTimesBlanks[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, data, children, issues, pairs},
+Module[{agg, node, data, children, issues, pairs, src},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
   issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
 
   pairs = Partition[children[[;;;;2]], 2, 1];
 
@@ -269,8 +262,9 @@ Module[{agg, node, data, children, issues, pairs},
       Continue[]
     ];
 
-    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Contiguous implicit ``Times`` between ``Blank``s\n\
-Did you mean " <> format[ToInputFormString[p[[1]]] <> " * " <> ToInputFormString[p[[2]]]] <> "?", "Error", <|Source->{p[[1, 3, Key[Source], 1]], p[[2, 3, Key[Source], 2]]}|>]];
+    src = p[[2, 3, Key[Source] ]];
+
+    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Contiguous implicit ``Times`` between ``Blank``s", "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions -> { CodeAction["Delete ``_``", DeleteNode, <|Source->src|>] }|>]];
 
     ,
     {p, pairs}
@@ -292,7 +286,7 @@ Module[{agg, node, data, issues},
   issues = {};
 
   AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between ``String``s\n\
-Did you mean ``*``?", "Warning", data]];
+Did you mean ``*``?", "Warning", <|data, ConfidenceLevel -> 0.75|>]];
 
   issues
 ]
@@ -325,7 +319,7 @@ Module[{agg, node, children, data, issues, line, nextLine},
     If[line != nextLine,
       AppendTo[issues,
         Lint["DotDifferentLine", "Operands for ``.`` are on different lines.\n\
-Did you mean ``;`` or ``,``?", "Warning", data]];
+Did you mean ``;`` or ``,``?", "Warning", <|data, ConfidenceLevel -> 0.75|>]];
       Break[];
     ];
     line = n[[3, Key[Source], 2, 1]];
@@ -356,7 +350,7 @@ Catch[
     (* top node, no parent *)
 
     AppendTo[issues, Lint["SuspiciousSpan", "Suspicious use of ``;;`` at top-level.\n\
-Did you mean ``;``?", "Warning", data]];
+Did you mean ``;``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]];
   ];
 
 
@@ -414,7 +408,7 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
 
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
-  Scan[(AppendTo[issues, Lint["StraySemicolon", "``;`` may not be needed.", "Warning", #[[3]]]])&, straySemis];
+  Scan[(AppendTo[issues, Lint["StraySemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
 
   (*
   Only check if LineCol-style
@@ -427,7 +421,7 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
     semi = #[[2]];
     If[ rand[[3, Key[Source], 2, 1]] != semi[[3, Key[Source], 1,1]],
       AppendTo[issues,
-        Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning", semi[[3]]]];
+        Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning", <|semi[[3]], ConfidenceLevel -> 0.95|>]];
     ];)& /@ Partition[children, 2];
 
   issues
@@ -493,7 +487,7 @@ Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
                                             LeafNode[Token`OpenParen, "(", <||>],
                                             CallNode[patternTestArg2, {args}, <||>],
                                             LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <>
-          "?", "Error", data]];
+          "?", "Error", <| data, ConfidenceLevel -> 0.95 |>]];
       Throw[issues]
   ];
 
@@ -516,7 +510,7 @@ Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
         " or " <> format[ToInputFormString[CallNode[GroupNode[GroupParen, {
                                                     LeafNode[Token`OpenParen, "(", <||>],
                                                     patternTest,
-                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>]]] <> "?", "Remark", data]];
+                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>]]] <> "?", "Remark", <| data, ConfidenceLevel -> 0.55 |>]];
 
   issues
 
@@ -545,23 +539,23 @@ Catch[
   Switch[patternTestArg2,
     LeafNode[Symbol, "Association", _],
       AppendTo[issues, Lint["AssociationCall", "Calling ``Association`` as a function.\n\
-Did you mean ``AssociationQ``?", "Error", patternTestArg2[[3]]]];
+Did you mean ``AssociationQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "String", _],
       AppendTo[issues, Lint["StringCall", "Calling ``String`` as a function.\n\
-Did you mean ``StringQ``?", "Error", patternTestArg2[[3]]]];
+Did you mean ``StringQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "Integer", _],
       AppendTo[issues, Lint["IntegerCall", "Calling ``Integer`` as a function.\n\
-Did you mean ``IntegerQ``?", "Error", patternTestArg2[[3]]]];
+Did you mean ``IntegerQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "Real", _],
       AppendTo[issues, Lint["RealCall", "Calling ``Real`` as a function.\n\
-Did you mean ``RealQ``?", "Error", patternTestArg2[[3]]]];
+Did you mean ``RealQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "Failure", _],
       AppendTo[issues, Lint["FailureCall", "Calling ``Failure`` as a function.\n\
-Did you mean ``FailureQ``?", "Error", patternTestArg2[[3]]]];
+Did you mean ``FailureQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     _,
       Throw[Failure["Internal", <||>]]
@@ -681,7 +675,7 @@ Did you mean " <>
                             LeafNode[Token`OpenParen, "(", <||>],
                             rule,
                             LeafNode[Token`CloseParen, ")", <||>] }, <||>],
-                          LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?", "Warning", data]}
+                          LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?", "Warning", <| data, ConfidenceLevel -> 0.75 |> ]}
 ]]
 
 
@@ -720,7 +714,7 @@ Did you mean " <>
                                             GroupNode[GroupParen, {
                                               LeafNode[Token`OpenParen, "(", <||>],
                                               patternTest,
-                                              LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <> "?", "Warning", data]}
+                                              LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <> "?", "Warning", <| data, ConfidenceLevel -> 0.75 |>]}
 ]]
 
 
@@ -771,7 +765,7 @@ Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
                                       patternTest,
                                       LeafNode[Token`CloseParen, ")", <||>] }, <||>], callChildren, <||>],
                                     LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?",
-    "Warning", data]}
+    "Warning", <| data, ConfidenceLevel -> 0.75 |>]}
 ]]
 
 
@@ -877,7 +871,7 @@ Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
                         pattern,
                         LeafNode[Token`Fake`PatternColon, ":", <||>],
                         opt}, <||>]]] <> "?\n\
-This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", data]}
+This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <| data, ConfidenceLevel -> 0.85|>]}
 ]]
 
 
@@ -895,7 +889,7 @@ Module[{agg, node, data, children, tok},
 
   tok = children[[1]];
 
-  {Lint["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "`` syntax in file.", "Error", data]}
+  {Lint["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "`` syntax in file.", "Error", <| data, ConfidenceLevel -> 0.55 |>]}
 ]
 
 
@@ -951,7 +945,7 @@ Did you mean " <> format[ToInputFormString[InfixNode[Alternatives,
                                                   alternatives,
                                                   LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~
                                                 stringExpArgRest,
-                                              LeafNode[Token`TildeTilde, "~~", <||>]], <||>]]] <> "?", "Remark", data]}
+                                              LeafNode[Token`TildeTilde, "~~", <||>]], <||>]]] <> "?", "Remark", <| data, ConfidenceLevel -> 0.75 |>]}
 ]]
 
 
@@ -973,7 +967,7 @@ Catch[
   middle = children[[3]];
   data = middle[[3]];
 
-  {Lint["ExpectedSymbol", "Middle expression is usually a symbol.", "Warning", data]}
+  {Lint["ExpectedSymbol", "Middle expression is usually a symbol.", "Warning", <| data, ConfidenceLevel -> 0.55 |>]}
 ]]
 
 
@@ -1041,7 +1035,7 @@ scanSyntaxErrorNodes[pos_List, aggIn_] :=
 
   tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
-  {Lint["SyntaxError", "Syntax error: " <> format[tagString] <> ".", "Fatal", data]}
+  {Lint["SyntaxError", "Syntax error: " <> format[tagString] <> ".", "Fatal", <| data, ConfidenceLevel -> 0.1.0 |>]}
 ]
 
 

@@ -114,7 +114,7 @@ Catch[
      ];
     ];
 
-  cstAndIssues = ConcreteParseFile[full, {FileNode[File, #[[1]], <||>], #[[2]]}&];
+  cstAndIssues = ConcreteParseFile[full, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
@@ -145,7 +145,7 @@ Catch[
 
   $Progress = 0;
 
-  cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], #[[2]]}&];
+  cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
@@ -170,7 +170,7 @@ Catch[
 
   $Progress = 0;
 
-  cstAndIssues = ConcreteParseBox[box, {FileNode[File, #[[1]], <||>], #[[2]]}&];
+  cstAndIssues = ConcreteParseBox[box, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]

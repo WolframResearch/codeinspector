@@ -425,27 +425,19 @@ scanBadCalls[pos_List, astIn_] :=
 
     Switch[name,
     "String",
-      AppendTo[issues, Lint["BadCall", "Calling ``String`` as a function.\n\
-Did you mean ``StringQ``?\n\
-This may be ok if ``String`` is handled programmatically.", "Error", <| data, CodeActions->{ CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[StringQ] |>] } |>]]
+      AppendTo[issues, Lint["BadCall", "Calling ``String`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
       "Integer",
-      AppendTo[issues, Lint["BadCall", "Calling ``Integer`` as a function.\n\
-Did you mean ``IntegerQ``?\n\
-This may be ok if ``Integer`` is handled programmatically.", "Error", <| data, CodeActions->{ CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[IntegerQ] |>] } |>]]
+      AppendTo[issues, Lint["BadCall", "Calling ``Integer`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
       "Real",
-      AppendTo[issues, Lint["BadCall", "Calling ``Real`` as a function.\n\
-Did you mean ``Developer`RealQ``?\n\
-This may be ok if ``Real`` is handled programmatically.", "Error", <| data, CodeActions->{ CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[Developer`RealQ] |>] } |>]]
+      AppendTo[issues, Lint["BadCall", "Calling ``Real`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
       "True",
-      AppendTo[issues, Lint["BadCall", "Calling ``True`` as a function.\n\
-Did you mean ``TrueQ``?\n\
-This may be ok if ``True`` is handled programmatically.", "Error", <| data, CodeActions->{ CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[TrueQ] |>] } |>]]
+      AppendTo[issues, Lint["BadCall", "Calling ``True`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.95 |>]]
     ,
     _,
-      AppendTo[issues, Lint["BadCall", "Calling " <> format[name] <> " as a function.", "Error", data]]
+      AppendTo[issues, Lint["BadCall", "Calling " <> format[name] <> " as a function.", "Error", <|data, ConfidenceLevel -> 0.90|>]]
   ];
 
   issues
@@ -514,7 +506,7 @@ This may be ok if ``Association`` is used programmatically.", "Remark", data]];
        actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
       AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in ``Association``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], CodeActions->actions |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], CodeActions->actions, ConfidenceLevel -> 1.0 |> ]];
    ];
 
     issues
@@ -562,7 +554,7 @@ Catch[
       srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in ``List`` of ``Rule``s.", "Remark",
-            <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |>]];
+            <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.75 |>]];
    ];
 
    issues
@@ -586,15 +578,13 @@ Catch[
 
   If[empty[children],
     AppendTo[issues, 
-     Lint["WhichArguments", "``Which`` does not have any arguments.\n\
-This may be ok if ``Which`` has pattern arguments.", "Error", data]];
+     Lint["WhichArguments", "``Which`` does not have any arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[!EvenQ[Length[children]],
     AppendTo[issues, 
-     Lint["WhichArguments", "``Which`` does not have even number of arguments.\n\
-This may be ok if ``Which`` has pattern arguments.", "Error", data]];
+     Lint["WhichArguments", "``Which`` does not have even number of arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -603,20 +593,19 @@ This may be ok if ``Which`` has pattern arguments.", "Error", data]];
     span = children[[1]][[3]];
    AppendTo[issues, 
     Lint["SwitchWhichConfusion", "``Which`` has ``$OperatingSystem`` in first place.\n\
-Did you mean ``Switch``?", "Error", span]];
+Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
   ];
 
   If[MatchQ[children[[-2]], CallNode[LeafNode[Symbol, "Blank", _], _, _]],
     lintData = children[[-2]][[3]];
    AppendTo[issues, 
-    Lint["SwitchWhichConfusion", "``Which`` has ``_`` in last place.\n\
-Did you mean ``True``?", "Error", <| lintData, CodeActions->{CodeAction["Replace ``_`` with ``True``", ReplaceNode, <| "ReplacementNode" -> ToNode[True] |>]} |>]];
+    Lint["SwitchWhichConfusion", "``Which`` has ``_`` in last place.", "Error", <| lintData, CodeActions->{CodeAction["Replace ``_`` with ``True``", ReplaceNode, <| "ReplacementNode" -> ToNode[True], Source->lintData[Source] |>]}, ConfidenceLevel -> 1.0 |>]];
   ];
 
 
   Scan[(If[MatchQ[#, CallNode[LeafNode[Symbol, "Set", _], _, _]],
     AppendTo[issues, Lint["WhichSet", "``Which`` has ``=`` as a clause.\n\
-Did you mean ``==``?", "Error", #[[3]]]];
+Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
   ];)&, children[[;;;;2]]];
 
 
@@ -627,7 +616,7 @@ Did you mean ``==``?", "Error", #[[3]]]];
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
    ];
 
   issues
@@ -649,15 +638,13 @@ Catch[
   issues = {};
 
   If[Length[children] == 1,
-   AppendTo[issues, Lint["SwitchArguments", "``Switch`` only has one argument.\n\
-This may be ok if ``Switch`` has pattern arguments.", "Error", data]];
+   AppendTo[issues, Lint["SwitchArguments", "``Switch`` only has one argument.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
    Throw[issues];
   ];
 
 
   If[!OddQ[Length[children]],
-   AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not have odd number of arguments.\n\
-This may be ok if ``Switch`` has pattern arguments.", "Error", data]];
+   AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not have odd number of arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
    Throw[issues];
   ];
 
@@ -666,7 +653,7 @@ This may be ok if ``Switch`` has pattern arguments.", "Error", data]];
    If[cases =!= {},
     span = cases[[1]][[3]];
     AppendTo[issues, Lint["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.\n\
-Did you mean ``\"Unix\"``?", "Error", span]];
+Did you mean ``\"Unix\"``?", "Error", <|span, ConfidenceLevel -> 0.95|>]];
    ]
   ];
 
@@ -679,7 +666,7 @@ Did you mean ``\"Unix\"``?", "Error", span]];
   *)
   If[Length[children] >= 5,
     If[MatchQ[children[[2;;-3]], { CallNode[LeafNode[Symbol, "Rule", _], _, _].. }],
-      AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not take ``Rules`` for arguments.", "Error", data]];
+      AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not take ``Rules`` for arguments.", "Error", <|data, ConfidenceLevel -> 0.95|>]];
     ]
   ];
 
@@ -696,7 +683,7 @@ Did you mean ``\"Unix\"``?", "Error", span]];
    If[FreeQ[children[[2;;-4;;2]], LeafNode[Symbol, "False", _]],
     span = children[[-2]][[3]];
     AppendTo[issues, Lint["SwitchWhichConfusion", "``Switch`` has ``True`` in last place.\n\
-Did you mean ``_``?", "Warning", span]];
+Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
    ]
   ];
 
@@ -708,7 +695,7 @@ Did you mean ``_``?", "Warning", span]];
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
    ];
 
 
@@ -764,18 +751,17 @@ Catch[
 
   Which[
     Length[children] == 0,
-      AppendTo[issues, Lint["IfArguments", "``If`` has zero arguments.", "Error", data]];
+      AppendTo[issues, Lint["IfArguments", "``If`` has zero arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
       Throw[issues];
       ,
     Length[children] == 1,
-      AppendTo[issues, Lint["IfArguments", "``If`` only has one argument.\n\
-This may be ok if ``If`` has pattern arguments.", "Error", data]];
+      AppendTo[issues, Lint["IfArguments", "``If`` only has one argument.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
       Throw[issues];
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Set", _], _, _]],
     AppendTo[issues, Lint["IfSet", "``If`` has ``=`` as first argument.\n\
-Did you mean ``==``?", "Warning", children[[1]][[3]]]];
+Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>]];
   ];
 
   srcs = {};
@@ -787,7 +773,7 @@ Did you mean ``==``?", "Warning", children[[1]][[3]]]];
 
             srcs = #[[3, Key[Source]]]& /@ selected;
 
-            AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``If``.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs]|>]]
+            AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``If``.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.90|>]]
       ];
   ];
 
@@ -873,8 +859,7 @@ Catch[
   issues = {};
 
   If[Length[children] != 2,
-    AppendTo[issues, Lint["PatternArguments", "``Pattern`` takes 2 arguments.\n\
-This may be ok if ``Pattern`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["PatternArguments", "``Pattern`` takes 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.85|>]];
     Throw[issues];
   ];
 
@@ -885,11 +870,8 @@ This may be ok if ``Pattern`` is handled programmatically.", "Error", data]];
   patterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
     If[#[[2, 1]]["String"] == name,
-      (*
-      This is never correct code, but make a Warning for now because it is noisy
-      *)
       AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> " in RHS of ``Pattern``.",
-            "Warning", <| Source -> #[[2, 1, 3, Key[Source]]], "AdditionalSources" -> { patSymbol[[3, Key[Source]]] } |> ]];
+            "Error", <| Source -> #[[2, 1, 3, Key[Source]]], "AdditionalSources" -> { patSymbol[[3, Key[Source]]] }, ConfidenceLevel -> 0.95 |> ]];
     ];
   )&, patterns];
 
@@ -924,8 +906,7 @@ Catch[
    ];
 
   {Lint["Control", format[s] <> " appears but is not called.\n\
-Did you mean " <> format[s<>"[]"] <>"?\n\
-This may be ok if " <> format[s] <> " is used as a symbol.", "Warning", data]}
+Did you mean " <> format[s<>"[]"] <>"?", "Warning", <|data, ConfidenceLevel -> 0.85|>]}
   ]]
 
 
@@ -944,8 +925,7 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.\n\
-This may be ok if ``Module`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -957,14 +937,12 @@ This may be ok if ``Module`` is handled programmatically.", "Error", data]];
   ];
 
   If[Length[children] != 2,
-    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.\n\
-This may be ok if ``Module`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.\n\
-This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern variable.", "Error", data]];
+    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -982,8 +960,7 @@ This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern
             CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
             *)
             err_ :> (AppendTo[issues, Lint["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-              " does not have proper form.\n\
-This may be ok if ``Module`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ params;
+              " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
 
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
@@ -992,13 +969,13 @@ This may be ok if ``Module`` is handled programmatically.", "Error", #[[3]]]]; N
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Module``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
       ];
 
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <| #[[3]], CodeActions->{CodeAction["Delete", DeleteNode, <||>]} |> ]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <| #[[3]], CodeActions->{CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&, unusedParams];
 
   issues
 ]]
@@ -1017,8 +994,7 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.\n\
-This may be ok if ``DynamicModule`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1030,8 +1006,7 @@ This may be ok if ``DynamicModule`` is handled programmatically.", "Error", data
   ];
 
   If[!(Length[children] >= 2),
-    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.\n\
-This may be ok if ``DynamicModule`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1047,8 +1022,7 @@ This may be ok if ``DynamicModule`` is handled programmatically.", "Error", data
   *)
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.\n\
-This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern variable.", "Error", data]];
+    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1057,8 +1031,7 @@ This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern
    vars = # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], _}, _] :> sym,
             sym:LeafNode[Symbol, _, _] :> sym,
             err_ :> (AppendTo[issues, Lint["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-              " does not have proper form.\n\
-This may be ok if ``DynamicModule`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ params;
+              " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
 
@@ -1066,13 +1039,13 @@ This may be ok if ``DynamicModule`` is handled programmatically.", "Error", #[[3
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``DynamicModule``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
       ];
 
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``DynamicModule``: " <> format[ToFullFormString[#]] <> ".", "Warning", #[[3]]]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``DynamicModule``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
 
   issues
 ]]
@@ -1099,8 +1072,7 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.\n\
-This may be ok if ``With`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues];
   ];
 
@@ -1112,14 +1084,12 @@ This may be ok if ``With`` is handled programmatically.", "Error", data]];
   ];
 
   If[Length[children] < 2,
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.\n\
-This may be ok if ``With`` is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues];
   ];
 
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], _, _]...}],
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` for most arguments.\n\
-This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern variable.", "Error", data]];
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues];
   ];
 
@@ -1127,7 +1097,7 @@ This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern
    
    varsAndVals = Function[{list}, # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
             err_ :> (AppendTo[issues, Lint["WithArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
-This may be ok if ``With`` is handled programmatically.", "Error", #[[3]]]]; Nothing)}& /@ list] /@ paramLists;
+This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ list] /@ paramLists;
 
   If[varsAndVals == {{}},
     Throw[issues];
@@ -1142,7 +1112,7 @@ This may be ok if ``With`` is handled programmatically.", "Error", #[[3]]]]; Not
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
       ];
 
   usedBody = ToFullFormString /@ Cases[Last[children], LeafNode[Symbol, _, _], {0, Infinity}];
@@ -1153,7 +1123,7 @@ This may be ok if ``With`` is handled programmatically.", "Error", #[[3]]]]; Not
 
   unusedParams = Flatten[unusedParams];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", #[[3]]]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
 
   issues
 ]]
@@ -1173,8 +1143,7 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have 2 arguments.\n\
-This may be ok if " <> format[head["String"]] <> " is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1186,14 +1155,12 @@ This may be ok if " <> format[head["String"]] <> " is handled programmatically."
   ];
 
   If[Length[children] != 2,
-    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have 2 arguments.\n\
-This may be ok if " <> format[head["String"]] <> " is handled programmatically.", "Error", data]];
+    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have a ``List`` for argument 1.\n\
-This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern variable.", "Error", data]];
+    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1205,8 +1172,7 @@ This may be ok if " <> format[ToFullFormString[children[[1]]]] <> " is a pattern
   Scan[# /. {
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[_, _, _], _}, _] :> (AppendTo[varsWithSet, sym]),
     sym:LeafNode[Symbol, _, _] :> (AppendTo[varsWithoutSet, sym]),
-    err_ :> (AppendTo[issues, Lint["BlockArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
-This may be ok if " <> format[head["String"]] <> " is handled programmatically.", "Error", #[[3]]]])}&, params];
+    err_ :> (AppendTo[issues, Lint["BlockArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]])}&, params];
 
   vars = varsWithSet ~Join~ varsWithoutSet;
 
@@ -1217,7 +1183,7 @@ This may be ok if " <> format[head["String"]] <> " is handled programmatically."
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
       ];
 
   (*
@@ -1252,7 +1218,7 @@ This may be ok if " <> format[head["String"]] <> " is handled programmatically."
   unusedParams = Select[unusedParams, lowercaseSymbolQ];
   
   Scan[AppendTo[issues, Lint["UnusedBlockVariables", "Unused variables in " <> format[head["String"]] <> ": `" <>
-    format[ToFullFormString[#]] <> ".", "Warning", #[[3]]]]&, unusedParams];
+    format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 0.90|>]]&, unusedParams];
 
   issues
 ]]
@@ -1287,7 +1253,7 @@ scanOptionals[pos_List, astIn_] :=
   opt = children[[2]];
   pats = Cases[opt, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
-    AppendTo[issues, Lint["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2]][[1]]]] <> " in ``Optional``.", "Error", #[[3]]]]
+    AppendTo[issues, Lint["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2]][[1]]]] <> " in ``Optional``.", "Error", <|#[[3]], ConfidenceLevel -> 0.95|>]]
   )&, pats];
 
   issues
@@ -1309,46 +1275,46 @@ scanBadSymbols[pos_List, astIn_] :=
     "Failed" | "System`Failed",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``Failed``.\n\
 Symbol ``Failed`` does not exist in **System`** context.\n\
-Did you mean ``$Failed``?", "Error", data]]
+Did you mean ``$Failed``?", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "AnyFalse" | "System`AnyFalse",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``AnyFalse``.\n\
 Symbol ``AnyFalse`` does not exist in **System`** context.\n\
-Did you mean ``AllTrue`` (and also inverting the logic)?", "Error", data]]
+Did you mean ``AllTrue`` (and also inverting the logic)?", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "AllFalse" | "System`AllFalse",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``AllFalse``.\n\
 Symbol ``AllFalse`` does not exist in **System`** context.\n\
-Did you mean ``AnyTrue`` (and also inverting the logic)?", "Error", data]]
+Did you mean ``AnyTrue`` (and also inverting the logic)?", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "Boolean" | "System`Boolean",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``Boolean``.\n\
 Symbol ``Boolean`` does not exist in **System`** context.\n\
-Did you mean ``True|False``?", "Error", data]]
+Did you mean ``True|False``?", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "RealQ" | "System`RealQ",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``RealQ``.\n\
-Symbol ``RealQ`` does not exist in **System`** context.", "Error", data]]
+Symbol ``RealQ`` does not exist in **System`** context.", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "FalseQ" | "System`FalseQ",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``FalseQ``.\n\
 Symbol ``FalseQ`` does not exist in **System`** context.\n\
-Did you mean ``TrueQ`` (and also inverting the logic)?", "Error", data]]
+Did you mean ``TrueQ`` (and also inverting the logic)?", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "RationalQ" | "System`RationalQ",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``RationalQ``.\n\
-Symbol ``RationalQ`` does not exist in **System`** context.", "Error", data]]
+Symbol ``RationalQ`` does not exist in **System`** context.", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "ComplexQ" | "System`ComplexQ",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``ComplexQ``.\n\
-Symbol ``ComplexQ`` does not exist in **System`** context.", "Error", data]]
+Symbol ``ComplexQ`` does not exist in **System`** context.", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     "SymbolQ" | "System`SymbolQ",
       AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``SymbolQ``.\n\
-Symbol ``SymbolQ`` does not exist in **System`** context.", "Error", data]]
+Symbol ``SymbolQ`` does not exist in **System`** context.", "Error", <|data, ConfidenceLevel -> 0.75|>]]
     ,
     _,
-      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``" <> name <> "``.", "Error", data]]
+      AppendTo[issues, Lint["BadSymbol", "Bad symbol: ``" <> name <> "``.", "Error", <|data, ConfidenceLevel -> 0.75|>]]
   ];
 
   issues
@@ -1369,10 +1335,10 @@ scanUndocumentedSymbols[pos_List, astIn_] :=
     "Fail" | "System`Fail",
       AppendTo[issues, Lint["UndocumentedSymbol", "Undocumented symbol: ``Fail``.\n\
 Symbol ``Fail`` is an undocumented **System`** symbol.\n\
-Did you mean ``$Failed``?", "Warning", data]]
+Did you mean ``$Failed``?", "Warning", <| data, ConfidenceLevel -> 0.55 |>]]
     ,
     _,
-      AppendTo[issues, Lint["UndocumentedSymbol", "Symbol " <> format[name] <> " is an undocumented **System`** symbol.", "Remark", data]]
+      AppendTo[issues, Lint["UndocumentedSymbol", "Symbol " <> format[name] <> " is an undocumented **System`** symbol.", "Remark", <|data, ConfidenceLevel -> 0.55 |>]]
   ];
 
   issues
@@ -1390,7 +1356,7 @@ scanObsoleteSymbols[pos_List, astIn_] :=
 
   issues = {};
 
-  AppendTo[issues, Lint["ObsoleteSymbol", "Symbol " <> format[name] <> " is an obsolete **System`** symbol.", "Warning", data]];
+  AppendTo[issues, Lint["ObsoleteSymbol", "Symbol " <> format[name] <> " is an obsolete **System`** symbol.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
 
   issues
 ]
@@ -1455,7 +1421,7 @@ Catch[
     ]
   ];
 
-  {Lint["SelfAssignment", "Self assignment: " <> format[ToFullFormString[var]] <> ".", "Warning", data]}
+  {Lint["SelfAssignment", "Self assignment: " <> format[ToFullFormString[var]] <> ".", "Warning", <|data, ConfidenceLevel -> 0.90|>]}
 ]]
 
 
@@ -1474,7 +1440,7 @@ Catch[
 
   {Lint["LoadJavaClassSystem", "``LoadJavaClass[\"java.lang.System\"]`` redefines symbols in **System`** context.\n\
 This can interfere with system functionality.\n\
-Did you mean ``LoadJavaCLass[\"java.lang.System\", AllowShortContext->False]``?", "Warning", data]}
+Did you mean ``LoadJavaCLass[\"java.lang.System\", AllowShortContext->False]``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]}
 ]]
 
 
@@ -1491,7 +1457,7 @@ Catch[
   strData = str[[3]];
 
   {Lint["SuspiciousPrivateContext", "Suspicious context: ``\"Private`\"``.\n\
-Did you mean ``\"`Private`\"``?", "Error", strData]}
+Did you mean ``\"`Private`\"``?", "Error", <|strData, ConfidenceLevel -> 0.95|>]}
 ]]
 
 
@@ -1505,7 +1471,7 @@ Catch[
   node = Extract[ast, {pos}][[1]];
   data = node[[3]];
 
-  {Lint["SessionSymbol", "Suspicious use of session symbol " <> format[node["String"]] <> ".", "Warning", data]}
+  {Lint["SessionSymbol", "Suspicious use of session symbol " <> format[node["String"]] <> ".", "Warning", <|data, ConfidenceLevel -> 0.55|>]}
 ]]
 
 
@@ -1520,7 +1486,7 @@ Catch[
   head = node[[1]];
   data = node[[3]];
 
-  {Lint["SessionSymbol", "Suspicious use of session function " <> format[head["String"]] <> ".", "Warning", data]}
+  {Lint["SessionSymbol", "Suspicious use of session function " <> format[head["String"]] <> ".", "Warning", <|data, ConfidenceLevel -> 0.55|>]}
 ]]
 
 
@@ -1658,7 +1624,7 @@ Catch[
   issues = {};
   
   consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
-  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``And``.", "Warning", #[[3]]]])&, consts];
+  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``And``.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, consts];
 
 
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
@@ -1668,7 +1634,7 @@ Catch[
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
       ];
 
   issues
@@ -1688,7 +1654,7 @@ Catch[
   issues = {};
   
   consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
-  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``Or``.", "Warning", #[[3]]]])&, consts];
+  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``Or``.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, consts];
 
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
   selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
@@ -1697,7 +1663,7 @@ Catch[
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
       ];
 
   issues
@@ -1708,7 +1674,7 @@ Attributes[scanAlternatives] = {HoldRest}
 
 scanAlternatives[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues},
+ Module[{ast, node, children, data, duplicates, selected, issues, consts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1716,6 +1682,13 @@ Catch[
 
   issues = {};
   
+  (*
+      only test for _
+      patterns like a_ may occur in Alternatives
+  *)
+  consts = Cases[children, CallNode[LeafNode[Symbol, "Blank", _], {}, _]];
+  Scan[(AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, consts];
+
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
   selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
 
@@ -1723,7 +1696,7 @@ Catch[
        srcs = #[[3, Key[Source]]]& /@ selected;
 
       AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs] |> ]];
+          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
       ];
 
   issues
@@ -1758,7 +1731,7 @@ scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
 
   tokString = Block[{$ContextPath = {"AbstractSyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[token]];
 
-  {Lint["AbstractSyntaxError", "Abstract syntax error: " <> format[tokString] <> ".", "Fatal", data]}
+  {Lint["AbstractSyntaxError", "Abstract syntax error: " <> format[tokString] <> ".", "Fatal", <|data, ConfidenceLevel -> 1.0|>]}
 ]
 
 

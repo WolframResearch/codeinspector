@@ -120,15 +120,23 @@ createButton[___] := Failure["Unimplemented", <||>]
 
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], StandardForm] :=
-Module[{g, bolded, actions, actionButtonsOrFailures, format},
+Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 
 	bolded = boldify[description];
 
 	g = gridify[bolded];
 
-	g[[1]] = {LintMarkup[tag, FontWeight->Bold],
+	menu = ActionMenu[
+		Tooltip[
+			"\[CenterEllipsis]",
+			"More information", TooltipDelay -> Automatic], {
+		tag :> Null,
+		severity :> Null }, Appearance -> None, DefaultBaseStyle -> {}];
+
+	g[[1]] = {
+					menu,
 					Spacer[20],
-					LintMarkup[severity, FontWeight->Bold, FontColor->severityColor[{lint}]],
+					Style["\[WarningSign]", Bold, Large, FontColor->severityColor[{lint}]],
 					Spacer[20]} ~Join~ g[[1]];
 
 	If[$Interactive,
@@ -152,7 +160,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format},
 	g = (Style[#, "Text"]& /@ #)& /@ g;
 
   format = Interpretation[
-  	Framed[Column[Row /@ g, {Left, Center}], Background -> GrayLevel[0.92], RoundingRadius -> 5],
+  	Framed[Column[Row /@ g, {Left, Center}], Background -> GrayLevel[0.92], RoundingRadius -> 5, FrameMargins -> {{10, 10}, {0, 2}}],
   	lint];
 
   If[$Debug,

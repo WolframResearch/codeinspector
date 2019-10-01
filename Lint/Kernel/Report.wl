@@ -40,7 +40,8 @@ Options[LintFileReport] = {
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {}
+  "LineHashExclusions" -> {},
+  ConfidenceLevel -> 0.95
 }
 
 
@@ -58,7 +59,7 @@ bug 338218
 LintFileReport[file_String | File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
-  lintedLines, unusedLineHashExclusions, hashes},
+  lintedLines, unusedLineHashExclusions, hashes, confidence},
 
  lints = lintsIn;
 
@@ -84,6 +85,8 @@ Catch[
  If[lineHashExclusions === None,
   lineHashExclusions = {}
  ];
+
+ confidence = OptionValue[ConfidenceLevel];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -114,7 +117,7 @@ Catch[
     ];
   ];
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions];
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
   LintedFile[full, lintedLines]
 ]]
 
@@ -128,13 +131,14 @@ Options[LintStringReport] = {
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {}
+  "LineHashExclusions" -> {},
+  ConfidenceLevel -> 0.95
 }
 
 
 LintStringReport[string_String, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines},
+ Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines, confidence},
 
  lints = lintsIn;
 
@@ -161,6 +165,8 @@ Catch[
   lineHashExclusions = {}
  ];
 
+ confidence = OptionValue[ConfidenceLevel];
+
 
  If[StringLength[string] == 0,
   Throw[Failure["EmptyString", <||>]]
@@ -177,7 +183,7 @@ Catch[
     *)
   lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions];
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
   LintedString[string, lintedLines]
 ]]
 
@@ -194,11 +200,11 @@ These Lints cannot be reported. `1`"
 (*
 Return a list of LintedLines
 *)
-lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
+lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List, confidence_] :=
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
-  additionalSources, shadowing},
+  additionalSources, shadowing, confidenceTest, existsTest, badLints},
   
   lints = lintsIn;
   If[$Debug,
@@ -298,6 +304,20 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   If[empty[lints],
     Throw[{}]
   ];
+
+
+
+  existsTest = Not @* KeyExistsQ[ConfidenceLevel];
+  badLints = Cases[lints, Lint[_, _, _, data_?existsTest]];
+  If[!empty[badLints],
+    Message[Lint::confidence, badLints]
+  ];
+
+  confidenceTest = GreaterEqualThan[confidence];
+  lints = Cases[lints, Lint[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
+
+
+
 
   (*
   If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
