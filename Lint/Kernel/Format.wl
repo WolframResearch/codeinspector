@@ -110,6 +110,23 @@ distrib[
 
 gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
 
+(*
+
+do not send `` markup
+do not send ** markup
+do not send ?? markup
+FIXME: what to do about ?? contents?
+
+\n newlines are ok to send
+
+*)
+plainify[s_String] := StringReplace[s, {
+  RegularExpression["``(.*?)``"] :> "$1",
+  RegularExpression["\\*\\*(.*?)\\*\\*"] :> "$1",
+  RegularExpression["\\?\\?(.*?)\\?\\?"] :> "$1",
+  "\n" -> " " }]
+
+
 
 
 (*
@@ -118,9 +135,48 @@ to be overridden
 createButton[___] := Failure["Unimplemented", <||>]
 
 
+createActionMenuItem[___] := Failure["Unimplemented", <||>]
+
+
+
+newLintStyle[lint:Lint[tag_, description_, severity_, data_]] :=
+Module[{plainified, actions, items},
+
+	plainified = plainify[description];
+
+	items = {};
+
+	If[$Interactive,
+		actions = Lookup[data, CodeActions, {}];
+		If[$Debug,
+				Print["actions: ", actions];
+			];
+		If[!empty[actions],
+
+			items = items ~Join~ (createActionMenuItem[#, lint]& /@ actions);
+		];
+	];
+
+	items = items ~Join~ {
+   	createActionMenuItem[CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>], lint]
+   };
+
+	RawBoxes[TemplateBox[{plainified, 
+   RGBColor[{1, 118/255, 0}] (*primary icon color*), 
+   RGBColor[{1, 1, 1}] (*secondary icon color*), 
+   RGBColor[{1, 46/51, 203/255}] (*primary bar color*), 
+   RGBColor[{218/255, 89/255, 1/51}] (*secondary bar color*), items}, 
+  "SuggestionGridTemplate"]]
+]
+
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], StandardForm] :=
+Catch[
 Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
+
+	If[$NewLintStyle,
+		Throw[newLintStyle[lint]]
+	];
 
 	bolded = boldify[description];
 
@@ -141,6 +197,9 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 
 	If[$Interactive,
 		actions = Lookup[data, CodeActions, {}];
+		If[$Debug,
+				Print["actions: ", actions];
+			];
 		If[!empty[actions],
 
 			actionButtonsOrFailures = createButton[#, lint]& /@ actions;
@@ -168,7 +227,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 	];
 
 	format
-]
+]]
 
 Format[lint:Lint[tag_String, description_String, severity_String, data_Association], OutputForm] :=
 Module[{g, bolded},

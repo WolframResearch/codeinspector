@@ -425,19 +425,19 @@ scanBadCalls[pos_List, astIn_] :=
 
     Switch[name,
     "String",
-      AppendTo[issues, Lint["BadCall", "Calling ``String`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues, Lint["BadCall", "``String`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
       "Integer",
-      AppendTo[issues, Lint["BadCall", "Calling ``Integer`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues, Lint["BadCall", "``Integer`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
       "Real",
-      AppendTo[issues, Lint["BadCall", "Calling ``Real`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues, Lint["BadCall", "``Real`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
       "True",
-      AppendTo[issues, Lint["BadCall", "Calling ``True`` as a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.95 |>]]
+      AppendTo[issues, Lint["BadCall", "``True`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.95 |>]]
     ,
     _,
-      AppendTo[issues, Lint["BadCall", "Calling " <> format[name] <> " as a function.", "Error", <|data, ConfidenceLevel -> 0.90|>]]
+      AppendTo[issues, Lint["BadCall", format[name] <> " is not a function.", "Error", <|data, ConfidenceLevel -> 0.90|>]]
   ];
 
   issues
@@ -505,7 +505,7 @@ This may be ok if ``Association`` is used programmatically.", "Remark", data]];
 
        actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
-      AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in ``Association``.", "Error",
+      AppendTo[issues, Lint["DuplicateKeys", "``Association`` has duplicated keys.", "Error",
           <| Source->First[srcs], "AdditionalSources"->Rest[srcs], CodeActions->actions, ConfidenceLevel -> 1.0 |> ]];
    ];
 
@@ -599,7 +599,7 @@ Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
   If[MatchQ[children[[-2]], CallNode[LeafNode[Symbol, "Blank", _], _, _]],
     lintData = children[[-2]][[3]];
    AppendTo[issues, 
-    Lint["SwitchWhichConfusion", "``Which`` has ``_`` in last place.", "Error", <| lintData, CodeActions->{CodeAction["Replace ``_`` with ``True``", ReplaceNode, <| "ReplacementNode" -> ToNode[True], Source->lintData[Source] |>]}, ConfidenceLevel -> 1.0 |>]];
+    Lint["SwitchWhichConfusion", "``_`` is not a test.", "Error", <| lintData, CodeActions->{CodeAction["Replace ``_`` with ``True``", ReplaceNode, <| "ReplacementNode" -> ToNode[True], Source->lintData[Source] |>]}, ConfidenceLevel -> 1.0 |>]];
   ];
 
 
@@ -629,7 +629,7 @@ Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, span, cases, duplicates, issues, selected, srcs},
+ Module[{ast, node, children, data, src, cases, duplicates, issues, selected, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -651,9 +651,8 @@ Catch[
   If[MatchQ[children[[1]], LeafNode[Symbol, "$OperatingSystem", _]],
    cases = Cases[children[[2;;-1;;2]], LeafNode[String, "\"Linux\"", _], {0, Infinity}];
    If[cases =!= {},
-    span = cases[[1]][[3]];
-    AppendTo[issues, Lint["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.\n\
-Did you mean ``\"Unix\"``?", "Error", <|span, ConfidenceLevel -> 0.95|>]];
+    src = cases[[1, 3, Key[Source] ]];
+    AppendTo[issues, Lint["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.", "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions->{CodeAction["Replace Linux with Unix", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode["Unix"]|>]}|>]];
    ]
   ];
 
@@ -773,7 +772,7 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
 
             srcs = #[[3, Key[Source]]]& /@ selected;
 
-            AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``If``.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.90|>]]
+            AppendTo[issues, Lint["DuplicateClauses", "Both branches are the same.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95|>]]
       ];
   ];
 
@@ -1745,12 +1744,14 @@ Attributes[scanAbstractSyntaxIssues] = {HoldRest}
 Just directly convert AbstractSyntaxIssues to Lints
 *)
 scanAbstractSyntaxIssues[pos_List, astIn_] :=
-Module[{ast, data, issues},
+Module[{ast, data, issues, syntaxIssues},
   ast = astIn;
   data = Extract[ast, {pos}][[1]];
   issues = data[AbstractSyntaxIssues];
 
-  Lint @@@ issues
+  syntaxIssues = Cases[issues, SyntaxIssue[_, _, _, _]];
+
+  Lint @@@ syntaxIssues
 ]
 
 

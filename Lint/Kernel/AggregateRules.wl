@@ -264,7 +264,7 @@ Module[{agg, node, data, children, issues, pairs, src},
 
     src = p[[2, 3, Key[Source] ]];
 
-    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Contiguous implicit ``Times`` between ``Blank``s", "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions -> { CodeAction["Delete ``_``", DeleteNode, <|Source->src|>] }|>]];
+    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Expected ``___``", "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions -> { CodeAction["Delete extra ``_``", DeleteNode, <|Source->src|>] }|>]];
 
     ,
     {p, pairs}
@@ -436,7 +436,7 @@ warn about a_?b[x] which actually parses as (a_?b)[x] and not a_?(b[x])
 scanPatternTestCalls[pos_List, aggIn_] :=
 Catch[
  Module[{agg, node, data, children, patternTest, args, patternTestChildren, patternTestArg1, patternTestArg2, issues,
-  parent, parentPos},
+  parent, parentPos, src, replacementNode1, replacementNode2},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   patternTest = node[[1]];
@@ -477,6 +477,7 @@ Catch[
 
       TODO: add anything callable like Function here 
       *)
+      src = data[Source];
       AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.\n\
 The precedence of ``?`` is surprisingly high.\n\
 ``PatternTest`` " <> format[ToInputFormString[patternTest]] <> " is calling arguments " <> format[ToInputFormString[args]] <> ".\n\
@@ -487,7 +488,7 @@ Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
                                             LeafNode[Token`OpenParen, "(", <||>],
                                             CallNode[patternTestArg2, {args}, <||>],
                                             LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <>
-          "?", "Error", <| data, ConfidenceLevel -> 0.95 |>]];
+          "?", "Error", <| Source->src, ConfidenceLevel -> 0.95 |>]];
       Throw[issues]
   ];
 
@@ -496,21 +497,24 @@ Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
   this is noisy, so make Remark for now
 
   *)
+  src = data[Source];
 
-  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``.\n\
-The precedence of ``?`` is surprisingly high.\n\
-``PatternTest`` " <> format[ToInputFormString[patternTest]] <> " is calling arguments " <> format[ToInputFormString[args]] <> ".\n\
-Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
+  replacementNode1 = BinaryNode[PatternTest, {
                                         patternTestArg1,
                                         LeafNode[Token`Question, "?", <||>],
                                         GroupNode[GroupParen, {
                                           LeafNode[Token`OpenParen, "(", <||>],
                                           CallNode[patternTestArg2, {args}, <||>],
-                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <>
-        " or " <> format[ToInputFormString[CallNode[GroupNode[GroupParen, {
+                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
+
+  replacementNode2 = CallNode[GroupNode[GroupParen, {
                                                     LeafNode[Token`OpenParen, "(", <||>],
                                                     patternTest,
-                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>]]] <> "?", "Remark", <| data, ConfidenceLevel -> 0.55 |>]];
+                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>];
+
+  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions ->{
+          CodeAction["Wrap parens around RHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode1|>],
+          CodeAction["Wrap parens around LHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode2|>] } |>]];
 
   issues
 
@@ -1035,7 +1039,7 @@ scanSyntaxErrorNodes[pos_List, aggIn_] :=
 
   tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
-  {Lint["SyntaxError", "Syntax error: " <> format[tagString] <> ".", "Fatal", <| data, ConfidenceLevel -> 0.1.0 |>]}
+  {Lint["SyntaxError", "Syntax error: " <> format[tagString] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
 ]
 
 
