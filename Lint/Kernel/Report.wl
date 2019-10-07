@@ -32,6 +32,9 @@ $LintedLineLimit = 10
 $LintLimit = 20
 
 
+$ConfidenceLevel = 0.95
+
+
 
 
 LintFileReport::usage = "LintFileReport[file, lints] returns a LintedFile object."
@@ -41,7 +44,7 @@ Options[LintFileReport] = {
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {},
-  ConfidenceLevel -> 0.95
+  ConfidenceLevel :> $ConfidenceLevel
 }
 
 
@@ -132,7 +135,7 @@ Options[LintStringReport] = {
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {},
-  ConfidenceLevel -> 0.95
+  ConfidenceLevel :> $ConfidenceLevel
 }
 
 

@@ -35,6 +35,12 @@ $Start
 $Time
 
 
+
+
+EnableNewLintStyle
+
+
+
 Begin["`Private`"]
 
 Needs["AST`"]
@@ -287,6 +293,17 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
 
   lints
 ]]
+
+
+
+
+
+EnableNewLintStyle[nb_NotebookObject] := (
+  SetOptions[nb, StyleDefinitions -> "Lint.nb"];
+  Lint`Format`Private`$NewLintStyle = True;
+)
+
+
 
 
 End[]

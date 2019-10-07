@@ -254,7 +254,7 @@ Module[{agg, node, data, children, issues, pairs, src},
     If[(!MatchQ[p[[1]], LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
-                        _OptionalDefaultPatternNode]) &&
+                        _OptionalDefaultPatternNode]) ||
       (!MatchQ[p[[2]],  LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
@@ -264,8 +264,7 @@ Module[{agg, node, data, children, issues, pairs, src},
 
     src = p[[2, 3, Key[Source] ]];
 
-    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Expected ``___``", "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions -> { CodeAction["Delete extra ``_``", DeleteNode, <|Source->src|>] }|>]];
-
+    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Stray " <> format[ToInputFormString[p[[2]]]], "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions -> { CodeAction["Delete stray " <> format[ToInputFormString[p[[2]]]], DeleteNode, <|Source->src|>] }|>]];
     ,
     {p, pairs}
   ];
@@ -278,15 +277,16 @@ Module[{agg, node, data, children, issues, pairs, src},
 Attributes[scanImplicitTimesStrings] = {HoldRest}
 
 scanImplicitTimesStrings[pos_List, aggIn_] :=
-Module[{agg, node, data, issues},
+Module[{agg, node, data, issues, src},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   data = node[[3]];
 
   issues = {};
 
-  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between ``String``s\n\
-Did you mean ``*``?", "Warning", <|data, ConfidenceLevel -> 0.75|>]];
+  src = data[Source];
+
+  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between ``String``s", "Warning", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Insert ``*``", InsertNode, <|Source->src, "InsertionNode"->ToNode["*"]|>]}|>]];
 
   issues
 ]

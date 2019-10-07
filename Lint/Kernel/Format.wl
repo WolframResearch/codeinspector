@@ -57,9 +57,6 @@ How many characters before partitioning a new line?
 $LintedLineWidth = 120
 
 
-$LintDescriptionLimit = 100
-
-
 
 
 
@@ -93,42 +90,6 @@ Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], Ou
 
 
 
-distrib[s_String] := StringSplit[s, "\n"->"\n"]
-distrib[StringExpression[args___]] := Flatten[distrib /@ {args}]
-distrib[bold[s_String]] := LintBold /@ StringSplit[s, "\n"->"\n"]
-distrib[preserve[s_String]] := LintPreserve[s]
-
-(*
-replace `` and ** markup
-*)
-boldify[s_String] :=
-distrib[
-	StringReplace[s, {
-		RegularExpression["``(.*?)``"] :> bold["$1"],
-		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"],
-		RegularExpression["\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }] ]
-
-gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
-
-(*
-
-do not send `` markup
-do not send ** markup
-do not send ?? markup
-FIXME: what to do about ?? contents?
-
-\n newlines are ok to send
-
-*)
-plainify[s_String] := StringReplace[s, {
-  RegularExpression["``(.*?)``"] :> "$1",
-  RegularExpression["\\*\\*(.*?)\\*\\*"] :> "$1",
-  RegularExpression["\\?\\?(.*?)\\?\\?"] :> "$1",
-  "\n" -> " " }]
-
-
-
-
 (*
 to be overridden
 *)
@@ -140,33 +101,30 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 
 
 newLintStyle[lint:Lint[tag_, description_, severity_, data_]] :=
-Module[{plainified, actions, items},
+Module[{plainified, actions, items, menuItems, inputified},
 
 	plainified = plainify[description];
+
+	inputified = escapeString[plainified];
 
 	items = {};
 
 	If[$Interactive,
 		actions = Lookup[data, CodeActions, {}];
 		If[$Debug,
-				Print["actions: ", actions];
-			];
-		If[!empty[actions],
-
-			items = items ~Join~ (createActionMenuItem[#, lint]& /@ actions);
+			Print["actions: ", actions];
 		];
+
+		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>] };
+
+		menuItems = createActionMenuItem[#, lint]& /@ actions;
+
+		menuItems = DeleteCases[menuItems, _?FailureQ];
+
+		items = items ~Join~ menuItems;
 	];
 
-	items = items ~Join~ {
-   	createActionMenuItem[CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>], lint]
-   };
-
-	RawBoxes[TemplateBox[{plainified, 
-   RGBColor[{1, 118/255, 0}] (*primary icon color*), 
-   RGBColor[{1, 1, 1}] (*secondary icon color*), 
-   RGBColor[{1, 46/51, 203/255}] (*primary bar color*), 
-   RGBColor[{218/255, 89/255, 1/51}] (*secondary bar color*), items}, 
-  "SuggestionGridTemplate"]]
+	RawBoxes[TemplateBox[{StyleBox[inputified, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplate"]]
 ]
 
 
@@ -181,6 +139,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 	bolded = boldify[description];
 
 	g = gridify[bolded];
+
 
 	menu = ActionMenu[
 		Tooltip[
@@ -216,7 +175,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 		];
 	];
 
-	g = (Style[#, "Text"]& /@ #)& /@ g;
+	g = (Style[#, "Text", ShowStringCharacters->False]& /@ #)& /@ g;
 
   format = Interpretation[
   	Framed[Column[Row /@ g, {Left, Center}], Background -> GrayLevel[0.92], RoundingRadius -> 5, FrameMargins -> {{10, 10}, {0, 2}}],
@@ -392,7 +351,7 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 		Print["grid: ", grid//InputForm];
 	];
 
-	grid
+	Style[grid, ShowStringCharacters->False]
 ]]
 
 
@@ -528,7 +487,7 @@ Module[{label, maxLineNumberLength, paddedLineNumber},
 	
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
-	label = Framed[Row[{"line", " ", paddedLineNumber, ":"}]];
+	label = Framed[Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False]];
 
 	(*
 	Copying in cloud:

@@ -5,9 +5,18 @@ expandLineNumberExclusions
 
 severityColor
 
+severityColorNewStyle
+
 format
 
 shadows
+
+boldify
+
+gridify
+
+plainify
+
 
 
 Begin["`Private`"]
@@ -15,6 +24,15 @@ Begin["`Private`"]
 Needs["AST`"]
 Needs["AST`Utils`"]
 Needs["Lint`"]
+Needs["Lint`Format`"]
+
+
+$shortenLimit = 100
+
+
+$LintDescriptionLimit = 100
+
+
 
 
 (*
@@ -53,8 +71,35 @@ Module[{maxSeverity},
 ]
 
 
+severityColorNewStyle[lints:{_Lint..}] :=
+Module[{maxSeverity},
+	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
+	Switch[maxSeverity,
+		"Formatting" | "Remark" | "ImplicitTimes", {
+				RGBColor[{0/255, 118/255, 255/255}] (*primary icon color*), 
+				RGBColor[{255/255, 255/255, 255/255}] (*secondary icon color*), 
+				RGBColor[{203/255, 230/255, 255/255}] (*primary bar color*), 
+				RGBColor[{5/255, 89/255, 218/255}] } (*secondary bar color*), 
+		"Warning", {
+				GrayLevel[118/255] (*primary icon color*), 
+				GrayLevel[255/255] (*secondary icon color*), 
+				GrayLevel[230/255] (*primary bar color*), 
+				GrayLevel[89/255] } (*secondary bar color*), 
+		"Error" | "Fatal", {
+				RGBColor[{255/255, 118/255, 0/255}] (*primary icon color*), 
+				RGBColor[{255/255, 255/255, 255/255}] (*secondary icon color*), 
+				RGBColor[{255/255, 230/255, 203/255}] (*primary bar color*), 
+				RGBColor[{218/255, 89/255, 5/255}] } (*secondary bar color*)
+	]
+]
 
-$shortenLimit = 100
+
+
+
+
+
+
+
 
 shorten[s_String] /; StringLength[s] < $shortenLimit := s
 
@@ -88,6 +133,54 @@ shadows[lint1_Lint, lint2_Lint] :=
 	(severityToInteger[lint1["Severity"]] <= severityToInteger[lint2["Severity"]] &&
 		SourceMemberQ[lint2[[4, Key[Source]]], lint1[[4, Key[Source]]]]) &&
    	(lint1 =!= lint2)
+
+
+
+
+
+
+distrib[s_String] := StringSplit[s, "\n"->"\n"]
+distrib[StringExpression[args___]] := Flatten[distrib /@ {args}]
+distrib[bold[s_String]] := LintBold /@ StringSplit[s, "\n"->"\n"]
+distrib[preserve[s_String]] := LintPreserve[s]
+
+(*
+replace `` and ** markup
+*)
+boldify[s_String] :=
+distrib[
+	StringReplace[s, {
+		RegularExpression["``(.*?)``"] :> bold["$1"],
+		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"],
+		RegularExpression["\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }] ]
+
+gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
+
+(*
+
+do not send `` markup
+do not send ** markup
+do not send ?? markup
+FIXME: what to do about ?? contents?
+*)
+plainify[s_String] := StringReplace[s, {
+  RegularExpression["``(.*?)``"] :> "$1",
+  RegularExpression["\\*\\*(.*?)\\*\\*"] :> "$1",
+  RegularExpression["\\?\\?(.*?)\\?\\?"] :> "$1"}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 End[]
