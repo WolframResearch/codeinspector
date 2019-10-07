@@ -24,6 +24,10 @@ set(WL_PACLET_SOURCES
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Utils.wl
 )
 
+set(WL_PACLET_STYLESHEET_SOURCES
+	${CMAKE_SOURCE_DIR}/Lint/FrontEnd/StyleSheets/Lint.nb
+)
+
 set(PACLETINFO_SOURCE
 	${CMAKE_SOURCE_DIR}/Lint/PacletInfo.m
 )
@@ -77,6 +81,15 @@ foreach(SRC ${WL_PACLET_SOURCES})
     COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${CMAKE_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
     MAIN_DEPENDENCY ${SRC})
 	list(APPEND COPIED_WL_PACLET_SOURCES ${CMAKE_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC})
+endforeach()
+
+foreach(SRC ${WL_PACLET_STYLESHEET_SOURCES})
+	get_filename_component(BARE_SRC ${SRC} NAME)
+	add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/paclet/${PACLET}/FrontEnd/StyleSheets/${BARE_SRC}
+    COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${CMAKE_BINARY_DIR}/paclet/${PACLET}/FrontEnd/StyleSheets/${BARE_SRC}
+    MAIN_DEPENDENCY ${SRC})
+	list(APPEND COPIED_WL_PACLET_SOURCES ${CMAKE_BINARY_DIR}/paclet/${PACLET}/FrontEnd/StyleSheets/${BARE_SRC})
 endforeach()
 
 set(PACLET_SOURCES
