@@ -113,13 +113,13 @@ Scan some symbols that are intuitive, yet do not exist
 *)
 LeafNode[Symbol, "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | 
                   "RealQ" | "FalseQ" | "RationalQ" | "ComplexQ" | 
-                  "SymbolQ", _] -> scanBadSymbols,
+                  "SymbolQ" | "Match", _] -> scanBadSymbols,
 
 (*
 Scan symbols that are in System` but are undocumented
 *)
 LeafNode[Symbol, "Absolute" | "ActionDelay" | "ActionMenuBox" | "ActionMenuBoxOptions" | 
-                  "ActiveItem" | "AlgebraicRulesData" | "AlignmentMarker",
+                  "ActiveItem" | "AlgebraicRulesData" | "AlignmentMarker" |
                   "AllowAdultContent" | "AllowIncomplete" | "AllowKernelInitialization" | 
                   "Analytic" | "AnimatorBox" | "AnimatorBoxOptions" | "AnimatorElements" | 
                   "Annotate" | "AnnotationNames" | "AnnotationValue" | "AppendCheck" | 
@@ -845,7 +845,7 @@ Catch[
 
       srcs = #[[3, Key[Source]]]& /@ selected;
 
-      AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in ``List`` of ``Rule``s.", "Remark",
+      AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in list of rules.", "Remark",
             <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.75 |>]];
    ];
 
@@ -1161,7 +1161,7 @@ Catch[
   patterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
     If[#[[2, 1]]["String"] == name,
-      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> " in RHS of ``Pattern``.",
+      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> ".",
             "Error", <| Source -> #[[2, 1, 3, Key[Source]]], "AdditionalSources" -> { patSymbol[[3, Key[Source]]] }, ConfidenceLevel -> 0.95 |> ]];
     ];
   )&, patterns];
@@ -1266,7 +1266,7 @@ Catch[
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <| #[[3]], CodeActions->{CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <| #[[3]], CodeActions->{CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&, unusedParams];
 
   issues
 ]]
@@ -1321,8 +1321,7 @@ Catch[
   params = children[[1,2]];
    vars = # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], _}, _] :> sym,
             sym:LeafNode[Symbol, _, _] :> sym,
-            err_ :> (AppendTo[issues, Lint["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-              " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
+            err_ :> (AppendTo[issues, Lint["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
     duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
     selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
 
@@ -1336,7 +1335,7 @@ Catch[
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``DynamicModule``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``DynamicModule``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
 
   issues
 ]]
@@ -1414,7 +1413,7 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], Con
 
   unusedParams = Flatten[unusedParams];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variables in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
 
   issues
 ]]
@@ -1508,7 +1507,7 @@ Catch[
   *)
   unusedParams = Select[unusedParams, lowercaseSymbolQ];
   
-  Scan[AppendTo[issues, Lint["UnusedBlockVariables", "Unused variables in " <> format[head["String"]] <> ": `" <>
+  Scan[AppendTo[issues, Lint["UnusedBlockVariables", "Unused variable in " <> format[head["String"]] <> ": `" <>
     format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 0.90|>]]&, unusedParams];
 
   issues
@@ -1565,15 +1564,18 @@ scanBadSymbols[pos_List, astIn_] :=
   src = data[Source];
 
   Switch[name,
-    "Failed" | "System`Failed",
-      AppendTo[issues, Lint["BadSymbol", "Symbol ``Failed`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]} |>]]
+    "Failed",
+      AppendTo[issues, Lint["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]} |>]]
     ,
-    "Boolean" | "System`Boolean",
-      AppendTo[issues, Lint["BadSymbol", "Symbol ``Boolean`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]}|>]]
+    "Boolean",
+      AppendTo[issues, Lint["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]}|>]]
+    ,
+    "Match",
+      AppendTo[issues, Lint["BadSymbol", "``Match`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]}|>]]
     ,
     _,
       (* everything else *)
-      AppendTo[issues, Lint["BadSymbol", "Symbol ``" <> name <> "`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75|>]]
+      AppendTo[issues, Lint["BadSymbol", "``" <> name <> "`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75|>]]
   ];
 
   issues
@@ -1597,7 +1599,7 @@ Symbol ``Fail`` is an undocumented **System`** symbol.\n\
 Did you mean ``$Failed``?", "Warning", <| data, ConfidenceLevel -> 0.55 |>]]
     ,
     _,
-      AppendTo[issues, Lint["UndocumentedSymbol", "Symbol " <> format[name] <> " is an undocumented **System`** symbol.", "Remark", <|data, ConfidenceLevel -> 0.55 |>]]
+      AppendTo[issues, Lint["UndocumentedSymbol", format[name] <> " is not documented.", "Remark", <|data, ConfidenceLevel -> 0.55 |>]]
   ];
 
   issues
@@ -1615,7 +1617,7 @@ scanObsoleteSymbols[pos_List, astIn_] :=
 
   issues = {};
 
-  AppendTo[issues, Lint["ObsoleteSymbol", "Symbol " <> format[name] <> " is an obsolete **System`** symbol.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
+  AppendTo[issues, Lint["ObsoleteSymbol", format[name] <> " is obsolete.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
 
   issues
 ]
@@ -1633,7 +1635,7 @@ scanExperimentalSymbols[pos_List, astIn_] :=
 
   issues = {};
 
-  AppendTo[issues, Lint["ExperimentalSymbol", "Symbol " <> format[name] <> " is an experimental **System`** symbol.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
+  AppendTo[issues, Lint["ExperimentalSymbol", format[name] <> " is experimental.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
 
   issues
 ]

@@ -27,6 +27,10 @@ Needs["Lint`"]
 Needs["Lint`Utils`"]
 
 
+$NewLintStyle = True
+
+
+
 
 (*
 
@@ -71,7 +75,7 @@ Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], Standard
 		lintedFile]
 
 Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], OutputForm] :=
-	Column[{Row[{file}]} ~Join~ lintedLines, Left]
+	Column[{Row[{file}], ""} ~Join~ lintedLines, Left]
 
 
 
@@ -85,7 +89,7 @@ Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], St
 		lintedString]
 
 Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], OutputForm] :=
-	Column[{Row[{string}]} ~Join~ lintedLines, Left]
+	Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
 
 
 
@@ -101,11 +105,11 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 
 
 newLintStyle[lint:Lint[tag_, description_, severity_, data_]] :=
-Module[{plainified, actions, items, menuItems, inputified},
+Module[{bolded, boldedBoxes, actions, items, menuItems},
 
-	plainified = plainify[description];
+	bolded = boldify[description];
 
-	inputified = escapeString[plainified];
+	boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
 
 	items = {};
 
@@ -124,7 +128,7 @@ Module[{plainified, actions, items, menuItems, inputified},
 		items = items ~Join~ menuItems;
 	];
 
-	RawBoxes[TemplateBox[{StyleBox[inputified, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplate"]]
+	RawBoxes[TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]]
 ]
 
 
@@ -626,7 +630,7 @@ Module[{s, color, weight, setup, opts},
 
 
 
-LintBold[content_] := LintMarkup[content, "Program", FontWeight->Bold]
+LintBold[content_] := LintMarkup[content, "Program", FontWeight->Bold, FontColor->Black]
 
 LintPreserve[content_] := LintMarkup[content]
 
@@ -668,6 +672,277 @@ variationsANSICode[{"Underline"->True}] = "\[RawEscape][4m"
 variationsANSICode[Automatic] = ""
 
 resetANSICode[] = "\[RawEscape][0m"
+
+
+
+
+
+
+
+
+
+
+
+$prettyTooltipTemplateDisplayFunction = Function[
+     TagBox[
+      TooltipBox[
+       #1,
+       FrameBox[
+        StyleBox[
+         #2,
+         "Text",
+         FontColor -> RGBColor[
+          0.537255,
+          0.537255,
+          0.537255
+         ],
+         FontSize -> 12,
+         FontWeight -> "Plain",
+         FontTracking -> "Plain",
+         StripOnInput -> False
+        ],
+        Background -> RGBColor[
+         0.960784,
+         0.960784,
+         0.960784
+        ],
+        FrameStyle -> RGBColor[
+         0.898039,
+         0.898039,
+         0.898039
+        ],
+        FrameMargins -> 8,
+        StripOnInput -> False
+       ],
+       TooltipDelay -> 0.1,
+       TooltipStyle -> {Background -> None, CellFrame -> 0}
+      ],
+      Function[
+       Annotation[
+        #1,
+        Framed[
+         Style[
+          FunctionResourceTools`BuildDefinitionNotebook`Private`$$tooltip,
+          "Text",
+          FontColor -> RGBColor[
+           0.537255,
+           0.537255,
+           0.537255
+          ],
+          FontSize -> 12,
+          FontWeight -> "Plain",
+          FontTracking -> "Plain"
+         ],
+         Background -> RGBColor[
+          0.960784,
+          0.960784,
+          0.960784
+         ],
+         FrameStyle -> RGBColor[
+          0.898039,
+          0.898039,
+          0.898039
+         ],
+         FrameMargins -> 8
+        ],
+        "Tooltip"
+       ]
+      ]
+     ]
+    ]
+
+
+
+$suggestionIconTemplateDisplayFunction = Function[
+     GraphicsBox[
+      {
+       Thickness[0.05555555555555555],
+       StyleBox[
+        {
+         FilledCurveBox[
+          {
+           {
+            {1, 4, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3}
+           }
+          },
+          CompressedData[
+           "\n1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO\nm+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD\njI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh\nMRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z\n       "
+          ]
+         ]
+        },
+        FaceForm[#1]
+       ],
+       StyleBox[
+        {
+         FilledCurveBox[
+          {
+           {
+            {0, 2, 0},
+            {0, 1, 0},
+            {0, 1, 0},
+            {0, 1, 0},
+            {0, 1, 0},
+            {0, 1, 0}
+           },
+           {
+            {1, 4, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3},
+            {1, 3, 3}
+           }
+          },
+          {
+           {
+            {8.175292500000001, 7.416875},
+            {7.796855000000001, 11.3084375},
+            {7.796855000000001, 13.38},
+            {10.11998, 13.38},
+            {10.11998, 11.3084375},
+            {9.741542500000001, 7.416875},
+            {8.175292500000001, 7.416875}
+           },
+           CompressedData[
+            "\n1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW\n1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa\niWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7\n2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro\n0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/\nACBxmlc=\n        "
+           ]
+          }
+         ]
+        },
+        FaceForm[#2]
+       ]
+      },
+      ImageSize -> #3,
+      PlotRange -> #4,
+      AspectRatio -> Automatic,
+      BaselinePosition -> Scaled[0.1]
+     ]
+    ]
+
+
+
+$prettyTooltipBox[interactive_] :=
+With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunction},
+	If[TrueQ[interactive],
+         AdjustmentBox[
+          TemplateBox[
+           {
+            ActionMenuBox[
+             TagBox[
+              PaneSelectorBox[
+               {
+                False -> GraphicsBox[
+                 {
+                  EdgeForm[Directive[GrayLevel[1, 0], Thickness[0.025]]],
+                  FaceForm[#4],
+                  RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 0.2],
+                  Thickness[0.15],
+                  #5,
+                  LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]
+                 },
+                 ImageSize -> {Automatic, 15},
+                 ImageMargins -> 0
+                ],
+                True -> GraphicsBox[
+                 {
+                  EdgeForm[Directive[#5, Thickness[0.025]]],
+                  FaceForm[#2],
+                  RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 0.2],
+                  Thickness[0.15],
+                  GrayLevel[1],
+                  LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]
+                 },
+                 ImageSize -> {Automatic, 15},
+                 ImageMargins -> 0
+                ]
+               },
+               Dynamic[CurrentValue["MouseOver"]],
+               ImageSize -> Automatic,
+               FrameMargins -> 0
+              ],
+              MouseAppearanceTag["LinkHand"]
+             ],
+             #6,
+             Appearance -> None,
+             Method -> "Queued"
+            ],
+            "\"View suggestions\""
+           },
+           "PrettyTooltipTemplateXXX"
+           ,
+           DisplayFunction -> $prettyTooltipTemplateDisplayFunction
+          ],
+          BoxBaselineShift -> -0.3
+         ]
+         ,
+         Sequence @@ {}
+         ]
+]
+
+
+
+$suggestionGridTemplateDisplayFunction[interactive_] :=
+With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFunction,
+	$prettyTooltipBox = $prettyTooltipBox[interactive],
+	paneBoxImageSize = If[TrueQ[interactive], Full, Automatic],
+	prettyTooltipBoxColumnItemSize = If[TrueQ[interactive], Fit, Sequence @@ {}]},
+ Function[
+  StyleBox[
+   FrameBox[
+    AdjustmentBox[
+     TagBox[
+      GridBox[
+       {
+        {
+         TemplateBox[
+          {#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}},
+          "SuggestionIconTemplateXXX"
+          ,
+          DisplayFunction -> $suggestionIconTemplateDisplayFunction
+         ],
+         PaneBox[
+          #1,
+          ImageSizeAction -> "ShrinkToFit",
+          BaselinePosition -> Baseline,
+          ImageSize -> paneBoxImageSize
+         ],
+
+         $prettyTooltipBox
+        }
+       },
+       GridBoxAlignment -> {"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+       AutoDelete -> False,
+       GridBoxItemSize -> {
+        "Columns" -> {Automatic, Automatic, prettyTooltipBoxColumnItemSize},
+        "Rows" -> {{Automatic}}
+       },
+       GridBoxSpacings -> {"Columns" -> {{0.4}}}
+      ],
+      "Grid"
+     ],
+     BoxMargins -> {{0.25, -1.}, {0.15, -0.15}}
+    ],
+    RoundingRadius -> {13, 75},
+    Background -> #4,
+    FrameStyle -> None,
+    FrameMargins -> {{0, 8 + 8}, {0, 0}},
+    ImageMargins -> {{0, 0}, {5, 5}},
+    StripOnInput -> False
+   ]
+   ,
+   FontColor -> #5
+  ]
+ ]
+]
 
 
 

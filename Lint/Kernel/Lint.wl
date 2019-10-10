@@ -38,7 +38,7 @@ $Time
 
 
 EnableNewLintStyle
-
+DisableNewLintStyle
 
 
 Begin["`Private`"]
@@ -209,6 +209,9 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   abstractRules = OptionValue["AbstractRules"];
 
   lints = Lint @@@ issues;
+  If[$Debug,
+    Print["lints: ", lints];
+  ];
 
   agg = Aggregate[cst];
 
@@ -299,10 +302,13 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
 
 
 EnableNewLintStyle[nb_NotebookObject] := (
-  SetOptions[nb, StyleDefinitions -> "Lint.nb"];
   Lint`Format`Private`$NewLintStyle = True;
 )
 
+
+DisableNewLintStyle[nb_NotebookObject] := (
+  Lint`Format`Private`$NewLintStyle = False;
+)
 
 
 

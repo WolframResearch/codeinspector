@@ -349,7 +349,7 @@ Catch[
   If[MatchQ[pos, {2, _}],
     (* top node, no parent *)
 
-    AppendTo[issues, Lint["SuspiciousSpan", "Suspicious use of ``;;`` at top-level.\n\
+    AppendTo[issues, Lint["SuspiciousSpan", "Suspicious ``;;`` at top-level.\n\
 Did you mean ``;``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]];
   ];
 
@@ -893,7 +893,7 @@ Module[{agg, node, data, children, tok},
 
   tok = children[[1]];
 
-  {Lint["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "`` syntax in file.", "Error", <| data, ConfidenceLevel -> 0.55 |>]}
+  {Lint["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "``.", "Error", <| data, ConfidenceLevel -> 0.55 |>]}
 ]
 
 
@@ -971,7 +971,10 @@ Catch[
   middle = children[[3]];
   data = middle[[3]];
 
-  {Lint["ExpectedSymbol", "Middle expression is usually a symbol.", "Warning", <| data, ConfidenceLevel -> 0.55 |>]}
+  (*
+  Middle expression is usually a symbol.
+  *)
+  {Lint["ExpectedSymbol", "Suspicious syntax.", "Warning", <| data, ConfidenceLevel -> 0.55 |>]}
 ]]
 
 
@@ -1031,15 +1034,23 @@ Catch[
 Attributes[scanSyntaxErrorNodes] = {HoldRest}
 
 scanSyntaxErrorNodes[pos_List, aggIn_] :=
- Module[{agg, node, tag, data, tagString},
+ Module[{agg, node, tag, data, tagString, children, leaf},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   tag = node[[1]];
+  children = node[[2]];
   data = node[[3]];
 
   tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
-  {Lint["SyntaxError", "Syntax error: " <> format[tagString] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  Switch[tagString,
+    "UnhandledCharacter",
+        leaf = children[[1]];
+        {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    _,
+        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  ]
 ]
 
 

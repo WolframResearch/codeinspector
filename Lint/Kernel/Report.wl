@@ -319,9 +319,6 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   confidenceTest = GreaterEqualThan[confidence];
   lints = Cases[lints, Lint[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
 
-
-
-
   (*
   If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
   *)

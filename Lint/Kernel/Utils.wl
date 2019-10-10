@@ -128,13 +128,30 @@ Module[{containsDoubleTicks, containsDoubleStars},
 
 
 
+(*
+shadows[lint1, lint2] => True means lint is less severe and is contained by lint2; we will get rid of lint1
 
-shadows[lint1_Lint, lint2_Lint] :=
-	(severityToInteger[lint1["Severity"]] <= severityToInteger[lint2["Severity"]] &&
-		SourceMemberQ[lint2[[4, Key[Source]]], lint1[[4, Key[Source]]]]) &&
-   	(lint1 =!= lint2)
-
-
+Get rid of Lints that have root causes that are also being reported
+Only report the root cause
+*)
+shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2Tag_, _, lint2Severity_, lint2Data_]] :=
+	Which[
+		lint1 === lint2,
+			False,
+		!SourceMemberQ[lint2Data[ Source ], lint1Data[ Source ] ],
+			False,
+		MatchQ[lint1Tag, "UnhandledCharacter" | "AbstractSyntaxError"] && lint2Tag == "UnrecognizedCharacter",
+			(*
+			"UnrecognizedCharacter" is the "root" cause, so keep it and get rid of "UnhandledCharacter"
+			*)
+			True,
+		lint1Tag == "UnrecognizedCharacter" && MatchQ[lint2Tag, "UnhandledCharacter" | "AbstractSyntaxError"],
+			False,
+		severityToInteger[lint1Severity] <= severityToInteger[lint2Severity],
+			True,
+		True,
+			False
+	]
 
 
 
