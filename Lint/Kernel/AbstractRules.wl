@@ -2047,17 +2047,60 @@ Catch[
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
 
 scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
- Module[{ast, node, token, data, tokString},
+ Module[{ast, node, tag, data, tagString, children},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
-  token = node[[1]];
+  tag = node[[1]];
+  children = node[[2]];
   data = node[[3]];
 
-  tokString = Block[{$ContextPath = {"AbstractSyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[token]];
+  tagString = Block[{$ContextPath = {"AbstractSyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
-  {Lint["AbstractSyntaxError", "Abstract syntax error: " <> format[tokString] <> ".", "Fatal", <|data, ConfidenceLevel -> 1.0|>]}
+  Switch[tagString,
+    "UnhandledCharacter",
+        leaf = children[[1]];
+        {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedOperand",
+        {Lint["ExpectedOperand", "Expected an expression.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "LinearSyntaxBang",
+        {Lint["LinearSyntaxBang", "Invalid syntax for ``\\!``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "NonAssociativePatternTest",
+        {Lint["NonAssociativePatternTest", "Invalid syntax for ``?``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "NonAssociativeDirectedEdge",
+        {Lint["NonAssociativeDirectedEdge", "Invalid syntax for ``\\[DirectedEdge]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "NonAssociativeUndirectedEdge",
+        {Lint["NonAssociativeUndirectedEdge", "Invalid syntax for ``\\[UndirectedEdge]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "OpenParen",
+        {Lint["OpenParen", "Invalid syntax for ``()``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "OpenSquare",
+        {Lint["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "GroupMissingCloser",
+        {Lint["GroupMissingCloser", "Missing closing bracket.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "GroupMissingOpener",
+        {Lint["GroupMissingOpener", "Missing opening bracket.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnterminatedString",
+        {Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "EmptyString",
+        {Lint["EmptyString", "Empty string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnterminatedComment",
+        {Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    _,
+        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  ]
 ]
-
 
 
 

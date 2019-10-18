@@ -138,6 +138,8 @@ shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2T
 	Which[
 		lint1 === lint2,
 			False,
+		KeyExistsQ[lint1Data, CodeActions],
+			False,
 		!SourceMemberQ[lint2Data[ Source ], lint1Data[ Source ] ],
 			False,
 		MatchQ[lint1Tag, "UnhandledCharacter" | "AbstractSyntaxError"] && lint2Tag == "UnrecognizedCharacter",

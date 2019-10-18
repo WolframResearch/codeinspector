@@ -12,11 +12,18 @@ LintSpaceIndicator
 
 LintErrorIndicator
 
+LintErrorContinuationIndicator
+
 LintContinuation
 
 LintTimes
 
 LintEOF
+
+
+
+$Interactive
+
 
 
 Begin["`Private`"]
@@ -376,7 +383,8 @@ underlineList is not used in OutputForm
 *)
 Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
 Catch[
-Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
+Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
+	endingAdditionalLintsThisLine},
 
 	maxLineNumberLength = OptionValue[LintedLine, {opts}, "MaxLineNumberLength"];
 	elided = OptionValue[LintedLine, {opts}, "Elided"];
@@ -392,6 +400,29 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	format them
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+
+	endingAdditionalLintsAny = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
+	If[$Debug,
+		Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
+	];
+
+	endingAdditionalLintsThisLine = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
+	If[$Debug,
+		Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
+	];
+
+	(*
+	Don't double-count Lints that have AdditionalSources
+	*)
+	endingLints = Complement[endingLints, endingAdditionalLintsAny];
+	If[$Debug,
+		Print["endingLints: ", endingLints];
+	];
+
+	endingLints = endingLints ~Join~ endingAdditionalLintsThisLine;
+	If[$Debug,
+		Print["endingLints: ", endingLints];
+	];
 
 	(*
 	Make sure to sort lints
@@ -526,13 +557,19 @@ get Grid alignment
 LintSpaceIndicator::usage = "LintSpaceIndicator represents a space indicator in formatted output."
 
 Format[LintSpaceIndicator, StandardForm] := "\[SpaceIndicator]"
-Format[LintSpaceIndicator, OutputForm] := "~"
+Format[LintSpaceIndicator, OutputForm] := " "
 
 
-LintErrorIndicator::usage = "LintErrorIndicator represented an error indicator in formatted output."
+LintErrorIndicator::usage = "LintErrorIndicator represents an error indicator in formatted output."
 
 Format[LintErrorIndicator, StandardForm] := "\[ErrorIndicator]"
 Format[LintErrorIndicator, OutputForm] := "^"
+
+
+LintErrorContinuationIndicator::usage = "LintErrorContinuationIndicator represents an error continuation indicator in formatted output."
+
+Format[LintErrorContinuationIndicator, StandardForm] := "\[ErrorIndicator]"
+Format[LintErrorContinuationIndicator, OutputForm] := "~"
 
 
 
@@ -929,7 +966,7 @@ With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFun
       ],
       "Grid"
      ],
-     BoxMargins -> {{0.25, -1.}, {0.15, -0.15}}
+     BoxMargins -> {{0.25, -1.0}, {0, 0}}
     ],
     RoundingRadius -> {13, 75},
     Background -> #4,

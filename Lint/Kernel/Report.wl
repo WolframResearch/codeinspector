@@ -427,7 +427,8 @@ Options[createUnderlineList] = {
 
 createUnderlineList[line_String, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Catch[
- Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn},
+ Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn,
+  firstError, indicator},
 
  lineIsEmpty = (line == "");
 
@@ -439,7 +440,18 @@ Catch[
 
   endOfFile = OptionValue["EndOfFile"];
 
-  markupPerColumn = Map[LintMarkup[LintErrorIndicator, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[#]]&, lintsPerColumn];
+
+  firstError = True;
+
+  markupPerColumn = Map[(
+                          If[firstError,
+                            indicator = LintErrorIndicator;
+                            firstError = False
+                            ,
+                            indicator = LintErrorContinuationIndicator;
+                          ];
+                          LintMarkup[indicator, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[#]]
+                        )&, lintsPerColumn];
 
   If[$Debug,
     Print["markupPerColumn: ", markupPerColumn];

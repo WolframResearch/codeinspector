@@ -198,7 +198,7 @@ Attributes[scanImplicitTimes] = {HoldRest}
 
 scanImplicitTimes[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, line, nextLine},
+Module[{agg, node, children, data, issues, line, nextLine, oldN, oldNSrc},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -209,20 +209,29 @@ Module[{agg, node, children, data, issues, line, nextLine},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
-  line = children[[1, 3, Key[Source], 2, 1]];
+  oldN = children[[1]];
+  oldNSrc = oldN[[3, Key[Source] ]];
+  line = oldNSrc[[2, 1]];
   Do[
     nextLine = n[[3, Key[Source], 1, 1]];
     If[n[[1]] === Token`Fake`ImplicitTimes && line != nextLine,
       AppendTo[issues,
-        Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.\n\
-Did you mean ``;`` or ``,``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]];
+        Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Warning",
+          <|Source->{{line, oldNSrc[[2,2]]+1}, {line, oldNSrc[[2,2]]+1}},
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Insert ``;``", InsertNode, <|Source->{{line, oldNSrc[[2,2]]+1}, {line, oldNSrc[[2,2]]+1}}, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
+              CodeAction["Insert ``,``", InsertNode, <|Source->{{line, oldNSrc[[2,2]]+1}, {line, oldNSrc[[2,2]]+1}}, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+          |>]];
       Break[];
     ];
-    line = n[[3, Key[Source], 2, 1]];
+    oldN = n;
+    oldNSrc = oldN[[3, Key[Source] ]];
+    line = oldNSrc[[2, 1]];
     ,
     {n, children[[2;;]]}
   ];
@@ -264,7 +273,12 @@ Module[{agg, node, data, children, issues, pairs, src},
 
     src = p[[2, 3, Key[Source] ]];
 
-    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Stray " <> format[ToInputFormString[p[[2]]]], "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions -> { CodeAction["Delete stray " <> format[ToInputFormString[p[[2]]]], DeleteNode, <|Source->src|>] }|>]];
+    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Unexpected " <> format[ToInputFormString[p[[2]]]], "Error",
+      <|Source->src,
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Delete unexpected " <> format[ToInputFormString[p[[2]]]], DeleteNode, <|Source->src|>] }
+      |>]];
     ,
     {p, pairs}
   ];
@@ -277,16 +291,24 @@ Module[{agg, node, data, children, issues, pairs, src},
 Attributes[scanImplicitTimesStrings] = {HoldRest}
 
 scanImplicitTimesStrings[pos_List, aggIn_] :=
-Module[{agg, node, data, issues, src},
+Module[{agg, node, data, issues, src, children, case},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
   data = node[[3]];
 
   issues = {};
 
-  src = data[Source];
+  case = FirstCase[children, LeafNode[Token`Fake`ImplicitTimes, _, _]];
 
-  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between ``String``s", "Warning", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Insert ``*``", InsertNode, <|Source->src, "InsertionNode"->ToNode["*"]|>]}|>]];
+  src = case[[ 3, Key[Source] ]];
+
+  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between ``String``s", "Warning",
+    <|Source->src,
+      ConfidenceLevel -> 0.75,
+      CodeActions -> {
+        CodeAction["Insert ``*``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+    |>]];
 
   issues
 ]
@@ -298,7 +320,7 @@ Attributes[scanDots] = {HoldRest}
 
 scanDots[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, line, nextLine},
+Module[{agg, node, children, data, issues, line, nextLine, oldN, oldNSrc},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -313,18 +335,26 @@ Module[{agg, node, children, data, issues, line, nextLine},
     Throw[issues]
   ];
 
-  line = children[[1, 3, Key[Source], 2, 1]];
+  oldN = children[[1]];
+  oldNSrc = oldN[[3, Key[Source] ]];
+  line = oldNSrc[[2, 1]];
   Do[
     nextLine = n[[3, Key[Source], 1, 1]];
-    If[line != nextLine,
-      AppendTo[issues,
-        Lint["DotDifferentLine", "Operands for ``.`` are on different lines.\n\
-Did you mean ``;`` or ``,``?", "Warning", <|data, ConfidenceLevel -> 0.75|>]];
+    If[oldN[[1]] === Token`Dot && line != nextLine,
+      AppendTo[issues, Lint["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
+        <|data,
+          ConfidenceLevel -> 0.75,
+          CodeActions -> {
+              CodeAction["Replace ``.`` with ``;``", ReplaceNode, <|Source->oldNSrc, "ReplacementNode"->LeafNode[Token`Semi, ";", <||>] |>],
+              CodeAction["Replace ``.`` with ``,``", ReplaceNode, <|Source->oldNSrc, "ReplacementNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+        |>]];
       Break[];
     ];
-    line = n[[3, Key[Source], 2, 1]];
+    oldN = n;
+    oldNSrc = oldN[[3, Key[Source] ]];
+    line = oldNSrc[[2, 1]];
     ,
-    {n, children[[3;;;;2]]}
+    {n, children[[2;;]]}
   ];
 
   issues
@@ -335,7 +365,7 @@ Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, children, data, issues},
+ Module[{agg, node, children, data, issues, src},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -349,8 +379,39 @@ Catch[
   If[MatchQ[pos, {2, _}],
     (* top node, no parent *)
 
-    AppendTo[issues, Lint["SuspiciousSpan", "Suspicious ``;;`` at top-level.\n\
-Did you mean ``;``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]];
+    Switch[node,
+      BinaryNode[Span, _, _],
+
+        src = node[[2, 2, 3, Key[Source] ]];
+
+        AppendTo[issues, Lint["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
+          <|  Source -> src,
+              ConfidenceLevel -> 0.95,
+              CodeActions -> {
+                CodeAction["Replace ``;;`` with ``;``", ReplaceNode,
+                  <|  Source -> src,
+                      "ReplacementNode"->LeafNode[Token`Semi, ";", <||>]
+                  |>] }
+          |>]];
+      ,
+      TernaryNode[Span, _, _],
+
+        (*
+        Pick second ;;
+        *)
+        src = node[[2, 4, 3, Key[Source] ]];
+
+        AppendTo[issues, Lint["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
+          <|  Source -> src,
+              ConfidenceLevel -> 0.95,
+              CodeActions -> {
+                CodeAction["Replace ``;;`` with ``;``", ReplaceNode,
+                  <|  Source -> src,
+                      "ReplacementNode"->LeafNode[Token`Semi, ";", <||>]
+                  |>] }
+          |>]];
+
+    ]
   ];
 
 
@@ -408,7 +469,7 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
 
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
-  Scan[(AppendTo[issues, Lint["StraySemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
+  Scan[(AppendTo[issues, Lint["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
 
   (*
   Only check if LineCol-style
@@ -436,7 +497,7 @@ warn about a_?b[x] which actually parses as (a_?b)[x] and not a_?(b[x])
 scanPatternTestCalls[pos_List, aggIn_] :=
 Catch[
  Module[{agg, node, data, children, patternTest, args, patternTestChildren, patternTestArg1, patternTestArg2, issues,
-  parent, parentPos, src, replacementNode1, replacementNode2},
+  parent, parentPos, src, replacementNode1, replacementNode2, replacementNode},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   patternTest = node[[1]];
@@ -477,18 +538,22 @@ Catch[
 
       TODO: add anything callable like Function here 
       *)
-      src = data[Source];
-      AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.\n\
-The precedence of ``?`` is surprisingly high.\n\
-``PatternTest`` " <> format[ToInputFormString[patternTest]] <> " is calling arguments " <> format[ToInputFormString[args]] <> ".\n\
-Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
+
+      replacementNode = BinaryNode[PatternTest, {
                                           patternTestArg1,
                                           LeafNode[Token`Question, "?", <||>],
                                           GroupNode[GroupParen, {
                                             LeafNode[Token`OpenParen, "(", <||>],
                                             CallNode[patternTestArg2, {args}, <||>],
-                                            LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <>
-          "?", "Error", <| Source->src, ConfidenceLevel -> 0.95 |>]];
+                                            LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
+
+      src = data[Source];
+      AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``", "Error",
+        <|
+          Source->src,
+          ConfidenceLevel -> 0.95,
+          CodeActions -> { CodeAction["Wrap parens around RHS", ReplaceNode, <| Source -> src, "ReplacementNode" -> replacementNode |>] }
+        |>]];
       Throw[issues]
   ];
 
@@ -512,7 +577,7 @@ Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
                                                     patternTest,
                                                     LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>];
 
-  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions ->{
+  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions -> {
           CodeAction["Wrap parens around RHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode1|>],
           CodeAction["Wrap parens around LHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode2|>] } |>]];
 
@@ -1047,6 +1112,45 @@ scanSyntaxErrorNodes[pos_List, aggIn_] :=
     "UnhandledCharacter",
         leaf = children[[1]];
         {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnterminatedComment",
+        {Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedEqual",
+        {Lint["ExpectedEqual", "Expected ``=``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "EmptyString",
+        {Lint["EmptyString", "Empty string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnterminatedString",
+        {Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "InvalidBase",
+        {Lint["InvalidBase", "Invalid base.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnrecognizedDigit",
+        {Lint["UnrecognizedDigit", "Unrecognized digit.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedAccuracy",
+        {Lint["ExpectedAccuracy", "Expected accuracy.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedExponent",
+        {Lint["ExpectedExponent", "Expected exponent.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnhandledDot",
+        {Lint["UnhandledDot", "Unhandled ``.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedTilde",
+        {Lint["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedSet",
+        {Lint["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ColonError",
+        {Lint["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedPossibleExpression",
+        {Lint["ExpectedPossibleExpression", "Expected an expression.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     _,
         {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
