@@ -1507,7 +1507,7 @@ Catch[
   *)
   unusedParams = Select[unusedParams, lowercaseSymbolQ];
   
-  Scan[AppendTo[issues, Lint["UnusedBlockVariables", "Unused variable in " <> format[head["String"]] <> ": `" <>
+  Scan[AppendTo[issues, Lint["UnusedBlockVariables", "Unused variable in " <> format[head["String"]] <> ": " <>
     format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 0.90|>]]&, unusedParams];
 
   issues
