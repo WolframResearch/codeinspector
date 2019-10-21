@@ -18,6 +18,8 @@ gridify
 plainify
 
 
+$characterReplacementRules
+
 
 Begin["`Private`"]
 
@@ -193,7 +195,43 @@ plainify[s_String] := StringReplace[s, {
 
 
 
-
+$characterReplacementRules = {
+	"\.00" -> "\[UnknownGlyph]",
+	"\.01" -> "\[UnknownGlyph]",
+	"\.02" -> "\[UnknownGlyph]",
+	"\.03" -> "\[UnknownGlyph]",
+	"\.04" -> "\[UnknownGlyph]",
+	"\.05" -> "\[UnknownGlyph]",
+	"\.06" -> "\[UnknownGlyph]",
+	"\.07" -> "\[UnknownGlyph]",
+	"\.08" -> "\[UnknownGlyph]",
+	(*
+	We want everything to be 1 character wide.
+	This keeps things simple
+	*)
+	"\t" -> " ",
+	"\.0b" -> "\[UnknownGlyph]",
+	"\.0c" -> "\[UnknownGlyph]",
+	"\.0e" -> "\[UnknownGlyph]",
+	"\.0f" -> "\[UnknownGlyph]",
+	"\.10" -> "\[UnknownGlyph]",
+	"\.11" -> "\[UnknownGlyph]",
+	"\.12" -> "\[UnknownGlyph]",
+	"\.13" -> "\[UnknownGlyph]",
+	"\.14" -> "\[UnknownGlyph]",
+	"\.15" -> "\[UnknownGlyph]",
+	"\.16" -> "\[UnknownGlyph]",
+	"\.17" -> "\[UnknownGlyph]",
+	"\.18" -> "\[UnknownGlyph]",
+	"\.19" -> "\[UnknownGlyph]",
+	"\.1a" -> "\[UnknownGlyph]",
+	"\.1b" -> "\[UnknownGlyph]",
+	"\.1c" -> "\[UnknownGlyph]",
+	"\.1d" -> "\[UnknownGlyph]",
+	"\.1e" -> "\[UnknownGlyph]",
+	"\.1f" -> "\[UnknownGlyph]",
+	"\.7f" -> "\[UnknownGlyph]"
+}
 
 
 

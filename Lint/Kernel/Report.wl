@@ -11,6 +11,7 @@ $DefaultSeverityExclusions
 
 $LintedLineLimit
 
+$LintLimit
 
 
 Begin["`Private`"]
@@ -30,6 +31,7 @@ $DefaultSeverityExclusions = {"Formatting", "Remark"}
 $LintedLineLimit = 10
 
 $LintLimit = 20
+
 
 
 $ConfidenceLevel = 0.95
@@ -333,12 +335,12 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     Print["lints: ", lints];
   ];
 
-  If[Length[lints] > $LintLimit,
-    lints = Take[lints, $LintLimit];
-    If[$Debug,
-      Print["lints: ", lints];
-    ];
-  ];
+  (*
+  Make sure to sort lints before taking
+  *)
+  lints = SortBy[lints, #[[4, Key[Source]]]&];
+
+  lints = Take[lints, UpTo[$LintLimit]];
 
    sources = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> src_]] :> src];
 
@@ -600,11 +602,8 @@ Module[{line, lintsPerColumn},
 
 
   line = Characters[line];
-  (*
-  We want everything to be 1 character wide.
-  This keeps things simple
-  *)
-  line = ReplaceAll[line, "\t" -> " "];
+  
+  line = ReplaceAll[line, $characterReplacementRules];
 
   lintsPerColumn = KeyValueMap[#1 -> LintMarkup[line[[#1]], FontWeight->Bold, FontColor->severityColor[#2]]&, lintsPerColumn];
 

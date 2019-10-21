@@ -548,7 +548,7 @@ Catch[
                                             LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
 
       src = data[Source];
-      AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``", "Error",
+      AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.", "Error",
         <|
           Source->src,
           ConfidenceLevel -> 0.95,
@@ -577,7 +577,7 @@ Catch[
                                                     patternTest,
                                                     LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>];
 
-  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions -> {
+  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``.", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions -> {
           CodeAction["Wrap parens around RHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode1|>],
           CodeAction["Wrap parens around LHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode2|>] } |>]];
 

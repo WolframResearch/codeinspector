@@ -32,6 +32,8 @@ $Interactive
 
 $NewLintStyle
 
+$LintsPerLineLimit
+
 
 
 Begin["`Private`"]
@@ -78,6 +80,8 @@ $LintedLineWidth = 120
 
 
 
+$LintsPerLineLimit = 5
+
 
 
 
@@ -98,15 +102,24 @@ Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], OutputFo
 
 LintedString::usage = "LintedString[string, lintedLines] represents a formatted object of linted lines found in string."
 
-Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], StandardForm] :=
+Format[lintedString:LintedString[stringIn_String, lintedLines:{___LintedLine}], StandardForm] :=
+Module[{string},
+
+	string = StringReplace[stringIn, $characterReplacementRules];
+
 	Interpretation[
 		Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
 		,
 		lintedString]
+]
 
-Format[lintedString:LintedString[string_String, lintedLines:{___LintedLine}], OutputForm] :=
+Format[lintedString:LintedString[stringIn_String, lintedLines:{___LintedLine}], OutputForm] :=
+Module[{string},
+
+	string = StringReplace[stringIn, $characterReplacementRules];
+
 	Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
-
+]
 
 
 
@@ -279,9 +292,12 @@ Style[Underscript[line, under], ScriptSizeMultipliers->1]
 But there is no guarantee that monospace fonts will be respected
 So brute-force it with Grid so that it looks good
 *)
-Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
+Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
 Catch[
-Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints, grid, red, darkerOrange, blue},
+Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints,
+	grid, red, darkerOrange, blue},
+
+	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
 	elided = OptionValue[LintedLine, {opts}, "Elided"];
 
@@ -325,6 +341,8 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 	If[$Debug,
 		Print["endingLints: ", endingLints];
 	];
+
+	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
 
 	(*
 	Make sure to sort lints
@@ -418,10 +436,12 @@ with Grid in OutputForm. bug?
 
 underlineList is not used in OutputForm
 *)
-Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
+Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
 Catch[
-Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
+Module[{lineSourceIn, maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
 	endingAdditionalLintsThisLine},
+
+	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
 	maxLineNumberLength = OptionValue[LintedLine, {opts}, "MaxLineNumberLength"];
 	elided = OptionValue[LintedLine, {opts}, "Elided"];
@@ -461,6 +481,8 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 		Print["endingLints: ", endingLints];
 	];
 
+	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
+
 	(*
 	Make sure to sort lints
 	*)
@@ -484,10 +506,12 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 
 
 
-Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], StandardForm] :=
+Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], StandardForm] :=
 Catch[
-Module[{endingLints, elided, startingLints, grid},
+Module[{lineSource, endingLints, elided, startingLints, grid},
 	
+	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
+
 	elided = OptionValue[LintedLine, {opts}, "Elided"];
 
 	If[elided,
