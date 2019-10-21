@@ -22,7 +22,15 @@ LintEOF
 
 
 
+
+
+EnableNewLintStyle
+DisableNewLintStyle
+
+
 $Interactive
+
+$NewLintStyle
 
 
 
@@ -31,6 +39,7 @@ Begin["`Private`"]
 Needs["AST`"]
 Needs["AST`Utils`"]
 Needs["Lint`"]
+Needs["Lint`External`"]
 Needs["Lint`Utils`"]
 
 
@@ -112,15 +121,17 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 
 
 newLintStyle[lint:Lint[tag_, description_, severity_, data_]] :=
-Module[{bolded, boldedBoxes, actions, items, menuItems},
+Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 
 	bolded = boldify[description];
 
 	boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
 
-	items = {};
+	If[$Debug,
+		Print["data: ", data];
+	];
 
-	If[$Interactive,
+	If[TrueQ[$Interactive],
 		actions = Lookup[data, CodeActions, {}];
 		If[$Debug,
 			Print["actions: ", actions];
@@ -132,7 +143,36 @@ Module[{bolded, boldedBoxes, actions, items, menuItems},
 
 		menuItems = DeleteCases[menuItems, _?FailureQ];
 
-		items = items ~Join~ menuItems;
+		items = menuItems;
+		,
+		(* non-Interactive *)
+
+		If[KeyExistsQ[data, "File"],
+
+			If[KeyExistsQ[data, Source],
+
+				file = data["File"];
+
+				line = data[Source][[1,1]];
+				col = data[Source][[1,2]];
+
+				items = With[{file = file, line = line, col = col}, { "Open in editor" :> OpenInEditor[file, line, col] }]
+
+				,
+
+				(*
+				Source may not exist in generated nodes
+				*)
+
+				items = {}
+			];
+			,
+			items = {}
+		]
+	];
+
+	If[$Debug,
+		Print["items: ", items];
 	];
 
 	RawBoxes[TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]]
@@ -241,7 +281,7 @@ So brute-force it with Grid so that it looks good
 *)
 Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
 Catch[
-Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints, grid, red, darkerOrange, blue, larger},
+Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints, grid, red, darkerOrange, blue},
 
 	elided = OptionValue[LintedLine, {opts}, "Elided"];
 
@@ -314,7 +354,6 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 	red = Position[grid, LintMarkup[_, ___, FontColor -> Red, ___]];
 	darkerOrange = Position[grid, LintMarkup[_, ___, FontColor -> Darker[Orange], ___]];
 	blue = Position[grid, LintMarkup[_, ___, FontColor -> Blue, ___]];
-	larger = Position[grid, LintMarkup[_, ___, FontSize -> Larger, ___]];
 
 	(*
 	Collect all of the adjacent positions of a style into a single range
@@ -332,7 +371,6 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 	red = coalesce[red];
 	darkerOrange = coalesce[darkerOrange];
 	blue = coalesce[blue];
-	larger = coalesce[larger];
 
 	(*
 	now remove markup from the grid itself
@@ -352,8 +390,7 @@ Module[{endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, el
 						ItemStyle -> {Automatic, Automatic,
 							(# -> {Bold, Red}& /@ red) ~Join~
 							(# -> {Bold, Darker[Orange]}& /@ darkerOrange) ~Join~
-							(# -> {Bold, Blue}& /@ blue) ~Join~
-							(# -> {Bold, Larger}& /@ larger)} ] } ~Join~ endingLints]}} ~Join~
+							(# -> {Bold, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
 		,
 		Alignment -> {Left, Top}, Spacings -> {0, 0}];
@@ -869,7 +906,7 @@ $suggestionIconTemplateDisplayFunction = Function[
 
 $prettyTooltipBox[interactive_] :=
 With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunction},
-	If[TrueQ[interactive],
+	If[TrueQ[interactive] || True,
          AdjustmentBox[
           TemplateBox[
            {
@@ -918,7 +955,8 @@ With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunct
            ,
            DisplayFunction -> $prettyTooltipTemplateDisplayFunction
           ],
-          BoxBaselineShift -> -0.3
+          BoxBaselineShift -> -0.3,
+          BoxMargins -> {{2, 0}, {0, 0}}
          ]
          ,
          Sequence @@ {}
@@ -930,8 +968,8 @@ With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunct
 $suggestionGridTemplateDisplayFunction[interactive_] :=
 With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFunction,
 	$prettyTooltipBox = $prettyTooltipBox[interactive],
-	paneBoxImageSize = If[TrueQ[interactive], Full, Automatic],
-	prettyTooltipBoxColumnItemSize = If[TrueQ[interactive], Fit, Sequence @@ {}]},
+	paneBoxImageSize = If[TrueQ[interactive], (*Full*)Automatic, Automatic],
+	prettyTooltipBoxColumnItemSize = If[TrueQ[interactive], (*Fit*)4, (*Sequence @@ {}*)4]},
  Function[
   StyleBox[
    FrameBox[
@@ -948,7 +986,7 @@ With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFun
          ],
          PaneBox[
           #1,
-          ImageSizeAction -> "ShrinkToFit",
+          (*ImageSizeAction -> "ShrinkToFit",*)
           BaselinePosition -> Baseline,
           ImageSize -> paneBoxImageSize
          ],
@@ -980,6 +1018,19 @@ With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFun
   ]
  ]
 ]
+
+
+
+EnableNewLintStyle[nb_NotebookObject] := (
+  $NewLintStyle = True;
+)
+
+
+DisableNewLintStyle[nb_NotebookObject] := (
+  $NewLintStyle = False;
+)
+
+
 
 
 

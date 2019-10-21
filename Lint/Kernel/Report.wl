@@ -195,7 +195,7 @@ Catch[
 
 
 
-Lint::sourceless = "There are Lints without Source data. This can happen when abstract syntax is linted. \
+Lint::sourceless = "There are Lints without Source data. This can happen when some abstract syntax is linted. \
 These Lints cannot be reported. `1`"
 
 

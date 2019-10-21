@@ -35,12 +35,6 @@ $Start
 $Time
 
 
-
-
-EnableNewLintStyle
-DisableNewLintStyle
-
-
 Begin["`Private`"]
 
 Needs["AST`"]
@@ -95,7 +89,7 @@ $fileByteCountMaxLimit = 3*^6
 
 LintFile[file_String | File[file_String], OptionsPattern[]] :=
 Catch[
- Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cstAndIssues},
+ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cstAndIssues, data},
 
  performanceGoal = OptionValue[PerformanceGoal];
  aggregateRules = OptionValue["AggregateRules"];
@@ -127,6 +121,18 @@ Catch[
   ];
 
   lints = LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "AggregateRules" -> aggregateRules, "AbstractRules" -> abstractRules];
+
+  (*
+  Add "File" to lints
+  *)
+  lints = Table[
+    data = lint[[4]];
+    data["File"] = full;
+    lint[[4]] = data;
+    lint
+    ,
+    {lint, lints}
+  ];
 
   lints
 ]]
@@ -296,19 +302,6 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
 
   lints
 ]]
-
-
-
-
-
-EnableNewLintStyle[nb_NotebookObject] := (
-  Lint`Format`Private`$NewLintStyle = True;
-)
-
-
-DisableNewLintStyle[nb_NotebookObject] := (
-  Lint`Format`Private`$NewLintStyle = False;
-)
 
 
 
