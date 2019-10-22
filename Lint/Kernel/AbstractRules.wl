@@ -765,7 +765,7 @@ Attributes[scanAssocs] = {HoldRest}
 
 scanAssocs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, keys, srcs, actions},
+ Module[{ast, node, children, data, duplicates, selecteds, issues, keys, srcs, actions},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -773,32 +773,31 @@ Catch[
 
   issues = {};
 
-  If[!MatchQ[children, {CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _] ...}],
-
+  If[!MatchQ[children, { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }],
     (*
-
-    too noisy
-
-    AppendTo[issues, Lint["AssociationArguments", "``Association`` does not have ``Rule`` arguments.\n\
-This may be ok if ``Association`` is used programmatically.", "Remark", data]];
-
-    Throw[issues] *)
-
+    Association does not have Rule arguments.
+    *)
     Throw[{}]
   ];
   
     keys = children[[All, 2, 1]];
 
     duplicates = Keys[Select[CountsBy[keys, ToFullFormString], # > 1&]];
-   selected = Flatten[Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates, 1];
+   selecteds = Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates;
 
-   If[!empty[selected],
+   Do[
+
+      If[!empty[selected],
        srcs = #[[3, Key[Source]]]& /@ selected;
 
        actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
-      AppendTo[issues, Lint["DuplicateKeys", "``Association`` has duplicated keys.", "Error",
+       AppendTo[issues, Lint["DuplicateKeys", "``Association`` has duplicated keys.", "Error",
           <| Source->First[srcs], "AdditionalSources"->Rest[srcs], CodeActions->actions, ConfidenceLevel -> 1.0 |> ]];
+      ];
+
+      ,
+      {selected, selecteds}
    ];
 
     issues
@@ -813,7 +812,7 @@ Attributes[scanRules] = {HoldRest}
 
 scanRules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, keys, srcs},
+ Module[{ast, node, children, data, duplicates, selecteds, issues, keys, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -833,20 +832,26 @@ Catch[
   ];
 
     duplicates = Keys[Select[CountsBy[keys, ToFullFormString], # > 1&]];
-   selected = Flatten[Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates, 1];
+   selecteds = Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates;
 
-   If[!empty[selected],
+   Do[
 
-      (*
-      It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
+      If[!empty[selected],
 
-      So make Remark for now
-      *)
+       (*
+       It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
 
-      srcs = #[[3, Key[Source]]]& /@ selected;
+       So make Remark for now
+       *)
 
-      AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in list of rules.", "Remark",
+       srcs = #[[3, Key[Source]]]& /@ selected;
+
+       AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in list of rules.", "Remark",
             <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.75 |>]];
+      ];
+
+      ,
+      {selected, selecteds}
    ];
 
    issues
@@ -2033,11 +2038,6 @@ Catch[
   issues
 
 ]]
-
-
-
-
-
 
 
 
