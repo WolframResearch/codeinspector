@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    388025,       7115]
-NotebookOptionsPosition[    380616,       7012]
-NotebookOutlinePosition[    380955,       7027]
-CellTagsIndexPosition[    380912,       7024]
+NotebookDataLength[    239243,       4097]
+NotebookOptionsPosition[    234517,       4023]
+NotebookOutlinePosition[    234856,       4038]
+CellTagsIndexPosition[    234813,       4035]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -23,7 +23,8 @@ Cell[BoxData[
  CellChangeTimes->{{3.751109253597948*^9, 3.751109254489959*^9}, {
   3.7526007337261753`*^9, 3.752600734451129*^9}, {3.766735989619089*^9, 
   3.7667359904964533`*^9}},
- CellLabel->"In[7]:=",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
+ CellLabel->
+  "In[152]:=",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
 
 Cell[CellGroupData[{
 
@@ -151,8 +152,10 @@ Cell[BoxData["\<\"abc\"\>"], "Output",
    3.7801362863410587`*^9}, 3.7803992062595377`*^9, 3.780401245005363*^9, 
    3.7804197699568043`*^9, 3.7804201790835543`*^9, 3.780420297165944*^9, 
    3.780420412882188*^9, 3.780420761394125*^9, 3.780420855930901*^9, 
-   3.780420978952878*^9, 3.7804210452873993`*^9},
- CellLabel->"Out[2]=",ExpressionUUID->"5fefb712-0928-42e3-8e53-efeddb61e569"]
+   3.780420978952878*^9, 3.7804210452873993`*^9, 3.780652194428095*^9, 
+   3.780657603309314*^9, 3.780659144826264*^9, 3.780659299737741*^9, 
+   3.78065944474109*^9},
+ CellLabel->"Out[2]=",ExpressionUUID->"993b5a93-aa55-4307-9995-fc70dcbccf37"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -462,8 +465,10 @@ Cell[BoxData[
    3.7801362889335413`*^9}, 3.780399209679543*^9, 3.780401247299075*^9, 
    3.78041977333228*^9, 3.780420182336314*^9, 3.780420300319949*^9, 
    3.780420416107882*^9, 3.780420762962389*^9, 3.780420857460671*^9, 
-   3.780420980408102*^9, 3.780421046741496*^9},
- CellLabel->"Out[4]=",ExpressionUUID->"e8a90e21-745e-4036-9512-2fbff661cb55"]
+   3.780420980408102*^9, 3.780421046741496*^9, 3.780651862657115*^9, 
+   3.780652197868198*^9, 3.780657605138803*^9, 3.780659146735421*^9, 
+   3.78065930208309*^9, 3.780659446381238*^9},
+ CellLabel->"Out[4]=",ExpressionUUID->"750a90de-22fe-43a4-828e-9f517fdbd4cc"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -521,7 +526,7 @@ e15090e310aa"],
 Cell[BoxData[
  RowBox[{"$MessagePrePrint", "=."}]], "Input",
  CellChangeTimes->{{3.7558912494540663`*^9, 3.7558912536547327`*^9}},
- CellLabel->"In[6]:=",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
+ CellLabel->"In[3]:=",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
 
 Cell["\<\
 The AST package must be built first. Change these paths to point to your \
@@ -537,7 +542,7 @@ Cell[BoxData[{
  CellChangeTimes->{{3.749556742283807*^9, 3.7495567425703573`*^9}, {
   3.752498664219411*^9, 3.752498664744933*^9}, {3.7525953788795967`*^9, 
   3.752595379563582*^9}},
- CellLabel->"In[7]:=",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
+ CellLabel->"In[4]:=",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
 
 Cell[BoxData[
  RowBox[{
@@ -547,7 +552,7 @@ Cell[BoxData[
   3.749559912422893*^9, {3.752498647092827*^9, 3.752498650857582*^9}, {
    3.752942153117607*^9, 3.7529421548689117`*^9}, 3.752942213225191*^9, {
    3.7558708210587387`*^9, 3.7558708221525393`*^9}},
- CellLabel->"In[9]:=",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
+ CellLabel->"In[6]:=",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
 
 Cell[BoxData[
  RowBox[{
@@ -555,7 +560,7 @@ Cell[BoxData[
   "protos", "=", 
    "\"\</Users/brenton/Library/Mathematica/ApplicationData/StashLink/\
 Prototypes/\>\""}], ";"}]], "Input",
- CellLabel->"In[10]:=",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
+ CellLabel->"In[7]:=",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
 
 Cell[BoxData[
  RowBox[{
@@ -564,7 +569,7 @@ Cell[BoxData[
  CellChangeTimes->{{3.752509394577828*^9, 3.752509404207556*^9}, 
    3.75294220275294*^9, 3.755870829451112*^9, {3.773047307509779*^9, 
    3.7730473246867743`*^9}},
- CellLabel->"In[11]:=",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
+ CellLabel->"In[8]:=",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
 
 Cell[BoxData[
  RowBox[{
@@ -572,7 +577,7 @@ Cell[BoxData[
   "github", "=", "\"\</Users/brenton/development/github-development/\>\""}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.774268681030183*^9, 3.7742686864376802`*^9}},
- CellLabel->"In[12]:=",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
+ CellLabel->"In[9]:=",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
 
 Cell[BoxData[
  RowBox[{
@@ -580,7 +585,7 @@ Cell[BoxData[
   "other", "=", "\"\</Users/brenton/development/other-development/\>\""}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.774868772298738*^9, 3.774868775178615*^9}},
- CellLabel->"In[13]:=",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
+ CellLabel->"In[10]:=",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
 
 Cell[BoxData[
  RowBox[{
@@ -588,7 +593,7 @@ Cell[BoxData[
   "examples", "=", "\"\</Users/brenton/Downloads/WLCodeExamples/\>\""}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.776000449971442*^9, 3.776000458131075*^9}},
- CellLabel->"In[14]:=",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
+ CellLabel->"In[11]:=",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -1540,14 +1545,14 @@ m\>\"", "\[Rule]",
    3.7690031513264847`*^9}, {3.769089635841011*^9, 3.769089699198401*^9}, {
    3.775554485375002*^9, 3.775554514400814*^9}, {3.778759581211093*^9, 
    3.778759584600298*^9}},
- CellLabel->"In[15]:=",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
+ CellLabel->"In[12]:=",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"$AdditionalRules", "=", 
    RowBox[{"<|", "|>"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.7576808456927147`*^9, 3.757680848636235*^9}},
- CellLabel->"In[17]:=",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
+ CellLabel->"In[14]:=",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
 
 Cell[BoxData[
  RowBox[{
@@ -1558,7 +1563,7 @@ Cell[BoxData[
    ";"}]], "Input",
  CellChangeTimes->{{3.752415714385433*^9, 3.752415725942972*^9}, 
    3.7524159581734457`*^9},
- CellLabel->"In[18]:=",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
+ CellLabel->"In[15]:=",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
 
 Cell[BoxData[
  RowBox[{
@@ -1799,7 +1804,7 @@ Cell[BoxData[
    3.7795771236732693`*^9}, {3.779577264129085*^9, 3.779577267095492*^9}, {
    3.779577458309791*^9, 3.779577474609827*^9}, {3.7795779566218367`*^9, 
    3.7795779762868156`*^9}, {3.780413443751047*^9, 3.7804134717124577`*^9}},
- CellLabel->"In[19]:=",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
+ CellLabel->"In[16]:=",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
 
 Cell[BoxData[
  RowBox[{
@@ -1809,7 +1814,7 @@ Cell[BoxData[
     RowBox[{"\"\<FileNamePrefixPattern\>\"", "\[Rule]", "\"\<\>\""}], "}"}]}],
    ";"}]], "Input",
  CellChangeTimes->{3.7524171998912363`*^9},
- CellLabel->"In[20]:=",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
+ CellLabel->"In[17]:=",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
 
 Cell[BoxData[
  RowBox[{
@@ -1939,7 +1944,7 @@ Cell[BoxData[
    3.768742074941379*^9, 3.7687420761969843`*^9}, {3.776594934653112*^9, 
    3.7765949395000677`*^9}, {3.776595055658917*^9, 3.776595096512281*^9}, {
    3.776595170900703*^9, 3.776595172799589*^9}},
- CellLabel->"In[21]:=",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
+ CellLabel->"In[18]:=",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -1960,13 +1965,13 @@ d17025596029"],
 Cell[BoxData[{
  RowBox[{
   RowBox[{"prefix1", ":=", 
-   RowBox[{"stash", "<>", "\"\<COM/\>\""}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"stash", "<>", "\"\<KERN/\>\""}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"prefix2", ":=", 
    RowBox[{"other", "<>", "\"\<WLCodeExamples/\>\""}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"prefix", "=", "prefix1"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"prefix", "=", "protos"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"names1", ":=", 
    RowBox[{"FileNames", "[", 
@@ -2609,17 +2614,20 @@ Cell[BoxData[{
    3.780399218838256*^9, 3.7803992201995573`*^9}, {3.780412193342181*^9, 
    3.780412197035544*^9}, {3.780412232999579*^9, 3.780412234720667*^9}, {
    3.780414050961417*^9, 3.780414054176931*^9}, {3.780414965656666*^9, 
-   3.780414965837262*^9}, {3.780480521974242*^9, 3.7804805225441723`*^9}},
- CellLabel->"In[22]:=",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
+   3.780414965837262*^9}, {3.780480521974242*^9, 3.7804805225441723`*^9}, {
+   3.780582715662313*^9, 3.780582715900137*^9}, {3.780655592294051*^9, 
+   3.78065559321097*^9}, {3.780661746821644*^9, 3.7806617477155724`*^9}, {
+   3.780667812190124*^9, 3.780667812966536*^9}},
+ CellLabel->"In[19]:=",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{"Length", "[", "names", "]"}]], "Input",
  CellChangeTimes->{{3.755821810995276*^9, 3.7558218130892*^9}},
- CellLabel->"In[64]:=",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
+ CellLabel->"In[61]:=",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
 
-Cell[BoxData["1131"], "Output",
+Cell[BoxData["3929"], "Output",
  CellChangeTimes->{
   3.755821815358417*^9, 3.755822152957499*^9, 3.755822319512195*^9, 
    3.755829819651298*^9, {3.755833600554923*^9, 3.755833613215407*^9}, 
@@ -2861,8 +2869,12 @@ Cell[BoxData["1131"], "Output",
    3.779578324596637*^9, 3.779578372737074*^9, 3.779647710311523*^9, 
    3.779648195994358*^9, 3.780399224298428*^9, {3.780412215243737*^9, 
    3.780412237147443*^9}, 3.780414209003706*^9, 3.780414970587739*^9, 
-   3.780480541047494*^9},
- CellLabel->"Out[64]=",ExpressionUUID->"c541d1e2-a210-49b0-aabf-f5a6b7fe9db4"]
+   3.780480541047494*^9, 3.780576410574078*^9, 3.7805770345431004`*^9, 
+   3.780582724633192*^9, 3.78058290273381*^9, 3.780583212238113*^9, 
+   3.7806556058833323`*^9, 3.780659515848081*^9, 3.780661326924329*^9, 
+   3.78066175148279*^9, 3.7806678174297047`*^9, 3.780741431799634*^9, 
+   3.7807443950160646`*^9},
+ CellLabel->"Out[61]=",ExpressionUUID->"aabfa79d-4848-48c1-b173-953e8024b083"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -2895,20 +2907,22 @@ Cell[BoxData[{
    3.776723987956072*^9, 3.776725994780061*^9, 3.776726237745318*^9, {
    3.776867081385981*^9, 3.7768671242398987`*^9}, 3.776867306765767*^9, 
    3.777924985582896*^9, 3.778425126723975*^9, 3.7793727527171707`*^9, 
-   3.779376297142969*^9, 3.77957823313553*^9, 3.779578486627757*^9},
- CellLabel->"In[65]:=",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
+   3.779376297142969*^9, 3.77957823313553*^9, 3.779578486627757*^9, 
+   3.780576949354025*^9, 3.780577083702368*^9},
+ CellLabel->"In[62]:=",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"Lint`Format`$Interactive", "=", "True"}], ";"}]], "Input",
- CellChangeTimes->{{3.780419111417235*^9, 3.780419120478463*^9}},
- CellLabel->"In[70]:=",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
+  RowBox[{"Lint`Format`$Interactive", "=", "xTrue"}], ";"}]], "Input",
+ CellChangeTimes->{{3.780419111417235*^9, 3.780419120478463*^9}, 
+   3.780577075998773*^9},
+ CellLabel->"In[67]:=",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"Lint`Format`Private`$NewLintStyle", "=", "True"}], ";"}]], "Input",\
-
- CellLabel->"In[71]:=",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
+  RowBox[{"Lint`Format`$NewLintStyle", "=", "True"}], ";"}]], "Input",
+ CellChangeTimes->{{3.7805764166970167`*^9, 3.780576416935618*^9}},
+ CellLabel->"In[68]:=",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
 
 Cell[BoxData[{
  RowBox[{
@@ -2920,7 +2934,7 @@ Cell[BoxData[{
   RowBox[{"severityExclusions", "=", 
    RowBox[{"{", "}"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.780413480311418*^9, 3.780413513912842*^9}},
- CellLabel->"In[72]:=",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
+ CellLabel->"In[69]:=",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
 
 Cell[BoxData[{
  RowBox[{
@@ -2943,25 +2957,26 @@ Cell[BoxData[{
  CellChangeTimes->{{3.780413480311418*^9, 3.7804135186971693`*^9}, {
   3.7804136265283527`*^9, 3.780413631391913*^9}, {3.7804136991688957`*^9, 
   3.780413705735568*^9}, {3.7804143846551228`*^9, 3.780414385137207*^9}},
- CellLabel->"In[74]:=",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
+ CellLabel->"In[71]:=",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"Lint`Report`Private`$ConfidenceLevel", "=", "0.8"}], 
+  RowBox[{"Lint`Report`Private`$ConfidenceLevel", "=", "0.0"}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.7793771052895403`*^9, 3.7793771060559273`*^9}, {
    3.779377193115782*^9, 3.7793772120118093`*^9}, {3.779448585111349*^9, 
    3.779448585460896*^9}, {3.779577131090147*^9, 3.779577131399589*^9}, 
    3.7795781150850563`*^9, {3.7804124431024017`*^9, 3.7804124673073874`*^9}, 
-   3.7804143617176447`*^9},
- CellLabel->"In[76]:=",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
+   3.7804143617176447`*^9, {3.7806556265473022`*^9, 3.780655626960745*^9}, {
+   3.780741443848221*^9, 3.780741444432385*^9}},
+ CellLabel->"In[73]:=",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
 
 Cell[BoxData[{
  RowBox[{
   RowBox[{"Lint`Private`$fileByteCountMinLimit", "=", "0.0*^6"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"Lint`Private`$fileByteCountMaxLimit", "=", "6.2*^6"}], 
+  RowBox[{"Lint`Private`$fileByteCountMaxLimit", "=", "2.0*^6"}], 
   ";"}]}], "Input",
  CellChangeTimes->{{3.766919573395403*^9, 3.766919580800743*^9}, {
    3.768832753126946*^9, 3.7688327534210176`*^9}, {3.7690865529697742`*^9, 
@@ -2980,16 +2995,18 @@ Cell[BoxData[{
    3.7767230759128933`*^9, {3.7779250553370543`*^9, 3.777925056069479*^9}, 
    3.778425115235981*^9, {3.77937428763105*^9, 3.779374289012247*^9}, {
    3.780399234404016*^9, 3.7803992347070017`*^9}, {3.780414981631074*^9, 
-   3.78041498381973*^9}, {3.780480550225256*^9, 3.780480550878134*^9}},
- CellLabel->"In[79]:=",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
+   3.78041498381973*^9}, {3.780480550225256*^9, 3.780480550878134*^9}, {
+   3.7805832398065968`*^9, 3.780583242100754*^9}, {3.780661762382292*^9, 
+   3.780661764876289*^9}},
+ CellLabel->"In[74]:=",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData["$ProcessID"], "Input",
  CellChangeTimes->{{3.771499598639045*^9, 3.7714996003266*^9}},
- CellLabel->"In[81]:=",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
+ CellLabel->"In[76]:=",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
 
-Cell[BoxData["5879"], "Output",
+Cell[BoxData["48609"], "Output",
  CellChangeTimes->{
   3.771499600631003*^9, {3.771500318760984*^9, 3.771500371073209*^9}, 
    3.771500565146717*^9, 3.771508711073694*^9, 3.771509264465637*^9, 
@@ -3075,13 +3092,18 @@ Cell[BoxData["5879"], "Output",
    3.780399236000737*^9, {3.780412223540642*^9, 3.7804122404463673`*^9}, {
    3.780412446037519*^9, 3.7804124699319487`*^9}, 3.780413522889854*^9, 
    3.780414220007984*^9, 3.780414363803177*^9, 3.780414985428018*^9, 
-   3.780419124841776*^9, 3.780480552263632*^9},
- CellLabel->"Out[81]=",ExpressionUUID->"3dfc326e-a82b-4ac5-a308-87c1daa0583d"]
+   3.780419124841776*^9, 3.780480552263632*^9, 3.780576421385553*^9, 
+   3.780577039719784*^9, 3.78058273293504*^9, 3.78058290997618*^9, {
+   3.780583217480719*^9, 3.780583243347471*^9}, 3.780655616336852*^9, 
+   3.780659521362822*^9, 3.78066133190485*^9, {3.780661757133733*^9, 
+   3.780661766283743*^9}, 3.780667824400806*^9, 3.7807414462008266`*^9, 
+   3.78074439996325*^9},
+ CellLabel->"Out[76]=",ExpressionUUID->"fd5a9e56-3ce9-4bcc-833b-2a57bd00834a"]
 }, Open  ]],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"start", "=", "1"}], ";"}]], "Input",
+  RowBox[{"start", "=", "1686"}], ";"}]], "Input",
  CellChangeTimes->{{3.745249007878497*^9, 3.745249020034534*^9}, {
    3.745249152154645*^9, 3.7452491769950523`*^9}, {3.745249213341361*^9, 
    3.745249264312643*^9}, {3.7452492980589123`*^9, 3.7452493282631903`*^9}, {
@@ -3461,8 +3483,12 @@ Cell[BoxData[
    3.779376293494306*^9, 3.779376294244072*^9}, {3.779376888671442*^9, 
    3.779376890237236*^9}, {3.7795782293576937`*^9, 3.7795782296217422`*^9}, 
    3.779578352952804*^9, {3.7804158963532*^9, 3.780415897261909*^9}, {
-   3.780480554033696*^9, 3.780480554902022*^9}},
- CellLabel->"In[82]:=",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
+   3.780480554033696*^9, 3.780480554902022*^9}, {3.7806557850929747`*^9, 
+   3.780655785603483*^9}, {3.7806595234310226`*^9, 3.780659523949522*^9}, {
+   3.7806602958564796`*^9, 3.780660296757292*^9}, {3.780661758637968*^9, 
+   3.7806617589160213`*^9}, {3.780662277181562*^9, 3.780662277659244*^9}, 
+   3.780664034571508*^9, {3.780743157149737*^9, 3.780743157757268*^9}},
+ CellLabel->"In[77]:=",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
 
 Cell[CellGroupData[{
 
@@ -3683,7 +3709,7 @@ Cell[BoxData[{
             RowBox[{"\"\<FileNamePrefixPattern\>\"", "\[Rule]", "prefix"}]}], 
            "]"}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
        RowBox[{"res", "=", 
-        RowBox[{"implicitTimesTest", "[", 
+        RowBox[{"lintTest", "[", 
          RowBox[{"file", ",", "x", ",", 
           RowBox[{"\"\<FileNamePrefixPattern\>\"", "\[Rule]", "prefix"}]}], 
          "]"}]}], ";", "\[IndentingNewLine]", 
@@ -3982,3031 +4008,16 @@ Cell[BoxData[{
    3.77659410862257*^9}, {3.7765941699368563`*^9, 3.776594173552103*^9}, {
    3.7765951801549187`*^9, 3.776595196216552*^9}, 3.776703327256935*^9, {
    3.776939042914029*^9, 3.776939049482829*^9}, {3.776939837266787*^9, 
-   3.776939843268523*^9}, {3.7804805662351847`*^9, 3.780480567388616*^9}},
- CellLabel->"In[92]:=",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
+   3.776939843268523*^9}, {3.7804805662351847`*^9, 3.780480567388616*^9}, 
+   3.7805764363747473`*^9, {3.780660303302554*^9, 3.780660304184548*^9}, 
+   3.780661319230905*^9, {3.7807431611777287`*^9, 3.7807431618472567`*^9}, 
+   3.780744523126532*^9},
+ CellLabel->"In[88]:=",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
 
-Cell[CellGroupData[{
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Linting \"\>", "\[InvisibleSpace]", "1131", 
-   "\[InvisibleSpace]", "\<\" files\"\>"}],
-  SequenceForm["Linting ", 1131, " files"],
-  Editable->False]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568133237*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"2b8cef47-4632-4624-bf1e-ffbb32914a62"],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Current file: \"\>", "\[InvisibleSpace]", 
-   DynamicBox[ToBoxes[$CellContext`file, StandardForm],
-    ImageSizeCache->{424.81054687499994`, {3., 9.}}]}],
-  SequenceForm["Current file: ", 
-   Dynamic[$CellContext`file]],
-  Editable->False]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568135562*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"d31dd10a-d3cf-4cb9-b7fb-f7f3e1bf52af"],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Current file size: \"\>", "\[InvisibleSpace]", 
-   DynamicBox[ToBoxes[
-     FileSize[$CellContext`file], StandardForm],
-    ImageSizeCache->{56., {3., 12.}}]}],
-  SequenceForm["Current file size: ", 
-   Dynamic[
-    FileSize[$CellContext`file]]],
-  Editable->False]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568139771*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"cc6fe5d9-24f0-44c6-a526-3175eda4f822"],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Current index: \"\>", "\[InvisibleSpace]", 
-   DynamicBox[ToBoxes[$CellContext`x, StandardForm],
-    ImageSizeCache->{28.8, {0., 8.}}]}],
-  SequenceForm["Current index: ", 
-   Dynamic[$CellContext`x]],
-  Editable->False]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.78048056814209*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"2e5edf7a-77d1-4269-8821-f60fda570cdb"],
-
-Cell[BoxData[
- TemplateBox[{"\"overall\"", 
-   TemplateBox[{10}, "Spacer1"], 
-   ProgressIndicatorBox[
-    Dynamic[$CellContext`x], {0, 1131}]},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568143708*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"0ed6b2c0-c2f8-4483-8ac3-07ab68afcbe4"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "4", "\" \"", "\"adtools/ADTools/Transform/ForwardAD.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568366231*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"85ccbea2-afaa-4a23-875b-6797b94c184a"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/adtools/ADTools/Transform/\
-ForwardAD.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   85\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "zeroConstant[x_?NumberQ] := 0 x;"], "\<\"Copy line number\"\>":>
-             CopyToClipboard[85], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"15fd6e08b1053b8b\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"z\"\>", "\<\"e\"\>", "\<\"r\"\>", \
-"\<\"o\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"n\"\>", "\<\"s\"\>", "\<\"t\"\>", \
-"\<\"a\"\>", "\<\"n\"\>", "\<\"t\"\>", "\<\"[\"\>", "\<\"x\"\>", "\<\"_\"\>", \
-"\<\"?\"\>", "\<\"N\"\>", "\<\"u\"\>", "\<\"m\"\>", "\<\"b\"\>", "\<\"e\"\>", \
-"\<\"r\"\>", "\<\"Q\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\":\"\>", "\<\"=\"\>", \
-"\<\" \"\>", "\<\"0\"\>", "\<\" \"\>", "\<\"x\"\>", "\<\";\"\>", "\<\" \
-\"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"(\"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {30, 31}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {33, 33}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {30, 31}} -> {
-                    Bold, Larger}, {{2, 2}, {33, 33}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/adtools/ADTools/Transform/ForwardAD.\
-m", {
-    Lint`LintedLine[
-    "zeroConstant[x_?NumberQ] := 0 x;", 85, 
-     "15fd6e08b1053b8b", {{
-      " ", "z", "e", "r", "o", "C", "o", "n", "s", "t", "a", "n", "t", "[", 
-       "x", "_", "?", "N", "u", "m", "b", "e", "r", "Q", "]", " ", ":", "=", 
-       " ", "0", " ", "x", ";", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568396596*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"ae59e9b8-826b-406b-87ef-ed03cd6ca373"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "5", "\" \"", "\"adtools/ADTools/Transform/ReverseAD.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.78048056860994*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"6e4d255e-846b-4808-8860-31eb35b086d2"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/adtools/ADTools/Transform/\
-ReverseAD.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  104\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "zeroConstant[x_?NumberQ] := 0 x;"], "\<\"Copy line number\"\>":>
-             CopyToClipboard[104], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"15fd6e08b1053b8b\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"z\"\>", "\<\"e\"\>", "\<\"r\"\>", \
-"\<\"o\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"n\"\>", "\<\"s\"\>", "\<\"t\"\>", \
-"\<\"a\"\>", "\<\"n\"\>", "\<\"t\"\>", "\<\"[\"\>", "\<\"x\"\>", "\<\"_\"\>", \
-"\<\"?\"\>", "\<\"N\"\>", "\<\"u\"\>", "\<\"m\"\>", "\<\"b\"\>", "\<\"e\"\>", \
-"\<\"r\"\>", "\<\"Q\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\":\"\>", "\<\"=\"\>", \
-"\<\" \"\>", "\<\"0\"\>", "\<\" \"\>", "\<\"x\"\>", "\<\";\"\>", "\<\" \
-\"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"(\"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {30, 31}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {33, 33}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {30, 31}} -> {
-                    Bold, Larger}, {{2, 2}, {33, 33}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/adtools/ADTools/Transform/ReverseAD.\
-m", {
-    Lint`LintedLine[
-    "zeroConstant[x_?NumberQ] := 0 x;", 104, 
-     "15fd6e08b1053b8b", {{
-      " ", "z", "e", "r", "o", "C", "o", "n", "s", "t", "a", "n", "t", "[", 
-       "x", "_", "?", "N", "u", "m", "b", "e", "r", "Q", "]", " ", ":", "=", 
-       " ", "0", " ", "x", ";", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568619969*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"b015fae2-0e31-47bb-a078-5f0f5079c052"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "7", "\" \"", "\"adtools/ADTools/TypeSystem/ADTypes.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568732603*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"6d8a6528-c7aa-43dd-876b-b733a90896a4"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/adtools/ADTools/TypeSystem/\
-ADTypes.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   31\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "CoerceConstants[\"Complex\"][e_] := ReplaceAll[N[e], \
-x_?MachineNumberQ :> x + 0. I];"], "\<\"Copy line number\"\>":>
-             CopyToClipboard[31], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"1cb46fbb0e394417\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"e\"\>", \
-"\<\"r\"\>", "\<\"c\"\>", "\<\"e\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"n\"\>", \
-"\<\"s\"\>", "\<\"t\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"t\"\>", "\<\"s\"\>", \
-"\<\"[\"\>", "\<\"\\\"\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", \
-"\<\"p\"\>", "\<\"l\"\>", "\<\"e\"\>", "\<\"x\"\>", "\<\"\\\"\"\>", \
-"\<\"]\"\>", "\<\"[\"\>", "\<\"e\"\>", "\<\"_\"\>", "\<\"]\"\>", "\<\" \"\>", \
-"\<\":\"\>", "\<\"=\"\>", "\<\" \"\>", "\<\"R\"\>", "\<\"e\"\>", "\<\"p\"\>", \
-"\<\"l\"\>", "\<\"a\"\>", "\<\"c\"\>", "\<\"e\"\>", "\<\"A\"\>", "\<\"l\"\>", \
-"\<\"l\"\>", "\<\"[\"\>", "\<\"N\"\>", "\<\"[\"\>", "\<\"e\"\>", "\<\"]\"\>", \
-"\<\",\"\>", "\<\" \"\>", "\<\"x\"\>", "\<\"_\"\>", "\<\"?\"\>", "\<\"M\"\>", \
-"\<\"a\"\>", "\<\"c\"\>", "\<\"h\"\>", "\<\"i\"\>", "\<\"n\"\>", "\<\"e\"\>", \
-"\<\"N\"\>", "\<\"u\"\>", "\<\"m\"\>", "\<\"b\"\>", "\<\"e\"\>", "\<\"r\"\>", \
-"\<\"Q\"\>", "\<\" \"\>", "\<\":\"\>", "\<\">\"\>", "\<\" \"\>", "\<\"x\"\>", \
-"\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", \
-"\<\"I\"\>", "\<\"]\"\>", "\<\";\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", \
-"\<\")\"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {78, 78}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {80, 80}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {82, 82}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {78, 78}} -> {
-                    Bold, Larger}, {{2, 2}, {80, 80}} -> {Bold, Larger}, {{2, 
-                    2}, {82, 82}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/adtools/ADTools/TypeSystem/ADTypes.m",\
- {
-    Lint`LintedLine[
-    "CoerceConstants[\"Complex\"][e_] := ReplaceAll[N[e], x_?MachineNumberQ \
-:> x + 0. I];", 31, 
-     "1cb46fbb0e394417", {{
-      " ", "C", "o", "e", "r", "c", "e", "C", "o", "n", "s", "t", "a", "n", 
-       "t", "s", "[", "\"", "C", "o", "m", "p", "l", "e", "x", "\"", "]", "[",
-        "e", "_", "]", " ", ":", "=", " ", "R", "e", "p", "l", "a", "c", "e", 
-       "A", "l", "l", "[", "N", "[", "e", "]", ",", " ", "x", "_", "?", "M", 
-       "a", "c", "h", "i", "n", "e", "N", "u", "m", "b", "e", "r", "Q", " ", 
-       ":", ">", " ", "x", " ", "+", " ", "0", ".", " ", "I", "]", ";", 
-       " "}, {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
-        " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.7804805687418623`*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"56f2b59e-24a5-4297-b052-19c2b31e671c"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "9", "\" \"", "\"adtools/ADTools/Utilities/ADUtilities.m\""},
-  
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568842423*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"4b685d32-88b6-4323-a301-7b3cce92ae66"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/adtools/ADTools/Utilities/\
-ADUtilities.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  116\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "UnaryMathDerivatives[Sqrt] = Function[{x,r}, Divide[1, 2 \
-r]];"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             116], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"199d356220fcf07a\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"U\"\>", "\<\"n\"\>", "\<\"a\"\>", \
-"\<\"r\"\>", "\<\"y\"\>", "\<\"M\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"h\"\>", \
-"\<\"D\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"a\"\>", \
-"\<\"t\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"e\"\>", "\<\"s\"\>", "\<\"[\"\>", \
-"\<\"S\"\>", "\<\"q\"\>", "\<\"r\"\>", "\<\"t\"\>", "\<\"]\"\>", "\<\" \"\>", \
-"\<\"=\"\>", "\<\" \"\>", "\<\"F\"\>", "\<\"u\"\>", "\<\"n\"\>", "\<\"c\"\>", \
-"\<\"t\"\>", "\<\"i\"\>", "\<\"o\"\>", "\<\"n\"\>", "\<\"[\"\>", "\<\"{\"\>", \
-"\<\"x\"\>", "\<\",\"\>", "\<\"r\"\>", "\<\"}\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"D\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"i\"\>", "\<\"d\"\>", "\<\"e\"\>", \
-"\<\"[\"\>", "\<\"1\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"2\"\>", "\<\" \"\>", \
-"\<\"r\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\";\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", \
-"\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {57, 58}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {60, 60}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {57, 58}} -> {
-                    Bold, Larger}, {{2, 2}, {60, 60}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  117\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "UnaryMathDerivatives[Internal`ReciprocalSqrt] = Function[{x,r}, \
-Divide[r, (-2) x]];"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             117], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"03c96b8b21e511c0\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"U\"\>", "\<\"n\"\>", "\<\"a\"\>", \
-"\<\"r\"\>", "\<\"y\"\>", "\<\"M\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"h\"\>", \
-"\<\"D\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"a\"\>", \
-"\<\"t\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"e\"\>", "\<\"s\"\>", "\<\"[\"\>", \
-"\<\"I\"\>", "\<\"n\"\>", "\<\"t\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"n\"\>", \
-"\<\"a\"\>", "\<\"l\"\>", "\<\"`\"\>", "\<\"R\"\>", "\<\"e\"\>", "\<\"c\"\>", \
-"\<\"i\"\>", "\<\"p\"\>", "\<\"r\"\>", "\<\"o\"\>", "\<\"c\"\>", "\<\"a\"\>", \
-"\<\"l\"\>", "\<\"S\"\>", "\<\"q\"\>", "\<\"r\"\>", "\<\"t\"\>", "\<\"]\"\>", \
-"\<\" \"\>", "\<\"=\"\>", "\<\" \"\>", "\<\"F\"\>", "\<\"u\"\>", "\<\"n\"\>", \
-"\<\"c\"\>", "\<\"t\"\>", "\<\"i\"\>", "\<\"o\"\>", "\<\"n\"\>", "\<\"[\"\>", \
-"\<\"{\"\>", "\<\"x\"\>", "\<\",\"\>", "\<\"r\"\>", "\<\"}\"\>", "\<\",\"\>", \
-"\<\" \"\>", "\<\"D\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"i\"\>", "\<\"d\"\>", \
-"\<\"e\"\>", "\<\"[\"\>", "\<\"r\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"(\"\>", \
-"\<\"-\"\>", "\<\"2\"\>", "\<\")\"\>", "\<\" \"\>", "\<\"x\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\";\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", \
-"\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {76, 76}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {80, 80}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {82, 82}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {76, 76}} -> {
-                    Bold, Larger}, {{2, 2}, {80, 80}} -> {Bold, Larger}, {{2, 
-                    2}, {82, 82}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  118\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "UnaryMathDerivatives[CubeRoot] = Function[{x,r}, Divide[1, 3 \
-r*r]];"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             118], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"4885f707f0f285c6\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"U\"\>", "\<\"n\"\>", "\<\"a\"\>", \
-"\<\"r\"\>", "\<\"y\"\>", "\<\"M\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"h\"\>", \
-"\<\"D\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"a\"\>", \
-"\<\"t\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"e\"\>", "\<\"s\"\>", "\<\"[\"\>", \
-"\<\"C\"\>", "\<\"u\"\>", "\<\"b\"\>", "\<\"e\"\>", "\<\"R\"\>", "\<\"o\"\>", \
-"\<\"o\"\>", "\<\"t\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\"=\"\>", "\<\" \"\>", \
-"\<\"F\"\>", "\<\"u\"\>", "\<\"n\"\>", "\<\"c\"\>", "\<\"t\"\>", "\<\"i\"\>", \
-"\<\"o\"\>", "\<\"n\"\>", "\<\"[\"\>", "\<\"{\"\>", "\<\"x\"\>", "\<\",\"\>", \
-"\<\"r\"\>", "\<\"}\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"D\"\>", "\<\"i\"\>", \
-"\<\"v\"\>", "\<\"i\"\>", "\<\"d\"\>", "\<\"e\"\>", "\<\"[\"\>", "\<\"1\"\>", \
-"\<\",\"\>", "\<\" \"\>", "\<\"3\"\>", "\<\" \"\>", "\<\"r\"\>", "\<\"*\"\>", \
-"\<\"r\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\";\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {61, 62}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {66, 66}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {61, 62}} -> {
-                    Bold, Larger}, {{2, 2}, {66, 66}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  128\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "With[{aye = 0. + 1. I},"], "\<\"Copy line number\"\>":>
-             CopyToClipboard[128], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"69a9e931a99b7401\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"W\"\>", "\<\"i\"\>", "\<\"t\"\>", \
-"\<\"h\"\>", "\<\"[\"\>", "\<\"{\"\>", "\<\"a\"\>", "\<\"y\"\>", "\<\"e\"\>", \
-"\<\" \"\>", "\<\"=\"\>", "\<\" \"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", \
-"\<\"+\"\>", "\<\" \"\>", "\<\"1\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"I\"\>", \
-"\<\"}\"\>", "\<\",\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \
-\"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {19, 19}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {21, 21}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {23, 23}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {19, 19}} -> {
-                    Bold, Larger}, {{2, 2}, {21, 21}} -> {Bold, Larger}, {{2, 
-                    2}, {23, 23}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  211\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "BinaryMathDerivatives[Log] = {Function[{x, y, r}, Divide[-r, x \
-Log[Plus[x, Times[0, r]]]]], Function[{x, y, r},Divide[1, y Log[Plus[x, \
-Times[0, r]]]]]};"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             211], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"6263cbd819a736da\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"B\"\>", "\<\"i\"\>", "\<\"n\"\>", \
-"\<\"a\"\>", "\<\"r\"\>", "\<\"y\"\>", "\<\"M\"\>", "\<\"a\"\>", "\<\"t\"\>", \
-"\<\"h\"\>", "\<\"D\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"i\"\>", "\<\"v\"\>", \
-"\<\"a\"\>", "\<\"t\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"e\"\>", "\<\"s\"\>", \
-"\<\"[\"\>", "\<\"L\"\>", "\<\"o\"\>", "\<\"g\"\>", "\<\"]\"\>", "\<\" \"\>", \
-"\<\"=\"\>", "\<\" \"\>", "\<\"{\"\>", "\<\"F\"\>", "\<\"u\"\>", "\<\"n\"\>", \
-"\<\"c\"\>", "\<\"t\"\>", "\<\"i\"\>", "\<\"o\"\>", "\<\"n\"\>", "\<\"[\"\>", \
-"\<\"{\"\>", "\<\"x\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"y\"\>", "\<\",\"\>", \
-"\<\" \"\>", "\<\"r\"\>", "\<\"}\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"D\"\>", \
-"\<\"i\"\>", "\<\"v\"\>", "\<\"i\"\>", "\<\"d\"\>", "\<\"e\"\>", "\<\"[\"\>", \
-"\<\"-\"\>", "\<\"r\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"x\"\>", "\<\" \"\>", \
-"\<\"L\"\>", "\<\"o\"\>", "\<\"g\"\>", "\<\"[\"\>", "\<\"P\"\>", "\<\"l\"\>", \
-"\<\"u\"\>", "\<\"s\"\>", "\<\"[\"\>", "\<\"x\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"T\"\>", "\<\"i\"\>", "\<\"m\"\>", "\<\"e\"\>", "\<\"s\"\>", "\<\"[\"\>", \
-"\<\"0\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"r\"\>", "\<\"]\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"F\"\>", \
-"\<\"u\"\>", "\<\"n\"\>", "\<\"c\"\>", "\<\"t\"\>", "\<\"i\"\>", "\<\"o\"\>", \
-"\<\"n\"\>", "\<\"[\"\>", "\<\"{\"\>", "\<\"x\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"y\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"r\"\>", "\<\"}\"\>", "\<\",\"\>", \
-"\<\"D\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"i\"\>", "\<\"d\"\>", "\<\"e\"\>", \
-"\<\"[\"\>", "\<\"1\"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", \
-"\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"},
-                   {"\<\",\"\>", "\<\" \"\>", "\<\"y\"\>", "\<\" \"\>", \
-"\<\"L\"\>", "\<\"o\"\>", "\<\"g\"\>", "\<\"[\"\>", "\<\"P\"\>", "\<\"l\"\>", \
-"\<\"u\"\>", "\<\"s\"\>", "\<\"[\"\>", "\<\"x\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"T\"\>", "\<\"i\"\>", "\<\"m\"\>", "\<\"e\"\>", "\<\"s\"\>", "\<\"[\"\>", \
-"\<\"0\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"r\"\>", "\<\"]\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\"}\"\>", "\<\";\"\>", "\<\" \"\>", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", ""},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", \
-"\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-                    "", ""}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {63, 64}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {90, 90}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{4, 4}, {3, 4}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{4, 4}, {30, 30}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {63, 64}} -> {
-                    Bold, Larger}, {{2, 2}, {90, 90}} -> {Bold, Larger}, {{4, 
-                    4}, {3, 4}} -> {Bold, Larger}, {{4, 4}, {30, 30}} -> {
-                    Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/adtools/ADTools/Utilities/ADUtilities.\
-m", {
-    Lint`LintedLine[
-    "UnaryMathDerivatives[Sqrt] = Function[{x,r}, Divide[1, 2 r]];", 116, 
-     "199d356220fcf07a", {{
-      " ", "U", "n", "a", "r", "y", "M", "a", "t", "h", "D", "e", "r", "i", 
-       "v", "a", "t", "i", "v", "e", "s", "[", "S", "q", "r", "t", "]", " ", 
-       "=", " ", "F", "u", "n", "c", "t", "i", "o", "n", "[", "{", "x", ",", 
-       "r", "}", ",", " ", "D", "i", "v", "i", "d", "e", "[", "1", ",", " ", 
-       "2", " ", "r", "]", "]", ";", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " "}}, {}], 
-    Lint`LintedLine[
-    "UnaryMathDerivatives[Internal`ReciprocalSqrt] = Function[{x,r}, \
-Divide[r, (-2) x]];", 117, 
-     "03c96b8b21e511c0", {{
-      " ", "U", "n", "a", "r", "y", "M", "a", "t", "h", "D", "e", "r", "i", 
-       "v", "a", "t", "i", "v", "e", "s", "[", "I", "n", "t", "e", "r", "n", 
-       "a", "l", "`", "R", "e", "c", "i", "p", "r", "o", "c", "a", "l", "S", 
-       "q", "r", "t", "]", " ", "=", " ", "F", "u", "n", "c", "t", "i", "o", 
-       "n", "[", "{", "x", ",", "r", "}", ",", " ", "D", "i", "v", "i", "d", 
-       "e", "[", "r", ",", " ", "(", "-", "2", ")", " ", "x", "]", "]", ";", 
-       " "}, {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
-        " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " "}}, {}], 
-    Lint`LintedLine[
-    "UnaryMathDerivatives[CubeRoot] = Function[{x,r}, Divide[1, 3 r*r]];", 
-     118, "4885f707f0f285c6", {{
-      " ", "U", "n", "a", "r", "y", "M", "a", "t", "h", "D", "e", "r", "i", 
-       "v", "a", "t", "i", "v", "e", "s", "[", "C", "u", "b", "e", "R", "o", 
-       "o", "t", "]", " ", "=", " ", "F", "u", "n", "c", "t", "i", "o", "n", 
-       "[", "{", "x", ",", "r", "}", ",", " ", "D", "i", "v", "i", "d", "e", 
-       "[", "1", ",", " ", "3", " ", "r", "*", "r", "]", "]", ";", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " "}}, {}], 
-    Lint`LintedLine[
-    "With[{aye = 0. + 1. I},", 128, 
-     "69a9e931a99b7401", {{
-      " ", "W", "i", "t", "h", "[", "{", "a", "y", "e", " ", "=", " ", "0", 
-       ".", " ", "+", " ", "1", ".", " ", "I", "}", ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " "}}, {}], 
-    Lint`LintedLine[
-    "BinaryMathDerivatives[Log] = {Function[{x, y, r}, Divide[-r, x \
-Log[Plus[x, Times[0, r]]]]], Function[{x, y, r},Divide[1, y Log[Plus[x, \
-Times[0, r]]]]]};", 211, 
-     "6263cbd819a736da", {{
-      " ", "B", "i", "n", "a", "r", "y", "M", "a", "t", "h", "D", "e", "r", 
-       "i", "v", "a", "t", "i", "v", "e", "s", "[", "L", "o", "g", "]", " ", 
-       "=", " ", "{", "F", "u", "n", "c", "t", "i", "o", "n", "[", "{", "x", 
-       ",", " ", "y", ",", " ", "r", "}", ",", " ", "D", "i", "v", "i", "d", 
-       "e", "[", "-", "r", ",", " ", "x", " ", "L", "o", "g", "[", "P", "l", 
-       "u", "s", "[", "x", ",", " ", "T", "i", "m", "e", "s", "[", "0", ",", 
-       " ", "r", "]", "]", "]", "]", "]", ",", " ", "F", "u", "n", "c", "t", 
-       "i", "o", "n", "[", "{", "x", ",", " ", "y", ",", " ", "r", "}", ",", 
-       "D", "i", "v", "i", "d", "e", "[", "1", ",", " ", "y", " ", "L", "o", 
-       "g", "[", "P", "l", "u", "s", "[", "x", ",", " ", "T", "i", "m", "e", 
-       "s", "[", "0", ",", " ", "r", "]", "]", "]", "]", "]", "}", ";", 
-       " "}, {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
-        " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480568894062*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"17cfbf43-40eb-4a03-917d-1085b88b872d"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "494", "\" \"", "\"compile/Compile/Core/Lint/Utilities.m\""},
-  
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480581521174*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"ce25827d-06c5-453b-9448-d00893415864"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compile/Compile/Core/Lint/\
-Utilities.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   56\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "error[st_, tag_ inst_, msg_] :="], "\<\"Copy line number\"\>":>
-             CopyToClipboard[56], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"3e5398c41dee6b9e\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"r\"\>", \
-"\<\"o\"\>", "\<\"r\"\>", "\<\"[\"\>", "\<\"s\"\>", "\<\"t\"\>", "\<\"_\"\>", \
-"\<\",\"\>", "\<\" \"\>", "\<\"t\"\>", "\<\"a\"\>", "\<\"g\"\>", "\<\"_\"\>", \
-"\<\" \"\>", "\<\"i\"\>", "\<\"n\"\>", "\<\"s\"\>", "\<\"t\"\>", "\<\"_\"\>", \
-"\<\",\"\>", "\<\" \"\>", "\<\"m\"\>", "\<\"s\"\>", "\<\"g\"\>", "\<\"_\"\>", \
-"\<\"]\"\>", "\<\" \"\>", "\<\":\"\>", "\<\"=\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"\
-\[Times]\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {13, 13}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {17, 17}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {23, 23}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {13, 13}} -> {
-                    Bold, Larger}, {{2, 2}, {17, 17}} -> {Bold, Larger}, {{2, 
-                    2}, {23, 23}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compile/Compile/Core/Lint/Utilities.\
-m", {
-    Lint`LintedLine[
-    "error[st_, tag_ inst_, msg_] :=", 56, 
-     "3e5398c41dee6b9e", {{
-      " ", "e", "r", "r", "o", "r", "[", "s", "t", "_", ",", " ", "t", "a", 
-       "g", "_", " ", "i", "n", "s", "t", "_", ",", " ", "m", "s", "g", "_", 
-       "]", " ", ":", "=", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.780480581523726*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"4acbc417-6fdf-41a1-9cbe-e52235bfb304"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "590", "\" \"", 
-   "\"compile/Compile/Core/Transform/ResolveConstants.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.78048058365578*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"b7efc9bd-c1f4-416b-af4a-246f52f3343e"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compile/Compile/Core/\
-Transform/ResolveConstants.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  276\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t\t\tval = 0. + 0. I"], "\<\"Copy line number\"\>":>
-             CopyToClipboard[276], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"07e5b78e823e8366\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"v\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\" \"\>", "\<\"=\"\>", "\<\" \
-\"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", \
-"\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {17, 17}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {19, 19}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {21, 21}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {17, 17}} -> {
-                    Bold, Larger}, {{2, 2}, {19, 19}} -> {Bold, Larger}, {{2, 
-                    2}, {21, 21}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compile/Compile/Core/Transform/\
-ResolveConstants.m", {
-    Lint`LintedLine[
-    "\t\t\t\tval = 0. + 0. I", 276, 
-     "07e5b78e823e8366", {{
-      " ", " ", " ", " ", " ", "v", "a", "l", " ", "=", " ", "0", ".", " ", 
-       "+", " ", "0", ".", " ", "I", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]]}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, {3.780480556246902*^9, 
-   3.78048058365868*^9}},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"adcb1b14-b1b5-4e0e-a1cf-fcce80077e59"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "653", "\" \"", 
-   "\"compile/Compile/TypeSystem/Bootstrap/Random.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.7804805883795013`*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"50c24b84-e7bb-4dff-b6a8-0c01abf86e01"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compile/Compile/TypeSystem/\
-Bootstrap/Random.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  146\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t\tRandomComplex[] -> Compile`Internal`MacroEvaluate[ \
-makeRandom[0. + 0. I,1. + 1. I, \"ComplexReal64\"]],"], "\<\"Copy line number\
-\"\>":>CopyToClipboard[146], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"2047655fc9767d51\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"R\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"o\"\>", "\<\"m\"\>", \
-"\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"l\"\>", "\<\"e\"\>", \
-"\<\"x\"\>", "\<\"[\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\"-\"\>", "\<\">\"\>", \
-"\<\" \"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"i\"\>", \
-"\<\"l\"\>", "\<\"e\"\>", "\<\"`\"\>", "\<\"I\"\>", "\<\"n\"\>", "\<\"t\"\>", \
-"\<\"e\"\>", "\<\"r\"\>", "\<\"n\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"`\"\>", \
-"\<\"M\"\>", "\<\"a\"\>", "\<\"c\"\>", "\<\"r\"\>", "\<\"o\"\>", "\<\"E\"\>", \
-"\<\"v\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"u\"\>", "\<\"a\"\>", "\<\"t\"\>", \
-"\<\"e\"\>", "\<\"[\"\>", "\<\" \"\>", "\<\"m\"\>", "\<\"a\"\>", "\<\"k\"\>", \
-"\<\"e\"\>", "\<\"R\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"o\"\>", \
-"\<\"m\"\>", "\<\"[\"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"+\"\>", \
-"\<\" \"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\",\"\>", \
-"\<\"1\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", "\<\"1\"\>", \
-"\<\".\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"\\\"\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", \
-"\<\"l\"\>", "\<\"e\"\>", "\<\"x\"\>", "\<\"R\"\>", "\<\"e\"\>", "\<\"a\"\>", \
-"\<\"l\"\>", "\<\"6\"\>", "\<\"4\"\>", "\<\"\\\"\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\",\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", \
-"\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {72, 72}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {74, 74}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {76, 76}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {82, 82}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {84, 84}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {86, 86}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {72, 72}} -> {
-                    Bold, Larger}, {{2, 2}, {74, 74}} -> {Bold, Larger}, {{2, 
-                    2}, {76, 76}} -> {Bold, Larger}, {{2, 2}, {82, 82}} -> {
-                    Bold, Larger}, {{2, 2}, {84, 84}} -> {Bold, Larger}, {{2, 
-                    2}, {86, 86}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  147\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t\tRandomComplex[max:Except[_List]] -> \
-Compile`Internal`MacroEvaluate[ makeRandom[0. + 0. I,max, \
-\"ComplexReal64\"]],"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             147], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"7de5688eeb205cc0\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"R\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"o\"\>", "\<\"m\"\>", \
-"\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"l\"\>", "\<\"e\"\>", \
-"\<\"x\"\>", "\<\"[\"\>", "\<\"m\"\>", "\<\"a\"\>", "\<\"x\"\>", "\<\":\"\>", \
-"\<\"E\"\>", "\<\"x\"\>", "\<\"c\"\>", "\<\"e\"\>", "\<\"p\"\>", "\<\"t\"\>", \
-"\<\"[\"\>", "\<\"_\"\>", "\<\"L\"\>", "\<\"i\"\>", "\<\"s\"\>", "\<\"t\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\"-\"\>", "\<\">\"\>", "\<\" \"\>", \
-"\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"i\"\>", "\<\"l\"\>", \
-"\<\"e\"\>", "\<\"`\"\>", "\<\"I\"\>", "\<\"n\"\>", "\<\"t\"\>", "\<\"e\"\>", \
-"\<\"r\"\>", "\<\"n\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"`\"\>", "\<\"M\"\>", \
-"\<\"a\"\>", "\<\"c\"\>", "\<\"r\"\>", "\<\"o\"\>", "\<\"E\"\>", "\<\"v\"\>", \
-"\<\"a\"\>", "\<\"l\"\>", "\<\"u\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"e\"\>", \
-"\<\"[\"\>", "\<\" \"\>", "\<\"m\"\>", "\<\"a\"\>", "\<\"k\"\>", "\<\"e\"\>", \
-"\<\"R\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"o\"\>", "\<\"m\"\>", \
-"\<\"[\"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", \
-"\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\",\"\>", "\<\"m\"\>", \
-"\<\"a\"\>", "\<\"x\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"\\\"\"\>", \
-"\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"l\"\>", "\<\"e\"\>", \
-"\<\"x\"\>", "\<\"R\"\>", "\<\"e\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"6\"\>", \
-"\<\"4\"\>", "\<\"\\\"\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\",\"\>", "\<\" \
-\"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {89, 89}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {91, 91}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {93, 93}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {89, 89}} -> {
-                    Bold, Larger}, {{2, 2}, {91, 91}} -> {Bold, Larger}, {{2, 
-                    2}, {93, 93}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  149\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t\tRandomComplex[max:Except[_List], dims_] -> \
-RandomComplex[{0. + 0. I, max}, dims],"], "\<\"Copy line number\"\>":>
-             CopyToClipboard[149], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"7112144526d69381\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"R\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"o\"\>", "\<\"m\"\>", \
-"\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"l\"\>", "\<\"e\"\>", \
-"\<\"x\"\>", "\<\"[\"\>", "\<\"m\"\>", "\<\"a\"\>", "\<\"x\"\>", "\<\":\"\>", \
-"\<\"E\"\>", "\<\"x\"\>", "\<\"c\"\>", "\<\"e\"\>", "\<\"p\"\>", "\<\"t\"\>", \
-"\<\"[\"\>", "\<\"_\"\>", "\<\"L\"\>", "\<\"i\"\>", "\<\"s\"\>", "\<\"t\"\>", \
-"\<\"]\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"d\"\>", "\<\"i\"\>", "\<\"m\"\>", \
-"\<\"s\"\>", "\<\"_\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\"-\"\>", "\<\">\"\>", \
-"\<\" \"\>", "\<\"R\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"o\"\>", \
-"\<\"m\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", "\<\"l\"\>", \
-"\<\"e\"\>", "\<\"x\"\>", "\<\"[\"\>", "\<\"{\"\>", "\<\"0\"\>", "\<\".\"\>", \
-"\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", "\<\"0\"\>", "\<\".\"\>", "\<\" \"\>", \
-"\<\"I\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"m\"\>", "\<\"a\"\>", "\<\"x\"\>", \
-"\<\"}\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"d\"\>", "\<\"i\"\>", "\<\"m\"\>", \
-"\<\"s\"\>", "\<\"]\"\>", "\<\",\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \"\>", \
-"\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {68, 68}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {70, 70}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {72, 72}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {68, 68}} -> {
-                    Bold, Larger}, {{2, 2}, {70, 70}} -> {Bold, Larger}, {{2, 
-                    2}, {72, 72}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compile/Compile/TypeSystem/Bootstrap/\
-Random.m", {
-    Lint`LintedLine[
-    "\t\t\tRandomComplex[] -> Compile`Internal`MacroEvaluate[ makeRandom[0. + \
-0. I,1. + 1. I, \"ComplexReal64\"]],", 146, 
-     "2047655fc9767d51", {{
-      " ", " ", " ", " ", "R", "a", "n", "d", "o", "m", "C", "o", "m", "p", 
-       "l", "e", "x", "[", "]", " ", "-", ">", " ", "C", "o", "m", "p", "i", 
-       "l", "e", "`", "I", "n", "t", "e", "r", "n", "a", "l", "`", "M", "a", 
-       "c", "r", "o", "E", "v", "a", "l", "u", "a", "t", "e", "[", " ", "m", 
-       "a", "k", "e", "R", "a", "n", "d", "o", "m", "[", "0", ".", " ", "+", 
-       " ", "0", ".", " ", "I", ",", "1", ".", " ", "+", " ", "1", ".", " ", 
-       "I", ",", " ", "\"", "C", "o", "m", "p", "l", "e", "x", "R", "e", "a", 
-       "l", "6", "4", "\"", "]", "]", ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}}, {}], 
-    Lint`LintedLine[
-    "\t\t\tRandomComplex[max:Except[_List]] -> \
-Compile`Internal`MacroEvaluate[ makeRandom[0. + 0. I,max, \
-\"ComplexReal64\"]],", 147, 
-     "7de5688eeb205cc0", {{
-      " ", " ", " ", " ", "R", "a", "n", "d", "o", "m", "C", "o", "m", "p", 
-       "l", "e", "x", "[", "m", "a", "x", ":", "E", "x", "c", "e", "p", "t", 
-       "[", "_", "L", "i", "s", "t", "]", "]", " ", "-", ">", " ", "C", "o", 
-       "m", "p", "i", "l", "e", "`", "I", "n", "t", "e", "r", "n", "a", "l", 
-       "`", "M", "a", "c", "r", "o", "E", "v", "a", "l", "u", "a", "t", "e", 
-       "[", " ", "m", "a", "k", "e", "R", "a", "n", "d", "o", "m", "[", "0", 
-       ".", " ", "+", " ", "0", ".", " ", "I", ",", "m", "a", "x", ",", " ", 
-       "\"", "C", "o", "m", "p", "l", "e", "x", "R", "e", "a", "l", "6", "4", 
-       "\"", "]", "]", ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " "}}, {}], 
-    Lint`LintedLine[
-    "\t\t\tRandomComplex[max:Except[_List], dims_] -> RandomComplex[{0. + 0. \
-I, max}, dims],", 149, 
-     "7112144526d69381", {{
-      " ", " ", " ", " ", "R", "a", "n", "d", "o", "m", "C", "o", "m", "p", 
-       "l", "e", "x", "[", "m", "a", "x", ":", "E", "x", "c", "e", "p", "t", 
-       "[", "_", "L", "i", "s", "t", "]", ",", " ", "d", "i", "m", "s", "_", 
-       "]", " ", "-", ">", " ", "R", "a", "n", "d", "o", "m", "C", "o", "m", 
-       "p", "l", "e", "x", "[", "{", "0", ".", " ", "+", " ", "0", ".", " ", 
-       "I", ",", " ", "m", "a", "x", "}", ",", " ", "d", "i", "m", "s", "]", 
-       ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480588384625*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"fbc6f1e3-02a1-4bfe-8011-cc1fe4b3b2d0"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "661", "\" \"", 
-   "\"compile/Compile/TypeSystem/Bootstrap/TakeDrop.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.78048058874437*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"326cde95-2d47-4c16-87b0-64d5d727c2a4"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compile/Compile/TypeSystem/\
-Bootstrap/TakeDrop.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  105\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\tWith[{arg = CreateMExprLiteral[ 2 args[\"length\"]]},"], \
-"\<\"Copy line number\"\>":>CopyToClipboard[105], "\<\"Copy line hash\"\>":>
-             CopyToClipboard["\"7a73d2a7c0935bb3\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"W\"\>", \
-"\<\"i\"\>", "\<\"t\"\>", "\<\"h\"\>", "\<\"[\"\>", "\<\"{\"\>", "\<\"a\"\>", \
-"\<\"r\"\>", "\<\"g\"\>", "\<\" \"\>", "\<\"=\"\>", "\<\" \"\>", "\<\"C\"\>", \
-"\<\"r\"\>", "\<\"e\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"e\"\>", "\<\"M\"\>", \
-"\<\"E\"\>", "\<\"x\"\>", "\<\"p\"\>", "\<\"r\"\>", "\<\"L\"\>", "\<\"i\"\>", \
-"\<\"t\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"[\"\>", \
-"\<\" \"\>", "\<\"2\"\>", "\<\" \"\>", "\<\"a\"\>", "\<\"r\"\>", "\<\"g\"\>", \
-"\<\"s\"\>", "\<\"[\"\>", "\<\"\\\"\"\>", "\<\"l\"\>", "\<\"e\"\>", \
-"\<\"n\"\>", "\<\"g\"\>", "\<\"t\"\>", "\<\"h\"\>", "\<\"\\\"\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\"}\"\>", "\<\",\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"(\"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {36, 37}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {52, 52}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {36, 37}} -> {
-                    Bold, Larger}, {{2, 2}, {52, 52}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compile/Compile/TypeSystem/Bootstrap/\
-TakeDrop.m", {
-    Lint`LintedLine[
-    "\t\tWith[{arg = CreateMExprLiteral[ 2 args[\"length\"]]},", 105, 
-     "7a73d2a7c0935bb3", {{
-      " ", " ", " ", "W", "i", "t", "h", "[", "{", "a", "r", "g", " ", "=", 
-       " ", "C", "r", "e", "a", "t", "e", "M", "E", "x", "p", "r", "L", "i", 
-       "t", "e", "r", "a", "l", "[", " ", "2", " ", "a", "r", "g", "s", "[", 
-       "\"", "l", "e", "n", "g", "t", "h", "\"", "]", "]", "}", ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480588755266*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"e7384a92-cf4d-45b9-a183-526a331e8094"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "663", "\" \"", 
-   "\"compile/Compile/TypeSystem/Bootstrap/Unchecked.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480589129792*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"7626d4b6-aab0-4189-a6be-29c8e0297557"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compile/Compile/TypeSystem/\
-Bootstrap/Unchecked.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   99\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t\t\t\t    f = ComplexExpand[op[xr + xi I, yr + yi I]]"], \
-"\<\"Copy line number\"\>":>CopyToClipboard[99], "\<\"Copy line hash\"\>":>
-             CopyToClipboard["\"0d3dc30f891303e4\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"f\"\>", "\<\" \"\>", "\<\"=\"\>", "\<\" \"\>", "\<\"C\"\>", "\<\"o\"\>", \
-"\<\"m\"\>", "\<\"p\"\>", "\<\"l\"\>", "\<\"e\"\>", "\<\"x\"\>", "\<\"E\"\>", \
-"\<\"x\"\>", "\<\"p\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"[\"\>", \
-"\<\"o\"\>", "\<\"p\"\>", "\<\"[\"\>", "\<\"x\"\>", "\<\"r\"\>", "\<\" \"\>", \
-"\<\"+\"\>", "\<\" \"\>", "\<\"x\"\>", "\<\"i\"\>", "\<\" \"\>", "\<\"I\"\>", \
-"\<\",\"\>", "\<\" \"\>", "\<\"y\"\>", "\<\"r\"\>", "\<\" \"\>", "\<\"+\"\>", \
-"\<\" \"\>", "\<\"y\"\>", "\<\"i\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \
-\"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \
-\"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {37, 37}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {39, 39}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {41, 41}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {48, 48}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {50, 50}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {52, 52}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {37, 37}} -> {
-                    Bold, Larger}, {{2, 2}, {39, 39}} -> {Bold, Larger}, {{2, 
-                    2}, {41, 41}} -> {Bold, Larger}, {{2, 2}, {48, 48}} -> {
-                    Bold, Larger}, {{2, 2}, {50, 50}} -> {Bold, Larger}, {{2, 
-                    2}, {52, 52}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  299\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "                    \t\t\tComplexExpand[op[xr + xi I], \
-TargetFunctions -> {Re, Im}]"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             299], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"0cdfffc9f13c9f12\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", \
-"\<\"l\"\>", "\<\"e\"\>", "\<\"x\"\>", "\<\"E\"\>", "\<\"x\"\>", "\<\"p\"\>", \
-"\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"[\"\>", "\<\"o\"\>", "\<\"p\"\>", \
-"\<\"[\"\>", "\<\"x\"\>", "\<\"r\"\>", "\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", \
-"\<\"x\"\>", "\<\"i\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\"]\"\>", "\<\",\"\>", \
-"\<\" \"\>", "\<\"T\"\>", "\<\"a\"\>", "\<\"r\"\>", "\<\"g\"\>", "\<\"e\"\>", \
-"\<\"t\"\>", "\<\"F\"\>", "\<\"u\"\>", "\<\"n\"\>", "\<\"c\"\>", "\<\"t\"\>", \
-"\<\"i\"\>", "\<\"o\"\>", "\<\"n\"\>", "\<\"s\"\>", "\<\" \"\>", "\<\"-\"\>", \
-"\<\">\"\>", "\<\" \"\>", "\<\"{\"\>", "\<\"R\"\>", "\<\"e\"\>", "\<\",\"\>", \
-"\<\" \"\>", "\<\"I\"\>", "\<\"m\"\>", "\<\"}\"\>", "\<\"]\"\>", "\<\" \
-\"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {47, 47}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {49, 49}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {51, 51}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {47, 47}} -> {
-                    Bold, Larger}, {{2, 2}, {49, 49}} -> {Bold, Larger}, {{2, 
-                    2}, {51, 51}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"  301\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "                    \t\t\tComplexExpand[op[xr + xi I]]]"], \
-"\<\"Copy line number\"\>":>CopyToClipboard[301], "\<\"Copy line hash\"\>":>
-             CopyToClipboard["\"0342622a6e7dc99d\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"m\"\>", "\<\"p\"\>", \
-"\<\"l\"\>", "\<\"e\"\>", "\<\"x\"\>", "\<\"E\"\>", "\<\"x\"\>", "\<\"p\"\>", \
-"\<\"a\"\>", "\<\"n\"\>", "\<\"d\"\>", "\<\"[\"\>", "\<\"o\"\>", "\<\"p\"\>", \
-"\<\"[\"\>", "\<\"x\"\>", "\<\"r\"\>", "\<\" \"\>", "\<\"+\"\>", "\<\" \"\>", \
-"\<\"x\"\>", "\<\"i\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\"]\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"(\"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {47, 47}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {49, 49}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {51, 51}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {47, 47}} -> {
-                    Bold, Larger}, {{2, 2}, {49, 49}} -> {Bold, Larger}, {{2, 
-                    2}, {51, 51}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compile/Compile/TypeSystem/Bootstrap/\
-Unchecked.m", {
-    Lint`LintedLine[
-    "\t\t\t\t\t    f = ComplexExpand[op[xr + xi I, yr + yi I]]", 99, 
-     "0d3dc30f891303e4", {{
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "f", " ", "=", " ", 
-       "C", "o", "m", "p", "l", "e", "x", "E", "x", "p", "a", "n", "d", "[", 
-       "o", "p", "[", "x", "r", " ", "+", " ", "x", "i", " ", "I", ",", " ", 
-       "y", "r", " ", "+", " ", "y", "i", " ", "I", "]", "]", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " "}}, {}], 
-    Lint`LintedLine[
-    "                    \t\t\tComplexExpand[op[xr + xi I], TargetFunctions \
--> {Re, Im}]", 299, 
-     "0cdfffc9f13c9f12", {{
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "C", "o", "m", "p", 
-       "l", "e", "x", "E", "x", "p", "a", "n", "d", "[", "o", "p", "[", "x", 
-       "r", " ", "+", " ", "x", "i", " ", "I", "]", ",", " ", "T", "a", "r", 
-       "g", "e", "t", "F", "u", "n", "c", "t", "i", "o", "n", "s", " ", "-", 
-       ">", " ", "{", "R", "e", ",", " ", "I", "m", "}", "]", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " "}}, {}], 
-    Lint`LintedLine[
-    "                    \t\t\tComplexExpand[op[xr + xi I]]]", 301, 
-     "0342622a6e7dc99d", {{
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "C", "o", "m", "p", 
-       "l", "e", "x", "E", "x", "p", "a", "n", "d", "[", "o", "p", "[", "x", 
-       "r", " ", "+", " ", "x", "i", " ", "I", "]", "]", "]", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480589141232*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"33f201ed-e0d2-482d-ad92-8e6b8329a18b"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "683", "\" \"", 
-   "\"compile/Compile/Utilities/Report/PassReport.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480590204974*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"4804924a-3213-43bc-8b5c-b173940c7669"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compile/Compile/Utilities/\
-Report/PassReport.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   95\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\tTable[Span[1 + (i - 1) div, If[i === num, -2, i div]], {i, \
-num}]"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             95], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"59ab48c89ecd7736\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"T\"\>", \
-"\<\"a\"\>", "\<\"b\"\>", "\<\"l\"\>", "\<\"e\"\>", "\<\"[\"\>", "\<\"S\"\>", \
-"\<\"p\"\>", "\<\"a\"\>", "\<\"n\"\>", "\<\"[\"\>", "\<\"1\"\>", "\<\" \"\>", \
-"\<\"+\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\"i\"\>", "\<\" \"\>", "\<\"-\"\>", \
-"\<\" \"\>", "\<\"1\"\>", "\<\")\"\>", "\<\" \"\>", "\<\"d\"\>", "\<\"i\"\>", \
-"\<\"v\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"I\"\>", "\<\"f\"\>", "\<\"[\"\>", \
-"\<\"i\"\>", "\<\" \"\>", "\<\"=\"\>", "\<\"=\"\>", "\<\"=\"\>", "\<\" \"\>", \
-"\<\"n\"\>", "\<\"u\"\>", "\<\"m\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"-\"\>", \
-"\<\"2\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"i\"\>", "\<\" \"\>", "\<\"d\"\>", \
-"\<\"i\"\>", "\<\"v\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"{\"\>", "\<\"i\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"n\"\>", "\<\"u\"\>", \
-"\<\"m\"\>", "\<\"}\"\>", "\<\"]\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\"(\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", \
-"\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {19, 19}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {26, 26}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {30, 30}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {50, 51}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {55, 55}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {19, 19}} -> {
-                    Bold, Larger}, {{2, 2}, {26, 26}} -> {Bold, Larger}, {{2, 
-                    2}, {30, 30}} -> {Bold, Larger}, {{2, 2}, {50, 51}} -> {
-                    Bold, Larger}, {{2, 2}, {55, 55}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compile/Compile/Utilities/Report/\
-PassReport.m", {
-    Lint`LintedLine[
-    "\t\tTable[Span[1 + (i - 1) div, If[i === num, -2, i div]], {i, num}]", 
-     95, "59ab48c89ecd7736", {{
-      " ", " ", " ", "T", "a", "b", "l", "e", "[", "S", "p", "a", "n", "[", 
-       "1", " ", "+", " ", "(", "i", " ", "-", " ", "1", ")", " ", "d", "i", 
-       "v", ",", " ", "I", "f", "[", "i", " ", "=", "=", "=", " ", "n", "u", 
-       "m", ",", " ", "-", "2", ",", " ", "i", " ", "d", "i", "v", "]", "]", 
-       ",", " ", "{", "i", ",", " ", "n", "u", "m", "}", "]", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.78048059021419*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"fc198030-1797-4957-9cba-636242b2528e"],
-
-Cell[BoxData[
- TemplateBox[{
-  "\"index: \"", "725", "\" \"", 
-   "\"compileutilities/CompileUtilities/Report/ComputationProfile.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480591394248*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"a62eda00-ddff-48f3-83a9-c33544d0aefd"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/stash/COM/compileutilities/\
-CompileUtilities/Report/ComputationProfile.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   51\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t  \"selfPercent\" -> 100 totalSelf/totalTime,"], "\<\"Copy \
-line number\"\>":>CopyToClipboard[51], "\<\"Copy line hash\"\>":>
-             CopyToClipboard["\"61a6473e25cba282\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"\\\"\"\>", "\<\"s\"\>", "\<\"e\"\>", "\<\"l\"\>", "\<\"f\"\>", \
-"\<\"P\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"c\"\>", "\<\"e\"\>", "\<\"n\"\>", \
-"\<\"t\"\>", "\<\"\\\"\"\>", "\<\" \"\>", "\<\"-\"\>", "\<\">\"\>", "\<\" \
-\"\>", "\<\"1\"\>", "\<\"0\"\>", "\<\"0\"\>", "\<\" \"\>", "\<\"t\"\>", \
-"\<\"o\"\>", "\<\"t\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"S\"\>", "\<\"e\"\>", \
-"\<\"l\"\>", "\<\"f\"\>", "\<\"/\"\>", "\<\"t\"\>", "\<\"o\"\>", "\<\"t\"\>", \
-"\<\"a\"\>", "\<\"l\"\>", "\<\"T\"\>", "\<\"i\"\>", "\<\"m\"\>", "\<\"e\"\>", \
-"\<\",\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\"(\"\>", "\<\" \"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", \
-"\<\")\"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {23, 23}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {26, 26}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {46, 46}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {23, 23}} -> {
-                    Bold, Larger}, {{2, 2}, {26, 26}} -> {Bold, Larger}, {{2, 
-                    2}, {46, 46}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"   52\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "\t\t  \"totalPercent\" -> 100 total/totalTime,"], "\<\"Copy \
-line number\"\>":>CopyToClipboard[52], "\<\"Copy line hash\"\>":>
-             CopyToClipboard["\"188e7ece725d8a9c\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"\\\"\"\>", "\<\"t\"\>", "\<\"o\"\>", "\<\"t\"\>", "\<\"a\"\>", \
-"\<\"l\"\>", "\<\"P\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"c\"\>", "\<\"e\"\>", \
-"\<\"n\"\>", "\<\"t\"\>", "\<\"\\\"\"\>", "\<\" \"\>", "\<\"-\"\>", \
-"\<\">\"\>", "\<\" \"\>", "\<\"1\"\>", "\<\"0\"\>", "\<\"0\"\>", "\<\" \"\>", \
-"\<\"t\"\>", "\<\"o\"\>", "\<\"t\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"/\"\>", \
-"\<\"t\"\>", "\<\"o\"\>", "\<\"t\"\>", "\<\"a\"\>", "\<\"l\"\>", "\<\"T\"\>", \
-"\<\"i\"\>", "\<\"m\"\>", "\<\"e\"\>", "\<\",\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"(\"\>", "\<\" \"\>", "\<\" \"\>", "\<\"\[Times]\"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\")\"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{2, 2}, {24, 24}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {27, 27}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {43, 43}} -> {Bold, 
-                    RGBColor[0, 0, 1]}, {{2, 2}, {24, 24}} -> {
-                    Bold, Larger}, {{2, 2}, {27, 27}} -> {Bold, Larger}, {{2, 
-                    2}, {43, 43}} -> {Bold, Larger}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/stash/COM/compileutilities/CompileUtilities/\
-Report/ComputationProfile.m", {
-    Lint`LintedLine[
-    "\t\t  \"selfPercent\" -> 100 totalSelf/totalTime,", 51, 
-     "61a6473e25cba282", {{
-      " ", " ", " ", " ", " ", "\"", "s", "e", "l", "f", "P", "e", "r", "c", 
-       "e", "n", "t", "\"", " ", "-", ">", " ", "1", "0", "0", " ", "t", "o", 
-       "t", "a", "l", "S", "e", "l", "f", "/", "t", "o", "t", "a", "l", "T", 
-       "i", "m", "e", ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " "}}, {}], 
-    Lint`LintedLine[
-    "\t\t  \"totalPercent\" -> 100 total/totalTime,", 52, 
-     "188e7ece725d8a9c", {{
-      " ", " ", " ", " ", " ", "\"", "t", "o", "t", "a", "l", "P", "e", "r", 
-       "c", "e", "n", "t", "\"", " ", "-", ">", " ", "1", "0", "0", " ", "t", 
-       "o", "t", "a", "l", "/", "t", "o", "t", "a", "l", "T", "i", "m", "e", 
-       ",", " "}, {
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       "(", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " ", " ", 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintTimes, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[0, 0, 1]], " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", " ", " ", " ", " ", " ", 
-       Lint`Format`LintMarkup[
-       ")", FontWeight -> Bold, FontSize -> Larger, FontColor -> 
-        RGBColor[0, 0, 1]], " "}}, {}]}]]], "Print",
- CellChangeTimes->{
-  3.779647720152615*^9, 3.779648200721924*^9, 3.7803992379621067`*^9, 
-   3.780399277196925*^9, {3.7804122250024967`*^9, 3.78041224201768*^9}, {
-   3.780412447509207*^9, 3.780412472029854*^9}, 3.780413524226259*^9, 
-   3.780413634631226*^9, 3.780413708250916*^9, 3.7804142212931013`*^9, {
-   3.780414365186111*^9, 3.780414388044675*^9}, 3.780414986863647*^9, 
-   3.780415898585593*^9, 3.7804191260514793`*^9, 3.780480556246902*^9, 
-   3.780480591405047*^9},
- CellLabel->
-  "During evaluation of \
-In[92]:=",ExpressionUUID->"d2ea6b8c-8a30-4f59-bf37-92bc7fcc4028"]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{"{", 
-  RowBox[{"44.727748`", ",", "Null"}], "}"}]], "Output",
- CellChangeTimes->{
-  3.776724114313778*^9, 3.776725981147295*^9, 3.776726024011846*^9, 
-   3.776726506028681*^9, 3.7767277938994904`*^9, 3.7767289865209007`*^9, 
-   3.776729243362418*^9, 3.7767674992648907`*^9, 3.7767676131649103`*^9, 
-   3.776767871223329*^9, 3.7767681133916388`*^9, 3.7767885597761602`*^9, 
-   3.776788738979535*^9, 3.776864332355092*^9, 3.77686441009359*^9, 
-   3.776864857136142*^9, 3.776865008591175*^9, 3.776865709799789*^9, 
-   3.77686688580964*^9, 3.776866967033195*^9, {3.7768670762338*^9, 
-   3.776867090959989*^9}, 3.776867133360495*^9, 3.776867302421631*^9, {
-   3.7768675717614813`*^9, 3.776867589061358*^9}, 3.776889069765226*^9, 
-   3.7768893596432047`*^9, 3.77693937920545*^9, 3.7769395578957033`*^9, 
-   3.776940247295438*^9, 3.777923443876378*^9, 3.777923488782123*^9, 
-   3.777924871053903*^9, 3.777925050599025*^9, 3.777925165519916*^9, 
-   3.778425122140216*^9, 3.778425416922248*^9, 3.778502998449951*^9, 
-   3.778758984287457*^9, 3.778759237448422*^9, 3.7787595725059137`*^9, 
-   3.7787597052520113`*^9, 3.779372706835168*^9, 3.779372761420274*^9, 
-   3.779373734324194*^9, 3.7793742659802523`*^9, 3.7793749148857803`*^9, 
-   3.779376285823575*^9, 3.779376738500684*^9, 3.77937698586528*^9, 
-   3.779377339895759*^9, 3.779377554026937*^9, {3.779431869801042*^9, 
-   3.779431880914214*^9}, 3.779432967651772*^9, 3.7794402293693447`*^9, 
-   3.779440981008274*^9, 3.77944515041759*^9, 3.7794488158154488`*^9, 
-   3.7795770900801773`*^9, 3.779577223503024*^9, 3.7795774081643953`*^9, 
-   3.779577743342038*^9, 3.7795781261834497`*^9, 3.779578211464283*^9, 
-   3.779578253994485*^9, 3.779578294745336*^9, 3.7795783477572117`*^9, 
-   3.779578474958735*^9, 3.779647747183589*^9, 3.779648229213814*^9, 
-   3.780399244091813*^9, 3.780399556147296*^9, {3.780412229051901*^9, 
-   3.780412251454558*^9}, {3.7804124573785753`*^9, 3.780412481707735*^9}, 
-   3.780413537896165*^9, 3.780413645322035*^9, 3.7804137189633837`*^9, 
-   3.780414328334238*^9, 3.780414371137574*^9, 3.780414494221881*^9, 
-   3.780415533837822*^9, 3.780415960503788*^9, 3.7804191555077353`*^9, 
-   3.780480558349661*^9, 3.7804806128604183`*^9},
- CellLabel->
-  "Out[100]=",ExpressionUUID->"61bfb889-cb25-41ba-91de-c462fece47e4"]
+Cell[BoxData["$Aborted"], "Output",
+ CellChangeTimes->{3.780741913088903*^9, 3.780743338089241*^9, 
+  3.78074440373545*^9, 3.7807454197541637`*^9},
+ CellLabel->"Out[96]=",ExpressionUUID->"d670674c-0811-4c9b-8ede-3d9c84f03310"]
 }, Open  ]]
 }, Open  ]]
 },
@@ -7026,95 +4037,66 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 298, 5, 29, "Input",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
+Cell[558, 20, 303, 6, 29, "Input",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
 Cell[CellGroupData[{
-Cell[881, 29, 1120, 23, 174, "Input",ExpressionUUID->"8644dace-687c-4e09-8d8c-cd95839003fe"],
-Cell[2004, 54, 7110, 100, 33, "Output",ExpressionUUID->"5fefb712-0928-42e3-8e53-efeddb61e569"]
+Cell[886, 30, 1120, 23, 174, "Input",ExpressionUUID->"8644dace-687c-4e09-8d8c-cd95839003fe"],
+Cell[2009, 55, 7227, 102, 33, "Output",ExpressionUUID->"993b5a93-aa55-4307-9995-fc70dcbccf37"]
 }, Open  ]],
-Cell[9129, 157, 276, 4, 29, "Input",ExpressionUUID->"d1bfdafc-32fd-4347-8094-822b9fb5d241"],
+Cell[9251, 160, 276, 4, 29, "Input",ExpressionUUID->"d1bfdafc-32fd-4347-8094-822b9fb5d241"],
 Cell[CellGroupData[{
-Cell[9430, 165, 930, 14, 29, "Input",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb558b76485c"],
-Cell[10363, 181, 20087, 284, 33, "Output",ExpressionUUID->"e8a90e21-745e-4036-9512-2fbff661cb55"]
+Cell[9552, 168, 930, 14, 29, "Input",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb558b76485c"],
+Cell[10485, 184, 20226, 286, 33, "Output",ExpressionUUID->"750a90de-22fe-43a4-828e-9f517fdbd4cc"]
 }, Open  ]],
-Cell[30465, 468, 214, 3, 29, "Input",ExpressionUUID->"e72a5699-cbbe-496a-aefb-c205e49e736b"],
+Cell[30726, 473, 214, 3, 29, "Input",ExpressionUUID->"e72a5699-cbbe-496a-aefb-c205e49e736b"],
 Cell[CellGroupData[{
-Cell[30704, 475, 151, 3, 67, "Section",ExpressionUUID->"9a1316b9-aa5f-4e82-b917-966ce0b3c96c"],
-Cell[30858, 480, 276, 4, 29, "Input",ExpressionUUID->"064d8d51-af4b-4a42-bada-7928c3db1be7"],
+Cell[30965, 480, 151, 3, 67, "Section",ExpressionUUID->"9a1316b9-aa5f-4e82-b917-966ce0b3c96c"],
+Cell[31119, 485, 276, 4, 29, "Input",ExpressionUUID->"064d8d51-af4b-4a42-bada-7928c3db1be7"],
 Cell[CellGroupData[{
-Cell[31159, 488, 391, 8, 29, "Input",ExpressionUUID->"3617a860-9445-49bf-b4c3-ca03b7b1679f"],
-Cell[31553, 498, 600, 11, 33, "Output",ExpressionUUID->"26d74195-7e64-4855-a028-95cdcf43b79d"]
+Cell[31420, 493, 391, 8, 29, "Input",ExpressionUUID->"3617a860-9445-49bf-b4c3-ca03b7b1679f"],
+Cell[31814, 503, 600, 11, 33, "Output",ExpressionUUID->"26d74195-7e64-4855-a028-95cdcf43b79d"]
 }, Open  ]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[32202, 515, 148, 3, 53, "Section",ExpressionUUID->"9263b767-fa90-4d67-823a-e15090e310aa"],
-Cell[32353, 520, 208, 3, 29, "Input",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
-Cell[32564, 525, 246, 6, 35, "Text",ExpressionUUID->"5691a06b-26bd-4ad6-bc39-964c44a1eedd"],
-Cell[32813, 533, 403, 6, 50, "Input",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
-Cell[33219, 541, 429, 8, 29, "Input",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
-Cell[33651, 551, 239, 6, 29, "Input",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
-Cell[33893, 559, 358, 7, 29, "Input",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
-Cell[34254, 568, 278, 6, 29, "Input",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
-Cell[34535, 576, 274, 6, 29, "Input",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
-Cell[34812, 584, 272, 6, 29, "Input",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
-Cell[35087, 592, 48173, 950, 4912, "Input",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
-Cell[83263, 1544, 250, 5, 29, "Input",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
-Cell[83516, 1551, 375, 9, 29, "Input",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
-Cell[83894, 1562, 14243, 239, 848, "Input",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
-Cell[98140, 1803, 334, 8, 29, "Input",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
-Cell[98477, 1813, 6465, 128, 725, "Input",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
+Cell[32463, 520, 148, 3, 53, "Section",ExpressionUUID->"9263b767-fa90-4d67-823a-e15090e310aa"],
+Cell[32614, 525, 208, 3, 29, "Input",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
+Cell[32825, 530, 246, 6, 35, "Text",ExpressionUUID->"5691a06b-26bd-4ad6-bc39-964c44a1eedd"],
+Cell[33074, 538, 403, 6, 50, "Input",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
+Cell[33480, 546, 429, 8, 29, "Input",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
+Cell[33912, 556, 238, 6, 29, "Input",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
+Cell[34153, 564, 357, 7, 29, "Input",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
+Cell[34513, 573, 277, 6, 29, "Input",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
+Cell[34793, 581, 274, 6, 29, "Input",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
+Cell[35070, 589, 272, 6, 29, "Input",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
+Cell[35345, 597, 48173, 950, 4483, "Input",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
+Cell[83521, 1549, 250, 5, 29, "Input",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
+Cell[83774, 1556, 375, 9, 29, "Input",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
+Cell[84152, 1567, 14243, 239, 848, "Input",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
+Cell[98398, 1808, 334, 8, 29, "Input",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
+Cell[98735, 1818, 6465, 128, 725, "Input",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[104979, 1946, 390, 6, 53, "Section",ExpressionUUID->"f0cee9b3-1e92-48a6-887a-3225a9b6a5ba"],
-Cell[105372, 1954, 201, 3, 35, "Text",ExpressionUUID->"486fdcfc-cf1c-41a0-be8f-d17025596029"],
-Cell[105576, 1959, 38195, 653, 970, "Input",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
+Cell[105237, 1951, 390, 6, 53, "Section",ExpressionUUID->"f0cee9b3-1e92-48a6-887a-3225a9b6a5ba"],
+Cell[105630, 1959, 201, 3, 35, "Text",ExpressionUUID->"486fdcfc-cf1c-41a0-be8f-d17025596029"],
+Cell[105834, 1964, 38392, 656, 970, "Input",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
 Cell[CellGroupData[{
-Cell[143796, 2616, 206, 3, 29, "Input",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
-Cell[144005, 2621, 17321, 243, 33, "Output",ExpressionUUID->"c541d1e2-a210-49b0-aabf-f5a6b7fe9db4"]
+Cell[144251, 2624, 206, 3, 29, "Input",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
+Cell[144460, 2629, 17607, 247, 33, "Output",ExpressionUUID->"aabfa79d-4848-48c1-b173-953e8024b083"]
 }, Open  ]],
-Cell[161341, 2867, 1823, 31, 112, "Input",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
-Cell[163167, 2900, 238, 4, 29, "Input",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
-Cell[163408, 2906, 183, 4, 29, "Input",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
-Cell[163594, 2912, 417, 10, 50, "Input",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
-Cell[164014, 2924, 1071, 21, 71, "Input",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
-Cell[165088, 2947, 510, 9, 29, "Input",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
-Cell[165601, 2958, 1615, 25, 50, "Input",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
+Cell[162082, 2879, 1871, 32, 112, "Input",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
+Cell[163956, 2913, 265, 5, 29, "Input",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
+Cell[164224, 2920, 241, 4, 29, "Input",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
+Cell[164468, 2926, 417, 10, 50, "Input",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
+Cell[164888, 2938, 1071, 21, 71, "Input",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
+Cell[165962, 2961, 608, 10, 29, "Input",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
+Cell[166573, 2973, 1717, 27, 50, "Input",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
 Cell[CellGroupData[{
-Cell[167241, 2987, 179, 2, 29, "Input",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
-Cell[167423, 2991, 6192, 87, 33, "Output",ExpressionUUID->"3dfc326e-a82b-4ac5-a308-87c1daa0583d"]
+Cell[168315, 3004, 179, 2, 29, "Input",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
+Cell[168497, 3008, 6523, 92, 33, "Output",ExpressionUUID->"fd5a9e56-3ce9-4bcc-833b-2a57bd00834a"]
 }, Open  ]],
-Cell[173630, 3081, 28225, 383, 29, "Input",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
+Cell[175035, 3103, 28550, 387, 29, "Input",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
 Cell[CellGroupData[{
-Cell[201880, 3468, 30483, 517, 888, "Input",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
-Cell[CellGroupData[{
-Cell[232388, 3989, 796, 16, 23, "Print",ExpressionUUID->"2b8cef47-4632-4624-bf1e-ffbb32914a62"],
-Cell[233187, 4007, 884, 18, 23, "Print",ExpressionUUID->"d31dd10a-d3cf-4cb9-b7fb-f7f3e1bf52af"],
-Cell[234074, 4027, 910, 20, 24, "Print",ExpressionUUID->"cc6fe5d9-24f0-44c6-a526-3175eda4f822"],
-Cell[234987, 4049, 864, 18, 23, "Print",ExpressionUUID->"2e5edf7a-77d1-4269-8821-f60fda570cdb"],
-Cell[235854, 4069, 756, 16, 26, "Print",ExpressionUUID->"0ed6b2c0-c2f8-4483-8ac3-07ab68afcbe4"],
-Cell[236613, 4087, 717, 14, 23, "Print",ExpressionUUID->"85ccbea2-afaa-4a23-875b-6797b94c184a"],
-Cell[237333, 4103, 5916, 134, 84, "Print",ExpressionUUID->"ae59e9b8-826b-406b-87ef-ed03cd6ca373"],
-Cell[243252, 4239, 716, 14, 23, "Print",ExpressionUUID->"6e4d255e-846b-4808-8860-31eb35b086d2"],
-Cell[243971, 4255, 5918, 134, 84, "Print",ExpressionUUID->"b015fae2-0e31-47bb-a078-5f0f5079c052"],
-Cell[249892, 4391, 716, 14, 23, "Print",ExpressionUUID->"6d8a6528-c7aa-43dd-876b-b733a90896a4"],
-Cell[250611, 4407, 8042, 160, 84, "Print",ExpressionUUID->"56f2b59e-24a5-4297-b052-19c2b31e671c"],
-Cell[258656, 4569, 722, 15, 23, "Print",ExpressionUUID->"4b685d32-88b6-4323-a301-7b3cce92ae66"],
-Cell[259381, 4586, 33487, 635, 213, "Print",ExpressionUUID->"17cfbf43-40eb-4a03-917d-1085b88b872d"],
-Cell[292871, 5223, 722, 15, 23, "Print",ExpressionUUID->"ce25827d-06c5-453b-9448-d00893415864"],
-Cell[293596, 5240, 5995, 133, 84, "Print",ExpressionUUID->"4acbc417-6fdf-41a1-9cbe-e52235bfb304"],
-Cell[299594, 5375, 734, 15, 23, "Print",ExpressionUUID->"b7efc9bd-c1f4-416b-af4a-246f52f3343e"],
-Cell[300331, 5392, 5556, 128, 84, "Print",ExpressionUUID->"adcb1b14-b1b5-4e0e-a1cf-fcce80077e59"],
-Cell[305890, 5522, 731, 15, 23, "Print",ExpressionUUID->"50c24b84-e7bb-4dff-b6a8-0c01abf86e01"],
-Cell[306624, 5539, 23693, 439, 138, "Print",ExpressionUUID->"fbc6f1e3-02a1-4bfe-8011-cc1fe4b3b2d0"],
-Cell[330320, 5980, 730, 15, 23, "Print",ExpressionUUID->"326cde95-2d47-4c16-87b0-64d5d727c2a4"],
-Cell[331053, 5997, 6766, 142, 84, "Print",ExpressionUUID->"e7384a92-cf4d-45b9-a183-526a331e8094"],
-Cell[337822, 6141, 732, 15, 23, "Print",ExpressionUUID->"7626d4b6-aab0-4189-a6be-29c8e0297557"],
-Cell[338557, 6158, 18901, 375, 138, "Print",ExpressionUUID->"33f201ed-e0d2-482d-ad92-8e6b8329a18b"],
-Cell[357461, 6535, 729, 15, 23, "Print",ExpressionUUID->"4804924a-3213-43bc-8b5c-b173940c7669"],
-Cell[358193, 6552, 8027, 163, 84, "Print",ExpressionUUID->"fc198030-1797-4957-9cba-636242b2528e"],
-Cell[366223, 6717, 745, 15, 23, "Print",ExpressionUUID->"a62eda00-ddff-48f3-83a9-c33544d0aefd"],
-Cell[366971, 6734, 11288, 236, 111, "Print",ExpressionUUID->"d2ea6b8c-8a30-4f59-bf37-92bc7fcc4028"]
-}, Open  ]],
-Cell[378274, 6973, 2314, 35, 33, "Output",ExpressionUUID->"61bfb889-cb25-41ba-91de-c462fece47e4"]
+Cell[203610, 3494, 30650, 520, 888, "Input",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
+Cell[234263, 4016, 226, 3, 33, "Output",ExpressionUUID->"d670674c-0811-4c9b-8ede-3d9c84f03310"]
 }, Open  ]]
 }, Open  ]]
 }

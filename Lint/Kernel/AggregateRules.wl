@@ -128,6 +128,7 @@ InfixNode[StringExpression, {InfixNode[Alternatives, _, _], __}, _] -> scanAlter
 TernaryNode[TernaryTilde, {_, _, Except[LeafNode[Symbol, _, _]], _, _}, _] -> scanTernaryTildeExpectedSymbol,
 
 
+PrefixNode[Plus, _, _] -> scanPrefixPlus,
 
 (*
 
@@ -1041,6 +1042,30 @@ Catch[
   *)
   {Lint["ExpectedSymbol", "Suspicious syntax.", "Warning", <| data, ConfidenceLevel -> 0.55 |>]}
 ]]
+
+
+
+
+
+
+Attributes[scanPrefixPlus] = {HoldRest}
+
+scanPrefixPlus[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, op},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  op = node[[2, 1]];
+
+  data = op[[3]];
+
+  issues = {};
+
+  AppendTo[issues, Lint["PrefixPlus", "Unexpected ``Plus``.", "Warning", <|Source->data[Source], ConfidenceLevel->0.9|>]];
+
+  issues
+]
+
 
 
 
