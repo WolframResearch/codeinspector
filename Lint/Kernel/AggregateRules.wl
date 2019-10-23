@@ -274,7 +274,7 @@ Module[{agg, node, data, children, issues, pairs, src},
 
     src = p[[2, 3, Key[Source] ]];
 
-    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Unexpected " <> format[ToInputFormString[p[[2]]]], "Error",
+    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Unexpected " <> format[ToInputFormString[p[[2]]]] <> ".", "Error",
       <|Source->src,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
@@ -304,7 +304,7 @@ Module[{agg, node, data, issues, src, children, case},
 
   src = case[[ 3, Key[Source] ]];
 
-  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between ``String``s", "Warning",
+  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between strings.", "Warning",
     <|Source->src,
       ConfidenceLevel -> 0.75,
       CodeActions -> {
