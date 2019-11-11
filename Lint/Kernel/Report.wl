@@ -223,10 +223,12 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   *)
   sourceLessLints = Cases[lints, Lint[_, _, _, data_ /; !MemberQ[Keys[data], Source]]];
 
+  (*
   If[!empty[sourceLessLints],
     Message[Lint::sourceless, sourceLessLints]
   ];
-
+  *)
+  
   lints = Complement[lints, sourceLessLints];
   If[$Debug,
     Print["lints: ", lints];

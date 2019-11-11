@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    317310,       5628]
-NotebookOptionsPosition[    310867,       5533]
-NotebookOutlinePosition[    311208,       5548]
-CellTagsIndexPosition[    311165,       5545]
+NotebookDataLength[    242366,       4170]
+NotebookOptionsPosition[    237266,       4090]
+NotebookOutlinePosition[    237663,       4106]
+CellTagsIndexPosition[    237620,       4103]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -23,7 +23,8 @@ Cell[BoxData[
  CellChangeTimes->{{3.751109253597948*^9, 3.751109254489959*^9}, {
   3.7526007337261753`*^9, 3.752600734451129*^9}, {3.766735989619089*^9, 
   3.7667359904964533`*^9}},
- CellLabel->"In[13]:=",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
+ CellLabel->
+  "In[146]:=",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
 
 Cell[CellGroupData[{
 
@@ -153,21 +154,22 @@ Cell[BoxData["\<\"abc\"\>"], "Output",
    3.780420412882188*^9, 3.780420761394125*^9, 3.780420855930901*^9, 
    3.780420978952878*^9, 3.7804210452873993`*^9, 3.780652194428095*^9, 
    3.780657603309314*^9, 3.780659144826264*^9, 3.780659299737741*^9, 
-   3.78065944474109*^9, 3.781108567095318*^9, 3.781286247375843*^9},
- CellLabel->"Out[2]=",ExpressionUUID->"7018aec0-3bcc-41f2-a14b-e9f0a218d8c7"]
+   3.78065944474109*^9, 3.781108567095318*^9, 3.781286247375843*^9, 
+   3.7819168803939133`*^9, 3.782401901755596*^9},
+ CellLabel->"Out[2]=",ExpressionUUID->"8c0466e4-e8db-46e4-995b-a69f5f60e3e2"]
 }, Open  ]],
 
 Cell[BoxData[
  RowBox[{"PacletUninstall", "[", "\"\<Lint\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.751270843570036*^9, 3.751270847127513*^9}, {
   3.7532827951227083`*^9, 3.7532827955772552`*^9}},
- CellLabel->"In[22]:=",ExpressionUUID->"d1bfdafc-32fd-4347-8094-822b9fb5d241"],
+ CellLabel->"In[3]:=",ExpressionUUID->"d1bfdafc-32fd-4347-8094-822b9fb5d241"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{"PacletInstall", "[", 
-  "\"\</Users/brenton/development/stash/COD/lint/build/paclet/Lint-0.14.\
+  "\"\</Users/brenton/development/stash/COD/lint/build/paclet/Lint-0.15.\
 paclet\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.7512708420741177`*^9, 3.751270852903513*^9}, {
   3.751583329828288*^9, 3.7515833300553017`*^9}, {3.752323185261293*^9, 
@@ -178,17 +180,19 @@ paclet\>\"", "]"}]], "Input",
   3.764418148550346*^9}, {3.766270163903755*^9, 3.76627016401475*^9}, {
   3.7699487757853947`*^9, 3.769948776271532*^9}, {3.773142840026576*^9, 
   3.773142842217784*^9}, {3.7740848388880177`*^9, 3.774084839043419*^9}, {
-  3.777656459898322*^9, 3.777656460103833*^9}},
- CellLabel->"In[77]:=",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb558b76485c"],
+  3.777656459898322*^9, 3.777656460103833*^9}, {3.7819168872071*^9, 
+  3.7819168877004957`*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb558b76485c"],
 
 Cell[BoxData[
  InterpretationBox[
-  RowBox[{"Paclet", "[", "\<\"Lint\"\>", ",", "\<\"0.14\"\>", ",", "<>", "]"}],
+  RowBox[{"Paclet", "[", "\<\"Lint\"\>", ",", "\<\"0.15\"\>", ",", "<>", "]"}],
   PacletManager`Paclet[
-  "Name" -> "Lint", "Version" -> "0.14", "WolframVersion" -> "11.0+", 
+  "Name" -> "Lint", "Version" -> "0.15", "WolframVersion" -> "11.0+", 
+   "Creator" -> "Brenton Bostick <brenton@wolfram.com>", 
    "Extensions" -> {{"Kernel", "Root" -> "Kernel", "Context" -> "Lint`"}, {
      "Documentation", "Language" -> "English"}, {"FrontEnd"}}, "Location" -> 
-   "/Users/brenton/Library/Mathematica/Paclets/Repository/Lint-0.14"]]], \
+   "/Users/brenton/Library/Mathematica/Paclets/Repository/Lint-0.15"]]], \
 "Output",
  CellChangeTimes->{
   3.751270853437409*^9, 3.751271638179447*^9, 3.751273353617054*^9, {
@@ -467,196 +471,28 @@ Cell[BoxData[
    3.780420980408102*^9, 3.780421046741496*^9, 3.780651862657115*^9, 
    3.780652197868198*^9, 3.780657605138803*^9, 3.780659146735421*^9, 
    3.78065930208309*^9, 3.780659446381238*^9, 3.7811085698524723`*^9, 
-   3.781286207335273*^9, 3.781460125980269*^9},
- CellLabel->"Out[77]=",ExpressionUUID->"71e86034-b998-4eaa-9c83-cfbbbda49a00"]
+   3.781286207335273*^9, 3.781460125980269*^9, {3.7819168839753838`*^9, 
+   3.781916888589464*^9}, 3.782401904780789*^9},
+ CellLabel->"Out[4]=",ExpressionUUID->"76f4777f-e30e-447d-85e0-d52b28c11f71"]
 }, Open  ]],
 
 Cell[BoxData[
  RowBox[{"Needs", "[", "\"\<Lint`\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.766753038452814*^9, 3.766753041414118*^9}},
- CellLabel->"In[6]:=",ExpressionUUID->"e72a5699-cbbe-496a-aefb-c205e49e736b"],
+ CellLabel->"In[5]:=",ExpressionUUID->"e72a5699-cbbe-496a-aefb-c205e49e736b"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{"LintString", "[", "\"\<1+1\>\"", "]"}]], "Input",
  CellChangeTimes->{{3.7813481594582987`*^9, 3.781348164400853*^9}},
- CellLabel->"In[7]:=",ExpressionUUID->"8c3e2740-0c9c-40fa-b012-e622aa5c2de3"],
+ CellLabel->"In[6]:=",ExpressionUUID->"8c3e2740-0c9c-40fa-b012-e622aa5c2de3"],
 
 Cell[BoxData[
- TemplateBox[{
-  "Part", "partw", 
-   "\"Part \\!\\(\\*RowBox[{\\\"2\\\"}]\\) of \
-\\!\\(\\*RowBox[{\\\"Lint`Private`Abstract\\\", \\\"[\\\", \
-RowBox[{\\\"Lint`Private`Aggregate\\\", \\\"[\\\", \
-\\\"\\\\\\\"1+1\\\\\\\"\\\", \\\"]\\\"}], \\\"]\\\"}]\\) does not exist.\"", 
-   2, 7, 9, 30587127611598096571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164720461*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"b33f1e62-dbec-47dc-98d9-ec4a7e7e7dc4"],
-
-Cell[BoxData[
- TemplateBox[{
-  "Function", "flpar", 
-   "\"Parameter specification \\!\\(\\*RowBox[{\\\"Lint\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"Lint`Private`FileNode\\\", \\\"[\\\", \
-RowBox[{\\\"File\\\", \\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\
-\\\", \\\"1\\\", \\\"\[RightDoubleBracket]\\\"}], \\\",\\\", \
-RowBox[{\\\"Association\\\", \\\"[\\\", \\\"]\\\"}]}], \\\"]\\\"}], \
-\\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\\\", \\\"2\\\", \\\"\
-\[RightDoubleBracket]\\\"}]}], \\\"]\\\"}]\\) in \
-\\!\\(\\*RowBox[{\\\"Function\\\", \\\"[\\\", RowBox[{RowBox[{\\\"Lint\\\", \
-\\\"[\\\", RowBox[{RowBox[{\\\"Lint`Private`FileNode\\\", \\\"[\\\", RowBox[{\
-\\\"File\\\", \\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\\\", \\\
-\"1\\\", \\\"\[RightDoubleBracket]\\\"}], \\\",\\\", \
-RowBox[{\\\"Association\\\", \\\"[\\\", \\\"]\\\"}]}], \\\"]\\\"}], \
-\\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\\\", \\\"2\\\", \\\"\
-\[RightDoubleBracket]\\\"}]}], \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
-\\\"}\\\"}]}], \\\"]\\\"}]\\) should be a symbol or a list of symbols.\"", 2, 
-   7, 10, 30587127611598096571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164726006*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"e1e2c7c7-a272-44ec-b5c4-3039f6f7d923"],
-
-Cell[BoxData[
- TemplateBox[{
-  "Function", "flpar", 
-   "\"Parameter specification \\!\\(\\*RowBox[{\\\"Lint\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"Lint`Private`FileNode\\\", \\\"[\\\", \
-RowBox[{\\\"File\\\", \\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\
-\\\", \\\"1\\\", \\\"\[RightDoubleBracket]\\\"}], \\\",\\\", \
-RowBox[{\\\"Association\\\", \\\"[\\\", \\\"]\\\"}]}], \\\"]\\\"}], \
-\\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\\\", \\\"2\\\", \\\"\
-\[RightDoubleBracket]\\\"}]}], \\\"]\\\"}]\\) in \
-\\!\\(\\*RowBox[{\\\"Function\\\", \\\"[\\\", RowBox[{RowBox[{\\\"Lint\\\", \
-\\\"[\\\", RowBox[{RowBox[{\\\"Lint`Private`FileNode\\\", \\\"[\\\", RowBox[{\
-\\\"File\\\", \\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\\\", \\\
-\"1\\\", \\\"\[RightDoubleBracket]\\\"}], \\\",\\\", \
-RowBox[{\\\"Association\\\", \\\"[\\\", \\\"]\\\"}]}], \\\"]\\\"}], \
-\\\",\\\", RowBox[{\\\"#1\\\", \\\"\[LeftDoubleBracket]\\\", \\\"2\\\", \\\"\
-\[RightDoubleBracket]\\\"}]}], \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
-\\\"}\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \\\"}\\\"}]}], \\\"]\\\"}]\\) \
-should be a symbol or a list of symbols.\"", 2, 7, 11, 30587127611598096571, 
-   "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164731258*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"deda997e-df5a-4cf4-91b6-ac9aa19c620f"],
-
-Cell[BoxData[
- TemplateBox[{
-  "Function", "argb", 
-   "\"\\!\\(\\*RowBox[{\\\"Function\\\"}]\\) called with \
-\\!\\(\\*RowBox[{\\\"4\\\"}]\\) arguments; between \
-\\!\\(\\*RowBox[{\\\"1\\\"}]\\) and \\!\\(\\*RowBox[{\\\"3\\\"}]\\) arguments \
-are expected.\"", 2, 7, 12, 30587127611598096571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164736496*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"7972be2d-4e7b-49c1-9b26-4d5b790c55c6"],
-
-Cell[BoxData[
- TemplateBox[{
-  "Function", "argb", 
-   "\"\\!\\(\\*RowBox[{\\\"Function\\\"}]\\) called with \
-\\!\\(\\*RowBox[{\\\"5\\\"}]\\) arguments; between \
-\\!\\(\\*RowBox[{\\\"1\\\"}]\\) and \\!\\(\\*RowBox[{\\\"3\\\"}]\\) arguments \
-are expected.\"", 2, 7, 13, 30587127611598096571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164741847*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"76ffd1ee-fde1-4e95-adbb-fd23522b5f5c"],
-
-Cell[BoxData[
- TemplateBox[{
-  "Function", "argb", 
-   "\"\\!\\(\\*RowBox[{\\\"Function\\\"}]\\) called with \
-\\!\\(\\*RowBox[{\\\"6\\\"}]\\) arguments; between \
-\\!\\(\\*RowBox[{\\\"1\\\"}]\\) and \\!\\(\\*RowBox[{\\\"3\\\"}]\\) arguments \
-are expected.\"", 2, 7, 14, 30587127611598096571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164747518*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"b3f83b29-8bf1-426e-a599-a7a763e51c80"],
-
-Cell[BoxData[
- TemplateBox[{
-  "General", "stop", 
-   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Function\\\", \
-\\\"::\\\", \\\"argb\\\"}], \\\"MessageName\\\"]\\) will be suppressed during \
-this calculation.\"", 2, 7, 15, 30587127611598096571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.781348164754097*^9},
- CellLabel->
-  "During evaluation of \
-In[7]:=",ExpressionUUID->"1b8164ae-aa9d-4268-92c1-72c01c88456d"],
-
-Cell[BoxData[
- RowBox[{"Function", "[", 
-  RowBox[{
-   RowBox[{"Lint", "[", 
-    RowBox[{
-     RowBox[{"Lint`Private`FileNode", "[", 
-      RowBox[{"File", ",", 
-       RowBox[{"#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-       ",", 
-       RowBox[{"Association", "[", "]"}]}], "]"}], ",", 
-     RowBox[{"#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
-    "]"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}], ",", 
-   RowBox[{"{", "}"}]}], "]"}]], "Output",
- CellChangeTimes->{3.781348164759313*^9},
- CellLabel->"Out[7]=",ExpressionUUID->"8aadcbdc-d684-43d4-949c-3a0d75eb4fc7"]
+ RowBox[{"{", "}"}]], "Output",
+ CellChangeTimes->{3.781348164759313*^9, 3.781863283836533*^9, 
+  3.78191689024013*^9, 3.7824019065760803`*^9},
+ CellLabel->"Out[6]=",ExpressionUUID->"e4386ce8-ade7-43cc-a9a3-6c9c4b818f61"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -698,7 +534,7 @@ Cell[BoxData[
   3.781458318644744*^9},
  CellLabel->"Out[23]=",ExpressionUUID->"e86ab182-e8b8-4730-9286-6f69ce7012d7"]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 
 Cell[CellGroupData[{
 
@@ -710,7 +546,7 @@ e15090e310aa"],
 Cell[BoxData[
  RowBox[{"$MessagePrePrint", "=."}]], "Input",
  CellChangeTimes->{{3.7558912494540663`*^9, 3.7558912536547327`*^9}},
- CellLabel->"In[59]:=",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
+ CellLabel->"In[7]:=",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
 
 Cell["\<\
 The AST package must be built first. Change these paths to point to your \
@@ -726,7 +562,7 @@ Cell[BoxData[{
  CellChangeTimes->{{3.749556742283807*^9, 3.7495567425703573`*^9}, {
   3.752498664219411*^9, 3.752498664744933*^9}, {3.7525953788795967`*^9, 
   3.752595379563582*^9}},
- CellLabel->"In[60]:=",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
+ CellLabel->"In[8]:=",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
 
 Cell[BoxData[
  RowBox[{
@@ -736,7 +572,7 @@ Cell[BoxData[
   3.749559912422893*^9, {3.752498647092827*^9, 3.752498650857582*^9}, {
    3.752942153117607*^9, 3.7529421548689117`*^9}, 3.752942213225191*^9, {
    3.7558708210587387`*^9, 3.7558708221525393`*^9}},
- CellLabel->"In[62]:=",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
+ CellLabel->"In[10]:=",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
 
 Cell[BoxData[
  RowBox[{
@@ -744,7 +580,7 @@ Cell[BoxData[
   "protos", "=", 
    "\"\</Users/brenton/Library/Mathematica/ApplicationData/StashLink/\
 Prototypes/\>\""}], ";"}]], "Input",
- CellLabel->"In[63]:=",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
+ CellLabel->"In[11]:=",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
 
 Cell[BoxData[
  RowBox[{
@@ -753,7 +589,7 @@ Cell[BoxData[
  CellChangeTimes->{{3.752509394577828*^9, 3.752509404207556*^9}, 
    3.75294220275294*^9, 3.755870829451112*^9, {3.773047307509779*^9, 
    3.7730473246867743`*^9}},
- CellLabel->"In[64]:=",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
+ CellLabel->"In[12]:=",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
 
 Cell[BoxData[
  RowBox[{
@@ -761,7 +597,7 @@ Cell[BoxData[
    ";"}]], "Input",
  CellChangeTimes->{{3.7812578129952593`*^9, 3.781257816897318*^9}, {
   3.781257915171618*^9, 3.7812579167304163`*^9}},
- CellLabel->"In[65]:=",ExpressionUUID->"6b382037-a64a-4ea9-a973-ab63c6eff61f"],
+ CellLabel->"In[13]:=",ExpressionUUID->"6b382037-a64a-4ea9-a973-ab63c6eff61f"],
 
 Cell[BoxData[
  RowBox[{
@@ -769,7 +605,7 @@ Cell[BoxData[
   "github", "=", "\"\</Users/brenton/development/github-development/\>\""}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.774268681030183*^9, 3.7742686864376802`*^9}},
- CellLabel->"In[66]:=",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
+ CellLabel->"In[14]:=",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
 
 Cell[BoxData[
  RowBox[{
@@ -777,7 +613,7 @@ Cell[BoxData[
   "other", "=", "\"\</Users/brenton/development/other-development/\>\""}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.774868772298738*^9, 3.774868775178615*^9}},
- CellLabel->"In[67]:=",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
+ CellLabel->"In[15]:=",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
 
 Cell[BoxData[
  RowBox[{
@@ -785,7 +621,7 @@ Cell[BoxData[
   "examples", "=", "\"\</Users/brenton/Downloads/WLCodeExamples/\>\""}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.776000449971442*^9, 3.776000458131075*^9}},
- CellLabel->"In[68]:=",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
+ CellLabel->"In[16]:=",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -1737,14 +1573,14 @@ m\>\"", "\[Rule]",
    3.7690031513264847`*^9}, {3.769089635841011*^9, 3.769089699198401*^9}, {
    3.775554485375002*^9, 3.775554514400814*^9}, {3.778759581211093*^9, 
    3.778759584600298*^9}},
- CellLabel->"In[69]:=",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
+ CellLabel->"In[17]:=",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"$AdditionalRules", "=", 
    RowBox[{"<|", "|>"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.7576808456927147`*^9, 3.757680848636235*^9}},
- CellLabel->"In[71]:=",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
+ CellLabel->"In[19]:=",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
 
 Cell[BoxData[
  RowBox[{
@@ -1755,7 +1591,7 @@ Cell[BoxData[
    ";"}]], "Input",
  CellChangeTimes->{{3.752415714385433*^9, 3.752415725942972*^9}, 
    3.7524159581734457`*^9},
- CellLabel->"In[72]:=",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
+ CellLabel->"In[20]:=",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
 
 Cell[BoxData[
  RowBox[{
@@ -1996,7 +1832,7 @@ Cell[BoxData[
    3.7795771236732693`*^9}, {3.779577264129085*^9, 3.779577267095492*^9}, {
    3.779577458309791*^9, 3.779577474609827*^9}, {3.7795779566218367`*^9, 
    3.7795779762868156`*^9}, {3.780413443751047*^9, 3.7804134717124577`*^9}},
- CellLabel->"In[73]:=",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
+ CellLabel->"In[21]:=",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
 
 Cell[BoxData[
  RowBox[{
@@ -2006,7 +1842,7 @@ Cell[BoxData[
     RowBox[{"\"\<FileNamePrefixPattern\>\"", "\[Rule]", "\"\<\>\""}], "}"}]}],
    ";"}]], "Input",
  CellChangeTimes->{3.7524171998912363`*^9},
- CellLabel->"In[74]:=",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
+ CellLabel->"In[22]:=",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
 
 Cell[BoxData[
  RowBox[{
@@ -2136,7 +1972,7 @@ Cell[BoxData[
    3.768742074941379*^9, 3.7687420761969843`*^9}, {3.776594934653112*^9, 
    3.7765949395000677`*^9}, {3.776595055658917*^9, 3.776595096512281*^9}, {
    3.776595170900703*^9, 3.776595172799589*^9}},
- CellLabel->"In[75]:=",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
+ CellLabel->"In[23]:=",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -2167,7 +2003,7 @@ Cell[BoxData[{
    RowBox[{"cvs", "<>", "\"\<Mathematica/Packages/Combinatorica/\>\""}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"prefix", "=", "prefix3"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"prefix", "=", "protos"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"names1", ":=", 
    RowBox[{"FileNames", "[", 
@@ -2815,8 +2651,11 @@ Cell[BoxData[{
    3.78065559321097*^9}, {3.780661746821644*^9, 3.7806617477155724`*^9}, {
    3.780667812190124*^9, 3.780667812966536*^9}, {3.781108576681141*^9, 
    3.781108577322489*^9}, {3.7811135712130327`*^9, 3.781113573978503*^9}, {
-   3.781258299973748*^9, 3.78125830312399*^9}},
- CellLabel->"In[76]:=",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
+   3.781258299973748*^9, 3.78125830312399*^9}, {3.781863298722636*^9, 
+   3.781863298902925*^9}, {3.7819168971616364`*^9, 3.78191689860281*^9}, {
+   3.7821748613963013`*^9, 3.782174863090912*^9}, {3.782401811662052*^9, 
+   3.7824018139002323`*^9}},
+ CellLabel->"In[98]:=",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
 
 Cell[CellGroupData[{
 
@@ -2824,9 +2663,9 @@ Cell[BoxData[
  RowBox[{"Length", "[", "names", "]"}]], "Input",
  CellChangeTimes->{{3.755821810995276*^9, 3.7558218130892*^9}},
  CellLabel->
-  "In[119]:=",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
+  "In[141]:=",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
 
-Cell[BoxData["3"], "Output",
+Cell[BoxData["3946"], "Output",
  CellChangeTimes->{
   3.755821815358417*^9, 3.755822152957499*^9, 3.755822319512195*^9, 
    3.755829819651298*^9, {3.755833600554923*^9, 3.755833613215407*^9}, 
@@ -3073,9 +2912,11 @@ Cell[BoxData["3"], "Output",
    3.7806556058833323`*^9, 3.780659515848081*^9, 3.780661326924329*^9, 
    3.78066175148279*^9, 3.7806678174297047`*^9, 3.780741431799634*^9, 
    3.7807443950160646`*^9, 3.781108580809072*^9, 3.78111357838379*^9, 
-   3.781258310163869*^9},
+   3.781258310163869*^9, 3.781863310134795*^9, 3.781916905449217*^9, 
+   3.782174868513685*^9, 3.782401818101728*^9, 3.7824019141317673`*^9, 
+   3.7824021776090727`*^9},
  CellLabel->
-  "Out[119]=",ExpressionUUID->"3f9f4a90-c2f1-4b3b-b38b-7ba2636870de"]
+  "Out[141]=",ExpressionUUID->"cff1d373-a84b-4d9e-b7be-1ab6676e025e"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -3111,7 +2952,7 @@ Cell[BoxData[{
    3.779376297142969*^9, 3.77957823313553*^9, 3.779578486627757*^9, 
    3.780576949354025*^9, 3.780577083702368*^9},
  CellLabel->
-  "In[120]:=",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
+  "In[142]:=",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
 
 Cell[BoxData[
  RowBox[{
@@ -3119,14 +2960,14 @@ Cell[BoxData[
  CellChangeTimes->{{3.780419111417235*^9, 3.780419120478463*^9}, 
    3.780577075998773*^9},
  CellLabel->
-  "In[125]:=",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
+  "In[147]:=",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"Lint`Format`$NewLintStyle", "=", "True"}], ";"}]], "Input",
  CellChangeTimes->{{3.7805764166970167`*^9, 3.780576416935618*^9}},
  CellLabel->
-  "In[126]:=",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
+  "In[148]:=",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
 
 Cell[BoxData[{
  RowBox[{
@@ -3136,10 +2977,14 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"severityExclusions", "=", 
-   RowBox[{"{", "}"}]}], ";"}]}], "Input",
- CellChangeTimes->{{3.780413480311418*^9, 3.780413513912842*^9}},
+   RowBox[{"{", 
+    RowBox[{"\"\<Formatting\>\"", ",", "\"\<Remark\>\""}], "}"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.780413480311418*^9, 3.780413513912842*^9}, {
+   3.781917336516412*^9, 3.7819173437467003`*^9}, {3.782174876003289*^9, 
+   3.782174876560285*^9}, 3.782401928428727*^9},
  CellLabel->
-  "In[127]:=",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
+  "In[149]:=",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
 
 Cell[BoxData[{
  RowBox[{
@@ -3163,7 +3008,7 @@ Cell[BoxData[{
   3.7804136265283527`*^9, 3.780413631391913*^9}, {3.7804136991688957`*^9, 
   3.780413705735568*^9}, {3.7804143846551228`*^9, 3.780414385137207*^9}},
  CellLabel->
-  "In[129]:=",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
+  "In[151]:=",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
 
 Cell[BoxData[
  RowBox[{
@@ -3174,16 +3019,18 @@ Cell[BoxData[
    3.779448585460896*^9}, {3.779577131090147*^9, 3.779577131399589*^9}, 
    3.7795781150850563`*^9, {3.7804124431024017`*^9, 3.7804124673073874`*^9}, 
    3.7804143617176447`*^9, {3.7806556265473022`*^9, 3.780655626960745*^9}, {
-   3.780741443848221*^9, 3.780741444432385*^9}},
- CellLabel->
-  "In[131]:=",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
+   3.780741443848221*^9, 3.780741444432385*^9}, {3.78191734846074*^9, 
+   3.7819173488181047`*^9}, 3.782062804011067*^9, {3.782401932591853*^9, 
+   3.782401932781177*^9}, 
+   3.782405083761969*^9},ExpressionUUID->"65c2396d-9d53-48d1-b4e5-\
+3b1cce9ee351"],
 
 Cell[BoxData[{
  RowBox[{
   RowBox[{"Lint`Private`$fileByteCountMinLimit", "=", "0.0*^6"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"Lint`Private`$fileByteCountMaxLimit", "=", "2.0*^6"}], 
+  RowBox[{"Lint`Private`$fileByteCountMaxLimit", "=", "3.0*^6"}], 
   ";"}]}], "Input",
  CellChangeTimes->{{3.766919573395403*^9, 3.766919580800743*^9}, {
    3.768832753126946*^9, 3.7688327534210176`*^9}, {3.7690865529697742`*^9, 
@@ -3204,18 +3051,18 @@ Cell[BoxData[{
    3.780399234404016*^9, 3.7803992347070017`*^9}, {3.780414981631074*^9, 
    3.78041498381973*^9}, {3.780480550225256*^9, 3.780480550878134*^9}, {
    3.7805832398065968`*^9, 3.780583242100754*^9}, {3.780661762382292*^9, 
-   3.780661764876289*^9}},
+   3.780661764876289*^9}, {3.782401846877261*^9, 3.782401847491597*^9}},
  CellLabel->
-  "In[132]:=",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
+  "In[154]:=",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData["$ProcessID"], "Input",
  CellChangeTimes->{{3.771499598639045*^9, 3.7714996003266*^9}},
  CellLabel->
-  "In[134]:=",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
+  "In[156]:=",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
 
-Cell[BoxData["32549"], "Output",
+Cell[BoxData["82955"], "Output",
  CellChangeTimes->{
   3.771499600631003*^9, {3.771500318760984*^9, 3.771500371073209*^9}, 
    3.771500565146717*^9, 3.771508711073694*^9, 3.771509264465637*^9, 
@@ -3307,9 +3154,11 @@ Cell[BoxData["32549"], "Output",
    3.780659521362822*^9, 3.78066133190485*^9, {3.780661757133733*^9, 
    3.780661766283743*^9}, 3.780667824400806*^9, 3.7807414462008266`*^9, 
    3.78074439996325*^9, 3.7811085874298773`*^9, 3.781113583837762*^9, 
-   3.7812583172644176`*^9},
+   3.7812583172644176`*^9, 3.781863323535574*^9, 3.7819169121337852`*^9, 
+   3.782174881022771*^9, 3.7824018491689987`*^9, 3.782401938045701*^9, 
+   3.7824021861384897`*^9},
  CellLabel->
-  "Out[134]=",ExpressionUUID->"e6ecc2bc-1232-4720-8576-4c43e7ea44a3"]
+  "Out[156]=",ExpressionUUID->"85d0cee6-e222-4564-884a-77f50e4c77fc"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -3699,9 +3548,10 @@ Cell[BoxData[
    3.7806602958564796`*^9, 3.780660296757292*^9}, {3.780661758637968*^9, 
    3.7806617589160213`*^9}, {3.780662277181562*^9, 3.780662277659244*^9}, 
    3.780664034571508*^9, {3.780743157149737*^9, 3.780743157757268*^9}, {
-   3.781108588712123*^9, 3.7811085889834213`*^9}},
+   3.781108588712123*^9, 3.7811085889834213`*^9}, 3.781917322043558*^9, {
+   3.782174883506921*^9, 3.782174883633675*^9}},
  CellLabel->
-  "In[135]:=",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
+  "In[157]:=",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
 
 Cell[CellGroupData[{
 
@@ -4226,1315 +4076,23 @@ Cell[BoxData[{
    3.780661319230905*^9, {3.7807431611777287`*^9, 3.7807431618472567`*^9}, 
    3.780744523126532*^9},
  CellLabel->
-  "In[136]:=",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Linting \"\>", "\[InvisibleSpace]", "3", 
-   "\[InvisibleSpace]", "\<\" files\"\>"}],
-  SequenceForm["Linting ", 3, " files"],
-  Editable->False]], "Print",
- CellChangeTimes->{3.7812583185818577`*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"ff31b8bf-4f37-4fe2-84ed-dc4ec4cf7fc3"],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Current file: \"\>", "\[InvisibleSpace]", 
-   DynamicBox[ToBoxes[$CellContext`file, StandardForm],
-    ImageSizeCache->{648.0105468750002, {3., 9.}}]}],
-  SequenceForm["Current file: ", 
-   Dynamic[$CellContext`file]],
-  Editable->False]], "Print",
- CellChangeTimes->{3.781258318583871*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"172294b0-1a6e-410a-8eda-25281a6137f9"],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Current file size: \"\>", "\[InvisibleSpace]", 
-   DynamicBox[ToBoxes[
-     FileSize[$CellContext`file], StandardForm],
-    ImageSizeCache->{34., {3., 11.}}]}],
-  SequenceForm["Current file size: ", 
-   Dynamic[
-    FileSize[$CellContext`file]]],
-  Editable->False]], "Print",
- CellChangeTimes->{3.7812583185918627`*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"5cdc4a22-c511-44df-acb5-04c37754a8eb"],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{"\<\"Current index: \"\>", "\[InvisibleSpace]", 
-   DynamicBox[ToBoxes[$CellContext`x, StandardForm],
-    ImageSizeCache->{7.2, {0., 8.}}]}],
-  SequenceForm["Current index: ", 
-   Dynamic[$CellContext`x]],
-  Editable->False]], "Print",
- CellChangeTimes->{3.7812583185962553`*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"28e65e71-ea5f-49b6-b867-a6c43aef65d6"],
-
-Cell[BoxData[
- TemplateBox[{"\"overall\"", 
-   TemplateBox[{10}, "Spacer1"], 
-   ProgressIndicatorBox[
-    Dynamic[$CellContext`x], {0, 3}]},
-  "RowDefault"]], "Print",
- CellChangeTimes->{3.7812583185976343`*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"2c1c1d3f-18bb-498a-a04e-f352697b6a85"],
-
-Cell[BoxData[
- TemplateBox[{"\"index: \"", "1", "\" \"", "\"Combinatorica.m\""},
-  "RowDefault"]], "Print",
- CellChangeTimes->{3.781258326832374*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"695cb09a-c4ce-47a4-b709-f438f7cc0663"],
-
-Cell[BoxData[
- InterpretationBox[
-  FrameBox[
-   TagBox[GridBox[{
-      {
-       TemplateBox[{
-        "\"/Users/brenton/development/cvs-development/Mathematica/Packages/\
-Combinatorica/Combinatorica.m\""},
-        "Row",
-        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
-        InterpretationFunction->(RowBox[{"Row", "[", 
-           RowBox[{
-             RowBox[{"{", #, "}"}], ",", 
-             RowBox[{"ImageMargins", "\[Rule]", 
-               RowBox[{"{", 
-                 RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"0", ",", "0"}], "}"}], ",", 
-                   RowBox[{"{", 
-                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
-           "]"}]& )]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            TemplateBox[{
-              TemplateBox[{10}, "Spacer1"]},
-             "RowDefault"], "", ""},
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"3840\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "                GetEdgeLabels[g, Select[Edges[g, All], \
-MemberQ[nel, #[[1]]]] ]"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             3840], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"673b27cbcf5a7d14\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"G\"\>", "\<\"e\"\>", "\<\"t\"\>", "\<\"E\"\>", "\<\"d\"\>", \
-"\<\"g\"\>", "\<\"e\"\>", "\<\"L\"\>", "\<\"a\"\>", "\<\"b\"\>", "\<\"e\"\>", \
-"\<\"l\"\>", "\<\"s\"\>", "\<\"[\"\>", "\<\"g\"\>", "\<\",\"\>", "\<\" \"\>", \
-"\<\"S\"\>", "\<\"e\"\>", "\<\"l\"\>", "\<\"e\"\>", "\<\"c\"\>", "\<\"t\"\>", \
-"\<\"[\"\>", "\<\"E\"\>", "\<\"d\"\>", "\<\"g\"\>", "\<\"e\"\>", "\<\"s\"\>", \
-"\<\"[\"\>", "\<\"g\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"A\"\>", "\<\"l\"\>", \
-"\<\"l\"\>", "\<\"]\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"M\"\>", "\<\"e\"\>", \
-"\<\"m\"\>", "\<\"b\"\>", "\<\"e\"\>", "\<\"r\"\>", "\<\"Q\"\>", "\<\"[\"\>", \
-"\<\"n\"\>", "\<\"e\"\>", "\<\"l\"\>", "\<\",\"\>", "\<\" \"\>", "\<\"#\"\>", \
-"\<\"[\"\>", "\<\"[\"\>", "\<\"1\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\" \"\>", "\<\"]\"\>", "\<\" \"\>"},
-                   {"\<\" \"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{1, 1}, {70, 70}} -> {Bold, 
-                    RGBColor[1, 0, 0]}, {{2, 2}, {70, 70}} -> {Bold, 
-                    RGBColor[1, 0, 0]}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]},
-               {
-                TemplateBox[{
-                  StyleBox[
-                   TemplateBox[{"\"There is no containing \"", 
-                    StyleBox[
-                    "\"Function\"", "Program", FontWeight -> Bold, FontColor -> 
-                    GrayLevel[0], StripOnInput -> False], "\".\""}, 
-                    "RowDefault"], "Text"], 
-                  RGBColor[{1, 
-                    Rational[118, 255], 0}], 
-                  RGBColor[{1, 1, 1}], 
-                  RGBColor[{1, 
-                    Rational[46, 51], 
-                    Rational[203, 255]}], 
-                  RGBColor[{
-                    Rational[218, 255], 
-                    Rational[89, 255], 
-                    Rational[1, 51]}], {
-                  "Open in editor" :> 
-                   Lint`External`OpenInEditor[
-                    "/Users/brenton/development/cvs-development/Mathematica/\
-Packages/Combinatorica/Combinatorica.m", 3840, 69]}},
-                 "SuggestionGridTemplateXXX",
-                 DisplayFunction->(StyleBox[
-                   FrameBox[
-                    AdjustmentBox[
-                    TagBox[
-                    GridBox[{{
-                    
-                    TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
-                    "SuggestionIconTemplateXXX", 
-                    DisplayFunction -> (GraphicsBox[{
-                    Thickness[0.05555555555555555], 
-                    StyleBox[{
-                    
-                    FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-                    3}}}, CompressedData["
-1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
-m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
-jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
-MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
-                    "]]}, 
-                    FaceForm[#]], 
-                    StyleBox[{
-                    
-                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
-                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
-                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
-                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
-                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
-                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
-1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
-1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
-iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
-2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
-0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
-ACBxmlc=
-                    "]}]}, 
-                    FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
-                    AspectRatio -> Automatic, BaselinePosition -> 
-                    Scaled[0.1]]& )], 
-                    
-                    PaneBox[#, BaselinePosition -> Baseline, ImageSize -> 
-                    Automatic], 
-                    AdjustmentBox[
-                    TemplateBox[{
-                    ActionMenuBox[
-                    TagBox[
-                    PaneSelectorBox[{False -> GraphicsBox[{
-                    EdgeForm[
-                    Directive[
-                    GrayLevel[1, 0], 
-                    Thickness[0.025]]], 
-                    FaceForm[#4], 
-                    
-                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
-                    0.2], 
-                    Thickness[0.15], #5, 
-                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
-                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
-                    GraphicsBox[{
-                    EdgeForm[
-                    Directive[#5, 
-                    Thickness[0.025]]], 
-                    FaceForm[#2], 
-                    
-                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
-                    0.2], 
-                    Thickness[0.15], 
-                    GrayLevel[1], 
-                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
-                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
-                    Dynamic[
-                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
-                    FrameMargins -> 0], 
-                    MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
-                    Method -> "Queued"], "\"View suggestions\""}, 
-                    "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
-                    TooltipBox[#, 
-                    FrameBox[
-                    
-                    StyleBox[#2, "Text", FontColor -> 
-                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
-                    FontWeight -> "Plain", FontTracking -> "Plain", 
-                    StripOnInput -> False], Background -> 
-                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
-                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8,
-                     StripOnInput -> False], TooltipDelay -> 0.1, 
-                    TooltipStyle -> {Background -> None, CellFrame -> 0}], 
-                    Annotation[#, 
-                    Framed[
-                    Style[
-                    FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
-tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
-                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
-                    "Plain"], Background -> 
-                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
-                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 
-                    8], "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
-                    BoxMargins -> {{2, 0}, {0, 0}}]}}, 
-                    GridBoxAlignment -> {
-                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
-                    AutoDelete -> False, 
-                    GridBoxItemSize -> {
-                    "Columns" -> {Automatic, Automatic, 4}, 
-                    "Rows" -> {{Automatic}}}, 
-                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
-                    BoxMargins -> {{0.25, -1.}, {0, 0}}], 
-                    RoundingRadius -> {13, 75}, Background -> #4, FrameStyle -> 
-                    None, FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
-                    ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
-                   FontColor -> #5]& )]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]},
-           {
-            TemplateBox[{
-              TemplateBox[{10}, "Spacer1"]},
-             "RowDefault"], "", ""}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            TemplateBox[{
-              TemplateBox[{10}, "Spacer1"]},
-             "RowDefault"], "", ""},
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"5021\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "                Chop[ Map[(Sqrt[ N[(v[[#[[1]]]]-v[[#[[2]]]]) \
-."], "\<\"Copy line number\"\>":>CopyToClipboard[
-             5021], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"4c77ed39f6de1bbf\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\"C\"\>", "\<\"h\"\>", "\<\"o\"\>", "\<\"p\"\>", "\<\"[\"\>", "\<\" \
-\"\>", "\<\"M\"\>", "\<\"a\"\>", "\<\"p\"\>", "\<\"[\"\>", "\<\"(\"\>", \
-"\<\"S\"\>", "\<\"q\"\>", "\<\"r\"\>", "\<\"t\"\>", "\<\"[\"\>", "\<\" \"\>", \
-"\<\"N\"\>", "\<\"[\"\>", "\<\"(\"\>", "\<\"v\"\>", "\<\"[\"\>", "\<\"[\"\>", \
-"\<\"#\"\>", "\<\"[\"\>", "\<\"[\"\>", "\<\"1\"\>", "\<\"]\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\"-\"\>", "\<\"v\"\>", "\<\"[\"\>", "\<\"[\"\>", \
-"\<\"#\"\>", "\<\"[\"\>", "\<\"[\"\>", "\<\"2\"\>", "\<\"]\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\")\"\>", "\<\" \"\>", "\<\".\"\>", "\<\" \
-\"\>"},
-                   {"\<\" \"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[Continuation]\"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{1, 1}, {37, 63}} -> {Bold, 
-                    RGBColor[
-                    Rational[2, 3], 0.33333333333333337`, 0]}, {{2, 2}, {37, 
-                    64}} -> {Bold, 
-                    RGBColor[
-                    Rational[2, 3], 0.33333333333333337`, 0]}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]},
-      {
-       StyleBox[
-        TagBox[GridBox[{
-           {
-            ActionMenuBox[
-             TagBox[
-              TooltipBox[
-               FrameBox[
-                StyleBox[
-                 TemplateBox[{"\"line\"", "\" \"", "\"5022\"", "\":\""},
-                  "RowDefault"],
-                 StripOnInput->False,
-                 ShowStringCharacters->False],
-                StripOnInput->False],
-               "\"Click to open menu...\"",
-               TooltipDelay->Automatic,
-               TooltipStyle->"TextStyling"],
-              
-              Annotation[#, "Click to open menu...", 
-               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
-             "                        (v[[#[[1]]]]-v[[#[[2]]]])] ])&,pairs] \
-],"], "\<\"Copy line number\"\>":>CopyToClipboard[
-             5022], "\<\"Copy line hash\"\>":>CopyToClipboard[
-             "\"16053f9bff46b55d\""]},
-             Appearance->None,
-             DefaultBaseStyle->{}], 
-            TemplateBox[{10},
-             "Spacer1"], 
-            TagBox[GridBox[{
-               {
-                TagBox[GridBox[{
-                   {"\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \"\>", "\<\" \
-\"\>", "\<\" \"\>", "\<\" \"\>", "\<\"(\"\>", "\<\"v\"\>", "\<\"[\"\>", \
-"\<\"[\"\>", "\<\"#\"\>", "\<\"[\"\>", "\<\"[\"\>", "\<\"1\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\"-\"\>", "\<\"v\"\>", "\<\"[\"\>", \
-"\<\"[\"\>", "\<\"#\"\>", "\<\"[\"\>", "\<\"[\"\>", "\<\"2\"\>", "\<\"]\"\>", \
-"\<\"]\"\>", "\<\"]\"\>", "\<\"]\"\>", "\<\")\"\>", "\<\"]\"\>", "\<\" \"\>", \
-"\<\"]\"\>", "\<\")\"\>", "\<\"&\"\>", "\<\",\"\>", "\<\"p\"\>", "\<\"a\"\>", \
-"\<\"i\"\>", "\<\"r\"\>", "\<\"s\"\>", "\<\"]\"\>", "\<\" \"\>", "\<\"]\"\>", \
-"\<\",\"\>", "\<\" \"\>"},
-                   {"\<\"\[Continuation]\"\>", "\<\"\[ErrorIndicator]\"\>", "\
-\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
-\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
-\[ErrorIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
-\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
-\[SpaceIndicator]\"\>", "\<\" \"\>"}
-                  },
-                  AutoDelete->False,
-                  GridBoxItemSize->{"Columns" -> {{0.65}}},
-                  
-                  GridBoxItemStyle->{
-                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
-                    "ItemsIndexed" -> {{{1, 1}, {2, 50}} -> {Bold, 
-                    RGBColor[
-                    Rational[2, 3], 0.33333333333333337`, 0]}, {{2, 2}, {1, 
-                    50}} -> {Bold, 
-                    RGBColor[
-                    Rational[2, 3], 0.33333333333333337`, 0]}}},
-                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-                 "Grid"]},
-               {
-                TemplateBox[{
-                  StyleBox[
-                   TemplateBox[{"\"Operands for \"", 
-                    StyleBox[
-                    "\".\"", "Program", FontWeight -> Bold, FontColor -> 
-                    GrayLevel[0], StripOnInput -> False], 
-                    "\" are on different lines.\""}, "RowDefault"], "Text"], 
-                  GrayLevel[
-                   Rational[118, 255]], 
-                  GrayLevel[1], 
-                  GrayLevel[
-                   Rational[46, 51]], 
-                  GrayLevel[
-                   Rational[89, 255]], {
-                  "Open in editor" :> 
-                   Lint`External`OpenInEditor[
-                    "/Users/brenton/development/cvs-development/Mathematica/\
-Packages/Combinatorica/Combinatorica.m", 5021, 36]}},
-                 "SuggestionGridTemplateXXX",
-                 DisplayFunction->(StyleBox[
-                   FrameBox[
-                    AdjustmentBox[
-                    TagBox[
-                    GridBox[{{
-                    
-                    TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
-                    "SuggestionIconTemplateXXX", 
-                    DisplayFunction -> (GraphicsBox[{
-                    Thickness[0.05555555555555555], 
-                    StyleBox[{
-                    
-                    FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-                    3}}}, CompressedData["
-1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
-m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
-jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
-MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
-                    "]]}, 
-                    FaceForm[#]], 
-                    StyleBox[{
-                    
-                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
-                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
-                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
-                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
-                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
-                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
-1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
-1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
-iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
-2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
-0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
-ACBxmlc=
-                    "]}]}, 
-                    FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
-                    AspectRatio -> Automatic, BaselinePosition -> 
-                    Scaled[0.1]]& )], 
-                    
-                    PaneBox[#, BaselinePosition -> Baseline, ImageSize -> 
-                    Automatic], 
-                    AdjustmentBox[
-                    TemplateBox[{
-                    ActionMenuBox[
-                    TagBox[
-                    PaneSelectorBox[{False -> GraphicsBox[{
-                    EdgeForm[
-                    Directive[
-                    GrayLevel[1, 0], 
-                    Thickness[0.025]]], 
-                    FaceForm[#4], 
-                    
-                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
-                    0.2], 
-                    Thickness[0.15], #5, 
-                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
-                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
-                    GraphicsBox[{
-                    EdgeForm[
-                    Directive[#5, 
-                    Thickness[0.025]]], 
-                    FaceForm[#2], 
-                    
-                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
-                    0.2], 
-                    Thickness[0.15], 
-                    GrayLevel[1], 
-                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
-                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
-                    Dynamic[
-                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
-                    FrameMargins -> 0], 
-                    MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
-                    Method -> "Queued"], "\"View suggestions\""}, 
-                    "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
-                    TooltipBox[#, 
-                    FrameBox[
-                    
-                    StyleBox[#2, "Text", FontColor -> 
-                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
-                    FontWeight -> "Plain", FontTracking -> "Plain", 
-                    StripOnInput -> False], Background -> 
-                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
-                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8,
-                     StripOnInput -> False], TooltipDelay -> 0.1, 
-                    TooltipStyle -> {Background -> None, CellFrame -> 0}], 
-                    Annotation[#, 
-                    Framed[
-                    Style[
-                    FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
-tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
-                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
-                    "Plain"], Background -> 
-                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
-                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 
-                    8], "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
-                    BoxMargins -> {{2, 0}, {0, 0}}]}}, 
-                    GridBoxAlignment -> {
-                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
-                    AutoDelete -> False, 
-                    GridBoxItemSize -> {
-                    "Columns" -> {Automatic, Automatic, 4}, 
-                    "Rows" -> {{Automatic}}}, 
-                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
-                    BoxMargins -> {{0.25, -1.}, {0, 0}}], 
-                    RoundingRadius -> {13, 75}, Background -> #4, FrameStyle -> 
-                    None, FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
-                    ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
-                   FontColor -> #5]& )]}
-              },
-              DefaultBaseStyle->"Column",
-              GridBoxAlignment->{"Columns" -> {{Left}}},
-              
-              GridBoxItemSize->{
-               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-             "Column"]},
-           {
-            TemplateBox[{
-              TemplateBox[{10}, "Spacer1"]},
-             "RowDefault"], "", ""}
-          },
-          AutoDelete->False,
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
-         "Grid"],
-        StripOnInput->False,
-        ShowStringCharacters->False]}
-     },
-     DefaultBaseStyle->"Column",
-     GridBoxAlignment->{"Columns" -> {{Left}}},
-     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
-    "Column"],
-   Background->GrayLevel[0.97],
-   RoundingRadius->5,
-   StripOnInput->False],
-  Lint`LintedFile[
-  "/Users/brenton/development/cvs-development/Mathematica/Packages/\
-Combinatorica/Combinatorica.m", {
-    Lint`LintedLine[
-    "                GetEdgeLabels[g, Select[Edges[g, All], MemberQ[nel, \
-#[[1]]]] ]", 3840, 
-     "673b27cbcf5a7d14", {{
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", "G", "e", "t", "E", "d", "g", "e", "L", "a", "b", "e", 
-       "l", "s", "[", "g", ",", " ", "S", "e", "l", "e", "c", "t", "[", "E", 
-       "d", "g", "e", "s", "[", "g", ",", " ", "A", "l", "l", "]", ",", " ", 
-       "M", "e", "m", "b", "e", "r", "Q", "[", "n", "e", "l", ",", " ", 
-       Lint`Format`LintMarkup[
-       "#", FontWeight -> Bold, FontColor -> RGBColor[1, 0, 0]], "[", "[", 
-       "1", "]", "]", "]", "]", " ", "]", " "}, {
-      " ", Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorIndicator, FontWeight -> Bold, FontSize -> Larger,
-         FontColor -> RGBColor[1, 0, 0]], Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, " "}}, {
-      Lint`Lint[
-      "MissingFunction", "There is no containing ``Function``.", "Error", 
-       Association[
-       AST`Source -> {{3840, 69}, {3840, 69}}, ConfidenceLevel -> 0.9, "File" -> 
-        "/Users/brenton/development/cvs-development/Mathematica/Packages/\
-Combinatorica/Combinatorica.m"]]}, "MaxLineNumberLength" -> 4], 
-    Lint`LintedLine[
-    "                Chop[ Map[(Sqrt[ N[(v[[#[[1]]]]-v[[#[[2]]]]) .", 5021, 
-     "4c77ed39f6de1bbf", {{
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", 
-       " ", " ", " ", "C", "h", "o", "p", "[", " ", "M", "a", "p", "[", "(", 
-       "S", "q", "r", "t", "[", " ", "N", "[", 
-       Lint`Format`LintMarkup["(", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["v", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["#", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["1", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["-", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["v", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["#", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["2", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[")", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[".", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], " "}, {
-      " ", Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorIndicator, FontWeight -> Bold, FontSize -> Larger,
-         FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintContinuation, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]]}}, {
-      Lint`Lint[
-      "DotDifferentLine", "Operands for ``.`` are on different lines.", 
-       "Warning", 
-       Association[
-       AST`Source -> {{5021, 36}, {5022, 49}}, ConfidenceLevel -> 0.75, 
-        AST`CodeActions -> {
-          AST`CodeAction["Replace ``.`` with ``;``", AST`ReplaceNode, 
-           Association[
-           AST`Source -> {{5021, 62}, {5021, 62}}, "ReplacementNode" -> 
-            AST`LeafNode[Token`Semi, ";", 
-              Association[]]]], 
-          AST`CodeAction["Replace ``.`` with ``,``", AST`ReplaceNode, 
-           Association[
-           AST`Source -> {{5021, 62}, {5021, 62}}, "ReplacementNode" -> 
-            AST`LeafNode[Token`Comma, ",", 
-              Association[]]]]}, "File" -> 
-        "/Users/brenton/development/cvs-development/Mathematica/Packages/\
-Combinatorica/Combinatorica.m"]]}, "MaxLineNumberLength" -> 4], 
-    Lint`LintedLine[
-    "                        (v[[#[[1]]]]-v[[#[[2]]]])] ])&,pairs] ],", 5022, 
-     "16053f9bff46b55d", {{" ", 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[" ", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["(", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["v", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["#", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["1", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["-", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["v", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["#", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["[", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["2", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup["]", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[")", FontWeight -> Bold, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], "]", " ", "]", ")", "&", 
-       ",", "p", "a", "i", "r", "s", "]", " ", "]", ",", " "}, {
-       Lint`Format`LintMarkup[
-       Lint`Format`LintContinuation, FontWeight -> Bold, FontSize -> Larger, 
-        FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintMarkup[
-       Lint`Format`LintErrorContinuationIndicator, FontWeight -> Bold, 
-        FontSize -> Larger, FontColor -> RGBColor[
-          Rational[2, 3], 0.33333333333333337`, 0]], 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, Lint`Format`LintSpaceIndicator, 
-       Lint`Format`LintSpaceIndicator, " "}}, {
-      Lint`Lint[
-      "DotDifferentLine", "Operands for ``.`` are on different lines.", 
-       "Warning", 
-       Association[
-       AST`Source -> {{5021, 36}, {5022, 49}}, ConfidenceLevel -> 0.75, 
-        AST`CodeActions -> {
-          AST`CodeAction["Replace ``.`` with ``;``", AST`ReplaceNode, 
-           Association[
-           AST`Source -> {{5021, 62}, {5021, 62}}, "ReplacementNode" -> 
-            AST`LeafNode[Token`Semi, ";", 
-              Association[]]]], 
-          AST`CodeAction["Replace ``.`` with ``,``", AST`ReplaceNode, 
-           Association[
-           AST`Source -> {{5021, 62}, {5021, 62}}, "ReplacementNode" -> 
-            AST`LeafNode[Token`Comma, ",", 
-              Association[]]]]}, "File" -> 
-        "/Users/brenton/development/cvs-development/Mathematica/Packages/\
-Combinatorica/Combinatorica.m"]]}, "MaxLineNumberLength" -> 4]}]]], "Print",
- CellChangeTimes->{3.781258326857522*^9},
- CellLabel->
-  "During evaluation of \
-In[136]:=",ExpressionUUID->"c49531e3-60e6-48aa-9dcc-c9753716e0c5"]
-}, Open  ]],
+  "In[158]:=",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
 
 Cell[BoxData[
  RowBox[{"{", 
-  RowBox[{"8.288448`", ",", "Null"}], "}"}]], "Output",
- CellChangeTimes->{3.78125832688344*^9},
+  RowBox[{"2520.181603`", ",", "Null"}], "}"}]], "Output",
+ CellChangeTimes->{3.7824018625867167`*^9, 3.782402026883251*^9, 
+  3.7824047083046293`*^9},
  CellLabel->
-  "Out[144]=",ExpressionUUID->"ecb6b8a5-5a78-4d8f-bc8e-e35e456835c0"]
+  "Out[166]=",ExpressionUUID->"abd4b68b-055c-4e66-b261-5b20ccd821e2"]
 }, Open  ]]
 }, Open  ]]
 },
 WindowSize->{1222, 738},
 WindowMargins->{{Automatic, 77}, {Automatic, 46}},
-FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (October 25, 2019)",
-StyleDefinitions->"Default.nb"
+FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (November 7, 2019)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"8513bcd3-566a-41eb-a5ce-6bb82806cdf6"
 ]
 (* End of Notebook Content *)
 
@@ -5547,87 +4105,71 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 299, 5, 29, "Input",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
+Cell[558, 20, 303, 6, 29, "Input",ExpressionUUID->"0790b377-4fb6-4e22-831f-bf8c87588529"],
 Cell[CellGroupData[{
-Cell[882, 29, 1120, 23, 214, "Input",ExpressionUUID->"8644dace-687c-4e09-8d8c-cd95839003fe"],
-Cell[2005, 54, 7271, 102, 33, "Output",ExpressionUUID->"7018aec0-3bcc-41f2-a14b-e9f0a218d8c7"]
+Cell[886, 30, 1120, 23, 214, "Input",ExpressionUUID->"8644dace-687c-4e09-8d8c-cd95839003fe"],
+Cell[2009, 55, 7321, 103, 33, "Output",ExpressionUUID->"8c0466e4-e8db-46e4-995b-a69f5f60e3e2"]
 }, Open  ]],
-Cell[9291, 159, 277, 4, 29, "Input",ExpressionUUID->"d1bfdafc-32fd-4347-8094-822b9fb5d241"],
+Cell[9345, 161, 276, 4, 29, "Input",ExpressionUUID->"d1bfdafc-32fd-4347-8094-822b9fb5d241"],
 Cell[CellGroupData[{
-Cell[9593, 167, 931, 14, 29, "Input",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb558b76485c"],
-Cell[10527, 183, 20299, 287, 33, "Output",ExpressionUUID->"71e86034-b998-4eaa-9c83-cfbbbda49a00"]
+Cell[9646, 169, 979, 15, 29, "Input",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb558b76485c"],
+Cell[10628, 186, 20430, 289, 33, "Output",ExpressionUUID->"76f4777f-e30e-447d-85e0-d52b28c11f71"]
 }, Open  ]],
-Cell[30841, 473, 214, 3, 29, "Input",ExpressionUUID->"e72a5699-cbbe-496a-aefb-c205e49e736b"],
+Cell[31073, 478, 214, 3, 29, "Input",ExpressionUUID->"e72a5699-cbbe-496a-aefb-c205e49e736b"],
 Cell[CellGroupData[{
-Cell[31080, 480, 219, 3, 29, "Input",ExpressionUUID->"8c3e2740-0c9c-40fa-b012-e622aa5c2de3"],
-Cell[31302, 485, 519, 12, 24, "Message",ExpressionUUID->"b33f1e62-dbec-47dc-98d9-ec4a7e7e7dc4"],
-Cell[31824, 499, 1350, 23, 24, "Message",ExpressionUUID->"e1e2c7c7-a272-44ec-b5c4-3039f6f7d923"],
-Cell[33177, 524, 1395, 24, 24, "Message",ExpressionUUID->"deda997e-df5a-4cf4-91b6-ac9aa19c620f"],
-Cell[34575, 550, 490, 11, 24, "Message",ExpressionUUID->"7972be2d-4e7b-49c1-9b26-4d5b790c55c6"],
-Cell[35068, 563, 490, 11, 24, "Message",ExpressionUUID->"76ffd1ee-fde1-4e95-adbb-fd23522b5f5c"],
-Cell[35561, 576, 490, 11, 24, "Message",ExpressionUUID->"b3f83b29-8bf1-426e-a599-a7a763e51c80"],
-Cell[36054, 589, 451, 10, 24, "Message",ExpressionUUID->"1b8164ae-aa9d-4268-92c1-72c01c88456d"],
-Cell[36508, 601, 1814, 57, 54, "Output",ExpressionUUID->"8aadcbdc-d684-43d4-949c-3a0d75eb4fc7"]
+Cell[31312, 485, 219, 3, 29, "Input",ExpressionUUID->"8c3e2740-0c9c-40fa-b012-e622aa5c2de3"],
+Cell[31534, 490, 235, 4, 33, "Output",ExpressionUUID->"e4386ce8-ade7-43cc-a9a3-6c9c4b818f61"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[38359, 663, 151, 3, 67, "Section",ExpressionUUID->"9a1316b9-aa5f-4e82-b917-966ce0b3c96c"],
-Cell[38513, 668, 277, 4, 29, "Input",ExpressionUUID->"064d8d51-af4b-4a42-bada-7928c3db1be7"],
+Cell[31806, 499, 151, 3, 67, "Section",ExpressionUUID->"9a1316b9-aa5f-4e82-b917-966ce0b3c96c"],
+Cell[31960, 504, 277, 4, 29, "Input",ExpressionUUID->"064d8d51-af4b-4a42-bada-7928c3db1be7"],
 Cell[CellGroupData[{
-Cell[38815, 676, 392, 8, 29, "Input",ExpressionUUID->"3617a860-9445-49bf-b4c3-ca03b7b1679f"],
-Cell[39210, 686, 686, 12, 33, "Output",ExpressionUUID->"e86ab182-e8b8-4730-9286-6f69ce7012d7"]
+Cell[32262, 512, 392, 8, 29, "Input",ExpressionUUID->"3617a860-9445-49bf-b4c3-ca03b7b1679f"],
+Cell[32657, 522, 686, 12, 33, "Output",ExpressionUUID->"e86ab182-e8b8-4730-9286-6f69ce7012d7"]
 }, Open  ]]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[39945, 704, 148, 3, 67, "Section",ExpressionUUID->"9263b767-fa90-4d67-823a-e15090e310aa"],
-Cell[40096, 709, 209, 3, 29, "Input",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
-Cell[40308, 714, 246, 6, 35, "Text",ExpressionUUID->"5691a06b-26bd-4ad6-bc39-964c44a1eedd"],
-Cell[40557, 722, 404, 6, 50, "Input",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
-Cell[40964, 730, 430, 8, 29, "Input",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
-Cell[41397, 740, 239, 6, 29, "Input",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
-Cell[41639, 748, 358, 7, 29, "Input",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
-Cell[42000, 757, 320, 6, 29, "Input",ExpressionUUID->"6b382037-a64a-4ea9-a973-ab63c6eff61f"],
-Cell[42323, 765, 278, 6, 29, "Input",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
-Cell[42604, 773, 274, 6, 29, "Input",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
-Cell[42881, 781, 272, 6, 29, "Input",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
-Cell[43156, 789, 48173, 950, 4912, "Input",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
-Cell[91332, 1741, 250, 5, 29, "Input",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
-Cell[91585, 1748, 375, 9, 29, "Input",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
-Cell[91963, 1759, 14243, 239, 848, "Input",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
-Cell[106209, 2000, 334, 8, 29, "Input",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
-Cell[106546, 2010, 6465, 128, 725, "Input",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[113048, 2143, 390, 6, 53, "Section",ExpressionUUID->"f0cee9b3-1e92-48a6-887a-3225a9b6a5ba"],
-Cell[113441, 2151, 201, 3, 35, "Text",ExpressionUUID->"486fdcfc-cf1c-41a0-be8f-d17025596029"],
-Cell[113645, 2156, 38686, 662, 990, "Input",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
+Cell[33392, 540, 148, 3, 53, "Section",ExpressionUUID->"9263b767-fa90-4d67-823a-e15090e310aa"],
+Cell[33543, 545, 208, 3, 29, "Input",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
+Cell[33754, 550, 246, 6, 35, "Text",ExpressionUUID->"5691a06b-26bd-4ad6-bc39-964c44a1eedd"],
+Cell[34003, 558, 403, 6, 50, "Input",ExpressionUUID->"ddac7bd0-d9e3-4ec4-b9fb-a50b47b97d25"],
+Cell[34409, 566, 430, 8, 29, "Input",ExpressionUUID->"3e2ab503-86b8-4b36-8a1e-2c8f43860719"],
+Cell[34842, 576, 239, 6, 29, "Input",ExpressionUUID->"4510a046-3a7a-4dcd-9333-4a822511ab21"],
+Cell[35084, 584, 358, 7, 29, "Input",ExpressionUUID->"b8848899-22a5-493e-8c72-ad67b0b85657"],
+Cell[35445, 593, 320, 6, 29, "Input",ExpressionUUID->"6b382037-a64a-4ea9-a973-ab63c6eff61f"],
+Cell[35768, 601, 278, 6, 29, "Input",ExpressionUUID->"5af1cdc5-b51b-4d4c-b0c7-85042492d4a7"],
+Cell[36049, 609, 274, 6, 29, "Input",ExpressionUUID->"c428a734-7668-4fcf-a1ee-53b5530dc672"],
+Cell[36326, 617, 272, 6, 29, "Input",ExpressionUUID->"14618938-e61f-42ff-a15c-bef25bbe2d5e"],
+Cell[36601, 625, 48173, 950, 4912, "Input",ExpressionUUID->"4133a792-c28e-4943-b538-edfd0d3f40f9"],
+Cell[84777, 1577, 250, 5, 29, "Input",ExpressionUUID->"ffd5e05e-4afa-4bf5-85c0-634088227a2c"],
+Cell[85030, 1584, 375, 9, 29, "Input",ExpressionUUID->"7c361d86-fc8d-4c11-bf75-3db29f743f58"],
+Cell[85408, 1595, 14243, 239, 848, "Input",ExpressionUUID->"b50af55c-13b5-4a7e-a544-08e9aa54e19b"],
+Cell[99654, 1836, 334, 8, 29, "Input",ExpressionUUID->"6b327ba0-a261-4b8a-9172-035d10bb73f6"],
+Cell[99991, 1846, 6465, 128, 725, "Input",ExpressionUUID->"0171a469-d59b-459c-810e-5572787b9abe"]
+}, Closed]],
 Cell[CellGroupData[{
-Cell[152356, 2822, 210, 4, 29, "Input",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
-Cell[152569, 2828, 17677, 249, 33, "Output",ExpressionUUID->"3f9f4a90-c2f1-4b3b-b38b-7ba2636870de"]
+Cell[106493, 1979, 390, 6, 53, "Section",ExpressionUUID->"f0cee9b3-1e92-48a6-887a-3225a9b6a5ba"],
+Cell[106886, 1987, 201, 3, 35, "Text",ExpressionUUID->"486fdcfc-cf1c-41a0-be8f-d17025596029"],
+Cell[107090, 1992, 38886, 665, 990, "Input",ExpressionUUID->"f1b22fe0-f1f6-4006-a1a7-836941d40719"],
+Cell[CellGroupData[{
+Cell[146001, 2661, 210, 4, 29, "Input",ExpressionUUID->"9f2c64a5-a872-4fbe-8a35-a36e2c9f413c"],
+Cell[146214, 2667, 17824, 251, 33, "Output",ExpressionUUID->"cff1d373-a84b-4d9e-b7be-1ab6676e025e"]
 }, Open  ]],
-Cell[170261, 3080, 1875, 33, 112, "Input",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
-Cell[172139, 3115, 269, 6, 29, "Input",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
-Cell[172411, 3123, 245, 5, 29, "Input",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
-Cell[172659, 3130, 421, 11, 50, "Input",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
-Cell[173083, 3143, 1075, 22, 71, "Input",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
-Cell[174161, 3167, 612, 11, 29, "Input",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
-Cell[174776, 3180, 1721, 28, 50, "Input",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
+Cell[164053, 2921, 1875, 33, 112, "Input",ExpressionUUID->"cd647b84-c2f1-41d2-b710-7e0a4c0a4fd4"],
+Cell[165931, 2956, 269, 6, 29, "Input",ExpressionUUID->"99f32c26-f6ce-4395-876d-5d7c152e9146"],
+Cell[166203, 2964, 245, 5, 29, "Input",ExpressionUUID->"06e75a9f-9b3b-43d1-a2bd-f722f4fe7433"],
+Cell[166451, 2971, 608, 15, 50, "Input",ExpressionUUID->"8b9ad0de-d577-4742-9536-5740256d44c6"],
+Cell[167062, 2988, 1075, 22, 71, "Input",ExpressionUUID->"3cc21fbb-86a7-42a1-ab1c-700c7144e32e"],
+Cell[168140, 3012, 735, 13, 29, "Input",ExpressionUUID->"65c2396d-9d53-48d1-b4e5-3b1cce9ee351"],
+Cell[168878, 3027, 1767, 28, 50, "Input",ExpressionUUID->"eafaab66-8bc6-4071-940a-a340182cd879"],
 Cell[CellGroupData[{
-Cell[176522, 3212, 183, 3, 29, "Input",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
-Cell[176708, 3217, 6601, 94, 33, "Output",ExpressionUUID->"e6ecc2bc-1232-4720-8576-4c43e7ea44a3"]
+Cell[170670, 3059, 183, 3, 29, "Input",ExpressionUUID->"87d48d4d-d5b7-4671-acb1-ab6ed98d05d4"],
+Cell[170856, 3064, 6747, 96, 33, "Output",ExpressionUUID->"85d0cee6-e222-4564-884a-77f50e4c77fc"]
 }, Open  ]],
-Cell[183324, 3314, 28603, 389, 29, "Input",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
+Cell[177618, 3163, 28675, 390, 29, "Input",ExpressionUUID->"e65c61c0-92bf-4987-8985-e1f44d2c7cef"],
 Cell[CellGroupData[{
-Cell[211952, 3707, 30654, 521, 908, "Input",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
-Cell[CellGroupData[{
-Cell[242631, 4232, 355, 9, 23, "Print",ExpressionUUID->"ff31b8bf-4f37-4fe2-84ed-dc4ec4cf7fc3"],
-Cell[242989, 4243, 445, 11, 23, "Print",ExpressionUUID->"172294b0-1a6e-410a-8eda-25281a6137f9"],
-Cell[243437, 4256, 475, 13, 23, "Print",ExpressionUUID->"5cdc4a22-c511-44df-acb5-04c37754a8eb"],
-Cell[243915, 4271, 429, 11, 23, "Print",ExpressionUUID->"28e65e71-ea5f-49b6-b867-a6c43aef65d6"],
-Cell[244347, 4284, 318, 9, 26, "Print",ExpressionUUID->"2c1c1d3f-18bb-498a-a04e-f352697b6a85"],
-Cell[244668, 4295, 255, 6, 23, "Print",ExpressionUUID->"695cb09a-c4ce-47a4-b709-f438f7cc0663"],
-Cell[244926, 4303, 65690, 1218, 256, "Print",ExpressionUUID->"c49531e3-60e6-48aa-9dcc-c9753716e0c5"]
-}, Open  ]],
-Cell[310631, 5524, 208, 5, 33, "Output",ExpressionUUID->"ecb6b8a5-5a78-4d8f-bc8e-e35e456835c0"]
+Cell[206318, 3557, 30654, 521, 908, "Input",ExpressionUUID->"9ca33916-8016-4ac4-af1e-9382bbb85347"],
+Cell[236975, 4080, 263, 6, 33, "Output",ExpressionUUID->"abd4b68b-055c-4e66-b261-5b20ccd821e2"]
 }, Open  ]]
 }, Open  ]]
 }
