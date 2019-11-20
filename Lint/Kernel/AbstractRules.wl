@@ -1388,15 +1388,25 @@ Catch[
     Throw[issues];
   ];
 
+
+  (*
+      Use {_, ___} to match 1 or more children instead of using { __ }
+      because of bug 382974
+
+      MatchQ[f[], f[__]...] returns True
+
+      Related bugs: 382974
+  *)
+  If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    Throw[issues];
+  ];
+
   paramLists = Most[children][[All, 2]];
    
    varsAndVals = Function[{list}, # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
             err_ :> (AppendTo[issues, Lint["WithArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
 This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ list] /@ paramLists;
-
-  If[varsAndVals == {{}},
-    Throw[issues];
-  ];
 
    {vars, vals} = Transpose[Transpose /@ varsAndVals];
 
