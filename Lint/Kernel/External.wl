@@ -26,15 +26,16 @@ needed
 
 OpenInEditor[file_String, line_Integer, col_Integer] :=
 Module[{},
-	Switch[$InterfaceEnvironment,
-		"Macintosh",
-			Switch[$Editor,
-				"Sublime Text",
-					Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-				,
-				"Visual Studio Code",
-					Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-			]
+	Switch[{$InterfaceEnvironment, $Editor},
+		{"Macintosh", "Sublime Text"},
+			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
+			,
+		{"Macintosh", "Visual Studio Code"},
+			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
+			,
+		_,
+			(* If no editor is specified or supported, Mathematica FrontEnd can always be used (even when we cannot open in the specific line, which would be great *)
+			NotebookOpen[file]
 	]
 ]
 
