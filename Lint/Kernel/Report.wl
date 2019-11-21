@@ -36,6 +36,7 @@ $LintLimit = 20
 
 $ConfidenceLevel = 0.95
 
+$existsTest = Not @* KeyExistsQ[ConfidenceLevel]
 
 
 
@@ -209,7 +210,7 @@ lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, seve
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
-  additionalSources, shadowing, confidenceTest, existsTest, badLints},
+  additionalSources, shadowing, confidenceTest, badLints},
   
   lints = lintsIn;
   If[$Debug,
@@ -313,9 +314,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   ];
 
 
-
-  existsTest = Not @* KeyExistsQ[ConfidenceLevel];
-  badLints = Cases[lints, Lint[_, _, _, data_?existsTest]];
+  badLints = Cases[lints, Lint[_, _, _, data_?$existsTest]];
   If[!empty[badLints],
     Message[Lint::confidence, badLints]
   ];

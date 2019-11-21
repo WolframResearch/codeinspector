@@ -131,7 +131,7 @@ Module[{containsDoubleTicks, containsDoubleStars},
 
 
 (*
-shadows[lint1, lint2] => True means lint is less severe and is contained by lint2; we will get rid of lint1
+shadows[lint1, lint2] => True means lint1 is less severe and is contained by lint2; we will get rid of lint1
 
 Get rid of Lints that have root causes that are also being reported
 Only report the root cause

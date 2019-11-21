@@ -10,7 +10,7 @@ StringCall
 TestMatch[
 	LintString["{ String[1,2,3] }"]
 	,
-	{Lint["StringCall", _, _, _]}
+	{Lint["BadCall", _, _, _]}
 	,
 	TestID->"AbstractRules-20190522-C4I4L9"
 ]
@@ -22,7 +22,7 @@ IntegerCall
 TestMatch[
 	LintString["{ Integer[1,2,3] }"]
 	,
-	{Lint["IntegerCall", _, _, _]}
+	{Lint["BadCall", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-F3D4K1"
 ]
@@ -33,7 +33,7 @@ RealCall
 TestMatch[
 	LintString["{ Real[1,2,3] }"]
 	,
-	{Lint["RealCall", _, _, _]}
+	{Lint["BadCall", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-N1Z9G4"
 ]
@@ -46,7 +46,7 @@ DuplicateKeys
 TestMatch[
 	LintString["<| 1->2, 1->3 |>"]
 	,
-	{Lint["DuplicateKeys", _, _, _], Lint["DuplicateKeys", _, _, _]}
+	{Lint["DuplicateKeys", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-M5A4H9"
 ]
@@ -172,7 +172,7 @@ DuplicateClauses
 TestMatch[
 	LintString[" Switch[a, 1, 2, 1, 2] "]
 	,
-	{Lint["DuplicateClauses", _, _, _], Lint["DuplicateClauses", _, _, _]}
+	{Lint["DuplicateClauses", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X0L3I6"
 ]
@@ -187,7 +187,7 @@ DuplicateClauses
 TestMatch[
 	LintString[" If[a, b, b] "]
 	,
-	{Lint["DuplicateClauses", _, _, _], Lint["DuplicateClauses", _, _, _]}
+	{Lint["DuplicateClauses", _, _, _]}
 	,
 	TestID->"AbstractRules-20190717-B6J9M6"
 ]
@@ -296,7 +296,7 @@ DuplicateVariables
 TestMatch[
 	LintString[" Module[{a, a}, a+1] "]
 	,
-	{Lint["DuplicateVariables", _, _, _], Lint["DuplicateVariables", _, _, _]}
+	{Lint["DuplicateVariables", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-O2P3W5"
 ]
@@ -369,7 +369,7 @@ DuplicateVariables
 TestMatch[
 	LintString[" DynamicModule[{a, a}, a+1] "]
 	,
-	{Lint["DuplicateVariables", _, _, _], Lint["DuplicateVariables", _, _, _]}
+	{Lint["DuplicateVariables", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X3I6F8"
 ]
@@ -427,6 +427,13 @@ TestMatch[
 	TestID->"AbstractRules-20190523-X9G8L3"
 ]
 
+TestMatch[
+	LintString["With[{}, {}, 34]"]
+	,
+	{Lint["WithArguments", _, _, _], Lint["WithArguments", _, _, _]}
+	,
+	TestID -> "AbstractRules-20191120-N6B9B5"
+]
 
 (*
 DuplicateVariables
@@ -434,7 +441,7 @@ DuplicateVariables
 TestMatch[
 	LintString[" With[{a=1, a=2}, a+1] "]
 	,
-	{Lint["DuplicateVariables", _, _, _], Lint["DuplicateVariables", _, _, _]}
+	{Lint["DuplicateVariables", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-I2P7L0"
 ]
@@ -503,7 +510,7 @@ DuplicateVariables
 TestMatch[
 	LintString[" Block[{a, a}, a+1] "]
 	,
-	{Lint["DuplicateVariables", _, _, _], Lint["DuplicateVariables", _, _, _]}
+	{Lint["DuplicateVariables", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-Y6N0J1"
 ]

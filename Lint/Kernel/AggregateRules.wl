@@ -257,10 +257,6 @@ Module[{agg, node, data, children, issues, pairs, src},
   pairs = Partition[children[[;;;;2]], 2, 1];
 
   Do[
-    If[!contiguousQ[p[[1, 3, Key[Source]]], p[[2, 3, Key[Source]]]],
-      Continue[]
-    ];
-
     If[(!MatchQ[p[[1]], LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
@@ -274,7 +270,7 @@ Module[{agg, node, data, children, issues, pairs, src},
 
     src = p[[2, 3, Key[Source] ]];
 
-    AppendTo[issues, Lint["ContiguousImplicitTimesBlanks", "Unexpected " <> format[ToInputFormString[p[[2]]]] <> ".", "Error",
+    AppendTo[issues, Lint["ImplicitTimesBlanks", "Unexpected " <> format[ToInputFormString[p[[2]]]] <> ".", "Error",
       <|Source->src,
         ConfidenceLevel -> 0.95,
         CodeActions -> {

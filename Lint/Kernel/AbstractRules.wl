@@ -677,6 +677,8 @@ CallNode[LeafNode[Symbol, "Alternatives", _], _, _] -> scanAlternatives,
 CallNode[LeafNode[Symbol, "Slot" | "SlotSequence", _], _, _] -> scanSlots,
 
 
+CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming", _], _, _] -> scanSolverCalls,
+
 
 (*
 cst of [x] is fine
@@ -926,7 +928,7 @@ Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, src, cases, duplicates, issues, selected, srcs},
+ Module[{ast, node, children, data, src, cases, duplicates, issues, selected, srcs, span},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2050,6 +2052,28 @@ Catch[
 ]]
 
 
+
+
+
+Attributes[scanSolverCalls] = {HoldRest}
+
+scanSolverCalls[pos_List, astIn_] :=
+Catch[
+ Module[{ast, node, children, data},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  cases = Cases[children, CallNode[LeafNode[Symbol, "EvenQ" | "OddQ" | "PrimeQ", _], _, _], Infinity];
+
+  Scan[(AppendTo[issues, Lint["BadSolverCall", "*Q function in symbolic solver. Did you mean to do this?", "Error", <|Source -> #[[3, Key[Source] ]], ConfidenceLevel -> 0.90|>]])&, cases];
+
+  issues
+
+]]
 
 
 
