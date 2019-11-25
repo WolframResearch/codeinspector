@@ -33,9 +33,13 @@ Module[{},
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
 			,
-		_,
-			(* If no editor is specified or supported, Mathematica FrontEnd can always be used (even when we cannot open in the specific line, which would be great *)
+		{_, "FrontEnd"},
+			(* Editor "FrontEnd" is supported in all environments. *)
 			NotebookOpen[file]
+			,
+		_,
+			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
+			SystemOpen[file]
 	]
 ]
 
