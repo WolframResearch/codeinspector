@@ -188,7 +188,9 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 		Print["items: ", items];
 	];
 
-	RawBoxes[TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]]
+	With[{boxes = TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]},
+		RawBoxes[InterpretationBox[boxes, lint]]
+	]
 ]
 
 
