@@ -1410,6 +1410,8 @@ Catch[
             err_ :> (AppendTo[issues, Lint["WithArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
 This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ list] /@ paramLists;
 
+   If[Length[Flatten[varsAndVals]] === 0, Throw[issues]];
+
    {vars, vals} = Transpose[Transpose /@ varsAndVals];
 
     duplicates = Keys[Select[CountsBy[#, ToFullFormString], # > 1 &]]& /@ vars;
