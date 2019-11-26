@@ -1245,7 +1245,7 @@ Catch[
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["ModuleArgumentsEmpty", "``Module`` does have an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["ModuleArgumentsEmpty", "``Module`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
   ];
 
 
@@ -1329,7 +1329,7 @@ Catch[
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` does have an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
   ];
 
 
@@ -1484,7 +1484,7 @@ Catch[
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` does have an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
   ];
 
   params = children[[1,2]];
