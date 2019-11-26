@@ -142,6 +142,29 @@ BinaryNode[Optional, {BlankNullSequenceNode[BlankNullSequence, _, _], _}, _] -> 
 
 
 (*
+scan for something like Rule___
+
+Last[StringSplit[sym, "`"]] will return the symbol name, e.g. A`Bar => Bar
+*)
+PatternBlankNode[PatternBlank, {
+  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+PatternBlankSequenceNode[PatternBlankSequence, {
+  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+PatternBlankNullSequenceNode[PatternBlankNullSequence, {
+  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+OptionalDefaultPatternNode[OptionalDefaultPattern, {
+  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+
+
+(*
 Tags: SyntaxError
 *)
 SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
@@ -1155,6 +1178,67 @@ Catch[
 ]]
 
 *)
+
+
+
+
+
+
+Attributes[scanUppercasePatternBlank] = {HoldRest}
+
+scanUppercasePatternBlank[pos_List, aggIn_] :=
+ Module[{agg, node, tag, data, children, src, sym, context, name},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  sym = children[[1]];
+
+  name = sym["String"];
+
+  (*
+  Determine context of symbol
+  *)
+  With[{name = name},
+  context =
+    Quiet[
+      Check[
+        Context[name]
+        ,
+        StringJoin[Most[StringSplit[name, "`"]]]
+        ,
+        {Context::notfound}
+      ]
+      ,
+      {Context::notfound}
+    ];
+  ];
+
+  issues = {};
+
+  If[context == "System`",
+
+    src = sym[[3, Key[Source] ]];
+
+    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol.", "Error",
+                      <|  Source->src,
+                          ConfidenceLevel->0.95|>]];
+    ,
+
+    src = sym[[3, Key[Source] ]];
+
+    AppendTo[issues, Lint["UppercasePatternBlank", "Suspicious uppercase symbol.", "Remark",
+                      <|  Source->src,
+                          ConfidenceLevel->0.80|>]];
+  ];
+
+  issues
+]
+
+
+
 
 
 
