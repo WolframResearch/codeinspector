@@ -1402,7 +1402,6 @@ Catch[
   (* Having empty {} as With variable argument is not critical, but a warning may be issued *)
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
     AppendTo[issues, Lint["WithArgumentsEmpty", "``With`` does not have a ``List`` with arguments for most arguments.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
-    Throw[issues];
   ];
 
   paramLists = Most[children][[All, 2]];
