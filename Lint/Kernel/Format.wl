@@ -171,7 +171,7 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 
 				items = With[{file = file, line = line, col = col}, {
 					ToString[tag] :> Null,
-					"confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]],
+					"confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] :> Null,
 					Delimiter,
 					"Open in editor" :> OpenInEditor[file, line, col] }]
 
@@ -183,12 +183,12 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 
 				items = {
 					ToString[tag] :> Null,
-					"confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] }
+					"confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] :> Null }
 			];
 			,
 			items = {
 				ToString[tag] :> Null,
-				"confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] }
+				"confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] :> Null }
 		]
 	];
 
