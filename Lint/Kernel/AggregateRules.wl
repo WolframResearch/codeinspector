@@ -246,39 +246,56 @@ Attributes[scanImplicitTimesBlanks] = {HoldRest}
 
 scanImplicitTimesBlanks[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, data, children, issues, pairs, src},
+Module[{agg, node, data, children, issues, pairs, src, srcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
+  srcs = {};
+
   issues = {};
 
-  pairs = Partition[children[[;;;;2]], 2, 1];
+  pairs = Partition[children, 2, 1];
 
   Do[
-    If[(!MatchQ[p[[1]], LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+    (*
+    Make sure there is a blank next to a Token`Fake`ImplicitTimes
+    *)
+    If[!MatchQ[p, {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
-                        _OptionalDefaultPatternNode]) ||
-      (!MatchQ[p[[2]],  LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+                        _OptionalDefaultPatternNode, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
+                    {LeafNode[Token`Fake`ImplicitTimes, _, _],
+                      LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
                         _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
-                        _OptionalDefaultPatternNode]),
+                        _OptionalDefaultPatternNode}],
       Continue[]
     ];
 
-    src = p[[2, 3, Key[Source] ]];
+    Switch[p,
+      {_, LeafNode[Token`Fake`ImplicitTimes, _, _]},
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      ,
+      {LeafNode[Token`Fake`ImplicitTimes, _, _], _},
+        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+    ];
 
-    AppendTo[issues, Lint["ImplicitTimesBlanks", "Unexpected " <> format[ToInputFormString[p[[2]]]] <> ".", "Error",
-      <|Source->src,
-        ConfidenceLevel -> 0.95,
-        CodeActions -> {
-          CodeAction["Delete unexpected " <> format[ToInputFormString[p[[2]]]], DeleteNode, <|Source->src|>] }
-      |>]];
     ,
     {p, pairs}
   ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` involving blanks.", "Error",
+      <|Source->#,
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+      |>]];
+    )&, srcs];
 
   issues
 ]]
@@ -288,24 +305,50 @@ Module[{agg, node, data, children, issues, pairs, src},
 Attributes[scanImplicitTimesStrings] = {HoldRest}
 
 scanImplicitTimesStrings[pos_List, aggIn_] :=
-Module[{agg, node, data, issues, src, children, case},
+Module[{agg, node, data, issues, src, children, pairs, srcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
+  srcs = {};
+
   issues = {};
 
-  case = FirstCase[children, LeafNode[Token`Fake`ImplicitTimes, _, _]];
+  pairs = Partition[children, 2, 1];
 
-  src = case[[ 3, Key[Source] ]];
+  Do[
 
-  AppendTo[issues, Lint["ImplicitTimesStrings", "Implicit ``Times`` between strings.", "Warning",
-    <|Source->src,
-      ConfidenceLevel -> 0.75,
-      CodeActions -> {
-        CodeAction["Insert ``*``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
-    |>]];
+    (*
+    Make sure there is a string next to a Token`Fake`ImplicitTimes
+    *)
+    If[!MatchQ[p, {LeafNode[String, _, _], LeafNode[Token`Fake`ImplicitTimes, _, _]} |
+                    {LeafNode[Token`Fake`ImplicitTimes, _, _], LeafNode[String, _, _]}],
+      Continue[]
+    ];
+
+    Switch[p,
+      {_, LeafNode[Token`Fake`ImplicitTimes, _, _]},
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      ,
+      {LeafNode[Token`Fake`ImplicitTimes, _, _], _},
+        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["ImplicitTimesStrings", "Suspicious implicit ``Times`` between strings.", "Warning",
+      <|Source->#,
+        ConfidenceLevel -> 0.75,
+        CodeActions -> {
+          CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+      |>]];
+    )&, srcs];
 
   issues
 ]
