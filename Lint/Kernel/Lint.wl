@@ -1,11 +1,14 @@
 BeginPackage["Lint`"]
 
-Lint
+(*
+Functions
+*)
 
+LintString
 
 LintFile
 
-LintString
+LintBytes
 
 LintBox
 
@@ -13,16 +16,21 @@ LintCST
 
 
 
-LintedLine
-
-
+LintStringReport
 
 LintFileReport
 
-LintStringReport
+LintBytesReport
 
 
 
+(*
+Objects
+*)
+
+Lint
+
+LintedLine
 
 LintedFile
 
@@ -158,6 +166,33 @@ Catch[
   $Progress = 0;
 
   cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+
+  If[FailureQ[cstAndIssues],
+    Throw[cstAndIssues]
+  ];
+
+  LintCST[cstAndIssues[[1]], cstAndIssues[[2]], "AggregateRules" -> aggregateRules, "AbstractRules" -> abstractRules]
+]]
+
+
+LintBytes::usage = "LintBytes[bytes] returns a list of Lints found in bytes."
+
+Options[LintBytes] = {
+  PerformanceGoal -> "Speed",
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules
+}
+
+LintBytes[bytes_List, OptionsPattern[]] :=
+Catch[
+ Module[{aggregateRules, abstractRules, cstAndIssues},
+
+  aggregateRules = OptionValue["AggregateRules"];
+  abstractRules = OptionValue["AbstractRules"];
+
+  $Progress = 0;
+
+  cstAndIssues = ConcreteParseBytes[bytes, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]

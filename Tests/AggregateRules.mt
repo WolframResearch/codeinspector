@@ -375,7 +375,13 @@ TestMatch[
 
 
 
-
+Test[
+	LintString["8 Pi*\"M\""]
+	,
+	{}
+	,
+	TestID->"AggregateRules-20191121-L0N6E3"
+]
 
 
 

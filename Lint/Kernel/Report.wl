@@ -196,6 +196,70 @@ Catch[
 
 
 
+LintBytesReport::usage = "LintBytesReport[bytes, lints] returns a LintedBytes object."
+
+Options[LintBytesReport] = {
+  "TagExclusions" -> $DefaultTagExclusions,
+  "SeverityExclusions" -> $DefaultSeverityExclusions,
+  "LineNumberExclusions" -> <||>,
+  "LineHashExclusions" -> {},
+  ConfidenceLevel :> $ConfidenceLevel
+}
+
+
+LintBytesReport[bytes_List, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
+Catch[
+ Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
+  confidence, string},
+
+ lints = lintsIn;
+
+ (*
+  Support None for the various exclusion options
+ *)
+ tagExclusions = OptionValue["TagExclusions"];
+ If[tagExclusions === None,
+  tagExclusions = {}
+ ];
+
+ severityExclusions = OptionValue["SeverityExclusions"];
+ If[severityExclusions === None,
+  severityExclusions = {}
+ ];
+
+ lineNumberExclusions = OptionValue["LineNumberExclusions"];
+ If[lineNumberExclusions === None,
+  lineNumberExclusions = {}
+ ];
+
+ lineHashExclusions = OptionValue["LineHashExclusions"];
+ If[lineHashExclusions === None,
+  lineHashExclusions = {}
+ ];
+
+ confidence = OptionValue[ConfidenceLevel];
+
+
+ If[lints === Automatic,
+    lints = LintBytes[bytes];
+  ];
+
+
+  string = FromCharacterCode[bytes, "UTF8"];
+
+ (*
+    bug 163988
+    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
+    *)
+  lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
+  LintedString[string, lintedLines]
+]]
+
+
+
+
 
 
 Lint::sourceless = "There are Lints without Source data. This can happen when some abstract syntax is linted. \
