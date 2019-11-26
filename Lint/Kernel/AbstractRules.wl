@@ -2003,7 +2003,7 @@ Attributes[scanAlternatives] = {HoldRest}
 
 scanAlternatives[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, consts},
+ Module[{ast, node, children, data, duplicates, selected, issues, blanks},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2012,11 +2012,25 @@ Catch[
   issues = {};
   
   (*
+      if this is _ | PatternSequence[] then this is ok
+  *)
+  If[MatchQ[children, {CallNode[LeafNode[Symbol, "Blank", _], {}, _],
+                        CallNode[LeafNode[Symbol, "PatternSequence", _], {}, _]}] ||
+      MatchQ[children, {CallNode[LeafNode[Symbol, "PatternSequence", _], {}, _],
+                        CallNode[LeafNode[Symbol, "Blank", _], {}, _]}],
+      Throw[issues]
+  ];
+
+  (*
       only test for _
       patterns like a_ may occur in Alternatives
   *)
-  consts = Cases[children, CallNode[LeafNode[Symbol, "Blank", _], {}, _]];
-  Scan[(AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, consts];
+  blanks = Cases[children, CallNode[LeafNode[Symbol, "Blank", _], {}, _]];
+
+  Scan[(
+      AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Warning",
+                        <|#[[3]],
+                              ConfidenceLevel -> 0.95|> ]])&, blanks];
 
   duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
   selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
