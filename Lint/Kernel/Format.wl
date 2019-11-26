@@ -448,7 +448,7 @@ underlineList is not used in OutputForm
 *)
 Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
 Catch[
-Module[{lineSourceIn, maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
+Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
 	endingAdditionalLintsThisLine},
 
 	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
