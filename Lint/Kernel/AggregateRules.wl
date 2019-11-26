@@ -142,6 +142,27 @@ BinaryNode[Optional, {BlankNullSequenceNode[BlankNullSequence, _, _], _}, _] -> 
 
 
 (*
+scan for something like Rule___
+*)
+PatternBlankNode[PatternBlank, {
+  LeafNode[Symbol, sym_ /; StringMatchQ[sym, Alternatives @@ CharacterRange["A", "Z"] ~~ ___], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+PatternBlankSequenceNode[PatternBlankSequence, {
+  LeafNode[Symbol, sym_ /; StringMatchQ[sym, Alternatives @@ CharacterRange["A", "Z"] ~~ ___], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+PatternBlankNullSequenceNode[PatternBlankNullSequence, {
+  LeafNode[Symbol, sym_ /; StringMatchQ[sym, Alternatives @@ CharacterRange["A", "Z"] ~~ ___], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+OptionalDefaultPatternNode[OptionalDefaultPattern, {
+  LeafNode[Symbol, sym_ /; StringMatchQ[sym, Alternatives @@ CharacterRange["A", "Z"] ~~ ___], _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+
+
+(*
 Tags: SyntaxError
 *)
 SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
@@ -1112,6 +1133,35 @@ Catch[
 ]]
 
 *)
+
+
+
+
+
+
+Attributes[scanUppercasePatternBlank] = {HoldRest}
+
+scanUppercasePatternBlank[pos_List, aggIn_] :=
+ Module[{agg, node, tag, data, children, src},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  src = children[[1, 3, Key[Source] ]];
+
+  AppendTo[issues, Lint["UppercasePatternBlank", "Suspicious uppercase symbol.", "Warning",
+                    <| Source->src,
+                        ConfidenceLevel->0.80|>]];
+
+  issues
+]
+
+
+
 
 
 
