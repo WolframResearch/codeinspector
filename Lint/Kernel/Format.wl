@@ -169,7 +169,7 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 				line = data[Source][[1,1]];
 				col = data[Source][[1,2]];
 
-				items = With[{file = file, line = line, col = col}, { "Open in editor" :> OpenInEditor[file, line, col] }]
+				items = With[{file = file, line = line, col = col}, { ToString[tag] :> Null, Delimiter, "Open in editor" :> OpenInEditor[file, line, col] }]
 
 				,
 
@@ -177,10 +177,10 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 				Source may not exist in generated nodes
 				*)
 
-				items = {}
+				items = { ToString[tag] :> Null }
 			];
 			,
-			items = {}
+			items = { ToString[tag] :> Null }
 		]
 	];
 
