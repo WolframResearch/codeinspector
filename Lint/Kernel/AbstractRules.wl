@@ -1412,7 +1412,7 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], Con
 
    varsAndVals = DeleteCases[varsAndVals, {}];
 
-   If[Length[varsAndVals] === 0, Throw[issues]];
+   If[empty[varsAndVals], Throw[issues]];
 
    {vars, vals} = Transpose[Transpose /@ varsAndVals];
 
