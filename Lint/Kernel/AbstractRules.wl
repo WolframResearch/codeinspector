@@ -1239,6 +1239,13 @@ Catch[
     Throw[issues]
   ];
 
+  (*
+      Module[Evaluate[]] denotes meta-programming
+  *)
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Evaluate", _], _, _]],
+    Throw[issues]
+  ];
+
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
     AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
@@ -1319,6 +1326,13 @@ Catch[
   ];
   *)
 
+  (*
+      DynamicModule[Evaluate[]] denotes meta-programming
+  *)
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Evaluate", _], _, _]],
+    Throw[issues]
+  ];
+
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
     AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
@@ -1390,6 +1404,13 @@ Catch[
     Throw[issues];
   ];
 
+
+  (*
+      With[Evaluate[]] denotes meta-programming
+  *)
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Evaluate", _], _, _]],
+    Throw[issues]
+  ];
 
   (*
       Use {_, ___} to match 1 or more children instead of using { __ }
@@ -1467,6 +1488,13 @@ Catch[
 
   If[Length[children] != 2,
     AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    Throw[issues]
+  ];
+
+  (*
+      Block[Evaluate[]] denotes meta-programming
+  *)
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Evaluate", _], _, _]],
     Throw[issues]
   ];
 
