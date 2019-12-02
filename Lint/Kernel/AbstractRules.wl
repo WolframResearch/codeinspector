@@ -1251,6 +1251,10 @@ Catch[
     Throw[issues]
   ];
 
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
+    AppendTo[issues, Lint["ModuleArgumentsEmpty", "``Module`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+  ];
+
 
   params = children[[1,2]];
    vars = # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], _}, _] :> sym,
@@ -1338,6 +1342,10 @@ Catch[
     Throw[issues]
   ];
 
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
+    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+  ];
+
 
   params = children[[1,2]];
    vars = # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], _}, _] :> sym,
@@ -1420,9 +1428,9 @@ Catch[
 
       Related bugs: 382974
   *)
+  (* Having empty {} as With variable argument is not critical, but a warning may be issued *)
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
-    Throw[issues];
+    AppendTo[issues, Lint["WithArgumentsEmpty", "``With`` does not have a ``List`` with arguments for most arguments.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
   ];
 
   paramLists = Most[children][[All, 2]];
@@ -1501,6 +1509,10 @@ Catch[
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
     AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
     Throw[issues]
+  ];
+
+  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
+    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
   ];
 
   params = children[[1,2]];
