@@ -78,6 +78,11 @@ How many characters before partitioning a new line?
 *)
 $LintedLineWidth = 120
 
+(*
+Number of characters per line to consider "long"
+*)
+$LineTruncationLimit = 500
+
 
 
 $LintsPerLineLimit = 5
@@ -156,7 +161,11 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 
 		menuItems = DeleteCases[menuItems, _?FailureQ];
 
-		items = menuItems;
+		items = {
+					"\"" <> ToString[tag] <> "\"" :> Null,
+					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
+					Delimiter } ~Join~
+					menuItems;
 		,
 		(* non-Interactive *)
 
@@ -362,7 +371,14 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	 Print["endingLints: ", endingLints];
 	];
 
-	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
+	grid = Transpose /@
+		Partition[
+			Take[
+				Transpose[{lineList, underlineList}],
+				UpTo[$LineTruncationLimit]
+			],
+			UpTo[$LintedLineWidth]
+		];
 
 	(*
 	make sure to remove any partitions that do not have errors in them
@@ -501,7 +517,14 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 	 Print["endingLints: ", endingLints];
 	];
 	
-	grid = Transpose /@ Partition[Transpose[{lineList, underlineList}], UpTo[$LintedLineWidth]];
+	grid = Transpose /@
+		Partition[
+			Take[
+				Transpose[{lineList, underlineList}],
+				UpTo[$LineTruncationLimit]
+			],
+			UpTo[$LintedLineWidth]
+		];
 
 	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicator)...}], Nothing, #]& /@ grid;
 
@@ -535,7 +558,14 @@ Module[{lineSource, endingLints, elided, startingLints, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	grid = Partition[lineList, UpTo[$LintedLineWidth]];
+	grid =
+		Partition[
+			Take[
+				lineList,
+				UpTo[$LineTruncationLimit]
+			],
+			UpTo[$LintedLineWidth]
+		];
 
 	(*
 	TODO: properly remove partitions that do not have errors in them
@@ -569,7 +599,14 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	grid = Partition[lineList, UpTo[$LintedLineWidth]];
+	grid =
+		Partition[
+			Take[
+				lineList,
+				UpTo[$LineTruncationLimit]
+			],
+			UpTo[$LintedLineWidth]
+		];
 
 	(*
 	TODO: properly remove partitions that do not have errors in them
@@ -593,7 +630,11 @@ Module[{label, maxLineNumberLength, paddedLineNumber},
 	
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
-	label = Framed[Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False]];
+	If[TrueQ[Lint`Report`$Underlight],
+		label = Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False];
+		,
+		label = Framed[Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False]];
+	];
 
 	(*
 	Copying in cloud:

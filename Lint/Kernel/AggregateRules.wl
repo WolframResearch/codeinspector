@@ -34,7 +34,6 @@ Aggregate lints
 (*
 Tags: ImplicitTimesAcrossLines
 *)
-InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanImplicitTimes,
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
                                 !FreeQ[children, LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                                                   _BlankNode |
@@ -47,11 +46,6 @@ InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes
 
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
                                 !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
-
-(*
-Tags: DotDifferentLine
-*)
-InfixNode[Dot, _, _] -> scanDots,
 
 (*
 Tags: SuspiciousSpan
@@ -218,58 +212,12 @@ Nothing
 
 
 
-Attributes[scanImplicitTimes] = {HoldRest}
-
-scanImplicitTimes[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, line, nextLine, oldN, oldNSrc},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  oldN = children[[1]];
-  oldNSrc = oldN[[3, Key[Source] ]];
-  line = oldNSrc[[2, 1]];
-  Do[
-    nextLine = n[[3, Key[Source], 1, 1]];
-    If[n[[1]] === Token`Fake`ImplicitTimes && line != nextLine,
-      AppendTo[issues,
-        Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Warning",
-          <|Source->{{line, oldNSrc[[2,2]]+1}, {line, oldNSrc[[2,2]]+1}},
-            ConfidenceLevel -> 0.95,
-            CodeActions -> {
-              CodeAction["Insert ``;``", InsertNode, <|Source->{{line, oldNSrc[[2,2]]+1}, {line, oldNSrc[[2,2]]+1}}, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
-              CodeAction["Insert ``,``", InsertNode, <|Source->{{line, oldNSrc[[2,2]]+1}, {line, oldNSrc[[2,2]]+1}}, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
-          |>]];
-      Break[];
-    ];
-    oldN = n;
-    oldNSrc = oldN[[3, Key[Source] ]];
-    line = oldNSrc[[2, 1]];
-    ,
-    {n, children[[2;;]]}
-  ];
-
-  issues
-]]
-
-
 
 Attributes[scanImplicitTimesBlanks] = {HoldRest}
 
 scanImplicitTimesBlanks[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, data, children, issues, pairs, src, srcs},
+Module[{agg, node, data, children, issues, pairs, srcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -312,7 +260,7 @@ Module[{agg, node, data, children, issues, pairs, src, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` involving blanks.", "Error",
+    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Error",
       <|Source->#,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
@@ -328,7 +276,7 @@ Module[{agg, node, data, children, issues, pairs, src, srcs},
 Attributes[scanImplicitTimesStrings] = {HoldRest}
 
 scanImplicitTimesStrings[pos_List, aggIn_] :=
-Module[{agg, node, data, issues, src, children, pairs, srcs},
+Module[{agg, node, data, issues, children, pairs, srcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -365,7 +313,7 @@ Module[{agg, node, data, issues, src, children, pairs, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesStrings", "Suspicious implicit ``Times`` between strings.", "Warning",
+    AppendTo[issues, Lint["ImplicitTimesStrings", "Suspicious implicit ``Times`` with strings.", "Warning",
       <|Source->#,
         ConfidenceLevel -> 0.75,
         CodeActions -> {
@@ -378,50 +326,6 @@ Module[{agg, node, data, issues, src, children, pairs, srcs},
 
 
 
-
-Attributes[scanDots] = {HoldRest}
-
-scanDots[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, line, nextLine, oldN, oldNSrc},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  oldN = children[[1]];
-  oldNSrc = oldN[[3, Key[Source] ]];
-  line = oldNSrc[[2, 1]];
-  Do[
-    nextLine = n[[3, Key[Source], 1, 1]];
-    If[oldN[[1]] === Token`Dot && line != nextLine,
-      AppendTo[issues, Lint["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
-        <|data,
-          ConfidenceLevel -> 0.75,
-          CodeActions -> {
-              CodeAction["Replace ``.`` with ``;``", ReplaceNode, <|Source->oldNSrc, "ReplacementNode"->LeafNode[Token`Semi, ";", <||>] |>],
-              CodeAction["Replace ``.`` with ``,``", ReplaceNode, <|Source->oldNSrc, "ReplacementNode"->LeafNode[Token`Comma, ",", <||>]|>] }
-        |>]];
-      Break[];
-    ];
-    oldN = n;
-    oldNSrc = oldN[[3, Key[Source] ]];
-    line = oldNSrc[[2, 1]];
-    ,
-    {n, children[[2;;]]}
-  ];
-
-  issues
-]]
 
 
 Attributes[scanSpans] = {HoldRest}
@@ -522,7 +426,7 @@ Attributes[scanCompoundExpressions] = {HoldRest}
 
 scanCompoundExpressions[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, straySemis, rand, semi},
+Module[{agg, node, children, data, issues, straySemis, semi},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -533,20 +437,6 @@ Module[{agg, node, children, data, issues, straySemis, rand, semi},
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
   Scan[(AppendTo[issues, Lint["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (rand = #[[1]];
-    semi = #[[2]];
-    If[ rand[[3, Key[Source], 2, 1]] != semi[[3, Key[Source], 1,1]],
-      AppendTo[issues,
-        Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning", <|semi[[3]], ConfidenceLevel -> 0.95|>]];
-    ];)& /@ Partition[children, 2];
 
   issues
 ]]

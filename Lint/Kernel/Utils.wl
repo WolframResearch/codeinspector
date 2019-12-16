@@ -194,7 +194,11 @@ plainify[s_String] := StringReplace[s, {
 
 
 
+BeginStaticAnalysisIgnore[]
 
+(*
+Replace invisible control characters with \[UnknownGlyph]
+*)
 $characterReplacementRules = {
 	"\.00" -> "\[UnknownGlyph]",
 	"\.01" -> "\[UnknownGlyph]",
@@ -210,8 +214,10 @@ $characterReplacementRules = {
 	This keeps things simple
 	*)
 	"\t" -> " ",
+	(*\n*)
 	"\.0b" -> "\[UnknownGlyph]",
 	"\.0c" -> "\[UnknownGlyph]",
+	(*\r*)
 	"\.0e" -> "\[UnknownGlyph]",
 	"\.0f" -> "\[UnknownGlyph]",
 	"\.10" -> "\[UnknownGlyph]",
@@ -233,8 +239,7 @@ $characterReplacementRules = {
 	"\.7f" -> "\[UnknownGlyph]"
 }
 
-
-
+EndStaticAnalysisIgnore[]
 
 
 

@@ -14,14 +14,19 @@ $LintedLineLimit
 $LintLimit
 
 
+$Underlight
+
+
 Begin["`Private`"]
 
 Needs["AST`"]
 Needs["AST`Utils`"]
 Needs["Lint`"]
+Needs["Lint`AbstractRules`"]
+Needs["Lint`AggregateRules`"]
+Needs["Lint`ConcreteRules`"]
 Needs["Lint`Format`"]
 Needs["Lint`Utils`"]
-
 
 
 $DefaultTagExclusions = {}
@@ -43,6 +48,11 @@ $existsTest = Not @* KeyExistsQ[ConfidenceLevel]
 LintFileReport::usage = "LintFileReport[file, lints] returns a LintedFile object."
 
 Options[LintFileReport] = {
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules,
+  CharacterEncoding -> "UTF-8",
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
@@ -65,9 +75,15 @@ bug 338218
 LintFileReport[file_String | File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
-  lintedLines, unusedLineHashExclusions, hashes, confidence},
+  lintedLines, unusedLineHashExclusions, hashes, confidence, performanceGoal, concreteRules,
+  aggregateRules, abstractRules},
 
  lints = lintsIn;
+
+ performanceGoal = OptionValue[PerformanceGoal];
+ concreteRules = OptionValue["ConcreteRules"];
+ aggregateRules = OptionValue["AggregateRules"];
+ abstractRules = OptionValue["AbstractRules"];
 
  (*
   Support None for the various exclusion options
@@ -104,7 +120,11 @@ Catch[
    ];
 
   If[lints === Automatic,
-    lints = LintFile[full];
+    lints = LintFile[full,
+      PerformanceGoal -> performanceGoal,
+      "ConcreteRules" -> concreteRules,
+      "AggregateRules" -> aggregateRules,
+      "AbstractRules" -> abstractRules];
   ];
 
 
@@ -134,6 +154,11 @@ Catch[
 LintStringReport::usage = "LintStringReport[string, lints] returns a LintedString object."
 
 Options[LintStringReport] = {
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules,
+  CharacterEncoding -> "UTF-8",
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
@@ -144,9 +169,15 @@ Options[LintStringReport] = {
 
 LintStringReport[string_String, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines, confidence},
+ Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
+  confidence, performanceGoal, concreteRules, aggregateRules, abstractRules},
 
  lints = lintsIn;
+
+ performanceGoal = OptionValue[PerformanceGoal];
+ concreteRules = OptionValue["ConcreteRules"];
+ aggregateRules = OptionValue["AggregateRules"];
+ abstractRules = OptionValue["AbstractRules"];
 
  (*
   Support None for the various exclusion options
@@ -179,7 +210,11 @@ Catch[
  ];
 
  If[lints === Automatic,
-    lints = LintString[string];
+    lints = LintString[string,
+      PerformanceGoal -> performanceGoal,
+      "ConcreteRules" -> concreteRules,
+      "AggregateRules" -> aggregateRules,
+      "AbstractRules" -> abstractRules];
   ];
 
 
@@ -199,6 +234,11 @@ Catch[
 LintBytesReport::usage = "LintBytesReport[bytes, lints] returns a LintedBytes object."
 
 Options[LintBytesReport] = {
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules,
+  CharacterEncoding -> "UTF-8",
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
@@ -210,9 +250,14 @@ Options[LintBytesReport] = {
 LintBytesReport[bytes_List, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
-  confidence, string},
+  confidence, string, performanceGoal, concreteRules, aggregateRules, abstractRules},
 
  lints = lintsIn;
+
+ performanceGoal = OptionValue[PerformanceGoal];
+ concreteRules = OptionValue["ConcreteRules"];
+ aggregateRules = OptionValue["AggregateRules"];
+ abstractRules = OptionValue["AbstractRules"];
 
  (*
   Support None for the various exclusion options
@@ -241,7 +286,11 @@ Catch[
 
 
  If[lints === Automatic,
-    lints = LintBytes[bytes];
+    lints = LintBytes[bytes,
+      PerformanceGoal -> performanceGoal,
+      "ConcreteRules" -> concreteRules,
+      "AggregateRules" -> aggregateRules,
+      "AbstractRules" -> abstractRules];
   ];
 
 
@@ -462,18 +511,31 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
    Table[
 
       If[!MemberQ[elidedLines, i],
-        With[
-          {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
+        If[TrueQ[$Underlight],
+          With[
+            {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
+            ,
+            {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
+              lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+              lints = Union[Flatten[Values[lintsPerColumn]]]}
+            ,
+            LintedLine[lineSource, lineNumber, hash, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+          ]
           ,
-          {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
-            lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-            underlineList = createUnderlineList[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-            lints = Union[Flatten[Values[lintsPerColumn]]]
-          }
-          ,
-          LintedLine[lineSource, lineNumber, hash, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+          With[
+            {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
+            ,
+            {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
+              lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+              underlineList = createUnderlineList[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+              lints = Union[Flatten[Values[lintsPerColumn]]]
+            }
+            ,
+            LintedLine[lineSource, lineNumber, hash, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+          ]
         ]
         ,
+        (* elided *)
         LintedLine["", i, "", {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True]
       ]
     ,
@@ -610,7 +672,7 @@ Module[{perColumn, endOfFile},
 
       (* staying within same line *)
       {{lineNumber, _}, {lineNumber, _}},
-      Association[Table[i -> lint, {i, src[[1, 2]], src[[2, 2]]}]]
+      Association[dropLastButLeaveAtleastOne[Table[i -> lint, {i, src[[1, 2]], src[[2, 2]]}]]]
       ,
 
       (* start on this line, but extends into next lines *)
@@ -620,7 +682,7 @@ Module[{perColumn, endOfFile},
 
       (* extend from previous lines, and end on this line *)
       {_, {lineNumber, _}},
-      Association[0 -> lint, Table[i -> lint, {i, 1, src[[2, 2]]}]]
+      Association[0 -> lint, dropLastButLeaveAtleastOne[Table[i -> lint, {i, 1, src[[2, 2]]}]]]
       ,
 
       (* extend from previous lines, and also extend into next lines  *)
@@ -639,6 +701,12 @@ Module[{perColumn, endOfFile},
 
   perColumn
 ]
+
+
+
+dropLastButLeaveAtleastOne[{}] := {}
+dropLastButLeaveAtleastOne[{a_}] := {a}
+dropLastButLeaveAtleastOne[{most___, a_, b_}] := {most, a}
 
 
 
@@ -670,7 +738,11 @@ Module[{line, lintsPerColumn},
   
   line = ReplaceAll[line, $characterReplacementRules];
 
-  lintsPerColumn = KeyValueMap[#1 -> LintMarkup[line[[#1]], FontWeight->Bold, FontColor->severityColor[#2]]&, lintsPerColumn];
+  If[TrueQ[$Underlight],
+    lintsPerColumn = KeyValueMap[#1 -> LintMarkup[line[[#1]], FontVariations -> {"Underlight" -> severityColor[#2]}]&, lintsPerColumn];
+    ,
+    lintsPerColumn = KeyValueMap[#1 -> LintMarkup[line[[#1]], FontWeight->Bold, FontColor->severityColor[#2]]&, lintsPerColumn];
+  ];
 
   line = ReplacePart[line, lintsPerColumn];
 

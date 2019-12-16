@@ -111,472 +111,475 @@ CallNode[LeafNode[Symbol, "Replace" | "ReplaceAll" | "ReplaceRepeated", _], _, _
 (*
 Scan some symbols that are intuitive, yet do not exist
 *)
-LeafNode[Symbol, "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | 
-                  "RealQ" | "FalseQ" | "RationalQ" | "ComplexQ" | 
-                  "SymbolQ" | "Match", _] -> scanBadSymbols,
+LeafNode[Symbol,
+  "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | "RealQ" | "FalseQ" | "RationalQ" |
+  "ComplexQ" | "SymbolQ" | "Match", _] -> scanBadSymbols,
 
 (*
 Scan symbols that are in System` but are undocumented
 *)
-LeafNode[Symbol, "Absolute" | "ActionDelay" | "ActionMenuBox" | "ActionMenuBoxOptions" | 
-                  "ActiveItem" | "AlgebraicRulesData" | "AlignmentMarker" |
-                  "AllowAdultContent" | "AllowIncomplete" | "AllowKernelInitialization" | 
-                  "Analytic" | "AnimatorBox" | "AnimatorBoxOptions" | "AnimatorElements" | 
-                  "Annotate" | "AnnotationNames" | "AnnotationValue" | "AppendCheck" | 
-                  "ArgumentCountQ" | "Arrow3DBox" | "ArrowBox" | "Authenticate" | 
-                  "AutoEvaluateEvents" | "AutoIndentSpacings" | "AutoMatch" | 
-                  "AutomaticImageSize" | "AutoNumberFormatting" | "AutoQuoteCharacters" | 
-                  "AutoScaling" | "AutoStyleOptions" | "AutoStyleWords" | 
-                  "BackgroundAppearance" | "BackgroundTasksSettings" | 
-                  "Backsubstitution" | "BeginFrontEndInteractionPacket" | 
-                  "BezierCurve3DBox" | "BezierCurve3DBoxOptions" | "BezierCurveBox" | 
-                  "BezierCurveBoxOptions" | "BlankForm" | "Bounds" | "Box" | 
-                  "BoxDimensions" | "Boxes" | "BoxForm" | "BoxID" | "BoxRotation" | 
-                  "BoxRotationPoint" | "Bra" | "BraKet" | "BrowserCategory" | 
-                  "BSplineCurve3DBox" | "BSplineCurve3DBoxOptions" | "BSplineCurveBox" | 
-                  "BSplineCurveBoxOptions" | "BSplineSurface3DBox" | 
-                  "BSplineSurface3DBoxOptions" | "ButtonCell" | "ButtonContents" | 
-                  "ButtonStyleMenuListing" | "CachedValue" | "CacheGraphics" | 
-                  "CardinalBSplineBasis" | "CellBoundingBox" | "CellContents" | 
-                  "CellElementsBoundingBox" | "CellElementSpacings" | 
-                  "CellEvaluationLanguage" | "CellLabelTemplate" | "ChangeOptions" | 
-                  "ChannelHistoryLength" | "ChannelListenerWait" | "ChartElementData" | 
-                  "ChartElementDataFunction" | "CheckAll" | "CheckboxBox" | 
-                  "CheckboxBoxOptions" | "CircleBox" | "ClipboardNotebook" | 
-                  "ClockwiseContourIntegral" | "Closed" | "ClosingEvent" | 
-                  "CloudObjectInformation" | "CloudObjectInformationData" | "Coarse" | 
-                  "CoefficientDomain" | "ColonForm" | "ColorSetterBox" | 
-                  "ColorSetterBoxOptions" | "ColumnBackgrounds" | 
-                  "CompletionsListPacket" | "ComponentwiseContextMenu" | 
-                  "CompressedData" | "ConeBox" | "ConicHullRegion3DBox" | 
-                  "ConicHullRegionBox" | "Connect" | "ConsoleMessage" | 
-                  "ConsoleMessagePacket" | "ConsolePrint" | "ContentsBoundingBox" | 
-                  "ContextMenu" | "Continuation" | "ContourIntegral" | "ContourSmoothing" | 
-                  "ControlAlignment" | "ControlGroupContentsBox" | "ControllerDuration" | 
-                  "ControllerInformationData" | "ConvertToBitmapPacket" | 
-                  "ConvertToPostScript" | "ConvertToPostScriptPacket" | "Cookies" | 
-                  "CopyTag" | "CounterBox" | "CounterBoxOptions" | 
-                  "CounterClockwiseContourIntegral" | "CounterEvaluator" | 
-                  "CounterStyle" | "CreateDataStructure" | "CreatePalettePacket" | 
-                  "CuboidBox" | "CurlyDoubleQuote" | "CurlyQuote" | 
-                  "CurrentlySpeakingPacket" | "CylinderBox" | "DampingFactor" | 
-                  "DataCompression" | "DataStructure" | "DataStructureQ" | 
-                  "DateDelimiters" | "DebugTag" | "Decimal" | "DeclareKnownSymbols" | 
-                  "DefaultControlPlacement" | "DefaultFormatTypeForStyle" | 
-                  "DefaultInputFormatType" | "DefaultOutputFormatType" | "DefaultStyle" | 
-                  "DefaultTextFormatType" | "DefaultTextInlineFormatType" | 
-                  "DefaultValue" | "DefaultValues" | "DefineExternal" | 
-                  "DegreeLexicographic" | "DegreeReverseLexicographic" | 
-                  "DeleteWithContents" | "DelimitedArray" | "DestroyAfterEvaluation" | 
-                  "DeviceOpenQ" | "DialogIndent" | "DialogLevel" | "DifferenceOrder" | 
-                  "DigitBlockMinimum" | "DisableConsolePrintPacket" | "DiskBox" | 
-                  "DispatchQ" | "DisplayFlushImagePacket" | "DisplayRules" | 
-                  "DisplaySetSizePacket" | "DisplayTemporary" | "DisplayWith" | 
-                  "DisplayWithRef" | "DisplayWithVariable" | "DistributionDomain" | 
-                  "Divergence" | "DocumentGeneratorInformationData" | 
-                  "DomainRegistrationInformation" | "DOSTextFormat" | 
-                  "DoubleContourIntegral" | "DoublyInfinite" | "Down" | "DrawEdges" | 
-                  "DrawFrontFaces" | "DrawHighlighted" | "DualLinearProgramming" | 
-                  "DumpGet" | "DynamicBox" | "DynamicBoxOptions" | "DynamicLocation" | 
-                  "DynamicModuleBox" | "DynamicModuleBoxOptions" | "DynamicModuleParent" | 
-                  "DynamicName" | "DynamicNamespace" | "DynamicReference" | 
-                  "DynamicUpdating" | "DynamicWrapperBox" | "DynamicWrapperBoxOptions" | 
-                  "EdgeCapForm" | "EdgeColor" | "EdgeDashing" | "EdgeJoinForm" | 
-                  "EdgeOpacity" | "EdgeThickness" | "EditButtonSettings" | 
-                  "EliminationOrder" | "EllipticReducedHalfPeriods" | "EmbeddingObject" | 
-                  "EmphasizeSyntaxErrors" | "Empty" | "EnableConsolePrintPacket" | 
-                  "EndAdd" | "EndFrontEndInteractionPacket" | "EngineEnvironment" | 
-                  "Enter" | "EqualColumns" | "EqualRows" | "EquatedTo" | "ErrorBoxOptions" | 
-                  "ErrorNorm" | "ErrorPacket" | "ErrorsDialogSettings" | "Evaluated" | 
-                  "EvaluationMode" | "EvaluationOrder" | "EventEvaluator" | 
-                  "EventHandlerTag" | "ExactRootIsolation" | "ExitDialog" | 
-                  "ExpectationE" | "ExportPacket" | "ExpressionPacket" | "ExpressionUUID" | 
-                  "ExternalCall" | "ExternalFunctionName" | "Fail" | 
-                  "FEDisableConsolePrintPacket" | "FEEnableConsolePrintPacket" | 
-                  "FileHandler" | "FileInformation" | "FileName" | "FilledCurveBox" | 
-                  "FilledCurveBoxOptions" | "Fine" | "FitAll" | "FlashSelection" | 
-                  "FlushPrintOutputPacket" | "FoldWhile" | "FoldWhileList" | "Font" | 
-                  "FontName" | "FontOpacity" | "FontPostScriptName" | "FontReencoding" | 
-                  "FormatRules" | "FormatValues" | "FrameInset" | "Frameless" | 
-                  "FrontEndObject" | "FrontEndResource" | "FrontEndResourceString" | 
-                  "FrontEndValueCache" | "FrontEndVersion" | "FrontFaceColor" | 
-                  "FrontFaceOpacity" | "FullAxes" | "Generic" | 
-                  "GeometricTransformation3DBox" | 
-                  "GeometricTransformation3DBoxOptions" | "GeometricTransformationBox" | 
-                  "GeometricTransformationBoxOptions" | "GestureHandlerTag" | 
-                  "GetBoundingBoxSizePacket" | "GetContext" | "GetFileName" | 
-                  "GetFrontEndOptionsDataPacket" | "GetLinebreakInformationPacket" | 
-                  "GetMenusPacket" | "GetPageBreakInformationPacket" | 
-                  "GlobalPreferences" | "GlobalSession" | "GraphElementData" | 
-                  "Graphics3DBox" | "Graphics3DBoxOptions" | "GraphicsBaseline" | 
-                  "GraphicsBox" | "GraphicsBoxOptions" | "GraphicsColor" | 
-                  "GraphicsComplex3DBox" | "GraphicsComplex3DBoxOptions" | 
-                  "GraphicsComplexBox" | "GraphicsComplexBoxOptions" | 
-                  "GraphicsContents" | "GraphicsData" | "GraphicsGridBox" | 
-                  "GraphicsGroup3DBox" | "GraphicsGroup3DBoxOptions" | 
-                  "GraphicsGroupBox" | "GraphicsGroupBoxOptions" | "GraphicsGrouping" | 
-                  "GraphicsHighlightColor" | "GraphicsStyle" | "GraphRoot" | 
-                  "GridBoxAlignment" | "GridBoxBackground" | "GridBoxDividers" | 
-                  "GridBoxFrame" | "GridBoxItemSize" | "GridBoxItemStyle" | 
-                  "GridBoxOptions" | "GridBoxSpacings" | "GridElementStyleOptions" | 
-                  "GroupTogetherGrouping" | "GroupTogetherNestedGrouping" | "HalfSpace" | 
-                  "HeadCompose" | "HelpBrowserLookup" | "HelpBrowserNotebook" | "Hessian" | 
-                  "HexahedronBox" | "HexahedronBoxOptions" | "HomePage" | "Horizontal" | 
-                  "HorizontalForm" | "HorizontalScrollPosition" | 
-                  "HyperlinkCreationSettings" | "Hyperplane" | "HyphenationOptions" | 
-                  "IconizedObject" | "IgnoreSpellCheck" | "ImageCache" | 
-                  "ImageCacheValid" | "ImageMarkers" | "ImageOffset" | "ImageRangeCache" | 
-                  "ImageSizeCache" | "ImageSizeRaw" | "IncludeSingularTerm" | "Indent" | 
-                  "IndentingNewlineSpacings" | "IndentMaxFraction" | 
-                  "IndexCreationOptions" | "IndexTag" | "Inequality" | "InexactNumbers" | 
-                  "InformationData" | "InformationDataGrid" | "InlineCounterAssignments" | 
-                  "InlineCounterIncrements" | "InlineRules" | "InputFieldBox" | 
-                  "InputFieldBoxOptions" | "InputGrouping" | "InputSettings" | 
-                  "InputToBoxFormPacket" | "InsertionPointObject" | "Inset3DBox" | 
-                  "Inset3DBoxOptions" | "InsetBox" | "InsetBoxOptions" | "Integral" | 
-                  "Interlaced" | "InterpolationPrecision" | "InterpretationFunction" | 
-                  "InterpretTemplate" | "InterruptSettings" | "Into" | 
-                  "InvisibleApplication" | "InvisibleTimes" | "ItemBox" | 
-                  "ItemBoxOptions" | "Jacobian" | "JoinedCurveBox" | 
-                  "JoinedCurveBoxOptions" | "K" | "KernelExecute" | "Ket" | 
-                  "LabeledSlider" | "LambertW" | "LanguageOptions" | "Launch" | 
-                  "LayoutInformation" | "Lexicographic" | "LicenseID" | "Line3DBox" | 
-                  "Line3DBoxOptions" | "LinearFilter" | "LineBox" | "LineBoxOptions" | 
-                  "LineBreak" | "LinebreakSemicolonWeighting" | "LineColor" | 
-                  "LineOpacity" | "LineWrapParts" | "LinkConnectedQ" | "LinkError" | 
-                  "LinkFlush" | "LinkHost" | "LinkMode" | "LinkOptions" | "LinkReadHeld" | 
-                  "LinkService" | "LinkWriteHeld" | "Listen" | "ListPickerBoxBackground" | 
-                  "LiteralSearch" | "LocalizeDefinitions" | "LocatorBox" | 
-                  "LocatorBoxOptions" | "LocatorCentering" | "LocatorPaneBox" | 
-                  "LocatorPaneBoxOptions" | "LongEqual" | "LongForm" | "Loopback" | 
-                  "MachineID" | "MachineName" | "MacintoshSystemPageSetup" | "MainSolve" | 
-                  "MaintainDynamicCaches" | "MakeRules" | "MatchLocalNameQ" | "Material" | 
-                  "MathematicaNotation" | "MathMLText" | "MaxBend" | "MaxPoints" | "Menu" | 
-                  "MenuAppearance" | "MenuEvaluator" | "MenuItem" | "MenuList" | 
-                  "MergeDifferences" | "MessageObject" | "MessageOptions" | 
-                  "MessagesNotebook" | "MetaCharacters" | "MethodOptions" | 
-                  "MinRecursion" | "MinSize" | "Mode" | "Modular" | "Momentary" | 
-                  "MonomialOrder" | "MouseAppearanceTag" | "MouseButtons" | 
-                  "MousePointerNote" | "MultiLetterItalics" | "MultiLetterStyle" | 
-                  "Multiplicity" | "NamespaceBox" | "NamespaceBoxOptions" | "NBernoulliB" | 
-                  "NeedCurrentFrontEndPackagePacket" | 
-                  "NeedCurrentFrontEndSymbolsPacket" | "NestedScriptRules" | 
-                  "NetworkPacketRecordingDuring" | "NewPrimitiveStyle" | "Next" | 
-                  "NonAssociative" | "NormalGrouping" | "NotebookCreateReturnObject" | 
-                  "NotebookDefault" | "NotebookFindReturnObject" | 
-                  "NotebookGetLayoutInformationPacket" | 
-                  "NotebookGetMisspellingsPacket" | "NotebookInterfaceObject" | 
-                  "NotebookOpenReturnObject" | "NotebookPutReturnObject" | 
-                  "NotebookResetGeneratedCells" | "NotebookSaveAs" | 
-                  "NotebookSetupLayoutInformationPacket" | "NProductFactors" | 
-                  "NSumTerms" | "NValues" | "OLEData" | "Open" | "OpenerBox" | 
-                  "OpenerBoxOptions" | "OpenFunctionInspectorPacket" | 
-                  "OpenSpecialOptions" | "OptionQ" | "OptionsPacket" | "OptionValueBox" | 
-                  "OptionValueBoxOptions" | "OutputFormData" | "OutputGrouping" | 
-                  "OutputMathEditExpression" | "Over" | "OverlayBox" | 
-                  "OverlayBoxOptions" | "Package" | "PageHeight" | "PaneBox" | 
-                  "PaneBoxOptions" | "PanelBox" | "PanelBoxOptions" | "PaneSelectorBox" | 
-                  "PaneSelectorBoxOptions" | "PaperWidth" | "Parameter" | 
-                  "ParameterVariables" | "ParentConnect" | "ParentForm" | "Parenthesize" | 
-                  "ParentList" | "PartialD" | "PasteAutoQuoteCharacters" | "PausedTime" | 
-                  "PeriodicInterpolation" | "PermissionsGroupMemberQ" | "Perpendicular" | 
-                  "Pivoting" | "PlotRangeClipPlanesStyle" | "Point3DBox" | 
-                  "Point3DBoxOptions" | "PointBox" | "PointBoxOptions" | "Polygon3DBox" | 
-                  "Polygon3DBoxOptions" | "PolygonBox" | "PolygonBoxOptions" | 
-                  "PolygonHoleScale" | "PolygonScale" | "PolynomialForm" | "Polynomials" | 
-                  "PopupMenuBox" | "PopupMenuBoxOptions" | "PostScript" | "Precedence" | 
-                  "PredictionRoot" | "Previous" | "PrimaryPlaceholder" | "PrintForm" | 
-                  "PrismBox" | "PrismBoxOptions" | "PrivateFrontEndOptions" | 
-                  "ProbabilityPr" | "ProcessStateDomain" | "ProcessTimeDomain" | 
-                  "ProgressIndicatorBox" | "ProgressIndicatorBoxOptions" | "PromptForm" | 
-                  "PyramidBox" | "PyramidBoxOptions" | "RadioButtonBox" | 
-                  "RadioButtonBoxOptions" | "RandomSeed" | "RangeSpecification" | 
-                  "Raster3DBox" | "Raster3DBoxOptions" | "RasterBox" | "RasterBoxOptions" | 
-                  "RationalFunctions" | "RawArray" | "RawMedium" | "RectangleBox" | 
-                  "RectangleBoxOptions" | "RecurringDigitsForm" | "RefBox" | 
-                  "ReferenceMarkers" | "ReferenceMarkerStyle" | "Reinstall" | "Removed" | 
-                  "RepeatedString" | "ResetMenusPacket" | "ResourceAcquire" | 
-                  "ResourceSubmissionObject" | "ResourceSystemBase" | 
-                  "ReturnEntersInput" | "ReturnInputFormPacket" | "RotationBox" | 
-                  "RotationBoxOptions" | "RoundImplies" | "RowBackgrounds" | "RowHeights" | 
-                  "RuleCondition" | "RuleForm" | "SaveAutoDelete" | "ScaledMousePosition" | 
-                  "ScheduledTaskInformationData" | "ScriptForm" | "ScriptRules" | 
-                  "SectionGrouping" | "Selection" | "SelectionCell" | 
-                  "SelectionCellCreateCell" | "SelectionCellDefaultStyle" | 
-                  "SelectionCellParentStyle" | "SelectionDebuggerTag" | 
-                  "SelectionDuplicateCell" | "SelectionPlaceholder" | 
-                  "SelectionSetStyle" | "SelectWithContents" | "SelfLoops" | 
-                  "ServiceResponse" | "Setbacks" | "SetBoxFormNamesPacket" | 
-                  "SetEvaluationNotebook" | "SetFileLoadingContext" | 
-                  "SetNotebookStatusLine" | "SetOptionsPacket" | 
-                  "SetSecuredAuthenticationKey" | "SetSpeechParametersPacket" | 
-                  "SetterBox" | "SetterBoxOptions" | "SetValue" | "ShowAutoConvert" | 
-                  "ShowCodeAssist" | "ShowControls" | "ShowGroupOpenCloseIcon" | 
-                  "ShowInvisibleCharacters" | "ShowPredictiveInterface" | 
-                  "ShowSyntaxStyles" | "ShrinkWrapBoundingBox" | "SingleEvaluation" | 
-                  "SingleLetterStyle" | "Slider2DBox" | "Slider2DBoxOptions" | 
-                  "SliderBox" | "SliderBoxOptions" | "Socket" | "SolveDelayed" | 
-                  "SoundAndGraphics" | "Space" | "SpaceForm" | "SpanningCharacters" | 
-                  "SpeakTextPacket" | "SpellingSuggestionsPacket" | "SphereBox" | 
-                  "StartupSound" | "StringBreak" | "StringByteCount" | "StrokeForm" | 
-                  "StructuredArrayHeadQ" | "StyleHints" | "StyleKeyMapping" | 
-                  "StyleNames" | "SubValues" | "SurdForm" | "Syntax" | "SystemException" | 
-                  "SystemGet" | "SystemInformationData" | "SystemStub" | "SystemTest" | 
-                  "Tab" | "TableView" | "TableViewBox" | "TableViewBoxBackground" | 
-                  "TableViewBoxOptions" | "TabViewBox" | "TabViewBoxOptions" | 
-                  "TagBoxNote" | "TagStyle" | "TemplateArgBox" | "TemplateEvaluate" | 
-                  "TemplateSlotSequence" | "TemplateUnevaluated" | "TemplateVerbatim" | 
-                  "TemporaryVariable" | "TensorQ" | "TetrahedronBox" | 
-                  "TetrahedronBoxOptions" | "Text3DBox" | "Text3DBoxOptions" | "TextBand" | 
-                  "TextBoundingBox" | "TextBox" | "TextForm" | "TextLine" | 
-                  "TextParagraph" | "ThisLink" | "TitleGrouping" | "ToColor" | "Toggle" | 
-                  "ToggleFalse" | "TogglerBox" | "TogglerBoxOptions" | "TooBig" | 
-                  "TooltipBox" | "TooltipBoxOptions" | "TotalHeight" | "TraceAction" | 
-                  "TraceInternal" | "TraceLevel" | "TradingChart" | "TraditionalNotation" | 
-                  "TraditionalOrder" | "TransparentColor" | "TrapSelection" | 
-                  "TubeBezierCurveBox" | "TubeBezierCurveBoxOptions" | "TubeBox" | 
-                  "TubeBoxOptions" | "TubeBSplineCurveBox" | 
-                  "TubeBSplineCurveBoxOptions" | "UntrackedVariables" | "Up" | 
-                  "UpdateDynamicObjects" | "UpdateDynamicObjectsSynchronous" | 
-                  "UseGraphicsRange" | "UserDefinedWavelet" | "Using" | "V2Get" | "Value" | 
-                  "ValueBox" | "ValueBoxOptions" | "ValueForm" | "ValuesData" | 
-                  "VectorGlyphData" | "Verbose" | "VerboseConvertToPostScriptPacket" | 
-                  "Version" | "VersionNumber" | "Vertical" | "VerticalForm" | 
-                  "ViewPointSelectorSettings" | "ViewPort" | "VirtualGroupData" | 
-                  "VisibleCell" | "WaitUntil" | "WindowPersistentStyles" | 
-                  "WindowSelected" | "WindowWidth" | "WolframAlphaDate" | 
-                  "WolframAlphaQuantity" | "WolframAlphaResult" | "$ActivationGroupID" | 
-                  "$ActivationUserRegistered" | "$AddOnsDirectory" | "$BoxForms" | 
-                  "$CloudVersionNumber" | "$CloudWolframEngineVersionNumber" | 
-                  "$ConditionHold" | "$DefaultFrontEnd" | "$DefaultMailbox" | 
-                  "$DefaultPath" | "$FinancialDataSource" | "$GeoEntityTypes" | 
-                  "$GeoLocationPrecision" | "$HTMLExportRules" | "$HTTPRequest" | 
-                  "$InterfaceEnvironment" | "$LaunchDirectory" | "$LicenseProcesses" | 
-                  "$LicenseSubprocesses" | "$LicenseType" | "$LinkSupported" | 
-                  "$LoadedFiles" | "$MaxLicenseProcesses" | "$MaxLicenseSubprocesses" | 
-                  "$MinorReleaseNumber" | "$NetworkLicense" | "$Off" | "$OutputForms" | 
-                  "$PasswordFile" | "$PatchLevelID" | "$PermissionsGroupBase" | 
-                  "$PipeSupported" | "$PreferencesDirectory" | "$PrintForms" | 
-                  "$PrintLiteral" | "$RegisteredDeviceClasses" | "$RegisteredUserName" | 
-                  "$ResourceSystemBase" | "$SecuredAuthenticationKeyTokens" | 
-                  "$SetParentLink" | "$SoundDisplay" | "$StructuredArrayHeads" | 
-                  "$SuppressInputFormHeads" | "$SystemMemory" | "$TraceOff" | "$TraceOn" | 
-                  "$TracePattern" | "$TracePostAction" | "$TracePreAction" | 
-                  "$UserAgentLanguages" | "$UserAgentMachine" | "$UserAgentName" | 
-                  "$UserAgentOperatingSystem" | "$UserAgentVersion" | "$UserName", _] -> scanUndocumentedSymbols,
+LeafNode[Symbol,
+  "Absolute" | "ActionDelay" | "ActionMenuBox" | "ActionMenuBoxOptions" | 
+  "ActiveItem" | "AlgebraicRulesData" | "AlignmentMarker" |
+  "AllowAdultContent" | "AllowIncomplete" | "AllowKernelInitialization" | 
+  "Analytic" | "AnimatorBox" | "AnimatorBoxOptions" | "AnimatorElements" | 
+  "Annotate" | "AnnotationNames" | "AnnotationValue" | "AppendCheck" | 
+  "ArgumentCountQ" | "Arrow3DBox" | "ArrowBox" | "Authenticate" | 
+  "AutoEvaluateEvents" | "AutoIndentSpacings" | "AutoMatch" | 
+  "AutomaticImageSize" | "AutoNumberFormatting" | "AutoQuoteCharacters" | 
+  "AutoScaling" | "AutoStyleOptions" | "AutoStyleWords" | 
+  "BackgroundAppearance" | "BackgroundTasksSettings" | 
+  "Backsubstitution" | "BeginFrontEndInteractionPacket" | 
+  "BezierCurve3DBox" | "BezierCurve3DBoxOptions" | "BezierCurveBox" | 
+  "BezierCurveBoxOptions" | "BlankForm" | "Bounds" | "Box" | 
+  "BoxDimensions" | "Boxes" | "BoxForm" | "BoxID" | "BoxRotation" | 
+  "BoxRotationPoint" | "Bra" | "BraKet" | "BrowserCategory" | 
+  "BSplineCurve3DBox" | "BSplineCurve3DBoxOptions" | "BSplineCurveBox" | 
+  "BSplineCurveBoxOptions" | "BSplineSurface3DBox" | 
+  "BSplineSurface3DBoxOptions" | "ButtonCell" | "ButtonContents" | 
+  "ButtonStyleMenuListing" | "CachedValue" | "CacheGraphics" | 
+  "CardinalBSplineBasis" | "CellBoundingBox" | "CellContents" | 
+  "CellElementsBoundingBox" | "CellElementSpacings" | 
+  "CellEvaluationLanguage" | "CellLabelTemplate" | "ChangeOptions" | 
+  "ChannelHistoryLength" | "ChannelListenerWait" | "ChartElementData" | 
+  "ChartElementDataFunction" | "CheckAll" | "CheckboxBox" | 
+  "CheckboxBoxOptions" | "CircleBox" | "ClipboardNotebook" | 
+  "ClockwiseContourIntegral" | "Closed" | "ClosingEvent" | 
+  "CloudObjectInformation" | "CloudObjectInformationData" | "Coarse" | 
+  "CoefficientDomain" | "ColonForm" | "ColorSetterBox" | 
+  "ColorSetterBoxOptions" | "ColumnBackgrounds" | 
+  "CompletionsListPacket" | "ComponentwiseContextMenu" | 
+  "CompressedData" | "ConeBox" | "ConicHullRegion3DBox" | 
+  "ConicHullRegionBox" | "Connect" | "ConsoleMessage" | 
+  "ConsoleMessagePacket" | "ConsolePrint" | "ContentsBoundingBox" | 
+  "ContextMenu" | "Continuation" | "ContourIntegral" | "ContourSmoothing" | 
+  "ControlAlignment" | "ControlGroupContentsBox" | "ControllerDuration" | 
+  "ControllerInformationData" | "ConvertToBitmapPacket" | 
+  "ConvertToPostScript" | "ConvertToPostScriptPacket" | "Cookies" | 
+  "CopyTag" | "CounterBox" | "CounterBoxOptions" | 
+  "CounterClockwiseContourIntegral" | "CounterEvaluator" | 
+  "CounterStyle" | "CreateDataStructure" | "CreatePalettePacket" | 
+  "CuboidBox" | "CurlyDoubleQuote" | "CurlyQuote" | 
+  "CurrentlySpeakingPacket" | "CylinderBox" | "DampingFactor" | 
+  "DataCompression" | "DataStructure" | "DataStructureQ" | 
+  "DateDelimiters" | "DebugTag" | "Decimal" | "DeclareKnownSymbols" | 
+  "DefaultControlPlacement" | "DefaultFormatTypeForStyle" | 
+  "DefaultInputFormatType" | "DefaultOutputFormatType" | "DefaultStyle" | 
+  "DefaultTextFormatType" | "DefaultTextInlineFormatType" | 
+  "DefaultValue" | "DefaultValues" | "DefineExternal" | 
+  "DegreeLexicographic" | "DegreeReverseLexicographic" | 
+  "DeleteWithContents" | "DelimitedArray" | "DestroyAfterEvaluation" | 
+  "DeviceOpenQ" | "DialogIndent" | "DialogLevel" | "DifferenceOrder" | 
+  "DigitBlockMinimum" | "DisableConsolePrintPacket" | "DiskBox" | 
+  "DispatchQ" | "DisplayFlushImagePacket" | "DisplayRules" | 
+  "DisplaySetSizePacket" | "DisplayTemporary" | "DisplayWith" | 
+  "DisplayWithRef" | "DisplayWithVariable" | "DistributionDomain" | 
+  "Divergence" | "DocumentGeneratorInformationData" | 
+  "DomainRegistrationInformation" | "DOSTextFormat" | 
+  "DoubleContourIntegral" | "DoublyInfinite" | "Down" | "DrawEdges" | 
+  "DrawFrontFaces" | "DrawHighlighted" | "DualLinearProgramming" | 
+  "DumpGet" | "DynamicBox" | "DynamicBoxOptions" | "DynamicLocation" | 
+  "DynamicModuleBox" | "DynamicModuleBoxOptions" | "DynamicModuleParent" | 
+  "DynamicName" | "DynamicNamespace" | "DynamicReference" | 
+  "DynamicUpdating" | "DynamicWrapperBox" | "DynamicWrapperBoxOptions" | 
+  "EdgeCapForm" | "EdgeColor" | "EdgeDashing" | "EdgeJoinForm" | 
+  "EdgeOpacity" | "EdgeThickness" | "EditButtonSettings" | 
+  "EliminationOrder" | "EllipticReducedHalfPeriods" | "EmbeddingObject" | 
+  "EmphasizeSyntaxErrors" | "Empty" | "EnableConsolePrintPacket" | 
+  "EndAdd" | "EndFrontEndInteractionPacket" | "EngineEnvironment" | 
+  "Enter" | "EqualColumns" | "EqualRows" | "EquatedTo" | "ErrorBoxOptions" | 
+  "ErrorNorm" | "ErrorPacket" | "ErrorsDialogSettings" | "Evaluated" | 
+  "EvaluationMode" | "EvaluationOrder" | "EventEvaluator" | 
+  "EventHandlerTag" | "ExactRootIsolation" | "ExitDialog" | 
+  "ExpectationE" | "ExportPacket" | "ExpressionPacket" | "ExpressionUUID" | 
+  "ExternalCall" | "ExternalFunctionName" | "Fail" | 
+  "FEDisableConsolePrintPacket" | "FEEnableConsolePrintPacket" | 
+  "FileHandler" | "FileInformation" | "FileName" | "FilledCurveBox" | 
+  "FilledCurveBoxOptions" | "Fine" | "FitAll" | "FlashSelection" | 
+  "FlushPrintOutputPacket" | "FoldWhile" | "FoldWhileList" | "Font" | 
+  "FontName" | "FontOpacity" | "FontPostScriptName" | "FontReencoding" | 
+  "FormatRules" | "FormatValues" | "FrameInset" | "Frameless" | 
+  "FrontEndObject" | "FrontEndResource" | "FrontEndResourceString" | 
+  "FrontEndValueCache" | "FrontEndVersion" | "FrontFaceColor" | 
+  "FrontFaceOpacity" | "FullAxes" | "Generic" | 
+  "GeometricTransformation3DBox" | 
+  "GeometricTransformation3DBoxOptions" | "GeometricTransformationBox" | 
+  "GeometricTransformationBoxOptions" | "GestureHandlerTag" | 
+  "GetBoundingBoxSizePacket" | "GetContext" | "GetFileName" | 
+  "GetFrontEndOptionsDataPacket" | "GetLinebreakInformationPacket" | 
+  "GetMenusPacket" | "GetPageBreakInformationPacket" | 
+  "GlobalPreferences" | "GlobalSession" | "GraphElementData" | 
+  "Graphics3DBox" | "Graphics3DBoxOptions" | "GraphicsBaseline" | 
+  "GraphicsBox" | "GraphicsBoxOptions" | "GraphicsColor" | 
+  "GraphicsComplex3DBox" | "GraphicsComplex3DBoxOptions" | 
+  "GraphicsComplexBox" | "GraphicsComplexBoxOptions" | 
+  "GraphicsContents" | "GraphicsData" | "GraphicsGridBox" | 
+  "GraphicsGroup3DBox" | "GraphicsGroup3DBoxOptions" | 
+  "GraphicsGroupBox" | "GraphicsGroupBoxOptions" | "GraphicsGrouping" | 
+  "GraphicsHighlightColor" | "GraphicsStyle" | "GraphRoot" | 
+  "GridBoxAlignment" | "GridBoxBackground" | "GridBoxDividers" | 
+  "GridBoxFrame" | "GridBoxItemSize" | "GridBoxItemStyle" | 
+  "GridBoxOptions" | "GridBoxSpacings" | "GridElementStyleOptions" | 
+  "GroupTogetherGrouping" | "GroupTogetherNestedGrouping" | "HalfSpace" | 
+  "HeadCompose" | "HelpBrowserLookup" | "HelpBrowserNotebook" | "Hessian" | 
+  "HexahedronBox" | "HexahedronBoxOptions" | "HomePage" | "Horizontal" | 
+  "HorizontalForm" | "HorizontalScrollPosition" | 
+  "HyperlinkCreationSettings" | "Hyperplane" | "HyphenationOptions" | 
+  "IconizedObject" | "IgnoreSpellCheck" | "ImageCache" | 
+  "ImageCacheValid" | "ImageMarkers" | "ImageOffset" | "ImageRangeCache" | 
+  "ImageSizeCache" | "ImageSizeRaw" | "IncludeSingularTerm" | "Indent" | 
+  "IndentingNewlineSpacings" | "IndentMaxFraction" | 
+  "IndexCreationOptions" | "IndexTag" | "Inequality" | "InexactNumbers" | 
+  "InformationData" | "InformationDataGrid" | "InlineCounterAssignments" | 
+  "InlineCounterIncrements" | "InlineRules" | "InputFieldBox" | 
+  "InputFieldBoxOptions" | "InputGrouping" | "InputSettings" | 
+  "InputToBoxFormPacket" | "InsertionPointObject" | "Inset3DBox" | 
+  "Inset3DBoxOptions" | "InsetBox" | "InsetBoxOptions" | "Integral" | 
+  "Interlaced" | "InterpolationPrecision" | "InterpretationFunction" | 
+  "InterpretTemplate" | "InterruptSettings" | "Into" | 
+  "InvisibleApplication" | "InvisibleTimes" | "ItemBox" | 
+  "ItemBoxOptions" | "Jacobian" | "JoinedCurveBox" | 
+  "JoinedCurveBoxOptions" | "K" | "KernelExecute" | "Ket" | 
+  "LabeledSlider" | "LambertW" | "LanguageOptions" | "Launch" | 
+  "LayoutInformation" | "Lexicographic" | "LicenseID" | "Line3DBox" | 
+  "Line3DBoxOptions" | "LinearFilter" | "LineBox" | "LineBoxOptions" | 
+  "LineBreak" | "LinebreakSemicolonWeighting" | "LineColor" | 
+  "LineOpacity" | "LineWrapParts" | "LinkConnectedQ" | "LinkError" | 
+  "LinkFlush" | "LinkHost" | "LinkMode" | "LinkOptions" | "LinkReadHeld" | 
+  "LinkService" | "LinkWriteHeld" | "Listen" | "ListPickerBoxBackground" | 
+  "LiteralSearch" | "LocalizeDefinitions" | "LocatorBox" | 
+  "LocatorBoxOptions" | "LocatorCentering" | "LocatorPaneBox" | 
+  "LocatorPaneBoxOptions" | "LongEqual" | "LongForm" | "Loopback" | 
+  "MachineID" | "MachineName" | "MacintoshSystemPageSetup" | "MainSolve" | 
+  "MaintainDynamicCaches" | "MakeRules" | "MatchLocalNameQ" | "Material" | 
+  "MathematicaNotation" | "MathMLText" | "MaxBend" | "MaxPoints" | "Menu" | 
+  "MenuAppearance" | "MenuEvaluator" | "MenuItem" | "MenuList" | 
+  "MergeDifferences" | "MessageObject" | "MessageOptions" | 
+  "MessagesNotebook" | "MetaCharacters" | "MethodOptions" | 
+  "MinRecursion" | "MinSize" | "Mode" | "Modular" | "Momentary" | 
+  "MonomialOrder" | "MouseAppearanceTag" | "MouseButtons" | 
+  "MousePointerNote" | "MultiLetterItalics" | "MultiLetterStyle" | 
+  "Multiplicity" | "NamespaceBox" | "NamespaceBoxOptions" | "NBernoulliB" | 
+  "NeedCurrentFrontEndPackagePacket" | 
+  "NeedCurrentFrontEndSymbolsPacket" | "NestedScriptRules" | 
+  "NetworkPacketRecordingDuring" | "NewPrimitiveStyle" | "Next" | 
+  "NonAssociative" | "NormalGrouping" | "NotebookCreateReturnObject" | 
+  "NotebookDefault" | "NotebookFindReturnObject" | 
+  "NotebookGetLayoutInformationPacket" | 
+  "NotebookGetMisspellingsPacket" | "NotebookInterfaceObject" | 
+  "NotebookOpenReturnObject" | "NotebookPutReturnObject" | 
+  "NotebookResetGeneratedCells" | "NotebookSaveAs" | 
+  "NotebookSetupLayoutInformationPacket" | "NProductFactors" | 
+  "NSumTerms" | "NValues" | "OLEData" | "Open" | "OpenerBox" | 
+  "OpenerBoxOptions" | "OpenFunctionInspectorPacket" | 
+  "OpenSpecialOptions" | "OptionQ" | "OptionsPacket" | "OptionValueBox" | 
+  "OptionValueBoxOptions" | "OutputFormData" | "OutputGrouping" | 
+  "OutputMathEditExpression" | "Over" | "OverlayBox" | 
+  "OverlayBoxOptions" | "Package" | "PageHeight" | "PaneBox" | 
+  "PaneBoxOptions" | "PanelBox" | "PanelBoxOptions" | "PaneSelectorBox" | 
+  "PaneSelectorBoxOptions" | "PaperWidth" | "Parameter" | 
+  "ParameterVariables" | "ParentConnect" | "ParentForm" | "Parenthesize" | 
+  "ParentList" | "PartialD" | "PasteAutoQuoteCharacters" | "PausedTime" | 
+  "PeriodicInterpolation" | "PermissionsGroupMemberQ" | "Perpendicular" | 
+  "Pivoting" | "PlotRangeClipPlanesStyle" | "Point3DBox" | 
+  "Point3DBoxOptions" | "PointBox" | "PointBoxOptions" | "Polygon3DBox" | 
+  "Polygon3DBoxOptions" | "PolygonBox" | "PolygonBoxOptions" | 
+  "PolygonHoleScale" | "PolygonScale" | "PolynomialForm" | "Polynomials" | 
+  "PopupMenuBox" | "PopupMenuBoxOptions" | "PostScript" | "Precedence" | 
+  "PredictionRoot" | "Previous" | "PrimaryPlaceholder" | "PrintForm" | 
+  "PrismBox" | "PrismBoxOptions" | "PrivateFrontEndOptions" | 
+  "ProbabilityPr" | "ProcessStateDomain" | "ProcessTimeDomain" | 
+  "ProgressIndicatorBox" | "ProgressIndicatorBoxOptions" | "PromptForm" | 
+  "PyramidBox" | "PyramidBoxOptions" | "RadioButtonBox" | 
+  "RadioButtonBoxOptions" | "RandomSeed" | "RangeSpecification" | 
+  "Raster3DBox" | "Raster3DBoxOptions" | "RasterBox" | "RasterBoxOptions" | 
+  "RationalFunctions" | "RawArray" | "RawMedium" | "RectangleBox" | 
+  "RectangleBoxOptions" | "RecurringDigitsForm" | "RefBox" | 
+  "ReferenceMarkers" | "ReferenceMarkerStyle" | "Reinstall" | "Removed" | 
+  "RepeatedString" | "ResetMenusPacket" | "ResourceAcquire" | 
+  "ResourceSubmissionObject" | "ResourceSystemBase" | 
+  "ReturnEntersInput" | "ReturnInputFormPacket" | "RotationBox" | 
+  "RotationBoxOptions" | "RoundImplies" | "RowBackgrounds" | "RowHeights" | 
+  "RuleCondition" | "RuleForm" | "SaveAutoDelete" | "ScaledMousePosition" | 
+  "ScheduledTaskInformationData" | "ScriptForm" | "ScriptRules" | 
+  "SectionGrouping" | "Selection" | "SelectionCell" | 
+  "SelectionCellCreateCell" | "SelectionCellDefaultStyle" | 
+  "SelectionCellParentStyle" | "SelectionDebuggerTag" | 
+  "SelectionDuplicateCell" | "SelectionPlaceholder" | 
+  "SelectionSetStyle" | "SelectWithContents" | "SelfLoops" | 
+  "ServiceResponse" | "Setbacks" | "SetBoxFormNamesPacket" | 
+  "SetEvaluationNotebook" | "SetFileLoadingContext" | 
+  "SetNotebookStatusLine" | "SetOptionsPacket" | 
+  "SetSecuredAuthenticationKey" | "SetSpeechParametersPacket" | 
+  "SetterBox" | "SetterBoxOptions" | "SetValue" | "ShowAutoConvert" | 
+  "ShowCodeAssist" | "ShowControls" | "ShowGroupOpenCloseIcon" | 
+  "ShowInvisibleCharacters" | "ShowPredictiveInterface" | 
+  "ShowSyntaxStyles" | "ShrinkWrapBoundingBox" | "SingleEvaluation" | 
+  "SingleLetterStyle" | "Slider2DBox" | "Slider2DBoxOptions" | 
+  "SliderBox" | "SliderBoxOptions" | "Socket" | "SolveDelayed" | 
+  "SoundAndGraphics" | "Space" | "SpaceForm" | "SpanningCharacters" | 
+  "SpeakTextPacket" | "SpellingSuggestionsPacket" | "SphereBox" | 
+  "StartupSound" | "StringBreak" | "StringByteCount" | "StrokeForm" | 
+  "StructuredArrayHeadQ" | "StyleHints" | "StyleKeyMapping" | 
+  "StyleNames" | "SubValues" | "SurdForm" | "Syntax" | "SystemException" | 
+  "SystemGet" | "SystemInformationData" | "SystemStub" | "SystemTest" | 
+  "Tab" | "TableView" | "TableViewBox" | "TableViewBoxBackground" | 
+  "TableViewBoxOptions" | "TabViewBox" | "TabViewBoxOptions" | 
+  "TagBoxNote" | "TagStyle" | "TemplateArgBox" | "TemplateEvaluate" | 
+  "TemplateSlotSequence" | "TemplateUnevaluated" | "TemplateVerbatim" | 
+  "TemporaryVariable" | "TensorQ" | "TetrahedronBox" | 
+  "TetrahedronBoxOptions" | "Text3DBox" | "Text3DBoxOptions" | "TextBand" | 
+  "TextBoundingBox" | "TextBox" | "TextForm" | "TextLine" | 
+  "TextParagraph" | "ThisLink" | "TitleGrouping" | "ToColor" | "Toggle" | 
+  "ToggleFalse" | "TogglerBox" | "TogglerBoxOptions" | "TooBig" | 
+  "TooltipBox" | "TooltipBoxOptions" | "TotalHeight" | "TraceAction" | 
+  "TraceInternal" | "TraceLevel" | "TradingChart" | "TraditionalNotation" | 
+  "TraditionalOrder" | "TransparentColor" | "TrapSelection" | 
+  "TubeBezierCurveBox" | "TubeBezierCurveBoxOptions" | "TubeBox" | 
+  "TubeBoxOptions" | "TubeBSplineCurveBox" | 
+  "TubeBSplineCurveBoxOptions" | "UntrackedVariables" | "Up" | 
+  "UpdateDynamicObjects" | "UpdateDynamicObjectsSynchronous" | 
+  "UseGraphicsRange" | "UserDefinedWavelet" | "Using" | "V2Get" | "Value" | 
+  "ValueBox" | "ValueBoxOptions" | "ValueForm" | "ValuesData" | 
+  "VectorGlyphData" | "Verbose" | "VerboseConvertToPostScriptPacket" | 
+  "Version" | "VersionNumber" | "Vertical" | "VerticalForm" | 
+  "ViewPointSelectorSettings" | "ViewPort" | "VirtualGroupData" | 
+  "VisibleCell" | "WaitUntil" | "WindowPersistentStyles" | 
+  "WindowSelected" | "WindowWidth" | "WolframAlphaDate" | 
+  "WolframAlphaQuantity" | "WolframAlphaResult" | "$ActivationGroupID" | 
+  "$ActivationUserRegistered" | "$AddOnsDirectory" | "$BoxForms" | 
+  "$CloudVersionNumber" | "$CloudWolframEngineVersionNumber" | 
+  "$ConditionHold" | "$DefaultFrontEnd" | "$DefaultMailbox" | 
+  "$DefaultPath" | "$FinancialDataSource" | "$GeoEntityTypes" | 
+  "$GeoLocationPrecision" | "$HTMLExportRules" | "$HTTPRequest" | 
+  "$InterfaceEnvironment" | "$LaunchDirectory" | "$LicenseProcesses" | 
+  "$LicenseSubprocesses" | "$LicenseType" | "$LinkSupported" | 
+  "$LoadedFiles" | "$MaxLicenseProcesses" | "$MaxLicenseSubprocesses" | 
+  "$MinorReleaseNumber" | "$NetworkLicense" | "$Off" | "$OutputForms" | 
+  "$PasswordFile" | "$PatchLevelID" | "$PermissionsGroupBase" | 
+  "$PipeSupported" | "$PreferencesDirectory" | "$PrintForms" | 
+  "$PrintLiteral" | "$RegisteredDeviceClasses" | "$RegisteredUserName" | 
+  "$ResourceSystemBase" | "$SecuredAuthenticationKeyTokens" | 
+  "$SetParentLink" | "$SoundDisplay" | "$StructuredArrayHeads" | 
+  "$SuppressInputFormHeads" | "$SystemMemory" | "$TraceOff" | "$TraceOn" | 
+  "$TracePattern" | "$TracePostAction" | "$TracePreAction" | 
+  "$UserAgentLanguages" | "$UserAgentMachine" | "$UserAgentName" | 
+  "$UserAgentOperatingSystem" | "$UserAgentVersion" | "$UserName", _] -> scanUndocumentedSymbols,
 
 (*
 Scan symbols that are documented as OBSOLETE
 *)
-LeafNode[Symbol, "$$Media" | "$AsynchronousTask" | "$DefaultFont" | "$EntityStores" | 
-                  "$FormatType" | "$HTTPCookies" | "$InstallationDate" | 
-                  "$MachineDomain" | "$ProductInformation" | "$ProgramName" | 
-                  "$RandomState" | "$ScheduledTask" | "$TemporaryPrefix" | "$TextStyle" |
-                  "$TopDirectory" | "$UserAddOnsDirectory" | "AbortScheduledTask" | 
-                  "Active" | "AlgebraicRules" | "Alias" | "AmbientLight" | 
-                  "AnatomyForm" | "AnimationCycleOffset" | "AnimationCycleRepetitions" |
-                  "AnimationDisplayTime" | "AspectRatioFixed" | "AstronomicalData" | 
-                  "AsynchronousTaskObject" | "AsynchronousTasks" | "AudioDevice" |
-                  "ButtonEvaluator" | "ButtonExpandable" | "ButtonFrame" | 
-                  "ButtonMargins" | "ButtonNote" | "ButtonStyle" | "CDFInformation" | 
-                  "CellArray" | "ChebyshevDistance" | "ClassifierInformation" | 
-                  "ClipFill" | "ColorOutput" | "ColumnForm" | "Compose" | 
-                  "ConstrainedMax" | "ConstrainedMin" | "ContourGraphics" |
-                  "ContourLevels" | "ContourLines" | "ContourSpacing" | 
-                  "ConversionOptions" | "CreateScheduledTask" | "CreateTemporary" | 
-                  "Date" | "Debug" | "DefaultColor" | "DefaultFont" | "DensityGraphics" |
-                  "Display" | "DisplayString" | "DotPlusLayer" | "DragAndDrop" | 
-                  "DSolveConstants" | "Dump" | "EdgeLabeling" | "EdgeRenderingFunction" |
-                  "EvaluateScheduledTask" | "ExpectedValue" | "FactorComplete" | 
-                  "FontForm" | "FormTheme" | "FromASCII" | "FromDate" | "FullOptions" | 
-                  "GraphicsArray" | "GraphicsSpacing" | "GridBaseline" | "HeldPart" | 
-                  "HiddenSurface" | "HomeDirectory" | "HTMLSave" | "ImageRotated" | 
-                  "InstanceNormalizationLayer" | "LegendreType" | "LightSources" | 
-                  "LinkOpen" | "Literal" | "LongestMatch" | "LUBackSubstitution" |
-                  "MeshRange" | "NextScheduledTaskTime" | "NotebookCreate" | 
-                  "OpenTemporary" | "PackingMethod" | "Plot3Matrix" | "PlotDivision" | 
-                  "PlotJoined" | "PolygonIntersections" | "PredictorInformation" | 
-                  "QuantityThread" | "Random" | "RasterArray" | "RecognitionThreshold" |
-                  "Release" | "RemoveAsynchronousTask" | "RemoveScheduledTask" | 
-                  "RenderAll" | "ReplaceHeldPart" | "ResetMedium" | 
-                  "ResetScheduledTask" | "ResumePacket" | "RunScheduledTask" | 
-                  "ScheduledTaskActiveQ" | "ScheduledTaskInformation" | 
-                  "ScheduledTaskObject" | "ScheduledTasks" | "SelectionAnimate" | 
-                  "SequenceAttentionLayer" | "SequenceForm" | "Shading" | 
-                  "ShortestMatch" | "SingularValues" | "SkinStyle" | "Splice" | 
-                  "StartAsynchronousTask" | "StartScheduledTask" | "StateDimensions" | 
-                  "StopAsynchronousTask" | "StopScheduledTask" | "StyleForm" | 
-                  "StylePrint" | "Subscripted" | "SurfaceColor" | "SurfaceGraphics" | 
-                  "SuspendPacket" | "TeXSave" | "TextStyle" | "ThreadDepth" | 
-                  "TimeWarpingCorrespondence" | "TimeWarpingDistance" | "ToASCII" | 
-                  "ToDate" | "ToFileName" | "ToHeldExpression" | "URLFetch" | 
-                  "URLFetchAsynchronous" | "URLSave" | "URLSaveAsynchronous" | 
-                  "VertexCoordinateRules" | "VertexLabeling" | 
-                  "VertexRenderingFunction" | "WaitAsynchronousTask" | "WindowMovable", _] -> scanObsoleteSymbols,
+LeafNode[Symbol,
+  "$$Media" | "$AsynchronousTask" | "$DefaultFont" | "$EntityStores" | 
+  "$FormatType" | "$HTTPCookies" | "$InstallationDate" | 
+  "$MachineDomain" | "$ProductInformation" | "$ProgramName" | 
+  "$RandomState" | "$ScheduledTask" | "$TemporaryPrefix" | "$TextStyle" |
+  "$TopDirectory" | "$UserAddOnsDirectory" | "AbortScheduledTask" | 
+  "Active" | "AlgebraicRules" | "Alias" | "AmbientLight" | 
+  "AnatomyForm" | "AnimationCycleOffset" | "AnimationCycleRepetitions" |
+  "AnimationDisplayTime" | "AspectRatioFixed" | "AstronomicalData" | 
+  "AsynchronousTaskObject" | "AsynchronousTasks" | "AudioDevice" |
+  "ButtonEvaluator" | "ButtonExpandable" | "ButtonFrame" | 
+  "ButtonMargins" | "ButtonNote" | "ButtonStyle" | "CDFInformation" | 
+  "CellArray" | "ChebyshevDistance" | "ClassifierInformation" | 
+  "ClipFill" | "ColorOutput" | "ColumnForm" | "Compose" | 
+  "ConstrainedMax" | "ConstrainedMin" | "ContourGraphics" |
+  "ContourLevels" | "ContourLines" | "ContourSpacing" | 
+  "ConversionOptions" | "CreateScheduledTask" | "CreateTemporary" | 
+  "Date" | "Debug" | "DefaultColor" | "DefaultFont" | "DensityGraphics" |
+  "Display" | "DisplayString" | "DotPlusLayer" | "DragAndDrop" | 
+  "DSolveConstants" | "Dump" | "EdgeLabeling" | "EdgeRenderingFunction" |
+  "EvaluateScheduledTask" | "ExpectedValue" | "FactorComplete" | 
+  "FontForm" | "FormTheme" | "FromASCII" | "FromDate" | "FullOptions" | 
+  "GraphicsArray" | "GraphicsSpacing" | "GridBaseline" | "HeldPart" | 
+  "HiddenSurface" | "HomeDirectory" | "HTMLSave" | "ImageRotated" | 
+  "InstanceNormalizationLayer" | "LegendreType" | "LightSources" | 
+  "LinkOpen" | "Literal" | "LongestMatch" | "LUBackSubstitution" |
+  "MeshRange" | "NextScheduledTaskTime" | "NotebookCreate" | 
+  "OpenTemporary" | "PackingMethod" | "Plot3Matrix" | "PlotDivision" | 
+  "PlotJoined" | "PolygonIntersections" | "PredictorInformation" | 
+  "QuantityThread" | "Random" | "RasterArray" | "RecognitionThreshold" |
+  "Release" | "RemoveAsynchronousTask" | "RemoveScheduledTask" | 
+  "RenderAll" | "ReplaceHeldPart" | "ResetMedium" | 
+  "ResetScheduledTask" | "ResumePacket" | "RunScheduledTask" | 
+  "ScheduledTaskActiveQ" | "ScheduledTaskInformation" | 
+  "ScheduledTaskObject" | "ScheduledTasks" | "SelectionAnimate" | 
+  "SequenceAttentionLayer" | "SequenceForm" | "Shading" | 
+  "ShortestMatch" | "SingularValues" | "SkinStyle" | "Splice" | 
+  "StartAsynchronousTask" | "StartScheduledTask" | "StateDimensions" | 
+  "StopAsynchronousTask" | "StopScheduledTask" | "StyleForm" | 
+  "StylePrint" | "Subscripted" | "SurfaceColor" | "SurfaceGraphics" | 
+  "SuspendPacket" | "TeXSave" | "TextStyle" | "ThreadDepth" | 
+  "TimeWarpingCorrespondence" | "TimeWarpingDistance" | "ToASCII" | 
+  "ToDate" | "ToFileName" | "ToHeldExpression" | "URLFetch" | 
+  "URLFetchAsynchronous" | "URLSave" | "URLSaveAsynchronous" | 
+  "VertexCoordinateRules" | "VertexLabeling" | 
+  "VertexRenderingFunction" | "WaitAsynchronousTask" | "WindowMovable", _] -> scanObsoleteSymbols,
 
 (*
 Scan symbols that are documented as EXPERIMENTAL
 *)
-LeafNode[Symbol, "ActiveClassification" | "ActiveClassificationObject" | 
-                  "ActivePrediction" | "ActivePredictionObject" | "AddToSearchIndex" | 
-                  "AggregatedEntityClass" | "AggregationLayer" | "AngleBisector" | 
-                  "AnnotationDelete" | "AnnotationRules" | "AnomalyDetection" | 
-                  "AnomalyDetectorFunction" | "AppendLayer" | "Around" | "AroundReplace" | 
-                  "AskAppend" | "AskConfirm" | "AskDisplay" | "AskedQ" | "AskedValue" | 
-                  "AskFunction" | "Ask" | "AskState" | "AskTemplateDisplay" | 
-                  "AssumeDeterministic" | "AsymptoticDSolveValue" | 
-                  "AsymptoticIntegrate" | "AsymptoticRSolveValue" | "AsymptoticSolve" | 
-                  "AsymptoticSum" | "AtomCoordinates" | "AtomCount" | 
-                  "AtomDiagramCoordinates" | "AtomList" | "Atom" | "AttentionLayer" | 
-                  "AudioAnnotate" | "AudioAnnotationLookup" | "AudioIdentify" | 
-                  "AudioLooping" | "AudioPause" | "AudioPlay" | "AudioRecord" | 
-                  "AudioStop" | "AudioStream" | "AudioStreams" | "Autocomplete" | 
-                  "AutocompletionFunction" | "AxiomaticTheory" | "BaseDecode" | 
-                  "BaseEncode" | "BasicRecurrentLayer" | "BatchNormalizationLayer" | 
-                  "BatchSize" | "BayesianMaximization" | "BayesianMaximizationObject" | 
-                  "BayesianMinimization" | "BayesianMinimizationObject" | 
-                  "BlockchainAddressData-ARK" | "BlockchainAddressData-Ethereum" | 
-                  "BlockchainAddressData" | "BlockchainBase" | "BlockchainBlockData-ARK" | 
-                  "BlockchainBlockData-Bitcoin" | "BlockchainBlockData-Ethereum" | 
-                  "BlockchainBlockData" | "BlockchainContractValue" | 
-                  "BlockchainData-ARK" | "BlockchainData-Bitcoin" | 
-                  "BlockchainData-Ethereum" | "BlockchainData" | "BlockchainGet" | 
-                  "BlockchainKeyEncode" | "BlockchainPut" | "BlockchainTokenData" | 
-                  "BlockchainTransaction-ARK" | "BlockchainTransaction-Bitcoin" | 
-                  "BlockchainTransactionData-ARK" | "BlockchainTransactionData-Bitcoin" | 
-                  "BlockchainTransactionData-Ethereum" | "BlockchainTransactionData" | 
-                  "BlockchainTransaction-Ethereum" | "BlockchainTransaction" | 
-                  "BlockchainTransactionSign-ARK" | "BlockchainTransactionSign-Bitcoin" | 
-                  "BlockchainTransactionSign-Ethereum" | "BlockchainTransactionSign" | 
-                  "BlockchainTransactionSubmit-ARK" | 
-                  "BlockchainTransactionSubmit-Bitcoin" | 
-                  "BlockchainTransactionSubmit-Ethereum" | 
-                  "BlockchainTransactionSubmit" | "BondCount" | "BondList" | "Bond" | 
-                  "BondQ" | "CatenateLayer" | "ChannelBase" | "ChannelBrokerAction" | 
-                  "ChannelDatabin" | "ChannelListener" | "ChannelListeners" | 
-                  "ChannelListen" | "ChannelObject" | "ChannelPreSendFunction" | 
-                  "ChannelReceiverFunction" | "ChannelSend" | "ChannelSubscribers" | 
-                  "CloudExpression" | "CloudExpressions" | "CloudRenderingMethod" | 
-                  "CombinedEntityClass" | "CompiledCodeFunction" | "CompilerOptions" | 
-                  "ComputeUncertainty" | "ConnectedMoleculeComponents" | 
-                  "ConnectedMoleculeQ" | "ConnectionSettings" | 
-                  "ConnectSystemModelComponents" | "ConstantArrayLayer" | 
-                  "ConstantPlusLayer" | "ConstantTimesLayer" | "Containing" | 
-                  "ContentFieldOptions" | "ContentLocationFunction" | "ContentObject" | 
-                  "ContrastiveLossLayer" | "ConvolutionLayer" | "CreateChannel" | 
-                  "CreateCloudExpression" | "CreateDataSystemModel" | 
-                  "CreateSearchIndex" | "CreateSystemModel" | "CrossEntropyLossLayer" | 
-                  "CTCLossLayer" | "CurrentNotebookImage" | "CurrentScreenImage" | 
-                  "Curry" | "DatabaseConnect" | "DatabaseDisconnect" | 
-                  "DatabaseReference" | "DeconvolutionLayer" | "DecryptFile" | 
-                  "DefineResourceFunction" | "DeleteAnomalies" | "DeleteChannel" | 
-                  "DeleteCloudExpression" | "DeleteSearchIndex" | "DerivedKey" | 
-                  "DigitalSignature" | "DisableFormatting" | "DocumentWeightingRules" | 
-                  "DotLayer" | "DropoutLayer" | "DynamicGeoGraphics" | "DynamicImage" | 
-                  "ElementwiseLayer" | "EmbeddingLayer" | "EncryptFile" | 
-                  "EntityFunction" | "EntityStore" | "EvaluationEnvironment" | 
-                  "ExpirationDate" | "ExtendedEntityClass" | "ExternalEvaluate" | 
-                  "ExternalFunction" | "ExternalObject" | "ExternalSessionObject" | 
-                  "ExternalSessions" | "ExternalValue" | "ExtractLayer" | 
-                  "FacialFeatures" | "FeatureDistance" | "FeatureExtraction" | 
-                  "FeatureExtract" | "FeatureExtractorFunction" | "FeatureExtractor" | 
-                  "FeatureSpacePlot3D" | "FeatureSpacePlot" | "FileConvert" | 
-                  "FilteredEntityClass" | "FindAnomalies" | "FindChannels" | 
-                  "FindEquationalProof" | "FindExternalEvaluators" | 
-                  "FindGeometricConjectures" | "FindMoleculeSubstructure" | 
-                  "FindSystemModelEquilibrium" | "FindTextualAnswer" | "FlattenLayer" | 
-                  "FormControl" | "FunctionCompileExportByteArray" | 
-                  "FunctionCompileExportLibrary" | "FunctionCompileExport" | 
-                  "FunctionCompileExportString" | "FunctionCompile" | "GalleryView" | 
-                  "GatedRecurrentLayer" | "GenerateDerivedKey" | 
-                  "GenerateDigitalSignature" | "GenerateSecuredAuthenticationKey" | 
-                  "GeometricAssertion" | "GeometricScene" | "HandlerFunctionsKeys" | 
-                  "HandlerFunctions" | "Iconize" | "ImageAugmentationLayer" | 
-                  "ImageBoundingBoxes" | "ImageCases" | "ImageContainsQ" | 
-                  "ImageContents" | "ImageGraphics" | "ImagePosition" | 
-                  "ImagePyramidApply" | "ImagePyramid" | "IncludeAromaticBonds" | 
-                  "IncludeHydrogens" | "IncludeRelatedTables" | 
-                  "InitialEvaluationHistory" | "InitializationObjects" | 
-                  "InitializationValue" | "Initialize" | "InverseImagePyramid" | 
-                  "InverseSpectrogram" | "KernelFunction" | "LearnDistribution" | 
-                  "LearnedDistribution" | "LearningRateMultipliers" | "LinearLayer" | 
-                  "LocalResponseNormalizationLayer" | "LocalSubmit" | 
-                  "LongShortTermMemoryLayer" | "LossFunction" | "MailExecute" | 
-                  "MailFolder" | "MailItem" | "MailSearch" | "MailServerConnection" | 
-                  "MailServerConnect" | "MaxTrainingRounds" | "MaxWordGap" | 
-                  "MeanAbsoluteLossLayer" | "MeanAround" | "MeanSquaredLossLayer" | 
-                  "MergingFunction" | "Midpoint" | "MissingValuePattern" | 
-                  "MoleculeContainsQ" | "MoleculeEquivalentQ" | "MoleculeGraph" | 
-                  "MoleculeModify" | "Molecule" | "MoleculePattern" | "MoleculePlot3D" | 
-                  "MoleculePlot" | "MoleculeProperty" | "MoleculeQ" | "MoleculeValue" | 
-                  "NBodySimulationData" | "NBodySimulation" | "NetAppend" | 
-                  "NetBidirectionalOperator" | "NetChain" | "NetDecoder" | "NetDelete" | 
-                  "NetDrop" | "NetEncoder" | "NetEvaluationMode" | "NetExtract" | 
-                  "NetFlatten" | "NetFoldOperator" | "NetGraph" | "NetInformation" | 
-                  "NetInitialize" | "NetInsert" | "NetInsertSharedArrays" | "NetJoin" | 
-                  "NetMapOperator" | "NetMapThreadOperator" | "NetMeasurements" | 
-                  "NetModel" | "NetNestOperator" | "NetPairEmbeddingOperator" | 
-                  "NetPortGradient" | "NetPort" | "NetPrepend" | "NetRename" | 
-                  "NetReplace" | "NetReplacePart" | "NetSharedArray" | "NetStateObject" | 
-                  "NetTake" | "NetTrain" | "NetTrainResultsObject" | 
-                  "NetworkPacketCapture" | "NetworkPacketRecording" | 
-                  "NetworkPacketTrace" | "NormalizationLayer" | "NumericArray" | 
-                  "NumericArrayQ" | "NumericArrayType" | "OrderingLayer" | "PaddingLayer" | 
-                  "Pagination" | "PartLayer" | "PartProtection" | "PerpendicularBisector" | 
-                  "PersistenceLocation" | "PersistenceTime" | "PersistentObject" | 
-                  "PersistentObjects" | "PersistentValue" | "PitchRecognize" | 
-                  "PoolingLayer" | "PrependLayer" | "PreserveColor" | "ProofObject" | 
-                  "PublisherID" | "RandomInstance" | "RarerProbability" | 
-                  "RegisterExternalEvaluator" | "RelationalDatabase" | 
-                  "RemoteAuthorizationCaching" | "RemoteConnectionObject" | 
-                  "RemoteConnect" | "RemoteFile" | "RemoteRun" | "RemoteRunProcess" | 
-                  "RemoveAudioStream" | "RemoveChannelListener" | 
-                  "RemoveChannelSubscribers" | "ReplicateLayer" | "ReshapeLayer" | 
-                  "ResizeLayer" | "ResourceFunction" | "ResourceRegister" | 
-                  "ResourceRemove" | "ResourceSearch" | "ResourceSubmit" | 
-                  "ResourceUpdate" | "SampledEntityClass" | "SearchAdjustment" | 
-                  "SearchIndexObject" | "SearchIndices" | "SearchQueryString" | 
-                  "SearchResultObject" | "SecuredAuthenticationKey" | 
-                  "SecuredAuthenticationKeys" | "SequenceLastLayer" | 
-                  "SequenceMostLayer" | "SequencePredict" | "SequencePredictorFunction" | 
-                  "SequenceRestLayer" | "SequenceReverseLayer" | "ServiceRequest" | 
-                  "ServiceSubmit" | "SessionSubmit" | "SetSystemModel" | "Snippet" | 
-                  "SnubPolyhedron" | "SocketListener" | "SocketListen" | "SocketOpen" | 
-                  "SocketReadMessage" | "SocketReadyQ" | "Sockets" | "SocketWaitAll" | 
-                  "SocketWaitNext" | "SoftmaxLayer" | "SortedEntityClass" | "SourceLink" | 
-                  "SpatialTransformationLayer" | "SpeechRecognize" | 
-                  "StartExternalSession" | "StartWebSession" | "StereochemistryElements" | 
-                  "SummationLayer" | "SynthesizeMissingValues" | "SystemInstall" | 
-                  "SystemModeler" | "SystemModelExamples" | "SystemModelLinearize" | 
-                  "SystemModel" | "SystemModelParametricSimulate" | "SystemModelPlot" | 
-                  "SystemModelProgressReporting" | "SystemModelReliability" | 
-                  "SystemModelSimulate" | "SystemModelSimulateSensitivity" | 
-                  "SystemModelSimulationData" | "SystemModels" | "TargetDevice" | 
-                  "TargetSystem" | "TaskAbort" | "TaskExecute" | "TaskObject" | 
-                  "TaskRemove" | "TaskResume" | "Tasks" | "TaskSuspend" | "TaskWait" | 
-                  "TextCases" | "TextContents" | "TextElement" | "TextPosition" | 
-                  "TextSearch" | "TextSearchReport" | "TextStructure" | "ThreadingLayer" | 
-                  "TotalLayer" | "TrainingProgressCheckpointing" | 
-                  "TrainingProgressFunction" | "TrainingProgressMeasurements" | 
-                  "TrainingProgressReporting" | "TrainingStoppingCriterion" | 
-                  "TransposeLayer" | "TriangleCenter" | "TriangleConstruct" | 
-                  "TriangleMeasurement" | "Typed" | "TypeSpecifier" | 
-                  "UnconstrainedParameters" | "UnitVectorLayer" | 
-                  "UnregisterExternalEvaluator" | "UpdateSearchIndex" | 
-                  "URLDownloadSubmit" | "ValenceErrorHandling" | 
-                  "ValuePreprocessingFunction" | "VectorAround" | "VerifyDerivedKey" | 
-                  "VerifyDigitalSignature" | "VerifyInterpretation" | "WebAudioSearch" | 
-                  "WebElementObject" | "WebExecute" | "WebImage" | "WebImageSearch" | 
-                  "WebSearch" | "WebSessionObject" | "WebSessions" | "WebWindowObject" | 
-                  "WikipediaSearch" | "ZoomCenter" | "ZoomFactor" | 
-                  "$AllowExternalChannelFunctions" | "$BlockchainBase" | "$ChannelBase" | 
-                  "$CookieStore" | "$CurrentTask" | "$CurrentWebSession" | 
-                  "$DefaultNetworkInterface" | "$IncomingMailSettings" | 
-                  "$InitializationContexts" | "$Initialization" | "$NetworkInterfaces" | 
-                  "$NoValue" | "$PersistenceBase" | "$PersistencePath" | 
-                  "$PreInitialization" | "$PublisherID" | "$ServiceCreditsAvailable" | 
-                  "$SourceLink" | "$SSHAuthentication" | "$SummaryBoxDataSizeLimit" | 
-                  "$TestFileName" | "$VoiceStyles", _] -> scanExperimentalSymbols,
+LeafNode[Symbol,
+  "ActiveClassification" | "ActiveClassificationObject" | 
+  "ActivePrediction" | "ActivePredictionObject" | "AddToSearchIndex" | 
+  "AggregatedEntityClass" | "AggregationLayer" | "AngleBisector" | 
+  "AnnotationDelete" | "AnnotationRules" | "AnomalyDetection" | 
+  "AnomalyDetectorFunction" | "AppendLayer" | "Around" | "AroundReplace" | 
+  "AskAppend" | "AskConfirm" | "AskDisplay" | "AskedQ" | "AskedValue" | 
+  "AskFunction" | "Ask" | "AskState" | "AskTemplateDisplay" | 
+  "AssumeDeterministic" | "AsymptoticDSolveValue" | 
+  "AsymptoticIntegrate" | "AsymptoticRSolveValue" | "AsymptoticSolve" | 
+  "AsymptoticSum" | "AtomCoordinates" | "AtomCount" | 
+  "AtomDiagramCoordinates" | "AtomList" | "Atom" | "AttentionLayer" | 
+  "AudioAnnotate" | "AudioAnnotationLookup" | "AudioIdentify" | 
+  "AudioLooping" | "AudioPause" | "AudioPlay" | "AudioRecord" | 
+  "AudioStop" | "AudioStream" | "AudioStreams" | "Autocomplete" | 
+  "AutocompletionFunction" | "AxiomaticTheory" | "BaseDecode" | 
+  "BaseEncode" | "BasicRecurrentLayer" | "BatchNormalizationLayer" | 
+  "BatchSize" | "BayesianMaximization" | "BayesianMaximizationObject" | 
+  "BayesianMinimization" | "BayesianMinimizationObject" | 
+  "BlockchainAddressData-ARK" | "BlockchainAddressData-Ethereum" | 
+  "BlockchainAddressData" | "BlockchainBase" | "BlockchainBlockData-ARK" | 
+  "BlockchainBlockData-Bitcoin" | "BlockchainBlockData-Ethereum" | 
+  "BlockchainBlockData" | "BlockchainContractValue" | 
+  "BlockchainData-ARK" | "BlockchainData-Bitcoin" | 
+  "BlockchainData-Ethereum" | "BlockchainData" | "BlockchainGet" | 
+  "BlockchainKeyEncode" | "BlockchainPut" | "BlockchainTokenData" | 
+  "BlockchainTransaction-ARK" | "BlockchainTransaction-Bitcoin" | 
+  "BlockchainTransactionData-ARK" | "BlockchainTransactionData-Bitcoin" | 
+  "BlockchainTransactionData-Ethereum" | "BlockchainTransactionData" | 
+  "BlockchainTransaction-Ethereum" | "BlockchainTransaction" | 
+  "BlockchainTransactionSign-ARK" | "BlockchainTransactionSign-Bitcoin" | 
+  "BlockchainTransactionSign-Ethereum" | "BlockchainTransactionSign" | 
+  "BlockchainTransactionSubmit-ARK" | 
+  "BlockchainTransactionSubmit-Bitcoin" | 
+  "BlockchainTransactionSubmit-Ethereum" | 
+  "BlockchainTransactionSubmit" | "BondCount" | "BondList" | "Bond" | 
+  "BondQ" | "CatenateLayer" | "ChannelBase" | "ChannelBrokerAction" | 
+  "ChannelDatabin" | "ChannelListener" | "ChannelListeners" | 
+  "ChannelListen" | "ChannelObject" | "ChannelPreSendFunction" | 
+  "ChannelReceiverFunction" | "ChannelSend" | "ChannelSubscribers" | 
+  "CloudExpression" | "CloudExpressions" | "CloudRenderingMethod" | 
+  "CombinedEntityClass" | "CompiledCodeFunction" | "CompilerOptions" | 
+  "ComputeUncertainty" | "ConnectedMoleculeComponents" | 
+  "ConnectedMoleculeQ" | "ConnectionSettings" | 
+  "ConnectSystemModelComponents" | "ConstantArrayLayer" | 
+  "ConstantPlusLayer" | "ConstantTimesLayer" | "Containing" | 
+  "ContentFieldOptions" | "ContentLocationFunction" | "ContentObject" | 
+  "ContrastiveLossLayer" | "ConvolutionLayer" | "CreateChannel" | 
+  "CreateCloudExpression" | "CreateDataSystemModel" | 
+  "CreateSearchIndex" | "CreateSystemModel" | "CrossEntropyLossLayer" | 
+  "CTCLossLayer" | "CurrentNotebookImage" | "CurrentScreenImage" | 
+  "Curry" | "DatabaseConnect" | "DatabaseDisconnect" | 
+  "DatabaseReference" | "DeconvolutionLayer" | "DecryptFile" | 
+  "DefineResourceFunction" | "DeleteAnomalies" | "DeleteChannel" | 
+  "DeleteCloudExpression" | "DeleteSearchIndex" | "DerivedKey" | 
+  "DigitalSignature" | "DisableFormatting" | "DocumentWeightingRules" | 
+  "DotLayer" | "DropoutLayer" | "DynamicGeoGraphics" | "DynamicImage" | 
+  "ElementwiseLayer" | "EmbeddingLayer" | "EncryptFile" | 
+  "EntityFunction" | "EntityStore" | "EvaluationEnvironment" | 
+  "ExpirationDate" | "ExtendedEntityClass" | "ExternalEvaluate" | 
+  "ExternalFunction" | "ExternalObject" | "ExternalSessionObject" | 
+  "ExternalSessions" | "ExternalValue" | "ExtractLayer" | 
+  "FacialFeatures" | "FeatureDistance" | "FeatureExtraction" | 
+  "FeatureExtract" | "FeatureExtractorFunction" | "FeatureExtractor" | 
+  "FeatureSpacePlot3D" | "FeatureSpacePlot" | "FileConvert" | 
+  "FilteredEntityClass" | "FindAnomalies" | "FindChannels" | 
+  "FindEquationalProof" | "FindExternalEvaluators" | 
+  "FindGeometricConjectures" | "FindMoleculeSubstructure" | 
+  "FindSystemModelEquilibrium" | "FindTextualAnswer" | "FlattenLayer" | 
+  "FormControl" | "FunctionCompileExportByteArray" | 
+  "FunctionCompileExportLibrary" | "FunctionCompileExport" | 
+  "FunctionCompileExportString" | "FunctionCompile" | "GalleryView" | 
+  "GatedRecurrentLayer" | "GenerateDerivedKey" | 
+  "GenerateDigitalSignature" | "GenerateSecuredAuthenticationKey" | 
+  "GeometricAssertion" | "GeometricScene" | "HandlerFunctionsKeys" | 
+  "HandlerFunctions" | "Iconize" | "ImageAugmentationLayer" | 
+  "ImageBoundingBoxes" | "ImageCases" | "ImageContainsQ" | 
+  "ImageContents" | "ImageGraphics" | "ImagePosition" | 
+  "ImagePyramidApply" | "ImagePyramid" | "IncludeAromaticBonds" | 
+  "IncludeHydrogens" | "IncludeRelatedTables" | 
+  "InitialEvaluationHistory" | "InitializationObjects" | 
+  "InitializationValue" | "Initialize" | "InverseImagePyramid" | 
+  "InverseSpectrogram" | "KernelFunction" | "LearnDistribution" | 
+  "LearnedDistribution" | "LearningRateMultipliers" | "LinearLayer" | 
+  "LocalResponseNormalizationLayer" | "LocalSubmit" | 
+  "LongShortTermMemoryLayer" | "LossFunction" | "MailExecute" | 
+  "MailFolder" | "MailItem" | "MailSearch" | "MailServerConnection" | 
+  "MailServerConnect" | "MaxTrainingRounds" | "MaxWordGap" | 
+  "MeanAbsoluteLossLayer" | "MeanAround" | "MeanSquaredLossLayer" | 
+  "MergingFunction" | "Midpoint" | "MissingValuePattern" | 
+  "MoleculeContainsQ" | "MoleculeEquivalentQ" | "MoleculeGraph" | 
+  "MoleculeModify" | "Molecule" | "MoleculePattern" | "MoleculePlot3D" | 
+  "MoleculePlot" | "MoleculeProperty" | "MoleculeQ" | "MoleculeValue" | 
+  "NBodySimulationData" | "NBodySimulation" | "NetAppend" | 
+  "NetBidirectionalOperator" | "NetChain" | "NetDecoder" | "NetDelete" | 
+  "NetDrop" | "NetEncoder" | "NetEvaluationMode" | "NetExtract" | 
+  "NetFlatten" | "NetFoldOperator" | "NetGraph" | "NetInformation" | 
+  "NetInitialize" | "NetInsert" | "NetInsertSharedArrays" | "NetJoin" | 
+  "NetMapOperator" | "NetMapThreadOperator" | "NetMeasurements" | 
+  "NetModel" | "NetNestOperator" | "NetPairEmbeddingOperator" | 
+  "NetPortGradient" | "NetPort" | "NetPrepend" | "NetRename" | 
+  "NetReplace" | "NetReplacePart" | "NetSharedArray" | "NetStateObject" | 
+  "NetTake" | "NetTrain" | "NetTrainResultsObject" | 
+  "NetworkPacketCapture" | "NetworkPacketRecording" | 
+  "NetworkPacketTrace" | "NormalizationLayer" | "NumericArray" | 
+  "NumericArrayQ" | "NumericArrayType" | "OrderingLayer" | "PaddingLayer" | 
+  "Pagination" | "PartLayer" | "PartProtection" | "PerpendicularBisector" | 
+  "PersistenceLocation" | "PersistenceTime" | "PersistentObject" | 
+  "PersistentObjects" | "PersistentValue" | "PitchRecognize" | 
+  "PoolingLayer" | "PrependLayer" | "PreserveColor" | "ProofObject" | 
+  "PublisherID" | "RandomInstance" | "RarerProbability" | 
+  "RegisterExternalEvaluator" | "RelationalDatabase" | 
+  "RemoteAuthorizationCaching" | "RemoteConnectionObject" | 
+  "RemoteConnect" | "RemoteFile" | "RemoteRun" | "RemoteRunProcess" | 
+  "RemoveAudioStream" | "RemoveChannelListener" | 
+  "RemoveChannelSubscribers" | "ReplicateLayer" | "ReshapeLayer" | 
+  "ResizeLayer" | "ResourceFunction" | "ResourceRegister" | 
+  "ResourceRemove" | "ResourceSearch" | "ResourceSubmit" | 
+  "ResourceUpdate" | "SampledEntityClass" | "SearchAdjustment" | 
+  "SearchIndexObject" | "SearchIndices" | "SearchQueryString" | 
+  "SearchResultObject" | "SecuredAuthenticationKey" | 
+  "SecuredAuthenticationKeys" | "SequenceLastLayer" | 
+  "SequenceMostLayer" | "SequencePredict" | "SequencePredictorFunction" | 
+  "SequenceRestLayer" | "SequenceReverseLayer" | "ServiceRequest" | 
+  "ServiceSubmit" | "SessionSubmit" | "SetSystemModel" | "Snippet" | 
+  "SnubPolyhedron" | "SocketListener" | "SocketListen" | "SocketOpen" | 
+  "SocketReadMessage" | "SocketReadyQ" | "Sockets" | "SocketWaitAll" | 
+  "SocketWaitNext" | "SoftmaxLayer" | "SortedEntityClass" | "SourceLink" | 
+  "SpatialTransformationLayer" | "SpeechRecognize" | 
+  "StartExternalSession" | "StartWebSession" | "StereochemistryElements" | 
+  "SummationLayer" | "SynthesizeMissingValues" | "SystemInstall" | 
+  "SystemModeler" | "SystemModelExamples" | "SystemModelLinearize" | 
+  "SystemModel" | "SystemModelParametricSimulate" | "SystemModelPlot" | 
+  "SystemModelProgressReporting" | "SystemModelReliability" | 
+  "SystemModelSimulate" | "SystemModelSimulateSensitivity" | 
+  "SystemModelSimulationData" | "SystemModels" | "TargetDevice" | 
+  "TargetSystem" | "TaskAbort" | "TaskExecute" | "TaskObject" | 
+  "TaskRemove" | "TaskResume" | "Tasks" | "TaskSuspend" | "TaskWait" | 
+  "TextCases" | "TextContents" | "TextElement" | "TextPosition" | 
+  "TextSearch" | "TextSearchReport" | "TextStructure" | "ThreadingLayer" | 
+  "TotalLayer" | "TrainingProgressCheckpointing" | 
+  "TrainingProgressFunction" | "TrainingProgressMeasurements" | 
+  "TrainingProgressReporting" | "TrainingStoppingCriterion" | 
+  "TransposeLayer" | "TriangleCenter" | "TriangleConstruct" | 
+  "TriangleMeasurement" | "Typed" | "TypeSpecifier" | 
+  "UnconstrainedParameters" | "UnitVectorLayer" | 
+  "UnregisterExternalEvaluator" | "UpdateSearchIndex" | 
+  "URLDownloadSubmit" | "ValenceErrorHandling" | 
+  "ValuePreprocessingFunction" | "VectorAround" | "VerifyDerivedKey" | 
+  "VerifyDigitalSignature" | "VerifyInterpretation" | "WebAudioSearch" | 
+  "WebElementObject" | "WebExecute" | "WebImage" | "WebImageSearch" | 
+  "WebSearch" | "WebSessionObject" | "WebSessions" | "WebWindowObject" | 
+  "WikipediaSearch" | "ZoomCenter" | "ZoomFactor" | 
+  "$AllowExternalChannelFunctions" | "$BlockchainBase" | "$ChannelBase" | 
+  "$CookieStore" | "$CurrentTask" | "$CurrentWebSession" | 
+  "$DefaultNetworkInterface" | "$IncomingMailSettings" | 
+  "$InitializationContexts" | "$Initialization" | "$NetworkInterfaces" | 
+  "$NoValue" | "$PersistenceBase" | "$PersistencePath" | 
+  "$PreInitialization" | "$PublisherID" | "$ServiceCreditsAvailable" | 
+  "$SourceLink" | "$SSHAuthentication" | "$SummaryBoxDataSizeLimit" | 
+  "$TestFileName" | "$VoiceStyles", _] -> scanExperimentalSymbols,
 
 (*
 
@@ -595,7 +598,8 @@ SymbolNode[Symbol, "arraycopy" | "clearProperty" | "console" | "currentTimeMilli
                       "setOut" | "setProperties" | "setProperty" | "setSecurityManager", _] -> scanJavaSystemSymbols,
 *)
 
-CallNode[LeafNode[Symbol, "LoadJavaClass" | "JLink`LoadJavaClass", _], { LeafNode[String, "\"java.lang.System\"", _] }, _] -> scanLoadJavaClassSystem,
+CallNode[LeafNode[Symbol, "LoadJavaClass" | "JLink`LoadJavaClass", _], {
+  LeafNode[String, "\"java.lang.System\"", _] }, _] -> scanLoadJavaClassSystem,
 
 
 
@@ -605,7 +609,8 @@ CallNode[LeafNode[Symbol, "LoadJavaClass" | "JLink`LoadJavaClass", _], { LeafNod
 scan for a := a  and  a = a
 possible results from batch renaming symbols
 *)
-CallNode[LeafNode[Symbol, "Set" | "SetDelayed", _], { LeafNode[Symbol, token_, _], LeafNode[Symbol, token_, _] }, _] -> scanSelfAssignments,
+CallNode[LeafNode[Symbol, "Set" | "SetDelayed", _], {
+  LeafNode[Symbol, token_, _], LeafNode[Symbol, token_, _] }, _] -> scanSelfAssignments,
 
 
 ContextNode[{LeafNode[String, "\"Private`\"", _]}, _, _] -> scanPrivateContextNode,
@@ -708,7 +713,7 @@ Nothing
 Attributes[scanBadCalls] = {HoldRest}
 
 scanBadCalls[pos_List, astIn_] :=
- Module[{ast, node, data, head, issues},
+Module[{ast, node, data, head, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   head = node[[1]];
@@ -719,19 +724,37 @@ scanBadCalls[pos_List, astIn_] :=
 
     Switch[name,
     "String",
-      AppendTo[issues, Lint["BadCall", "``String`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues, Lint["BadCall", "``String`` is not a function.", "Error", <|
+        Source -> data[Source],
+        CodeActions -> {
+          CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
-      "Integer",
-      AppendTo[issues, Lint["BadCall", "``Integer`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+    "Integer",
+      AppendTo[issues, Lint["BadCall", "``Integer`` is not a function.", "Error", <|
+        Source -> data[Source],
+        CodeActions -> {
+          CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
-      "Real",
-      AppendTo[issues, Lint["BadCall", "``Real`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+    "Real",
+      AppendTo[issues, Lint["BadCall", "``Real`` is not a function.", "Error", <|
+        Source -> data[Source],
+        CodeActions -> {
+          CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
     ,
-      "True",
-      AppendTo[issues, Lint["BadCall", "``True`` is not a function.", "Error", <| Source -> data[Source], CodeActions->{ CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <| "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.95 |>]]
+    "True",
+      AppendTo[issues, Lint["BadCall", "``True`` is not a function.", "Error", <|
+        Source -> data[Source],
+        CodeActions -> {
+          CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.95 |>]]
     ,
     _,
-      AppendTo[issues, Lint["BadCall", format[name] <> " is not a function.", "Error", <|data, ConfidenceLevel -> 0.90|>]]
+      AppendTo[issues, Lint["BadCall", format[name] <> " is not a function.", "Error", <|
+        data,
+        ConfidenceLevel -> 0.90 |> ]]
   ];
 
   issues
@@ -751,10 +774,10 @@ scanFailureCalls[pos_List, astIn_] :=
   children = node[[2]];
   data = node[[3]];
   If[Length[children] == 1,
-  	{Lint["FailureCall", {"Calling ", LintBold["Failure"], " as a function. Did you mean ", LintBold["FailureQ"],
+    {Lint["FailureCall", {"Calling ", LintBold["Failure"], " as a function. Did you mean ", LintBold["FailureQ"],
       "? This may be ok if ", LintBold["Failure"], " is handled programmatically."}, "Error", data]}
-  	,
-  	{}
+    ,
+    {}
   ]
   ]
 *)
@@ -767,7 +790,7 @@ Attributes[scanAssocs] = {HoldRest}
 
 scanAssocs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selecteds, issues, keys, srcs, actions},
+Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupKeys, expensiveChildren},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -781,30 +804,36 @@ Catch[
     *)
     Throw[{}]
   ];
-  
-    keys = children[[All, 2, 1]];
 
-    duplicates = Keys[Select[CountsBy[keys, ToFullFormString], # > 1&]];
-   selecteds = Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates;
+  counts = CountsBy[children, ToFullFormString[#[[2, 1]] ]&];
 
-   Do[
+  dupKeys = Keys[Select[counts, # > 1&]];
 
-      If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  expensiveChildren = ToFullFormString[#[[2, 1]] ]& /@ children;
 
-       actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+  selecteds = Function[key, Pick[children, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
-       AppendTo[issues, Lint["DuplicateKeys", "``Association`` has duplicated keys.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], CodeActions->actions, ConfidenceLevel -> 1.0 |> ]];
-      ];
+  Do[
 
-      ,
-      {selected, selecteds}
-   ];
+    If[empty[selected],
+      Continue[]
+    ];
 
-    issues
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
-  ]]
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+
+    AppendTo[issues, Lint["DuplicateKeys", "``Association`` has duplicated keys.", "Error", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      CodeActions -> actions, ConfidenceLevel -> 1.0 |> ]
+    ];
+    ,
+    {selected, selecteds}
+  ];
+
+  issues
+]]
 
 
 
@@ -814,7 +843,7 @@ Attributes[scanRules] = {HoldRest}
 
 scanRules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selecteds, issues, keys, srcs},
+Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -833,32 +862,41 @@ Catch[
     Throw[issues]
   ];
 
-    duplicates = Keys[Select[CountsBy[keys, ToFullFormString], # > 1&]];
-   selecteds = Select[children, Function[{rule}, ToFullFormString[rule[[2, 1]]] === #]]& /@ duplicates;
+  counts = CountsBy[children, ToFullFormString[#[[2, 1]] ]&];
 
-   Do[
+  dupKeys = Keys[Select[counts, # > 1&]];
 
-      If[!empty[selected],
+  expensiveChildren = ToFullFormString[#[[2, 1]] ]& /@ children;
 
-       (*
-       It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
+  selecteds = Function[key, Pick[children, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
-       So make Remark for now
-       *)
+  Do[
 
-       srcs = #[[3, Key[Source]]]& /@ selected;
+    If[empty[selected],
+      Continue[]
+    ];
 
-       AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in list of rules.", "Remark",
-            <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.75 |>]];
-      ];
+    (*
+    It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
 
-      ,
-      {selected, selecteds}
-   ];
+    So make Remark for now
+    *)
 
-   issues
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
-  ]]
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+
+    AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in list of rules.", "Remark", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      CodeActions -> actions, ConfidenceLevel -> 1.0 |> ]
+    ];
+    ,
+    {selected, selecteds}
+  ];
+
+  issues
+]]
 
 
 
@@ -867,7 +905,8 @@ Attributes[scanWhichs] = {HoldRest}
 
 scanWhichs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, issues, span, duplicates, selected, lintData, srcs},
+Module[{ast, node, children, data, issues, span, selected, lintData, srcs, counts, selecteds,
+  dupKeys, expensiveChildren},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -883,7 +922,9 @@ Catch[
 
   If[!EvenQ[Length[children]],
     AppendTo[issues, 
-     Lint["WhichArguments", "``Which`` does not have even number of arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+      Lint["WhichArguments", "``Which`` does not have even number of arguments.", "Error", <|
+        data,
+        ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -898,37 +939,53 @@ Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
   If[MatchQ[children[[-2]], CallNode[LeafNode[Symbol, "Blank", _], _, _]],
     lintData = children[[-2]][[3]];
    AppendTo[issues, 
-    Lint["SwitchWhichConfusion", "``_`` is not a test.", "Error", <| lintData, CodeActions->{CodeAction["Replace ``_`` with ``True``", ReplaceNode, <| "ReplacementNode" -> ToNode[True], Source->lintData[Source] |>]}, ConfidenceLevel -> 1.0 |>]];
+    Lint["SwitchWhichConfusion", "``_`` is not a test.", "Error", <|
+      lintData,
+      CodeActions -> {
+        CodeAction["Replace ``_`` with ``True``", ReplaceNode, <|
+          "ReplacementNode" -> ToNode[True], Source->lintData[Source] |>]}, ConfidenceLevel -> 1.0 |>]];
   ];
-
 
   Scan[(If[MatchQ[#, CallNode[LeafNode[Symbol, "Set", _], _, _]],
     AppendTo[issues, Lint["WhichSet", "``Which`` has ``=`` as a clause.\n\
 Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
   ];)&, children[[;;;;2]]];
 
+  counts = CountsBy[children[[;;;;2]], ToFullFormString];
 
-    duplicates = Keys[Select[CountsBy[children[[;;;;2]], ToFullFormString], # > 1&]];
-   selected = Flatten[Select[children[[;;;;2]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
+  dupKeys = Keys[Select[counts, # > 1&]];
 
-   If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  expensiveChildren = ToFullFormString /@ children[[;;;;2]];
 
-      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
-   ];
+  selecteds = Function[key, Pick[children[[;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
+
+  Do[
+
+    If[empty[selected],
+      Continue[]
+    ];
+
+    srcs = #[[3, Key[Source]]]& /@ selected;
+
+    AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      ConfidenceLevel -> 0.95 |> ]
+    ];
+    ,
+    {selected, selecteds}
+  ];
 
   issues
-  ]]
-
-
+]]
 
 
 Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, src, cases, duplicates, issues, selected, srcs, span},
+Module[{ast, node, children, data, src, cases, issues, selected, srcs, span, counts,
+  dupKeys, expensiveChildren},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -937,22 +994,29 @@ Catch[
   issues = {};
 
   If[Length[children] == 1,
-   AppendTo[issues, Lint["SwitchArguments", "``Switch`` only has one argument.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
-   Throw[issues];
+    AppendTo[issues, Lint["SwitchArguments", "``Switch`` only has one argument.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
+    Throw[issues];
   ];
 
 
   If[!OddQ[Length[children]],
-   AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not have odd number of arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
-   Throw[issues];
+    AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not have odd number of arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
+    Throw[issues];
   ];
 
   If[MatchQ[children[[1]], LeafNode[Symbol, "$OperatingSystem", _]],
-   cases = Cases[children[[2;;-1;;2]], LeafNode[String, "\"Linux\"", _], {0, Infinity}];
-   If[cases =!= {},
-    src = cases[[1, 3, Key[Source] ]];
-    AppendTo[issues, Lint["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.", "Error", <|Source->src, ConfidenceLevel -> 0.95, CodeActions->{CodeAction["Replace Linux with Unix", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode["Unix"]|>]}|>]];
-   ]
+    cases = Cases[children[[2;;-1;;2]], LeafNode[String, "\"Linux\"", _], {0, Infinity}];
+    If[cases =!= {},
+      src = cases[[1, 3, Key[Source] ]];
+      AppendTo[issues, Lint["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.", "Error", <|
+        Source -> src,
+        ConfidenceLevel -> 0.95, CodeActions -> {
+          CodeAction["Replace Linux with Unix", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode["Unix"]|>]}|>]];
+    ]
   ];
 
   (*
@@ -964,7 +1028,9 @@ Catch[
   *)
   If[Length[children] >= 5,
     If[MatchQ[children[[2;;-3]], { CallNode[LeafNode[Symbol, "Rule", _], _, _].. }],
-      AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not take ``Rules`` for arguments.", "Error", <|data, ConfidenceLevel -> 0.95|>]];
+      AppendTo[issues, Lint["SwitchArguments", "``Switch`` does not take ``Rules`` for arguments.", "Error", <|
+        data,
+        ConfidenceLevel -> 0.95|>]];
     ]
   ];
 
@@ -985,16 +1051,30 @@ Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
    ]
   ];
 
+  counts = CountsBy[children[[2;;;;2]], ToFullFormString];
 
-  duplicates = Keys[Select[CountsBy[children[[2;;;;2]], ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children[[2;;;;2]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
+  dupKeys = Keys[Select[counts, # > 1&]];
 
-  If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  expensiveChildren = ToFullFormString /@ children[[2;;;;2]];
 
-      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
-   ];
+  selecteds = Function[key, Pick[children[[2;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
+
+  Do[
+
+    If[empty[selected],
+      Continue[]
+    ];
+
+    srcs = #[[3, Key[Source]]]& /@ selected;
+
+    AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      ConfidenceLevel -> 0.95 |> ]
+    ];
+    ,
+    {selected, selecteds}
+  ];
 
 
   (*
@@ -1039,7 +1119,7 @@ Attributes[scanIfs] = {HoldRest}
 
 scanIfs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, issues, selected, srcs},
+ Module[{ast, node, children, data, issues, selected, srcs, counts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1064,15 +1144,17 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
 
   srcs = {};
   If[Length[children] >= 3,
-      duplicates = Keys[Select[CountsBy[children[[2;;3]], ToFullFormString], # > 1&]];
-      selected = Flatten[Select[children[[2;;3]], Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
 
-      If[!empty[selected],
+    counts = CountsBy[children[[2;;3]], ToFullFormString];
 
-            srcs = #[[3, Key[Source]]]& /@ selected;
+    selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
 
-            AppendTo[issues, Lint["DuplicateClauses", "Both branches are the same.", "Warning", <|Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95|>]]
-      ];
+    If[!empty[selected],
+      srcs = #[[3, Key[Source]]]& /@ selected;
+      AppendTo[issues, Lint["DuplicateClauses", "Both branches are the same.", "Warning", <|
+        Source -> First[srcs],
+        "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
+    ];
   ];
 
   issues
@@ -1133,21 +1215,11 @@ Catch[
 
 
 
-
-
-
-
-
-
-
-
-
-
 Attributes[scanPatterns] = {HoldRest}
 
 scanPatterns[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, patSymbol, name, rhs, children, patterns, issues},
+Module[{ast, node, patSymbol, name, rhs, children, patterns, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   
@@ -1157,7 +1229,9 @@ Catch[
   issues = {};
 
   If[Length[children] != 2,
-    AppendTo[issues, Lint["PatternArguments", "``Pattern`` takes 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.85|>]];
+    AppendTo[issues, Lint["PatternArguments", "``Pattern`` takes 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.85|>]];
     Throw[issues];
   ];
 
@@ -1168,8 +1242,9 @@ Catch[
   patterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
     If[#[[2, 1]]["String"] == name,
-      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> ".",
-            "Error", <| Source -> #[[2, 1, 3, Key[Source]]], "AdditionalSources" -> { patSymbol[[3, Key[Source]]] }, ConfidenceLevel -> 0.95 |> ]];
+      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> ".", "Error", <|
+        Source -> #[[2, 1, 3, Key[Source] ]],
+        "AdditionalSources" -> { patSymbol[[3, Key[Source] ]] }, ConfidenceLevel -> 0.95 |> ]];
     ];
   )&, patterns];
 
@@ -1195,17 +1270,18 @@ Catch[
   parentPos = Most[pos];
   parent = Extract[ast, {parentPos}][[1]];
   While[ListQ[parent],
-   parentPos = Most[parentPos];
-   parent = Extract[ast, {parentPos}][[1]];
-   ];
+    parentPos = Most[parentPos];
+    parent = Extract[ast, {parentPos}][[1]];
+  ];
 
-   If[MatchQ[parent, CallNode[node, _, _]],
+  If[MatchQ[parent, CallNode[node, _, _]],
     Throw[{}]
-   ];
+  ];
 
   {Lint["Control", format[s] <> " appears but is not called.\n\
 Did you mean " <> format[s<>"[]"] <>"?", "Warning", <|data, ConfidenceLevel -> 0.85|>]}
-  ]]
+
+]]
 
 
 
@@ -1214,7 +1290,7 @@ Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, params, issues, vars, used, unusedParams},
+ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1223,7 +1299,9 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1235,7 +1313,9 @@ Catch[
   ];
 
   If[Length[children] != 2,
-    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1247,44 +1327,57 @@ Catch[
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["ModuleArgumentsEmpty", "``Module`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["ModuleArgumentsEmpty", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
+      data,
+      ConfidenceLevel -> 0.90|>]];
   ];
 
 
   params = children[[1,2]];
-   vars = # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], _}, _] :> sym,
-            sym:LeafNode[Symbol, _, _] :> sym,
-            (*
+  vars = # /. {
+    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
+      sym:LeafNode[Symbol, _, _], _}, _] :> sym,
+      sym:LeafNode[Symbol, _, _] :> sym,
+      (*
 
-            Compiler syntax includes:
-            Module[{ Typed[x, "Integer64"] }, x]
+      Compiler syntax includes:
+      Module[{ Typed[x, "Integer64"] }, x]
 
-            TODO: support this
+      TODO: support this
 
-            CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
-            *)
-            err_ :> (AppendTo[issues, Lint["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-              " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
+      CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
+      *)
+      err_ :> (AppendTo[issues, Lint["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
+                "does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
 
-    duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
-    selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
+  counts = CountsBy[vars, ToFullFormString];
 
-    If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
-      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Module``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
-      ];
+  If[!empty[selected],
+    srcs = #[[3, Key[Source]]]& /@ selected;
+
+    AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Module``.", "Error",
+      <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
+  ];
 
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <| #[[3]], CodeActions->{CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&, unusedParams];
+  Scan[
+    AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
+      #[[3]],
+      CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
+      ,
+      unusedParams
+  ];
 
   issues
 ]]
@@ -1294,7 +1387,7 @@ Attributes[scanDynamicModules] = {HoldRest}
 
 scanDynamicModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, params, issues, vars, used, unusedParams},
+Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1303,7 +1396,9 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1315,7 +1410,9 @@ Catch[
   ];
 
   If[!(Length[children] >= 2),
-    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
@@ -1343,28 +1440,40 @@ Catch[
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|data, ConfidenceLevel -> 0.90|>]];
   ];
 
+  params = children[[1, 2]];
+  vars = # /. {
+    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
+      sym:LeafNode[Symbol, _, _], _}, _] :> sym,
+      sym:LeafNode[Symbol, _, _] :> sym,
+      err_ :> (AppendTo[issues, Lint["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
+        " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)
+  }& /@ params;
 
-  params = children[[1,2]];
-   vars = # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], _}, _] :> sym,
-            sym:LeafNode[Symbol, _, _] :> sym,
-            err_ :> (AppendTo[issues, Lint["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
-    duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
-    selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
+  counts = CountsBy[vars, ToFullFormString];
 
-    If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
-      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``DynamicModule``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
-      ];
+  If[!empty[selected],
+    srcs = #[[3, Key[Source] ]]& /@ selected;
+
+    AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``DynamicModule``.", "Error", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      ConfidenceLevel -> 1.0 |> ]
+    ];
+  ];
 
   used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
   unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``DynamicModule``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
+  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``DynamicModule``: " <>
+    format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&
+    ,
+    unusedParams
+  ];
 
   issues
 ]]
@@ -1382,7 +1491,9 @@ Attributes[scanWiths] = {HoldRest}
 
 scanWiths[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, paramLists, issues, varsAndVals, vars, vals, usedBody, unusedParams},
+Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
+  usedBody, unusedParams, counts, flattenedVars},
+  
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1391,7 +1502,11 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
+
     Throw[issues];
   ];
 
@@ -1403,12 +1518,18 @@ Catch[
   ];
 
   If[Length[children] < 2,
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
+
     Throw[issues];
   ];
 
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], _, _]...}],
-    AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55|>]];
+
     Throw[issues];
   ];
 
@@ -1430,40 +1551,59 @@ Catch[
   *)
   (* Having empty {} as With variable argument is not critical, but a warning may be issued *)
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
-    AppendTo[issues, Lint["WithArgumentsEmpty", "``With`` does not have a ``List`` with arguments for most arguments.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["WithArgumentsEmpty", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark", <|
+      data,
+      ConfidenceLevel -> 0.90|>]];
   ];
 
   paramLists = Most[children][[All, 2]];
    
-   varsAndVals = Function[{list}, # /. {CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
-            err_ :> (AppendTo[issues, Lint["WithArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
-This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ list] /@ paramLists;
+  varsAndVals = Function[{list}, # /. {
+    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
+    err_ :> (AppendTo[issues, Lint["WithArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
+This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)
+  }& /@ list] /@ paramLists;
 
-   varsAndVals = DeleteCases[varsAndVals, {}];
+  varsAndVals = DeleteCases[varsAndVals, {}];
 
-   If[empty[varsAndVals], Throw[issues]];
+  If[empty[varsAndVals],
+    Throw[issues]
+  ];
 
-   {vars, vals} = Transpose[Transpose /@ varsAndVals];
+  {vars, vals} = Transpose[Transpose /@ varsAndVals];
 
-    duplicates = Keys[Select[CountsBy[#, ToFullFormString], # > 1 &]]& /@ vars;
-      selected = Flatten[Function[{duplicates, vars}, (Select[vars, Function[{c}, ToFullFormString[c] === #]])& /@ duplicates] @@@ Transpose[{duplicates, vars}]];
+  flattenedVars = Flatten[vars];
 
-      If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  counts = CountsBy[flattenedVars, ToFullFormString];
 
-      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
-      ];
+  selected = Select[flattenedVars, counts[ToFullFormString[#]] > 1&];
+
+  If[!empty[selected],
+    srcs = #[[3, Key[Source]]]& /@ selected;
+
+    AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``.", "Error", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      ConfidenceLevel -> 1.0 |> ]];
+  ];
 
   usedBody = ToFullFormString /@ Cases[Last[children], LeafNode[Symbol, _, _], {0, Infinity}];
 
   usedAtVariousScopes = FoldList[Join[#1, ToFullFormString /@ Cases[#2, LeafNode[Symbol, _, _], {0, Infinity}]]&, usedBody, vals // Reverse] // Reverse;
 
-  unusedParams = Function[{vars, useds}, Select[vars, Function[{c}, !MemberQ[useds, ToFullFormString[c]]]]] @@@ Transpose[{vars, Most[usedAtVariousScopes]}];
+  unusedParams = Function[{vars, useds},
+    Select[vars, Function[{c}, !MemberQ[useds, ToFullFormString[c]]]]] @@@ Transpose[{vars, Most[usedAtVariousScopes]}];
 
   unusedParams = Flatten[unusedParams];
 
-  Scan[AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&, unusedParams];
+  Scan[
+    AppendTo[issues,
+      Lint["UnusedVariables", "Unused variable in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
+        #[[3]],
+        ConfidenceLevel -> 1.0|>]]&
+    ,
+    unusedParams
+  ];
 
   issues
 ]]
@@ -1474,7 +1614,9 @@ Attributes[scanBlocks] = {HoldRest}
 
 scanBlocks[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, head, children, data, duplicates, selected, params, issues, varsWithSet, varsWithoutSet, toDelete},
+Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, varsWithoutSet,
+  toDelete, counts},
+
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   head = node[[1]];
@@ -1512,7 +1654,7 @@ Catch[
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Warning", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|data, ConfidenceLevel -> 0.90|>]];
   ];
 
   params = children[[1,2]];
@@ -1521,21 +1663,25 @@ Catch[
   varsWithoutSet = {};
 
   Scan[# /. {
-    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[_, _, _], _}, _] :> (AppendTo[varsWithSet, sym]),
-    sym:LeafNode[Symbol, _, _] :> (AppendTo[varsWithoutSet, sym]),
-    err_ :> (AppendTo[issues, Lint["BlockArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]])}&, params];
+    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
+      sym:LeafNode[_, _, _], _}, _] :> (AppendTo[varsWithSet, sym]),
+      sym:LeafNode[Symbol, _, _] :> (AppendTo[varsWithoutSet, sym]),
+      err_ :> (AppendTo[issues, Lint["BlockArguments", "Variable " <> format[ToFullFormString[err]] <>
+        " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]])
+  }&, params];
 
   vars = varsWithSet ~Join~ varsWithoutSet;
 
-  duplicates = Keys[Select[CountsBy[vars, ToFullFormString], # > 1&]];
-  selected = Flatten[Select[vars, Function[{c}, ToFullFormString[c] === #]]& /@ duplicates, 1];
-  
-  If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+  counts = CountsBy[vars, ToFullFormString];
 
-      AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
-      ];
+  selected = Select[vars, counts[ToFullFormString[#]] > 1&];
+
+  If[!empty[selected],
+    srcs = #[[3, Key[Source]]]& /@ selected;
+
+    AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
+      <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
+  ];
 
   (*
   Give unused Block variables its own tag
@@ -1590,7 +1736,7 @@ lowercaseSymbolQ[LeafNode[Symbol, s_, _]] :=
 Attributes[scanOptionals] = {HoldRest}
 
 scanOptionals[pos_List, astIn_] :=
- Module[{ast, node, children, data, issues, opt, pats},
+Module[{ast, node, children, data, issues, opt, pats},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1604,7 +1750,9 @@ scanOptionals[pos_List, astIn_] :=
   opt = children[[2]];
   pats = Cases[opt, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
-    AppendTo[issues, Lint["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2]][[1]]]] <> " in ``Optional``.", "Error", <|#[[3]], ConfidenceLevel -> 0.95|>]]
+    AppendTo[issues, Lint["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2, 1]] ]] <> " in ``Optional``.", "Error", <|
+      #[[3]],
+      ConfidenceLevel -> 0.95|>]]
   )&, pats];
 
   issues
@@ -1614,7 +1762,7 @@ scanOptionals[pos_List, astIn_] :=
 Attributes[scanBadSymbols] = {HoldRest}
 
 scanBadSymbols[pos_List, astIn_] :=
- Module[{ast, node, name, data, issues, src},
+Module[{ast, node, name, data, issues, src},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   name = node["String"];
@@ -1626,17 +1774,24 @@ scanBadSymbols[pos_List, astIn_] :=
 
   Switch[name,
     "Failed",
-      AppendTo[issues, Lint["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]} |>]]
+      AppendTo[issues, Lint["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error", <|
+        Source -> src, ConfidenceLevel -> 0.75, CodeActions -> {
+          CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]} |>]]
     ,
     "Boolean",
-      AppendTo[issues, Lint["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]}|>]]
+      AppendTo[issues, Lint["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error", <|
+        Source -> src, ConfidenceLevel -> 0.75, CodeActions -> {
+          CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]}|>]]
     ,
     "Match",
-      AppendTo[issues, Lint["BadSymbol", "``Match`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75, CodeActions->{CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]}|>]]
+      AppendTo[issues, Lint["BadSymbol", "``Match`` does not exist in **System`** context.", "Error", <|
+        Source -> src, ConfidenceLevel -> 0.75, CodeActions -> {
+          CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]}|>]]
     ,
     _,
       (* everything else *)
-      AppendTo[issues, Lint["BadSymbol", "``" <> name <> "`` does not exist in **System`** context.", "Error", <|Source->src, ConfidenceLevel -> 0.75|>]]
+      AppendTo[issues, Lint["BadSymbol", "``" <> name <> "`` does not exist in **System`** context.", "Error", <|
+        Source -> src, ConfidenceLevel -> 0.75|>]]
   ];
 
   issues
@@ -1645,7 +1800,7 @@ scanBadSymbols[pos_List, astIn_] :=
 Attributes[scanUndocumentedSymbols] = {HoldRest}
 
 scanUndocumentedSymbols[pos_List, astIn_] :=
- Module[{ast, node, name, data, issues},
+Module[{ast, node, name, data, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   name = node["String"];
@@ -1660,7 +1815,9 @@ Symbol ``Fail`` is an undocumented **System`** symbol.\n\
 Did you mean ``$Failed``?", "Warning", <| data, ConfidenceLevel -> 0.55 |>]]
     ,
     _,
-      AppendTo[issues, Lint["UndocumentedSymbol", format[name] <> " is not documented.", "Remark", <|data, ConfidenceLevel -> 0.55 |>]]
+      AppendTo[issues, Lint["UndocumentedSymbol", format[name] <> " is not documented.", "Remark", <|
+        data,
+        ConfidenceLevel -> 0.55 |>]]
   ];
 
   issues
@@ -1670,7 +1827,7 @@ Did you mean ``$Failed``?", "Warning", <| data, ConfidenceLevel -> 0.55 |>]]
 Attributes[scanObsoleteSymbols] = {HoldRest}
 
 scanObsoleteSymbols[pos_List, astIn_] :=
- Module[{ast, node, name, data, issues},
+Module[{ast, node, name, data, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   name = node["String"];
@@ -1678,7 +1835,9 @@ scanObsoleteSymbols[pos_List, astIn_] :=
 
   issues = {};
 
-  AppendTo[issues, Lint["ObsoleteSymbol", format[name] <> " is obsolete.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
+  AppendTo[issues, Lint["ObsoleteSymbol", format[name] <> " is obsolete.", "Warning", <|
+    data,
+    ConfidenceLevel -> 0.55 |>]];
 
   issues
 ]
@@ -1688,7 +1847,7 @@ scanObsoleteSymbols[pos_List, astIn_] :=
 Attributes[scanExperimentalSymbols] = {HoldRest}
 
 scanExperimentalSymbols[pos_List, astIn_] :=
- Module[{ast, node, name, data, issues},
+Module[{ast, node, name, data, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   name = node["String"];
@@ -1696,7 +1855,9 @@ scanExperimentalSymbols[pos_List, astIn_] :=
 
   issues = {};
 
-  AppendTo[issues, Lint["ExperimentalSymbol", format[name] <> " is experimental.", "Warning", <|data, ConfidenceLevel -> 0.55 |>]];
+  AppendTo[issues, Lint["ExperimentalSymbol", format[name] <> " is experimental.", "Warning", <|
+    data,
+    ConfidenceLevel -> 0.55 |>]];
 
   issues
 ]
@@ -1738,7 +1899,7 @@ Attributes[scanSelfAssignments] = {HoldRest}
 
 scanSelfAssignments[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, var, data, parentPos, parent},
+Module[{ast, node, var, data, parentPos, parent},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   var = node[[2]][[1]];
@@ -1761,7 +1922,9 @@ Catch[
     ]
   ];
 
-  {Lint["SelfAssignment", "Self assignment: " <> format[ToFullFormString[var]] <> ".", "Warning", <|data, ConfidenceLevel -> 0.90|>]}
+  {Lint["SelfAssignment", "Self assignment: " <> format[ToFullFormString[var]] <> ".", "Warning", <|
+    data,
+    ConfidenceLevel -> 0.90|>]}
 ]]
 
 
@@ -1772,10 +1935,10 @@ Attributes[scanLoadJavaClassSystem] = {HoldRest}
 
 scanLoadJavaClassSystem[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, var, data},
+Module[{ast, node, var, data},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
-  var = node[[2]][[1]];
+  var = node[[2, 1]];
   data = node[[3]];
 
   {Lint["LoadJavaClassSystem", "``LoadJavaClass[\"java.lang.System\"]`` redefines symbols in **System`** context.\n\
@@ -1789,11 +1952,11 @@ Attributes[scanPrivateContextNode] = {HoldRest}
 
 scanPrivateContextNode[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, str, strData},
+Module[{ast, node, str, strData},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
 
-  str = node[[1]][[1]];
+  str = node[[1, 1]];
   strData = str[[3]];
 
   {Lint["SuspiciousPrivateContext", "Suspicious context: ``\"Private`\"``.\n\
@@ -1806,12 +1969,14 @@ Attributes[scanSessionSymbols] = {HoldRest}
 
 scanSessionSymbols[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, data},
+Module[{ast, node, data},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   data = node[[3]];
 
-  {Lint["SessionSymbol", "Suspicious use of session symbol " <> format[node["String"]] <> ".", "Warning", <|data, ConfidenceLevel -> 0.55|>]}
+  {Lint["SuspiciousSessionSymbol", "Suspicious use of session symbol " <> format[node["String"]] <> ".", "Warning", <|
+    data,
+    ConfidenceLevel -> 0.55|>]}
 ]]
 
 
@@ -1820,13 +1985,15 @@ Attributes[scanSessionCalls] = {HoldRest}
 
 scanSessionCalls[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, data, head},
+Module[{ast, node, data, head},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   head = node[[1]];
   data = node[[3]];
 
-  {Lint["SessionSymbol", "Suspicious use of session function " <> format[head["String"]] <> ".", "Warning", <|data, ConfidenceLevel -> 0.55|>]}
+  {Lint["SuspiciousSessionSymbol", "Suspicious use of session function " <> format[head["String"]] <> ".", "Warning", <|
+    data,
+    ConfidenceLevel -> 0.55|>]}
 ]]
 
 
@@ -1955,7 +2122,7 @@ Attributes[scanAnds] = {HoldRest}
 
 scanAnds[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, consts},
+Module[{ast, node, children, data, selected, issues, consts, counts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1964,28 +2131,35 @@ Catch[
   issues = {};
   
   consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
-  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``And``.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, consts];
+  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``And``.", "Warning", <|
+    #[[3]],
+    ConfidenceLevel -> 0.95|>]])&
+    ,
+    consts
+  ];
 
+  counts = CountsBy[children, ToFullFormString];
 
-  duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
+  selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
-      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
-      ];
+    AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", <|
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      ConfidenceLevel -> 0.95 |> ]];
+  ];
 
   issues
+]]
 
-  ]]
 
 Attributes[scanOrs] = {HoldRest}
 
 scanOrs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, consts},
+Module[{ast, node, children, data, selected, issues, consts, counts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1994,28 +2168,30 @@ Catch[
   issues = {};
   
   consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
-  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``Or``.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, consts];
+  Scan[(AppendTo[issues, Lint["LogicalConstant", "Logical constant in ``Or``.", "Warning", <|
+    #[[3]],
+    ConfidenceLevel -> 0.95|>]])&, consts];
 
-  duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
+  counts = CountsBy[children, ToFullFormString];
+
+  selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
-      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
-      ];
+    AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
+      <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
+  ];
 
   issues
-
-  ]]
+]]
 
 
 Attributes[scanAlternatives] = {HoldRest}
 
 scanAlternatives[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, duplicates, selected, issues, blanks},
+Module[{ast, node, children, data, selected, issues, blanks, counts, selecteds},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2039,24 +2215,23 @@ Catch[
   *)
   blanks = Cases[children, CallNode[LeafNode[Symbol, "Blank", _], {}, _]];
 
-  Scan[(
-      AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Warning",
-                        <|#[[3]],
-                              ConfidenceLevel -> 0.95|> ]])&, blanks];
+  Scan[(AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Warning", <|
+    #[[3]],
+    ConfidenceLevel -> 0.95|>]])&, blanks];
 
-  duplicates = Keys[Select[CountsBy[children, ToFullFormString], # > 1&]];
-  selected = Flatten[Select[children, Function[{key}, ToFullFormString[key] === #]]& /@ duplicates, 1];
+  counts = CountsBy[children, ToFullFormString];
+
+  selecteds = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-       srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
-      AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error",
-          <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
-      ];
+    AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", <|
+      Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
+  ];
 
   issues
-
-  ]]
+]]
 
 
 
@@ -2067,7 +2242,7 @@ Attributes[scanSlots] = {HoldRest}
 
 scanSlots[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, foundFunction, parent},
+Module[{ast, node, children, data, foundFunction, parent},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2094,19 +2269,20 @@ Catch[
   ];
 
   If[!foundFunction,
-      (*
-      This is not more confident because there are lots of examples of using # with no containing Function:
+    (*
+    This is not more confident because there are lots of examples of using # with no containing Function:
 
-      Algebra work
-      doing Function @@ {#}
-      etc.
+    Algebra work
+    doing Function @@ {#}
+    etc.
 
-      *)
-      AppendTo[issues, Lint["MissingFunction", "There is no containing ``Function``.", "Error", <| Source->data[Source], ConfidenceLevel -> 0.90 |>]]
+    *)
+    AppendTo[issues, Lint["MissingFunction", "There is no containing ``Function``.", "Error", <|
+      Source -> data[Source],
+      ConfidenceLevel -> 0.90 |>]]
   ];
 
   issues
-
 ]]
 
 
@@ -2117,7 +2293,7 @@ Attributes[scanSolverCalls] = {HoldRest}
 
 scanSolverCalls[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data},
+Module[{ast, node, children, data},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2127,10 +2303,14 @@ Catch[
 
   cases = Cases[children, CallNode[LeafNode[Symbol, "EvenQ" | "OddQ" | "PrimeQ", _], _, _], Infinity];
 
-  Scan[(AppendTo[issues, Lint["BadSolverCall", "*Q function in symbolic solver. Did you mean to do this?", "Error", <|Source -> #[[3, Key[Source] ]], ConfidenceLevel -> 0.90|>]])&, cases];
+  Scan[(AppendTo[issues, Lint["BadSolverCall", "*Q function in symbolic solver. Did you mean to do this?", "Error", <|
+    Source -> #[[3, Key[Source] ]],
+    ConfidenceLevel -> 0.90|>]])&
+    ,
+    cases
+  ];
 
   issues
-
 ]]
 
 
@@ -2139,7 +2319,7 @@ Catch[
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
 
 scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
- Module[{ast, node, tag, data, tagString, children},
+Module[{ast, node, tag, data, tagString, children},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   tag = node[[1]];
@@ -2150,47 +2330,40 @@ scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
 
   Switch[tagString,
     "UnhandledCharacter",
-        leaf = children[[1]];
-        {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      leaf = children[[1]];
+      {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <|
+        data,
+        ConfidenceLevel -> 1.0 |>]}
     ,
     "ExpectedOperand",
-        {Lint["ExpectedOperand", "Expected an expression.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["ExpectedOperand", "Expected an expression.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "LinearSyntaxBang",
-        {Lint["LinearSyntaxBang", "Invalid syntax for ``\\!``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["LinearSyntaxBang", "Invalid syntax for ``\\!``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "NonAssociativePatternTest",
-        {Lint["NonAssociativePatternTest", "Invalid syntax for ``?``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "NonAssociativeDirectedEdge",
-        {Lint["NonAssociativeDirectedEdge", "Invalid syntax for ``\\[DirectedEdge]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "NonAssociativeUndirectedEdge",
-        {Lint["NonAssociativeUndirectedEdge", "Invalid syntax for ``\\[UndirectedEdge]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["NonAssociativePatternTest", "Invalid syntax for ``?``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "OpenParen",
-        {Lint["OpenParen", "Invalid syntax for ``()``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["OpenParen", "Invalid syntax for ``()``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "OpenSquare",
-        {Lint["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "GroupMissingCloser",
-        {Lint["GroupMissingCloser", "Missing closing bracket.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "GroupMissingOpener",
-        {Lint["GroupMissingOpener", "Missing opening bracket.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["GroupMissingCloser", "Missing closing bracket.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "UnterminatedString",
-        {Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "EmptyString",
-        {Lint["EmptyString", "Empty string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["EmptyString", "Empty string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "UnterminatedComment",
-        {Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     _,
-        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
 ]
 

@@ -33,7 +33,7 @@ Options[ImplicitTimesFile] = {
 
 
 $fileByteCountMinLimit = 0*^6
-$fileByteCountMaxLimit = 2*^6
+$fileByteCountMaxLimit = 3*^6
 
 
 
@@ -216,7 +216,7 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
   rules, underLength},
 
   startCols = Cases[starts, {lineNumber, col_} :> col];
-  endCols = Cases[ends, {lineNumber, col_} :> col + 1];
+  endCols = Cases[ends, {lineNumber, col_} :> col];
   infixCols = Cases[infixs, {lineNumber, col_} :> col];
 
   line = lineIn;
@@ -270,14 +270,14 @@ return {line, col} for all \[Times] symbols
 processPar[{left_, LeafNode[Token`Fake`ImplicitTimes, _, _], right_}] :=
  Module[{leftSource, rightSource},
 
-  leftSource = left[[3]][Source];
-  rightSource = right[[3]][Source];
+  leftSource = left[[3, Key[Source] ]];
+  rightSource = right[[3, Key[Source] ]];
    (*
    same line
    
    this is symbolically represented as the best placement between left and right at this stage
 
-   Actual tokenization needs to occur later to figure out actual the column
+   Actual tokenization needs to occur later to figure out the actual column
    *)
    BestImplicitTimesPlacement[{leftSource[[2]], rightSource[[1]]}]
    ]
@@ -405,21 +405,17 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
   ];
 
   Which[
-    span[[1]] == span[[2]],
-      (* spans are the same, this can happen in degenerate cases *)
-      span[[1]]
-    ,
     span[[1, 1]] != span[[2, 1]],
       (* different lines, so place \[Times] at end of first line *)
-      {span[[1, 1]], StringLength[lines[[span[[1, 1]]]]] + 1}
+      {span[[1, 1]], StringLength[lines[[span[[1, 1]] ]] ] + 1}
+    ,
+    span[[1, 2]] == span[[2, 2]],
+      (* contiguous *)
+      {span[[1, 1]], span[[1, 2]]}
     ,
     span[[1, 2]] + 1 == span[[2, 2]],
-      (* contiguous *)
-      {span[[1, 1]], span[[1, 2]] + 1}
-    ,
-    span[[1, 2]] + 1 == span[[2, 2]] - 1,
       (* optimization case to avoid calling TokenizeString: only 1 space between *)
-      {span[[1, 1]], span[[1, 2]] + 1}
+      {span[[1, 1]], span[[1, 2]]}
     ,
     True,
       (* do actual work to figure out best placement *)
@@ -429,35 +425,67 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       line = lines[[lineNumber]];
 
       (* only tokenize the characters in-between *)
-      line = StringTake[line, {span[[1,2]]+1, span[[2,2]]-1}];
+      line = StringTake[line, {span[[1, 2]], span[[2, 2]]-1}];
+
+      If[$Debug,
+        Print["line: ", line];
+      ];
 
       tokens = TokenizeString[line];
 
+      If[$Debug,
+        Print["tokens: ", tokens];
+      ];
+
       offset = span[[1, 2]];
       
+      If[$Debug,
+        Print["offset: ", offset];
+      ];
+
       (*
       any space is a candidate
       *)
       spaces = Cases[tokens, LeafNode[Token`WhiteSpace, _, _]];
-      spaceRanges = offset + Flatten[Range @@ #[[3]][Source][[All, 2]]& /@ spaces];
+      spaceRanges = offset - 1 + Flatten[Range @@ #[[3, Key[Source], All, 2]]& /@ spaces];
       
+      If[$Debug,
+        Print["spaceRanges: ", spaceRanges];
+      ];
+
       (*
       the gaps on either side of a comment are only candidates if they are not next to a space (because the space
       itself is preferred) 
       *)
       comments = Cases[tokens, LeafNode[Token`Comment, _, _]];
-      gaps = #[[3]][Source][[1, 2]]& /@ comments;
+      gaps = #[[3, Key[Source], 1, 2]]& /@ comments;
       excludes = SequenceCases[tokens, {LeafNode[Token`WhiteSpace, _, _], c:LeafNode[Token`Comment, _, _]} :> c];
-      gaps = offset + Complement[gaps, excludes];
+      gaps = offset - 1 + Complement[gaps, excludes];
 
-      edges = offset + {1, StringLength[line]+1};
+      If[$Debug,
+        Print["gaps: ", gaps];
+      ];
+
+      edges = offset - 1 + {0, StringLength[line]+1};
+
+      If[$Debug,
+        Print["edges: ", edges];
+      ];
 
       candidates = Union[spaceRanges ~Join~ gaps ~Join~ edges];
+
+      If[$Debug,
+        Print["candidates: ", candidates];
+      ];
 
       (*
       Which candidates are closest to mean?
       *)
       goals = MinimalBy[candidates, Abs[# - mean]&];
+
+      If[$Debug,
+        Print["goals: ", goals];
+      ];
 
       Which[
         Length[goals] == 1,

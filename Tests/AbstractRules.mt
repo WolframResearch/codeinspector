@@ -10,7 +10,7 @@ StringCall
 TestMatch[
 	LintString["{ String[1,2,3] }"]
 	,
-	{Lint["BadCall", _, _, _]}
+	{Lint["BadCall", _, _, _], Lint["TopLevel", _, _, _]}
 	,
 	TestID->"AbstractRules-20190522-C4I4L9"
 ]
@@ -22,7 +22,7 @@ IntegerCall
 TestMatch[
 	LintString["{ Integer[1,2,3] }"]
 	,
-	{Lint["BadCall", _, _, _]}
+	{Lint["BadCall", _, _, _], Lint["TopLevel", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-F3D4K1"
 ]
@@ -33,7 +33,7 @@ RealCall
 TestMatch[
 	LintString["{ Real[1,2,3] }"]
 	,
-	{Lint["BadCall", _, _, _]}
+	{Lint["BadCall", _, _, _], Lint["TopLevel", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-N1Z9G4"
 ]
@@ -46,7 +46,7 @@ DuplicateKeys
 TestMatch[
 	LintString["<| 1->2, 1->3 |>"]
 	,
-	{Lint["DuplicateKeys", _, _, _]}
+	{Lint["DuplicateKeys", _, _, _], Lint["TopLevel", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-M5A4H9"
 ]
@@ -103,7 +103,7 @@ DuplicateClauses
 *)
 
 TestMatch[
-	LintString[" Which[a, b, a, b] "]
+	LintString[" Which[a, 1, a, 2, b, 3, b, 4] "]
 	,
 	{Lint["DuplicateClauses", _, _, _], Lint["DuplicateClauses", _, _, _]}
 	,
@@ -206,7 +206,7 @@ DuplicateNamedPattern
 TestMatch[
 	LintString[" a : ( a:2 ) "]
 	,
-	{Lint["DuplicateNamedPattern", _, _, _]}
+	{Lint["DuplicateNamedPattern", _, _, _], Lint["TopLevel", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-I6L1Y3"
 ]
@@ -430,7 +430,7 @@ TestMatch[
 TestMatch[
 	LintString["With[{}, {}, 34]"]
 	,
-	{Lint["WithArguments", _, _, _], Lint["WithArguments", _, _, _]}
+	{Lint["WithArgumentsEmpty", _, _, _]}
 	,
 	TestID -> "AbstractRules-20191120-N6B9B5"
 ]
@@ -537,7 +537,7 @@ NamedPatternInOptional
 TestMatch[
 	LintString[" _:b:c "]
 	,
-	{Lint["NamedPatternInOptional", _, _, _]}
+	{Lint["NamedPatternInOptional", _, _, _], Lint["TopLevel", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-V0R4Z2"
 ]
@@ -647,5 +647,17 @@ TestMatch[
 
 
 
+
+
+(*
+SuspiciousOut
+*)
+TestMatch[
+	LintString["{ % }"]
+	,
+	{Lint["SuspiciousSessionSymbol", _, _, _], Lint["TopLevel", _, _, _]}
+	,
+	TestID->"AbstractRules-20190522-O5O0L9"
+]
 
 
