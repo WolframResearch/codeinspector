@@ -2200,18 +2200,18 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, selecteds},
   issues = {};
   
   (*
-      if this is _ | PatternSequence[] then this is ok
+  if this is _ | PatternSequence[] then this is ok
   *)
   If[MatchQ[children, {CallNode[LeafNode[Symbol, "Blank", _], {}, _],
-                        CallNode[LeafNode[Symbol, "PatternSequence", _], {}, _]}] ||
-      MatchQ[children, {CallNode[LeafNode[Symbol, "PatternSequence", _], {}, _],
+                        CallNode[LeafNode[Symbol, "PatternSequence", _], {}, _]} |
+                      {CallNode[LeafNode[Symbol, "PatternSequence", _], {}, _],
                         CallNode[LeafNode[Symbol, "Blank", _], {}, _]}],
       Throw[issues]
   ];
 
   (*
-      only test for _
-      patterns like a_ may occur in Alternatives
+  only test for _
+  patterns like a_ may occur in Alternatives
   *)
   blanks = Cases[children, CallNode[LeafNode[Symbol, "Blank", _], {}, _]];
 
@@ -2221,7 +2221,7 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, selecteds},
 
   counts = CountsBy[children, ToFullFormString];
 
-  selecteds = Select[children, counts[ToFullFormString[#]] > 1&];
+  selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
     srcs = #[[3, Key[Source] ]]& /@ selected;
