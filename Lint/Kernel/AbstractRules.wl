@@ -1291,7 +1291,7 @@ Attributes[scanModules] = {HoldRest}
 scanModules[pos_List, astIn_] :=
 Catch[
  Module[{ast, node, children, data, selected, params, issues, vars, usedSymbols, unusedParams, counts,
-  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions},
+  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1381,6 +1381,7 @@ Catch[
   ];
 
 
+
   stringFunctions =
     Cases[children[[2]],
       CallNode[LeafNode[Symbol, "StringReplace" | "StringReplaceList" | "StringSplit" | "StringTrim" | "StringCases", _], _, _], {0, Infinity}];
@@ -1389,15 +1390,25 @@ Catch[
     Flatten[
       Cases[#[[2]], CallNode[LeafNode[Symbol, "RuleDelayed", _], {_, rhs_}, _] :> rhs, {0, Infinity}]& /@ stringFunctions];
 
-  ruleDelayedRHSSymbols = ToFullFormString /@ Cases[ruleDelayedRHSs, LeafNode[Symbol, _, _], {0, Infinity}];
+  ruleDelayedRHSSymbols = Cases[ruleDelayedRHSs, LeafNode[Symbol, _, _], {0, Infinity}];
 
-  ruleDelayedRHSParams = Select[vars, Function[{c}, MemberQ[ruleDelayedRHSSymbols, ToFullFormString[c]]]];
+  ruleDelayedRHSParams = Select[vars, Function[{c}, MemberQ[ToFullFormString /@ ruleDelayedRHSSymbols, ToFullFormString[c]]]];
 
-  Scan[
-    AppendTo[issues, Lint["LeakedVariable", "Leaked variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
-      #[[3]], ConfidenceLevel -> 0.75 |> ]]&
-      ,
-      ruleDelayedRHSParams
+  Scan[(
+
+    paramString = ToFullFormString[#];
+
+    paramUses = Select[ruleDelayedRHSSymbols, ToFullFormString[#] == paramString&];
+
+    AppendTo[issues,
+      Lint["LeakedVariable", "Leaked variable in ``Module``: " <> format[paramString] <> ".", "Warning", <|
+        Source -> #[[3, Key[Source] ]],
+        "AdditionalSources" -> ( #[[3, Key[Source] ]]& /@ paramUses ),
+        ConfidenceLevel -> 0.75 |>
+      ]
+    ])&
+    ,
+    ruleDelayedRHSParams
   ];
 
   issues
