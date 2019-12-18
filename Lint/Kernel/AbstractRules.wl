@@ -1384,7 +1384,7 @@ Catch[
 
   stringFunctions =
     Cases[children[[2]],
-      CallNode[LeafNode[Symbol, "StringReplace" | "StringReplaceList" | "StringSplit" | "StringTrim" | "StringCases", _], _, _], {0, Infinity}];
+      CallNode[LeafNode[Symbol, "StringReplace" | "StringReplaceList" | "StringSplit" | "StringCases", _], _, _], {0, Infinity}];
 
   ruleDelayedRHSs =
     Flatten[
