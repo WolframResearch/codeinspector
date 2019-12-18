@@ -1290,7 +1290,8 @@ Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts},
+ Module[{ast, node, children, data, selected, params, issues, vars, usedSymbols, unusedParams, counts,
+  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1368,8 +1369,8 @@ Catch[
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
   ];
 
-  used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
-  unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
+  usedSymbols = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
+  unusedParams = Select[vars, Function[{c}, !MemberQ[usedSymbols, ToFullFormString[c]]]];
 
   Scan[
     AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
@@ -1377,6 +1378,37 @@ Catch[
       CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
       ,
       unusedParams
+  ];
+
+
+
+  stringFunctions =
+    Cases[children[[2]],
+      CallNode[LeafNode[Symbol, "StringReplace" | "StringReplaceList" | "StringSplit" | "StringCases", _], _, _], {0, Infinity}];
+
+  ruleDelayedRHSs =
+    Flatten[
+      Cases[#[[2]], CallNode[LeafNode[Symbol, "RuleDelayed", _], {_, rhs_}, _] :> rhs, {0, Infinity}]& /@ stringFunctions];
+
+  ruleDelayedRHSSymbols = Cases[ruleDelayedRHSs, LeafNode[Symbol, _, _], {0, Infinity}];
+
+  ruleDelayedRHSParams = Select[vars, Function[{c}, MemberQ[ToFullFormString /@ ruleDelayedRHSSymbols, ToFullFormString[c]]]];
+
+  Scan[(
+
+    paramString = ToFullFormString[#];
+
+    paramUses = Select[ruleDelayedRHSSymbols, ToFullFormString[#] == paramString&];
+
+    AppendTo[issues,
+      Lint["LeakedVariable", "Leaked variable in ``Module``: " <> format[paramString] <> ".", "Warning", <|
+        Source -> #[[3, Key[Source] ]],
+        "AdditionalSources" -> ( #[[3, Key[Source] ]]& /@ paramUses ),
+        ConfidenceLevel -> 0.75 |>
+      ]
+    ])&
+    ,
+    ruleDelayedRHSParams
   ];
 
   issues
