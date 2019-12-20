@@ -189,7 +189,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseString[string, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cstAndIssues = ConcreteParseString[string, {StringNode[String, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
