@@ -97,7 +97,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-LintFile[file_String | File[file_String], OptionsPattern[]] :=
+LintFile[File[file_String], OptionsPattern[]] :=
 Catch[
 Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cstAndIssues, data, concreteRules},
 
@@ -132,7 +132,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     ];
   ];
 
-  cstAndIssues = ConcreteParseFile[full, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cstAndIssues = ConcreteParseFile[File[full], {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]

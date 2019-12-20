@@ -72,7 +72,7 @@ bug 338218
 *)
 
 
-LintFileReport[file_String | File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
+LintFileReport[File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   lintedLines, unusedLineHashExclusions, hashes, confidence, performanceGoal, concreteRules,
@@ -120,7 +120,7 @@ Catch[
    ];
 
   If[lints === Automatic,
-    lints = LintFile[full,
+    lints = LintFile[File[full],
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,

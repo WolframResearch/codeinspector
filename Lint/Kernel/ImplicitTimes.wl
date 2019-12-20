@@ -37,7 +37,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-ImplicitTimesFile[file_, OptionsPattern[]] :=
+ImplicitTimesFile[File[file_String], OptionsPattern[]] :=
 Catch[
  Module[{full, times, performanceGoal, cst, agg},
 
