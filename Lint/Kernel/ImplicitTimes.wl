@@ -446,7 +446,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       (*
       any space is a candidate
       *)
-      spaces = Cases[tokens, LeafNode[Token`WhiteSpace, _, _]];
+      spaces = Cases[tokens, LeafNode[Whitespace, _, _]];
       spaceRanges = offset - 1 + Flatten[Range @@ #[[3, Key[Source], All, 2]]& /@ spaces];
       
       If[$Debug,
@@ -459,7 +459,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       *)
       comments = Cases[tokens, LeafNode[Token`Comment, _, _]];
       gaps = #[[3, Key[Source], 1, 2]]& /@ comments;
-      excludes = SequenceCases[tokens, {LeafNode[Token`WhiteSpace, _, _], c:LeafNode[Token`Comment, _, _]} :> c];
+      excludes = SequenceCases[tokens, {LeafNode[Whitespace, _, _], c:LeafNode[Token`Comment, _, _]} :> c];
       gaps = offset - 1 + Complement[gaps, excludes];
 
       If[$Debug,

@@ -95,7 +95,7 @@ Module[{cst, node, children, data, issues, srcs},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   pairs = Partition[filtered, 2, 1];
 
@@ -152,7 +152,7 @@ Module[{cst, node, children, data, issues, srcs},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   pairs = Partition[filtered, 2, 1];
 
@@ -209,7 +209,7 @@ Module[{cst, node, children, data, issues, pairs, srcs, filtered},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   pairs = Partition[filtered, 2, 1];
 
@@ -275,7 +275,7 @@ Module[{cst, node, children, data, issues, srcs},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   pairs = Partition[filtered, 2, 1];
 
@@ -335,7 +335,7 @@ Module[{cst, node, children, data, issues, pairs, filtered, srcs},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   pairs = Partition[filtered, 2, 1];
 
@@ -413,7 +413,7 @@ Module[{cst, node, children, data, issues, pairs, srcs, filtered, poss, i},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   pairs = Partition[filtered, 2, 1];
 
@@ -476,7 +476,7 @@ Module[{cst, node, children, data, issues, srcs},
   (*
   We want to ignore trivia
   *)
-  filtered = DeleteCases[children, LeafNode[Token`Comment | Token`WhiteSpace | Token`Newline | Token`LineContinuation, _, _] ];
+  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
   (*
   With a ~f~ b, we only want to look at {~, f} and {f, ~}
