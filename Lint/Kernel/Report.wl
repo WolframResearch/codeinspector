@@ -76,7 +76,7 @@ LintFileReport[File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]]
 Catch[
  Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   lintedLines, unusedLineHashExclusions, hashes, confidence, performanceGoal, concreteRules,
-  aggregateRules, abstractRules},
+  aggregateRules, abstractRules, bytes, str},
 
  lints = lintsIn;
 
@@ -127,13 +127,11 @@ Catch[
       "AbstractRules" -> abstractRules];
   ];
 
+   bytes = Import[full, "Byte"];
 
+   str = FromCharacterCode[bytes, "UTF8"];
 
-   (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-   lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+   lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
    If[!empty[lineHashExclusions],
     hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
@@ -218,11 +216,7 @@ Catch[
   ];
 
 
- (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-  lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+  lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
   LintedString[string, lintedLines]
@@ -296,11 +290,7 @@ Catch[
 
   string = FromCharacterCode[bytes, "UTF8"];
 
- (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-  lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+  lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
   LintedString[string, lintedLines]
