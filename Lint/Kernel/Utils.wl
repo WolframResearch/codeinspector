@@ -142,7 +142,7 @@ shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2T
 			False,
 		KeyExistsQ[lint1Data, CodeActions],
 			False,
-		!SourceMemberQ[lint2Data[ Source ], lint1Data[ Source ] ],
+		!SourceMemberQ[lint2Data[Source], lint1Data[Source] ],
 			False,
 		MatchQ[lint1Tag, "UnhandledCharacter" | "AbstractSyntaxError"] && lint2Tag == "UnrecognizedCharacter",
 			(*
@@ -151,7 +151,9 @@ shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2T
 			True,
 		lint1Tag == "UnrecognizedCharacter" && MatchQ[lint2Tag, "UnhandledCharacter" | "AbstractSyntaxError"],
 			False,
-		severityToInteger[lint1Severity] <= severityToInteger[lint2Severity],
+		severityToInteger[lint1Severity] < severityToInteger[lint2Severity],
+			True,
+		lint1Data[ConfidenceLevel] < lint2Data[ConfidenceLevel],
 			True,
 		True,
 			False
@@ -236,7 +238,12 @@ $characterReplacementRules = {
 	"\.1d" -> "\[UnknownGlyph]",
 	"\.1e" -> "\[UnknownGlyph]",
 	"\.1f" -> "\[UnknownGlyph]",
-	"\.7f" -> "\[UnknownGlyph]"
+	"\.7f" -> "\[UnknownGlyph]",
+
+	(*
+	BOM
+	*)
+	"\:feff" -> "\[UnknownGlyph]"
 }
 
 EndStaticAnalysisIgnore[]
