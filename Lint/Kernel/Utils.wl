@@ -142,7 +142,7 @@ shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2T
 			False,
 		KeyExistsQ[lint1Data, CodeActions],
 			False,
-		!SourceMemberQ[lint2Data[Source], lint1Data[Source] ],
+		!SourceMemberQ[lint2Data[Source], lint1Data[Source]],
 			False,
 		MatchQ[lint1Tag, "UnhandledCharacter" | "AbstractSyntaxError"] && lint2Tag == "UnrecognizedCharacter",
 			(*
@@ -150,6 +150,13 @@ shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2T
 			*)
 			True,
 		lint1Tag == "UnrecognizedCharacter" && MatchQ[lint2Tag, "UnhandledCharacter" | "AbstractSyntaxError"],
+			False,
+		lint1Tag == "UnexpectedCharacter" && lint2Tag == "CharacterEncoding",
+			(*
+			"CharacterEncoding" is the "root" cause, so keep it and get rid of "UnexpectedCharacter"
+			*)
+			True,
+		lint1Tag == "CharacterEncoding" && lint2Tag == "UnexpectedCharacter",
 			False,
 		severityToInteger[lint1Severity] < severityToInteger[lint2Severity],
 			True,
