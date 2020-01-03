@@ -132,7 +132,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     ];
   ];
 
-  cstAndIssues = ConcreteParseFile[File[full], {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cstAndIssues = ConcreteParseFile[File[full], {ContainerNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
@@ -189,7 +189,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseString[string, {StringNode[String, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cstAndIssues = ConcreteParseString[string, {ContainerNode[String, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
@@ -230,7 +230,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseBytes[bytes, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cstAndIssues = ConcreteParseBytes[bytes, {ContainerNode[Byte, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
@@ -269,7 +269,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseBox[box, {FileNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cstAndIssues = ConcreteParseBox[box, {ContainerNode[Box, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
 
   If[FailureQ[cstAndIssues],
     Throw[cstAndIssues]
