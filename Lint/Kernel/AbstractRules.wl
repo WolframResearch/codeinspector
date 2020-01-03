@@ -1321,7 +1321,7 @@ Catch[
   ];
 
   (*
-      Module[Evaluate[]] denotes meta-programming
+  Module[Evaluate[]] denotes meta-programming
   *)
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Evaluate", _], _, _]],
     Throw[issues]
@@ -1329,14 +1329,14 @@ Catch[
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
     AppendTo[issues, Lint["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|
-      data,
+      children[[1, 3]],
       ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
     AppendTo[issues, Lint["ModuleArgumentsEmpty", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
-      data,
+      children[[1, 3]],
       ConfidenceLevel -> 0.90|>]];
   ];
 
@@ -1467,12 +1467,14 @@ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedP
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|
+      children[[1, 3]], ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|data, ConfidenceLevel -> 0.90|>]];
+    AppendTo[issues, Lint["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
+      children[[1, 3]], ConfidenceLevel -> 0.90|>]];
   ];
 
   params = children[[1, 2]];
@@ -1559,7 +1561,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
 
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], _, _]...}],
     AppendTo[issues, Lint["WithArguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|
-      data,
+      Source -> {#[[1, 3, Key[Source], 1]], #[[-1, 3, Key[Source], 2]]}&[Most[children]],
       ConfidenceLevel -> 0.55|>]];
 
     Throw[issues];
@@ -1584,7 +1586,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   (* Having empty {} as With variable argument is not critical, but a warning may be issued *)
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
     AppendTo[issues, Lint["WithArgumentsEmpty", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark", <|
-      data,
+      Source -> {#[[1, 3, Key[Source], 1]], #[[-1, 3, Key[Source], 2]]}&[Most[children]],
       ConfidenceLevel -> 0.90|>]];
   ];
 
@@ -1681,12 +1683,14 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, Lint["BlockArguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|
+      children[[1, 3]], ConfidenceLevel -> 0.55|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|data, ConfidenceLevel -> 0.90|>]];
+    AppendTo[issues, Lint["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
+      children[[1, 3]], ConfidenceLevel -> 0.90|>]];
   ];
 
   params = children[[1,2]];
