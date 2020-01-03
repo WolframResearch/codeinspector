@@ -129,7 +129,7 @@ Catch[
 
    bytes = Import[full, "Byte"];
 
-   str = FromCharacterCode[bytes, "UTF8"];
+   str = SafeString[bytes];
 
    lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
@@ -288,7 +288,7 @@ Catch[
   ];
 
 
-  string = FromCharacterCode[bytes, "UTF8"];
+  string = SafeString[bytes];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 

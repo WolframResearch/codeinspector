@@ -241,9 +241,9 @@ $characterReplacementRules = {
 	"\.7f" -> "\[UnknownGlyph]",
 
 	(*
-	BOM
+	Virtual BOM character
 	*)
-	"\:feff" -> "\[UnknownGlyph]"
+	"\:e001" -> "\[UnknownGlyph]"
 }
 
 EndStaticAnalysisIgnore[]
