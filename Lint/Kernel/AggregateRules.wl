@@ -39,9 +39,14 @@ InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes
                                                   _BlankNode |
                                                   _BlankSequenceNode |
                                                   _BlankNullSequenceNode |
-                                                  _PatternBlankNode |
-                                                  _PatternBlankSequenceNode |
-                                                  _PatternBlankNullSequenceNode |
+                                                  (*
+                                                  only care about a_ syntax
+                                                  a_b syntax doesn't get flagged here
+                                                  there are symbols on both sides, so probably ok
+                                                  *)
+                                                  PatternBlankNode[_, { _, _}, _] |
+                                                  PatternBlankSequenceNode[_, { _, _ }, _] |
+                                                  PatternBlankNullSequenceNode[_, { _, _ }, _] |
                                                   _OptionalDefaultPatternNode, 1], _] -> scanImplicitTimesBlanks,
 
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
@@ -235,12 +240,16 @@ Module[{agg, node, data, children, issues, pairs, srcs},
     *)
     If[!MatchQ[p, {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
-                        _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
+                        PatternBlankNode[_, { _, _}, _] |
+                        PatternBlankSequenceNode[_, { _, _ }, _] |
+                        PatternBlankNullSequenceNode[_, { _, _ }, _] |
                         _OptionalDefaultPatternNode, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
                     {LeafNode[Token`Fake`ImplicitTimes, _, _],
                       LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
                         _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
-                        _PatternBlankNode | _PatternBlankSequenceNode | _PatternBlankNullSequenceNode |
+                        PatternBlankNode[_, { _, _}, _] |
+                        PatternBlankSequenceNode[_, { _, _ }, _] |
+                        PatternBlankNullSequenceNode[_, { _, _ }, _] |
                         _OptionalDefaultPatternNode}],
       Continue[]
     ];
