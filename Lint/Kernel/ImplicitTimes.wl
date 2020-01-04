@@ -57,7 +57,7 @@ Catch[
      ];
     ];
 
-    cst = ConcreteParseFile[full];
+    cst = ConcreteParseFile[File[full]];
 
     If[FailureQ[cst],
       Throw[cst]
@@ -82,29 +82,20 @@ Options[ImplicitTimesString] = {
 
 ImplicitTimesString[string_, OptionsPattern[]] :=
 Catch[
- Module[{times, cst, agg},
+Module[{times, cst, agg},
 
-   cst = ConcreteParseString[string];
+  cst = ConcreteParseString[string];
 
-   If[FailureQ[cst],
+  If[FailureQ[cst],
     Throw[cst]
   ];
 
   agg = Aggregate[cst];
 
-    times = implicitTimes[agg];
+  times = implicitTimes[agg];
 
-   times
+  times
 ]]
-
-
-
-
-
-
-
-
-
 
 
 
@@ -115,39 +106,36 @@ Options[ImplicitTimesFileReport] = {
   "LineHashExclusions" -> {}
 }
 
-
-
-
 ImplicitTimesFileReport[file_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
+Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines, bytes, str},
 
- implicitTimes = implicitTimesIn;
+  implicitTimes = implicitTimesIn;
 
- lineNumberExclusions = OptionValue["LineNumberExclusions"];
- lineHashExclusions = OptionValue["LineHashExclusions"];
+  lineNumberExclusions = OptionValue["LineNumberExclusions"];
+  lineHashExclusions = OptionValue["LineHashExclusions"];
 
-   full = FindFile[file];
+  full = FindFile[file];
   If[FailureQ[full],
     Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
   ];
 
-   If[FileByteCount[full] == 0,
-   Throw[Failure["EmptyFile", <|"FileName"->full|>]]
-   ];
+  If[FileByteCount[full] == 0,
+    Throw[Failure["EmptyFile", <|"FileName"->full|>]]
+  ];
 
-   If[implicitTimes === Automatic,
+  If[implicitTimes === Automatic,
     implicitTimes = ImplicitTimesFile[full];
-    ];
+  ];
 
-   (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-   lines = Import[full, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+  bytes = Import[full, "Byte"];
 
-   lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
-   LintedFile[full, lintedLines]
+  str = SafeString[bytes];
+
+  lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
+
+  lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+  LintedFile[full, lintedLines]
 ]]
 
 
@@ -162,29 +150,25 @@ Options[ImplicitTimesStringReport] = {
 
 ImplicitTimesStringReport[string_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
+Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
 
- implicitTimes = implicitTimesIn;
+  implicitTimes = implicitTimesIn;
 
- lineNumberExclusions = OptionValue["LineNumberExclusions"];
- lineHashExclusions = OptionValue["LineHashExclusions"];
+  lineNumberExclusions = OptionValue["LineNumberExclusions"];
+  lineHashExclusions = OptionValue["LineHashExclusions"];
 
- If[StringLength[string] == 0,
-  Throw[Failure["EmptyString", <||>]]
- ];
+  If[StringLength[string] == 0,
+    Throw[Failure["EmptyString", <||>]]
+  ];
 
   If[implicitTimes === Automatic,
     implicitTimes = ImplicitTimesString[string];
   ];
 
-    (*
-    bug 163988
-    Use CharacterEncoding -> "ASCII" to guarantee that newlines are preserved
-    *)
-   lines = ImportString[string, {"Text", "Lines"}, CharacterEncoding -> "ASCII"];
+  lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-   lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
-   LintedString[string, lintedLines]
+  lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+  LintedString[string, lintedLines]
 ]]
 
 
