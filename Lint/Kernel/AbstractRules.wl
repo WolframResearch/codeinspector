@@ -3,6 +3,9 @@ BeginPackage["Lint`AbstractRules`"]
 $DefaultAbstractRules
 
 
+setupSystemSymbols[]
+
+
 Begin["`Private`"]
 
 Needs["AST`"]
@@ -10,6 +13,70 @@ Needs["AST`Utils`"]
 Needs["Lint`"]
 Needs["Lint`Format`"]
 Needs["Lint`Utils`"]
+
+
+
+(*
+This can take some time to run (~20 seconds), so it is optional
+*)
+setupSystemSymbols[] :=
+Module[{names, documentedSymbols, allSymbols, allASCIISymbols, undocumentedSymbols, obsoleteNames,
+  obsoleteSymbols, experimentalNames, experimentalSymbols, systemSymbolRules},
+
+  SetDirectory[FileNameJoin[{$InstallationDirectory, "Documentation/English/System/ReferencePages/Symbols"}]];
+
+  names = FileNames["*.nb", "", Infinity];
+
+  documentedSymbols = StringDrop[#, -3] & /@ names;
+
+  allSymbols = Names["System`*"];
+
+  allASCIISymbols = Flatten[StringCases[allSymbols, RegularExpression["[a-zA-Z0-9$]+"]]];
+
+  undocumentedSymbols = Complement[allASCIISymbols, documentedSymbols];
+
+  $undocumentedSystemSymbolAlternatives = Alternatives @@ undocumentedSymbols;
+
+  (*
+  "OBSOLETE SYMBOL" is found in the first ~50 lines, so use 100 as a heuristic for how many lines to read
+  *)
+  obsoleteNames = Select[names, FindList[#, "\"OBSOLETE SYMBOL\"", 100] != {} &];
+
+  obsoleteSymbols = StringDrop[#, -3] & /@ obsoleteNames;
+
+  $obsoleteSystemSymbolAlternatives = Alternatives @@ obsoleteSymbols;
+
+  (*
+  "EXPERIMENTAL" is found in the first ~500 lines, so use 1000 as a heuristic for how many lines to read
+  *)
+  experimentalNames = Select[names, FindList[#, "\"EXPERIMENTAL\"", 1000] != {} &];
+
+  experimentalSymbols = StringDrop[#, -3] & /@ experimentalNames;
+
+  $experimentalSystemSymbolAlternatives = Alternatives @@ experimentalSymbols;
+
+  ResetDirectory[];
+
+
+  systemSymbolRules = <|
+    (*
+    Scan symbols that are in System` but are undocumented
+    *)
+    LeafNode[Symbol, $undocumentedSystemSymbolAlternatives, _] -> scanUndocumentedSymbols,
+
+    (*
+    Scan symbols that are documented as OBSOLETE
+    *)
+    LeafNode[Symbol, $obsoleteSystemSymbolAlternatives, _] -> scanObsoleteSymbols,
+
+    (*
+    Scan symbols that are documented as EXPERIMENTAL
+    *)
+    LeafNode[Symbol, $experimentalSystemSymbolAlternatives, _] -> scanExperimentalSymbols
+  |>;
+
+  $DefaultAbstractRules = $DefaultAbstractRules ~Join~ systemSymbolRules;
+]
 
 
 
@@ -114,472 +181,6 @@ Scan some symbols that are intuitive, yet do not exist
 LeafNode[Symbol,
   "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | "RealQ" | "FalseQ" | "RationalQ" |
   "ComplexQ" | "SymbolQ" | "Match", _] -> scanBadSymbols,
-
-(*
-Scan symbols that are in System` but are undocumented
-*)
-LeafNode[Symbol,
-  "Absolute" | "ActionDelay" | "ActionMenuBox" | "ActionMenuBoxOptions" | 
-  "ActiveItem" | "AlgebraicRulesData" | "AlignmentMarker" |
-  "AllowAdultContent" | "AllowIncomplete" | "AllowKernelInitialization" | 
-  "Analytic" | "AnimatorBox" | "AnimatorBoxOptions" | "AnimatorElements" | 
-  "Annotate" | "AnnotationNames" | "AnnotationValue" | "AppendCheck" | 
-  "ArgumentCountQ" | "Arrow3DBox" | "ArrowBox" | "Authenticate" | 
-  "AutoEvaluateEvents" | "AutoIndentSpacings" | "AutoMatch" | 
-  "AutomaticImageSize" | "AutoNumberFormatting" | "AutoQuoteCharacters" | 
-  "AutoScaling" | "AutoStyleOptions" | "AutoStyleWords" | 
-  "BackgroundAppearance" | "BackgroundTasksSettings" | 
-  "Backsubstitution" | "BeginFrontEndInteractionPacket" | 
-  "BezierCurve3DBox" | "BezierCurve3DBoxOptions" | "BezierCurveBox" | 
-  "BezierCurveBoxOptions" | "BlankForm" | "Bounds" | "Box" | 
-  "BoxDimensions" | "Boxes" | "BoxForm" | "BoxID" | "BoxRotation" | 
-  "BoxRotationPoint" | "Bra" | "BraKet" | "BrowserCategory" | 
-  "BSplineCurve3DBox" | "BSplineCurve3DBoxOptions" | "BSplineCurveBox" | 
-  "BSplineCurveBoxOptions" | "BSplineSurface3DBox" | 
-  "BSplineSurface3DBoxOptions" | "ButtonCell" | "ButtonContents" | 
-  "ButtonStyleMenuListing" | "CachedValue" | "CacheGraphics" | 
-  "CardinalBSplineBasis" | "CellBoundingBox" | "CellContents" | 
-  "CellElementsBoundingBox" | "CellElementSpacings" | 
-  "CellEvaluationLanguage" | "CellLabelTemplate" | "ChangeOptions" | 
-  "ChannelHistoryLength" | "ChannelListenerWait" | "ChartElementData" | 
-  "ChartElementDataFunction" | "CheckAll" | "CheckboxBox" | 
-  "CheckboxBoxOptions" | "CircleBox" | "ClipboardNotebook" | 
-  "ClockwiseContourIntegral" | "Closed" | "ClosingEvent" | 
-  "CloudObjectInformation" | "CloudObjectInformationData" | "Coarse" | 
-  "CoefficientDomain" | "ColonForm" | "ColorSetterBox" | 
-  "ColorSetterBoxOptions" | "ColumnBackgrounds" | 
-  "CompletionsListPacket" | "ComponentwiseContextMenu" | 
-  "CompressedData" | "ConeBox" | "ConicHullRegion3DBox" | 
-  "ConicHullRegionBox" | "Connect" | "ConsoleMessage" | 
-  "ConsoleMessagePacket" | "ConsolePrint" | "ContentsBoundingBox" | 
-  "ContextMenu" | "Continuation" | "ContourIntegral" | "ContourSmoothing" | 
-  "ControlAlignment" | "ControlGroupContentsBox" | "ControllerDuration" | 
-  "ControllerInformationData" | "ConvertToBitmapPacket" | 
-  "ConvertToPostScript" | "ConvertToPostScriptPacket" | "Cookies" | 
-  "CopyTag" | "CounterBox" | "CounterBoxOptions" | 
-  "CounterClockwiseContourIntegral" | "CounterEvaluator" | 
-  "CounterStyle" | "CreateDataStructure" | "CreatePalettePacket" | 
-  "CuboidBox" | "CurlyDoubleQuote" | "CurlyQuote" | 
-  "CurrentlySpeakingPacket" | "CylinderBox" | "DampingFactor" | 
-  "DataCompression" | "DataStructure" | "DataStructureQ" | 
-  "DateDelimiters" | "DebugTag" | "Decimal" | "DeclareKnownSymbols" | 
-  "DefaultControlPlacement" | "DefaultFormatTypeForStyle" | 
-  "DefaultInputFormatType" | "DefaultOutputFormatType" | "DefaultStyle" | 
-  "DefaultTextFormatType" | "DefaultTextInlineFormatType" | 
-  "DefaultValue" | "DefaultValues" | "DefineExternal" | 
-  "DegreeLexicographic" | "DegreeReverseLexicographic" | 
-  "DeleteWithContents" | "DelimitedArray" | "DestroyAfterEvaluation" | 
-  "DeviceOpenQ" | "DialogIndent" | "DialogLevel" | "DifferenceOrder" | 
-  "DigitBlockMinimum" | "DisableConsolePrintPacket" | "DiskBox" | 
-  "DispatchQ" | "DisplayFlushImagePacket" | "DisplayRules" | 
-  "DisplaySetSizePacket" | "DisplayTemporary" | "DisplayWith" | 
-  "DisplayWithRef" | "DisplayWithVariable" | "DistributionDomain" | 
-  "Divergence" | "DocumentGeneratorInformationData" | 
-  "DomainRegistrationInformation" | "DOSTextFormat" | 
-  "DoubleContourIntegral" | "DoublyInfinite" | "Down" | "DrawEdges" | 
-  "DrawFrontFaces" | "DrawHighlighted" | "DualLinearProgramming" | 
-  "DumpGet" | "DynamicBox" | "DynamicBoxOptions" | "DynamicLocation" | 
-  "DynamicModuleBox" | "DynamicModuleBoxOptions" | "DynamicModuleParent" | 
-  "DynamicName" | "DynamicNamespace" | "DynamicReference" | 
-  "DynamicUpdating" | "DynamicWrapperBox" | "DynamicWrapperBoxOptions" | 
-  "EdgeCapForm" | "EdgeColor" | "EdgeDashing" | "EdgeJoinForm" | 
-  "EdgeOpacity" | "EdgeThickness" | "EditButtonSettings" | 
-  "EliminationOrder" | "EllipticReducedHalfPeriods" | "EmbeddingObject" | 
-  "EmphasizeSyntaxErrors" | "Empty" | "EnableConsolePrintPacket" | 
-  "EndAdd" | "EndFrontEndInteractionPacket" | "EngineEnvironment" | 
-  "Enter" | "EqualColumns" | "EqualRows" | "EquatedTo" | "ErrorBoxOptions" | 
-  "ErrorNorm" | "ErrorPacket" | "ErrorsDialogSettings" | "Evaluated" | 
-  "EvaluationMode" | "EvaluationOrder" | "EventEvaluator" | 
-  "EventHandlerTag" | "ExactRootIsolation" | "ExitDialog" | 
-  "ExpectationE" | "ExportPacket" | "ExpressionPacket" | "ExpressionUUID" | 
-  "ExternalCall" | "ExternalFunctionName" | "Fail" | 
-  "FEDisableConsolePrintPacket" | "FEEnableConsolePrintPacket" | 
-  "FileHandler" | "FileInformation" | "FileName" | "FilledCurveBox" | 
-  "FilledCurveBoxOptions" | "Fine" | "FitAll" | "FlashSelection" | 
-  "FlushPrintOutputPacket" | "FoldWhile" | "FoldWhileList" | "Font" | 
-  "FontName" | "FontOpacity" | "FontPostScriptName" | "FontReencoding" | 
-  "FormatRules" | "FormatValues" | "FrameInset" | "Frameless" | 
-  "FrontEndObject" | "FrontEndResource" | "FrontEndResourceString" | 
-  "FrontEndValueCache" | "FrontEndVersion" | "FrontFaceColor" | 
-  "FrontFaceOpacity" | "FullAxes" | "Generic" | 
-  "GeometricTransformation3DBox" | 
-  "GeometricTransformation3DBoxOptions" | "GeometricTransformationBox" | 
-  "GeometricTransformationBoxOptions" | "GestureHandlerTag" | 
-  "GetBoundingBoxSizePacket" | "GetContext" | "GetFileName" | 
-  "GetFrontEndOptionsDataPacket" | "GetLinebreakInformationPacket" | 
-  "GetMenusPacket" | "GetPageBreakInformationPacket" | 
-  "GlobalPreferences" | "GlobalSession" | "GraphElementData" | 
-  "Graphics3DBox" | "Graphics3DBoxOptions" | "GraphicsBaseline" | 
-  "GraphicsBox" | "GraphicsBoxOptions" | "GraphicsColor" | 
-  "GraphicsComplex3DBox" | "GraphicsComplex3DBoxOptions" | 
-  "GraphicsComplexBox" | "GraphicsComplexBoxOptions" | 
-  "GraphicsContents" | "GraphicsData" | "GraphicsGridBox" | 
-  "GraphicsGroup3DBox" | "GraphicsGroup3DBoxOptions" | 
-  "GraphicsGroupBox" | "GraphicsGroupBoxOptions" | "GraphicsGrouping" | 
-  "GraphicsHighlightColor" | "GraphicsStyle" | "GraphRoot" | 
-  "GridBoxAlignment" | "GridBoxBackground" | "GridBoxDividers" | 
-  "GridBoxFrame" | "GridBoxItemSize" | "GridBoxItemStyle" | 
-  "GridBoxOptions" | "GridBoxSpacings" | "GridElementStyleOptions" | 
-  "GroupTogetherGrouping" | "GroupTogetherNestedGrouping" | "HalfSpace" | 
-  "HeadCompose" | "HelpBrowserLookup" | "HelpBrowserNotebook" | "Hessian" | 
-  "HexahedronBox" | "HexahedronBoxOptions" | "HomePage" | "Horizontal" | 
-  "HorizontalForm" | "HorizontalScrollPosition" | 
-  "HyperlinkCreationSettings" | "Hyperplane" | "HyphenationOptions" | 
-  "IconizedObject" | "IgnoreSpellCheck" | "ImageCache" | 
-  "ImageCacheValid" | "ImageMarkers" | "ImageOffset" | "ImageRangeCache" | 
-  "ImageSizeCache" | "ImageSizeRaw" | "IncludeSingularTerm" | "Indent" | 
-  "IndentingNewlineSpacings" | "IndentMaxFraction" | 
-  "IndexCreationOptions" | "IndexTag" | "Inequality" | "InexactNumbers" | 
-  "InformationData" | "InformationDataGrid" | "InlineCounterAssignments" | 
-  "InlineCounterIncrements" | "InlineRules" | "InputFieldBox" | 
-  "InputFieldBoxOptions" | "InputGrouping" | "InputSettings" | 
-  "InputToBoxFormPacket" | "InsertionPointObject" | "Inset3DBox" | 
-  "Inset3DBoxOptions" | "InsetBox" | "InsetBoxOptions" | "Integral" | 
-  "Interlaced" | "InterpolationPrecision" | "InterpretationFunction" | 
-  "InterpretTemplate" | "InterruptSettings" | "Into" | 
-  "InvisibleApplication" | "InvisibleTimes" | "ItemBox" | 
-  "ItemBoxOptions" | "Jacobian" | "JoinedCurveBox" | 
-  "JoinedCurveBoxOptions" | "K" | "KernelExecute" | "Ket" | 
-  "LabeledSlider" | "LambertW" | "LanguageOptions" | "Launch" | 
-  "LayoutInformation" | "Lexicographic" | "LicenseID" | "Line3DBox" | 
-  "Line3DBoxOptions" | "LinearFilter" | "LineBox" | "LineBoxOptions" | 
-  "LineBreak" | "LinebreakSemicolonWeighting" | "LineColor" | 
-  "LineOpacity" | "LineWrapParts" | "LinkConnectedQ" | "LinkError" | 
-  "LinkFlush" | "LinkHost" | "LinkMode" | "LinkOptions" | "LinkReadHeld" | 
-  "LinkService" | "LinkWriteHeld" | "Listen" | "ListPickerBoxBackground" | 
-  "LiteralSearch" | "LocalizeDefinitions" | "LocatorBox" | 
-  "LocatorBoxOptions" | "LocatorCentering" | "LocatorPaneBox" | 
-  "LocatorPaneBoxOptions" | "LongEqual" | "LongForm" | "Loopback" | 
-  "MachineID" | "MachineName" | "MacintoshSystemPageSetup" | "MainSolve" | 
-  "MaintainDynamicCaches" | "MakeRules" | "MatchLocalNameQ" | "Material" | 
-  "MathematicaNotation" | "MathMLText" | "MaxBend" | "MaxPoints" | "Menu" | 
-  "MenuAppearance" | "MenuEvaluator" | "MenuItem" | "MenuList" | 
-  "MergeDifferences" | "MessageObject" | "MessageOptions" | 
-  "MessagesNotebook" | "MetaCharacters" | "MethodOptions" | 
-  "MinRecursion" | "MinSize" | "Mode" | "Modular" | "Momentary" | 
-  "MonomialOrder" | "MouseAppearanceTag" | "MouseButtons" | 
-  "MousePointerNote" | "MultiLetterItalics" | "MultiLetterStyle" | 
-  "Multiplicity" | "NamespaceBox" | "NamespaceBoxOptions" | "NBernoulliB" | 
-  "NeedCurrentFrontEndPackagePacket" | 
-  "NeedCurrentFrontEndSymbolsPacket" | "NestedScriptRules" | 
-  "NetworkPacketRecordingDuring" | "NewPrimitiveStyle" | "Next" | 
-  "NonAssociative" | "NormalGrouping" | "NotebookCreateReturnObject" | 
-  "NotebookDefault" | "NotebookFindReturnObject" | 
-  "NotebookGetLayoutInformationPacket" | 
-  "NotebookGetMisspellingsPacket" | "NotebookInterfaceObject" | 
-  "NotebookOpenReturnObject" | "NotebookPutReturnObject" | 
-  "NotebookResetGeneratedCells" | "NotebookSaveAs" | 
-  "NotebookSetupLayoutInformationPacket" | "NProductFactors" | 
-  "NSumTerms" | "NValues" | "OLEData" | "Open" | "OpenerBox" | 
-  "OpenerBoxOptions" | "OpenFunctionInspectorPacket" | 
-  "OpenSpecialOptions" | "OptionQ" | "OptionsPacket" | "OptionValueBox" | 
-  "OptionValueBoxOptions" | "OutputFormData" | "OutputGrouping" | 
-  "OutputMathEditExpression" | "Over" | "OverlayBox" | 
-  "OverlayBoxOptions" | "Package" | "PageHeight" | "PaneBox" | 
-  "PaneBoxOptions" | "PanelBox" | "PanelBoxOptions" | "PaneSelectorBox" | 
-  "PaneSelectorBoxOptions" | "PaperWidth" | "Parameter" | 
-  "ParameterVariables" | "ParentConnect" | "ParentForm" | "Parenthesize" | 
-  "ParentList" | "PartialD" | "PasteAutoQuoteCharacters" | "PausedTime" | 
-  "PeriodicInterpolation" | "PermissionsGroupMemberQ" | "Perpendicular" | 
-  "Pivoting" | "PlotRangeClipPlanesStyle" | "Point3DBox" | 
-  "Point3DBoxOptions" | "PointBox" | "PointBoxOptions" | "Polygon3DBox" | 
-  "Polygon3DBoxOptions" | "PolygonBox" | "PolygonBoxOptions" | 
-  "PolygonHoleScale" | "PolygonScale" | "PolynomialForm" | "Polynomials" | 
-  "PopupMenuBox" | "PopupMenuBoxOptions" | "PostScript" | "Precedence" | 
-  "PredictionRoot" | "Previous" | "PrimaryPlaceholder" | "PrintForm" | 
-  "PrismBox" | "PrismBoxOptions" | "PrivateFrontEndOptions" | 
-  "ProbabilityPr" | "ProcessStateDomain" | "ProcessTimeDomain" | 
-  "ProgressIndicatorBox" | "ProgressIndicatorBoxOptions" | "PromptForm" | 
-  "PyramidBox" | "PyramidBoxOptions" | "RadioButtonBox" | 
-  "RadioButtonBoxOptions" | "RandomSeed" | "RangeSpecification" | 
-  "Raster3DBox" | "Raster3DBoxOptions" | "RasterBox" | "RasterBoxOptions" | 
-  "RationalFunctions" | "RawArray" | "RawMedium" | "RectangleBox" | 
-  "RectangleBoxOptions" | "RecurringDigitsForm" | "RefBox" | 
-  "ReferenceMarkers" | "ReferenceMarkerStyle" | "Reinstall" | "Removed" | 
-  "RepeatedString" | "ResetMenusPacket" | "ResourceAcquire" | 
-  "ResourceSubmissionObject" | "ResourceSystemBase" | 
-  "ReturnEntersInput" | "ReturnInputFormPacket" | "RotationBox" | 
-  "RotationBoxOptions" | "RoundImplies" | "RowBackgrounds" | "RowHeights" | 
-  "RuleCondition" | "RuleForm" | "SaveAutoDelete" | "ScaledMousePosition" | 
-  "ScheduledTaskInformationData" | "ScriptForm" | "ScriptRules" | 
-  "SectionGrouping" | "Selection" | "SelectionCell" | 
-  "SelectionCellCreateCell" | "SelectionCellDefaultStyle" | 
-  "SelectionCellParentStyle" | "SelectionDebuggerTag" | 
-  "SelectionDuplicateCell" | "SelectionPlaceholder" | 
-  "SelectionSetStyle" | "SelectWithContents" | "SelfLoops" | 
-  "ServiceResponse" | "Setbacks" | "SetBoxFormNamesPacket" | 
-  "SetEvaluationNotebook" | "SetFileLoadingContext" | 
-  "SetNotebookStatusLine" | "SetOptionsPacket" | 
-  "SetSecuredAuthenticationKey" | "SetSpeechParametersPacket" | 
-  "SetterBox" | "SetterBoxOptions" | "SetValue" | "ShowAutoConvert" | 
-  "ShowCodeAssist" | "ShowControls" | "ShowGroupOpenCloseIcon" | 
-  "ShowInvisibleCharacters" | "ShowPredictiveInterface" | 
-  "ShowSyntaxStyles" | "ShrinkWrapBoundingBox" | "SingleEvaluation" | 
-  "SingleLetterStyle" | "Slider2DBox" | "Slider2DBoxOptions" | 
-  "SliderBox" | "SliderBoxOptions" | "Socket" | "SolveDelayed" | 
-  "SoundAndGraphics" | "Space" | "SpaceForm" | "SpanningCharacters" | 
-  "SpeakTextPacket" | "SpellingSuggestionsPacket" | "SphereBox" | 
-  "StartupSound" | "StringBreak" | "StringByteCount" | "StrokeForm" | 
-  "StructuredArrayHeadQ" | "StyleHints" | "StyleKeyMapping" | 
-  "StyleNames" | "SubValues" | "SurdForm" | "Syntax" | "SystemException" | 
-  "SystemGet" | "SystemInformationData" | "SystemStub" | "SystemTest" | 
-  "Tab" | "TableView" | "TableViewBox" | "TableViewBoxBackground" | 
-  "TableViewBoxOptions" | "TabViewBox" | "TabViewBoxOptions" | 
-  "TagBoxNote" | "TagStyle" | "TemplateArgBox" | "TemplateEvaluate" | 
-  "TemplateSlotSequence" | "TemplateUnevaluated" | "TemplateVerbatim" | 
-  "TemporaryVariable" | "TensorQ" | "TetrahedronBox" | 
-  "TetrahedronBoxOptions" | "Text3DBox" | "Text3DBoxOptions" | "TextBand" | 
-  "TextBoundingBox" | "TextBox" | "TextForm" | "TextLine" | 
-  "TextParagraph" | "ThisLink" | "TitleGrouping" | "ToColor" | "Toggle" | 
-  "ToggleFalse" | "TogglerBox" | "TogglerBoxOptions" | "TooBig" | 
-  "TooltipBox" | "TooltipBoxOptions" | "TotalHeight" | "TraceAction" | 
-  "TraceInternal" | "TraceLevel" | "TradingChart" | "TraditionalNotation" | 
-  "TraditionalOrder" | "TransparentColor" | "TrapSelection" | 
-  "TubeBezierCurveBox" | "TubeBezierCurveBoxOptions" | "TubeBox" | 
-  "TubeBoxOptions" | "TubeBSplineCurveBox" | 
-  "TubeBSplineCurveBoxOptions" | "UntrackedVariables" | "Up" | 
-  "UpdateDynamicObjects" | "UpdateDynamicObjectsSynchronous" | 
-  "UseGraphicsRange" | "UserDefinedWavelet" | "Using" | "V2Get" | "Value" | 
-  "ValueBox" | "ValueBoxOptions" | "ValueForm" | "ValuesData" | 
-  "VectorGlyphData" | "Verbose" | "VerboseConvertToPostScriptPacket" | 
-  "Version" | "VersionNumber" | "Vertical" | "VerticalForm" | 
-  "ViewPointSelectorSettings" | "ViewPort" | "VirtualGroupData" | 
-  "VisibleCell" | "WaitUntil" | "WindowPersistentStyles" | 
-  "WindowSelected" | "WindowWidth" | "WolframAlphaDate" | 
-  "WolframAlphaQuantity" | "WolframAlphaResult" | "$ActivationGroupID" | 
-  "$ActivationUserRegistered" | "$AddOnsDirectory" | "$BoxForms" | 
-  "$CloudVersionNumber" | "$CloudWolframEngineVersionNumber" | 
-  "$ConditionHold" | "$DefaultFrontEnd" | "$DefaultMailbox" | 
-  "$DefaultPath" | "$FinancialDataSource" | "$GeoEntityTypes" | 
-  "$GeoLocationPrecision" | "$HTMLExportRules" | "$HTTPRequest" | 
-  "$InterfaceEnvironment" | "$LaunchDirectory" | "$LicenseProcesses" | 
-  "$LicenseSubprocesses" | "$LicenseType" | "$LinkSupported" | 
-  "$LoadedFiles" | "$MaxLicenseProcesses" | "$MaxLicenseSubprocesses" | 
-  "$MinorReleaseNumber" | "$NetworkLicense" | "$Off" | "$OutputForms" | 
-  "$PasswordFile" | "$PatchLevelID" | "$PermissionsGroupBase" | 
-  "$PipeSupported" | "$PreferencesDirectory" | "$PrintForms" | 
-  "$PrintLiteral" | "$RegisteredDeviceClasses" | "$RegisteredUserName" | 
-  "$ResourceSystemBase" | "$SecuredAuthenticationKeyTokens" | 
-  "$SetParentLink" | "$SoundDisplay" | "$StructuredArrayHeads" | 
-  "$SuppressInputFormHeads" | "$SystemMemory" | "$TraceOff" | "$TraceOn" | 
-  "$TracePattern" | "$TracePostAction" | "$TracePreAction" | 
-  "$UserAgentLanguages" | "$UserAgentMachine" | "$UserAgentName" | 
-  "$UserAgentOperatingSystem" | "$UserAgentVersion" | "$UserName", _] -> scanUndocumentedSymbols,
-
-(*
-Scan symbols that are documented as OBSOLETE
-*)
-LeafNode[Symbol,
-  "$$Media" | "$AsynchronousTask" | "$DefaultFont" | "$EntityStores" | 
-  "$FormatType" | "$HTTPCookies" | "$InstallationDate" | 
-  "$MachineDomain" | "$ProductInformation" | "$ProgramName" | 
-  "$RandomState" | "$ScheduledTask" | "$TemporaryPrefix" | "$TextStyle" |
-  "$TopDirectory" | "$UserAddOnsDirectory" | "AbortScheduledTask" | 
-  "Active" | "AlgebraicRules" | "Alias" | "AmbientLight" | 
-  "AnatomyForm" | "AnimationCycleOffset" | "AnimationCycleRepetitions" |
-  "AnimationDisplayTime" | "AspectRatioFixed" | "AstronomicalData" | 
-  "AsynchronousTaskObject" | "AsynchronousTasks" | "AudioDevice" |
-  "ButtonEvaluator" | "ButtonExpandable" | "ButtonFrame" | 
-  "ButtonMargins" | "ButtonNote" | "ButtonStyle" | "CDFInformation" | 
-  "CellArray" | "ChebyshevDistance" | "ClassifierInformation" | 
-  "ClipFill" | "ColorOutput" | "ColumnForm" | "Compose" | 
-  "ConstrainedMax" | "ConstrainedMin" | "ContourGraphics" |
-  "ContourLevels" | "ContourLines" | "ContourSpacing" | 
-  "ConversionOptions" | "CreateScheduledTask" | "CreateTemporary" | 
-  "Date" | "Debug" | "DefaultColor" | "DefaultFont" | "DensityGraphics" |
-  "Display" | "DisplayString" | "DotPlusLayer" | "DragAndDrop" | 
-  "DSolveConstants" | "Dump" | "EdgeLabeling" | "EdgeRenderingFunction" |
-  "EvaluateScheduledTask" | "ExpectedValue" | "FactorComplete" | 
-  "FontForm" | "FormTheme" | "FromASCII" | "FromDate" | "FullOptions" | 
-  "GraphicsArray" | "GraphicsSpacing" | "GridBaseline" | "HeldPart" | 
-  "HiddenSurface" | "HomeDirectory" | "HTMLSave" | "ImageRotated" | 
-  "InstanceNormalizationLayer" | "LegendreType" | "LightSources" | 
-  "LinkOpen" | "Literal" | "LongestMatch" | "LUBackSubstitution" |
-  "MeshRange" | "NextScheduledTaskTime" | "NotebookCreate" | 
-  "OpenTemporary" | "PackingMethod" | "Plot3Matrix" | "PlotDivision" | 
-  "PlotJoined" | "PolygonIntersections" | "PredictorInformation" | 
-  "QuantityThread" | "Random" | "RasterArray" | "RecognitionThreshold" |
-  "Release" | "RemoveAsynchronousTask" | "RemoveScheduledTask" | 
-  "RenderAll" | "ReplaceHeldPart" | "ResetMedium" | 
-  "ResetScheduledTask" | "ResumePacket" | "RunScheduledTask" | 
-  "ScheduledTaskActiveQ" | "ScheduledTaskInformation" | 
-  "ScheduledTaskObject" | "ScheduledTasks" | "SelectionAnimate" | 
-  "SequenceAttentionLayer" | "SequenceForm" | "Shading" | 
-  "ShortestMatch" | "SingularValues" | "SkinStyle" | "Splice" | 
-  "StartAsynchronousTask" | "StartScheduledTask" | "StateDimensions" | 
-  "StopAsynchronousTask" | "StopScheduledTask" | "StyleForm" | 
-  "StylePrint" | "Subscripted" | "SurfaceColor" | "SurfaceGraphics" | 
-  "SuspendPacket" | "TeXSave" | "TextStyle" | "ThreadDepth" | 
-  "TimeWarpingCorrespondence" | "TimeWarpingDistance" | "ToASCII" | 
-  "ToDate" | "ToFileName" | "ToHeldExpression" | "URLFetch" | 
-  "URLFetchAsynchronous" | "URLSave" | "URLSaveAsynchronous" | 
-  "VertexCoordinateRules" | "VertexLabeling" | 
-  "VertexRenderingFunction" | "WaitAsynchronousTask" | "WindowMovable", _] -> scanObsoleteSymbols,
-
-(*
-Scan symbols that are documented as EXPERIMENTAL
-*)
-LeafNode[Symbol,
-  "ActiveClassification" | "ActiveClassificationObject" | 
-  "ActivePrediction" | "ActivePredictionObject" | "AddToSearchIndex" | 
-  "AggregatedEntityClass" | "AggregationLayer" | "AngleBisector" | 
-  "AnnotationDelete" | "AnnotationRules" | "AnomalyDetection" | 
-  "AnomalyDetectorFunction" | "AppendLayer" | "Around" | "AroundReplace" | 
-  "AskAppend" | "AskConfirm" | "AskDisplay" | "AskedQ" | "AskedValue" | 
-  "AskFunction" | "Ask" | "AskState" | "AskTemplateDisplay" | 
-  "AssumeDeterministic" | "AsymptoticDSolveValue" | 
-  "AsymptoticIntegrate" | "AsymptoticRSolveValue" | "AsymptoticSolve" | 
-  "AsymptoticSum" | "AtomCoordinates" | "AtomCount" | 
-  "AtomDiagramCoordinates" | "AtomList" | "Atom" | "AttentionLayer" | 
-  "AudioAnnotate" | "AudioAnnotationLookup" | "AudioIdentify" | 
-  "AudioLooping" | "AudioPause" | "AudioPlay" | "AudioRecord" | 
-  "AudioStop" | "AudioStream" | "AudioStreams" | "Autocomplete" | 
-  "AutocompletionFunction" | "AxiomaticTheory" | "BaseDecode" | 
-  "BaseEncode" | "BasicRecurrentLayer" | "BatchNormalizationLayer" | 
-  "BatchSize" | "BayesianMaximization" | "BayesianMaximizationObject" | 
-  "BayesianMinimization" | "BayesianMinimizationObject" | 
-  "BlockchainAddressData-ARK" | "BlockchainAddressData-Ethereum" | 
-  "BlockchainAddressData" | "BlockchainBase" | "BlockchainBlockData-ARK" | 
-  "BlockchainBlockData-Bitcoin" | "BlockchainBlockData-Ethereum" | 
-  "BlockchainBlockData" | "BlockchainContractValue" | 
-  "BlockchainData-ARK" | "BlockchainData-Bitcoin" | 
-  "BlockchainData-Ethereum" | "BlockchainData" | "BlockchainGet" | 
-  "BlockchainKeyEncode" | "BlockchainPut" | "BlockchainTokenData" | 
-  "BlockchainTransaction-ARK" | "BlockchainTransaction-Bitcoin" | 
-  "BlockchainTransactionData-ARK" | "BlockchainTransactionData-Bitcoin" | 
-  "BlockchainTransactionData-Ethereum" | "BlockchainTransactionData" | 
-  "BlockchainTransaction-Ethereum" | "BlockchainTransaction" | 
-  "BlockchainTransactionSign-ARK" | "BlockchainTransactionSign-Bitcoin" | 
-  "BlockchainTransactionSign-Ethereum" | "BlockchainTransactionSign" | 
-  "BlockchainTransactionSubmit-ARK" | 
-  "BlockchainTransactionSubmit-Bitcoin" | 
-  "BlockchainTransactionSubmit-Ethereum" | 
-  "BlockchainTransactionSubmit" | "BondCount" | "BondList" | "Bond" | 
-  "BondQ" | "CatenateLayer" | "ChannelBase" | "ChannelBrokerAction" | 
-  "ChannelDatabin" | "ChannelListener" | "ChannelListeners" | 
-  "ChannelListen" | "ChannelObject" | "ChannelPreSendFunction" | 
-  "ChannelReceiverFunction" | "ChannelSend" | "ChannelSubscribers" | 
-  "CloudExpression" | "CloudExpressions" | "CloudRenderingMethod" | 
-  "CombinedEntityClass" | "CompiledCodeFunction" | "CompilerOptions" | 
-  "ComputeUncertainty" | "ConnectedMoleculeComponents" | 
-  "ConnectedMoleculeQ" | "ConnectionSettings" | 
-  "ConnectSystemModelComponents" | "ConstantArrayLayer" | 
-  "ConstantPlusLayer" | "ConstantTimesLayer" | "Containing" | 
-  "ContentFieldOptions" | "ContentLocationFunction" | "ContentObject" | 
-  "ContrastiveLossLayer" | "ConvolutionLayer" | "CreateChannel" | 
-  "CreateCloudExpression" | "CreateDataSystemModel" | 
-  "CreateSearchIndex" | "CreateSystemModel" | "CrossEntropyLossLayer" | 
-  "CTCLossLayer" | "CurrentNotebookImage" | "CurrentScreenImage" | 
-  "Curry" | "DatabaseConnect" | "DatabaseDisconnect" | 
-  "DatabaseReference" | "DeconvolutionLayer" | "DecryptFile" | 
-  "DefineResourceFunction" | "DeleteAnomalies" | "DeleteChannel" | 
-  "DeleteCloudExpression" | "DeleteSearchIndex" | "DerivedKey" | 
-  "DigitalSignature" | "DisableFormatting" | "DocumentWeightingRules" | 
-  "DotLayer" | "DropoutLayer" | "DynamicGeoGraphics" | "DynamicImage" | 
-  "ElementwiseLayer" | "EmbeddingLayer" | "EncryptFile" | 
-  "EntityFunction" | "EntityStore" | "EvaluationEnvironment" | 
-  "ExpirationDate" | "ExtendedEntityClass" | "ExternalEvaluate" | 
-  "ExternalFunction" | "ExternalObject" | "ExternalSessionObject" | 
-  "ExternalSessions" | "ExternalValue" | "ExtractLayer" | 
-  "FacialFeatures" | "FeatureDistance" | "FeatureExtraction" | 
-  "FeatureExtract" | "FeatureExtractorFunction" | "FeatureExtractor" | 
-  "FeatureSpacePlot3D" | "FeatureSpacePlot" | "FileConvert" | 
-  "FilteredEntityClass" | "FindAnomalies" | "FindChannels" | 
-  "FindEquationalProof" | "FindExternalEvaluators" | 
-  "FindGeometricConjectures" | "FindMoleculeSubstructure" | 
-  "FindSystemModelEquilibrium" | "FindTextualAnswer" | "FlattenLayer" | 
-  "FormControl" | "FunctionCompileExportByteArray" | 
-  "FunctionCompileExportLibrary" | "FunctionCompileExport" | 
-  "FunctionCompileExportString" | "FunctionCompile" | "GalleryView" | 
-  "GatedRecurrentLayer" | "GenerateDerivedKey" | 
-  "GenerateDigitalSignature" | "GenerateSecuredAuthenticationKey" | 
-  "GeometricAssertion" | "GeometricScene" | "HandlerFunctionsKeys" | 
-  "HandlerFunctions" | "Iconize" | "ImageAugmentationLayer" | 
-  "ImageBoundingBoxes" | "ImageCases" | "ImageContainsQ" | 
-  "ImageContents" | "ImageGraphics" | "ImagePosition" | 
-  "ImagePyramidApply" | "ImagePyramid" | "IncludeAromaticBonds" | 
-  "IncludeHydrogens" | "IncludeRelatedTables" | 
-  "InitialEvaluationHistory" | "InitializationObjects" | 
-  "InitializationValue" | "Initialize" | "InverseImagePyramid" | 
-  "InverseSpectrogram" | "KernelFunction" | "LearnDistribution" | 
-  "LearnedDistribution" | "LearningRateMultipliers" | "LinearLayer" | 
-  "LocalResponseNormalizationLayer" | "LocalSubmit" | 
-  "LongShortTermMemoryLayer" | "LossFunction" | "MailExecute" | 
-  "MailFolder" | "MailItem" | "MailSearch" | "MailServerConnection" | 
-  "MailServerConnect" | "MaxTrainingRounds" | "MaxWordGap" | 
-  "MeanAbsoluteLossLayer" | "MeanAround" | "MeanSquaredLossLayer" | 
-  "MergingFunction" | "Midpoint" | "MissingValuePattern" | 
-  "MoleculeContainsQ" | "MoleculeEquivalentQ" | "MoleculeGraph" | 
-  "MoleculeModify" | "Molecule" | "MoleculePattern" | "MoleculePlot3D" | 
-  "MoleculePlot" | "MoleculeProperty" | "MoleculeQ" | "MoleculeValue" | 
-  "NBodySimulationData" | "NBodySimulation" | "NetAppend" | 
-  "NetBidirectionalOperator" | "NetChain" | "NetDecoder" | "NetDelete" | 
-  "NetDrop" | "NetEncoder" | "NetEvaluationMode" | "NetExtract" | 
-  "NetFlatten" | "NetFoldOperator" | "NetGraph" | "NetInformation" | 
-  "NetInitialize" | "NetInsert" | "NetInsertSharedArrays" | "NetJoin" | 
-  "NetMapOperator" | "NetMapThreadOperator" | "NetMeasurements" | 
-  "NetModel" | "NetNestOperator" | "NetPairEmbeddingOperator" | 
-  "NetPortGradient" | "NetPort" | "NetPrepend" | "NetRename" | 
-  "NetReplace" | "NetReplacePart" | "NetSharedArray" | "NetStateObject" | 
-  "NetTake" | "NetTrain" | "NetTrainResultsObject" | 
-  "NetworkPacketCapture" | "NetworkPacketRecording" | 
-  "NetworkPacketTrace" | "NormalizationLayer" | "NumericArray" | 
-  "NumericArrayQ" | "NumericArrayType" | "OrderingLayer" | "PaddingLayer" | 
-  "Pagination" | "PartLayer" | "PartProtection" | "PerpendicularBisector" | 
-  "PersistenceLocation" | "PersistenceTime" | "PersistentObject" | 
-  "PersistentObjects" | "PersistentValue" | "PitchRecognize" | 
-  "PoolingLayer" | "PrependLayer" | "PreserveColor" | "ProofObject" | 
-  "PublisherID" | "RandomInstance" | "RarerProbability" | 
-  "RegisterExternalEvaluator" | "RelationalDatabase" | 
-  "RemoteAuthorizationCaching" | "RemoteConnectionObject" | 
-  "RemoteConnect" | "RemoteFile" | "RemoteRun" | "RemoteRunProcess" | 
-  "RemoveAudioStream" | "RemoveChannelListener" | 
-  "RemoveChannelSubscribers" | "ReplicateLayer" | "ReshapeLayer" | 
-  "ResizeLayer" | "ResourceFunction" | "ResourceRegister" | 
-  "ResourceRemove" | "ResourceSearch" | "ResourceSubmit" | 
-  "ResourceUpdate" | "SampledEntityClass" | "SearchAdjustment" | 
-  "SearchIndexObject" | "SearchIndices" | "SearchQueryString" | 
-  "SearchResultObject" | "SecuredAuthenticationKey" | 
-  "SecuredAuthenticationKeys" | "SequenceLastLayer" | 
-  "SequenceMostLayer" | "SequencePredict" | "SequencePredictorFunction" | 
-  "SequenceRestLayer" | "SequenceReverseLayer" | "ServiceRequest" | 
-  "ServiceSubmit" | "SessionSubmit" | "SetSystemModel" | "Snippet" | 
-  "SnubPolyhedron" | "SocketListener" | "SocketListen" | "SocketOpen" | 
-  "SocketReadMessage" | "SocketReadyQ" | "Sockets" | "SocketWaitAll" | 
-  "SocketWaitNext" | "SoftmaxLayer" | "SortedEntityClass" | "SourceLink" | 
-  "SpatialTransformationLayer" | "SpeechRecognize" | 
-  "StartExternalSession" | "StartWebSession" | "StereochemistryElements" | 
-  "SummationLayer" | "SynthesizeMissingValues" | "SystemInstall" | 
-  "SystemModeler" | "SystemModelExamples" | "SystemModelLinearize" | 
-  "SystemModel" | "SystemModelParametricSimulate" | "SystemModelPlot" | 
-  "SystemModelProgressReporting" | "SystemModelReliability" | 
-  "SystemModelSimulate" | "SystemModelSimulateSensitivity" | 
-  "SystemModelSimulationData" | "SystemModels" | "TargetDevice" | 
-  "TargetSystem" | "TaskAbort" | "TaskExecute" | "TaskObject" | 
-  "TaskRemove" | "TaskResume" | "Tasks" | "TaskSuspend" | "TaskWait" | 
-  "TextCases" | "TextContents" | "TextElement" | "TextPosition" | 
-  "TextSearch" | "TextSearchReport" | "TextStructure" | "ThreadingLayer" | 
-  "TotalLayer" | "TrainingProgressCheckpointing" | 
-  "TrainingProgressFunction" | "TrainingProgressMeasurements" | 
-  "TrainingProgressReporting" | "TrainingStoppingCriterion" | 
-  "TransposeLayer" | "TriangleCenter" | "TriangleConstruct" | 
-  "TriangleMeasurement" | "Typed" | "TypeSpecifier" | 
-  "UnconstrainedParameters" | "UnitVectorLayer" | 
-  "UnregisterExternalEvaluator" | "UpdateSearchIndex" | 
-  "URLDownloadSubmit" | "ValenceErrorHandling" | 
-  "ValuePreprocessingFunction" | "VectorAround" | "VerifyDerivedKey" | 
-  "VerifyDigitalSignature" | "VerifyInterpretation" | "WebAudioSearch" | 
-  "WebElementObject" | "WebExecute" | "WebImage" | "WebImageSearch" | 
-  "WebSearch" | "WebSessionObject" | "WebSessions" | "WebWindowObject" | 
-  "WikipediaSearch" | "ZoomCenter" | "ZoomFactor" | 
-  "$AllowExternalChannelFunctions" | "$BlockchainBase" | "$ChannelBase" | 
-  "$CookieStore" | "$CurrentTask" | "$CurrentWebSession" | 
-  "$DefaultNetworkInterface" | "$IncomingMailSettings" | 
-  "$InitializationContexts" | "$Initialization" | "$NetworkInterfaces" | 
-  "$NoValue" | "$PersistenceBase" | "$PersistencePath" | 
-  "$PreInitialization" | "$PublisherID" | "$ServiceCreditsAvailable" | 
-  "$SourceLink" | "$SSHAuthentication" | "$SummaryBoxDataSizeLimit" | 
-  "$TestFileName" | "$VoiceStyles", _] -> scanExperimentalSymbols,
 
 (*
 
@@ -2227,7 +1828,7 @@ Attributes[scanAlternatives] = {HoldRest}
 
 scanAlternatives[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, blanks, counts, selecteds},
+Module[{ast, node, children, data, selected, issues, blanks, counts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
