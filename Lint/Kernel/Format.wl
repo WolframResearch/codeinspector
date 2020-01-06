@@ -297,6 +297,8 @@ Module[{g, bolded},
 
 LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
 
+LintedLine::truncation = "Truncation limit reached. Linted line may not display properly."
+
 Options[LintedLine] = {
 	"MaxLineNumberLength" -> 5,
 	"Elided" -> False
@@ -369,6 +371,10 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
+	];
+
+	If[Length[lineList] > $LineTruncationLimit,
+		Message[LintedLine::truncation]
 	];
 
 	grid = Transpose /@
@@ -517,6 +523,10 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 	 Print["endingLints: ", endingLints];
 	];
 	
+	If[Length[lineList] > $LineTruncationLimit,
+		Message[LintedLine::truncation]
+	];
+
 	grid = Transpose /@
 		Partition[
 			Take[
@@ -558,6 +568,10 @@ Module[{lineSource, endingLints, elided, startingLints, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
+	If[Length[lineList] > $LineTruncationLimit,
+		Message[LintedLine::truncation]
+	];
+
 	grid =
 		Partition[
 			Take[
@@ -598,6 +612,10 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	format them
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+
+	If[Length[lineList] > $LineTruncationLimit,
+		Message[LintedLine::truncation]
+	];
 
 	grid =
 		Partition[
