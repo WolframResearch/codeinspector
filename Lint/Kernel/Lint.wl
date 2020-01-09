@@ -22,6 +22,8 @@ LintFileReport
 
 LintBytesReport
 
+LintBoxReport
+
 
 
 (*
@@ -35,6 +37,8 @@ LintedLine
 LintedFile
 
 LintedString
+
+LintedBox
 
 
 
@@ -52,6 +56,7 @@ Needs["AST`Abstract`"]
 Needs["AST`Utils`"]
 Needs["Lint`AbstractRules`"]
 Needs["Lint`AggregateRules`"]
+Needs["Lint`Boxes`"]
 Needs["Lint`ConcreteRules`"]
 Needs["Lint`Folds`"]
 Needs["Lint`Format`"]
