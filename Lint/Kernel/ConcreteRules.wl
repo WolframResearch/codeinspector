@@ -62,6 +62,18 @@ BinaryNode[Span, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line
 
 TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
 
+
+
+ErrorNode[_, _, _] -> scanErrorNodes,
+
+SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
+
+GroupMissingCloserNode[_, _, _] -> scanGroupMissingCloserNodes,
+
+KeyValuePattern[SyntaxIssues -> _] -> scanSyntaxIssues,
+
+
+
 Nothing
 |>
 
@@ -507,6 +519,105 @@ Module[{cst, node, children, data, issues, srcs},
 
   issues
 ]]
+
+
+
+
+Attributes[scanErrorNodes] = {HoldRest}
+
+scanErrorNodes[pos_List, cstIn_] :=
+ Module[{cst, node, tag, data, tagString, children, leaf},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+
+  Switch[tagString,
+    "Aborted",
+        leaf = children[[1]];
+        {Lint["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedOperand",
+        {Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    _,
+        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  ]
+]
+
+
+
+
+Attributes[scanSyntaxErrorNodes] = {HoldRest}
+
+scanSyntaxErrorNodes[pos_List, cstIn_] :=
+ Module[{cst, node, tag, data, tagString, children},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+
+  Switch[tagString,
+    "ExpectedOperand",
+        {Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedTilde",
+        {Lint["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ColonError",
+        {Lint["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedSet",
+        {Lint["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "ExpectedIntegrand",
+        {Lint["ExpectedIntegrand", "Expected integrand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    "UnexpectedCloser",
+        {Lint["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    _,
+        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  ]
+]
+
+
+
+
+Attributes[scanGroupMissingCloserNodes] = {HoldRest}
+
+scanGroupMissingCloserNodes[pos_List, cstIn_] :=
+ Module[{cst, node, data},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  data = node[[3]];
+
+  {Lint["GroupMissingCloser", "Missing closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+]
+
+
+
+Attributes[scanSyntaxIssues] = {HoldRest}
+
+(*
+Just directly convert SyntaxIssues to Lints
+*)
+scanSyntaxIssues[pos_List, cstIn_] :=
+Module[{cst, data, issues, syntaxIssues},
+  cst = cstIn;
+  data = Extract[cst, {pos}][[1]];
+  issues = data[SyntaxIssues];
+
+  syntaxIssues = Cases[issues, SyntaxIssue[_, _, _, _]];
+
+  Lint @@@ syntaxIssues
+]
 
 
 

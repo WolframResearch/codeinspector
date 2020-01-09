@@ -98,7 +98,7 @@ $fileByteCountMaxLimit = 3*^6
 
 LintFile[File[file_String], OptionsPattern[]] :=
 Catch[
-Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cstAndIssues, data, concreteRules},
+Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -131,19 +131,19 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     ];
   ];
 
-  cstAndIssues = ConcreteParseFile[File[full], {ContainerNode[File, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cst = ConcreteParseFile[File[full]];
 
-  If[FailureQ[cstAndIssues],
-    Throw[cstAndIssues]
+  If[FailureQ[cst],
+    Throw[cst]
   ];
 
   lints = LintCST[
-    cstAndIssues[[1]],
-    cstAndIssues[[2]],
+    cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules];
+    "AbstractRules" -> abstractRules
+  ];
 
   (*
   Add "File" to lints
@@ -174,7 +174,7 @@ Options[LintString] = {
 
 LintString[string_String, OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cstAndIssues, concreteRules, performanceGoal},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -188,19 +188,19 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseString[string, {ContainerNode[String, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cst = ConcreteParseString[string];
 
-  If[FailureQ[cstAndIssues],
-    Throw[cstAndIssues]
+  If[FailureQ[cst],
+    Throw[cst]
   ];
 
   LintCST[
-    cstAndIssues[[1]],
-    cstAndIssues[[2]],
+    cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules]
+    "AbstractRules" -> abstractRules
+  ]
 ]]
 
 
@@ -215,7 +215,7 @@ Options[LintBytes] = {
 
 LintBytes[bytes_List, OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cstAndIssues, concreteRules, performanceGoal},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -229,19 +229,19 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseBytes[bytes, {ContainerNode[Byte, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cst = ConcreteParseBytes[bytes];
 
-  If[FailureQ[cstAndIssues],
-    Throw[cstAndIssues]
+  If[FailureQ[cst],
+    Throw[cst]
   ];
 
   LintCST[
-    cstAndIssues[[1]],
-    cstAndIssues[[2]],
+    cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules]
+    "AbstractRules" -> abstractRules
+  ]
 ]]
 
 
@@ -254,7 +254,7 @@ Options[LintBox] = {
 
 LintBox[box_, OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cstAndIssues, concreteRules, performanceGoal},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -268,15 +268,14 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cstAndIssues = ConcreteParseBox[box, {ContainerNode[Box, #[[1]], <||>], Cases[#[[2]], _SyntaxIssue]}&];
+  cst = ConcreteParseBox[box];
 
-  If[FailureQ[cstAndIssues],
-    Throw[cstAndIssues]
+  If[FailureQ[cst],
+    Throw[cst]
   ];
 
   LintCST[
-    cstAndIssues[[1]],
-    cstAndIssues[[2]],
+    cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
@@ -294,17 +293,17 @@ Options[LintCST] = {
 
 Attributes[LintCST] = {HoldFirst}
 
-LintCST[cstIn_, issuesIn_, OptionsPattern[]] :=
+LintCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes,
-  ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start, issues},
+  ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start, missingCloserChildrenNodes,
+  ignoredNodes},
 
   If[$Debug,
     Print["LintCST"];
   ];
 
   cst = cstIn;
-  issues = issuesIn;
 
   lints = {};
 
@@ -330,20 +329,19 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   *)
   staticAnalysisIgnoreNodes = Cases[ast[[2]], StaticAnalysisIgnoreNode[_, _, _], Infinity];
 
+  (*
+  Do not descend into MissingCloser nodes
+  *)
+  missingCloserChildrenNodes = Flatten[Cases[cst[[2]], GroupMissingCloserNode[_, children_, _] :> children, Infinity]];
+
   If[$Debug,
     Print["staticAnalysisIgnoreNodes: ", staticAnalysisIgnoreNodes];
+    Print["missingCloserChildrenNodes: ", missingCloserChildrenNodes];
   ];
 
+  ignoredNodes = staticAnalysisIgnoreNodes ~Join~ missingCloserChildrenNodes;
 
-
-  ignoredNodesSrcMemberFunc = SourceMemberQ[staticAnalysisIgnoreNodes[[All, 3, Key[Source] ]] ];
-
-  issues = DeleteCases[issues, n_ /; ignoredNodesSrcMemberFunc[n[[4, Key[Source] ]] ]];
-
-  lints = Lint @@@ issues;
-  If[$Debug,
-    Print["lints: ", lints];
-  ];
+  ignoredNodesSrcMemberFunc = SourceMemberQ[ignoredNodes[[All, 3, Key[Source] ]] ];
   
   cst = removeIgnoredNodes[cst, ignoredNodesSrcMemberFunc];
 
@@ -368,6 +366,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   If[$Debug,
     Print["concreteRules"];
   ];
+
+  lints = {};
 
   prog = 0;
   start = Now;

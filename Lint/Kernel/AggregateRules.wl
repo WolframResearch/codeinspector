@@ -164,12 +164,6 @@ OptionalDefaultPatternNode[OptionalDefaultPattern, {
 
 
 (*
-Tags: SyntaxError
-*)
-SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
-
-
-(*
 Tags: SyntaxError MaxExpressionDepth etc.
 *)
 (*
@@ -1134,74 +1128,6 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
   ];
 
   issues
-]
-
-
-
-
-
-
-
-
-Attributes[scanSyntaxErrorNodes] = {HoldRest}
-
-scanSyntaxErrorNodes[pos_List, aggIn_] :=
- Module[{agg, node, tag, data, tagString, children, leaf},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  tag = node[[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
-
-  Switch[tagString,
-    "UnhandledCharacter",
-        leaf = children[[1]];
-        {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "UnterminatedComment",
-        {Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedEqual",
-        {Lint["ExpectedEqual", "Expected ``=``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "EmptyString",
-        {Lint["EmptyString", "Empty string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "UnterminatedString",
-        {Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "InvalidBase",
-        {Lint["InvalidBase", "Invalid base.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "UnrecognizedDigit",
-        {Lint["UnrecognizedDigit", "Unrecognized digit.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedAccuracy",
-        {Lint["ExpectedAccuracy", "Expected accuracy.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedExponent",
-        {Lint["ExpectedExponent", "Expected exponent.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "UnhandledDot",
-        {Lint["UnhandledDot", "Unhandled ``.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedTilde",
-        {Lint["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedSet",
-        {Lint["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ColonError",
-        {Lint["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedPossibleExpression",
-        {Lint["ExpectedPossibleExpression", "Expected an expression.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    _,
-        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-  ]
 ]
 
 

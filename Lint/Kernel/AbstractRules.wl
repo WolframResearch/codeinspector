@@ -1953,6 +1953,9 @@ Module[{ast, node, children, data},
 
 
 
+
+
+
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
 
 scanAbstractSyntaxErrorNodes[pos_List, astIn_] :=
@@ -1966,15 +1969,6 @@ Module[{ast, node, tag, data, tagString, children},
   tagString = Block[{$ContextPath = {"AbstractSyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
   Switch[tagString,
-    "UnhandledCharacter",
-      leaf = children[[1]];
-      {Lint["UnhandledCharacter", "Unhandled character: " <> format[leaf[[2]]] <> ".", "Fatal", <|
-        data,
-        ConfidenceLevel -> 1.0 |>]}
-    ,
-    "ExpectedOperand",
-      {Lint["ExpectedOperand", "Expected an expression.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
     "LinearSyntaxBang",
       {Lint["LinearSyntaxBang", "Invalid syntax for ``\\!``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
@@ -1986,18 +1980,6 @@ Module[{ast, node, tag, data, tagString, children},
     ,
     "OpenSquare",
       {Lint["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "GroupMissingCloser",
-      {Lint["GroupMissingCloser", "Missing closing bracket.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "UnterminatedString",
-      {Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "EmptyString",
-      {Lint["EmptyString", "Empty string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    "UnterminatedComment",
-      {Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     _,
       {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
