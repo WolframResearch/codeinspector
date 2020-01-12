@@ -20,14 +20,28 @@ removeIgnoredNodes[l_LeafNode, _SourceMemberQFunction] := l
 removeIgnoredNodes[node_, SourceMemberQFunction[{}]] :=
   node
 
-removeIgnoredNodes[node_[tag_, childrenIn_, data_], ignoredNodesSrcMemberFunc_SourceMemberQFunction] :=
-Module[{children},
+removeIgnoredNodes[node_[tag_, childrenIn_, dataIn_], ignoredNodesSrcMemberFunc_SourceMemberQFunction] :=
+Module[{children, data, syntaxIssues, abstractSyntaxIssues},
 
   children = childrenIn;
+  data = dataIn;
 
   children = DeleteCases[children, n_ /; ignoredNodesSrcMemberFunc[n[[3, Key[Source] ]] ]];
+  children = removeIgnoredNodes[#, ignoredNodesSrcMemberFunc]& /@ children;
+  
+  syntaxIssues = Lookup[data, SyntaxIssues, {}];
+  If[syntaxIssues != {},
+    syntaxIssues = DeleteCases[syntaxIssues, n_ /; ignoredNodesSrcMemberFunc[n[[4, Key[Source] ]] ]];
+    data[SyntaxIssues] = syntaxIssues;
+  ];
 
-  node[tag, removeIgnoredNodes[#, ignoredNodesSrcMemberFunc]& /@ children, data]
+  abstractSyntaxIssues = Lookup[data, AbstractSyntaxIssues, {}];
+  If[abstractSyntaxIssues != {},
+    abstractSyntaxIssues = DeleteCases[abstractSyntaxIssues, n_ /; ignoredNodesSrcMemberFunc[n[[4, Key[Source] ]] ]];
+    data[AbstractSyntaxIssues] = abstractSyntaxIssues;
+  ];
+
+  node[tag, children, data]
 ]
 
 
