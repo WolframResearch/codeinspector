@@ -150,6 +150,10 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     "AbstractRules" -> abstractRules
   ];
 
+  If[FailureQ[lints],
+    Throw[lints]
+  ];
+
   (*
   Add "File" to lints
   *)
