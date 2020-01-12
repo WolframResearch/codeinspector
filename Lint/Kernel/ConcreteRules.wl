@@ -560,7 +560,7 @@ scanErrorNodes[pos_List, cstIn_] :=
   children = node[[2]];
   data = node[[3]];
 
-  tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+  tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
 
   Switch[tagString,
     "Aborted",
