@@ -60,6 +60,7 @@ BinaryNode[Span, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line
 
 TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
 
+CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
 
 ErrorNode[_, _, _] -> scanErrorNodes,
@@ -517,6 +518,34 @@ Module[{cst, node, children, data, issues, srcs},
 
   issues
 ]]
+
+
+
+
+Attributes[scanCalls] = {HoldRest}
+
+scanCalls[pos_List, cstIn_] :=
+ Module[{cst, node, tag, children, groupSquare, groupSquareChildren, openSquare, openSquareData},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+
+  groupSquare = children[[1]];
+
+  groupSquareChildren = groupSquare[[2]];
+
+  openSquare = groupSquareChildren[[1]];
+
+  openSquareData = openSquare[[3]];
+
+  (*
+  Use source of [
+  *)
+
+  {Lint["CallDifferentLine", "Call is on different lines.", "Warning", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
+]
+
 
 
 
