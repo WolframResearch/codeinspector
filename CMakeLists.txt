@@ -16,6 +16,7 @@ message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 set(WL_PACLET_SOURCES
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/AbstractRules.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/AggregateRules.wl
+	${CMAKE_SOURCE_DIR}/Lint/Kernel/Boxes.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/ConcreteRules.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/External.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Folds.wl

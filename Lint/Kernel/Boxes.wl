@@ -104,20 +104,51 @@ Module[{},
 
 
 processBox[box_, lint_] :=
-Module[{sevColor, poss, processedBox},
+Module[{sevColor, srcs, processedBox},
   sevColor = severityColor[{lint}];
-  poss = {lint[[4, Key[Source] ]]} ~Join~ Lookup[lint[[4]], "AdditionalSources", {}];
+  srcs = {lint[[4, Key[Source] ]]} ~Join~ Lookup[lint[[4]], "AdditionalSources", {}];
+
   processedBox = box;
-  Scan[(
-    processedBox = 
-      ReplacePart[
-        processedBox, # -> StyleBox[Extract[processedBox, #], FontVariations -> {"Underlight" -> Red}]];
-    )&
-    ,
-    poss
-  ];
+  Scan[(processedBox = replaceBox[processedBox, #, sevColor])&, srcs];
+
+  processedBox = processedBox /. s_String :> StringReplace[s, $characterReplacementRules];
+
   processedBox
 ]
+
+
+
+replaceBox[box_, src_, sevColor_] :=
+Catch[
+Module[{processedBox, srcInter},
+
+  If[!MatchQ[Last[src], Intra[___]],
+      (*
+      There is no Intra in the position, so we can just use ReplacePart
+      *)
+      
+      extracted = Extract[box, src];
+
+      processedBox = 
+        ReplacePart[
+          box, src -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+
+      Throw[processedBox]
+  ];
+
+  (*
+  There is Intra in the position
+  *)
+  srcInter = Most[src];
+
+  extracted = Extract[box, {srcInter}][[1]];
+
+  processedBox = 
+    ReplacePart[
+      box, srcInter -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+
+  processedBox
+]]
 
 
 
