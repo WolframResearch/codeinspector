@@ -343,12 +343,13 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   *)
   missingCloserChildrenNodes = Flatten[Cases[cst[[2]], GroupMissingCloserNode[_, children_, _] :> children, Infinity]];
 
+  ignoredNodes = staticAnalysisIgnoreNodes ~Join~ missingCloserChildrenNodes;
+
   If[$Debug,
     Print["staticAnalysisIgnoreNodes: ", staticAnalysisIgnoreNodes];
     Print["missingCloserChildrenNodes: ", missingCloserChildrenNodes];
+    Print["ignoredNodes: ", ignoredNodes];
   ];
-
-  ignoredNodes = staticAnalysisIgnoreNodes ~Join~ missingCloserChildrenNodes;
 
   ignoredNodesSrcMemberFunc = SourceMemberQ[ignoredNodes[[All, 3, Key[Source] ]] ];
   
@@ -365,10 +366,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   *)
 
   If[$Debug,
+    Print["cst: ", cst];
     Print["agg: ", agg];
-  ];
-
-  If[$Debug,
     Print["ast: ", ast];
   ];
 
