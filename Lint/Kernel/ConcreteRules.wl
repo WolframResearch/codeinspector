@@ -47,15 +47,13 @@ InfixNode[Times,
 (*
 Tags: DotDifferentLine
 *)
-InfixNode[Dot,
-  _,
+InfixNode[Dot, _,
   KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanDots,
 
 (*
 Tags: StraySemicolon
 *)
-InfixNode[CompoundExpression,
-  _,
+InfixNode[CompoundExpression, _,
   KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanCompoundExpressions,
 
 BinaryNode[Span, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanSpans,

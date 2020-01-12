@@ -1115,14 +1115,15 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
     src = sym[[3, Key[Source] ]];
 
-    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol.", "Error",
+    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
                       <|  Source->src,
                           ConfidenceLevel->0.95|>]];
     ,
+    (* not in System`*)
 
     src = sym[[3, Key[Source] ]];
 
-    AppendTo[issues, Lint["UppercasePatternBlank", "Suspicious uppercase symbol.", "Remark",
+    AppendTo[issues, Lint["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
                       <|  Source->src,
                           ConfidenceLevel->0.80|>]];
   ];
