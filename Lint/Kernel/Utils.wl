@@ -206,128 +206,152 @@ plainify[s_String] := StringReplace[s, {
 BeginStaticAnalysisIgnore[]
 
 (*
-Replace invisible control characters with \[UnknownGlyph]
+Replace invisible characters with \[UnknownGlyph]
 *)
-$characterReplacementRules = {
-	"\.00" -> "\[UnknownGlyph]",
-	"\.01" -> "\[UnknownGlyph]",
-	"\.02" -> "\[UnknownGlyph]",
-	"\.03" -> "\[UnknownGlyph]",
-	"\.04" -> "\[UnknownGlyph]",
-	"\.05" -> "\[UnknownGlyph]",
-	"\.06" -> "\[UnknownGlyph]",
-	"\.07" -> "\[UnknownGlyph]",
-	"\.08" -> "\[UnknownGlyph]",
+$invisibleCharacters = {
+
 	(*
-	We want everything to be 1 character wide.
-	This keeps things simple
+	ASCII control characters
 	*)
-	"\t" -> " ",
+	"\.00",
+	"\.01",
+	"\.02",
+	"\.03",
+	"\.04",
+	"\.05",
+	"\.06",
+	"\.07",
+	"\.08",
+	(*\t*)
 	(*\n*)
-	"\.0b" -> "\[UnknownGlyph]",
-	"\.0c" -> "\[UnknownGlyph]",
+	"\.0b",
+	"\.0c",
 	(*\r*)
-	"\.0e" -> "\[UnknownGlyph]",
-	"\.0f" -> "\[UnknownGlyph]",
-	"\.10" -> "\[UnknownGlyph]",
-	"\.11" -> "\[UnknownGlyph]",
-	"\.12" -> "\[UnknownGlyph]",
-	"\.13" -> "\[UnknownGlyph]",
-	"\.14" -> "\[UnknownGlyph]",
-	"\.15" -> "\[UnknownGlyph]",
-	"\.16" -> "\[UnknownGlyph]",
-	"\.17" -> "\[UnknownGlyph]",
-	"\.18" -> "\[UnknownGlyph]",
-	"\.19" -> "\[UnknownGlyph]",
-	"\.1a" -> "\[UnknownGlyph]",
-	"\.1b" -> "\[UnknownGlyph]",
-	"\.1c" -> "\[UnknownGlyph]",
-	"\.1d" -> "\[UnknownGlyph]",
-	"\.1e" -> "\[UnknownGlyph]",
-	"\.1f" -> "\[UnknownGlyph]",
-	"\.7f" -> "\[UnknownGlyph]",
+	"\.0e",
+	"\.0f",
+	"\.10",
+	"\.11",
+	"\.12",
+	"\.13",
+	"\.14",
+	"\.15",
+	"\.16",
+	"\.17",
+	"\.18",
+	"\.19",
+	"\.1a",
+	"\.1b",
+	"\.1c",
+	"\.1d",
+	"\.1e",
+	"\.1f",
+	"\.7f",
 
 	(*
 	Virtual BOM character
 	*)
-	"\:e001" -> "\[UnknownGlyph]"
+	"\:e001"} ~Join~
 
 	(*
 	Unicode non-characters
 	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
 	*)
-	"\:fdd0" -> "\[UnknownGlyph]",
-	"\:fdd1" -> "\[UnknownGlyph]",
-	"\:fdd2" -> "\[UnknownGlyph]",
-	"\:fdd3" -> "\[UnknownGlyph]",
-	"\:fdd4" -> "\[UnknownGlyph]",
-	"\:fdd5" -> "\[UnknownGlyph]",
-	"\:fdd6" -> "\[UnknownGlyph]",
-	"\:fdd7" -> "\[UnknownGlyph]",
-	"\:fdd8" -> "\[UnknownGlyph]",
-	"\:fdd9" -> "\[UnknownGlyph]",
-	"\:fdda" -> "\[UnknownGlyph]",
-	"\:fddb" -> "\[UnknownGlyph]",
-	"\:fddc" -> "\[UnknownGlyph]",
-	"\:fddd" -> "\[UnknownGlyph]",
-	"\:fdde" -> "\[UnknownGlyph]",
-	"\:fddf" -> "\[UnknownGlyph]",
-	"\:fde0" -> "\[UnknownGlyph]",
-	"\:fde1" -> "\[UnknownGlyph]",
-	"\:fde2" -> "\[UnknownGlyph]",
-	"\:fde3" -> "\[UnknownGlyph]",
-	"\:fde4" -> "\[UnknownGlyph]",
-	"\:fde5" -> "\[UnknownGlyph]",
-	"\:fde6" -> "\[UnknownGlyph]",
-	"\:fde7" -> "\[UnknownGlyph]",
-	"\:fde8" -> "\[UnknownGlyph]",
-	"\:fde9" -> "\[UnknownGlyph]",
-	"\:fdea" -> "\[UnknownGlyph]",
-	"\:fdeb" -> "\[UnknownGlyph]",
-	"\:fdec" -> "\[UnknownGlyph]",
-	"\:fded" -> "\[UnknownGlyph]",
-	"\:fdee" -> "\[UnknownGlyph]",
-	"\:fdef" -> "\[UnknownGlyph]",
-	"\|00fffe" -> "\[UnknownGlyph]",
-	"\|00ffff" -> "\[UnknownGlyph]",
-	"\|01fffe" -> "\[UnknownGlyph]",
-	"\|01ffff" -> "\[UnknownGlyph]",
-	"\|02fffe" -> "\[UnknownGlyph]",
-	"\|02ffff" -> "\[UnknownGlyph]",
-	"\|03fffe" -> "\[UnknownGlyph]",
-	"\|03ffff" -> "\[UnknownGlyph]",
-	"\|04fffe" -> "\[UnknownGlyph]",
-	"\|04ffff" -> "\[UnknownGlyph]",
-	"\|05fffe" -> "\[UnknownGlyph]",
-	"\|05ffff" -> "\[UnknownGlyph]",
-	"\|06fffe" -> "\[UnknownGlyph]",
-	"\|06ffff" -> "\[UnknownGlyph]",
-	"\|07fffe" -> "\[UnknownGlyph]",
-	"\|07ffff" -> "\[UnknownGlyph]",
-	"\|08fffe" -> "\[UnknownGlyph]",
-	"\|08ffff" -> "\[UnknownGlyph]",
-	"\|09fffe" -> "\[UnknownGlyph]",
-	"\|09ffff" -> "\[UnknownGlyph]",
-	"\|0afffe" -> "\[UnknownGlyph]",
-	"\|0affff" -> "\[UnknownGlyph]",
-	"\|0bfffe" -> "\[UnknownGlyph]",
-	"\|0bffff" -> "\[UnknownGlyph]",
-	"\|0cfffe" -> "\[UnknownGlyph]",
-	"\|0cffff" -> "\[UnknownGlyph]",
-	"\|0dfffe" -> "\[UnknownGlyph]",
-	"\|0dffff" -> "\[UnknownGlyph]",
-	"\|0efffe" -> "\[UnknownGlyph]",
-	"\|0effff" -> "\[UnknownGlyph]",
-	"\|0ffffe" -> "\[UnknownGlyph]",
-	"\|0fffff" -> "\[UnknownGlyph]",
-	"\|10fffe" -> "\[UnknownGlyph]",
-	"\|10ffff" -> "\[UnknownGlyph]"
-}
+	CharacterRange["\:fdd0", "\:fdef"] ~Join~ {
+	(*
+	Unicode non-characters
+	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
+	*)
+	"\|00fffe",
+	"\|00ffff",
+	"\|01fffe",
+	"\|01ffff",
+	"\|02fffe",
+	"\|02ffff",
+	"\|03fffe",
+	"\|03ffff",
+	"\|04fffe",
+	"\|04ffff",
+	"\|05fffe",
+	"\|05ffff",
+	"\|06fffe",
+	"\|06ffff",
+	"\|07fffe",
+	"\|07ffff",
+	"\|08fffe",
+	"\|08ffff",
+	"\|09fffe",
+	"\|09ffff",
+	"\|0afffe",
+	"\|0affff",
+	"\|0bfffe",
+	"\|0bffff",
+	"\|0cfffe",
+	"\|0cffff",
+	"\|0dfffe",
+	"\|0dffff",
+	"\|0efffe",
+	"\|0effff",
+	"\|0ffffe",
+	"\|0fffff",
+	"\|10fffe",
+	"\|10ffff",
+
+	(*
+	ZERO WIDTH SPACE
+  *)
+  "\:200b",
+
+  (*
+  ZERO WIDTH NON-JOINER
+  *)
+  "\:200c",
+
+  (*
+  ZERO WIDTH JOINER
+  *)
+  "\:200d",
+
+  (*
+  LINE SEPARATOR
+  *)
+  "\:2028",
+
+  (*
+  WORD JOINER
+  *)
+  "\:2060",
+
+  (*
+  FUNCTION APPLICATION
+  *)
+  "\:2061"} ~Join~
+
+  (*
+  C1
+  *)
+  CharacterRange["\:0080", "\:009f"] ~Join~
+
+  (*
+  Plane 15 PUA
+  *)
+  CharacterRange["\|0f0000", "\|0ffffd"] ~Join~
+
+  (*
+  Plane 16 PUA
+  *)
+  CharacterRange["\|100000", "\|10fffd"]
 
 EndStaticAnalysisIgnore[]
 
 
-
+$characterReplacementRules = { 
+	(*
+	We want everything to be 1 character wide.
+	This keeps things simple
+	*)
+	"\t" -> " ",
+	Alternatives @@ $invisibleCharacters -> "\[UnknownGlyph]"
+}
 
 
 End[]
