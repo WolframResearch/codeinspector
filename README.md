@@ -2,6 +2,8 @@
 
 Lint is a paclet for finding problems in Wolfram Language code.
 
+[Finding Bugs in the Wolfram Language from WTC 2019](https://www.wolfram.com/broadcast/video.php?c=467&p=5&v=2911)
+
 
 ## Installing
 
