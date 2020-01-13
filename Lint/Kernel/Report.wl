@@ -369,7 +369,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   lineHashExclusions = lineHashExclusionsIn;
 
   (* Association of lineNumber -> All *)
-  tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]]], i -> All, Nothing], {i, 1, Length[lines]}]];
+  tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]] ], i -> All, Nothing], {i, 1, Length[lines]}]];
   lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
 
 
@@ -442,7 +442,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   (*
   Make sure to sort lints before taking
   *)
-  lints = SortBy[lints, #[[4, Key[Source]]]&];
+  lints = SortBy[lints, #[[4, Key[Source] ]]&];
 
   lints = Take[lints, UpTo[$LintLimit]];
 

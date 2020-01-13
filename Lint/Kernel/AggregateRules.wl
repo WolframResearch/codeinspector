@@ -605,7 +605,7 @@ Catch[
   children = node[[2]];
   data = node[[3]];
   rule = children[[1]];
-  ruleChild1 = rule[[2]][[1]];
+  ruleChild1 = rule[[2, 1]];
 
   (*
   we want to reduce the number of false positives so here are some heuristics:

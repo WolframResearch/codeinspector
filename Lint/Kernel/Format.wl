@@ -175,8 +175,8 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 
 				file = data["File"];
 
-				line = data[Source][[1,1]];
-				col = data[Source][[1,2]];
+				line = data[[Key[Source], 1, 1]];
+				col = data[[Key[Source], 1, 2]];
 
 				items = With[{file = file, line = line, col = col}, {
 					"\"" <> ToString[tag] <> "\"" :> Null,
@@ -454,7 +454,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 
 
 coalesce[list_] :=
-  {{#[[1]][[1]], #[[-1]][[1]]}, {#[[1]][[2]], #[[-1]][[2]]}}& /@ Split[list, #1[[1]] == #2[[1]] && #1[[2]] + 1 == #2[[2]]&]
+  {{#[[1, 1]], #[[-1, 1]]}, {#[[1, 2]], #[[-1, 2]]}}& /@ Split[list, #1[[1]] == #2[[1]] && #1[[2]] + 1 == #2[[2]]&]
 
 
 (*
@@ -518,7 +518,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 	(*
 	Make sure to sort lints
 	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
+	endingLints = SortBy[endingLints, #[[4, Key[Source] ]]&];
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
 	];

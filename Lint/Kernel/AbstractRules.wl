@@ -27,7 +27,7 @@ Module[{names, documentedSymbols, allSymbols, allASCIISymbols, undocumentedSymbo
 
   names = FileNames["*.nb", "", Infinity];
 
-  documentedSymbols = StringDrop[#, -3] & /@ names;
+  documentedSymbols = StringDrop[#, -3]& /@ names;
 
   allSymbols = Names["System`*"];
 
@@ -40,7 +40,7 @@ Module[{names, documentedSymbols, allSymbols, allASCIISymbols, undocumentedSymbo
   (*
   "OBSOLETE SYMBOL" is found in the first ~50 lines, so use 100 as a heuristic for how many lines to read
   *)
-  obsoleteNames = Select[names, FindList[#, "\"OBSOLETE SYMBOL\"", 100] != {} &];
+  obsoleteNames = Select[names, FindList[#, "\"OBSOLETE SYMBOL\"", 100] != {}&];
 
   obsoleteSymbols = StringDrop[#, -3] & /@ obsoleteNames;
 
@@ -49,9 +49,9 @@ Module[{names, documentedSymbols, allSymbols, allASCIISymbols, undocumentedSymbo
   (*
   "EXPERIMENTAL" is found in the first ~500 lines, so use 1000 as a heuristic for how many lines to read
   *)
-  experimentalNames = Select[names, FindList[#, "\"EXPERIMENTAL\"", 1000] != {} &];
+  experimentalNames = Select[names, FindList[#, "\"EXPERIMENTAL\"", 1000] != {}&];
 
-  experimentalSymbols = StringDrop[#, -3] & /@ experimentalNames;
+  experimentalSymbols = StringDrop[#, -3]& /@ experimentalNames;
 
   $experimentalSystemSymbolAlternatives = Alternatives @@ experimentalSymbols;
 
@@ -420,9 +420,9 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
       Continue[]
     ];
 
-    srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
-    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]] ], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, Lint["DuplicateKeys", "``Association`` has duplicated keys.", "Error", <|
       Source -> First[srcs],
@@ -483,9 +483,9 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
     So make Remark for now
     *)
 
-    srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
-    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]] ], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, Lint["DuplicateKeys", "Duplicate keys in list of rules.", "Remark", <|
       Source -> First[srcs],
@@ -531,7 +531,7 @@ Module[{ast, node, children, data, issues, span, selected, lintData, srcs, count
 
 
   If[MatchQ[children[[1]], LeafNode[Symbol, "$OperatingSystem", _]],
-    span = children[[1]][[3]];
+    span = children[[1, 3]];
    AppendTo[issues, 
     Lint["SwitchWhichConfusion", "``Which`` has ``$OperatingSystem`` in first place.\n\
 Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
@@ -550,7 +550,7 @@ Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
   Scan[(If[MatchQ[#, CallNode[LeafNode[Symbol, "Set", _], _, _]],
     AppendTo[issues, Lint["WhichSet", "``Which`` has ``=`` as a clause.\n\
 Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
-  ];)&, children[[;;;;2]]];
+  ];)&, children[[;;;;2]] ];
 
   counts = CountsBy[children[[;;;;2]], ToFullFormString];
 
@@ -566,7 +566,7 @@ Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
       Continue[]
     ];
 
-    srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
     AppendTo[issues, Lint["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", <|
       Source -> First[srcs],
@@ -1294,7 +1294,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
       children[[1, 3]], ConfidenceLevel -> 0.90|>]];
   ];
 
-  params = children[[1,2]];
+  params = children[[1, 2]];
 
   varsWithSet = {};
   varsWithoutSet = {};

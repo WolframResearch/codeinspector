@@ -313,7 +313,7 @@ Catch[
     lineHashExclusions = lineHashExclusionsIn;
 
     (* Association of lineNumber -> All *)
-    tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]]], i -> All, Nothing], {i, 1, Length[lines]}]];
+    tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]] ], i -> All, Nothing], {i, 1, Length[lines]}]];
     lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
 
 
@@ -362,7 +362,7 @@ Catch[
 
 
 
-   linesToModify = Union[starts[[All, 1]] ~Join~ ends[[All, 1]] ~Join~ infixs[[All, 1]]];
+   linesToModify = Union[starts[[All, 1]] ~Join~ ends[[All, 1]] ~Join~ infixs[[All, 1]] ];
 
    Table[
 
