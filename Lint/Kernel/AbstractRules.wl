@@ -420,7 +420,7 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
       Continue[]
     ];
 
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[2, 1, 3, Key[Source] ]]& /@ selected;
 
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]] ], DeleteNode, <|Source->#|>]&, srcs];
 
@@ -483,7 +483,7 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
     So make Remark for now
     *)
 
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[2, 1, 3, Key[Source] ]]& /@ selected;
 
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]] ], DeleteNode, <|Source->#|>]&, srcs];
 
