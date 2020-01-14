@@ -66,7 +66,7 @@ How many ems for characters in the Grid ?
 
 Somewhere between 0.606 and 0.607, \[ErrorIndicator] starts overlapping and actually overflow display on the cloud and looks bad
 
-CLOUD-15903
+Related issues: CLOUD-15903
 
 The desktop FE allows overlapping just fine
 
@@ -77,11 +77,6 @@ $LintedLintItemSize = 0.65
 How many characters before partitioning a new line?
 *)
 $LintedLineWidth = 120
-
-(*
-Number of characters per line to consider "long"
-*)
-$LineTruncationLimit = 500
 
 
 
@@ -297,8 +292,6 @@ Module[{g, bolded},
 
 LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
 
-LintedLine::truncation = "Truncation limit reached. Linted line may not display properly."
-
 Options[LintedLine] = {
 	"MaxLineNumberLength" -> 5,
 	"Elided" -> False
@@ -373,16 +366,10 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	 Print["endingLints: ", endingLints];
 	];
 
-	If[Length[lineList] > $LineTruncationLimit,
-		Message[LintedLine::truncation]
-	];
-
 	grid = Transpose /@
 		Partition[
-			Take[
-				Transpose[{lineList, underlineList}],
-				UpTo[$LineTruncationLimit]
-			],
+			Transpose[{lineList, underlineList}]
+			,
 			UpTo[$LintedLineWidth]
 		];
 
@@ -522,17 +509,11 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
 	];
-	
-	If[Length[lineList] > $LineTruncationLimit,
-		Message[LintedLine::truncation]
-	];
 
 	grid = Transpose /@
 		Partition[
-			Take[
-				Transpose[{lineList, underlineList}],
-				UpTo[$LineTruncationLimit]
-			],
+			Transpose[{lineList, underlineList}]
+			,
 			UpTo[$LintedLineWidth]
 		];
 
@@ -568,16 +549,10 @@ Module[{lineSource, endingLints, elided, startingLints, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	If[Length[lineList] > $LineTruncationLimit,
-		Message[LintedLine::truncation]
-	];
-
 	grid =
 		Partition[
-			Take[
-				lineList,
-				UpTo[$LineTruncationLimit]
-			],
+			lineList
+			,
 			UpTo[$LintedLineWidth]
 		];
 
@@ -613,16 +588,10 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	*)
 	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	If[Length[lineList] > $LineTruncationLimit,
-		Message[LintedLine::truncation]
-	];
-
 	grid =
 		Partition[
-			Take[
-				lineList,
-				UpTo[$LineTruncationLimit]
-			],
+			lineList
+			,
 			UpTo[$LintedLineWidth]
 		];
 

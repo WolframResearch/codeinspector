@@ -751,7 +751,7 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
     selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
 
     If[!empty[selected],
-      srcs = #[[3, Key[Source]]]& /@ selected;
+      srcs = #[[3, Key[Source] ]]& /@ selected;
       AppendTo[issues, Lint["DuplicateClauses", "Both branches are the same.", "Warning", <|
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
