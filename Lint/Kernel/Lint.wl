@@ -340,8 +340,10 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
 
   (*
   Do not descend into MissingCloser nodes
+
+  And skip the opener token. This allows the GroupMissingCloserNode itself to be counted in the linter.
   *)
-  missingCloserChildrenNodes = Flatten[Cases[cst[[2]], GroupMissingCloserNode[_, children_, _] :> children, Infinity]];
+  missingCloserChildrenNodes = Flatten[Cases[cst[[2]], GroupMissingCloserNode[_, children_, _] :> children[[2;;]], Infinity]];
 
   ignoredNodes = staticAnalysisIgnoreNodes ~Join~ missingCloserChildrenNodes;
 
