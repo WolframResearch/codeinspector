@@ -31,6 +31,24 @@ $DefaultAggregateRules = <|
 Aggregate lints
 *)
 
+PrefixNode[
+  _,
+  _,
+  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPrefixs,
+
+PostfixNode[
+  _,
+  _,
+  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPostfixs,
+
+
+(*
+Tags: ImplicitTimesAcrossLines
+*)
+InfixNode[Times,
+  children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1],
+  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanImplicitTimes,
+
 (*
 Tags: ImplicitTimesAcrossLines
 *)
@@ -39,18 +57,23 @@ InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes
                                                   _BlankNode |
                                                   _BlankSequenceNode |
                                                   _BlankNullSequenceNode |
-                                                  (*
-                                                  only care about a_ syntax
-                                                  a_b syntax doesn't get flagged here
-                                                  there are symbols on both sides, so probably ok
-                                                  *)
-                                                  PatternBlankNode[_, { _, _}, _] |
-                                                  PatternBlankSequenceNode[_, { _, _ }, _] |
-                                                  PatternBlankNullSequenceNode[_, { _, _ }, _] |
+                                                  _PatternBlankNode |
+                                                  _PatternBlankSequenceNode |
+                                                  _PatternBlankNullSequenceNode |
                                                   _OptionalDefaultPatternNode, 1], _] -> scanImplicitTimesBlanks,
 
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
                                 !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
+
+
+(*
+Tags: DotDifferentLine
+*)
+InfixNode[Dot, _,
+  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanDots,
+
+TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
+
 
 (*
 Tags: SuspiciousSpan
@@ -146,19 +169,19 @@ scan for something like Rule___
 Last[StringSplit[sym, "`"]] will return the symbol name, e.g. A`Bar => Bar
 *)
 PatternBlankNode[PatternBlank, {
-  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
   ___}, _] -> scanUppercasePatternBlank,
 
 PatternBlankSequenceNode[PatternBlankSequence, {
-  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
   ___}, _] -> scanUppercasePatternBlank,
 
 PatternBlankNullSequenceNode[PatternBlankNullSequence, {
-  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
   ___}, _] -> scanUppercasePatternBlank,
 
 OptionalDefaultPatternNode[OptionalDefaultPattern, {
-  LeafNode[Symbol, sym_ /; UpperCaseQ[StringPart[Last[StringSplit[sym, "`"]], 1]], _],
+  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
   ___}, _] -> scanUppercasePatternBlank,
 
 
@@ -212,6 +235,173 @@ Nothing
 
 
 
+Attributes[scanPrefixs] = {HoldRest}
+
+scanPrefixs[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["PrefixDifferentLine", "Operands are on different lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+Attributes[scanPostfixs] = {HoldRest}
+
+scanPostfixs[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["PostfixDifferentLine", "Operands are on different lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Attributes[scanImplicitTimes] = {HoldRest}
+
+scanImplicitTimes[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, pairs, srcs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+
+    If[!MatchQ[p, {_, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
+                    {LeafNode[Token`Fake`ImplicitTimes, _, _], _}],
+      Continue[]
+    ];
+
+    Switch[p,
+      {n_, i:LeafNode[Token`Fake`ImplicitTimes, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      ,
+      {i:LeafNode[Token`Fake`ImplicitTimes, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+                  CodeAction["Insert ``;``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
+                  CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
 Attributes[scanImplicitTimesBlanks] = {HoldRest}
 
 scanImplicitTimesBlanks[pos_List, aggIn_] :=
@@ -233,17 +423,21 @@ Module[{agg, node, data, children, issues, pairs, srcs},
     Make sure there is a blank next to a Token`Fake`ImplicitTimes
     *)
     If[!MatchQ[p, {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
-                        _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
-                        PatternBlankNode[_, { _, _}, _] |
-                        PatternBlankSequenceNode[_, { _, _ }, _] |
-                        PatternBlankNullSequenceNode[_, { _, _ }, _] |
+                        _BlankNode |
+                        _BlankSequenceNode |
+                        _BlankNullSequenceNode |
+                        _PatternBlankNode |
+                        _PatternBlankSequenceNode |
+                        _PatternBlankNullSequenceNode |
                         _OptionalDefaultPatternNode, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
                     {LeafNode[Token`Fake`ImplicitTimes, _, _],
                       LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
-                        _BlankNode | _BlankSequenceNode | _BlankNullSequenceNode |
-                        PatternBlankNode[_, { _, _}, _] |
-                        PatternBlankSequenceNode[_, { _, _ }, _] |
-                        PatternBlankNullSequenceNode[_, { _, _ }, _] |
+                        _BlankNode |
+                        _BlankSequenceNode |
+                        _BlankNullSequenceNode |
+                        _PatternBlankNode |
+                        _PatternBlankSequenceNode |
+                        _PatternBlankNullSequenceNode |
                         _OptionalDefaultPatternNode}],
       Continue[]
     ];
@@ -331,6 +525,119 @@ Module[{agg, node, data, issues, children, pairs, srcs},
 
 
 
+Attributes[scanDots] = {HoldRest}
+
+scanDots[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+    If[!MatchQ[p, {_, LeafNode[Token`Dot, _, _]} |
+                    {LeafNode[Token`Dot, _, _], _}],
+      Continue[]
+    ];
+    Switch[p,
+      {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      ,
+      {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+
+Attributes[scanTernaryTildes] = {HoldRest}
+
+scanTernaryTildes[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  (*
+  With a ~f~ b, we only want to look at {~, f} and {f, ~}
+  *)
+  filtered = children[[2;;-2]];
+
+  pairs = Partition[filtered, 2, 1];
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["TernaryTildeDifferentLine", "Operands are on different lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+
+
+
+
+
 Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, aggIn_] :=
@@ -386,24 +693,43 @@ Catch[
 
 
   (*
-  
-  The parser returns a Warning about different lines
-
+  Only check if LineCol-style
   *)
-  (*
-  line = children[[1]][[3]][Source][[2,1]];
-  Do[
-    nextLine = n[[3]][Source][[1,1]];
-    If[line != nextLine,
-      AppendTo[issues, Lint["SuspiciousSpan", "Suspicious use of ``;;``.\n\
-Did you mean ``;``?", "Warning", data]];
-      Break[];
-    ];
-    line = n[[3]][Source][[2,1]];
-    ,
-    {n, children[[3;;;;2]]}
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
   ];
-  *)
+
+  
+  pairs = Partition[children, 2, 1];
+
+  srcs = {};
+  Do[
+
+    If[!MatchQ[p, {_, LeafNode[Token`SemiSemi, _, _]} |
+                    {LeafNode[Token`SemiSemi, _, _], _}],
+      Continue[]
+    ];
+
+    Switch[p,
+      {n_, i:LeafNode[Token`SemiSemi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      ,
+      {i:LeafNode[Token`SemiSemi, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["SpanDifferentLine", "Operands for ``;;`` are on different lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
 
   issues
 ]]
@@ -423,26 +749,66 @@ StraySemicolon is to find things like this:
 ; Throw[$Failed, $tag])
 
 *)
-
-
 Attributes[scanCompoundExpressions] = {HoldRest}
 
 scanCompoundExpressions[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, straySemis, semi},
+Module[{agg, node, children, data, issues, pairs, srcs, straySemis, semi},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
+  srcs = {};
+
   issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+
+    If[!MatchQ[p, {_, LeafNode[Token`Semi, _, _]}],
+      Continue[]
+    ];
+
+    Switch[p,
+      {n_, i:LeafNode[Token`Semi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
 
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
   Scan[(AppendTo[issues, Lint["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
 
+
   issues
 ]]
+
+
+
+
+
 
 
 Attributes[scanPatternTestCalls] = {HoldRest}
@@ -1132,22 +1498,6 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 ]
 
 
-
-(*
-Attributes[scanSyntaxIssues] = {HoldRest}
-
-(*
-Just directly convert SyntaxIssues to Lints
-*)
-scanSyntaxIssues[pos_List, cstIn_] :=
-Module[{cst, data, issues},
-  cst = cstIn;
-  data = Extract[cst, {pos}][[1]];
-  issues = data[SyntaxIssues];
-
-  Lint @@@ issues
-]
-*)
 
 
 

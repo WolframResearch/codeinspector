@@ -27,38 +27,9 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 
 $DefaultConcreteRules = <|
 
-PrefixNode[
-  _,
-  _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPrefixs,
+BinaryNode[Span, _, _] -> scanBinarySpans,
 
-PostfixNode[
-  _,
-  _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPostfixs,
-
-(*
-Tags: ImplicitTimesAcrossLines
-*)
-InfixNode[Times,
-  children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1],
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanImplicitTimes,
-
-(*
-Tags: DotDifferentLine
-*)
-InfixNode[Dot, _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanDots,
-
-(*
-Tags: StraySemicolon
-*)
-InfixNode[CompoundExpression, _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanCompoundExpressions,
-
-BinaryNode[Span, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanSpans,
-
-TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
+TernaryNode[Span, _, _] -> scanTernarySpans,
 
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
@@ -78,317 +49,95 @@ Nothing
 
 
 
+Attributes[scanBinarySpans] = {HoldRest}
 
-
-
-
-Attributes[scanPrefixs] = {HoldRest}
-
-scanPrefixs[pos_List, cstIn_] :=
+scanBinarySpans[pos_List, cstIn_] :=
 Catch[
-Module[{cst, node, children, data, issues, srcs},
+Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
-  srcs = {};
-
   issues = {};
 
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
 
   (*
-  We want to ignore trivia
+  Already checked for LineCol style
   *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
 
-  pairs = Partition[filtered, 2, 1];
+  poss = Position[children, LeafNode[Token`SemiSemi, _, _]];
 
-  Do[
+  If[!MatchQ[Last[children], LeafNode[Token`Fake`ImplicitAll, _, _]],
+    (* something real *)
+    i = poss[[1, 1]];
 
-    Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+    i++;
+    While[i < Length[children],
+      Switch[children[[i]],
+        LeafNode[Token`Newline, _, _],
+          AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+            <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
+               ConfidenceLevel -> 0.95 |>]
+          ];
+          Break[]
+        ,
+        LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _],
+          i++
+        ,
+        _,
+          (*
+          Some non-trivia
+          *)
+          Break[]
+      ]
     ];
-
     ,
-    {p, pairs}
-  ];
+    (*
+    Last[children] is ImplicitAll
 
-  srcs = DeleteDuplicates[srcs];
+    implicit All
+    check sibling nodes
+    *)
+    siblingsPos = Most[pos];
+    siblings = Extract[cst, {siblingsPos}][[1]];
+    siblingsAfter = siblings[[ (Last[pos] + 1);; ]];
 
-  Scan[(
-    AppendTo[issues, Lint["PrefixDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
-
-
-
-
-Attributes[scanPostfixs] = {HoldRest}
-
-scanPostfixs[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, srcs},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  We want to ignore trivia
-  *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
-
-  pairs = Partition[filtered, 2, 1];
-
-  Do[
-
-    Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, Lint["PostfixDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
-
-
-
-
-Attributes[scanImplicitTimes] = {HoldRest}
-
-scanImplicitTimes[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, pairs, srcs, filtered},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  We want to ignore trivia
-  *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
-
-  pairs = Partition[filtered, 2, 1];
-
-  Do[
-
-    If[!MatchQ[p, {_, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
-                    {LeafNode[Token`Fake`ImplicitTimes, _, _], _}],
-      Continue[]
-    ];
-
-    Switch[p,
-      {n_, i:LeafNode[Token`Fake`ImplicitTimes, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+    Switch[siblingsAfter,
+      {LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _]..., LeafNode[Token`Newline, _, _], ___},
+        (*
+        There is a newline after some other trivia
+        *)
+        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+          <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
+             ConfidenceLevel -> 0.95 |>]
+        ];
       ,
-      {i:LeafNode[Token`Fake`ImplicitTimes, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+      {LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _]...},
+        (*
+        There is only trivia.
+        This could be inside of a group (and maybe not end of line) or EOF (which should be warned, but currently too hard)
+        FIXME: Allow LintString["a;;"] to return a warning
+        *)
+        (*
+        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+          <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
+             ConfidenceLevel -> 0.95 |>]
+        ];*)
+        Null
     ];
-
-    ,
-    {p, pairs}
   ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95,
-        CodeActions -> {
-                  CodeAction["Insert ``;``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
-                  CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
-      |>]];
-    )&, srcs];
 
   issues
 ]]
 
 
 
+Attributes[scanTernarySpans] = {HoldRest}
 
-
-Attributes[scanDots] = {HoldRest}
-
-scanDots[pos_List, cstIn_] :=
+scanTernarySpans[pos_List, cstIn_] :=
 Catch[
-Module[{cst, node, children, data, issues, srcs},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  We want to ignore trivia
-  *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
-
-  pairs = Partition[filtered, 2, 1];
-
-  Do[
-    If[!MatchQ[p, {_, LeafNode[Token`Dot, _, _]} |
-                    {LeafNode[Token`Dot, _, _], _}],
-      Continue[]
-    ];
-    Switch[p,
-      {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
-      ,
-      {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, Lint["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
-
-Attributes[scanCompoundExpressions] = {HoldRest}
-
-scanCompoundExpressions[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, pairs, filtered, srcs},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  We want to ignore trivia
-  *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
-
-  pairs = Partition[filtered, 2, 1];
-
-  Do[
-
-    If[!MatchQ[p, {_, LeafNode[Token`Semi, _, _]}],
-      Continue[]
-    ];
-
-    Switch[p,
-      {n_, i:LeafNode[Token`Semi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
-
-
-
-
-
-Attributes[scanSpans] = {HoldRest}
-
-scanSpans[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, pairs, srcs, filtered, poss, i},
+Module[{cst, node, children, data, issues, poss, i, j},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
@@ -396,66 +145,58 @@ Module[{cst, node, children, data, issues, pairs, srcs, filtered, poss, i},
 
   issues = {};
 
+
   (*
-  Only check if LineCol-style
+  Already checked for LineCol style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
+
 
   poss = Position[children, LeafNode[Token`SemiSemi, _, _]];
 
   i = poss[[1, 1]];
+  j = poss[[2, 1]];
 
-  i += 1;
-  While[i <= Length[children],
+  i++;
+  While[i < j,
     Switch[children[[i]],
       LeafNode[Token`Newline, _, _],
-        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning", <|
-          Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
-          ConfidenceLevel -> 0.95 |>]];
+        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+          <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
+             ConfidenceLevel -> 0.95 |>]
+        ];
         Break[]
       ,
+      LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _],
+        i++
+      ,
       _,
-        i += 1
+        (*
+        Some non-trivia
+        *)
+        Break[]
     ]
   ];
 
-  (*
-  We want to ignore trivia
-  *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
-
-  pairs = Partition[filtered, 2, 1];
-
-  srcs = {};
-  Do[
-
-    If[!MatchQ[p, {_, LeafNode[Token`SemiSemi, _, _]} |
-                    {LeafNode[Token`SemiSemi, _, _], _}],
-      Continue[]
-    ];
-
-    Switch[p,
-      {n_, i:LeafNode[Token`SemiSemi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+  j++;
+  While[j < Length[children],
+    Switch[children[[j]],
+      LeafNode[Token`Newline, _, _],
+        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+          <| Source -> children[[ poss[[2, 1]], 3, Key[Source] ]],
+             ConfidenceLevel -> 0.95 |>]
+        ];
+        Break[]
       ,
-      {i:LeafNode[Token`SemiSemi, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
-    ];
-
-    ,
-    {p, pairs}
+      LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _],
+        j++
+      ,
+      _,
+        (*
+        Some non-trivia
+        *)
+        Break[]
+    ]
   ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, Lint["SpanDifferentLine", "Operands for ``;;`` are on different lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
 
   issues
 ]]
@@ -463,61 +204,6 @@ Module[{cst, node, children, data, issues, pairs, srcs, filtered, poss, i},
 
 
 
-Attributes[scanTernaryTildes] = {HoldRest}
-
-scanTernaryTildes[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, srcs},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  We want to ignore trivia
-  *)
-  filtered = DeleteCases[children, LeafNode[Whitespace | Token`Comment | Token`Newline | Token`LineContinuation, _, _] ];
-
-  (*
-  With a ~f~ b, we only want to look at {~, f} and {f, ~}
-  *)
-  filtered = filtered[[2;;-2]];
-
-  pairs = Partition[filtered, 2, 1];
-
-  Do[
-
-    Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, Lint["TernaryTildeDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
 
 
 

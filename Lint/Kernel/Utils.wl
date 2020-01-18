@@ -21,6 +21,9 @@ plainify
 $characterReplacementRules
 
 
+uppercaseSymbolNameQ
+
+
 Begin["`Private`"]
 
 Needs["AST`"]
@@ -352,6 +355,13 @@ $characterReplacementRules = {
 	"\t" -> " ",
 	Alternatives @@ $invisibleCharacters -> "\[UnknownGlyph]"
 }
+
+
+
+uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
+
+
+
 
 
 End[]
