@@ -9,7 +9,7 @@ ImplicitTimesAcrossLines
 TestMatch[
 	LintString["{ a\nb }"]
 	,
-	{ Lint["ImplicitTimesAcrossLines", _, _, _], Lint["TopLevel", _, _, _] }
+	{ Lint["ImplicitTimesAcrossLines", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190522-D9Q1R2"
 ]
@@ -22,7 +22,7 @@ DotDifferentLine
 TestMatch[
 	LintString["{ a.\nb }"]
 	,
-	{ Lint["DotDifferentLine", _, _, _], Lint["TopLevel", _, _, _] }
+	{ Lint["DotDifferentLine", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190522-U4K0M9"
 ]
@@ -33,7 +33,7 @@ TestMatch[
 TestMatch[
 	LintString["{ a;;\nb }"]
 	,
-	{ Lint["EndOfLine", _, "Warning", _], Lint["SpanDifferentLine", _, "Warning", _], Lint["TopLevel", _, _, _] }
+	{ Lint["EndOfLine", _, "Warning", _], Lint["SpanDifferentLine", _, "Warning", _] }
 	,
 	TestID->"ConcreteRules-20190522-S2L6J4"
 ]
@@ -59,7 +59,7 @@ DifferentLine:
 TestMatch[
 	LintString["-\na"]
 	,
-	{Lint["PrefixDifferentLine", _, _, _], Lint["TopLevel", _, _, _]}
+	{Lint["PrefixDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-Y8O9L2"
 ]
@@ -67,7 +67,7 @@ TestMatch[
 TestMatch[
 	LintString["{ a\n! }"]
 	,
-	{Lint["PostfixDifferentLine", _, _, _], Lint["TopLevel", _, _, _]}
+	{Lint["PostfixDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-R2X2T0"
 ]
@@ -89,7 +89,7 @@ TestMatch[
 TestMatch[
 	LintString["{ a\n;; }"]
 	,
-	{Lint["SpanDifferentLine", _, _, _], Lint["TopLevel", _, _, _]}
+	{Lint["SpanDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-E0L3O1"
 ]
@@ -97,7 +97,7 @@ TestMatch[
 TestMatch[
 	LintString["{ a~\nf~b } "]
 	,
-	{Lint["TernaryTildeDifferentLine", _, _, _], Lint["TopLevel", _, _, _]}
+	{Lint["TernaryTildeDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-S5U4W8"
 ]
@@ -106,7 +106,7 @@ TestMatch[
 TestMatch[
 	LintString["{ a~f~\nb } "]
 	,
-	{Lint["TernaryTildeDifferentLine", _, _, _], Lint["TopLevel", _, _, _]}
+	{Lint["TernaryTildeDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20191212-Y2G4G8"
 ]
@@ -129,7 +129,7 @@ ImplicitTimesSpan
 TestMatch[
 	LintString[";;b;;"]
 	,
-	{Lint["ImplicitTimes", _, _, _], Lint["EndOfLine", _, _, _]}
+	{ OrderlessPatternSequence[ Lint["UnexpectedImplicitTimes", _, _, _], Lint["EndOfLine", _, _, _] ] }
 	,
 	TestID->"ConcreteRules-20190523-I1D9N0"
 ]
@@ -138,7 +138,7 @@ TestMatch[
 TestMatch[
 	LintString["a;;b;;"]
 	,
-	{Lint["ImplicitTimes", _, _, _], Lint["EndOfLine", _, _, _]}
+	{ OrderlessPatternSequence[ Lint["UnexpectedImplicitTimes", _, _, _], Lint["EndOfLine", _, _, _] ] }
 	,
 	TestID->"ConcreteRules-20190523-L7M6K3"
 ]
