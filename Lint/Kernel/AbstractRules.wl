@@ -815,7 +815,6 @@ Catch[
 
 
 
-
 Attributes[scanPatterns] = {HoldRest}
 
 scanPatterns[pos_List, astIn_] :=
@@ -843,7 +842,7 @@ Module[{ast, node, patSymbol, name, rhs, children, patterns, issues},
   patterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
     If[#[[2, 1]]["String"] == name,
-      AppendTo[issues, Lint["DuplicateNamedPattern", "Duplicate named pattern " <> format[name] <> ".", "Error", <|
+      AppendTo[issues, Lint["DuplicatePatternName", "Pattern name " <> format[name] <> " occurs inside pattern with same name.", "Error", <|
         Source -> #[[2, 1, 3, Key[Source] ]],
         "AdditionalSources" -> { patSymbol[[3, Key[Source] ]] }, ConfidenceLevel -> 0.95 |> ]];
     ];
