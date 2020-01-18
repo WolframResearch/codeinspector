@@ -361,7 +361,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	(*
 	Make sure to sort lints
 	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
+	endingLints = SortBy[endingLints, #[[4, Key[Source] ]]&];
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
 	];

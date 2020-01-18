@@ -327,7 +327,7 @@ lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, seve
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
-  additionalSources, shadowing, confidenceTest, badLints},
+  additionalSources, shadowing, confidenceTest, badLints, truncated},
   
   lints = lintsIn;
   If[$Debug,
@@ -370,7 +370,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
 
   If[AnyTrue[lines, (StringLength[#] > $LineTruncationLimit)&],
-    Message[LintedLine::truncation]
+    truncated = True;
   ];
 
   lines = StringTake[#, UpTo[$LineTruncationLimit]]& /@ lines;
@@ -455,12 +455,24 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     Print["lints: ", lints];
   ];
 
+  If[empty[lints],
+    Throw[{}]
+  ];
+  
   (*
   Make sure to sort lints before taking
   *)
   lints = SortBy[lints, #[[4, Key[Source] ]]&];
 
   lints = Take[lints, UpTo[$LintLimit]];
+
+  (*
+  These are the lints we will be working with
+  *)
+
+  If[truncated,
+    Message[LintedLine::truncation]
+  ];
 
    sources = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> src_]] :> src];
 
