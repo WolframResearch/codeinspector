@@ -21,12 +21,14 @@ Note that even "obvious" problems don't necessarily have ConfidenceLevel -> 1.0
 
 ### Formatting
 
-
+```
 Sin [x]
+```
 
+```
 (#+1)
      &
-
+```
 
 
 
@@ -57,9 +59,13 @@ Recoverable errors in syntax.
 
 Code that is never intentional.
 
-`"\[Alpa]"`
+```
+"\[Alpa]"
+```
 
-`f[a,]`
+```
+f[a,]
+```
 
 
 
@@ -68,7 +74,9 @@ Code that is never intentional.
 
 Unrecoverable errors in syntax.
 
-`1 + {}}`
+```
+1 + {}}
+```
 
 
 
