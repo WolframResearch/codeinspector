@@ -305,7 +305,7 @@ Attributes[LintCST] = {HoldFirst}
 LintCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes,
-  ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start, missingCloserChildrenNodes,
+  ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start,
   ignoredNodes},
 
   If[$Debug,
@@ -338,18 +338,10 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   *)
   staticAnalysisIgnoreNodes = Cases[ast[[2]], StaticAnalysisIgnoreNode[_, _, _], Infinity];
 
-  (*
-  Do not descend into MissingCloser nodes
-
-  And skip the opener token. This allows the GroupMissingCloserNode itself to be counted in the linter.
-  *)
-  missingCloserChildrenNodes = Flatten[Cases[cst[[2]], GroupMissingCloserNode[_, children_, _] :> children[[2;;]], Infinity]];
-
-  ignoredNodes = staticAnalysisIgnoreNodes ~Join~ missingCloserChildrenNodes;
+  ignoredNodes = staticAnalysisIgnoreNodes;
 
   If[$Debug,
     Print["staticAnalysisIgnoreNodes: ", staticAnalysisIgnoreNodes];
-    Print["missingCloserChildrenNodes: ", missingCloserChildrenNodes];
     Print["ignoredNodes: ", ignoredNodes];
   ];
 
