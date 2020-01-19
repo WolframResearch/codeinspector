@@ -8,10 +8,12 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(PACLET "Lint")
 set(WOLFRAMKERNEL /Applications/Mathematica.app/Contents/MacOS/WolframKernel CACHE FILEPATH "Path to WolframKernel")
 set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
+set(LOCAL_BUILD OFF CACHE BOOL "Local build")
 
 message(STATUS "PACLET: ${PACLET}")
 message(STATUS "WOLFRAMKERNEL: ${WOLFRAMKERNEL}")
 message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
+message(STATUS "LOCAL_BUILD: ${LOCAL_BUILD}")
 
 set(WL_PACLET_SOURCES
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/AbstractRules.wl
@@ -71,10 +73,19 @@ file(MAKE_DIRECTORY
 #
 # Copy WL source files
 #
+
+set(COPIED_PACLETINFO ${CMAKE_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m)
+
 add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m ${CMAKE_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m
-    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m)
+	OUTPUT
+		${COPIED_PACLETINFO}
+	COMMAND
+		${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m ${COPIED_PACLETINFO}
+	COMMAND
+		${CMAKE_COMMAND} -DLOCAL_BUILD=${LOCAL_BUILD} -DCOPIED_PACLETINFO=${COPIED_PACLETINFO} -P ${PROJECT_SOURCE_DIR}/cmake/ReplacePacletInfo.cmake
+	MAIN_DEPENDENCY
+		${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m
+)
 list(APPEND COPIED_WL_PACLET_SOURCES ${CMAKE_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m)
 
 foreach(SRC ${WL_PACLET_SOURCES})
