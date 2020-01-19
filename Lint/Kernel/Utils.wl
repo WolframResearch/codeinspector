@@ -142,29 +142,54 @@ Only report the root cause
 shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2Tag_, _, lint2Severity_, lint2Data_]] :=
 	Which[
 		lint1 === lint2,
-			False,
-		KeyExistsQ[lint1Data, CodeActions],
-			False,
+			False
+    ,
+		KeyExistsQ[lint1Data, CodeActions] &&
+      (!KeyExistsQ[lint2Data, CodeActions] || lint1Data[CodeActions] =!= lint2Data[CodeActions]),
+      (*
+      If lint1 has CodeActions and lint2 does not, then keep lint1
+      If they both have CodeActions, then only keep lint1 if the actions are different
+      *)
+			False
+    ,
 		!SourceMemberQ[lint2Data[Source], lint1Data[Source]],
-			False,
+			False
+    ,
 		MatchQ[lint1Tag, "UnhandledCharacter" | "AbstractSyntaxError"] && lint2Tag == "UnrecognizedCharacter",
 			(*
 			"UnrecognizedCharacter" is the "root" cause, so keep it and get rid of "UnhandledCharacter"
 			*)
-			True,
+			True
+    ,
 		lint1Tag == "UnrecognizedCharacter" && MatchQ[lint2Tag, "UnhandledCharacter" | "AbstractSyntaxError"],
-			False,
+			False
+    ,
 		lint1Tag == "UnexpectedCharacter" && lint2Tag == "CharacterEncoding",
 			(*
 			"CharacterEncoding" is the "root" cause, so keep it and get rid of "UnexpectedCharacter"
 			*)
-			True,
+			True
+    ,
 		lint1Tag == "CharacterEncoding" && lint2Tag == "UnexpectedCharacter",
-			False,
+			False
+    ,
 		severityToInteger[lint1Severity] < severityToInteger[lint2Severity],
-			True,
+			True
+    ,
 		lint1Data[ConfidenceLevel] < lint2Data[ConfidenceLevel],
-			True,
+			True
+    ,
+    severityToInteger[lint1Severity] == severityToInteger[lint2Severity] &&
+      lint1Data[ConfidenceLevel] == lint2Data[ConfidenceLevel],
+      (*
+      Given all of this:
+      lint1 is SourceMemberQ of lint2
+      same severity
+      same confidence
+      then get rid of lint1
+      *)
+      True
+    ,
 		True,
 			False
 	]

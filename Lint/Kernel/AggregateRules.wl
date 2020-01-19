@@ -388,7 +388,7 @@ Module[{agg, node, children, data, issues, pairs, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Warning",
+    AppendTo[issues, Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Error",
       <|Source -> #,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
@@ -406,13 +406,14 @@ Attributes[scanImplicitTimesBlanks] = {HoldRest}
 
 scanImplicitTimesBlanks[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, data, children, issues, pairs, srcs},
+Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
-  srcs = {};
+  warningSrcs = {};
+  errorSrcs = {};
 
   issues = {};
 
@@ -442,28 +443,75 @@ Module[{agg, node, data, children, issues, pairs, srcs},
       Continue[]
     ];
 
+    (*
+    mark more specific patterns as errors
+  
+    The error cases are:
+    _ <implicit Times>
+    __ <implicit Times>
+    ___ <implicit Times>
+    a_ <implicit Times>
+    a__ <implicit Times>
+    a___ <implicit Times>
+    a_. <implicit Times>
+
+    <implicit Times> _
+    <implicit Times> __
+    <implicit Times> ___
+    <implicit Times> _a
+    <implicit Times> __a
+    <implicit Times> ___a
+    *)
     Switch[p,
+      {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+        PatternBlankNode[_, {_, _}, _] |
+        PatternBlankSequenceNode[_, {_, _}, _] |
+        PatternBlankNullSequenceNode[_, {_, _}, _] |
+        _OptionalDefaultPatternNode
+        ,
+        LeafNode[Token`Fake`ImplicitTimes, _, _]}
+        ,
+        AppendTo[errorSrcs, p[[2, 3, Key[Source] ]] ];
+      ,
+      {LeafNode[Token`Fake`ImplicitTimes, _, _],
+        LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+        _BlankNode |
+        _BlankSequenceNode |
+        _BlankNullSequenceNode}
+        ,
+        AppendTo[errorSrcs, p[[1, 3, Key[Source] ]] ];
+      ,
       {_, LeafNode[Token`Fake`ImplicitTimes, _, _]},
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+        AppendTo[warningSrcs, p[[2, 3, Key[Source] ]] ];
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _], _},
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+        AppendTo[warningSrcs, p[[1, 3, Key[Source] ]] ];
     ];
 
     ,
     {p, pairs}
   ];
 
-  srcs = DeleteDuplicates[srcs];
+  warningSrcs = DeleteDuplicates[warningSrcs];
+  errorSrcs = DeleteDuplicates[errorSrcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Error",
+    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Warning",
       <|Source->#,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
           CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
       |>]];
-    )&, srcs];
+    )&, warningSrcs];
+
+  Scan[(
+    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Error",
+      <|Source->#,
+        ConfidenceLevel -> 0.85,
+        CodeActions -> {
+          CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+      |>]];
+    )&, errorSrcs];
 
   issues
 ]]
@@ -1382,7 +1430,7 @@ Module[{agg, node, data, issues, op},
 
   issues = {};
 
-  AppendTo[issues, Lint["PrefixPlus", "Unexpected ``Plus``.", "Warning", <|Source->data[Source], ConfidenceLevel->0.9|>]];
+  AppendTo[issues, Lint["PrefixPlus", "Unexpected prefix ``Plus``.", "Remark", <|Source->data[Source], ConfidenceLevel->0.9|>]];
 
   issues
 ]
@@ -1481,7 +1529,7 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
     src = sym[[3, Key[Source] ]];
 
-    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
+    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Warning",
                       <|  Source->src,
                           ConfidenceLevel->0.95|>]];
     ,
