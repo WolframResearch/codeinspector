@@ -274,29 +274,28 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
   children = node[[2]];
   data = node[[3]];
 
-  tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
-
-  Switch[tagString,
-    "ExpectedOperand",
-        {Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  Switch[tag,
+    SyntaxError`ExpectedOperand,
+      {Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    "ExpectedTilde",
-        {Lint["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    SyntaxError`ExpectedTilde,
+      {Lint["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    "ColonError",
-        {Lint["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    SyntaxError`ColonError,
+      {Lint["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    "ExpectedSet",
-        {Lint["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    SyntaxError`ExpectedSet,
+      {Lint["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    "ExpectedIntegrand",
-        {Lint["ExpectedIntegrand", "Expected integrand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    SyntaxError`ExpectedIntegrand,
+      {Lint["ExpectedIntegrand", "Expected integrand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    "UnexpectedCloser",
-        {Lint["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    SyntaxError`UnexpectedCloser,
+      {Lint["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     _,
-        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+      {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
 ]
 

@@ -1851,7 +1851,7 @@ Module[{ast, node, children, data, selected, issues, blanks, counts},
   *)
   blanks = Cases[children, CallNode[LeafNode[Symbol, "Blank", _], {}, _]];
 
-  Scan[(AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Warning", <|
+  Scan[(AppendTo[issues, Lint["Blank", "Blank in ``Alternatives``.", "Error", <|
     #[[3]],
     ConfidenceLevel -> 0.95|>]])&, blanks];
 

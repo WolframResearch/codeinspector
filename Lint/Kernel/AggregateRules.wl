@@ -1529,7 +1529,7 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
     src = sym[[3, Key[Source] ]];
 
-    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Warning",
+    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
                       <|  Source->src,
                           ConfidenceLevel->0.95|>]];
     ,
