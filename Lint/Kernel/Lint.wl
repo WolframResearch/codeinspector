@@ -42,6 +42,12 @@ LintedBox
 
 
 
+BeginStaticAnalysisIgnore
+EndStaticAnalysisIgnore
+
+
+
+
 $ConcreteLintProgress
 $ConcreteLintTime
 $AggregateLintProgress
@@ -304,9 +310,9 @@ Attributes[LintCST] = {HoldFirst}
 
 LintCST[cstIn_, OptionsPattern[]] :=
 Catch[
-Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, staticAnalysisIgnoreNodes,
+Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
   ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start,
-  ignoredNodes},
+  ignoredNodes, beginStaticAnalysisIgnoreNodePoss, endPos, siblingsPos, siblings, candidate, endFound},
 
   If[$Debug,
     Print["LintCST"];
@@ -321,48 +327,59 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
 
-  agg = Aggregate[cst];
-
-  If[FailureQ[agg],
-    Throw[agg]
-  ];
-
-  ast = Abstract[agg];
-
-  If[FailureQ[ast],
-    Throw[ast]
-  ];
-
   (*
-  Make sure to use Infinity, because StaticAnalysisIgnoreNode may be nested inside of PackageNode or ContextNode
+  Make sure to use Infinity
   *)
-  staticAnalysisIgnoreNodes = Cases[ast[[2]], StaticAnalysisIgnoreNode[_, _, _], Infinity];
+  
+  ignoredNodes = {};
 
-  ignoredNodes = staticAnalysisIgnoreNodes;
+  beginStaticAnalysisIgnoreNodePoss =
+    Position[cst,
+      CallNode[{LeafNode[Symbol, "BeginStaticAnalysisIgnore" | "Lint`BeginStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, {LeafNode[Token`OpenSquare, _, _], LeafNode[Token`CloseSquare, _, _]}, _]}, _]];
+
+  ignoredNodes = Reap[
+  Do[
+    siblingsPos = Most[beginPos];
+    siblings = Extract[cst, {siblingsPos}][[1]];
+    endFound = False;
+    Do[
+      candidate = siblings[[pos]];
+      If[MatchQ[candidate, CallNode[{LeafNode[Symbol, "EndStaticAnalysisIgnore" | "Lint`EndStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, {LeafNode[Token`OpenSquare, _, _], LeafNode[Token`CloseSquare, _, _]}, _]}, _]],
+        endPos = pos;
+        endFound = True;
+        Break[]
+      ]
+      ,
+      {pos, Last[beginPos]+1, Length[siblings]}
+    ];
+    If[endFound,
+      staticAnalysisIgnoreChildren = siblings[[(Last[beginPos]+1);;(endPos-1)]];
+      Sow[staticAnalysisIgnoreChildren]
+      ,
+      Message[EndStaticAnalysisIgnore::missing]
+    ]
+    ,
+    {beginPos, beginStaticAnalysisIgnoreNodePoss}
+  ]][[2]];
+
+  If[!empty[ignoredNodes],
+    ignoredNodes = ignoredNodes[[1]];
+    ignoredNodes = Flatten[ignoredNodes];
+  ];
 
   If[$Debug,
-    Print["staticAnalysisIgnoreNodes: ", staticAnalysisIgnoreNodes];
     Print["ignoredNodes: ", ignoredNodes];
   ];
 
   ignoredNodesSrcMemberFunc = SourceMemberQ[ignoredNodes[[All, 3, Key[Source] ]] ];
   
+  
+
+
   cst = removeIgnoredNodes[cst, ignoredNodesSrcMemberFunc];
-
-  agg = removeIgnoredNodes[agg, ignoredNodesSrcMemberFunc];
-
-  ast = removeIgnoredNodes[ast, ignoredNodesSrcMemberFunc];
-
-  (*
-  agg[[2]] = DeleteCases[agg[[2]], node_ /; SourceMemberQ[staticAnalysisIgnoreNodes[[All, 3, Key[Source]]], node[[3]][Source]]];
-
-  ast[[2]] = DeleteCases[ast[[2]], node_ /; SourceMemberQ[staticAnalysisIgnoreNodes[[All, 3, Key[Source]]], node[[3]][Source]]];
-  *)
-
+  
   If[$Debug,
     Print["cst: ", cst];
-    Print["agg: ", agg];
-    Print["ast: ", ast];
   ];
 
   If[$Debug,
@@ -386,6 +403,19 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
     )&, concreteRules];
   $ConcreteLintTime = Now - start;
 
+
+  agg = Aggregate[cst];
+
+  cst =.;
+
+  If[FailureQ[agg],
+    Throw[agg]
+  ];
+
+  If[$Debug,
+    Print["agg: ", agg];
+  ];
+
   If[$Debug,
     Print["aggregateRules"];
   ];
@@ -404,6 +434,20 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints, st
     $AggregateLintProgress = Floor[100 * prog / Length[aggregateRules]];
     )&, aggregateRules];
   $AggregateLintTime = Now - start;
+
+
+
+  ast = Abstract[agg];
+
+  agg =.;
+
+  If[FailureQ[ast],
+    Throw[ast]
+  ];
+
+  If[$Debug,
+    Print["ast: ", ast];
+  ];
 
   If[$Debug,
     Print["abstractRules"];
