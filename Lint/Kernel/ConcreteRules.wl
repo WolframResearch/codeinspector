@@ -239,26 +239,48 @@ scanCalls[pos_List, cstIn_] :=
 Attributes[scanErrorNodes] = {HoldRest}
 
 scanErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, tag, data, tagString, children, leaf},
+ Module[{cst, node, tag, data, tagString, children, leaf, issues, multilineStrings},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
   children = node[[2]];
   data = node[[3]];
 
-  tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+  issues = {};
 
-  Switch[tagString,
-    "Aborted",
-        leaf = children[[1]];
-        {Lint["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  Switch[tag,
+    Token`Error`Aborted,
+      leaf = children[[1]];
+      AppendTo[issues, Lint["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
-    "ExpectedOperand",
-        {Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    Token`Error`ExpectedOperand,
+      AppendTo[issues, Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnterminatedComment,
+      AppendTo[issues, Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnterminatedString,
+      AppendTo[issues, Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]];
+      (*
+      Finding the correct string with the missing quote is difficult.
+      So also flag any multiline strings as a Warning
+      This will help find the actual offending string
+      *)
+      multilineStrings = Cases[cst, LeafNode[String, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]], Infinity];
+      Scan[Function[s,
+        (AppendTo[issues,
+          Lint["MultilineString", "Multiline string.", "Warning",
+            (* just mark the opening quote here *)
+            <| Source -> { { #[[1]], #[[2]] }, { #[[1]], #[[2]] + 1  } }, ConfidenceLevel -> 0.9 |>]])&[s[[3, Key[Source], 1]] ];
+        ], multilineStrings
+      ];
     ,
     _,
-        {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-  ]
+      tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
+      AppendTo[issues, Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+  ];
+
+  issues
 ]
 
 
