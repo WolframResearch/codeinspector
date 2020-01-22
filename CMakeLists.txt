@@ -21,7 +21,6 @@ set(WL_PACLET_SOURCES
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Boxes.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/ConcreteRules.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/External.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Folds.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Format.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/ImplicitTimes.wl
 	${CMAKE_SOURCE_DIR}/Lint/Kernel/Lint.wl

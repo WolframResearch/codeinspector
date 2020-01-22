@@ -64,7 +64,6 @@ Needs["Lint`AbstractRules`"]
 Needs["Lint`AggregateRules`"]
 Needs["Lint`Boxes`"]
 Needs["Lint`ConcreteRules`"]
-Needs["Lint`Folds`"]
 Needs["Lint`Format`"]
 Needs["Lint`Report`"]
 
