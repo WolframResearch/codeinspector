@@ -907,9 +907,12 @@ Catch[
   ];
 
   (*
-  Used as a pattern, so no issues
+  Used as a pattern or GroupMissingCloserNode, so no issues
   *)
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _]],
+  If[MatchQ[children[[1]],
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+      GroupMissingCloserNode[_, _, _]]
+    ,
     Throw[issues]
   ];
 
@@ -1035,9 +1038,12 @@ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedP
   ];
 
   (*
-  Being used as a pattern, so no issues
+  Being used as a pattern or GroupMissingCloserNode, so no issues
   *)
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _]],
+  If[MatchQ[children[[1]],
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+      GroupMissingCloserNode[_, _, _]]
+    ,
     Throw[issues]
   ];
 
@@ -1145,9 +1151,12 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   ];
 
   (*
-  Being used as a pattern, so no issues
+  Being used as a pattern or GroupMissingCloserNode, so no issues
   *)
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _]],
+  If[MatchQ[children[[1]],
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+      GroupMissingCloserNode[_, _, _]]
+    ,
     Throw[issues]
   ];
 
@@ -1264,9 +1273,12 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   ];
 
   (*
-  Being used as a pattern, so no issues
+  Being used as a pattern or GroupMissingCloserNode, so no issues
   *)
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _]],
+  If[MatchQ[children[[1]],
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+      GroupMissingCloserNode[_, _, _]]
+    ,
     Throw[issues]
   ];
 
