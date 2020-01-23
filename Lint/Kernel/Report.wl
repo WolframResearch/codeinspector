@@ -80,11 +80,12 @@ There was a change in Mathematica 11.2 to allow
 foo[lints : {___Lint} : Automatic] := lints
 foo[]  returns Automatic
 
-bug 338218
+Related bugs: 338218
 *)
 
+lintsInPat = If[$VersionNumber >= 11.2, {___Lint}, _]
 
-LintFileReport[File[file_String], lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
+LintFileReport[File[file_String], lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   lintedLines, unusedLineHashExclusions, hashes, confidence, performanceGoal, concreteRules,
@@ -177,7 +178,7 @@ Options[LintStringReport] = {
 }
 
 
-LintStringReport[string_String, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
+LintStringReport[string_String, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules},
@@ -253,7 +254,7 @@ Options[LintBytesReport] = {
 }
 
 
-LintBytesReport[bytes_List, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
+LintBytesReport[bytes_List, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
   confidence, string, performanceGoal, concreteRules, aggregateRules, abstractRules},
@@ -280,7 +281,7 @@ Catch[
 
  lineNumberExclusions = OptionValue["LineNumberExclusions"];
  If[lineNumberExclusions === None,
-  lineNumberExclusions = {}
+  lineNumberExclusions = <||>
  ];
 
  lineHashExclusions = OptionValue["LineHashExclusions"];

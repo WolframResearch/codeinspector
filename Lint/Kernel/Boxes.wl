@@ -26,7 +26,19 @@ Options[LintBoxReport] = {
   ConfidenceLevel :> $ConfidenceLevel
 }
 
-LintBoxReport[box_, lintsIn:{___Lint}:Automatic, OptionsPattern[]] :=
+(*
+
+There was a change in Mathematica 11.2 to allow 
+
+foo[lints : {___Lint} : Automatic] := lints
+foo[]  returns Automatic
+
+Related bugs: 338218
+*)
+
+lintsInPat = If[$VersionNumber >= 11.2, {___Lint}, _]
+
+LintBoxReport[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules,
