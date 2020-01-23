@@ -208,7 +208,7 @@ BeginStaticAnalysisIgnore[]
 (*
 Replace invisible characters with \[UnknownGlyph]
 *)
-$invisibleCharacters = {
+$invisibleBMPCharacters = {
 
 	(*
 	ASCII control characters
@@ -250,13 +250,64 @@ $invisibleCharacters = {
 	(*
 	Virtual BOM character
 	*)
-	"\:e001"} ~Join~
+	"\:e001",
+
+  (*
+  ZERO WIDTH SPACE
+  *)
+  "\:200b",
+
+  (*
+  ZERO WIDTH NON-JOINER
+  *)
+  "\:200c",
+
+  (*
+  ZERO WIDTH JOINER
+  *)
+  "\:200d",
+
+  (*
+  LINE SEPARATOR
+  *)
+  "\:2028",
+
+  (*
+  WORD JOINER
+  *)
+  "\:2060",
+
+  (*
+  FUNCTION APPLICATION
+  *)
+  "\:2061"} ~Join~
+
+  (*
+  C1
+  *)
+  CharacterRange["\:0080", "\:009f"] ~Join~
 
 	(*
 	Unicode non-characters
 	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
 	*)
-	CharacterRange["\:fdd0", "\:fdef"] ~Join~ {
+	CharacterRange["\:fdd0", "\:fdef"]
+
+
+
+(*
+Handling of \|XXXXXX notation did not become correct until version 12.0
+
+e.g., in version 12:
+StringLength["\|10ffff"] => 1
+
+in version 11:
+StringLength["\|10ffff"] => 8 (or 2 if coming from FE!)
+
+*)
+If[$VersionNumber >= 12.0,
+
+  $invisibleNonBMPCharacters = {
 	(*
 	Unicode non-characters
 	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
@@ -294,42 +345,7 @@ $invisibleCharacters = {
 	"\|0ffffe",
 	"\|0fffff",
 	"\|10fffe",
-	"\|10ffff",
-
-	(*
-	ZERO WIDTH SPACE
-  *)
-  "\:200b",
-
-  (*
-  ZERO WIDTH NON-JOINER
-  *)
-  "\:200c",
-
-  (*
-  ZERO WIDTH JOINER
-  *)
-  "\:200d",
-
-  (*
-  LINE SEPARATOR
-  *)
-  "\:2028",
-
-  (*
-  WORD JOINER
-  *)
-  "\:2060",
-
-  (*
-  FUNCTION APPLICATION
-  *)
-  "\:2061"} ~Join~
-
-  (*
-  C1
-  *)
-  CharacterRange["\:0080", "\:009f"] ~Join~
+	"\|10ffff"} ~Join~
 
   (*
   Plane 15 PUA
@@ -341,8 +357,16 @@ $invisibleCharacters = {
   *)
   CharacterRange["\|100000", "\|10fffd"]
 
+  ,
+  (*
+  $VersionNumber < 12.0
+  *)
+  $invisibleNonBMPCharacters = {}
+]
+
 EndStaticAnalysisIgnore[]
 
+$invisibleCharacters = $invisibleBMPCharacters ~Join~ $invisibleNonBMPCharacters
 
 $characterReplacementRules = { 
 	(*
