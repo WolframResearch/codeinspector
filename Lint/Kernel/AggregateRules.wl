@@ -13,6 +13,17 @@ Needs["Lint`Utils`"]
 
 
 
+blankPat =
+  LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+  _BlankNode |
+  _BlankSequenceNode |
+  _BlankNullSequenceNode |
+  _PatternBlankNode |
+  _PatternBlankSequenceNode |
+  _PatternBlankNullSequenceNode |
+  _OptionalDefaultPatternNode
+
+
 (*
 
 Rules are of the form: pat -> func where pat is the node pattern to match on and func is the processing function for the node.
@@ -53,14 +64,8 @@ InfixNode[Times,
 Tags: ImplicitTimesAcrossLines
 *)
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-                                !FreeQ[children, LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
-                                                  _BlankNode |
-                                                  _BlankSequenceNode |
-                                                  _BlankNullSequenceNode |
-                                                  _PatternBlankNode |
-                                                  _PatternBlankSequenceNode |
-                                                  _PatternBlankNullSequenceNode |
-                                                  _OptionalDefaultPatternNode, 1], _] -> scanImplicitTimesBlanks,
+                                !FreeQ[children, blankPat |
+                                                  BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _] -> scanImplicitTimesBlanks,
 
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
                                 !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
@@ -423,23 +428,8 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     (*
     Make sure there is a blank next to a Token`Fake`ImplicitTimes
     *)
-    If[!MatchQ[p, {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
-                        _BlankNode |
-                        _BlankSequenceNode |
-                        _BlankNullSequenceNode |
-                        _PatternBlankNode |
-                        _PatternBlankSequenceNode |
-                        _PatternBlankNullSequenceNode |
-                        _OptionalDefaultPatternNode, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
-                    {LeafNode[Token`Fake`ImplicitTimes, _, _],
-                      LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
-                        _BlankNode |
-                        _BlankSequenceNode |
-                        _BlankNullSequenceNode |
-                        _PatternBlankNode |
-                        _PatternBlankSequenceNode |
-                        _PatternBlankNullSequenceNode |
-                        _OptionalDefaultPatternNode}],
+    If[!MatchQ[p, {blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _], LeafNode[Token`Fake`ImplicitTimes, _, _]} |
+                    {LeafNode[Token`Fake`ImplicitTimes, _, _], blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _]}],
       Continue[]
     ];
 
@@ -450,6 +440,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     _ <implicit Times>
     __ <implicit Times>
     ___ <implicit Times>
+    _. <implicit Times>
     a_ <implicit Times>
     a__ <implicit Times>
     a___ <implicit Times>
@@ -458,9 +449,17 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     <implicit Times> _
     <implicit Times> __
     <implicit Times> ___
+    <implicit Times> _.
     <implicit Times> _a
     <implicit Times> __a
     <implicit Times> ___a
+    <implicit Times> _?f
+    <implicit Times> __?f
+    <implicit Times> ___?f
+    <implicit Times> _.?f
+    <implicit Times> _a?f
+    <implicit Times> __a?f
+    <implicit Times> ___a?f
     *)
     Switch[p,
       {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
@@ -477,7 +476,12 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
         LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
         _BlankNode |
         _BlankSequenceNode |
-        _BlankNullSequenceNode}
+        _BlankNullSequenceNode |
+        BinaryNode[PatternTest | Condition, {
+          LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+          _BlankNode |
+          _BlankSequenceNode |
+          _BlankNullSequenceNode, ___ }, _]}
         ,
         AppendTo[errorSrcs, p[[1, 3, Key[Source] ]] ];
       ,
