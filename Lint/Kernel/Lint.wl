@@ -298,6 +298,20 @@ Catch[
 
 
 
+
+
+
+
+beginStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "BeginStaticAnalysisIgnore" | "Lint`BeginStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
+
+beginStaticAnalysisIgnoreCallPat = beginStaticAnalysisIgnoreCallPat0 | InfixNode[CompoundExpression, {beginStaticAnalysisIgnoreCallPat0, LeafNode[Token`Semi, _, _], LeafNode[Token`Fake`ImplicitNull, _, _]}, _]
+
+
+endStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "EndStaticAnalysisIgnore" | "Lint`EndStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
+
+endStaticAnalysisIgnoreCallPat = endStaticAnalysisIgnoreCallPat0 | InfixNode[CompoundExpression, {endStaticAnalysisIgnoreCallPat0, LeafNode[Token`Semi, _, _], LeafNode[Token`Fake`ImplicitNull, _, _]}, _]
+
+
 Options[LintCST] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
@@ -332,9 +346,7 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
   
   ignoredNodes = {};
 
-  beginStaticAnalysisIgnoreNodePoss =
-    Position[cst,
-      CallNode[{LeafNode[Symbol, "BeginStaticAnalysisIgnore" | "Lint`BeginStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, {LeafNode[Token`OpenSquare, _, _], LeafNode[Token`CloseSquare, _, _]}, _]}, _]];
+  beginStaticAnalysisIgnoreNodePoss = Position[cst, beginStaticAnalysisIgnoreCallPat];
 
   ignoredNodes = Reap[
   Do[
@@ -343,7 +355,7 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
     endFound = False;
     Do[
       candidate = siblings[[pos]];
-      If[MatchQ[candidate, CallNode[{LeafNode[Symbol, "EndStaticAnalysisIgnore" | "Lint`EndStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, {LeafNode[Token`OpenSquare, _, _], LeafNode[Token`CloseSquare, _, _]}, _]}, _]],
+      If[MatchQ[candidate, endStaticAnalysisIgnoreCallPat],
         endPos = pos;
         endFound = True;
         Break[]
