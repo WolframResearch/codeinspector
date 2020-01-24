@@ -176,11 +176,8 @@ shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2T
 		severityToInteger[lint1Severity] < severityToInteger[lint2Severity],
 			True
     ,
-		lint1Data[ConfidenceLevel] < lint2Data[ConfidenceLevel],
-			True
-    ,
     severityToInteger[lint1Severity] == severityToInteger[lint2Severity] &&
-      lint1Data[ConfidenceLevel] == lint2Data[ConfidenceLevel],
+      lint1Data[ConfidenceLevel] <= lint2Data[ConfidenceLevel],
       (*
       Given all of this:
       lint1 is SourceMemberQ of lint2
