@@ -53,6 +53,8 @@ $LineTruncationLimit = 500
 
 $ConfidenceLevel = 0.95
 
+$MaxConfidenceLevel = 1.0
+
 $existsTest = Not @* KeyExistsQ[ConfidenceLevel]
 
 
@@ -440,6 +442,9 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   ];
 
   confidenceTest = GreaterEqualThan[confidence];
+  lints = Cases[lints, Lint[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
+
+  confidenceTest = LessEqualThan[$MaxConfidenceLevel];
   lints = Cases[lints, Lint[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
 
   (*

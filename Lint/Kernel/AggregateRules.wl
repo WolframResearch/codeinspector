@@ -292,13 +292,14 @@ Attributes[scanPostfixs] = {HoldRest}
 
 scanPostfixs[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs},
+Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
-  srcs = {};
+  highConfSrcs = {};
+  lowConfSrcs = {};
 
   issues = {};
 
@@ -314,22 +315,36 @@ Module[{agg, node, children, data, issues, srcs},
   Do[
 
     Switch[p,
+      (*
+      People like putting & on another line for some reason
+      *)
+      {a_, b:LeafNode[Token`Amp, _, _]} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
+        AppendTo[lowConfSrcs, p[[2, 3, Key[Source] ]] ]
+      ,
       {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+        AppendTo[highConfSrcs, p[[2, 3, Key[Source] ]] ];
     ];
 
     ,
     {p, pairs}
   ];
 
-  srcs = DeleteDuplicates[srcs];
+  highConfSrcs = DeleteDuplicates[highConfSrcs];
+  lowConfSrcs = DeleteDuplicates[lowConfSrcs];
 
   Scan[(
     AppendTo[issues, Lint["PostfixDifferentLine", "Operands are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
-    )&, srcs];
+    )&, highConfSrcs];
+
+  Scan[(
+    AppendTo[issues, Lint["PostfixDifferentLine", "Operands are on different lines.", "Warning",
+      <|Source -> #,
+        ConfidenceLevel -> 0.85
+      |>]];
+    )&, lowConfSrcs];
 
   issues
 ]]
@@ -502,7 +517,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
   Scan[(
     AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Warning",
       <|Source->#,
-        ConfidenceLevel -> 0.95,
+        ConfidenceLevel -> 0.85,
         CodeActions -> {
           CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
       |>]];
@@ -622,7 +637,7 @@ Module[{agg, node, children, data, issues, srcs},
   Scan[(
     AppendTo[issues, Lint["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
       <|Source -> #,
-        ConfidenceLevel -> 0.95
+        ConfidenceLevel -> 0.85
       |>]];
     )&, srcs];
 

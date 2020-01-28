@@ -391,7 +391,7 @@ Attributes[scanAssocs] = {HoldRest}
 
 scanAssocs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupKeys, expensiveChildren},
+Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupKeys, expensiveChildren, filtered},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -401,18 +401,23 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
 
   If[!MatchQ[children, { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }],
     (*
-    Association does not have Rule arguments.
+    Association does not have all Rule arguments.
     *)
     Throw[{}]
   ];
 
-  counts = CountsBy[children, ToFullFormString[#[[2, 1]] ]&];
+  (*
+  Skip  <| _ -> a, _ -> b |>
+  *)
+  filtered = DeleteCases[children, CallNode[_, { CallNode[LeafNode[Symbol, "Blank", _], _, _], _ }, _]];
+
+  counts = CountsBy[filtered, ToFullFormString[#[[2, 1]] ]&];
 
   dupKeys = Keys[Select[counts, # > 1&]];
 
-  expensiveChildren = ToFullFormString[#[[2, 1]] ]& /@ children;
+  expensiveChildren = ToFullFormString[#[[2, 1]] ]& /@ filtered;
 
-  selecteds = Function[key, Pick[children, (# == key)& /@ expensiveChildren]] /@ dupKeys;
+  selecteds = Function[key, Pick[filtered, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
   Do[
 
@@ -748,11 +753,16 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
 
     counts = CountsBy[children[[2;;3]], ToFullFormString];
 
+    (*
+    Do not warn about  If[a, _, _]
+    *)
+    counts = KeyDrop[counts, "Blank[]"];
+
     selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
 
     If[!empty[selected],
       srcs = #[[3, Key[Source] ]]& /@ selected;
-      AppendTo[issues, Lint["DuplicateClauses", "Both branches are the same.", "Warning", <|
+      AppendTo[issues, Lint["DuplicateClauses", "Both branches are the same.", "Error", <|
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
     ];
@@ -944,7 +954,7 @@ Catch[
   ];
 
 
-  params = children[[1,2]];
+  params = children[[1, 2]];
   vars = # /. {
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[Symbol, _, _], _}, _] :> sym,
@@ -978,7 +988,7 @@ Catch[
   Scan[
     AppendTo[issues, Lint["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
       #[[3]],
-      CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
+      CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source] ]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
       ,
       unusedParams
   ];
@@ -1215,20 +1225,26 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], Con
 
   {vars, vals} = Transpose[Transpose /@ varsAndVals];
 
-  flattenedVars = Flatten[vars];
+  Scan[
+    Function[varsList,
+      
+      counts = CountsBy[varsList, ToFullFormString];
 
-  counts = CountsBy[flattenedVars, ToFullFormString];
+      selected = Select[varsList, counts[ToFullFormString[#]] > 1&];
 
-  selected = Select[flattenedVars, counts[ToFullFormString[#]] > 1&];
+      If[!empty[selected],
+        srcs = #[[3, Key[Source] ]]& /@ selected;
 
-  If[!empty[selected],
-    srcs = #[[3, Key[Source]]]& /@ selected;
-
-    AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``.", "Error", <|
-      Source -> First[srcs],
-      "AdditionalSources" -> Rest[srcs],
-      ConfidenceLevel -> 1.0 |> ]];
+        AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``With``.", "Error", <|
+          Source -> First[srcs],
+          "AdditionalSources" -> Rest[srcs],
+          ConfidenceLevel -> 1.0 |> ]];
+      ];
+    ]
+    ,
+    vars
   ];
+  
 
   usedBody = ToFullFormString /@ Cases[Last[children], LeafNode[Symbol, _, _], {0, Infinity}];
 
@@ -1325,7 +1341,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source]]]& /@ selected;
+    srcs = #[[3, Key[Source] ]]& /@ selected;
 
     AppendTo[issues, Lint["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
@@ -1547,32 +1563,41 @@ Attributes[scanSelfAssignments] = {HoldRest}
 
 scanSelfAssignments[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, var, data, parentPos, parent},
+Module[{ast, node, var, data, parentPos, parent, withChildren},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
-  var = node[[2]][[1]];
+  var = node[[2, 1]];
   data = node[[3]];
 
-  (*
-  It is a common idiom to do With[{a = a}, foo], so do not warn about that
-
-  And there are enough occurrences of Block and Module, so add those too
-  *)
   If[Length[pos] >= 4,
     parentPos = Drop[pos, -4];
     parent = Extract[ast, {parentPos}][[1]];
-    If[MatchQ[parent, CallNode[LeafNode[Symbol, "Block" | "DynamicModule" | "Module" | "With", _], _, _]],
+    Switch[parent,
+      CallNode[LeafNode[Symbol, "With", _], _, _],
+        (*
+        It is a common idiom to do With[{a = a}, foo], so do not warn about that
+        *)
+        withChildren = Extract[ast, { Drop[pos, -3] }][[1]];
 
-      (* and make sure to only skip  With[{a = a}, foo]  and still report   With[{}, a=a] *)
-      If[pos[[-3]] == 1,
-        Throw[{}]
-      ]
+        (* and make sure to only skip  With[{a = a}, foo]  and  With[{a=1}, {b=b}, a+b]  and still report  With[{}, a=a] *)
+        If[pos[[-3]] != Length[withChildren],
+          Throw[{}]
+        ]
+      ,
+      CallNode[LeafNode[Symbol, "Block", _], _, _],
+        (*
+        It is a (somewhat) common idiom to do Block[{$ContextPath = $ContextPath}, foo], so do not warn about that
+        *)
+        (* and make sure to only skip  Block[{$ContextPath = $ContextPath}, foo]  and still report  Block[{}, $ContextPath = $ContextPath] *)
+        If[pos[[-3]] == 1,
+          Throw[{}]
+        ]
     ]
   ];
 
   {Lint["SelfAssignment", "Self assignment: " <> format[ToFullFormString[var]] <> ".", "Warning", <|
     data,
-    ConfidenceLevel -> 0.90|>]}
+    ConfidenceLevel -> 0.95|>]}
 ]]
 
 
