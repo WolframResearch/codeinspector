@@ -1,8 +1,8 @@
 Resources[
     Version[1],
-    ExecutionBuildCommand["<<Lint`"],
+    ExecutionBuildCommand["<<CodeInspector`"],
     Paclet[
-        PacletFolder["Lint"],
+        PacletFolder["CodeInspector"],
         FunctionPaclet[False]
     ]
 ]

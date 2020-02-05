@@ -1,6 +1,6 @@
-<project name='Lint' basedir='..'>
+<project name='CodeInspector' basedir='..'>
 
-	<property name='component' value='Lint' />
+	<property name='component' value='CodeInspector' />
 	<property name='system_id' value='### Must be set by Jenkins ###' />
 
 	<property name='app.name' value='${component}' />
@@ -14,7 +14,7 @@
 		Component (platform-independent)
 	-->
 
-	<target name='Component.Lint.execute' extensionOf='Component.execute'>
+	<target name='Component.CodeInspector.execute' extensionOf='Component.execute'>
 
 		<copy todir='${files_directory}'>
 			<fileset dir='${basedir}' >
@@ -29,7 +29,7 @@
 			Paclet generation
 	-->
 	
-	<target name='Paclet.Lint.init.custom' extensionOf='Paclet.init.custom'>
+	<target name='Paclet.CodeInspector.init.custom' extensionOf='Paclet.init.custom'>
 	
 		<!--
 			Prevent Paclet.clean from deleting files_directory,
@@ -41,7 +41,7 @@
 	
 	</target>
 	
-	<target name='Paclet.Lint.execute' extensionOf='Paclet.execute'>
+	<target name='Paclet.CodeInspector.execute' extensionOf='Paclet.execute'>
 		<mathematica exe="${mathExe}" fresh="true" quit="true"><![CDATA[
 
 			Print["$Version: ", $Version];
@@ -50,13 +50,13 @@
 			Unset[$MessagePrePrint];
 			Needs["PacletManager`"];
 
-			src = FileNameJoin[{AntProperty["files_directory"], "Lint"}];
+			src = FileNameJoin[{AntProperty["files_directory"], "CodeInspector"}];
 			dest = FileNameJoin[AntProperty["files_directory"]];
 			PackPaclet[src, dest];
 
 			SetDirectory[dest]
-			If [TrueQ[FileExistsQ[FileNames["Lint*.paclet"][[1]]]],
-				Print[FileNames["Lint*.paclet"][[1]] " ... OK"],
+			If [TrueQ[FileExistsQ[FileNames["CodeInspector*.paclet"][[1]]]],
+				Print[FileNames["CodeInspector*.paclet"][[1]] " ... OK"],
 				AntFail["Paclet not produced" ]];
 
 		]]></mathematica>
@@ -67,11 +67,11 @@
             Paclet deployment
     -->
 	
-	<target name='Deploy.Lint.execute' extensionOf='Deploy.execute'>
+	<target name='Deploy.CodeInspector.execute' extensionOf='Deploy.execute'>
 	
 		<path id='file.id'> 
 			<fileset dir='${checkout_directory}'>
-				<include name="Lint*.paclet"/>
+				<include name="CodeInspector*.paclet"/>
 			</fileset>
 		</path>
 

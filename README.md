@@ -1,6 +1,6 @@
-# Lint
+# CodeInspector
 
-Lint is a paclet for finding problems in Wolfram Language code.
+CodeInspector is a paclet for finding problems in Wolfram Language code.
 
 [Finding Bugs in the Wolfram Language from WTC 2019: Watch Video](https://www.wolfram.com/broadcast/video.php?v=2911)
 
@@ -9,36 +9,34 @@ Lint is a paclet for finding problems in Wolfram Language code.
 
 ## Installing
 
-Install Lint and dependencies from the public paclet server:
+Install CodeInspector and dependencies from the public paclet server:
 ```
-In[1]:= PacletUpdate["AST", "Site" -> "http://pacletserver.wolfram.com", "UpdateSites" -> True]
-			PacletUpdate["Lint", "Site" -> "http://pacletserver.wolfram.com", "UpdateSites" -> True]
+In[1]:= PacletUpdate["CodeParser", "UpdateSites" -> True]
+			PacletUpdate["CodeInspector", "UpdateSites" -> True]
 
-Out[1]= Paclet[AST,0.2,<>]
-Out[2]= Paclet[Lint,0.2,<>]
+Out[1]= Paclet[CodeParser,1.0,<>]
+Out[2]= Paclet[CodeInspector,1.0,<>]
 ```
 
 
 ## Setup
 
-Lint depends on the AST paclet. Make sure that the paclets can be found on your system:
+CodeInspector depends on the CodeParser paclet. Make sure that the paclets can be found on your system:
 ```
-In[1]:= Needs["AST`"]
-			Needs["Lint`"]
+In[1]:= Needs["CodeParser`"]
+			Needs["CodeInspector`"]
 ```
-
-[AST on stash.wolfram.com](https://stash.wolfram.com/projects/COD/repos/ast/browse)
 
 
 ## Building
 
-Lint uses a Wolfram Language kernel to build a `.paclet` file.
+CodeInspector uses a Wolfram Language kernel to build a `.paclet` file.
 
-Lint uses CMake to generate build scripts.
+CodeInspector uses CMake to generate build scripts.
 
-Here is an example transcript using the default make generator to build Lint:
+Here is an example transcript using the default make generator to build CodeInspector:
 ```
-cd lint
+cd codeparser
 mkdir build
 cd build
 cmake ..

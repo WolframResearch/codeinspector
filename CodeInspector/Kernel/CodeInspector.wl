@@ -1,44 +1,34 @@
-BeginPackage["Lint`"]
+BeginPackage["CodeInspector`"]
 
 (*
 Functions
 *)
 
-LintString
+CodeInspect
 
-LintFile
+CodeInspectBox
 
-LintBytes
-
-LintBox
-
-LintCST
+CodeInspectCST
 
 
 
-LintStringReport
+CodeInspectSummarize
 
-LintFileReport
-
-LintBytesReport
-
-LintBoxReport
-
+CodeInspectBoxSummarize
 
 
 (*
 Objects
 *)
 
-Lint
+InspectionObject
 
-LintedLine
+InspectedStringObject
+InspectedFileObject
+InspectedBytesObject
+InspectedLineObject
 
-LintedFile
-
-LintedString
-
-LintedBox
+InspectedBoxObject
 
 
 
@@ -57,42 +47,42 @@ $AbstractLintTime
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Abstract`"]
-Needs["AST`Utils`"]
-Needs["Lint`AbstractRules`"]
-Needs["Lint`AggregateRules`"]
-Needs["Lint`Boxes`"]
-Needs["Lint`ConcreteRules`"]
-Needs["Lint`Format`"]
-Needs["Lint`Report`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Abstract`"]
+Needs["CodeParser`Utils`"]
+Needs["CodeInspector`AbstractRules`"]
+Needs["CodeInspector`AggregateRules`"]
+Needs["CodeInspector`Boxes`"]
+Needs["CodeInspector`ConcreteRules`"]
+Needs["CodeInspector`Format`"]
+Needs["CodeInspector`Summarize`"]
 
 
 
-Lint::usage = "Lint[tag, description, severity, data] is a problem found in WL source code."
+InspectionObject::usage = "InspectionObject[tag, description, severity, data] is a problem found in WL source code."
 
 (*
 provide some selectors for Lint and LintedLine objects
 *)
 
-Lint[tag_,     _,         _, _]["Tag"] := tag
-Lint[   _, desc_,         _, _]["Description"] := desc
-Lint[   _,     _, severity_, _]["Severity"] := severity
+InspectionObject[tag_,     _,         _, _]["Tag"] := tag
+InspectionObject[   _, desc_,         _, _]["Description"] := desc
+InspectionObject[   _,     _, severity_, _]["Severity"] := severity
 
 
 
-LintedLine[_, lineNumber_,     _, _,      _, ___]["LineNumber"] := lineNumber
-LintedLine[_,           _, hash_, _,      _, ___]["Hash"] := hash
-LintedLine[_,           _,     _, _, lints_, ___]["Lints"] := lints
+InspectedLineObject[_, lineNumber_,     _, _,      _, ___]["LineNumber"] := lineNumber
+InspectedLineObject[_,           _, hash_, _,      _, ___]["Hash"] := hash
+InspectedLineObject[_,           _,     _, _, lints_, ___]["Lints"] := lints
 
 
 
 
 
 
-LintFile::usage = "LintFile[file] returns a list of Lints found in file."
+CodeInspect::usage = "CodeInspect[code] returns a list of problems found in code."
 
-Options[LintFile] = {
+Options[CodeInspect] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
@@ -106,7 +96,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-LintFile[File[file_String], OptionsPattern[]] :=
+CodeInspect[File[file_String], OptionsPattern[]] :=
 Catch[
 Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules},
 
@@ -141,13 +131,13 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     ];
   ];
 
-  cst = ConcreteParseFile[File[full]];
+  cst = CodeConcreteParse[File[full]];
 
   If[FailureQ[cst],
     Throw[cst]
   ];
 
-  lints = LintCST[
+  lints = CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
@@ -177,16 +167,8 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
 
 
-LintString::usage = "LintString[string] returns a list of Lints found in string."
 
-Options[LintString] = {
-  PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
-  "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules
-}
-
-LintString[string_String, OptionsPattern[]] :=
+CodeInspect[string_String, OptionsPattern[]] :=
 Catch[
  Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
@@ -202,13 +184,13 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cst = ConcreteParseString[string];
+  cst = CodeConcreteParse[string];
 
   If[FailureQ[cst],
     Throw[cst]
   ];
 
-  LintCST[
+  CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
@@ -218,16 +200,8 @@ Catch[
 ]]
 
 
-LintBytes::usage = "LintBytes[bytes] returns a list of Lints found in bytes."
 
-Options[LintBytes] = {
-  PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
-  "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules
-}
-
-LintBytes[bytes_List, OptionsPattern[]] :=
+CodeInspect[bytes_List, OptionsPattern[]] :=
 Catch[
  Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
@@ -243,13 +217,13 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cst = ConcreteParseBytes[bytes];
+  cst = CodeConcreteParse[bytes];
 
   If[FailureQ[cst],
     Throw[cst]
   ];
 
-  LintCST[
+  CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
@@ -259,14 +233,14 @@ Catch[
 ]]
 
 
-Options[LintBox] = {
+Options[CodeInspectBox] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules
 }
 
-LintBox[box_, OptionsPattern[]] :=
+CodeInspectBox[box_, OptionsPattern[]] :=
 Catch[
  Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
@@ -282,13 +256,13 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cst = ConcreteParseBox[box];
+  cst = CodeConcreteParseBox[box];
 
   If[FailureQ[cst],
     Throw[cst]
   ];
 
-  LintCST[
+  CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
@@ -302,33 +276,33 @@ Catch[
 
 
 
-beginStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "BeginStaticAnalysisIgnore" | "Lint`BeginStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
+beginStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "BeginStaticAnalysisIgnore" | "CodeInspector`BeginStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
 
 beginStaticAnalysisIgnoreCallPat = beginStaticAnalysisIgnoreCallPat0 | InfixNode[CompoundExpression, {beginStaticAnalysisIgnoreCallPat0, LeafNode[Token`Semi, _, _], LeafNode[Token`Fake`ImplicitNull, _, _]}, _]
 
 
-endStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "EndStaticAnalysisIgnore" | "Lint`EndStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
+endStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "EndStaticAnalysisIgnore" | "CodeInspector`EndStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
 
 endStaticAnalysisIgnoreCallPat = endStaticAnalysisIgnoreCallPat0 | InfixNode[CompoundExpression, {endStaticAnalysisIgnoreCallPat0, LeafNode[Token`Semi, _, _], LeafNode[Token`Fake`ImplicitNull, _, _]}, _]
 
 
-Options[LintCST] = {
+Options[CodeInspectCST] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules
 }
 
-Attributes[LintCST] = {HoldFirst}
+Attributes[CodeInspectCST] = {HoldFirst}
 
-LintCST[cstIn_, OptionsPattern[]] :=
+CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
   ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start,
   ignoredNodes, beginStaticAnalysisIgnoreNodePoss, endPos, siblingsPos, siblings, candidate, endFound},
 
   If[$Debug,
-    Print["LintCST"];
+    Print["CodeInspectCST"];
   ];
 
   cst = cstIn;

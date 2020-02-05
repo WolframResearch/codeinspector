@@ -1,4 +1,4 @@
-BeginPackage["Lint`Format`"]
+BeginPackage["CodeInspector`Format`"]
 
 LintMarkup
 
@@ -38,11 +38,11 @@ $LintsPerLineLimit
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Utils`"]
-Needs["Lint`"]
-Needs["Lint`External`"]
-Needs["Lint`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`External`"]
+Needs["CodeInspector`Utils`"]
 
 
 $NewLintStyle = True
@@ -86,23 +86,23 @@ $LintsPerLineLimit = 5
 
 
 
-LintedFile::usage = "LintedFile[file, lintedLines] represents a formatted object of linted lines found in file."
+InspectedFileObject::usage = "InspectedFileObject[file, lintedLines] represents a formatted object of linted lines found in file."
 
-Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], StandardForm] :=
+Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], StandardForm] :=
 	Interpretation[
 		Framed[Column[{Row[{file}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
 		,
 		lintedFile]
 
-Format[lintedFile:LintedFile[file_String, lintedLines:{___LintedLine}], OutputForm] :=
+Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], OutputForm] :=
 	Column[{Row[{file}], ""} ~Join~ lintedLines, Left]
 
 
 
 
-LintedString::usage = "LintedString[string, lintedLines] represents a formatted object of linted lines found in string."
+InspectedStringObject::usage = "InspectedStringObject[string, lintedLines] represents a formatted object of linted lines found in string."
 
-Format[lintedString:LintedString[stringIn_String, lintedLines:{___LintedLine}], StandardForm] :=
+Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___InspectedLineObject}], StandardForm] :=
 Module[{string},
 
 	string = StringReplace[stringIn, $characterReplacementRules];
@@ -113,7 +113,7 @@ Module[{string},
 		lintedString]
 ]
 
-Format[lintedString:LintedString[stringIn_String, lintedLines:{___LintedLine}], OutputForm] :=
+Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___InspectedLineObject}], OutputForm] :=
 Module[{string},
 
 	string = StringReplace[stringIn, $characterReplacementRules];
@@ -133,7 +133,7 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 
 
 
-newLintStyle[lint:Lint[tag_, description_, severity_, data_]] :=
+newLintStyle[lint:InspectionObject[tag_, description_, severity_, data_]] :=
 Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 
 	bolded = boldify[description];
@@ -206,7 +206,7 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 ]
 
 
-Format[lint:Lint[tag_String, description_String, severity_String, data_Association], StandardForm] :=
+Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], StandardForm] :=
 Catch[
 Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 
@@ -266,7 +266,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 	format
 ]]
 
-Format[lint:Lint[tag_String, description_String, severity_String, data_Association], OutputForm] :=
+Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], OutputForm] :=
 Module[{g, bolded},
 
 	bolded = boldify[description];
@@ -290,9 +290,9 @@ Module[{g, bolded},
 
 
 
-LintedLine::usage = "LintedLine[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
+InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
 
-Options[LintedLine] = {
+Options[InspectedLineObject] = {
 	"MaxLineNumberLength" -> 5,
 	"Elided" -> False
 }
@@ -306,14 +306,14 @@ Style[Underscript[line, under], ScriptSizeMultipliers->1]
 But there is no guarantee that monospace fonts will be respected
 So brute-force it with Grid so that it looks good
 *)
-Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], StandardForm] :=
+Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints,
 	grid, red, darkerOrange, blue},
 
 	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
-	elided = OptionValue[LintedLine, {opts}, "Elided"];
+	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
 	If[elided,
 		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
@@ -323,22 +323,22 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 		Print["lineNumber: ", lineNumber];
 	];
 
-	startingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
+	startingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
 	(*
 	lints that are ending on this line
 	format them
 	*)
-	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 	If[$Debug,
 		Print["endingLints: ", endingLints];
 	];
 
-	endingAdditionalLintsAny = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
+	endingAdditionalLintsAny = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
 	If[$Debug,
 		Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
 	];
 
-	endingAdditionalLintsThisLine = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
+	endingAdditionalLintsThisLine = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
 	If[$Debug,
 		Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
 	];
@@ -455,15 +455,15 @@ with Grid in OutputForm. bug?
 
 underlineList is not used in OutputForm
 *)
-Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___Lint}, opts___], OutputForm] :=
+Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
 	endingAdditionalLintsThisLine},
 
 	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
-	maxLineNumberLength = OptionValue[LintedLine, {opts}, "MaxLineNumberLength"];
-	elided = OptionValue[LintedLine, {opts}, "Elided"];
+	maxLineNumberLength = OptionValue[InspectedLineObject, {opts}, "MaxLineNumberLength"];
+	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
 	If[elided,
 		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
@@ -475,14 +475,14 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 	lints that are ending on this line
 	format them
 	*)
-	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	endingAdditionalLintsAny = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
+	endingAdditionalLintsAny = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
 	If[$Debug,
 		Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
 	];
 
-	endingAdditionalLintsThisLine = Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
+	endingAdditionalLintsThisLine = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
 	If[$Debug,
 		Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
 	];
@@ -530,24 +530,24 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 
 
 
-Format[LintedLine[lineSourceIn_String, lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], StandardForm] :=
+Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, hash_String, lineList_List, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, elided, startingLints, grid},
 	
 	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
-	elided = OptionValue[LintedLine, {opts}, "Elided"];
+	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
 	If[elided,
 		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
 	];
 
-	startingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
+	startingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
 	(*
 	lints that are ending on this line
 	format them
 	*)
-	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
 	grid =
 		Partition[
@@ -569,12 +569,12 @@ Module[{lineSource, endingLints, elided, startingLints, grid},
 			Alignment -> Top, Spacings -> {0, 0}]
 ]]
 
-Format[LintedLine[lineSource_String, lineNumber_Integer, hash_String, lineList_List, lints:{___Lint}, opts___], OutputForm] :=
+Format[InspectedLineObject[lineSource_String, lineNumber_Integer, hash_String, lineList_List, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 
-	maxLineNumberLength = OptionValue[LintedLine, {opts}, "MaxLineNumberLength"];
-	elided = OptionValue[LintedLine, {opts}, "Elided"];
+	maxLineNumberLength = OptionValue[InspectedLineObject, {opts}, "MaxLineNumberLength"];
+	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
 	If[elided,
 		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
@@ -586,7 +586,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	lints that are ending on this line
 	format them
 	*)
-	endingLints = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
 	grid =
 		Partition[
@@ -617,7 +617,7 @@ Module[{label, maxLineNumberLength, paddedLineNumber},
 	
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
-	If[TrueQ[Lint`Report`$Underlight],
+	If[TrueQ[CodeInspector`Summarize`$Underlight],
 		label = Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False];
 		,
 		label = Framed[Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False]];

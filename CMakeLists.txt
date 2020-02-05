@@ -1,12 +1,13 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-project(lint)
+project(codeinspector)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+include(WolframKernel)
 
-set(PACLET "Lint")
-set(WOLFRAMKERNEL /Applications/Mathematica.app/Contents/MacOS/WolframKernel CACHE FILEPATH "Path to WolframKernel")
+set(PACLET "CodeInspector")
+set(WOLFRAMKERNEL ${WOLFRAMKERNEL_DEFAULT} CACHE FILEPATH "Path to WolframKernel")
 set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
 set(LOCAL_BUILD OFF CACHE BOOL "Local build")
 
@@ -16,32 +17,35 @@ message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 message(STATUS "LOCAL_BUILD: ${LOCAL_BUILD}")
 
 set(WL_PACLET_SOURCES
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/AbstractRules.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/AggregateRules.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Boxes.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/ConcreteRules.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/External.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Format.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/ImplicitTimes.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Lint.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Report.wl
-	${CMAKE_SOURCE_DIR}/Lint/Kernel/Utils.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/AbstractRules.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/AggregateRules.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Boxes.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/CodeInspector.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/ConcreteRules.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/External.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTimes.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
 
 set(WL_GENERATE_PACKPACLET_SOURCES
-	${CMAKE_SOURCE_DIR}/Lint/Generate/PackPaclet.wl
+	${CMAKE_SOURCE_DIR}/CodeInspector/Generate/PackPaclet.wl
 )
 
 set(PACLETINFO_SOURCE
-	${CMAKE_SOURCE_DIR}/Lint/PacletInfo.m
+	${CMAKE_SOURCE_DIR}/CodeInspector/PacletInfo.m
 )
 
 set(DOCUMENTATION_NOTEBOOK_PATHS
-	English/ReferencePages/Symbols/LintFile.nb
-	English/ReferencePages/Symbols/LintString.nb
-	English/ReferencePages/Symbols/LintFileReport.nb
-	English/ReferencePages/Symbols/LintStringReport.nb
-	English/Tutorials/LintTutorial.nb
+	English/ReferencePages/Symbols/CodeInspect.nb
+	English/ReferencePages/Symbols/CodeInspectSummarize.nb
+	English/ReferencePages/Symbols/InspectedFileObject.nb
+	English/ReferencePages/Symbols/InspectedLineObject.nb
+	English/ReferencePages/Symbols/InspectedStringObject.nb
+	English/ReferencePages/Symbols/InspectionObject.nb
+	English/Tutorials/CodeInspectorTutorial.nb
+	English/Tutorials/WritingAdditionalRules.nb
 )
 
 #
@@ -59,7 +63,6 @@ endforeach()
 #
 # Set VERSION_NUMBER, SYSTEMID, and PACLET_VERSION
 #
-include(WolframKernel)
 CheckWolframKernel()
 
 

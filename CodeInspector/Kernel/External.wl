@@ -1,4 +1,4 @@
-BeginPackage["Lint`External`"]
+BeginPackage["CodeInspector`External`"]
 
 OpenInEditor
 

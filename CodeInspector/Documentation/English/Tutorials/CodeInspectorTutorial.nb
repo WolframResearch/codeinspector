@@ -1,0 +1,2672 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    125159,       2664]
+NotebookOptionsPosition[    117509,       2499]
+NotebookOutlinePosition[    117982,       2516]
+CellTagsIndexPosition[    117939,       2513]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[{
+ "New in: ",
+ Cell["XX", "HistoryData",
+  CellTags->"New",ExpressionUUID->"82279252-2d04-42ab-8a22-2bc338d14f3d"],
+ " | Modified in: ",
+ Cell[" ", "HistoryData",
+  CellTags->"Modified",ExpressionUUID->"7f132638-8315-4875-aaaa-b1c9908a5b45"],
+ " | Obsolete in: ",
+ Cell[" ", "HistoryData",
+  CellTags->"Obsolete",ExpressionUUID->"af642c2c-86fc-4f96-95c2-eb85e3f772f0"],
+ " | Excised in: ",
+ Cell[" ", "HistoryData",
+  CellTags->"Excised",ExpressionUUID->"14b8e4fa-7c2c-41ef-ab83-e5160e502fee"]
+}], "History",
+ CellID->1247902091,ExpressionUUID->"0f2c6a2b-205f-4cfb-a6c9-796c89d8e4ec"],
+
+Cell[CellGroupData[{
+
+Cell["Categorization", "CategorizationSection",
+ CellID->1122911449,ExpressionUUID->"fea22ff7-57d6-426a-ae5e-e0006f20bcbb"],
+
+Cell["Tutorial", "Categorization",
+ CellLabel->"Entity Type",
+ CellID->686433507,ExpressionUUID->"3e210c7f-31c7-4ecc-92c1-1b0e1c625603"],
+
+Cell["CodeInspector Package", "Categorization",
+ CellChangeTimes->{{3.789902096746173*^9, 3.789902099098196*^9}},
+ CellLabel->"Paclet Name",
+ CellID->605800465,ExpressionUUID->"627b634b-8139-4e22-b2bc-79b382c9484a"],
+
+Cell["CodeInspector`", "Categorization",
+ CellChangeTimes->{{3.789902103495616*^9, 3.7899021042909327`*^9}},
+ CellLabel->"Context",
+ CellID->468444828,ExpressionUUID->"95defca3-e4f9-4844-9dd9-c6a2e37505ee"],
+
+Cell["CodeInspector/tutorial/CodeInspectorTutorial", "Categorization",
+ CellChangeTimes->{{3.789902106455*^9, 3.7899021127035027`*^9}},
+ CellLabel->"URI",ExpressionUUID->"d39c4701-beae-40cd-a985-6b5e42241983"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Keywords", "KeywordsSection",
+ CellID->1427428552,ExpressionUUID->"48b88e89-39dd-44cf-a2f4-12817fefccb1"],
+
+Cell["XXXX", "Keywords",
+ CellID->1251852827,ExpressionUUID->"84a78cad-4cbd-4157-9817-ff033587a486"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Details", "DetailsSection",
+ CellID->307771771,ExpressionUUID->"977f41db-6c7c-40f5-9c38-a67fb7c132b1"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Lead",
+ CellID->218895918,ExpressionUUID->"bd3b4bf2-40ef-463e-8041-a3ff00c51882"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Developers",
+ CellID->350963985,ExpressionUUID->"5bdd0993-bf8a-4a53-9d8a-42341a1df8b0"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Authors",
+ CellID->795871300,ExpressionUUID->"8e508360-2bf4-4c88-bcb4-0226f3c8fff4"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Feature Name",
+ CellID->199739161,ExpressionUUID->"dae12b1d-6edb-4300-99a0-44fb2b3094aa"],
+
+Cell["XXXX", "Details",
+ CellLabel->"QA",
+ CellID->40625308,ExpressionUUID->"7bcd9a91-d13b-4858-8ac9-7926cd0221c9"],
+
+Cell["XXXX", "Details",
+ CellLabel->"DA",
+ CellID->357121918,ExpressionUUID->"eba6ea5e-7418-477f-be91-6e7828f2300a"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Docs",
+ CellID->35949532,ExpressionUUID->"e723592c-504d-434e-809c-31ec2d5ebc64"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Features Page Notes",
+ CellID->929432370,ExpressionUUID->"af97266e-63ad-4709-baa5-1ff345bb2d46"],
+
+Cell["XXXX", "Details",
+ CellLabel->"Comments",
+ CellID->240026365,ExpressionUUID->"332a4cc1-b3eb-4f98-bd05-3f7a12f8e29e"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["CodeInspector Tutorial", "Title",
+ CellChangeTimes->{3.756408471534739*^9, 3.7899021241289463`*^9},
+ CellID->509267359,ExpressionUUID->"3718a8fb-8a69-4280-a9fc-db0844015d11"],
+
+Cell["\<\
+The functions in the CodeInspector` context provide functionality for linting \
+of WL code.\
+\>", "Text",
+ CellChangeTimes->{{3.756408476318542*^9, 3.7564084987111683`*^9}, {
+  3.7899021270251083`*^9, 3.7899021277724247`*^9}},
+ CellID->1534169418,ExpressionUUID->"fbf971f5-8e6c-4398-95b2-7f0e8135f523"],
+
+Cell[BoxData[GridBox[{
+   {
+    RowBox[{"CodeInspect", "[", "code", "]"}], Cell[
+    "returns a list of problems found in code", "TableText",ExpressionUUID->
+     "39057987-87ab-45d0-b96b-0ae01ff068bd"]},
+   {
+    RowBox[{"CodeInspectSummarize", "[", "code", "]"}], Cell[
+    "returns an inspection summary object", "TableText",ExpressionUUID->
+     "41434d02-3b28-470e-887e-43470b8d68f7"]}
+  }]], "DefinitionBox",
+ CellChangeTimes->{{3.7564085045923367`*^9, 3.756408608322991*^9}, {
+  3.7899021342556562`*^9, 3.789902210008671*^9}},
+ CellID->2096742444,ExpressionUUID->"47571219-7c51-4d5d-b2a4-51543409aed0"],
+
+Cell["Inspecting WL code.", "Caption",
+ CellChangeTimes->{{3.75640861509157*^9, 3.7564086178669367`*^9}, {
+  3.789902149164949*^9, 3.789902150956895*^9}},
+ CellID->1891092685,ExpressionUUID->"29f65765-0904-450a-900c-b4044870e2e1"],
+
+Cell[CellGroupData[{
+
+Cell["First we need to load the CodeInspector` package", "MathCaption",
+ CellChangeTimes->{
+  3.756408646867611*^9, {3.756409236538945*^9, 3.75640923723275*^9}, {
+   3.7899022158059807`*^9, 3.789902216281485*^9}},
+ CellID->836781195,ExpressionUUID->"855adb52-3a87-47ec-a2be-db42ed6ffe53"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<CodeInspector`\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.756408648278659*^9, 3.756408652062694*^9}, 
+   3.789902218078862*^9},
+ CellLabel->"In[8]:=",
+ CellID->2058623809,ExpressionUUID->"f7523b60-f111-4c9f-9398-3c6c2c9658fa"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["See lints in a piece of WL code.", "MathCaption",
+ CellChangeTimes->{{3.756408677957814*^9, 3.7564086893417177`*^9}, {
+  3.756408740043303*^9, 3.756408740394554*^9}},
+ CellID->577773108,ExpressionUUID->"afb77939-b18c-4e3a-87d9-9f5efedd5374"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"str", "=", "\"\<1+f[,2]\>\""}], ";"}]], "Input",
+ CellChangeTimes->{{3.756408713041026*^9, 3.756408714607912*^9}},
+ CellLabel->"In[9]:=",
+ CellID->1285539883,ExpressionUUID->"8baac6a9-d51a-4cb3-9794-b72306215ae6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"lints", "=", 
+  RowBox[{"CodeInspect", "[", "str", "]"}]}]], "Input",
+ CellChangeTimes->{{3.756408691830105*^9, 3.756408717344022*^9}, {
+  3.7899022292350597`*^9, 3.7899022304207983`*^9}},
+ CellLabel->"In[10]:=",
+ CellID->1307936235,ExpressionUUID->"725563f8-f341-46f7-91c7-d508e266aaae"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   InterpretationBox[
+    TemplateBox[{
+      StyleBox[
+       TemplateBox[{"\"Expected an operand.\""}, "RowDefault"], "Text"], 
+      RGBColor[{1, 
+        Rational[118, 255], 0}], 
+      RGBColor[{1, 1, 1}], 
+      RGBColor[{1, 
+        Rational[46, 51], 
+        Rational[203, 255]}], 
+      RGBColor[{
+        Rational[218, 255], 
+        Rational[89, 255], 
+        Rational[1, 51]}], {
+      "\"ExpectedOperand\"" :> Null, "\"confidence: 100%\"" :> Null}},
+     "SuggestionGridTemplateXXX",
+     DisplayFunction->(StyleBox[
+       FrameBox[
+        AdjustmentBox[
+         TagBox[
+          GridBox[{{
+             
+             TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+              "SuggestionIconTemplateXXX", DisplayFunction -> (GraphicsBox[{
+                 Thickness[0.05555555555555555], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                  FaceForm[#]], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                  FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                AspectRatio -> Automatic, BaselinePosition -> 
+                Scaled[0.1]]& )], 
+             PaneBox[#, BaselinePosition -> Baseline, ImageSize -> Automatic], 
+             AdjustmentBox[
+              TemplateBox[{
+                ActionMenuBox[
+                 TagBox[
+                  PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                   Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                   FrameMargins -> 0], 
+                  MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                 Method -> "Queued"], "\"View suggestions\""}, 
+               "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                 TooltipBox[#, 
+                  FrameBox[
+                   
+                   StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8, 
+                   StripOnInput -> False], TooltipDelay -> 0.1, 
+                  TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                 Annotation[#, 
+                  Framed[
+                   Style[
+                   FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8],
+                   "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+              BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+           GridBoxAlignment -> {
+            "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, AutoDelete -> 
+           False, GridBoxItemSize -> {
+            "Columns" -> {Automatic, Automatic, 4}, "Rows" -> {{Automatic}}}, 
+           GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+         BoxMargins -> {{0.25, -1.}, {0, 0}}], RoundingRadius -> {13, 75}, 
+        Background -> #4, FrameStyle -> None, 
+        FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+        ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+       FontColor -> #5]& )],
+    CodeInspector`InspectionObject[
+    "ExpectedOperand", "Expected an operand.", "Fatal", 
+     Association[
+     CodeParser`Source -> {{1, 5}, {1, 5}}, ConfidenceLevel -> 1.]]], ",", 
+   InterpretationBox[
+    TemplateBox[{
+      StyleBox[
+       TemplateBox[{"\"Extra \"", 
+         StyleBox[
+         "\",\"", "Program", FontWeight -> Bold, FontColor -> GrayLevel[0], 
+          StripOnInput -> False], "\".\""}, "RowDefault"], "Text"], 
+      RGBColor[{1, 
+        Rational[118, 255], 0}], 
+      RGBColor[{1, 1, 1}], 
+      RGBColor[{1, 
+        Rational[46, 51], 
+        Rational[203, 255]}], 
+      RGBColor[{
+        Rational[218, 255], 
+        Rational[89, 255], 
+        Rational[1, 51]}], {
+      "\"Comma\"" :> Null, "\"confidence: 100%\"" :> Null}},
+     "SuggestionGridTemplateXXX",
+     DisplayFunction->(StyleBox[
+       FrameBox[
+        AdjustmentBox[
+         TagBox[
+          GridBox[{{
+             
+             TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+              "SuggestionIconTemplateXXX", DisplayFunction -> (GraphicsBox[{
+                 Thickness[0.05555555555555555], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                  FaceForm[#]], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                  FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                AspectRatio -> Automatic, BaselinePosition -> 
+                Scaled[0.1]]& )], 
+             PaneBox[#, BaselinePosition -> Baseline, ImageSize -> Automatic], 
+             AdjustmentBox[
+              TemplateBox[{
+                ActionMenuBox[
+                 TagBox[
+                  PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                   Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                   FrameMargins -> 0], 
+                  MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                 Method -> "Queued"], "\"View suggestions\""}, 
+               "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                 TooltipBox[#, 
+                  FrameBox[
+                   
+                   StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8, 
+                   StripOnInput -> False], TooltipDelay -> 0.1, 
+                  TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                 Annotation[#, 
+                  Framed[
+                   Style[
+                   FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8],
+                   "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+              BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+           GridBoxAlignment -> {
+            "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, AutoDelete -> 
+           False, GridBoxItemSize -> {
+            "Columns" -> {Automatic, Automatic, 4}, "Rows" -> {{Automatic}}}, 
+           GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+         BoxMargins -> {{0.25, -1.}, {0, 0}}], RoundingRadius -> {13, 75}, 
+        Background -> #4, FrameStyle -> None, 
+        FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+        ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+       FontColor -> #5]& )],
+    CodeInspector`InspectionObject["Comma", "Extra ``,``.", "Error", 
+     Association[
+     CodeParser`Source -> {{1, 5}, {1, 5}}, CodeParser`CodeActions -> {
+        CodeParser`CodeAction["Delete ``,``", CodeParser`DeleteNode, 
+         Association[CodeParser`Source -> {{1, 5}, {1, 5}}]]}, 
+      ConfidenceLevel -> 1.]]]}], "}"}]], "Output",
+ CellChangeTimes->{{3.756408695561631*^9, 3.756408717778944*^9}, 
+   3.756409069217732*^9, 3.756409242498288*^9, 3.789902234756898*^9},
+ CellLabel->"Out[10]=",
+ CellID->1520838024,ExpressionUUID->"884a411e-cf06-458f-8514-06053363eaf9"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Format the lints by lines", "MathCaption",
+ CellChangeTimes->{{3.756408743762595*^9, 3.756408750275074*^9}},
+ CellID->855542086,ExpressionUUID->"5df81aee-813e-4e77-b11d-0abbfc2e1cfd"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CodeInspectSummarize", "[", 
+  RowBox[{"str", ",", "lints"}], "]"}]], "Input",
+ CellChangeTimes->{{3.756408719664187*^9, 3.7564087239035997`*^9}, {
+  3.789902716660324*^9, 3.789902727052306*^9}},
+ CellLabel->"In[16]:=",
+ CellID->1007615328,ExpressionUUID->"3dad53b2-3b30-40b6-bf8b-761b75f66965"],
+
+Cell[BoxData[
+ InterpretationBox[
+  FrameBox[
+   TagBox[GridBox[{
+      {
+       TemplateBox[{"\"1+f[,2]\""},
+        "Row",
+        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
+        InterpretationFunction->(RowBox[{"Row", "[", 
+           RowBox[{
+             RowBox[{"{", #, "}"}], ",", 
+             RowBox[{"ImageMargins", "\[Rule]", 
+               RowBox[{"{", 
+                 RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
+           "]"}]& )]},
+      {
+       StyleBox[
+        TagBox[GridBox[{
+           {
+            TemplateBox[{
+              TemplateBox[{10}, "Spacer1"]},
+             "RowDefault"], "", ""},
+           {
+            ActionMenuBox[
+             TagBox[
+              TooltipBox[
+               FrameBox[
+                StyleBox[
+                 TemplateBox[{"\"line\"", "\" \"", "\"1\"", "\":\""},
+                  "RowDefault"],
+                 StripOnInput->False,
+                 ShowStringCharacters->False],
+                StripOnInput->False],
+               "\"Click to open menu...\"",
+               TooltipDelay->Automatic,
+               TooltipStyle->"TextStyling"],
+              
+              Annotation[#, "Click to open menu...", 
+               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
+             "1+f[,2]"], "\<\"Copy line number\"\>":>CopyToClipboard[
+             1], "\<\"Copy line hash\"\>":>CopyToClipboard[
+             "\"069af0fd0304fa5b\""]},
+             Appearance->None,
+             DefaultBaseStyle->{}], 
+            TemplateBox[{10},
+             "Spacer1"], 
+            TagBox[GridBox[{
+               {
+                TagBox[GridBox[{
+                   {"\<\" \"\>", "\<\"1\"\>", "\<\"+\"\>", "\<\"f\"\>", \
+"\<\"[\"\>", "\<\",\"\>", "\<\"2\"\>", "\<\"]\"\>", "\<\" \"\>"},
+                   {"\<\" \"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\" \"\>"}
+                  },
+                  AutoDelete->False,
+                  GridBoxItemSize->{"Columns" -> {{0.65}}},
+                  
+                  GridBoxItemStyle->{
+                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
+                    "ItemsIndexed" -> {{{1, 1}, {6, 6}} -> {Bold, 
+                    RGBColor[1, 0, 0]}, {{2, 2}, {6, 6}} -> {Bold, 
+                    RGBColor[1, 0, 0]}}},
+                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
+                 "Grid"]},
+               {
+                InterpretationBox[
+                 TemplateBox[{
+                   StyleBox[
+                    TemplateBox[{"\"Extra \"", 
+                    StyleBox[
+                    "\",\"", "Program", FontWeight -> Bold, FontColor -> 
+                    GrayLevel[0], StripOnInput -> False], "\".\""}, 
+                    "RowDefault"], "Text"], 
+                   RGBColor[{1, 
+                    Rational[118, 255], 0}], 
+                   RGBColor[{1, 1, 1}], 
+                   RGBColor[{1, 
+                    Rational[46, 51], 
+                    Rational[203, 255]}], 
+                   RGBColor[{
+                    Rational[218, 255], 
+                    Rational[89, 255], 
+                    Rational[1, 51]}], {
+                   "\"Comma\"" :> Null, "\"confidence: 100%\"" :> Null}},
+                  "SuggestionGridTemplateXXX",
+                  DisplayFunction->(StyleBox[
+                    FrameBox[
+                    AdjustmentBox[
+                    TagBox[
+                    GridBox[{{
+                    
+                    TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+                    "SuggestionIconTemplateXXX", 
+                    DisplayFunction -> (GraphicsBox[{
+                    Thickness[0.05555555555555555], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                    FaceForm[#]], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                    FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                    AspectRatio -> Automatic, BaselinePosition -> 
+                    Scaled[0.1]]& )], 
+                    
+                    PaneBox[#, BaselinePosition -> Baseline, ImageSize -> 
+                    Automatic], 
+                    AdjustmentBox[
+                    TemplateBox[{
+                    ActionMenuBox[
+                    TagBox[
+                    PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                    Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                    FrameMargins -> 0], 
+                    MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                    Method -> "Queued"], "\"View suggestions\""}, 
+                    "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                    TooltipBox[#, 
+                    FrameBox[
+                    
+                    StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8,
+                     StripOnInput -> False], TooltipDelay -> 0.1, 
+                    TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                    Annotation[#, 
+                    Framed[
+                    Style[
+                    FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 
+                    8], "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+                    BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
+                    AutoDelete -> False, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {Automatic, Automatic, 4}, 
+                    "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+                    BoxMargins -> {{0.25, -1.}, {0, 0}}], 
+                    RoundingRadius -> {13, 75}, Background -> #4, FrameStyle -> 
+                    None, FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+                    ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+                    FontColor -> #5]& )],
+                 CodeInspector`InspectionObject[
+                 "Comma", "Extra ``,``.", "Error", 
+                  Association[
+                  CodeParser`Source -> {{1, 5}, {1, 5}}, 
+                   CodeParser`CodeActions -> {
+                    CodeParser`CodeAction[
+                    "Delete ``,``", CodeParser`DeleteNode, 
+                    Association[CodeParser`Source -> {{1, 5}, {1, 5}}]]}, 
+                   ConfidenceLevel -> 1.]]]},
+               {
+                InterpretationBox[
+                 TemplateBox[{
+                   StyleBox[
+                    TemplateBox[{"\"Expected an operand.\""}, "RowDefault"], 
+                    "Text"], 
+                   RGBColor[{1, 
+                    Rational[118, 255], 0}], 
+                   RGBColor[{1, 1, 1}], 
+                   RGBColor[{1, 
+                    Rational[46, 51], 
+                    Rational[203, 255]}], 
+                   RGBColor[{
+                    Rational[218, 255], 
+                    Rational[89, 255], 
+                    Rational[1, 51]}], {
+                   "\"ExpectedOperand\"" :> Null, "\"confidence: 100%\"" :> 
+                    Null}},
+                  "SuggestionGridTemplateXXX",
+                  DisplayFunction->(StyleBox[
+                    FrameBox[
+                    AdjustmentBox[
+                    TagBox[
+                    GridBox[{{
+                    
+                    TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+                    "SuggestionIconTemplateXXX", 
+                    DisplayFunction -> (GraphicsBox[{
+                    Thickness[0.05555555555555555], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                    FaceForm[#]], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                    FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                    AspectRatio -> Automatic, BaselinePosition -> 
+                    Scaled[0.1]]& )], 
+                    
+                    PaneBox[#, BaselinePosition -> Baseline, ImageSize -> 
+                    Automatic], 
+                    AdjustmentBox[
+                    TemplateBox[{
+                    ActionMenuBox[
+                    TagBox[
+                    PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                    Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                    FrameMargins -> 0], 
+                    MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                    Method -> "Queued"], "\"View suggestions\""}, 
+                    "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                    TooltipBox[#, 
+                    FrameBox[
+                    
+                    StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8,
+                     StripOnInput -> False], TooltipDelay -> 0.1, 
+                    TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                    Annotation[#, 
+                    Framed[
+                    Style[
+                    FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 
+                    8], "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+                    BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
+                    AutoDelete -> False, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {Automatic, Automatic, 4}, 
+                    "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+                    BoxMargins -> {{0.25, -1.}, {0, 0}}], 
+                    RoundingRadius -> {13, 75}, Background -> #4, FrameStyle -> 
+                    None, FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+                    ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+                    FontColor -> #5]& )],
+                 CodeInspector`InspectionObject[
+                 "ExpectedOperand", "Expected an operand.", "Fatal", 
+                  Association[
+                  CodeParser`Source -> {{1, 5}, {1, 5}}, ConfidenceLevel -> 
+                   1.]]]}
+              },
+              DefaultBaseStyle->"Column",
+              GridBoxAlignment->{"Columns" -> {{Left}}},
+              
+              GridBoxItemSize->{
+               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+             "Column"]},
+           {
+            TemplateBox[{
+              TemplateBox[{10}, "Spacer1"]},
+             "RowDefault"], "", ""}
+          },
+          AutoDelete->False,
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
+          
+          GridBoxItemSize->{
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
+         "Grid"],
+        StripOnInput->False,
+        ShowStringCharacters->False]}
+     },
+     DefaultBaseStyle->"Column",
+     GridBoxAlignment->{"Columns" -> {{Left}}},
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
+    "Column"],
+   Background->GrayLevel[0.97],
+   RoundingRadius->5,
+   StripOnInput->False],
+  CodeInspector`InspectedStringObject["1+f[,2]", {
+    CodeInspector`InspectedLineObject[
+    "1+f[,2]", 1, "069af0fd0304fa5b", {{" ", "1", "+", "f", "[", 
+       CodeInspector`Format`LintMarkup[
+       ",", FontWeight -> Bold, FontColor -> RGBColor[1, 0, 0]], "2", "]", 
+       " "}, {" ", CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorIndicator, FontWeight -> Bold, FontSize -> 
+        Larger, FontColor -> RGBColor[1, 0, 0]], 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, " "}}, {
+      CodeInspector`InspectionObject["Comma", "Extra ``,``.", "Error", 
+       Association[
+       CodeParser`Source -> {{1, 5}, {1, 5}}, CodeParser`CodeActions -> {
+          CodeParser`CodeAction["Delete ``,``", CodeParser`DeleteNode, 
+           Association[CodeParser`Source -> {{1, 5}, {1, 5}}]]}, 
+        ConfidenceLevel -> 1.]], 
+      CodeInspector`InspectionObject[
+      "ExpectedOperand", "Expected an operand.", "Fatal", 
+       Association[
+       CodeParser`Source -> {{1, 5}, {1, 5}}, ConfidenceLevel -> 1.]]}, 
+     "MaxLineNumberLength" -> 1]}]]], "Output",
+ CellChangeTimes->{{3.756408720674735*^9, 3.7564087244530487`*^9}, 
+   3.7564090705724382`*^9, 3.756409244031427*^9, 3.789902728729075*^9},
+ CellLabel->"Out[16]=",
+ CellID->865353149,ExpressionUUID->"aa825131-0098-4969-9f37-40a86f40cef2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Next we lint code in an example package. This tutorial assumes that the \
+codetoolsexamples repo is next to the codeinspector repo in your setup.\
+\>", "MathCaption",
+ CellChangeTimes->{{3.756405975566804*^9, 3.756405977693439*^9}, {
+  3.756406268620192*^9, 3.756406309261456*^9}, {3.756406860975806*^9, 
+  3.756406861862772*^9}, {3.756406952965509*^9, 3.756406958269087*^9}, {
+  3.756408780832786*^9, 3.75640879194419*^9}, {3.789902747387755*^9, 
+  3.789902749450642*^9}},
+ CellID->216740014,ExpressionUUID->"e736bb90-4f7b-406b-b2c8-76a7ceb78b83"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"codetoolsExamplesDir", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"ParentDirectory", "[", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", "5"}], "]"}], ",", 
+      "\"\<codetoolsexamples\>\""}], "}"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7899027520217047`*^9, 3.789902755670821*^9}},
+ CellLabel->"In[18]:=",
+ CellID->176260392,ExpressionUUID->"0e0fa6c5-66f0-4379-947e-c00ef3d3e18a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrependTo", "[", 
+   RowBox[{"$Path", ",", "codetoolsExamplesDir"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{3.756408821831646*^9},
+ CellLabel->"In[19]:=",
+ CellID->546602460,ExpressionUUID->"d2509ecc-9861-498e-988c-065b4972afc6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CodeInspect", "[", 
+  RowBox[{"File", "[", "\"\<Collatz`\>\"", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.756408825186997*^9, 3.756408827530254*^9}, {
+  3.789902759798324*^9, 3.789902783034833*^9}},
+ CellLabel->"In[22]:=",
+ CellID->1152290958,ExpressionUUID->"554221c6-0665-49c8-8f61-732cdce48e96"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   InterpretationBox[
+    TemplateBox[{
+      StyleBox[
+       TemplateBox[{"\"Suspicious implicit \"", 
+         StyleBox[
+         "\"Times\"", "Program", FontWeight -> Bold, FontColor -> 
+          GrayLevel[0], StripOnInput -> False], "\" with strings.\""}, 
+        "RowDefault"], "Text"], 
+      GrayLevel[
+       Rational[118, 255]], 
+      GrayLevel[1], 
+      GrayLevel[
+       Rational[46, 51]], 
+      GrayLevel[
+       Rational[89, 255]], {
+      "\"ImplicitTimesStrings\"" :> Null, "\"confidence: 75%\"" :> Null, 
+       Delimiter, "Open in editor" :> 
+       CodeInspector`External`OpenInEditor[
+        "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/\
+Collatz.m", 3, 16]}},
+     "SuggestionGridTemplateXXX",
+     DisplayFunction->(StyleBox[
+       FrameBox[
+        AdjustmentBox[
+         TagBox[
+          GridBox[{{
+             
+             TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+              "SuggestionIconTemplateXXX", DisplayFunction -> (GraphicsBox[{
+                 Thickness[0.05555555555555555], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                  FaceForm[#]], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                  FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                AspectRatio -> Automatic, BaselinePosition -> 
+                Scaled[0.1]]& )], 
+             PaneBox[#, BaselinePosition -> Baseline, ImageSize -> Automatic], 
+             AdjustmentBox[
+              TemplateBox[{
+                ActionMenuBox[
+                 TagBox[
+                  PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                   Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                   FrameMargins -> 0], 
+                  MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                 Method -> "Queued"], "\"View suggestions\""}, 
+               "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                 TooltipBox[#, 
+                  FrameBox[
+                   
+                   StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8, 
+                   StripOnInput -> False], TooltipDelay -> 0.1, 
+                  TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                 Annotation[#, 
+                  Framed[
+                   Style[
+                   FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8],
+                   "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+              BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+           GridBoxAlignment -> {
+            "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, AutoDelete -> 
+           False, GridBoxItemSize -> {
+            "Columns" -> {Automatic, Automatic, 4}, "Rows" -> {{Automatic}}}, 
+           GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+         BoxMargins -> {{0.25, -1.}, {0, 0}}], RoundingRadius -> {13, 75}, 
+        Background -> #4, FrameStyle -> None, 
+        FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+        ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+       FontColor -> #5]& )],
+    CodeInspector`InspectionObject[
+    "ImplicitTimesStrings", "Suspicious implicit ``Times`` with strings.", 
+     "Warning", 
+     Association[
+     CodeParser`Source -> {{3, 16}, {3, 16}}, ConfidenceLevel -> 0.75, 
+      CodeParser`CodeActions -> {
+        CodeParser`CodeAction["Insert ``*``", CodeParser`InsertNode, 
+         Association[
+         CodeParser`Source -> {{3, 16}, {3, 16}}, "InsertionNode" -> 
+          CodeParser`LeafNode[Token`Star, "*", 
+            Association[]]]]}, "File" -> 
+      "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/Collatz.\
+m"]]], ",", 
+   InterpretationBox[
+    TemplateBox[{
+      StyleBox[
+       TemplateBox[{
+         StyleBox[
+         "\"Module\"", "Program", FontWeight -> Bold, FontColor -> 
+          GrayLevel[0], StripOnInput -> False], "\" has an empty \"", 
+         StyleBox[
+         "\"List\"", "Program", FontWeight -> Bold, FontColor -> GrayLevel[0],
+           StripOnInput -> False], "\" for argument 1.\""}, "RowDefault"], 
+       "Text"], 
+      RGBColor[{0, 
+        Rational[118, 255], 1}], 
+      RGBColor[{1, 1, 1}], 
+      RGBColor[{
+        Rational[203, 255], 
+        Rational[46, 51], 1}], 
+      RGBColor[{
+        Rational[1, 51], 
+        Rational[89, 255], 
+        Rational[218, 255]}], {
+      "\"ModuleArgumentsEmpty\"" :> Null, "\"confidence: 90%\"" :> Null, 
+       Delimiter, "Open in editor" :> 
+       CodeInspector`External`OpenInEditor[
+        "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/\
+Collatz.m", 33, 8]}},
+     "SuggestionGridTemplateXXX",
+     DisplayFunction->(StyleBox[
+       FrameBox[
+        AdjustmentBox[
+         TagBox[
+          GridBox[{{
+             
+             TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+              "SuggestionIconTemplateXXX", DisplayFunction -> (GraphicsBox[{
+                 Thickness[0.05555555555555555], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                  FaceForm[#]], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                  FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                AspectRatio -> Automatic, BaselinePosition -> 
+                Scaled[0.1]]& )], 
+             PaneBox[#, BaselinePosition -> Baseline, ImageSize -> Automatic], 
+             AdjustmentBox[
+              TemplateBox[{
+                ActionMenuBox[
+                 TagBox[
+                  PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                   Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                   FrameMargins -> 0], 
+                  MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                 Method -> "Queued"], "\"View suggestions\""}, 
+               "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                 TooltipBox[#, 
+                  FrameBox[
+                   
+                   StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8, 
+                   StripOnInput -> False], TooltipDelay -> 0.1, 
+                  TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                 Annotation[#, 
+                  Framed[
+                   Style[
+                   FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8],
+                   "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+              BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+           GridBoxAlignment -> {
+            "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, AutoDelete -> 
+           False, GridBoxItemSize -> {
+            "Columns" -> {Automatic, Automatic, 4}, "Rows" -> {{Automatic}}}, 
+           GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+         BoxMargins -> {{0.25, -1.}, {0, 0}}], RoundingRadius -> {13, 75}, 
+        Background -> #4, FrameStyle -> None, 
+        FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+        ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+       FontColor -> #5]& )],
+    CodeInspector`InspectionObject[
+    "ModuleArgumentsEmpty", 
+     "``Module`` has an empty ``List`` for argument 1.", "Remark", 
+     Association[
+     CodeParser`Source -> {{33, 8}, {33, 10}}, ConfidenceLevel -> 0.9, "File" -> 
+      "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/Collatz.\
+m"]]], ",", 
+   InterpretationBox[
+    TemplateBox[{
+      StyleBox[
+       TemplateBox[{"\"Unexpected expression at top-level.\""}, "RowDefault"],
+        "Text"], 
+      GrayLevel[
+       Rational[118, 255]], 
+      GrayLevel[1], 
+      GrayLevel[
+       Rational[46, 51]], 
+      GrayLevel[
+       Rational[89, 255]], {
+      "\"TopLevel\"" :> Null, "\"confidence: 95%\"" :> Null, Delimiter, 
+       "Open in editor" :> 
+       CodeInspector`External`OpenInEditor[
+        "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/\
+Collatz.m", 3, 1]}},
+     "SuggestionGridTemplateXXX",
+     DisplayFunction->(StyleBox[
+       FrameBox[
+        AdjustmentBox[
+         TagBox[
+          GridBox[{{
+             
+             TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+              "SuggestionIconTemplateXXX", DisplayFunction -> (GraphicsBox[{
+                 Thickness[0.05555555555555555], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                  FaceForm[#]], 
+                 StyleBox[{
+                   
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                  FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                AspectRatio -> Automatic, BaselinePosition -> 
+                Scaled[0.1]]& )], 
+             PaneBox[#, BaselinePosition -> Baseline, ImageSize -> Automatic], 
+             AdjustmentBox[
+              TemplateBox[{
+                ActionMenuBox[
+                 TagBox[
+                  PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                   Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                   FrameMargins -> 0], 
+                  MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                 Method -> "Queued"], "\"View suggestions\""}, 
+               "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                 TooltipBox[#, 
+                  FrameBox[
+                   
+                   StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8, 
+                   StripOnInput -> False], TooltipDelay -> 0.1, 
+                  TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                 Annotation[#, 
+                  Framed[
+                   Style[
+                   FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                   RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                   RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8],
+                   "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+              BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+           GridBoxAlignment -> {
+            "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, AutoDelete -> 
+           False, GridBoxItemSize -> {
+            "Columns" -> {Automatic, Automatic, 4}, "Rows" -> {{Automatic}}}, 
+           GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+         BoxMargins -> {{0.25, -1.}, {0, 0}}], RoundingRadius -> {13, 75}, 
+        Background -> #4, FrameStyle -> None, 
+        FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+        ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+       FontColor -> #5]& )],
+    CodeInspector`InspectionObject[
+    "TopLevel", "Unexpected expression at top-level.", "Warning", 
+     Association[
+     CodeParser`Source -> {{3, 1}, {3, 8}}, ConfidenceLevel -> 0.95, "File" -> 
+      "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/Collatz.\
+m"]]]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.756408828208044*^9, {3.756409076033883*^9, 3.7564091013664923`*^9}, {
+   3.7564092492941093`*^9, 3.756409255754414*^9}, 3.789902784479472*^9, 
+   3.789902820666564*^9},
+ CellLabel->"Out[22]=",
+ CellID->846157180,ExpressionUUID->"e05c0317-3b4e-4cef-aff7-21704a72cca0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CodeInspectSummarize", "[", 
+  RowBox[{
+   RowBox[{"File", "[", "\"\<Collatz`\>\"", "]"}], ",", "%", ",", 
+   RowBox[{"ConfidenceLevel", "\[Rule]", "0."}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.756409095767641*^9, 3.756409098854842*^9}, {
+  3.756409252524683*^9, 3.756409253858829*^9}, {3.789902792434369*^9, 
+  3.789902826417534*^9}},
+ CellLabel->"In[23]:=",
+ CellID->1451995309,ExpressionUUID->"f9287502-455a-45df-9027-b1bac8e6e6ee"],
+
+Cell[BoxData[
+ InterpretationBox[
+  FrameBox[
+   TagBox[GridBox[{
+      {
+       TemplateBox[{
+        "\"/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/\
+Collatz.m\""},
+        "Row",
+        DisplayFunction->(PaneBox[#, ImageMargins -> {{0, 0}, {10, 10}}]& ),
+        InterpretationFunction->(RowBox[{"Row", "[", 
+           RowBox[{
+             RowBox[{"{", #, "}"}], ",", 
+             RowBox[{"ImageMargins", "\[Rule]", 
+               RowBox[{"{", 
+                 RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}]}], 
+           "]"}]& )]},
+      {
+       StyleBox[
+        TagBox[GridBox[{
+           {
+            TemplateBox[{
+              TemplateBox[{10}, "Spacer1"]},
+             "RowDefault"], "", ""},
+           {
+            ActionMenuBox[
+             TagBox[
+              TooltipBox[
+               FrameBox[
+                StyleBox[
+                 TemplateBox[{"\"line\"", "\" \"", "\"3\"", "\":\""},
+                  "RowDefault"],
+                 StripOnInput->False,
+                 ShowStringCharacters->False],
+                StripOnInput->False],
+               "\"Click to open menu...\"",
+               TooltipDelay->Automatic,
+               TooltipStyle->"TextStyling"],
+              
+              Annotation[#, "Click to open menu...", 
+               "Tooltip"]& ], {"\<\"Copy line source\"\>":>CopyToClipboard[
+             "Collatz::usage \"Collatz[n] gives a list of the iterates in the \
+3n+1 problem,"], "\<\"Copy line number\"\>":>CopyToClipboard[
+             3], "\<\"Copy line hash\"\>":>CopyToClipboard[
+             "\"7ac84f8da1c4b38e\""]},
+             Appearance->None,
+             DefaultBaseStyle->{}], 
+            TemplateBox[{10},
+             "Spacer1"], 
+            TagBox[GridBox[{
+               {
+                TagBox[GridBox[{
+                   {"\<\" \"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"l\"\>", \
+"\<\"l\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"z\"\>", "\<\":\"\>", "\<\":\"\>", \
+"\<\"u\"\>", "\<\"s\"\>", "\<\"a\"\>", "\<\"g\"\>", "\<\"e\"\>", "\<\" \"\>", \
+"\<\"\\\"\"\>", "\<\"C\"\>", "\<\"o\"\>", "\<\"l\"\>", "\<\"l\"\>", \
+"\<\"a\"\>", "\<\"t\"\>", "\<\"z\"\>", "\<\"[\"\>", "\<\"n\"\>", "\<\"]\"\>", \
+"\<\" \"\>", "\<\"g\"\>", "\<\"i\"\>", "\<\"v\"\>", "\<\"e\"\>", "\<\"s\"\>", \
+"\<\" \"\>", "\<\"a\"\>", "\<\" \"\>", "\<\"l\"\>", "\<\"i\"\>", "\<\"s\"\>", \
+"\<\"t\"\>", "\<\" \"\>", "\<\"o\"\>", "\<\"f\"\>", "\<\" \"\>", "\<\"t\"\>", \
+"\<\"h\"\>", "\<\"e\"\>", "\<\" \"\>", "\<\"i\"\>", "\<\"t\"\>", "\<\"e\"\>", \
+"\<\"r\"\>", "\<\"a\"\>", "\<\"t\"\>", "\<\"e\"\>", "\<\"s\"\>", "\<\" \"\>", \
+"\<\"i\"\>", "\<\"n\"\>", "\<\" \"\>", "\<\"t\"\>", "\<\"h\"\>", "\<\"e\"\>", \
+"\<\" \"\>", "\<\"3\"\>", "\<\"n\"\>", "\<\"+\"\>", "\<\"1\"\>", "\<\" \"\>", \
+"\<\"p\"\>", "\<\"r\"\>", "\<\"o\"\>", "\<\"b\"\>", "\<\"l\"\>", "\<\"e\"\>", \
+"\<\"m\"\>", "\<\",\"\>", "\<\" \"\>"},
+                   {"\<\" \"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
+\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\
+\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
+\[ErrorIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[ErrorIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\
+\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\
+\>", "\<\"\[SpaceIndicator]\"\>", "\<\"\[SpaceIndicator]\"\>", "\<\" \"\>"}
+                  },
+                  AutoDelete->False,
+                  GridBoxItemSize->{"Columns" -> {{0.65}}},
+                  
+                  GridBoxItemStyle->{
+                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}, 
+                    "ItemsIndexed" -> {{{1, 1}, {2, 8}} -> {Bold, 
+                    RGBColor[
+                    Rational[2, 3], 0.33333333333333337`, 0]}, {{1, 1}, {17, 
+                    17}} -> {Bold, 
+                    RGBColor[
+                    Rational[2, 3], 0.33333333333333337`, 0]}, {{2, 2}, {2, 
+                    8}} -> {Bold, 
+                    RGBColor[
+                    Rational[2, 3], 0.33333333333333337`, 0]}, {{2, 2}, {17, 
+                    17}} -> {Bold, 
+                    RGBColor[
+                    Rational[2, 3], 0.33333333333333337`, 0]}}},
+                  GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
+                 "Grid"]},
+               {
+                InterpretationBox[
+                 TemplateBox[{
+                   StyleBox[
+                    
+                    TemplateBox[{"\"Unexpected expression at top-level.\""}, 
+                    "RowDefault"], "Text"], 
+                   GrayLevel[
+                    Rational[118, 255]], 
+                   GrayLevel[1], 
+                   GrayLevel[
+                    Rational[46, 51]], 
+                   GrayLevel[
+                    Rational[89, 255]], {
+                   "\"TopLevel\"" :> Null, "\"confidence: 95%\"" :> Null, 
+                    Delimiter, "Open in editor" :> 
+                    CodeInspector`External`OpenInEditor[
+                    "/Users/brenton/development/stash/COD/codetoolsexamples/\
+Collatz/Collatz.m", 3, 1]}},
+                  "SuggestionGridTemplateXXX",
+                  DisplayFunction->(StyleBox[
+                    FrameBox[
+                    AdjustmentBox[
+                    TagBox[
+                    GridBox[{{
+                    
+                    TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+                    "SuggestionIconTemplateXXX", 
+                    DisplayFunction -> (GraphicsBox[{
+                    Thickness[0.05555555555555555], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                    FaceForm[#]], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                    FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                    AspectRatio -> Automatic, BaselinePosition -> 
+                    Scaled[0.1]]& )], 
+                    
+                    PaneBox[#, BaselinePosition -> Baseline, ImageSize -> 
+                    Automatic], 
+                    AdjustmentBox[
+                    TemplateBox[{
+                    ActionMenuBox[
+                    TagBox[
+                    PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                    Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                    FrameMargins -> 0], 
+                    MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                    Method -> "Queued"], "\"View suggestions\""}, 
+                    "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                    TooltipBox[#, 
+                    FrameBox[
+                    
+                    StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8,
+                     StripOnInput -> False], TooltipDelay -> 0.1, 
+                    TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                    Annotation[#, 
+                    Framed[
+                    Style[
+                    FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 
+                    8], "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+                    BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
+                    AutoDelete -> False, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {Automatic, Automatic, 4}, 
+                    "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+                    BoxMargins -> {{0.25, -1.}, {0, 0}}], 
+                    RoundingRadius -> {13, 75}, Background -> #4, FrameStyle -> 
+                    None, FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+                    ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+                    FontColor -> #5]& )],
+                 CodeInspector`InspectionObject[
+                 "TopLevel", "Unexpected expression at top-level.", "Warning", 
+                  Association[
+                  CodeParser`Source -> {{3, 1}, {3, 8}}, ConfidenceLevel -> 
+                   0.95, "File" -> 
+                   "/Users/brenton/development/stash/COD/codetoolsexamples/\
+Collatz/Collatz.m"]]]},
+               {
+                InterpretationBox[
+                 TemplateBox[{
+                   StyleBox[
+                    TemplateBox[{"\"Suspicious implicit \"", 
+                    StyleBox[
+                    "\"Times\"", "Program", FontWeight -> Bold, FontColor -> 
+                    GrayLevel[0], StripOnInput -> False], 
+                    "\" with strings.\""}, "RowDefault"], "Text"], 
+                   GrayLevel[
+                    Rational[118, 255]], 
+                   GrayLevel[1], 
+                   GrayLevel[
+                    Rational[46, 51]], 
+                   GrayLevel[
+                    Rational[89, 255]], {
+                   "\"ImplicitTimesStrings\"" :> Null, "\"confidence: 75%\"" :> 
+                    Null, Delimiter, "Open in editor" :> 
+                    CodeInspector`External`OpenInEditor[
+                    "/Users/brenton/development/stash/COD/codetoolsexamples/\
+Collatz/Collatz.m", 3, 16]}},
+                  "SuggestionGridTemplateXXX",
+                  DisplayFunction->(StyleBox[
+                    FrameBox[
+                    AdjustmentBox[
+                    TagBox[
+                    GridBox[{{
+                    
+                    TemplateBox[{#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}}, 
+                    "SuggestionIconTemplateXXX", 
+                    DisplayFunction -> (GraphicsBox[{
+                    Thickness[0.05555555555555555], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJJIGZigIIGAwcIQ8kBxk94ekHp9k9Vh4qXaoYcOfoO
+m+a+X37stKZDbP+hrxpzdOA0TBymDqYPl7n2pnG7PHlk4PzZRxQ2FGWIwPWD
+jI3p54WbLxuVYn3fnwluD8S8H/Yo9gD5KPYA+TB7YPph9sDMh9EwcZg6FPdh
+MRfdXpi7YPph7oaZD/MXzB5c4QCzBwA8nn+Z
+                    "]]}, 
+                    FaceForm[#]], 
+                    StyleBox[{
+                    
+                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 
+                    3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                    3}}}, {{{8.175292500000001, 7.416875}, {7.796855000000001,
+                     11.3084375}, {7.796855000000001, 13.38}, {10.11998, 
+                    13.38}, {10.11998, 11.3084375}, {9.741542500000001, 
+                    7.416875}, {8.175292500000001, 7.416875}}, CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ/cTvZcLf/4oOD6tE1rk/5HNQjDzAkqeL4FsusdsW
+1KjgwAAGAg7hCSdehX2Xd5BvfR24Q07QwaZCOJPjjZyDHdf1xQW2Qg56LJYa
+iWlyDv2HvmrEzBeG80GmVbmIwvkvtjT6Sb8Qg+t/BLLPUwJuPti6DEm4/WD7
+2qTg7gMZJyIm7QBzP4y/zEVob88lJTi/7+dk7hV1ynD9c3LzfPxZVODmr3ro
+0futUwVu/0bpbbqnzqjA3Qfjw9wP48P8B9MP8z/MfFj4wOyHhR/MfbDwRQ9/
+ACBxmlc=
+                    "]}]}, 
+                    FaceForm[#2]]}, ImageSize -> #3, PlotRange -> #4, 
+                    AspectRatio -> Automatic, BaselinePosition -> 
+                    Scaled[0.1]]& )], 
+                    
+                    PaneBox[#, BaselinePosition -> Baseline, ImageSize -> 
+                    Automatic], 
+                    AdjustmentBox[
+                    TemplateBox[{
+                    ActionMenuBox[
+                    TagBox[
+                    PaneSelectorBox[{False -> GraphicsBox[{
+                    EdgeForm[
+                    Directive[
+                    GrayLevel[1, 0], 
+                    Thickness[0.025]]], 
+                    FaceForm[#4], 
+                    
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], #5, 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0], True -> 
+                    GraphicsBox[{
+                    EdgeForm[
+                    Directive[#5, 
+                    Thickness[0.025]]], 
+                    FaceForm[#2], 
+                    RectangleBox[{-1.75, -2}, {1.75, 2}, RoundingRadius -> 
+                    0.2], 
+                    Thickness[0.15], 
+                    GrayLevel[1], 
+                    LineBox[{{-0.5, -1.}, {0.5, 0.}, {-0.5, 1.}}]}, 
+                    ImageSize -> {Automatic, 15}, ImageMargins -> 0]}, 
+                    Dynamic[
+                    CurrentValue["MouseOver"]], ImageSize -> Automatic, 
+                    FrameMargins -> 0], 
+                    MouseAppearanceTag["LinkHand"]], #6, Appearance -> None, 
+                    Method -> "Queued"], "\"View suggestions\""}, 
+                    "PrettyTooltipTemplateXXX", DisplayFunction -> (TagBox[
+                    TooltipBox[#, 
+                    FrameBox[
+                    
+                    StyleBox[#2, "Text", FontColor -> 
+                    RGBColor[0.537255, 0.537255, 0.537255], FontSize -> 12, 
+                    FontWeight -> "Plain", FontTracking -> "Plain", 
+                    StripOnInput -> False], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 8,
+                     StripOnInput -> False], TooltipDelay -> 0.1, 
+                    TooltipStyle -> {Background -> None, CellFrame -> 0}], 
+                    Annotation[#, 
+                    Framed[
+                    Style[
+                    FunctionResourceTools`BuildDefinitionNotebook`Private`$$\
+tooltip, "Text", FontColor -> RGBColor[0.537255, 0.537255, 0.537255], 
+                    FontSize -> 12, FontWeight -> "Plain", FontTracking -> 
+                    "Plain"], Background -> 
+                    RGBColor[0.960784, 0.960784, 0.960784], FrameStyle -> 
+                    RGBColor[0.898039, 0.898039, 0.898039], FrameMargins -> 
+                    8], "Tooltip"]& ]& )], BoxBaselineShift -> -0.3, 
+                    BoxMargins -> {{2, 0}, {0, 0}}]}}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Baseline}}}, 
+                    AutoDelete -> False, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {Automatic, Automatic, 4}, 
+                    "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+                    BoxMargins -> {{0.25, -1.}, {0, 0}}], 
+                    RoundingRadius -> {13, 75}, Background -> #4, FrameStyle -> 
+                    None, FrameMargins -> {{0, 8 + 8}, {0, 0}}, 
+                    ImageMargins -> {{0, 0}, {5, 5}}, StripOnInput -> False], 
+                    FontColor -> #5]& )],
+                 CodeInspector`InspectionObject[
+                 "ImplicitTimesStrings", 
+                  "Suspicious implicit ``Times`` with strings.", "Warning", 
+                  Association[
+                  CodeParser`Source -> {{3, 16}, {3, 16}}, ConfidenceLevel -> 
+                   0.75, CodeParser`CodeActions -> {
+                    CodeParser`CodeAction[
+                    "Insert ``*``", CodeParser`InsertNode, 
+                    Association[
+                    CodeParser`Source -> {{3, 16}, {3, 16}}, "InsertionNode" -> 
+                    CodeParser`LeafNode[Token`Star, "*", 
+                    Association[]]]]}, "File" -> 
+                   "/Users/brenton/development/stash/COD/codetoolsexamples/\
+Collatz/Collatz.m"]]]}
+              },
+              DefaultBaseStyle->"Column",
+              GridBoxAlignment->{"Columns" -> {{Left}}},
+              
+              GridBoxItemSize->{
+               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+             "Column"]},
+           {
+            TemplateBox[{
+              TemplateBox[{10}, "Spacer1"]},
+             "RowDefault"], "", ""}
+          },
+          AutoDelete->False,
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Top}}},
+          
+          GridBoxItemSize->{
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+          GridBoxSpacings->{"Columns" -> {{0}}, "Rows" -> {{0}}}],
+         "Grid"],
+        StripOnInput->False,
+        ShowStringCharacters->False]}
+     },
+     DefaultBaseStyle->"Column",
+     GridBoxAlignment->{"Columns" -> {{Left}}},
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+     GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{0}}}],
+    "Column"],
+   Background->GrayLevel[0.97],
+   RoundingRadius->5,
+   StripOnInput->False],
+  CodeInspector`InspectedFileObject[
+  "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/Collatz.m", {
+    CodeInspector`InspectedLineObject[
+    "Collatz::usage \"Collatz[n] gives a list of the iterates in the 3n+1 \
+problem,", 3, "7ac84f8da1c4b38e", {{" ", 
+       CodeInspector`Format`LintMarkup[
+       "C", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       "o", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       "l", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       "l", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       "a", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       "t", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       "z", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], ":", ":", "u", "s", "a", 
+       "g", "e", " ", 
+       CodeInspector`Format`LintMarkup[
+       "\"", FontWeight -> Bold, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], "C", "o", "l", "l", "a", 
+       "t", "z", "[", "n", "]", " ", "g", "i", "v", "e", "s", " ", "a", " ", 
+       "l", "i", "s", "t", " ", "o", "f", " ", "t", "h", "e", " ", "i", "t", 
+       "e", "r", "a", "t", "e", "s", " ", "i", "n", " ", "t", "h", "e", " ", 
+       "3", "n", "+", "1", " ", "p", "r", "o", "b", "l", "e", "m", ",", 
+       " "}, {" ", 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorIndicator, FontWeight -> Bold, FontSize -> 
+        Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintMarkup[
+       CodeInspector`Format`LintErrorContinuationIndicator, FontWeight -> 
+        Bold, FontSize -> Larger, FontColor -> RGBColor[
+          Rational[2, 3], 0.33333333333333337`, 0]], 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, 
+       CodeInspector`Format`LintSpaceIndicator, " "}}, {
+      CodeInspector`InspectionObject[
+      "ImplicitTimesStrings", "Suspicious implicit ``Times`` with strings.", 
+       "Warning", 
+       Association[
+       CodeParser`Source -> {{3, 16}, {3, 16}}, ConfidenceLevel -> 0.75, 
+        CodeParser`CodeActions -> {
+          CodeParser`CodeAction["Insert ``*``", CodeParser`InsertNode, 
+           Association[
+           CodeParser`Source -> {{3, 16}, {3, 16}}, "InsertionNode" -> 
+            CodeParser`LeafNode[Token`Star, "*", 
+              Association[]]]]}, "File" -> 
+        "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/\
+Collatz.m"]], 
+      CodeInspector`InspectionObject[
+      "TopLevel", "Unexpected expression at top-level.", "Warning", 
+       Association[
+       CodeParser`Source -> {{3, 1}, {3, 8}}, ConfidenceLevel -> 0.95, "File" -> 
+        "/Users/brenton/development/stash/COD/codetoolsexamples/Collatz/\
+Collatz.m"]]}, "MaxLineNumberLength" -> 1]}]]], "Output",
+ CellChangeTimes->{
+  3.756409102509055*^9, {3.7564092502130413`*^9, 3.756409256521989*^9}, {
+   3.7899028048122263`*^9, 3.789902826951704*^9}},
+ CellLabel->"Out[23]=",
+ CellID->441526315,ExpressionUUID->"d056afe6-bca0-4c34-8511-99d19d2b01a2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The linter has caught an accidental usage of the Span operator ;;. The code \
+should be this:\
+\>", "MathCaption",
+ CellChangeTimes->{{3.756409286508494*^9, 3.756409302829833*^9}},
+ CellID->1221023659,ExpressionUUID->"cf1052d1-3129-4b17-83b7-6463edfd8d27"],
+
+Cell["\<\
+Collatz[n_Integer]  := Prepend[Collatz[(3 n + 1)/2], n] /; OddQ[n] && n > 0;\
+\>", "Program",
+ CellChangeTimes->{{3.7506252700469637`*^9, 3.750625271064453*^9}},
+ CellID->605596308,ExpressionUUID->"b00737cc-3b4c-4999-b150-eed474cfe725"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implicit Times", "Section",
+ CellChangeTimes->{{3.7564093431874743`*^9, 3.7564093453545094`*^9}},
+ CellID->1332145423,ExpressionUUID->"13779ca2-08b8-4df6-930f-9a588a50519a"],
+
+Cell[BoxData[GridBox[{
+   {
+    RowBox[{"CodeInspectImplicitTimes", "[", "code", "]"}], Cell[
+    "returns a list of implicit times in code", "TableText",ExpressionUUID->
+     "b9fec29d-9ec5-4246-9b87-05a5d8c263de"]},
+   {
+    RowBox[{"CodeInspectImplicitTimesSummarize", "[", "code", "]"}], Cell[
+    "returns an inspection summary object", "TableText",ExpressionUUID->
+     "9fabda27-daec-4670-a862-7ee1d60cf448"]}
+  }]], "DefinitionBox",
+ CellChangeTimes->{{3.756409514445806*^9, 3.7564096553701963`*^9}, {
+  3.789903086127141*^9, 3.789903139801461*^9}},
+ CellID->1818228175,ExpressionUUID->"609e0ad3-0aa5-4a87-8324-3e5c320daa5e"],
+
+Cell["Finding implicit times in WL code.", "Caption",
+ CellChangeTimes->{{3.7564095794711943`*^9, 3.7564095848546667`*^9}},
+ CellID->268640415,ExpressionUUID->"61665f46-9878-4e7d-b3b4-8c229a1046e0"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Report uses of implicit multiplication. This is a source of bugs but it is \
+hard to automatically determine whether it is incorrect.\
+\>", "MathCaption",
+ CellChangeTimes->{
+  3.756409356753059*^9, {3.756409453051682*^9, 3.756409453422822*^9}},
+ CellID->1660928616,ExpressionUUID->"aeb8ccf3-5a47-4112-829e-67b584d6f065"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<CodeInspector`ImplicitTimes`\>\"", "]"}]], "Input",\
+
+ CellChangeTimes->{{3.756409363062416*^9, 3.756409372636406*^9}, {
+  3.7899031476430073`*^9, 3.789903149571087*^9}},
+ CellLabel->"In[10]:=",
+ CellID->885472612,ExpressionUUID->"5e4006d6-059f-4c20-93a6-2ce111eec595"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"times", "=", 
+   RowBox[{"CodeInspectImplicitTimes", "[", 
+    RowBox[{"File", "[", "\"\<Collatz`\>\"", "]"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.756409391313341*^9, 3.7564094130784082`*^9}, {
+  3.7899031519953127`*^9, 3.789903160347577*^9}},
+ CellLabel->"In[12]:=",
+ CellID->1353075314,ExpressionUUID->"07cf56c7-7353-49d4-9a90-401fee9bf14b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CodeInspectImplicitTimesSummarize", "[", 
+  RowBox[{"\"\<Collatz`\>\"", ",", "times"}], "]"}]], "Input",
+ CellChangeTimes->{{3.756409396825465*^9, 3.756409423487047*^9}, {
+  3.789903163432123*^9, 3.7899031681245937`*^9}},
+ CellLabel->"In[14]:=",
+ CellID->403819275,ExpressionUUID->"fe97c4ec-dbfd-47b0-ae3d-08f97a915990"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    3\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz::usage \"Collatz[n] gives a list of the iterates in the \
+3n+1 problem,"], "\"Copy line number\"" :> CopyToClipboard[3], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["7ac84f8da1c4b38e"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\":\"", "\":\"", "\"u\"", "\"s\"", "\"a\"", "\"g\"", 
+           "\"e\"", "\" \"", "\"\\\"\"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", 
+           "\"a\"", "\"t\"", "\"z\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", 
+           "\"g\"", "\"i\"", "\"v\"", "\"e\"", "\"s\"", "\" \"", "\"a\"", 
+           "\" \"", "\"l\"", "\"i\"", "\"s\"", "\"t\"", "\" \"", "\"o\"", 
+           "\"f\"", "\" \"", "\"t\"", "\"h\"", "\"e\"", "\" \"", "\"i\"", 
+           "\"t\"", "\"e\"", "\"r\"", "\"a\"", "\"t\"", "\"e\"", "\"s\"", 
+           "\" \"", "\"i\"", "\"n\"", "\" \"", "\"t\"", "\"h\"", "\"e\"", 
+           "\" \"", "\"3\"", "\"n\"", "\"+\"", "\"1\"", "\" \"", "\"p\"", 
+           "\"r\"", "\"o\"", "\"b\"", "\"l\"", "\"e\"", "\"m\"", "\",\"", 
+           "\" \""}, {"\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"(\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[Times]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+              Bold, FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \""}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"    5\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> CopyToClipboard["        terminates.\""], 
+         "\"Copy line number\"" :> CopyToClipboard[5], "\"Copy line hash\"" :> 
+         CopyToClipboard[
+           AST`Utils`escapeString["0501989acbc46476"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\"t\"", "\"e\"", "\"r\"", "\"m\"", "\"i\"", 
+           "\"n\"", "\"a\"", "\"t\"", "\"e\"", "\"s\"", "\".\"", "\"\\\"\"", 
+           "\" \""}, {
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\")\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ]}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"   12\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz[n_Integer]  := Prepend[Collatz[(3 n + 1)/2], n] /; OddQ[n] \
+&& n > 0;;"], "\"Copy line number\"" :> CopyToClipboard[12], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["7f945bdb61000730"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\"[\"", "\"n\"", "\"_\"", "\"I\"", "\"n\"", "\"t\"", 
+           "\"e\"", "\"g\"", "\"e\"", "\"r\"", "\"]\"", "\" \"", "\" \"", 
+           "\":\"", "\"=\"", "\" \"", "\"P\"", "\"r\"", "\"e\"", "\"p\"", 
+           "\"e\"", "\"n\"", "\"d\"", "\"[\"", "\"C\"", "\"o\"", "\"l\"", 
+           "\"l\"", "\"a\"", "\"t\"", "\"z\"", "\"[\"", "\"(\"", "\"3\"", 
+           "\" \"", "\"n\"", "\" \"", "\"+\"", "\" \"", "\"1\"", "\")\"", 
+           "\"/\"", "\"2\"", "\"]\"", "\",\"", "\" \"", "\"n\"", "\"]\"", 
+           "\" \"", "\"/\"", "\";\"", "\" \"", "\"O\"", "\"d\"", "\"d\"", 
+           "\"Q\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", "\"&\"", "\"&\"", 
+           "\" \"", "\"n\"", "\" \"", "\">\"", "\" \"", "\"0\"", "\";\"", 
+           "\";\"", "\" \""}, {
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"(\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[Times]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+              Bold, FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\")\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \""}}, AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]},
+    {
+     TemplateBox[{ActionMenuBox[
+        TagBox[
+         TooltipBox[
+          FrameBox[
+           
+           TemplateBox[{"\"line\"", "\" \"", "\"   29\"", "\":\""}, 
+            "RowDefault"], FrameMargins -> {{5, 5}, {1, 1}}, Background -> 
+           GrayLevel[0.95], StripOnInput -> False], 
+          "\"Click to open menu...\"", TooltipDelay -> Automatic, LabelStyle -> 
+          "TextStyling"], 
+         Annotation[#, "Click to open menu...", "Tooltip"]& ], {
+        "\"Copy line source\"" :> 
+         CopyToClipboard[
+          "Collatz[n_Integer] := (DummyFunction1[];Prepend[Collatz[3 n + 1], \
+n]) /; OddQ[n] && n > 0;"], "\"Copy line number\"" :> CopyToClipboard[29], 
+         "\"Copy line hash\"" :> CopyToClipboard[
+           AST`Utils`escapeString["0a09153d841023ed"]]}, Appearance -> None, 
+        Method -> "Queued", DefaultBaseStyle -> {}],TagBox[
+        GridBox[{{
+          "\" \"", "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", 
+           "\"z\"", "\"[\"", "\"n\"", "\"_\"", "\"I\"", "\"n\"", "\"t\"", 
+           "\"e\"", "\"g\"", "\"e\"", "\"r\"", "\"]\"", "\" \"", "\":\"", 
+           "\"=\"", "\" \"", "\"(\"", "\"D\"", "\"u\"", "\"m\"", "\"m\"", 
+           "\"y\"", "\"F\"", "\"u\"", "\"n\"", "\"c\"", "\"t\"", "\"i\"", 
+           "\"o\"", "\"n\"", "\"1\"", "\"[\"", "\"]\"", "\";\"", "\"P\"", 
+           "\"r\"", "\"e\"", "\"p\"", "\"e\"", "\"n\"", "\"d\"", "\"[\"", 
+           "\"C\"", "\"o\"", "\"l\"", "\"l\"", "\"a\"", "\"t\"", "\"z\"", 
+           "\"[\"", "\"3\"", "\" \"", "\"n\"", "\" \"", "\"+\"", "\" \"", 
+           "\"1\"", "\"]\"", "\",\"", "\" \"", "\"n\"", "\"]\"", "\")\"", 
+           "\" \"", "\"/\"", "\";\"", "\" \"", "\"O\"", "\"d\"", "\"d\"", 
+           "\"Q\"", "\"[\"", "\"n\"", "\"]\"", "\" \"", "\"&\"", "\"&\"", 
+           "\" \"", "\"n\"", "\" \"", "\">\"", "\" \"", "\"0\"", "\";\"", 
+           "\" \""}, {
+          "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"(\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\"\[Times]\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+              Bold, FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", 
+           TagBox[
+            TooltipBox[
+             StyleBox[
+             "\")\"", FontColor -> RGBColor[1, 0, 0], FontWeight -> Bold, 
+              FontSize -> Larger, StripOnInput -> False], 
+             TagBox[
+              GridBox[{{
+                 TagBox[
+                  GridBox[{{"\"ImplicitTimes\""}, {
+                    StyleBox[
+                    
+                    TemplateBox[{"\"Severity: \"", "\"ImplicitTimes\""}, 
+                    "RowDefault"], FontColor -> RGBColor[1, 0, 0], FontWeight -> 
+                    Bold, StripOnInput -> False]}, {"\"ImplicitTimes\""}}, 
+                   GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+                   DefaultBaseStyle -> "Column", 
+                   GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                  "Column"]}}, GridBoxAlignment -> {"Columns" -> {{Left}}}, 
+               DefaultBaseStyle -> "Column", 
+               GridBoxItemSize -> {
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+              "Column"]], Annotation[#, 
+             Column[{
+               Lint`Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", 
+                Association[]]}], "Tooltip"]& ], "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", 
+           "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \"", "\" \""}}, 
+         AutoDelete -> False, 
+         GridBoxItemSize -> {
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+         GridBoxSpacings -> {"Columns" -> {{0}}, "Rows" -> {{0}}}], "Grid"]},
+      "RowDefault"]}
+   },
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output",
+ CellChangeTimes->{{3.756409420188154*^9, 3.7564094240317783`*^9}},
+ FontSize->10,
+ CellLabel->"Out[14]=",
+ CellID->967597892,ExpressionUUID->"bd058bcc-b661-49ac-88f0-e3708da15af0"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The linter has caught an accidental use of implicit multiplication. The equal \
+sign is missing in the usage message assignment. The code should be this:\
+\>", "MathCaption",
+ CellChangeTimes->{{3.75640946440408*^9, 3.756409477628767*^9}},
+ CellID->1128868266,ExpressionUUID->"cdff7f13-8cb1-439c-84d6-f32188cd8757"],
+
+Cell["\<\
+Collatz::usage = \"Collatz[n] gives a list of the iterates in the 3n+1 problem,
+        starting from n. The conjecture is that this sequence always
+        terminates.\"\
+\>", "Program",
+ CellChangeTimes->{{3.7506251377194023`*^9, 3.7506251477528057`*^9}},
+ CellID->1749450636,ExpressionUUID->"05d03a3a-c534-4083-8f6d-18cfad1fd52d"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["More About", "TutorialMoreAboutSection",
+ CellID->23220180,ExpressionUUID->"3dcd39ee-8bfd-444b-91d8-65624418e4e9"],
+
+Cell["XXXX", "TutorialMoreAbout",
+ CellID->1567025153,ExpressionUUID->"f84fa8b8-5bbc-45d8-8197-c43650e1a939"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Related Tutorials", "RelatedTutorialsSection",
+ CellID->415694126,ExpressionUUID->"b77d5af4-0072-4829-8104-d43423a42fb5"],
+
+Cell["XXXX", "RelatedTutorials",
+ CellID->806871991,ExpressionUUID->"ec3032c9-e4f9-44af-abfa-d765d1d7b421"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Related Wolfram Education Group Courses", "TutorialRelatedLinksSection",
+ CellID->415694148,ExpressionUUID->"ed15d1e5-cab2-4fdc-aa43-0fc45f590254"],
+
+Cell["XXXX", "TutorialRelatedLinks",
+ CellID->415694149,ExpressionUUID->"d1b2a5ce-eb06-48be-bfa4-cbaf20b8f0d8"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1048, 751},
+WindowMargins->{{41, Automatic}, {Automatic, 36}},
+FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (January 25, 2020)",
+StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "TutorialPageStyles.nb", 
+  CharacterEncoding -> "UTF-8"],
+ExpressionUUID->"f24cd8e9-2731-43c1-a1c3-1d926210c758"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 599, 14, 24, "History",ExpressionUUID->"0f2c6a2b-205f-4cfb-a6c9-796c89d8e4ec",
+ CellID->1247902091],
+Cell[CellGroupData[{
+Cell[1182, 38, 123, 1, 29, "CategorizationSection",ExpressionUUID->"fea22ff7-57d6-426a-ae5e-e0006f20bcbb",
+ CellID->1122911449],
+Cell[1308, 41, 136, 2, 30, "Categorization",ExpressionUUID->"3e210c7f-31c7-4ecc-92c1-1b0e1c625603",
+ CellID->686433507],
+Cell[1447, 45, 215, 3, 30, "Categorization",ExpressionUUID->"627b634b-8139-4e22-b2bc-79b382c9484a",
+ CellID->605800465],
+Cell[1665, 50, 206, 3, 30, "Categorization",ExpressionUUID->"95defca3-e4f9-4844-9dd9-c6a2e37505ee",
+ CellID->468444828],
+Cell[1874, 55, 209, 2, 30, "Categorization",ExpressionUUID->"d39c4701-beae-40cd-a985-6b5e42241983"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2120, 62, 111, 1, 19, "KeywordsSection",ExpressionUUID->"48b88e89-39dd-44cf-a2f4-12817fefccb1",
+ CellID->1427428552],
+Cell[2234, 65, 100, 1, 19, "Keywords",ExpressionUUID->"84a78cad-4cbd-4157-9817-ff033587a486",
+ CellID->1251852827]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2371, 71, 108, 1, 19, "DetailsSection",ExpressionUUID->"977f41db-6c7c-40f5-9c38-a67fb7c132b1",
+ CellID->307771771],
+Cell[2482, 74, 118, 2, 30, "Details",ExpressionUUID->"bd3b4bf2-40ef-463e-8041-a3ff00c51882",
+ CellID->218895918],
+Cell[2603, 78, 124, 2, 30, "Details",ExpressionUUID->"5bdd0993-bf8a-4a53-9d8a-42341a1df8b0",
+ CellID->350963985],
+Cell[2730, 82, 121, 2, 30, "Details",ExpressionUUID->"8e508360-2bf4-4c88-bcb4-0226f3c8fff4",
+ CellID->795871300],
+Cell[2854, 86, 126, 2, 30, "Details",ExpressionUUID->"dae12b1d-6edb-4300-99a0-44fb2b3094aa",
+ CellID->199739161],
+Cell[2983, 90, 115, 2, 30, "Details",ExpressionUUID->"7bcd9a91-d13b-4858-8ac9-7926cd0221c9",
+ CellID->40625308],
+Cell[3101, 94, 116, 2, 30, "Details",ExpressionUUID->"eba6ea5e-7418-477f-be91-6e7828f2300a",
+ CellID->357121918],
+Cell[3220, 98, 117, 2, 30, "Details",ExpressionUUID->"e723592c-504d-434e-809c-31ec2d5ebc64",
+ CellID->35949532],
+Cell[3340, 102, 133, 2, 30, "Details",ExpressionUUID->"af97266e-63ad-4709-baa5-1ff345bb2d46",
+ CellID->929432370],
+Cell[3476, 106, 122, 2, 30, "Details",ExpressionUUID->"332a4cc1-b3eb-4f98-bd05-3f7a12f8e29e",
+ CellID->240026365]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3635, 113, 180, 2, 106, "Title",ExpressionUUID->"3718a8fb-8a69-4280-a9fc-db0844015d11",
+ CellID->509267359],
+Cell[3818, 117, 312, 6, 23, "Text",ExpressionUUID->"fbf971f5-8e6c-4398-95b2-7f0e8135f523",
+ CellID->1534169418],
+Cell[4133, 125, 609, 12, 65, "DefinitionBox",ExpressionUUID->"47571219-7c51-4d5d-b2a4-51543409aed0",
+ CellID->2096742444],
+Cell[4745, 139, 230, 3, 29, "Caption",ExpressionUUID->"29f65765-0904-450a-900c-b4044870e2e1",
+ CellID->1891092685],
+Cell[CellGroupData[{
+Cell[5000, 146, 288, 4, 40, "MathCaption",ExpressionUUID->"855adb52-3a87-47ec-a2be-db42ed6ffe53",
+ CellID->836781195],
+Cell[5291, 152, 270, 5, 27, "Input",ExpressionUUID->"f7523b60-f111-4c9f-9398-3c6c2c9658fa",
+ CellID->2058623809]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5598, 162, 247, 3, 40, "MathCaption",ExpressionUUID->"afb77939-b18c-4e3a-87d9-9f5efedd5374",
+ CellID->577773108],
+Cell[5848, 167, 248, 5, 27, "Input",ExpressionUUID->"8baac6a9-d51a-4cb3-9794-b72306215ae6",
+ CellID->1285539883],
+Cell[CellGroupData[{
+Cell[6121, 176, 312, 6, 27, "Input",ExpressionUUID->"725563f8-f341-46f7-91c7-d508e266aaae",
+ CellID->1307936235],
+Cell[6436, 184, 12616, 263, 42, "Output",ExpressionUUID->"884a411e-cf06-458f-8514-06053363eaf9",
+ CellID->1520838024]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19101, 453, 189, 2, 40, "MathCaption",ExpressionUUID->"5df81aee-813e-4e77-b11d-0abbfc2e1cfd",
+ CellID->855542086],
+Cell[CellGroupData[{
+Cell[19315, 459, 319, 6, 27, "Input",ExpressionUUID->"3dad53b2-3b30-40b6-bf8b-761b75f66965",
+ CellID->1007615328],
+Cell[19637, 467, 19210, 404, 180, "Output",ExpressionUUID->"aa825131-0098-4969-9f37-40a86f40cef2",
+ CellID->865353149]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38896, 877, 558, 9, 56, "MathCaption",ExpressionUUID->"e736bb90-4f7b-406b-b2c8-76a7ceb78b83",
+ CellID->216740014],
+Cell[39457, 888, 494, 12, 47, "Input",ExpressionUUID->"0e0fa6c5-66f0-4379-947e-c00ef3d3e18a",
+ CellID->176260392],
+Cell[39954, 902, 268, 6, 27, "Input",ExpressionUUID->"d2509ecc-9861-498e-988c-065b4972afc6",
+ CellID->546602460],
+Cell[CellGroupData[{
+Cell[40247, 912, 325, 6, 27, "Input",ExpressionUUID->"554221c6-0665-49c8-8f61-732cdce48e96",
+ CellID->1152290958],
+Cell[40575, 920, 19907, 418, 118, "Output",ExpressionUUID->"e05c0317-3b4e-4cef-aff7-21704a72cca0",
+ CellID->846157180]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60519, 1343, 462, 9, 27, "Input",ExpressionUUID->"f9287502-455a-45df-9027-b1bac8e6e6ee",
+ CellID->1451995309],
+Cell[60984, 1354, 29984, 593, 180, "Output",ExpressionUUID->"d056afe6-bca0-4c34-8511-99d19d2b01a2",
+ CellID->441526315]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[91017, 1953, 266, 5, 56, "MathCaption",ExpressionUUID->"cf1052d1-3129-4b17-83b7-6463edfd8d27",
+ CellID->1221023659],
+Cell[91286, 1960, 246, 4, 41, "Program",ExpressionUUID->"b00737cc-3b4c-4999-b150-eed474cfe725",
+ CellID->605596308]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[91569, 1969, 179, 2, 43, "Section",ExpressionUUID->"13779ca2-08b8-4df6-930f-9a588a50519a",
+ CellID->1332145423],
+Cell[91751, 1973, 633, 12, 83, "DefinitionBox",ExpressionUUID->"609e0ad3-0aa5-4a87-8324-3e5c320daa5e",
+ CellID->1818228175],
+Cell[92387, 1987, 198, 2, 29, "Caption",ExpressionUUID->"61665f46-9878-4e7d-b3b4-8c229a1046e0",
+ CellID->268640415],
+Cell[CellGroupData[{
+Cell[92610, 1993, 331, 6, 56, "MathCaption",ExpressionUUID->"aeb8ccf3-5a47-4112-829e-67b584d6f065",
+ CellID->1660928616],
+Cell[92944, 2001, 311, 6, 27, "Input",ExpressionUUID->"5e4006d6-059f-4c20-93a6-2ce111eec595",
+ CellID->885472612],
+Cell[93258, 2009, 390, 8, 27, "Input",ExpressionUUID->"07cf56c7-7353-49d4-9a90-401fee9bf14b",
+ CellID->1353075314],
+Cell[CellGroupData[{
+Cell[93673, 2021, 344, 6, 27, "Input",ExpressionUUID->"fe97c4ec-dbfd-47b0-ae3d-08f97a915990",
+ CellID->403819275],
+Cell[94020, 2029, 21882, 419, 137, "Output",ExpressionUUID->"bd058bcc-b661-49ac-88f0-e3708da15af0",
+ CellID->967597892]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[115951, 2454, 325, 5, 56, "MathCaption",ExpressionUUID->"cdff7f13-8cb1-439c-84d6-f32188cd8757",
+ CellID->1128868266],
+Cell[116279, 2461, 343, 6, 75, "Program",ExpressionUUID->"05d03a3a-c534-4083-8f6d-18cfad1fd52d",
+ CellID->1749450636]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[116671, 2473, 120, 1, 72, "TutorialMoreAboutSection",ExpressionUUID->"3dcd39ee-8bfd-444b-91d8-65624418e4e9",
+ CellID->23220180],
+Cell[116794, 2476, 109, 1, 22, "TutorialMoreAbout",ExpressionUUID->"f84fa8b8-5bbc-45d8-8197-c43650e1a939",
+ CellID->1567025153]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[116940, 2482, 127, 1, 72, "RelatedTutorialsSection",ExpressionUUID->"b77d5af4-0072-4829-8104-d43423a42fb5",
+ CellID->415694126],
+Cell[117070, 2485, 107, 1, 22, "RelatedTutorials",ExpressionUUID->"ec3032c9-e4f9-44af-abfa-d765d1d7b421",
+ CellID->806871991]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[117214, 2491, 153, 1, 72, "TutorialRelatedLinksSection",ExpressionUUID->"ed15d1e5-cab2-4fdc-aa43-0fc45f590254",
+ CellID->415694148],
+Cell[117370, 2494, 111, 1, 22, "TutorialRelatedLinks",ExpressionUUID->"d1b2a5ce-eb06-48be-bfa4-cbaf20b8f0d8",
+ CellID->415694149]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

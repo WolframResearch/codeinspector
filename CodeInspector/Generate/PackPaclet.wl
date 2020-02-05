@@ -1,4 +1,4 @@
-BeginPackage["Lint`Generate`PackPaclet`"]
+BeginPackage["CodeInspector`Generate`PackPaclet`"]
 
 Begin["`Private`"]
 

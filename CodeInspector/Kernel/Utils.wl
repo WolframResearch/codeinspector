@@ -1,4 +1,4 @@
-BeginPackage["Lint`Utils`"]
+BeginPackage["CodeInspector`Utils`"]
 
 
 expandLineNumberExclusions
@@ -26,10 +26,10 @@ uppercaseSymbolNameQ
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Utils`"]
-Needs["Lint`"]
-Needs["Lint`Format`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`Format`"]
 
 
 $shortenLimit = 100
@@ -65,7 +65,7 @@ severityToInteger["Fatal"] = 4
 (*
 return the highest severity from list of Lints
 *)
-severityColor[lints:{_Lint..}] :=
+severityColor[lints:{_InspectionObject..}] :=
 Module[{maxSeverity},
 	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
 	Switch[maxSeverity,
@@ -76,7 +76,7 @@ Module[{maxSeverity},
 ]
 
 
-severityColorNewStyle[lints:{_Lint..}] :=
+severityColorNewStyle[lints:{_InspectionObject..}] :=
 Module[{maxSeverity},
 	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
 	Switch[maxSeverity,
@@ -124,7 +124,7 @@ Module[{containsDoubleTicks, containsDoubleStars},
 	containsDoubleStars = StringContainsQ[s, "**"];
 
 	Which[
-		containsDoubleTicks && containsDoubleStars, Message[Lint::cannotFormat, s];shorten[s],
+		containsDoubleTicks && containsDoubleStars, Message[InspectionObject::cannotFormat, s];shorten[s],
 		containsDoubleTicks, "**" <> shorten[s] <> "**",
 		True, "``" <> shorten[s] <> "``"
 	]
@@ -139,7 +139,7 @@ shadows[lint1, lint2] => True means lint1 is less severe and is contained by lin
 Get rid of Lints that have root causes that are also being reported
 Only report the root cause
 *)
-shadows[lint1:Lint[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:Lint[lint2Tag_, _, lint2Severity_, lint2Data_]] :=
+shadows[lint1:InspectionObject[lint1Tag_, _, lint1Severity__, lint1Data_], lint2:InspectionObject[lint2Tag_, _, lint2Severity_, lint2Data_]] :=
 	Which[
 		lint1 === lint2,
 			False

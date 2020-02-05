@@ -1,15 +1,15 @@
-BeginPackage["Lint`AggregateRules`"]
+BeginPackage["CodeInspector`AggregateRules`"]
 
 $DefaultAggregateRules
 
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Utils`"]
-Needs["Lint`"]
-Needs["Lint`Format`"]
-Needs["Lint`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`Format`"]
+Needs["CodeInspector`Utils`"]
 
 
 
@@ -138,9 +138,9 @@ BinaryNode[Optional, {PatternBlankSequenceNode[PatternBlankSequence, {_, _}, _],
 BinaryNode[Optional, {PatternBlankNullSequenceNode[PatternBlankNullSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
 
 
-
+(*
 StartOfLineNode[Information, _, _] -> scanInformation,
-
+*)
 
 
 (*
@@ -277,7 +277,7 @@ Module[{agg, node, children, data, issues, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["PrefixDifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["PrefixDifferentLine", "Operands are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -333,14 +333,14 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs},
   lowConfSrcs = DeleteDuplicates[lowConfSrcs];
 
   Scan[(
-    AppendTo[issues, Lint["PostfixDifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["PostfixDifferentLine", "Operands are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, highConfSrcs];
 
   Scan[(
-    AppendTo[issues, Lint["PostfixDifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["PostfixDifferentLine", "Operands are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.85
       |>]];
@@ -408,7 +408,7 @@ Module[{agg, node, children, data, issues, pairs, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Error",
+    AppendTo[issues, InspectionObject["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Error",
       <|Source -> #,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
@@ -515,7 +515,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
   errorSrcs = DeleteDuplicates[errorSrcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Warning",
+    AppendTo[issues, InspectionObject["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Warning",
       <|Source->#,
         ConfidenceLevel -> 0.85,
         CodeActions -> {
@@ -524,7 +524,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     )&, warningSrcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Error",
+    AppendTo[issues, InspectionObject["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Error",
       <|Source->#,
         ConfidenceLevel -> 0.85,
         CodeActions -> {
@@ -577,7 +577,7 @@ Module[{agg, node, data, issues, children, pairs, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["ImplicitTimesStrings", "Suspicious implicit ``Times`` with strings.", "Warning",
+    AppendTo[issues, InspectionObject["ImplicitTimesStrings", "Suspicious implicit ``Times`` with strings.", "Warning",
       <|Source->#,
         ConfidenceLevel -> 0.75,
         CodeActions -> {
@@ -635,7 +635,7 @@ Module[{agg, node, children, data, issues, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.85
       |>]];
@@ -689,7 +689,7 @@ Module[{agg, node, children, data, issues, srcs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["TernaryTildeDifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["TernaryTildeDifferentLine", "Operands are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -728,7 +728,7 @@ Catch[
 
         src = node[[2, 2, 3, Key[Source] ]];
 
-        AppendTo[issues, Lint["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
+        AppendTo[issues, InspectionObject["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
           <|  Source -> src,
               ConfidenceLevel -> 0.95,
               CodeActions -> {
@@ -745,7 +745,7 @@ Catch[
         *)
         src = node[[2, 4, 3, Key[Source] ]];
 
-        AppendTo[issues, Lint["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
+        AppendTo[issues, InspectionObject["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
           <|  Source -> src,
               ConfidenceLevel -> 0.95,
               CodeActions -> {
@@ -792,7 +792,7 @@ Catch[
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["SpanDifferentLine", "Operands for ``;;`` are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["SpanDifferentLine", "Operands for ``;;`` are on different lines.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -857,7 +857,7 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis, semi},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, Lint["DifferentLine", "Operand for ``;`` is on different line.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operand for ``;`` is on different line.", "Warning",
       <|Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -866,7 +866,7 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis, semi},
 
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
-  Scan[(AppendTo[issues, Lint["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
+  Scan[(AppendTo[issues, InspectionObject["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
 
 
   issues
@@ -937,7 +937,7 @@ Catch[
                                             LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
 
       src = data[Source];
-      AppendTo[issues, Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.", "Error",
+      AppendTo[issues, InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.", "Error",
         <|
           Source->src,
           ConfidenceLevel -> 0.95,
@@ -966,7 +966,7 @@ Catch[
                                                     patternTest,
                                                     LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>];
 
-  AppendTo[issues, Lint["SuspiciousPatternTestCall", "Suspicious use of ``?``.", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions -> {
+  AppendTo[issues, InspectionObject["SuspiciousPatternTestCall", "Suspicious use of ``?``.", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions -> {
           CodeAction["Wrap parens around RHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode1|>],
           CodeAction["Wrap parens around LHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode2|>] } |>]];
 
@@ -996,23 +996,23 @@ Catch[
   *)
   Switch[patternTestArg2,
     LeafNode[Symbol, "Association", _],
-      AppendTo[issues, Lint["AssociationCall", "Calling ``Association`` as a function.\n\
+      AppendTo[issues, InspectionObject["AssociationCall", "Calling ``Association`` as a function.\n\
 Did you mean ``AssociationQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "String", _],
-      AppendTo[issues, Lint["StringCall", "Calling ``String`` as a function.\n\
+      AppendTo[issues, InspectionObject["StringCall", "Calling ``String`` as a function.\n\
 Did you mean ``StringQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "Integer", _],
-      AppendTo[issues, Lint["IntegerCall", "Calling ``Integer`` as a function.\n\
+      AppendTo[issues, InspectionObject["IntegerCall", "Calling ``Integer`` as a function.\n\
 Did you mean ``IntegerQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "Real", _],
-      AppendTo[issues, Lint["RealCall", "Calling ``Real`` as a function.\n\
+      AppendTo[issues, InspectionObject["RealCall", "Calling ``Real`` as a function.\n\
 Did you mean ``RealQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     LeafNode[Symbol, "Failure", _],
-      AppendTo[issues, Lint["FailureCall", "Calling ``Failure`` as a function.\n\
+      AppendTo[issues, InspectionObject["FailureCall", "Calling ``Failure`` as a function.\n\
 Did you mean ``FailureQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
     ,
     _,
@@ -1115,7 +1115,7 @@ Catch[
   ruleHead = rule[[1]];
   ruleChild2 = rule[[2]][[3]];
 
-  {Lint["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
+  {InspectionObject["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low.\n\
 ``" <> SymbolName[ruleHead] <> "`` " <> format[ToInputFormString[rule]] <> " is inside a ``Function``.\n\
 Did you mean " <>
@@ -1155,7 +1155,7 @@ Catch[
   patternTestChildren = patternTest[[2]];
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[3]];
-  {Lint["SuspiciousPatternTestFunction", "Suspicious use of ``&``.\n\
+  {InspectionObject["SuspiciousPatternTestFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
 ``?`` is inside a ``Function``.\n\
 Did you mean " <>
@@ -1205,7 +1205,7 @@ Catch[
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[2]];
 
-  {Lint["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
+  {InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
 Call to ``PatternTest`` " <> format[ToInputFormString[call]] <> " is inside a ``Function``.\n\
 Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
@@ -1324,7 +1324,7 @@ Catch[
     Throw[{}]
   ];
 
-  {Lint["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
+  {InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
 Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
                         pattern,
                         LeafNode[Token`Fake`PatternColon, ":", <||>],
@@ -1347,7 +1347,7 @@ Module[{agg, node, data, children, tok},
 
   tok = children[[1]];
 
-  {Lint["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "``.", "Error", <| data, ConfidenceLevel -> 0.55 |>]}
+  {InspectionObject["SuspiciousInformation", "Suspicious use of ``" <> tok["String"] <> "``.", "Error", <| data, ConfidenceLevel -> 0.55 |>]}
 ]
 
 
@@ -1387,7 +1387,7 @@ Catch[
 
   stringExpArgRest = children[[3;;;;2]];
 
-  {Lint["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``. The precedence of ``|`` is higher than ``~~``.\n\
+  {InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``. The precedence of ``|`` is higher than ``~~``.\n\
 Did you mean " <> format[ToInputFormString[InfixNode[Alternatives,
                                           Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
                                                                     LeafNode[Token`OpenParen, "(", <||>],
@@ -1428,7 +1428,7 @@ Catch[
   (*
   Middle expression is usually a symbol.
   *)
-  {Lint["ExpectedSymbol", "Suspicious syntax.", "Warning", <| data, ConfidenceLevel -> 0.55 |>]}
+  {InspectionObject["ExpectedSymbol", "Suspicious syntax.", "Warning", <| data, ConfidenceLevel -> 0.55 |>]}
 ]]
 
 
@@ -1449,7 +1449,7 @@ Module[{agg, node, data, issues, op},
 
   issues = {};
 
-  AppendTo[issues, Lint["PrefixPlus", "Unexpected prefix ``Plus``.", "Remark", <|Source->data[Source], ConfidenceLevel->0.9|>]];
+  AppendTo[issues, InspectionObject["PrefixPlus", "Unexpected prefix ``Plus``.", "Remark", <|Source->data[Source], ConfidenceLevel->0.9|>]];
 
   issues
 ]
@@ -1548,7 +1548,7 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
     src = sym[[3, Key[Source] ]];
 
-    AppendTo[issues, Lint["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
+    AppendTo[issues, InspectionObject["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
                       <|  Source->src,
                           ConfidenceLevel->0.95|>]];
     ,
@@ -1556,7 +1556,7 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
     src = sym[[3, Key[Source] ]];
 
-    AppendTo[issues, Lint["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
+    AppendTo[issues, InspectionObject["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
                       <|  Source->src,
                           ConfidenceLevel->0.80|>]];
   ];

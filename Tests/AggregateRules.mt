@@ -1,13 +1,13 @@
 
-Needs["Lint`"]
+Needs["CodeInspector`"]
 
 (*
 ImplicitTimesAcrossLines
 *)
 TestMatch[
-	LintString["{ a\nb }"]
+	CodeInspect["{ a\nb }"]
 	,
-	{Lint["ImplicitTimesAcrossLines", _, _, _]}
+	{InspectionObject["ImplicitTimesAcrossLines", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-D9Q1R2"
 ]
@@ -16,9 +16,9 @@ TestMatch[
 ImplicitTimesBlanks
 *)
 TestMatch[
-	LintString["{ ____ }"]
+	CodeInspect["{ ____ }"]
 	,
-	{Lint["ImplicitTimesBlanks", _, _, _]}
+	{InspectionObject["ImplicitTimesBlanks", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-M3F3T8"
 ]
@@ -28,9 +28,9 @@ TestMatch[
 DotDifferentLine
 *)
 TestMatch[
-	LintString["{ a.\nb }"]
+	CodeInspect["{ a.\nb }"]
 	,
-	{Lint["DotDifferentLine", _, _, _]}
+	{InspectionObject["DotDifferentLine", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-U4K0M9"
 ]
@@ -40,9 +40,9 @@ TestMatch[
 SuspiciousSpan
 *)
 TestMatch[
-	LintString[" a;; "]
+	CodeInspect[" a;; "]
 	,
-	{OrderlessPatternSequence[ Lint["SuspiciousSpan", _, _, _], Lint["EndOfLine", _, _, _] ]}
+	{ InspectionObject["SuspiciousSpan", _, _, _] }
 	,
 	TestID->"AggregateRules-20190522-S9S6W2"
 ]
@@ -52,9 +52,9 @@ TestMatch[
 StraySemicolon
 *)
 TestMatch[
-	LintString["f[ a;b; ;x ]"]
+	CodeInspect["f[ a;b; ;x ]"]
 	,
-	{ Lint["UnexpectedSemicolon", _, "Warning", _] }
+	{ InspectionObject["UnexpectedSemicolon", _, "Warning", _] }
 	,
 	TestID->"AggregateRules-20190630-H1H8N7"
 ]
@@ -64,10 +64,10 @@ TestMatch[
 DifferentLine
 *)
 TestMatch[
-	LintString["(f[]
+	CodeInspect["(f[]
 ; Throw[$Failed, $tag])"]
 	,
-	{ Lint["DifferentLine", _, "Warning", _] }
+	{ InspectionObject["DifferentLine", _, "Warning", _] }
 	,
 	TestID->"AggregateRules-20190522-I8L1E6"
 ]
@@ -82,9 +82,9 @@ TestMatch[
 SuspiciousPatternTestCall
 *)
 TestMatch[
-	LintString["a_?b[x]"]
+	CodeInspect["a_?b[x]"]
 	,
-	{Lint["SuspiciousPatternTestCall", _, _, _]}
+	{InspectionObject["SuspiciousPatternTestCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-X8Z0P3"
 ]
@@ -97,9 +97,9 @@ TestMatch[
 AssociationCall
 *)
 TestMatch[
-	LintString["a?Association"]
+	CodeInspect["a?Association"]
 	,
-	{Lint["AssociationCall", _, _, _]}
+	{InspectionObject["AssociationCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-Y0P7H3"
 ]
@@ -108,9 +108,9 @@ TestMatch[
 StringCall
 *)
 TestMatch[
-	LintString["a?String"]
+	CodeInspect["a?String"]
 	,
-	{Lint["StringCall", _, _, _]}
+	{InspectionObject["StringCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-N1P9K9"
 ]
@@ -119,9 +119,9 @@ TestMatch[
 IntegerCall
 *)
 TestMatch[
-	LintString["a?Integer"]
+	CodeInspect["a?Integer"]
 	,
-	{Lint["IntegerCall", _, _, _]}
+	{InspectionObject["IntegerCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-I2E9A2"
 ]
@@ -130,9 +130,9 @@ TestMatch[
 RealCall
 *)
 TestMatch[
-	LintString["a?Real"]
+	CodeInspect["a?Real"]
 	,
-	{Lint["RealCall", _, _, _]}
+	{InspectionObject["RealCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-S0H6K7"
 ]
@@ -141,9 +141,9 @@ TestMatch[
 FailureCall
 *)
 TestMatch[
-	LintString["a?Failure"]
+	CodeInspect["a?Failure"]
 	,
-	{Lint["FailureCall", _, _, _]}
+	{InspectionObject["FailureCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-C8C7F4"
 ]
@@ -156,15 +156,15 @@ SuspiciousRuleFunction
 *)
 
 TestMatch[
-	LintString[" a->b& "]
+	CodeInspect[" a->b& "]
 	,
-	{Lint["SuspiciousRuleFunction", _, _, _]}
+	{InspectionObject["SuspiciousRuleFunction", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-G2J4D6"
 ]
 
 TestMatch[
-	LintString["(a->b&)"]
+	CodeInspect["(a->b&)"]
 	,
 	{}
 	,
@@ -172,7 +172,7 @@ TestMatch[
 ]
 
 TestMatch[
-	LintString["a->b& @ x"]
+	CodeInspect["a->b& @ x"]
 	,
 	{}
 	,
@@ -181,7 +181,7 @@ TestMatch[
 
 
 TestMatch[
-	LintString["Map[a->b&, x]"]
+	CodeInspect["Map[a->b&, x]"]
 	,
 	{}
 	,
@@ -189,7 +189,7 @@ TestMatch[
 ]
 
 TestMatch[
-	LintString["a->b&[x]"]
+	CodeInspect["a->b&[x]"]
 	,
 	{}
 	,
@@ -208,9 +208,9 @@ TestMatch[
 SuspiciousPatternTestFunction
 *)
 TestMatch[
-	LintString[" a?b& "]
+	CodeInspect[" a?b& "]
 	,
-	{Lint["SuspiciousPatternTestFunction", _, _, _]}
+	{InspectionObject["SuspiciousPatternTestFunction", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-U6J6X9"
 ]
@@ -222,9 +222,9 @@ TestMatch[
 SuspiciousPatternTestCallFunction
 *)
 TestMatch[
-	LintString[" a?b[#]& "]
+	CodeInspect[" a?b[#]& "]
 	,
-	{Lint["SuspiciousPatternTestCallFunction", _, _, _]}
+	{InspectionObject["SuspiciousPatternTestCallFunction", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-W2H4Z1"
 ]
@@ -240,9 +240,9 @@ TestMatch[
 SuspiciousPatternBlankOptional
 *)
 TestMatch[
-	LintString[" a_:_ "]
+	CodeInspect[" a_:_ "]
 	,
-	{Lint["SuspiciousPatternBlankOptional", _, _, _]}
+	{InspectionObject["SuspiciousPatternBlankOptional", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-T7Q3D0"
 ]
@@ -253,9 +253,9 @@ example taken from:
 https://bugs.wolfram.com/show?number=373945
 *)
 TestMatch[
-	LintString["checkSystemID[sid_: ($platformPattern | Automatic)] := sid"]
+	CodeInspect["checkSystemID[sid_: ($platformPattern | Automatic)] := sid"]
 	,
-	{Lint["SuspiciousPatternBlankOptional", _, _, _]}
+	{InspectionObject["SuspiciousPatternBlankOptional", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-B2O7A2"
 ]
@@ -279,21 +279,21 @@ SyntaxError ExpectedOperand:
 *)
 
 TestMatch[
-	LintString["{ + }"]
+	CodeInspect["{ + }"]
 	,
 	{
-		Lint["ExpectedOperand", _, "Fatal", _],
-		Lint["PrefixPlus", _, "Warning", _]}
+		InspectionObject["ExpectedOperand", _, "Fatal", _],
+		InspectionObject["PrefixPlus", _, "Remark", _]}
 	,
 	TestID->"AggregateRules-20190523-C2Y2X2"
 ]
 
 TestMatch[
-	LintString["{ * }"]
+	CodeInspect["{ * }"]
 	,
 	{
-		Lint["ExpectedOperand", _, "Fatal", _],
-		Lint["ExpectedOperand", _, "Fatal", _]}
+		InspectionObject["ExpectedOperand", _, "Fatal", _],
+		InspectionObject["ExpectedOperand", _, "Fatal", _]}
 	,
 	TestID->"AggregateRules-20191212-O0N6L9"
 ]
@@ -305,9 +305,9 @@ SyntaxError NonAssociative:
 *)
 
 TestMatch[
-	LintString["a ? b ? c"]
+	CodeInspect["a ? b ? c"]
 	,
-	{Lint["NonAssociativePatternTest", _, _, _]}
+	{InspectionObject["NonAssociativePatternTest", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-W9O8V3"
 ]
@@ -318,9 +318,9 @@ SyntaxError ExpectedTilde:
 *)
 
 TestMatch[
-	LintString["a ~f"]
+	CodeInspect["a ~f"]
 	,
-	{Lint["ExpectedTilde", _, _, _]}
+	{InspectionObject["ExpectedTilde", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-N4B7X7"
 ]
@@ -332,9 +332,9 @@ SyntaxError ExpectedSymbol:
 *)
 
 TestMatch[
-	LintString["1:2"]
+	CodeInspect["1:2"]
 	,
-	{Lint["ColonError", _, _, _]}
+	{InspectionObject["ColonError", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-F9Z1T6"
 ]
@@ -344,9 +344,9 @@ SyntaxError ExpectedSet:
 *)
 
 TestMatch[
-	LintString["a /: b * c"]
+	CodeInspect["a /: b * c"]
 	,
-	{Lint["ExpectedSet", _, _, _]}
+	{InspectionObject["ExpectedSet", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-A6O0J4"
 ]
@@ -356,9 +356,9 @@ SyntaxError ExpectedPossible:
 *)
 
 TestMatch[
-	LintString["&"]
+	CodeInspect["&"]
 	,
-	{Lint["ExpectedOperand", _, _, _]}
+	{InspectionObject["ExpectedOperand", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-H9C7R8"
 ]
@@ -367,7 +367,7 @@ TestMatch[
 
 
 TestMatch[
-	LintString["8 Pi*\"M\""]
+	CodeInspect["8 Pi*\"M\""]
 	,
 	{}
 	,

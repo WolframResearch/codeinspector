@@ -1,33 +1,28 @@
-BeginPackage["Lint`ImplicitTimes`"]
+BeginPackage["CodeInspector`ImplicitTimes`"]
 
-ImplicitTimesFile
-
-ImplicitTimesString
+CodeInspectImplicitTimes
 
 
-
-ImplicitTimesFileReport
-
-ImplicitTimesStringReport
+CodeInspectImplicitTimesSummarize
 
 
 
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Abstract`"]
-Needs["Lint`"]
-Needs["Lint`Report`"]
-Needs["Lint`Format`"]
-Needs["Lint`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Abstract`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`Summarize`"]
+Needs["CodeInspector`Format`"]
+Needs["CodeInspector`Utils`"]
 
 
 
 
-ImplicitTimesFile::usage = "ImplicitTimesFile[file, options] returns a list of implicit times in file."
+CodeInspectImplicitTimes::usage = "CodeInspectImplicitTimes[code] returns a list of implicit times in code."
 
-Options[ImplicitTimesFile] = {
+Options[CodeInspectImplicitTimes] = {
   PerformanceGoal -> "Speed"
 }
 
@@ -37,7 +32,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-ImplicitTimesFile[File[file_String], OptionsPattern[]] :=
+CodeInspectImplicitTimes[File[file_String], OptionsPattern[]] :=
 Catch[
  Module[{full, times, performanceGoal, cst, agg},
 
@@ -57,7 +52,7 @@ Catch[
      ];
     ];
 
-    cst = ConcreteParseFile[File[full]];
+    cst = CodeConcreteParse[File[full]];
 
     If[FailureQ[cst],
       Throw[cst]
@@ -74,17 +69,11 @@ Catch[
 
 
 
-ImplicitTimesString::usage = "ImplicitTimesString[string, options] returns a list of implicit times in string."
-
-Options[ImplicitTimesString] = {
-  PerformanceGoal -> "Speed"
-}
-
-ImplicitTimesString[string_, OptionsPattern[]] :=
+CodeInspectImplicitTimes[string_String, OptionsPattern[]] :=
 Catch[
 Module[{times, cst, agg},
 
-  cst = ConcreteParseString[string];
+  cst = CodeConcreteParse[string];
 
   If[FailureQ[cst],
     Throw[cst]
@@ -99,14 +88,14 @@ Module[{times, cst, agg},
 
 
 
-ImplicitTimesFileReport::usage = "ImplicitTimesFileReport[file, implicitTimes, options] returns a LintedFile object."
+CodeInspectImplicitTimesSummarize::usage = "CodeInspectImplicitTimesSummarize[code] returns an inspection summary object."
 
-Options[ImplicitTimesFileReport] = {
+Options[CodeInspectImplicitTimesSummarize] = {
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
 
-ImplicitTimesFileReport[file_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTimesSummarize[File[file_String], implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
 Catch[
 Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines, bytes, str},
 
@@ -125,7 +114,7 @@ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, li
   ];
 
   If[implicitTimes === Automatic,
-    implicitTimes = ImplicitTimesFile[full];
+    implicitTimes = CodeImplicitTimes[File[full]];
   ];
 
   bytes = Import[full, "Byte"];
@@ -135,20 +124,14 @@ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, li
   lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
   lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
-  LintedFile[full, lintedLines]
+  InspectedFileObject[full, lintedLines]
 ]]
 
 
 
 
-ImplicitTimesStringReport::usage = "ImplicitTimesStringReport[string, implicitTimes, options] returns a LintedString object."
 
-Options[ImplicitTimesStringReport] = {
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {}
-}
-
-ImplicitTimesStringReport[string_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTimesSummarize[string_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
 Catch[
 Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
 
@@ -162,13 +145,13 @@ Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLi
   ];
 
   If[implicitTimes === Automatic,
-    implicitTimes = ImplicitTimesString[string];
+    implicitTimes = CodeInspectImplicitTimes[string];
   ];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
   lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
-  LintedString[string, lintedLines]
+  InspectedStringObject[string, lintedLines]
 ]]
 
 
@@ -192,7 +175,7 @@ Module[{implicitTimes},
 $markupLimit = 100
 
 
-$color = severityColor[{Lint["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}];
+$color = severityColor[{InspectionObject["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}];
 
 
 modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
@@ -366,7 +349,7 @@ Catch[
 
    Table[
 
-     LintedLine[lines[[i]], i, hashes[[i]], {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
+     InspectedLineObject[lines[[i]], i, hashes[[i]], {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
                                   modify[lines[[i]], {starts, ends, infixs}, i]},
                                   {}]
     ,
@@ -415,7 +398,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
         Print["line: ", line];
       ];
 
-      tokens = TokenizeString[line];
+      tokens = CodeTokenize[line];
 
       If[$Debug,
         Print["tokens: ", tokens];

@@ -1,4 +1,4 @@
-BeginPackage["Lint`Report`"]
+BeginPackage["CodeInspector`Summarize`"]
 
 ListifyLine
 
@@ -19,14 +19,14 @@ $Underlight
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Utils`"]
-Needs["Lint`"]
-Needs["Lint`AbstractRules`"]
-Needs["Lint`AggregateRules`"]
-Needs["Lint`ConcreteRules`"]
-Needs["Lint`Format`"]
-Needs["Lint`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`AbstractRules`"]
+Needs["CodeInspector`AggregateRules`"]
+Needs["CodeInspector`ConcreteRules`"]
+Needs["CodeInspector`Format`"]
+Needs["CodeInspector`Utils`"]
 
 
 $DefaultTagExclusions = {}
@@ -59,9 +59,9 @@ $existsTest = Not @* KeyExistsQ[ConfidenceLevel]
 
 
 
-LintFileReport::usage = "LintFileReport[file, lints] returns a LintedFile object."
+CodeInspectSummarize::usage = "CodeInspectSummarize[code] returns an inspection summary object."
 
-Options[LintFileReport] = {
+Options[CodeInspectSummarize] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
@@ -85,9 +85,9 @@ foo[]  returns Automatic
 Related bugs: 338218
 *)
 
-lintsInPat = If[$VersionNumber >= 11.2, {___Lint}, _]
+lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
-LintFileReport[File[file_String], lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectSummarize[File[file_String], lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   lintedLines, unusedLineHashExclusions, hashes, confidence, performanceGoal, concreteRules,
@@ -135,7 +135,7 @@ Catch[
    ];
 
   If[lints === Automatic,
-    lints = LintFile[File[full],
+    lints = CodeInspect[File[full],
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
@@ -152,35 +152,19 @@ Catch[
     hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
     unusedLineHashExclusions = Complement[lineHashExclusions, hashes];
     If[!empty[unusedLineHashExclusions],
-      Message[LintFile::unusedLineHashExclusions, full, unusedLineHashExclusions];
+      Message[CodeInspect::unusedLineHashExclusions, full, unusedLineHashExclusions];
     ];
   ];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
-  LintedFile[full, lintedLines]
+  InspectedFileObject[full, lintedLines]
 ]]
 
 
 
 
 
-LintStringReport::usage = "LintStringReport[string, lints] returns a LintedString object."
-
-Options[LintStringReport] = {
-  PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
-  "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules,
-  CharacterEncoding -> "UTF-8",
-  "TagExclusions" -> $DefaultTagExclusions,
-  "SeverityExclusions" -> $DefaultSeverityExclusions,
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {},
-  ConfidenceLevel :> $ConfidenceLevel
-}
-
-
-LintStringReport[string_String, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules},
@@ -223,7 +207,7 @@ Catch[
  ];
 
  If[lints === Automatic,
-    lints = LintString[string,
+    lints = CodeInspect[string,
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
@@ -234,29 +218,14 @@ Catch[
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
-  LintedString[string, lintedLines]
+  InspectedStringObject[string, lintedLines]
 ]]
 
 
 
 
-LintBytesReport::usage = "LintBytesReport[bytes, lints] returns a LintedBytes object."
 
-Options[LintBytesReport] = {
-  PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
-  "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules,
-  CharacterEncoding -> "UTF-8",
-  "TagExclusions" -> $DefaultTagExclusions,
-  "SeverityExclusions" -> $DefaultSeverityExclusions,
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {},
-  ConfidenceLevel :> $ConfidenceLevel
-}
-
-
-LintBytesReport[bytes_List, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
   confidence, string, performanceGoal, concreteRules, aggregateRules, abstractRules},
@@ -295,7 +264,7 @@ Catch[
 
 
  If[lints === Automatic,
-    lints = LintBytes[bytes,
+    lints = CodeInspect[bytes,
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
@@ -308,7 +277,7 @@ Catch[
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
-  LintedString[string, lintedLines]
+  InspectedBytesObject[string, lintedLines]
 ]]
 
 
@@ -316,17 +285,17 @@ Catch[
 
 
 
-Lint::sourceless = "There are Lints without Source data. This can happen when some abstract syntax is linted. \
-These Lints cannot be reported. `1`"
+InspectionObject::sourceless = "There are InspectionObjects without Source data. This can happen when some abstract syntax is inspected. \
+These InspectionObjects cannot be reported. `1`"
 
-LintedLine::truncation = "Truncation limit reached. Linted line may not display properly."
+InspectedLineObject::truncation = "Truncation limit reached. Inspected line may not display properly."
 
 
 
 (*
 Return a list of LintedLines
 *)
-lintLinesReport[linesIn:{___String}, lintsIn:{___Lint}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List, confidence_] :=
+lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List, confidence_] :=
 Catch[
 Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
@@ -342,7 +311,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   Certain Lints may not have Source information attached
   That is fine, but those Lints cannot be reported
   *)
-  sourceLessLints = Cases[lints, Lint[_, _, _, data_ /; !MemberQ[Keys[data], Source]]];
+  sourceLessLints = Cases[lints, InspectionObject[_, _, _, data_ /; !MemberQ[Keys[data], Source]]];
 
   (*
   If[!empty[sourceLessLints],
@@ -393,7 +362,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
 
 
   If[!empty[tagExclusions],
-    lints = DeleteCases[lints, Lint[Alternatives @@ tagExclusions, _, _, _]];
+    lints = DeleteCases[lints, InspectionObject[Alternatives @@ tagExclusions, _, _, _]];
     If[$Debug,
       Print["lints: ", lints];
     ];
@@ -404,7 +373,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   ];
 
   If[!empty[severityExclusions],
-    lints = DeleteCases[lints, Lint[_, _, Alternatives @@ severityExclusions, _]];
+    lints = DeleteCases[lints, InspectionObject[_, _, Alternatives @@ severityExclusions, _]];
     If[$Debug,
       Print["lints: ", lints];
     ];
@@ -419,9 +388,9 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   *)
   lintsExcludedByLineNumber = Catenate[KeyValueMap[Function[{line, tags},
       If[tags === All,
-        Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
+        Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
         ,
-        Cases[lints, Lint[tag_ /; MemberQ[tags, tag], _, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
+        Cases[lints, InspectionObject[tag_ /; MemberQ[tags, tag], _, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
       ]
     ],
     lineNumberExclusions]];
@@ -436,16 +405,16 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   ];
 
 
-  badLints = Cases[lints, Lint[_, _, _, data_?$existsTest]];
+  badLints = Cases[lints, InspectionObject[_, _, _, data_?$existsTest]];
   If[!empty[badLints],
-    Message[Lint::confidence, badLints]
+    Message[InspectionObject::confidence, badLints]
   ];
 
   confidenceTest = GreaterEqualThan[confidence];
-  lints = Cases[lints, Lint[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
+  lints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
 
   confidenceTest = LessEqualThan[$MaxConfidenceLevel];
-  lints = Cases[lints, Lint[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
+  lints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
 
   (*
   If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
@@ -477,12 +446,12 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   *)
 
   If[truncated,
-    Message[LintedLine::truncation]
+    Message[InspectedLineObject::truncation]
   ];
 
-   sources = Cases[lints, Lint[_, _, _, KeyValuePattern[Source -> src_]] :> src];
+   sources = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> src_]] :> src];
 
-   additionalSources = Join @@ Cases[lints, Lint[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_]] :> srcs];
+   additionalSources = Join @@ Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_]] :> srcs];
 
    sources = sources ~Join~ additionalSources;
 
@@ -543,7 +512,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
               lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               lints = Union[Flatten[Values[lintsPerColumn]]]}
             ,
-            LintedLine[lineSource, lineNumber, hash, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+            InspectedLineObject[lineSource, lineNumber, hash, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength]
           ]
           ,
           With[
@@ -555,12 +524,12 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
               lints = Union[Flatten[Values[lintsPerColumn]]]
             }
             ,
-            LintedLine[lineSource, lineNumber, hash, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+            InspectedLineObject[lineSource, lineNumber, hash, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
           ]
         ]
         ,
         (* elided *)
-        LintedLine["", i, "", {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True]
+        InspectedLineObject["", i, "", {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True]
       ]
     ,
     {i, linesToModify}

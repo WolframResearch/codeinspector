@@ -1,5 +1,5 @@
 
-Needs["Lint`"]
+Needs["CodeInspector`"]
 
 
 
@@ -7,9 +7,9 @@ Needs["Lint`"]
 ImplicitTimesAcrossLines
 *)
 TestMatch[
-	LintString["{ a\nb }"]
+	CodeInspect["{ a\nb }"]
 	,
-	{ Lint["ImplicitTimesAcrossLines", _, _, _] }
+	{ InspectionObject["ImplicitTimesAcrossLines", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190522-D9Q1R2"
 ]
@@ -20,9 +20,9 @@ TestMatch[
 DotDifferentLine
 *)
 TestMatch[
-	LintString["{ a.\nb }"]
+	CodeInspect["{ a.\nb }"]
 	,
-	{ Lint["DotDifferentLine", _, _, _] }
+	{ InspectionObject["DotDifferentLine", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190522-U4K0M9"
 ]
@@ -31,9 +31,9 @@ TestMatch[
 
 
 TestMatch[
-	LintString["{ a;;\nb }"]
+	CodeInspect["{ a;;\nb }"]
 	,
-	{ Lint["EndOfLine", _, "Warning", _], Lint["SpanDifferentLine", _, "Warning", _] }
+	{ InspectionObject["EndOfLine", _, "Warning", _], InspectionObject["SpanDifferentLine", _, "Warning", _] }
 	,
 	TestID->"ConcreteRules-20190522-S2L6J4"
 ]
@@ -44,9 +44,9 @@ TestMatch[
 DifferentLine
 *)
 TestMatch[
-	LintString["(f[]\n; Throw[$Failed, $tag])"]
+	CodeInspect["(f[]\n; Throw[$Failed, $tag])"]
 	,
-	{ Lint["DifferentLine", _, "Warning", _] }
+	{ InspectionObject["DifferentLine", _, "Warning", _] }
 	,
 	TestID->"ConcreteRules-20190522-I8L1E6"
 ]
@@ -57,17 +57,17 @@ DifferentLine:
 *)
 
 TestMatch[
-	LintString["-\na"]
+	CodeInspect["-\na"]
 	,
-	{Lint["PrefixDifferentLine", _, _, _]}
+	{InspectionObject["PrefixDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-Y8O9L2"
 ]
 
 TestMatch[
-	LintString["{ a\n! }"]
+	CodeInspect["{ a\n! }"]
 	,
-	{Lint["PostfixDifferentLine", _, _, _]}
+	{InspectionObject["PostfixDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-R2X2T0"
 ]
@@ -87,35 +87,35 @@ TestMatch[
 *)
 
 TestMatch[
-	LintString["{ a\n;; }"]
+	CodeInspect["{ a\n;; }"]
 	,
-	{Lint["SpanDifferentLine", _, _, _]}
+	{InspectionObject["SpanDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-E0L3O1"
 ]
 
 TestMatch[
-	LintString["{ a~\nf~b } "]
+	CodeInspect["{ a~\nf~b } "]
 	,
-	{Lint["TernaryTildeDifferentLine", _, _, _]}
+	{InspectionObject["TernaryTildeDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-S5U4W8"
 ]
 
 
 TestMatch[
-	LintString["{ a~f~\nb } "]
+	CodeInspect["{ a~f~\nb } "]
 	,
-	{Lint["TernaryTildeDifferentLine", _, _, _]}
+	{}
 	,
 	TestID->"ConcreteRules-20191212-Y2G4G8"
 ]
 
 
 TestMatch[
-	LintString["<<\na"]
+	CodeInspect["<<\na"]
 	,
-	{Lint["PrefixDifferentLine", _, _, _]}
+	{InspectionObject["PrefixDifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20191212-S0K7T1"
 ]
@@ -127,18 +127,18 @@ ImplicitTimesSpan
 *)
 
 TestMatch[
-	LintString[";;b;;"]
+	CodeInspect[";;b;;"]
 	,
-	{ OrderlessPatternSequence[ Lint["UnexpectedImplicitTimes", _, _, _], Lint["EndOfLine", _, _, _] ] }
+	{ InspectionObject["UnexpectedImplicitTimes", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190523-I1D9N0"
 ]
 
 
 TestMatch[
-	LintString["a;;b;;"]
+	CodeInspect["a;;b;;"]
 	,
-	{ OrderlessPatternSequence[ Lint["UnexpectedImplicitTimes", _, _, _], Lint["EndOfLine", _, _, _] ] }
+	{ InspectionObject["UnexpectedImplicitTimes", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190523-L7M6K3"
 ]

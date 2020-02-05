@@ -1,15 +1,15 @@
-BeginPackage["Lint`ConcreteRules`"]
+BeginPackage["CodeInspector`ConcreteRules`"]
 
 $DefaultConcreteRules
 
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["AST`Utils`"]
-Needs["Lint`"]
-Needs["Lint`Format`"]
-Needs["Lint`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`Format`"]
+Needs["CodeInspector`Utils`"]
 
 
 
@@ -76,7 +76,7 @@ Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
     While[i < Length[children],
       Switch[children[[i]],
         LeafNode[Token`Newline, _, _],
-          AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+          AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
             <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
                ConfidenceLevel -> 0.95 |>]
           ];
@@ -108,7 +108,7 @@ Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
         (*
         There is a newline after some other trivia
         *)
-        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+        AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
           <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
              ConfidenceLevel -> 0.95 |>]
         ];
@@ -160,7 +160,7 @@ Module[{cst, node, children, data, issues, poss, i, j},
   While[i < j,
     Switch[children[[i]],
       LeafNode[Token`Newline, _, _],
-        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+        AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
           <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
              ConfidenceLevel -> 0.95 |>]
         ];
@@ -181,7 +181,7 @@ Module[{cst, node, children, data, issues, poss, i, j},
   While[j < Length[children],
     Switch[children[[j]],
       LeafNode[Token`Newline, _, _],
-        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
+        AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
           <| Source -> children[[ poss[[2, 1]], 3, Key[Source] ]],
              ConfidenceLevel -> 0.95 |>]
         ];
@@ -229,7 +229,7 @@ scanCalls[pos_List, cstIn_] :=
   Use source of [
   *)
 
-  {Lint["CallDifferentLine", "Call is on different lines.", "Warning", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
+  {InspectionObject["CallDifferentLine", "Call is on different lines.", "Warning", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
 ]
 
 
@@ -251,16 +251,16 @@ scanErrorNodes[pos_List, cstIn_] :=
   Switch[tag,
     Token`Error`Aborted,
       leaf = children[[1]];
-      AppendTo[issues, Lint["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedOperand,
-      AppendTo[issues, Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnterminatedComment,
-      AppendTo[issues, Lint["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnterminatedString,
-      AppendTo[issues, Lint["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]];
+      AppendTo[issues, InspectionObject["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]];
       (*
       Finding the correct string with the missing quote is difficult.
       So also flag any multiline strings as a Warning
@@ -269,15 +269,15 @@ scanErrorNodes[pos_List, cstIn_] :=
       multilineStrings = Cases[cst, LeafNode[String, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]], Infinity];
       Scan[Function[s,
         (AppendTo[issues,
-          Lint["MultilineString", "Multiline string.", "Warning",
+          InspectionObject["MultilineString", "Multiline string.", "Warning",
             (* just mark the opening quote here *)
             <| Source -> { { #[[1]], #[[2]] }, { #[[1]], #[[2]] + 1  } }, ConfidenceLevel -> 0.9 |>]])&[s[[3, Key[Source], 1]] ];
         ], multilineStrings
       ];
     ,
     _,
-      tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
-      AppendTo[issues, Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
+      AppendTo[issues, InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
   ];
 
   issues
@@ -298,26 +298,26 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
 
   Switch[tag,
     SyntaxError`ExpectedOperand,
-      {Lint["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     SyntaxError`ExpectedTilde,
-      {Lint["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     SyntaxError`ColonError,
-      {Lint["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     SyntaxError`ExpectedSet,
-      {Lint["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     SyntaxError`ExpectedIntegrand,
-      {Lint["ExpectedIntegrand", "Expected integrand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["ExpectedIntegrand", "Expected integrand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     SyntaxError`UnexpectedCloser,
-      {Lint["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     _,
-      tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "Lint`Scratch`"}, ToString[tag]];
-      {Lint[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
+      {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
 ]
 
@@ -332,7 +332,7 @@ scanGroupMissingCloserNodes[pos_List, cstIn_] :=
   node = Extract[cst, {pos}][[1]];
   data = node[[3]];
 
-  {Lint["GroupMissingCloser", "Missing closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+  {InspectionObject["GroupMissingCloser", "Missing closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
 ]
 
 
@@ -350,7 +350,7 @@ Module[{cst, data, issues, syntaxIssues},
 
   syntaxIssues = Cases[issues, SyntaxIssue[_, _, _, _]];
 
-  Lint @@@ syntaxIssues
+  InspectionObject @@@ syntaxIssues
 ]
 
 

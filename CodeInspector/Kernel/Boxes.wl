@@ -1,19 +1,19 @@
-BeginPackage["Lint`Boxes`"]
+BeginPackage["CodeInspector`Boxes`"]
 
 Begin["`Private`"]
 
-Needs["AST`"]
-Needs["Lint`"]
-Needs["Lint`AbstractRules`"]
-Needs["Lint`AggregateRules`"]
-Needs["Lint`ConcreteRules`"]
-Needs["Lint`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeInspector`"]
+Needs["CodeInspector`AbstractRules`"]
+Needs["CodeInspector`AggregateRules`"]
+Needs["CodeInspector`ConcreteRules`"]
+Needs["CodeInspector`Utils`"]
 
 
 
 
 
-Options[LintBoxReport] = {
+Options[CodeInspectBoxSummarize] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
@@ -36,9 +36,9 @@ foo[]  returns Automatic
 Related bugs: 338218
 *)
 
-lintsInPat = If[$VersionNumber >= 11.2, {___Lint}, _]
+lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
-LintBoxReport[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules,
@@ -77,7 +77,7 @@ Catch[
  confidence = OptionValue[ConfidenceLevel];
 
  If[lints === Automatic,
-    lints = LintBox[box,
+    lints = CodeConcreteParseBox[box,
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
@@ -91,7 +91,7 @@ Catch[
     {lint, lints}
   ];
 
-  LintedBox[processedBox, lints]
+  InspectedBoxObject[processedBox, lints]
 ]]
 
 
@@ -99,9 +99,9 @@ Catch[
 
 
 
-LintedBox::usage = "LintedBox[box] represents a formatted object of lints found in box."
+InspectedBoxObject::usage = "InspectedBoxObject[box] represents a formatted object of lints found in box."
 
-Format[LintedBox[processedBox_, lints_], StandardForm] :=
+Format[InspectedBoxObject[processedBox_, lints_], StandardForm] :=
 Module[{},
 
   Interpretation[
