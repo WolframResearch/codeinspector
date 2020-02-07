@@ -5,6 +5,7 @@ project(codeinspector)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(WolframKernel)
+include(PacletInfo)
 
 set(PACLET "CodeInspector")
 set(WOLFRAMKERNEL ${WOLFRAMKERNEL_DEFAULT} CACHE FILEPATH "Path to WolframKernel")
@@ -64,7 +65,7 @@ endforeach()
 # Set VERSION_NUMBER, SYSTEMID, and PACLET_VERSION
 #
 CheckWolframKernel()
-
+CheckPacletInfo()
 
 
 file(MAKE_DIRECTORY
