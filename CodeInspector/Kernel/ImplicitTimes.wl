@@ -114,7 +114,7 @@ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, li
   ];
 
   If[implicitTimes === Automatic,
-    implicitTimes = CodeImplicitTimes[File[full]];
+    implicitTimes = CodeInspectImplicitTimes[File[full]];
   ];
 
   bytes = Import[full, "Byte"];
