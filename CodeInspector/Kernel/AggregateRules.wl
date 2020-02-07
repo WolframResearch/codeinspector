@@ -1327,7 +1327,7 @@ Catch[
   {InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
 Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
                         pattern,
-                        LeafNode[Token`Fake`PatternColon, ":", <||>],
+                        LeafNode[Token`Colon, ":", <||>],
                         opt}, <||>]]] <> "?\n\
 This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <| data, ConfidenceLevel -> 0.85|>]}
 ]]
