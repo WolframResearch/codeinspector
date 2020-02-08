@@ -43,7 +43,7 @@ cmake ..
 cmake --build . --target paclet
 ```
 
-The result is a directory named `paclet` that contains the WL package source code and a built Lint `.paclet` file for installing.
+The result is a directory named `paclet` that contains the WL package source code and a built CodeInspector `.paclet` file for installing.
 
 You may see an error because the default path to `WolframKernel` may not be correct.
 
@@ -55,13 +55,13 @@ cmake -DWOLFRAMKERNEL=/path/to/WolframKernel ..
 Here are typical values for the variables:
 * `WOLFRAMKERNEL` `/Applications/Mathematica.app/Contents/MacOS/WolframKernel`
 
-Here is the build directory layout after building Lint:
+Here is the build directory layout after building CodeInspector:
 
 ```
 paclet/
-  Lint/
+  CodeInspector/
     Kernel/
-      Lint.wl
+      CodeInspector.wl
     PacletInfo.m
     ...
 ```
