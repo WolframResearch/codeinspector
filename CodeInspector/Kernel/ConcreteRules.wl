@@ -27,9 +27,13 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 
 $DefaultConcreteRules = <|
 
+(*
 BinaryNode[Span, _, _] -> scanBinarySpans,
+*)
 
+(*
 TernaryNode[Span, _, _] -> scanTernarySpans,
+*)
 
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
@@ -48,7 +52,7 @@ Nothing
 |>
 
 
-
+(*
 Attributes[scanBinarySpans] = {HoldRest}
 
 scanBinarySpans[pos_List, cstIn_] :=
@@ -130,9 +134,10 @@ Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
 
   issues
 ]]
+*)
 
 
-
+(*
 Attributes[scanTernarySpans] = {HoldRest}
 
 scanTernarySpans[pos_List, cstIn_] :=
@@ -200,7 +205,7 @@ Module[{cst, node, children, data, issues, poss, i, j},
 
   issues
 ]]
-
+*)
 
 
 
