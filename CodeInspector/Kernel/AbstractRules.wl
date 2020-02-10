@@ -65,7 +65,7 @@ Tags: DuplicateKeys
 *)
 CallNode[LeafNode[Symbol, "Association", _], _, _] -> scanAssocs,
 
-CallNode[LeafNode[Symbol, "List", _], { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }, _] -> scanRules,
+CallNode[LeafNode[Symbol, "List", _], { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }, _] -> scanListsOfRules,
 
 (*
 Tags: 
@@ -217,6 +217,11 @@ CallNode[LeafNode[Symbol, "Slot" | "SlotSequence", _], _, _] -> scanSlots,
 
 
 CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming", _], _, _] -> scanSolverCalls,
+
+
+
+CallNode[LeafNode[Symbol, "Rule", _], {lhs_ /; !FreeQ[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]], _}, _] -> scanPatternRules,
+
 
 
 (*
@@ -378,9 +383,9 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
 
 
 
-Attributes[scanRules] = {HoldRest}
+Attributes[scanListsOfRules] = {HoldRest}
 
-scanRules[pos_List, astIn_] :=
+scanListsOfRules[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren},
   ast = astIn;
@@ -1075,7 +1080,7 @@ Attributes[scanWiths] = {HoldRest}
 scanWiths[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
-  usedBody, unusedParams, counts, flattenedVars},
+  usedBody, unusedParams, counts},
   
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1919,6 +1924,53 @@ Module[{ast, node, children, data},
   issues
 ]]
 
+
+
+
+
+
+
+
+
+Attributes[scanPatternRules] = {HoldRest}
+
+scanPatternRules[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
+  rhsOccurringSymbols, rhsSymbols, fullForm},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  lhs = node[[2, 1]];
+  rhs = node[[2, 2]];
+  lhsPatterns = Cases[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
+
+  lhsPatternNames = #[[2, 1]]& /@ lhsPatterns;
+  rhsSymbols = Cases[rhs, LeafNode[Symbol, _, _], {0, Infinity}];
+
+  Do[
+    
+    fullForm = ToFullFormString[lhsPatternName];
+
+    rhsOccurringSymbols = Select[rhsSymbols, (ToFullFormString[#] == fullForm)&];
+
+    If[!empty[rhsOccurringSymbols],
+      AppendTo[issues, InspectionObject["PatternRule", "The same symbol occurs on lhs and rhs of ``Rule``. Did you mean ``RuleDelayed``?", "Error", <|
+        Source -> lhsPatternName[[3, Key[Source] ]],
+        "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source] ]],
+        ConfidenceLevel -> 0.8 |>]]
+    ];
+    ,
+    {lhsPatternName, lhsPatternNames}
+  ];
+
+  issues
+]]
 
 
 
