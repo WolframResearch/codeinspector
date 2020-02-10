@@ -3,9 +3,6 @@ BeginPackage["CodeInspector`AbstractRules`"]
 $DefaultAbstractRules
 
 
-setupSystemSymbols[]
-
-
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -13,70 +10,6 @@ Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
-
-
-
-(*
-This can take some time to run (~20 seconds), so it is optional
-*)
-setupSystemSymbols[] :=
-Module[{names, documentedSymbols, allSymbols, allASCIISymbols, undocumentedSymbols, obsoleteNames,
-  obsoleteSymbols, experimentalNames, experimentalSymbols, systemSymbolRules},
-
-  SetDirectory[FileNameJoin[{$InstallationDirectory, "Documentation/English/System/ReferencePages/Symbols"}]];
-
-  names = FileNames["*.nb", "", Infinity];
-
-  documentedSymbols = StringDrop[#, -3]& /@ names;
-
-  allSymbols = Names["System`*"];
-
-  allASCIISymbols = Flatten[StringCases[allSymbols, RegularExpression["[a-zA-Z0-9$]+"]]];
-
-  undocumentedSymbols = Complement[allASCIISymbols, documentedSymbols];
-
-  $undocumentedSystemSymbolAlternatives = Alternatives @@ undocumentedSymbols;
-
-  (*
-  "OBSOLETE SYMBOL" is found in the first ~50 lines, so use 100 as a heuristic for how many lines to read
-  *)
-  obsoleteNames = Select[names, FindList[#, "\"OBSOLETE SYMBOL\"", 100] != {}&];
-
-  obsoleteSymbols = StringDrop[#, -3] & /@ obsoleteNames;
-
-  $obsoleteSystemSymbolAlternatives = Alternatives @@ obsoleteSymbols;
-
-  (*
-  "EXPERIMENTAL" is found in the first ~500 lines, so use 1000 as a heuristic for how many lines to read
-  *)
-  experimentalNames = Select[names, FindList[#, "\"EXPERIMENTAL\"", 1000] != {}&];
-
-  experimentalSymbols = StringDrop[#, -3]& /@ experimentalNames;
-
-  $experimentalSystemSymbolAlternatives = Alternatives @@ experimentalSymbols;
-
-  ResetDirectory[];
-
-
-  systemSymbolRules = <|
-    (*
-    Scan symbols that are in System` but are undocumented
-    *)
-    LeafNode[Symbol, $undocumentedSystemSymbolAlternatives, _] -> scanUndocumentedSymbols,
-
-    (*
-    Scan symbols that are documented as OBSOLETE
-    *)
-    LeafNode[Symbol, $obsoleteSystemSymbolAlternatives, _] -> scanObsoleteSymbols,
-
-    (*
-    Scan symbols that are documented as EXPERIMENTAL
-    *)
-    LeafNode[Symbol, $experimentalSystemSymbolAlternatives, _] -> scanExperimentalSymbols
-  |>;
-
-  $DefaultAbstractRules = $DefaultAbstractRules ~Join~ systemSymbolRules;
-]
 
 
 
