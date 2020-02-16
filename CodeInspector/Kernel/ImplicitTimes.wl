@@ -180,7 +180,7 @@ $color = severityColor[{InspectionObject["ImplicitTimes", "ImplicitTimes", "Impl
 
 modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
  Module[{line, startCols, endCols, infixCols, startInserters, endInserters, infixInserters, under,
-  rules, underLength},
+  rules},
 
   startCols = Cases[starts, {lineNumber, col_} :> col];
   endCols = Cases[ends, {lineNumber, col_} :> col];
@@ -190,7 +190,7 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
 
   startInserters = AssociationMap[LintMarkup["(", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, startCols];
   endInserters = AssociationMap[LintMarkup[")", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, endCols];
-  infixInserters = AssociationMap[LintMarkup[LintTimes, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, infixCols];
+  infixInserters = AssociationMap[LintMarkup[LintTimesCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, infixCols];
 
   If[$Debug,
     Print["lineNumber: ", lineNumber];
@@ -341,13 +341,6 @@ Catch[
     resolve BestImplicitTimesPlacement with actual columns now
    *)
    infixs = Map[resolveInfix[#, lines]&, infixs];
-
-
-
-
-
-
-
 
    linesToModify = Union[starts[[All, 1]] ~Join~ ends[[All, 1]] ~Join~ infixs[[All, 1]] ];
 

@@ -8,17 +8,17 @@ LintPreserve
 
 
 
-LintSpaceIndicator
+LintSpaceIndicatorCharacter
 
-LintErrorIndicator
+LintErrorIndicatorCharacter
 
-LintErrorContinuationIndicator
+LintErrorContinuationIndicatorCharacter
 
-LintContinuation
+LintContinuationCharacter
 
-LintTimes
+LintTimesCharacter
 
-LintEOF
+LintEOFCharacter
 
 
 
@@ -379,7 +379,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	As a test: Create a HUGE single line lint, so that there are hundreds of partitions
 	Make sure that only the partitions with errors are displayed.
 	*)
-	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicator)...}], Nothing, #]& /@ grid;
+	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
 
 	grid = Flatten[grid, 1];
 
@@ -517,7 +517,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 			UpTo[$LintedLineWidth]
 		];
 
-	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicator)...}], Nothing, #]& /@ grid;
+	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
 
 	grid = Flatten[grid, 1];
 
@@ -653,43 +653,43 @@ Cannot use characters like \[SpaceIndicator] and \[ErrorIndicator] in OutputForm
 get Grid alignment
 *)
 
-LintSpaceIndicator::usage = "LintSpaceIndicator represents a space indicator in formatted output."
+LintSpaceIndicatorCharacter::usage = "LintSpaceIndicatorCharacter represents a space indicator in formatted output."
 
-Format[LintSpaceIndicator, StandardForm] := "\[SpaceIndicator]"
-Format[LintSpaceIndicator, OutputForm] := " "
-
-
-LintErrorIndicator::usage = "LintErrorIndicator represents an error indicator in formatted output."
-
-Format[LintErrorIndicator, StandardForm] := "\[ErrorIndicator]"
-Format[LintErrorIndicator, OutputForm] := "^"
+Format[LintSpaceIndicatorCharacter, StandardForm] := "\[SpaceIndicator]"
+Format[LintSpaceIndicatorCharacter, OutputForm] := " "
 
 
-LintErrorContinuationIndicator::usage = "LintErrorContinuationIndicator represents an error continuation indicator in formatted output."
+LintErrorIndicatorCharacter::usage = "LintErrorIndicatorCharacter represents an error indicator in formatted output."
 
-Format[LintErrorContinuationIndicator, StandardForm] := "\[ErrorIndicator]"
-Format[LintErrorContinuationIndicator, OutputForm] := "~"
+Format[LintErrorIndicatorCharacter, StandardForm] := "\[ErrorIndicator]"
+Format[LintErrorIndicatorCharacter, OutputForm] := "^"
 
 
+LintErrorContinuationIndicatorCharacter::usage = "LintErrorContinuationIndicatorCharacter represents an error continuation indicator in formatted output."
 
-LintContinuation::usage = "LintContinuation represents a continuation in formatted output."
-
-Format[LintContinuation, StandardForm] := "\[Continuation]"
-Format[LintContinuation, OutputForm] := "\\"
+Format[LintErrorContinuationIndicatorCharacter, StandardForm] := "\[ErrorIndicator]"
+Format[LintErrorContinuationIndicatorCharacter, OutputForm] := "~"
 
 
 
-LintTimes::usage = "LintTimes represents a times operator in formatted output."
+LintContinuationCharacter::usage = "LintContinuationCharacter represents a continuation in formatted output."
 
-Format[LintTimes, StandardForm] := "\[Times]"
-Format[LintTimes, OutputForm] := "x"
+Format[LintContinuationCharacter, StandardForm] := "\[Continuation]"
+Format[LintContinuationCharacter, OutputForm] := "\\"
 
 
 
-LintEOF::usage = "LintEOF represents an EOF in formatted output."
+LintTimesCharacter::usage = "LintTimesCharacter represents a times operator in formatted output."
 
-Format[LintEOF, StandardForm] := "\[FilledSquare]"
-Format[LintEOF, OutputForm] := "EOF"
+Format[LintTimesCharacter, StandardForm] := "\[Times]"
+Format[LintTimesCharacter, OutputForm] := "x"
+
+
+
+LintEOFCharacter::usage = "LintEOFCharacter represents an EOF in formatted output."
+
+Format[LintEOFCharacter, StandardForm] := "\[FilledSquare]"
+Format[LintEOFCharacter, OutputForm] := "EOF"
 
 
 

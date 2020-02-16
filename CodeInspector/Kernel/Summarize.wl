@@ -567,10 +567,10 @@ Catch[
 
   markupPerColumn = Map[(
                           If[firstError,
-                            indicator = LintErrorIndicator;
+                            indicator = LintErrorIndicatorCharacter;
                             firstError = False
                             ,
-                            indicator = LintErrorContinuationIndicator;
+                            indicator = LintErrorContinuationIndicatorCharacter;
                           ];
                           LintMarkup[indicator, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[#]]
                         )&, lintsPerColumn];
@@ -589,7 +589,7 @@ Catch[
     (*
    Mark hitting EOF with \[FilledSquare]
    *)
-    startMarker = If[endOfFile, LintEOF, LintContinuation];
+    startMarker = If[endOfFile, LintEOFCharacter, LintContinuationCharacter];
     AssociateTo[markupPerColumn, 0 -> LintMarkup[startMarker, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[startChar]]];
   ];
 
@@ -606,7 +606,7 @@ Catch[
         Print["endChar: ", endChar];
       ];
 
-      endMarker = LintContinuation;
+      endMarker = LintContinuationCharacter;
       AssociateTo[markupPerColumn, StringLength[line]+1 -> LintMarkup[endMarker, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[endChar]]];
     ,
     True,
@@ -617,8 +617,12 @@ Catch[
     Print["markupPerColumn: ", markupPerColumn];
   ];
 
-
-  under = Table[LintSpaceIndicator, {StringLength[line]}];
+  (*
+  FIXME: revisit this if we ever need to preserve \t in the underline for whatever reason
+  The \t characters are preserved in Implicit Times markup because .e.g, tabs need to be
+  send to Sublime to get the spacing correct for ( \[Times] ) stuff
+  *)
+  under = Table[LintSpaceIndicatorCharacter, {StringLength[line]}];
   
   under = Join[{" "}, under, {" "}];
 
@@ -734,7 +738,7 @@ Module[{line, lintsPerColumn},
   KeyDropFrom[lintsPerColumn, StringLength[line]+1];
   
   line = StringReplace[line, $characterReplacementRules];
-
+  
   line = Characters[line];
 
   If[TrueQ[$Underlight],
