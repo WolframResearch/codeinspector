@@ -101,8 +101,12 @@ Catch[
 
 InspectedBoxObject::usage = "InspectedBoxObject[box] represents a formatted object of lints found in box."
 
-Format[InspectedBoxObject[processedBox_, lints_], StandardForm] :=
-Module[{},
+Format[InspectedBoxObject[processedBoxIn_, lints_], StandardForm] :=
+Module[{processedBox},
+
+  processedBox = processedBoxIn;
+
+  processedBox = processedBox /. s_String :> StringReplace[s, $characterReplacementRules];
 
   Interpretation[
     Framed[Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
@@ -122,8 +126,6 @@ Module[{sevColor, srcs, processedBox},
 
   processedBox = box;
   Scan[(processedBox = replaceBox[processedBox, #, sevColor])&, srcs];
-
-  processedBox = processedBox /. s_String :> StringReplace[s, $characterReplacementRules];
 
   processedBox
 ]

@@ -305,7 +305,8 @@ $invisibleBMPCharacters = {
   (*
   FUNCTION APPLICATION
   *)
-  "\:2061"} ~Join~
+  "\:2061"
+} ~Join~
 
   (*
   C1
@@ -333,44 +334,45 @@ StringLength["\|10ffff"] => 8 (or 2 if coming from FE!)
 If[$VersionNumber >= 12.0,
 
   $invisibleNonBMPCharacters = {
-	(*
-	Unicode non-characters
-	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
-	*)
-	"\|00fffe",
-	"\|00ffff",
-	"\|01fffe",
-	"\|01ffff",
-	"\|02fffe",
-	"\|02ffff",
-	"\|03fffe",
-	"\|03ffff",
-	"\|04fffe",
-	"\|04ffff",
-	"\|05fffe",
-	"\|05ffff",
-	"\|06fffe",
-	"\|06ffff",
-	"\|07fffe",
-	"\|07ffff",
-	"\|08fffe",
-	"\|08ffff",
-	"\|09fffe",
-	"\|09ffff",
-	"\|0afffe",
-	"\|0affff",
-	"\|0bfffe",
-	"\|0bffff",
-	"\|0cfffe",
-	"\|0cffff",
-	"\|0dfffe",
-	"\|0dffff",
-	"\|0efffe",
-	"\|0effff",
-	"\|0ffffe",
-	"\|0fffff",
-	"\|10fffe",
-	"\|10ffff"} ~Join~
+  	(*
+  	Unicode non-characters
+  	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
+  	*)
+  	"\|00fffe",
+  	"\|00ffff",
+  	"\|01fffe",
+  	"\|01ffff",
+  	"\|02fffe",
+  	"\|02ffff",
+  	"\|03fffe",
+  	"\|03ffff",
+  	"\|04fffe",
+  	"\|04ffff",
+  	"\|05fffe",
+  	"\|05ffff",
+  	"\|06fffe",
+  	"\|06ffff",
+  	"\|07fffe",
+  	"\|07ffff",
+  	"\|08fffe",
+  	"\|08ffff",
+  	"\|09fffe",
+  	"\|09ffff",
+  	"\|0afffe",
+  	"\|0affff",
+  	"\|0bfffe",
+  	"\|0bffff",
+  	"\|0cfffe",
+  	"\|0cffff",
+  	"\|0dfffe",
+  	"\|0dffff",
+  	"\|0efffe",
+  	"\|0effff",
+  	"\|0ffffe",
+  	"\|0fffff",
+  	"\|10fffe",
+  	"\|10ffff"
+  } ~Join~
 
   (*
   Plane 15 PUA
@@ -393,12 +395,7 @@ EndStaticAnalysisIgnore[]
 
 $invisibleCharacters = $invisibleBMPCharacters ~Join~ $invisibleNonBMPCharacters
 
-$characterReplacementRules = { 
-	(*
-	We want everything to be 1 character wide.
-	This keeps things simple
-	*)
-	"\t" -> " ",
+$characterReplacementRules = {
 	Alternatives @@ $invisibleCharacters -> "\[UnknownGlyph]"
 }
 

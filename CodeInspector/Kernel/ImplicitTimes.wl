@@ -214,12 +214,16 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
   rules = Join[startInserters, endInserters, infixInserters];
   rules = Normal[rules];
 
-  underLength = StringLength[line];
+  (*
+  preserve tabs and convert everything else to spaces
+  *)
+  under = Characters[line];
+  under = Replace[under, {"\t" -> "\t", _ -> " "}, {1}];
+
   (*
   extend line to be able to insert \[Times] after the line, when ImplicitTimes spans lines
   *)
-  underLength = underLength + 1;
-  under = Table[" ", {underLength}];
+  under = Join[under, {" "}];
 
   under = ReplacePart[under, rules];
 
