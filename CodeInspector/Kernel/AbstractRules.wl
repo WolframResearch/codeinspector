@@ -1399,70 +1399,7 @@ Module[{ast, node, name, data, issues, src},
   issues
 ]
 
-Attributes[scanUndocumentedSymbols] = {HoldRest}
 
-scanUndocumentedSymbols[pos_List, astIn_] :=
-Module[{ast, node, name, data, issues},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  name = node["String"];
-  data = node[[3]];
-
-  issues = {};
-
-  Switch[name,
-    "Fail" | "System`Fail",
-      AppendTo[issues, InspectionObject["UndocumentedSymbol", "Undocumented symbol: ``Fail``.\n\
-Symbol ``Fail`` is an undocumented **System`** symbol.\n\
-Did you mean ``$Failed``?", "Warning", <| data, ConfidenceLevel -> 0.55 |>]]
-    ,
-    _,
-      AppendTo[issues, InspectionObject["UndocumentedSymbol", format[name] <> " is not documented.", "Remark", <|
-        data,
-        ConfidenceLevel -> 0.55 |>]]
-  ];
-
-  issues
-]
-
-
-Attributes[scanObsoleteSymbols] = {HoldRest}
-
-scanObsoleteSymbols[pos_List, astIn_] :=
-Module[{ast, node, name, data, issues},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  name = node["String"];
-  data = node[[3]];
-
-  issues = {};
-
-  AppendTo[issues, InspectionObject["ObsoleteSymbol", format[name] <> " is obsolete.", "Warning", <|
-    data,
-    ConfidenceLevel -> 0.55 |>]];
-
-  issues
-]
-
-
-
-Attributes[scanExperimentalSymbols] = {HoldRest}
-
-scanExperimentalSymbols[pos_List, astIn_] :=
-Module[{ast, node, name, data, issues},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  name = node["String"];
-  data = node[[3]];
-
-  issues = {};
-
-  AppendTo[issues, InspectionObject["ExperimentalSymbol", format[name] <> " is experimental.", "Warning", <|
-    data,
-    ConfidenceLevel -> 0.55 |>]];
-
-  issues
-]
 
 
 (*
