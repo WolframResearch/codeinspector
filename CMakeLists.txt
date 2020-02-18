@@ -18,24 +18,24 @@ message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 message(STATUS "LOCAL_BUILD: ${LOCAL_BUILD}")
 
 set(WL_PACLET_SOURCES
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/AbstractRules.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/AggregateRules.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Boxes.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/CodeInspector.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/ConcreteRules.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/External.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTimes.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
-	${CMAKE_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AbstractRules.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AggregateRules.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Boxes.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/CodeInspector.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ConcreteRules.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/External.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTimes.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
 
 set(WL_GENERATE_CREATEPACLETARCHIVE_SOURCES
-	${CMAKE_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl
+	${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl
 )
 
 set(PACLETINFO_SOURCE
-	${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m
+	${PROJECT_SOURCE_DIR}/${PACLET}/PacletInfo.m
 )
 
 set(DOCUMENTATION_NOTEBOOK_PATHS
@@ -53,8 +53,8 @@ set(DOCUMENTATION_NOTEBOOK_PATHS
 # Setup documentation notebook paths
 #
 foreach(NB_PATH ${DOCUMENTATION_NOTEBOOK_PATHS})
-	set(SRC ${CMAKE_SOURCE_DIR}/${PACLET}/Documentation/${NB_PATH})
-	set(BUILT ${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/${NB_PATH})
+	set(SRC ${PROJECT_SOURCE_DIR}/${PACLET}/Documentation/${NB_PATH})
+	set(BUILT ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Documentation/${NB_PATH})
 	list(APPEND DOCUMENTATION_SOURCE ${SRC})
 	list(APPEND BUILT_DOCUMENTATION ${BUILT})
 endforeach()
@@ -69,7 +69,7 @@ CheckPacletInfo()
 
 
 file(MAKE_DIRECTORY
-	${CMAKE_BINARY_DIR}/paclet/${PACLET}
+	${PROJECT_BINARY_DIR}/paclet/${PACLET}
 )
 
 
@@ -77,27 +77,28 @@ file(MAKE_DIRECTORY
 # Copy WL source files
 #
 
-set(COPIED_PACLETINFO ${CMAKE_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m)
+set(COPIED_PACLETINFO ${PROJECT_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m)
 
 add_custom_command(
 	OUTPUT
 		${COPIED_PACLETINFO}
 	COMMAND
-		${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m ${COPIED_PACLETINFO}
+		${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/${PACLET}/PacletInfo.m ${COPIED_PACLETINFO}
 	COMMAND
 		${CMAKE_COMMAND} -DLOCAL_BUILD=${LOCAL_BUILD} -DCOPIED_PACLETINFO=${COPIED_PACLETINFO} -P ${PROJECT_SOURCE_DIR}/cmake/ReplacePacletInfo.cmake
 	DEPENDS
-		${CMAKE_SOURCE_DIR}/${PACLET}/PacletInfo.m
+		${PROJECT_SOURCE_DIR}/${PACLET}/PacletInfo.m
+		${PROJECT_SOURCE_DIR}/cmake/ReplacePacletInfo.cmake
 )
-list(APPEND COPIED_WL_PACLET_SOURCES ${CMAKE_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m)
+list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/PacletInfo.m)
 
 foreach(SRC ${WL_PACLET_SOURCES})
 	get_filename_component(BARE_SRC ${SRC} NAME)
 	add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
-    COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${CMAKE_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
+    OUTPUT ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
+    COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
     DEPENDS ${SRC})
-	list(APPEND COPIED_WL_PACLET_SOURCES ${CMAKE_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC})
+	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC})
 endforeach()
 
 set(PACLET_SOURCES
@@ -157,9 +158,9 @@ add_custom_command(
 	DEPENDS
 		${DOCUMENTATION_SOURCE}
 	COMMAND
-		ant -DmathExe=${WOLFRAMKERNEL} -DappPath=${DOCS_APPPATH} -Djlinkpath=${DOCS_JLINKPATH} -DinputDir=${CMAKE_SOURCE_DIR}/${PACLET}/Documentation/ -DoutputDir=${CMAKE_BINARY_DIR}/paclet/${PACLET}/Documentation/ -file ${DOCS_APPPATH}/DocumentationBuild/SystemFiles/ant/Build/notebook.xml
+		ant -DmathExe=${WOLFRAMKERNEL} -DappPath=${DOCS_APPPATH} -Djlinkpath=${DOCS_JLINKPATH} -DinputDir=${PROJECT_SOURCE_DIR}/${PACLET}/Documentation/ -DoutputDir=${PROJECT_BINARY_DIR}/paclet/${PACLET}/Documentation/ -file ${DOCS_APPPATH}/DocumentationBuild/SystemFiles/ant/Build/notebook.xml
 	WORKING_DIRECTORY
-		${CMAKE_SOURCE_DIR}
+		${PROJECT_SOURCE_DIR}
 )
 
 endif(BUILD_DOCS)
@@ -173,7 +174,7 @@ endif(BUILD_DOCS)
 # paclet target
 #
 add_custom_target(paclet
-	DEPENDS ${CMAKE_BINARY_DIR}/paclet/${PACLET}-${PACLET_VERSION}.paclet
+	DEPENDS ${PROJECT_BINARY_DIR}/paclet/${PACLET}-${PACLET_VERSION}.paclet
 )
 
 #
@@ -181,14 +182,16 @@ add_custom_target(paclet
 #
 add_custom_command(
 	OUTPUT
-		${CMAKE_BINARY_DIR}/paclet/${PACLET}-${PACLET_VERSION}.paclet
+		${PROJECT_BINARY_DIR}/paclet/${PACLET}-${PACLET_VERSION}.paclet
 	DEPENDS
 		${PACLET_SOURCES}
+		${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl
+		${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	COMMAND
-		${CMAKE_COMMAND} -DSCRIPT=${CMAKE_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl -DSRCDIR=${CMAKE_SOURCE_DIR} -DBUILDDIR=${CMAKE_BINARY_DIR} -DPACLET=${PACLET} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
+		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DPACLET=${PACLET} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	VERBATIM
 	WORKING_DIRECTORY
-		${CMAKE_SOURCE_DIR}
+		${PROJECT_SOURCE_DIR}
 )
 
 

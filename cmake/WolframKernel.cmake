@@ -22,7 +22,34 @@ elseif (CMAKE_HOST_APPLE)
 endif()
 
 macro(CheckWolframKernel)
+	
+	#
+	# Canary test
+	#
+	string(TIMESTAMP CANARY_BEFORE "%s")
+	execute_process(
+		COMMAND
+			${WOLFRAMKERNEL} -noinit -noprompt -nopaclet -runfirst Exit[]
+		WORKING_DIRECTORY
+			${PROJECT_SOURCE_DIR}
+		TIMEOUT
+			300
+		RESULT_VARIABLE
+			CANARY_RESULT
+	)
+	string(TIMESTAMP CANARY_AFTER "%s")
+
+	math(EXPR CANARY_TIME "${CANARY_AFTER} - ${CANARY_BEFORE}")
+
+	message(STATUS "Canary test took ${CANARY_TIME} seconds")
+
+	if(NOT ${CANARY_RESULT} EQUAL "0")
+		message(WARNING "Bad exit code from Canary script: ${CANARY_RESULT}; Continuing")
+	endif()
+
+	#
 	# get $VersionNumber
+	#
 	execute_process(
 		COMMAND
 			${WOLFRAMKERNEL} -noinit -noprompt -nopaclet -runfirst Print[OutputForm[Floor[100\ \$VersionNumber\ +\ \$ReleaseNumber]]]\;Exit[]
@@ -30,7 +57,7 @@ macro(CheckWolframKernel)
 			VERSION_NUMBER
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		WORKING_DIRECTORY
-			${CMAKE_SOURCE_DIR}
+			${PROJECT_SOURCE_DIR}
 		TIMEOUT
 			10
 		RESULT_VARIABLE
@@ -47,14 +74,17 @@ macro(CheckWolframKernel)
 		message(WARNING "Bad exit code from VersionNumber script: ${VERSION_NUMBER_RESULT}; Continuing")
 	endif()
 
+	#
 	# get $SystemID
+	#
 	execute_process(
 		COMMAND
 			${WOLFRAMKERNEL} -noinit -noprompt -nopaclet -runfirst Print[OutputForm[\$SystemID]]\;Exit[]
 		OUTPUT_VARIABLE
 			SYSTEMID
 		OUTPUT_STRIP_TRAILING_WHITESPACE
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		WORKING_DIRECTORY
+			${PROJECT_SOURCE_DIR}
 		TIMEOUT
 			10
 		RESULT_VARIABLE
