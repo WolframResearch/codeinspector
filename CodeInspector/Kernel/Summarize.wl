@@ -520,7 +520,7 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
             ,
             {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
               lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-              underlineList = createUnderlineList[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+              underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               lints = Union[Flatten[Values[lintsPerColumn]]]
             }
             ,
@@ -547,10 +547,9 @@ Options[createUnderlineList] = {
   "EndOfFile" -> False
 }
 
-createUnderlineList[line_String, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
+createUnderlineList[line_String, lineNumber_Integer, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Catch[
- Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn,
-  firstError, indicator},
+ Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn},
 
  lineIsEmpty = (line == "");
 
@@ -562,18 +561,16 @@ Catch[
 
   endOfFile = OptionValue["EndOfFile"];
 
-
-  firstError = True;
-
-  markupPerColumn = Map[(
-                          If[firstError,
-                            indicator = LintErrorIndicatorCharacter;
-                            firstError = False
-                            ,
-                            indicator = LintErrorContinuationIndicatorCharacter;
-                          ];
-                          LintMarkup[indicator, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[#]]
-                        )&, lintsPerColumn];
+  markupPerColumn = KeyValueMap[
+                      Function[{column, lints},
+                        column -> LintMarkup[
+                          If[isFirstError[lints, lineNumber, column], LintErrorIndicatorCharacter, LintErrorContinuationIndicatorCharacter],
+                          FontWeight->Bold, FontSize->Larger, FontColor->severityColor[lints]]
+                      ]
+                      ,
+                      lintsPerColumn
+                    ];
+  markupPerColumn = Association[markupPerColumn];
 
   If[$Debug,
     Print["markupPerColumn: ", markupPerColumn];

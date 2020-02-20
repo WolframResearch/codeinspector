@@ -24,6 +24,9 @@ $characterReplacementRules
 uppercaseSymbolNameQ
 
 
+isFirstError
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -402,6 +405,17 @@ $characterReplacementRules = {
 
 
 uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
+
+
+
+
+
+
+isFirstError[lints:{_InspectionObject..}, lineNumber_Integer, column_Integer] :=
+Module[{any},
+  any = MemberQ[First /@ {#[[4, Key[Source] ]]} ~Join~ Lookup[#[[4]], "AdditionalSources", {}], {lineNumber, column}]& /@ lints;
+  Or @@ any
+]
 
 
 
