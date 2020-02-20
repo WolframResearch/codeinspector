@@ -59,6 +59,12 @@ Needs["CodeInspector`Summarize`"]
 
 
 
+If[PacletFind["Lint"] != {},
+  Message[General::obspkg, "Lint`"]
+]
+
+
+
 InspectionObject::usage = "InspectionObject[tag, description, severity, data] is a problem found in WL source code."
 
 (*
