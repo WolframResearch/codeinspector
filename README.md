@@ -1,22 +1,24 @@
 # CodeInspector
 
-CodeInspector is a paclet for finding problems in Wolfram Language code.
+`CodeInspector` is a package for finding and reporting problems in Wolfram Language code.
+
+```
+In[1]:= Needs["CodeInspector`"]
+
+In[2]:= CodeInspectSummarize["If[a,b,b]"]
+
+Out[2]= If[a,b,b]
+
+        line 1:  If[a,b,b] 
+                      ^ ^  
+                DuplicateClauses Error Both branches are the same.
+
+In[3]:= 
+```
 
 [Finding Bugs in the Wolfram Language from WTC 2019: Watch Video](https://www.wolfram.com/broadcast/video.php?v=2911)
 
 [Finding Bugs in the Wolfram Language from WTC 2019: Download Presentation](https://files.wolframcdn.com/pub/www.wolfram.com/technology-conference/2019/Thursday/2019BrentonBostickFindingBugsInTheWL.nb)
-
-
-## Installing
-
-Install CodeInspector and dependencies from the public paclet server:
-```
-In[1]:= PacletUpdate["CodeParser", "UpdateSites" -> True]
-			PacletUpdate["CodeInspector", "UpdateSites" -> True]
-
-Out[1]= Paclet[CodeParser,1.0,<>]
-Out[2]= Paclet[CodeInspector,1.0,<>]
-```
 
 
 ## Setup
@@ -24,7 +26,19 @@ Out[2]= Paclet[CodeInspector,1.0,<>]
 CodeInspector depends on the CodeParser paclet. Make sure that the paclets can be found on your system:
 ```
 In[1]:= Needs["CodeParser`"]
-			Needs["CodeInspector`"]
+      Needs["CodeInspector`"]
+```
+
+[CodeParser on github.com](https://github.com/xxx)
+[CodeInspector on github.com](https://github.com/xxx)
+
+Install CodeInspector and dependencies from the CodeTools paclet server:
+```
+In[1]:= PacletUpdate["CodeParser", "Site" -> "XXX", "UpdateSites" -> True]
+			PacletUpdate["CodeInspector", "Site" -> "XXX", "UpdateSites" -> True]
+
+Out[1]= PacletObject[CodeParser, 1.0, <>]
+Out[2]= PacletObject[CodeInspector, 1.0, <>]
 ```
 
 
@@ -45,66 +59,8 @@ cmake --build . --target paclet
 
 The result is a directory named `paclet` that contains the WL package source code and a built CodeInspector `.paclet` file for installing.
 
-You may see an error because the default path to `WolframKernel` may not be correct.
-
-Here is the cmake command using supplied values for `WOLFRAMKERNEL`:
+Specify `INSTALLATION_DIRECTORY` if you have Mathematica installed in a non-default location:
 ```
-cmake -DWOLFRAMKERNEL=/path/to/WolframKernel ..
+cmake -DINSTALLATION_DIRECTORY=/Applications/Mathematica111.app/Contents/ ..
+cmake --build . --target paclet
 ```
-
-Here are typical values for the variables:
-* `WOLFRAMKERNEL` `/Applications/Mathematica.app/Contents/MacOS/WolframKernel`
-
-Here is the build directory layout after building CodeInspector:
-
-```
-paclet/
-  CodeInspector/
-    Kernel/
-      CodeInspector.wl
-    PacletInfo.m
-    ...
-```
-
-### Windows
-
-It is recommended to specify `wolfram.exe` instead of `WolframKernel.exe`.
-
-`WolframKernel.exe` opens a new window while it is running. But `wolfram.exe` runs inside the window that started it.
-
-
-## The Severity levels
-
-### Remark
-
-Issues such as character encoding assumptions, formatting issues.
-
-A character was saved as extended ASCII, and cannot be treated as UTF8.
-
-Token is not on same line as operand.
-
-
-### Warning
-
-Most likely unintended uses of functions.
-
-
-### Error
-
-Recoverable errors in syntax.
-
-Code that is never intentional.
-
-`"\[Alpa]"`
-
-`f[a,]`
-
-
-### Fatal
-
-Unrecoverable errors in syntax.
-
-`1 + {}}`
-
-
-

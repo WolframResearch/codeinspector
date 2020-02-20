@@ -39,6 +39,7 @@ set(PACLETINFO_SOURCE
 )
 
 set(DOCUMENTATION_NOTEBOOK_PATHS
+	English/Guides/CodeInspector.nb
 	English/ReferencePages/Symbols/CodeInspect.nb
 	English/ReferencePages/Symbols/CodeInspectSummarize.nb
 	English/ReferencePages/Symbols/InspectedFileObject.nb
