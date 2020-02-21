@@ -481,7 +481,7 @@ Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
   ];
 
   If[MatchQ[children[[-2]], CallNode[LeafNode[Symbol, "Blank", _], _, _]],
-    lintData = children[[-2]][[3]];
+    lintData = children[[-2, 3]];
    AppendTo[issues, 
     InspectionObject["SwitchWhichConfusion", "``_`` is not a test.", "Error", <|
       lintData,
@@ -589,7 +589,7 @@ Module[{ast, node, children, data, src, cases, issues, selected, srcs, span, cou
    presence of False makes it less likely that True is unintended
    *)
    If[FreeQ[children[[2;;-4;;2]], LeafNode[Symbol, "False", _]],
-    span = children[[-2]][[3]];
+    span = children[[-2, 3]];
     AppendTo[issues, InspectionObject["SwitchWhichConfusion", "``Switch`` has ``True`` in last place.\n\
 Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
    ]

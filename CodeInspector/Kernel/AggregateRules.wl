@@ -1113,7 +1113,7 @@ Catch[
     ];
 
   ruleHead = rule[[1]];
-  ruleChild2 = rule[[2]][[3]];
+  ruleChild2 = rule[[2, 3]];
 
   {InspectionObject["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low.\n\
@@ -1121,7 +1121,7 @@ The precedence of ``&`` is surprisingly low.\n\
 Did you mean " <>
       format[ToInputFormString[BinaryNode[ruleHead, {
         ruleChild1,
-        rule[[2]][[2]],
+        rule[[2, 2]],
         GroupNode[GroupParen, {
           LeafNode[Token`OpenParen, "(", <||>],
           PostfixNode[Function, {
