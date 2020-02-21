@@ -1,6 +1,6 @@
 # CodeInspector
 
-`CodeInspector` is a package for finding and reporting problems in Wolfram Language code.
+CodeInspector is a package for finding and reporting problems in Wolfram Language code.
 
 ```
 In[1]:= Needs["CodeInspector`"]
