@@ -2,10 +2,12 @@ BeginPackage["CodeInspector`ImplicitTimes`"]
 
 CodeInspectImplicitTimes
 
-
 CodeInspectImplicitTimesSummarize
 
 
+CodeInspectImplicitTimesCST
+
+CodeInspectImplicitTimesCSTSummarize
 
 
 Begin["`Private`"]
@@ -34,7 +36,7 @@ $fileByteCountMaxLimit = 3*^6
 
 CodeInspectImplicitTimes[File[file_String], OptionsPattern[]] :=
 Catch[
- Module[{full, times, performanceGoal, cst, agg},
+ Module[{full, performanceGoal, cst},
 
  performanceGoal = OptionValue[PerformanceGoal];
 
@@ -54,15 +56,7 @@ Catch[
 
     cst = CodeConcreteParse[File[full]];
 
-    If[FailureQ[cst],
-      Throw[cst]
-    ];
-
-    agg = Aggregate[cst];
-
-    times = implicitTimes[agg];
-
-   times
+    CodeInspectImplicitTimesCST[cst]
 ]]
 
 
@@ -71,9 +65,19 @@ Catch[
 
 CodeInspectImplicitTimes[string_String, OptionsPattern[]] :=
 Catch[
-Module[{times, cst, agg},
+Module[{cst},
 
   cst = CodeConcreteParse[string];
+
+  CodeInspectImplicitTimesCST[cst]
+]]
+
+
+
+
+CodeInspectImplicitTimesCST[cst_, OptionsPattern[]] :=
+Catch[
+Module[{times, agg},
 
   If[FailureQ[cst],
     Throw[cst]
@@ -85,6 +89,7 @@ Module[{times, cst, agg},
 
   times
 ]]
+
 
 
 
@@ -154,6 +159,38 @@ Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLi
   InspectedStringObject[string, lintedLines]
 ]]
 
+
+
+
+Options[CodeInspectImplicitTimesCSTSummarize] = {
+  "LineNumberExclusions" -> <||>,
+  "LineHashExclusions" -> {}
+}
+
+CodeInspectImplicitTimesCSTSummarize[cst_, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
+Catch[
+Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines, string},
+
+  If[FailureQ[cst],
+    Throw[cst]
+  ];
+
+  implicitTimes = implicitTimesIn;
+
+  lineNumberExclusions = OptionValue["LineNumberExclusions"];
+  lineHashExclusions = OptionValue["LineHashExclusions"];
+
+  If[implicitTimes === Automatic,
+    implicitTimes = CodeInspectImplicitTimesCST[cst];
+  ];
+
+  string = ToSourceCharacterString[cst];
+
+  lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
+
+  lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+  InspectedStringObject[string, lintedLines]
+]]
 
 
 
