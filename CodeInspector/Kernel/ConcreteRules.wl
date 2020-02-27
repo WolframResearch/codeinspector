@@ -35,7 +35,7 @@ BinaryNode[Span, _, _] -> scanBinarySpans,
 TernaryNode[Span, _, _] -> scanTernarySpans,
 *)
 
-CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
+CallNode[{_, ___, LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _], ___}, _, _] -> scanCalls,
 
 
 ErrorNode[_, _, _] -> scanErrorNodes,
@@ -79,7 +79,7 @@ Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
     i++;
     While[i < Length[children],
       Switch[children[[i]],
-        LeafNode[Token`Newline, _, _],
+        LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _],
           AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
             <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
                ConfidenceLevel -> 0.95 |>]
@@ -108,7 +108,7 @@ Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
     siblingsAfter = siblings[[ (Last[pos] + 1);; ]];
 
     Switch[siblingsAfter,
-      {LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _]..., LeafNode[Token`Newline, _, _], ___},
+      {LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _]..., LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _], ___},
         (*
         There is a newline after some other trivia
         *)
@@ -164,7 +164,7 @@ Module[{cst, node, children, data, issues, poss, i, j},
   i++;
   While[i < j,
     Switch[children[[i]],
-      LeafNode[Token`Newline, _, _],
+      LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _],
         AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
           <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
              ConfidenceLevel -> 0.95 |>]
@@ -185,7 +185,7 @@ Module[{cst, node, children, data, issues, poss, i, j},
   j++;
   While[j < Length[children],
     Switch[children[[j]],
-      LeafNode[Token`Newline, _, _],
+      LeafNode[Token`ToplevelNewline, | Token`InternalNewline, _, _],
         AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
           <| Source -> children[[ poss[[2, 1]], 3, Key[Source] ]],
              ConfidenceLevel -> 0.95 |>]
