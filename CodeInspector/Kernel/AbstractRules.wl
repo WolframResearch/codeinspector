@@ -223,6 +223,7 @@ CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assu
 CallNode[LeafNode[Symbol, "Rule", _], {lhs_ /; !FreeQ[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]], _}, _] -> scanPatternRules,
 
 
+CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "ImageDimensions", _], _, _]]}, _] -> scanImageSizes,
 
 (*
 cst of [x] is fine
@@ -1908,6 +1909,37 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
 
   issues
 ]]
+
+
+
+
+
+
+
+Attributes[scanImageSizes] = {HoldRest}
+
+scanImageSizes[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, children, data},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  AppendTo[issues, InspectionObject["ImageSize", "The option ``ImageSize`` is in points, but ``ImageDimensions`` is in pixels.", "Error", <|
+    Source -> data[Source],
+    ConfidenceLevel -> 0.8 |>]];
+
+  issues
+]]
+
+
+
+
+
 
 
 
