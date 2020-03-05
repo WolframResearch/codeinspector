@@ -225,6 +225,15 @@ CallNode[LeafNode[Symbol, "Rule", _], {lhs_ /; !FreeQ[lhs, CallNode[LeafNode[Sym
 
 CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "ImageDimensions", _], _, _]]}, _] -> scanImageSizes,
 
+
+
+(*
+Do a basic scan for Patterns in rhs here, this is just a preliminary scan
+*)
+CallNode[LeafNode[Symbol, "RuleDelayed" | "SetDelayed", _], {lhs_, rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]]}, _] -> scanRHSPatterns,
+
+
+
 (*
 cst of [x] is fine
 ast of [x] is an error
@@ -1935,6 +1944,60 @@ Module[{ast, node, children, data},
 
   issues
 ]]
+
+
+
+
+
+
+
+
+
+Attributes[scanRHSPatterns] = {HoldRest}
+
+scanRHSPatterns[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
+  rhsOccurringPatterns, rhsSymbols, fullForm, rhsPatterns, rhsPatternNames},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  lhs = children[[1]];
+  rhs = children[[2]];
+  lhsPatterns = Cases[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
+  rhsPatterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
+
+  lhsPatternNames = #[[2, 1]]& /@ lhsPatterns;
+  rhsPatternNames = #[[2, 1]]& /@ rhsPatterns;
+
+  Do[
+    
+    fullForm = ToFullFormString[lhsPatternName];
+
+    rhsOccurringPatterns = Select[rhsPatternNames, (ToFullFormString[#] == fullForm)&];
+
+    If[!empty[rhsOccurringPatterns],
+      AppendTo[issues, InspectionObject["PatternRule", "The same named pattern occurs on lhs and rhs.", "Error", <|
+        Source -> lhsPatternName[[3, Key[Source] ]],
+        "AdditionalSources" -> rhsOccurringPatterns[[All, 3, Key[Source] ]],
+        ConfidenceLevel -> 0.9 |>]]
+    ];
+    ,
+    {lhsPatternName, lhsPatternNames}
+  ];
+
+  issues
+]]
+
+
+
+
+
 
 
 
