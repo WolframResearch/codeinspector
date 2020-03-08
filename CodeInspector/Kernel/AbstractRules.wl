@@ -233,6 +233,8 @@ Do a basic scan for Patterns in rhs here, this is just a preliminary scan
 CallNode[LeafNode[Symbol, "RuleDelayed" | "SetDelayed", _], {lhs_, rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]]}, _] -> scanRHSPatterns,
 
 
+CallNode[LeafNode[Symbol, "OptionsPattern", _], {}, _] -> scanOptionsPattern,
+
 
 (*
 cst of [x] is fine
@@ -1958,7 +1960,7 @@ Attributes[scanRHSPatterns] = {HoldRest}
 scanRHSPatterns[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
-  rhsOccurringPatterns, rhsSymbols, fullForm, rhsPatterns, rhsPatternNames},
+  rhsOccurringPatterns, fullForm, rhsPatterns, rhsPatternNames},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1999,6 +2001,64 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
 
 
 
+(*
+
+Explained here:
+https://mathematica.stackexchange.com/questions/124199/functions-with-both-optional-arguments-and-options/124208#124208
+
+*)
+
+Attributes[scanOptionsPattern] = {HoldRest}
+
+scanOptionsPattern[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, optionalChildren, optionalPattern},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  data = node[[3]];
+
+  issues = {};
+
+  If[pos == {},
+    Throw[issues]
+  ];
+
+  parentPos = Most[pos];
+  parent = Extract[ast, {parentPos}][[1]];
+  While[ListQ[parent],
+    parentPos = Most[parentPos];
+    parent = Extract[ast, {parentPos}][[1]]
+  ];
+
+  previousPos = parentPos~Join~{2}~Join~{Last[pos] - 1};
+
+  previous = Extract[ast, {previousPos}][[1]];
+
+  If[!MatchQ[previous, CallNode[LeafNode[Symbol, "Optional", _], _, _]],
+    Throw[issues]
+  ];
+
+  optional = previous;
+  optionalChildren = optional[[2]];
+  optionalPattern = optionalChildren[[1]];
+
+  (*
+  dig down into name
+  *)
+  If[MatchQ[optionalPattern, CallNode[LeafNode[Symbol, "Pattern", _], _, _]],
+    optionalPattern = optionalPattern[[2, 2]]
+  ];
+
+  If[MatchQ[optionalPattern, CallNode[LeafNode[Symbol, "Blank" | "BlankSequence" | "BlankNullSequence", _], {}, _]],
+    AppendTo[issues, InspectionObject["OptionsPattern", "``Optional`` occurs before ``OptionsPattern`` and may bind arguments intended for ``OptionsPattern``.", "Error", <|
+      Source -> optionalPattern[[3, Key[Source]]],
+      "AdditionalSources" -> { data[Source] },
+      ConfidenceLevel -> 0.95 |>]];
+  ];
+
+  issues
+]]
 
 
 
