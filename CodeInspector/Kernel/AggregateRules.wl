@@ -14,14 +14,16 @@ Needs["CodeInspector`Utils`"]
 
 
 blankPat =
-  LeafNode[Blank | BlankSequence | BlankNullSequence, _, _] |
-  _OptionalDefaultNode
+  LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
   _BlankNode |
   _BlankSequenceNode |
   _BlankNullSequenceNode |
+  _OptionalDefaultNode |
   _PatternBlankNode |
   _PatternBlankSequenceNode |
-  _PatternBlankNullSequenceNode
+  _PatternBlankNullSequenceNode |
+  _PatternOptionalDefaultNode
+
 
 
 (*
@@ -182,6 +184,10 @@ PatternBlankSequenceNode[PatternBlankSequence, {
   ___}, _] -> scanUppercasePatternBlank,
 
 PatternBlankNullSequenceNode[PatternBlankNullSequence, {
+  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
+  ___}, _] -> scanUppercasePatternBlank,
+
+PatternOptionalDefaultNode[PatternOptionalDefault, {
   LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
   ___}, _] -> scanUppercasePatternBlank,
 
@@ -473,7 +479,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     <implicit Times> ___a?f
     *)
     Switch[p,
-      {LeafNode[Blank | BlankSequence | BlankNullSequence, _, _] |
+      {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
         OptionalDefaultNode[_, {_, _}, _] |
         PatternBlankNode[_, {_, _}, _] |
         PatternBlankSequenceNode[_, {_, _}, _] |
@@ -484,16 +490,17 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
         AppendTo[errorSrcs, p[[2, 3, Key[Source] ]] ];
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _],
-        LeafNode[Blank | BlankSequence | BlankNullSequence, _, _] |
-        OptionalDefaultNode[_, {_, _}, _] |
+        LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
         _BlankNode |
         _BlankSequenceNode |
         _BlankNullSequenceNode |
+        _OptionalDefaultNode |
         BinaryNode[PatternTest | Condition, {
-          LeafNode[Blank | BlankSequence | BlankNullSequence, _, _] |
+          LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
           _BlankNode |
           _BlankSequenceNode |
-          _BlankNullSequenceNode, ___ }, _]}
+          _BlankNullSequenceNode |
+          _OptionalDefaultNode, ___ }, _]}
         ,
         AppendTo[errorSrcs, p[[1, 3, Key[Source] ]] ];
       ,
@@ -1307,7 +1314,6 @@ Catch[
   If b has Patterns or Blanks, then b is NOT a valid optional and warn
   *)
   If[FreeQ[opt, LeafNode[Blank | BlankSequence | BlankNullSequence, _, _] |
-                _OptionalDefaultNode |
                 _BlankNode |
                 _BlankSequenceNode |
                 _BlankNullSequenceNode |
