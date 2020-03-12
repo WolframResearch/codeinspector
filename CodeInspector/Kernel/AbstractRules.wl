@@ -2024,14 +2024,35 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
     Throw[issues]
   ];
 
+  actualPos = pos;
+
   parentPos = Most[pos];
   parent = Extract[ast, {parentPos}][[1]];
   While[ListQ[parent],
     parentPos = Most[parentPos];
     parent = Extract[ast, {parentPos}][[1]]
   ];
+  
+  (*
+  could be something like  opts:OptionsPattern[], so go include the Pattern before proceeding
+  *)
+  If[MatchQ[parent, CallNode[LeafNode[Symbol, "Pattern", _], _, _]],
 
-  previousPos = parentPos~Join~{2}~Join~{Last[pos] - 1};
+      If[parentPos == {},
+        Throw[issues]
+      ];
+
+      actualPos = parentPos;
+
+      parentPos = Most[parentPos];
+      parent = Extract[ast, {parentPos}][[1]];
+      While[ListQ[parent],
+        parentPos = Most[parentPos];
+        parent = Extract[ast, {parentPos}][[1]]
+      ];
+  ];
+
+  previousPos = parentPos~Join~{2}~Join~{Last[actualPos] - 1};
 
   previous = Extract[ast, {previousPos}][[1]];
 
