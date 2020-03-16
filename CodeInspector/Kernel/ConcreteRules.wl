@@ -35,7 +35,7 @@ BinaryNode[Span, _, _] -> scanBinarySpans,
 TernaryNode[Span, _, _] -> scanTernarySpans,
 *)
 
-CallNode[{_, ___, LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _], ___}, _, _] -> scanCalls,
+CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
 
 ErrorNode[_, _, _] -> scanErrorNodes,
