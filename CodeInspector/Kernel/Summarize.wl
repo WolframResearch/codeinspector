@@ -39,7 +39,7 @@ How many linted lines to keep?
 $LintedLineLimit = 10
 
 (*
-Hoe many lints to keep?
+How many lints to keep?
 *)
 $LintLimit = 20
 
