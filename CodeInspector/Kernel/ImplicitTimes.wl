@@ -10,6 +10,10 @@ CodeInspectImplicitTimesCST
 CodeInspectImplicitTimesCSTSummarize
 
 
+
+$ImplicitTimesLimit
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -18,6 +22,14 @@ Needs["CodeInspector`"]
 Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
+
+
+
+
+(*
+How many implicit Times to keep?
+*)
+$ImplicitTimesLimit = 20
 
 
 
@@ -355,6 +367,14 @@ Catch[
       lineNumberExclusions]];
 
     implicitTimes = Complement[implicitTimes, implicitTimesExcludedByLineNumber];
+
+
+    (*
+    Make sure to sort implicitTimes before taking
+    *)
+    implicitTimes = SortBy[implicitTimes, #[[4, Key[Source]]]&];
+
+    implicitTimes = Take[implicitTimes, UpTo[$ImplicitTimesLimit]];
 
 
     sources = #[Source]& /@ implicitTimes[[All, 3]];
