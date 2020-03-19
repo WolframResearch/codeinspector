@@ -25,7 +25,7 @@ set(WL_PACLET_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ConcreteRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/External.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
-	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTimes.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTokens.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
