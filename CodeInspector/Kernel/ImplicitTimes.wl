@@ -372,7 +372,7 @@ Catch[
     (*
     Make sure to sort implicitTimes before taking
     *)
-    implicitTimes = SortBy[implicitTimes, #[[4, Key[Source]]]&];
+    implicitTimes = SortBy[implicitTimes, #[[3, Key[Source]]]&];
 
     implicitTimes = Take[implicitTimes, UpTo[$ImplicitTimesLimit]];
 
