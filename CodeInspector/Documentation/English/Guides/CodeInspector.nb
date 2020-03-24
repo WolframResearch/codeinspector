@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     13647,        354]
-NotebookOptionsPosition[      8754,        253]
-NotebookOutlinePosition[      9221,        270]
-CellTagsIndexPosition[      9178,        267]
+NotebookDataLength[     14046,        362]
+NotebookOptionsPosition[      9035,        259]
+NotebookOutlinePosition[      9500,        276]
+CellTagsIndexPosition[      9457,        273]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -228,6 +228,12 @@ Cell[TextData[ButtonBox["CodeInspectorTutorial",
  CellChangeTimes->{{3.791211437873395*^9, 3.7912114550595493`*^9}},
  CellID->806871991,ExpressionUUID->"a7972e88-2430-4bc4-82ff-487b07ff2f6b"],
 
+Cell[TextData[ButtonBox["Release Notes",
+ BaseStyle->"Link",
+ ButtonData->"paclet:CodeInspector/tutorial/ReleaseNotes"]], "GuideTutorial",
+ CellChangeTimes->{{3.794066526108901*^9, 3.794066548888845*^9}},
+ CellID->44394517,ExpressionUUID->"a2085ae9-d42a-4c19-bdab-1090d280afde"],
+
 Cell[TextData[ButtonBox["WritingAdditionalRules",
  BaseStyle->"Link",
  ButtonData->
@@ -253,7 +259,7 @@ Cell["Related Links", "GuideRelatedLinksSection",
 },
 WindowSize->{700, 770},
 WindowMargins->{{4, Automatic}, {Automatic, 0}},
-FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (January 25, 2020)",
+FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 18, 2020)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "GuidePageStyles.nb", 
   CharacterEncoding -> "UTF-8"],
 ExpressionUUID->"f565a96f-5585-4af8-8a2b-0713ef93849f"
@@ -343,18 +349,20 @@ Cell[7514, 220, 117, 1, 72, "GuideTutorialsSection",ExpressionUUID->"7b01a9e1-73
  CellID->415694126],
 Cell[7634, 223, 301, 5, 22, "GuideTutorial",ExpressionUUID->"a7972e88-2430-4bc4-82ff-487b07ff2f6b",
  CellID->806871991],
-Cell[7938, 230, 302, 5, 22, "GuideTutorial",ExpressionUUID->"7902e204-e234-4502-ba1b-87b62934bb97",
+Cell[7938, 230, 278, 4, 22, "GuideTutorial",ExpressionUUID->"a2085ae9-d42a-4c19-bdab-1090d280afde",
+ CellID->44394517],
+Cell[8219, 236, 302, 5, 22, "GuideTutorial",ExpressionUUID->"7902e204-e234-4502-ba1b-87b62934bb97",
  CellID->1885805579]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[8277, 240, 117, 1, 72, "GuideMoreAboutSection",ExpressionUUID->"579b68b0-a33d-439d-9870-fd2c5734bfef",
+Cell[8558, 246, 117, 1, 72, "GuideMoreAboutSection",ExpressionUUID->"579b68b0-a33d-439d-9870-fd2c5734bfef",
  CellID->23220180],
-Cell[8397, 243, 106, 1, 22, "GuideMoreAbout",ExpressionUUID->"83b9f469-5124-4e9b-90b2-3051399efb53",
+Cell[8678, 249, 106, 1, 22, "GuideMoreAbout",ExpressionUUID->"83b9f469-5124-4e9b-90b2-3051399efb53",
  CellID->1567025153],
-Cell[8506, 246, 105, 1, 22, "GuideMoreAbout",ExpressionUUID->"c3bd4df2-4d8d-49f6-99c1-551d361fb06d",
+Cell[8787, 252, 105, 1, 22, "GuideMoreAbout",ExpressionUUID->"c3bd4df2-4d8d-49f6-99c1-551d361fb06d",
  CellID->252299663]
 }, Open  ]],
-Cell[8626, 250, 124, 1, 72, "GuideRelatedLinksSection",ExpressionUUID->"732e1505-7081-401e-87ca-12244f9025a2",
+Cell[8907, 256, 124, 1, 72, "GuideRelatedLinksSection",ExpressionUUID->"732e1505-7081-401e-87ca-12244f9025a2",
  CellID->415694148]
 }
 ]

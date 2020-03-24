@@ -47,6 +47,7 @@ set(DOCUMENTATION_NOTEBOOK_PATHS
 	English/ReferencePages/Symbols/InspectedStringObject.nb
 	English/ReferencePages/Symbols/InspectionObject.nb
 	English/Tutorials/CodeInspectorTutorial.nb
+	English/Tutorials/ReleaseNotes.nb
 	English/Tutorials/WritingAdditionalRules.nb
 )
 
