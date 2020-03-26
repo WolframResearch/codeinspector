@@ -38,6 +38,37 @@ TernaryNode[Span, _, _] -> scanTernarySpans,
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
 
+(*
+Something like  a_..b  or  _...
+
+Prior to 12.2,  a_..b  was parsed as Times[(a_).., b]
+12.2 and onward,  a_..b  is parsed as Dot[a_., b]
+
+Prior to 12.2,  a_..b  and  _...  were parsed differently by the kernel vs. the FE
+
+The rules here catch cases that come from the FE and might be surprising.
+
+Related bugs: 390755
+*)
+
+InfixNode[Dot, {
+  LeafNode[Token`UnderDot, _, _], LeafNode[Token`Dot, _, _], _}, _] -> scanUnderNodes,
+
+InfixNode[Dot, {
+  PatternOptionalDefaultNode[PatternOptionalDefault, {_, LeafNode[Token`UnderDot, _, _]}, _],
+  LeafNode[Token`Dot, _, _], _}, _] -> scanUnderNodes,
+
+PostfixNode[Repeated, {
+  LeafNode[Token`UnderDot, _, _], LeafNode[Token`DotDot, _, _]}, _] -> scanUnderNodes,
+
+PostfixNode[Repeated, {
+  PatternOptionalDefaultNode[PatternOptionalDefault, {_, LeafNode[Token`UnderDot, _, _]}, _], 
+  LeafNode[Token`DotDot, _, _]}, _] -> scanUnderNodes,
+
+
+
+
+
 ErrorNode[_, _, _] -> scanErrorNodes,
 
 SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
@@ -236,6 +267,30 @@ scanCalls[pos_List, cstIn_] :=
 
   {InspectionObject["CallDifferentLine", "Call is on different lines.", "Warning", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
 ]
+
+
+
+
+
+
+
+Attributes[scanUnderNodes] = {HoldRest}
+
+scanUnderNodes[pos_List, cstIn_] :=
+ Module[{cst, node, data},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  data = node[[3]];
+
+  {InspectionObject["KernelFEDifference", "Syntax may be interpreted differently depending on system.", "Warning", <| data, ConfidenceLevel -> 0.95 |>]}
+]
+
+
+
+
+
+
+
 
 
 
