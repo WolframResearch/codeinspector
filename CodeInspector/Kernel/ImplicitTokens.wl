@@ -1,17 +1,17 @@
-BeginPackage["CodeInspector`ImplicitTimes`"]
+BeginPackage["CodeInspector`ImplicitTokens`"]
 
-CodeInspectImplicitTimes
+CodeInspectImplicitTokens
 
-CodeInspectImplicitTimesSummarize
-
-
-CodeInspectImplicitTimesCST
-
-CodeInspectImplicitTimesCSTSummarize
+CodeInspectImplicitTokensSummarize
 
 
+CodeInspectImplicitTokensCST
 
-$ImplicitTimesLimit
+CodeInspectImplicitTokensCSTSummarize
+
+
+
+$ImplicitTokensLimit
 
 
 Begin["`Private`"]
@@ -27,16 +27,16 @@ Needs["CodeInspector`Utils`"]
 
 
 (*
-How many implicit Times to keep?
+How many implicit tokens to keep?
 *)
-$ImplicitTimesLimit = 20
+$ImplicitTokensLimit = 20
 
 
 
 
-CodeInspectImplicitTimes::usage = "CodeInspectImplicitTimes[code] returns a list of implicit times in code."
+CodeInspectImplicitTokens::usage = "CodeInspectImplicitTokens[code] returns a list of implicit tokens in code."
 
-Options[CodeInspectImplicitTimes] = {
+Options[CodeInspectImplicitTokens] = {
   PerformanceGoal -> "Speed"
 }
 
@@ -46,7 +46,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-CodeInspectImplicitTimes[File[file_String], OptionsPattern[]] :=
+CodeInspectImplicitTokens[File[file_String], OptionsPattern[]] :=
 Catch[
  Module[{full, performanceGoal, cst},
 
@@ -68,28 +68,28 @@ Catch[
 
     cst = CodeConcreteParse[File[full]];
 
-    CodeInspectImplicitTimesCST[cst]
+    CodeInspectImplicitTokensCST[cst]
 ]]
 
 
 
 
 
-CodeInspectImplicitTimes[string_String, OptionsPattern[]] :=
+CodeInspectImplicitTokens[string_String, OptionsPattern[]] :=
 Catch[
 Module[{cst},
 
   cst = CodeConcreteParse[string];
 
-  CodeInspectImplicitTimesCST[cst]
+  CodeInspectImplicitTokensCST[cst]
 ]]
 
 
 
 
-CodeInspectImplicitTimesCST[cst_, OptionsPattern[]] :=
+CodeInspectImplicitTokensCST[cst_, OptionsPattern[]] :=
 Catch[
-Module[{times, agg},
+Module[{times, agg, spans, nulls},
 
   If[FailureQ[cst],
     Throw[cst]
@@ -98,25 +98,27 @@ Module[{times, agg},
   agg = Aggregate[cst];
 
   times = implicitTimes[agg];
+  spans = implicitSpans[agg];
+  nulls = implicitNulls[agg];
 
-  times
+  Join[times, spans, nulls]
 ]]
 
 
 
 
-CodeInspectImplicitTimesSummarize::usage = "CodeInspectImplicitTimesSummarize[code] returns an inspection summary object."
+CodeInspectImplicitTokensSummarize::usage = "CodeInspectImplicitTokensSummarize[code] returns an inspection summary object."
 
-Options[CodeInspectImplicitTimesSummarize] = {
+Options[CodeInspectImplicitTokensSummarize] = {
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
 
-CodeInspectImplicitTimesSummarize[File[file_String], implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTokensSummarize[File[file_String], implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
 Catch[
-Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines, bytes, str},
+Module[{implicitTokens, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines, bytes, str},
 
-  implicitTimes = implicitTimesIn;
+  implicitTokens = implicitTokensIn;
 
   lineNumberExclusions = OptionValue["LineNumberExclusions"];
   lineHashExclusions = OptionValue["LineHashExclusions"];
@@ -130,8 +132,8 @@ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, li
     Throw[Failure["EmptyFile", <|"FileName"->full|>]]
   ];
 
-  If[implicitTimes === Automatic,
-    implicitTimes = CodeInspectImplicitTimes[File[full]];
+  If[implicitTokens === Automatic,
+    implicitTokens = CodeInspectImplicitTokens[File[full]];
   ];
 
   bytes = Import[full, "Byte"];
@@ -140,7 +142,7 @@ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, li
 
   lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+  lintedLines = implicitTokensLinesReport[lines, implicitTokens, lineNumberExclusions, lineHashExclusions];
   InspectedFileObject[full, lintedLines]
 ]]
 
@@ -148,11 +150,11 @@ Module[{implicitTimes, full, lines, lineNumberExclusions, lineHashExclusions, li
 
 
 
-CodeInspectImplicitTimesSummarize[string_String, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTokensSummarize[string_String, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
 Catch[
-Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
+Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
 
-  implicitTimes = implicitTimesIn;
+  implicitTokens = implicitTokensIn;
 
   lineNumberExclusions = OptionValue["LineNumberExclusions"];
   lineHashExclusions = OptionValue["LineHashExclusions"];
@@ -161,46 +163,46 @@ Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLi
     Throw[Failure["EmptyString", <||>]]
   ];
 
-  If[implicitTimes === Automatic,
-    implicitTimes = CodeInspectImplicitTimes[string];
+  If[implicitTokens === Automatic,
+    implicitTokens = CodeInspectImplicitTokens[string];
   ];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+  lintedLines = implicitTokensLinesReport[lines, implicitTokens, lineNumberExclusions, lineHashExclusions];
   InspectedStringObject[string, lintedLines]
 ]]
 
 
 
 
-Options[CodeInspectImplicitTimesCSTSummarize] = {
+Options[CodeInspectImplicitTokensCSTSummarize] = {
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {}
 }
 
-CodeInspectImplicitTimesCSTSummarize[cst_, implicitTimesIn:{___InfixNode}:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTokensCSTSummarize[cst_, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
 Catch[
-Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLines, string},
+Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedLines, string},
 
   If[FailureQ[cst],
     Throw[cst]
   ];
 
-  implicitTimes = implicitTimesIn;
+  implicitTokens = implicitTokensIn;
 
   lineNumberExclusions = OptionValue["LineNumberExclusions"];
   lineHashExclusions = OptionValue["LineHashExclusions"];
 
-  If[implicitTimes === Automatic,
-    implicitTimes = CodeInspectImplicitTimesCST[cst];
+  If[implicitTokens === Automatic,
+    implicitTokens = CodeInspectImplicitTokensCST[cst];
   ];
 
   string = ToSourceCharacterString[cst];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = implicitTimesLinesReport[lines, implicitTimes, lineNumberExclusions, lineHashExclusions];
+  lintedLines = implicitTokensLinesReport[lines, implicitTokens, lineNumberExclusions, lineHashExclusions];
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -209,11 +211,29 @@ Module[{implicitTimes, lines, lineNumberExclusions, lineHashExclusions, lintedLi
 
 implicitTimes[agg_] :=
 Catch[
-Module[{implicitTimes},
+Module[{times},
 
-  implicitTimes = Cases[agg, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], opts_], {0, Infinity}];
+  times = Cases[agg, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], _], {0, Infinity}];
 
-  implicitTimes
+  times
+]]
+
+implicitSpans[agg_] :=
+Catch[
+Module[{spans},
+
+  spans = Cases[agg, (BinaryNode|TernaryNode)[Span, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitOne | Token`Fake`ImplicitAll, _, _], 1], _], {0, Infinity}];
+
+  spans
+]]
+
+implicitNulls[agg_] :=
+Catch[
+Module[{nulls},
+
+  nulls = Cases[agg, InfixNode[Comma | CompoundExpression, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitNull, _, _], 1], _], {0, Infinity}];
+
+  nulls
 ]]
 
 
@@ -227,40 +247,22 @@ $markupLimit = 100
 $color = severityColor[{InspectionObject["ImplicitTimes", "ImplicitTimes", "ImplicitTimes", <||>]}];
 
 
-modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
- Module[{line, startCols, endCols, infixCols, startInserters, endInserters, infixInserters, under,
-  rules},
+modify[lineIn_String, charInfos:{{_, _, _}...}, lineNumber_] :=
+ Module[{line, cols, inserters, under, rules},
 
-  startCols = Cases[starts, {lineNumber, col_} :> col];
-  endCols = Cases[ends, {lineNumber, col_} :> col];
-  infixCols = Cases[infixs, {lineNumber, col_} :> col];
+  cols = Cases[charInfos, {char_, lineNumber, col_} :> {char, col}];
 
   line = lineIn;
 
-  startInserters = AssociationMap[LintMarkup["(", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, startCols];
-  endInserters = AssociationMap[LintMarkup[")", FontWeight->Bold, FontSize->Larger, FontColor->$color]&, endCols];
-  infixInserters = AssociationMap[LintMarkup[LintTimesCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, infixCols];
+  inserters = (#[[2]] -> #[[1]])& /@ cols;
 
   If[$Debug,
     Print["lineNumber: ", lineNumber];
-    Print["startInserters: ", startInserters];
-    Print["endInserters: ", endInserters];
-    Print["infixInserters: ", infixInserters];
+    Print["inserters: ", inserters];
   ];
 
-  If[Intersection[Keys[startInserters], Keys[endInserters]] =!= {},
-    Throw["intersection start and end", "Unhandled"]
-  ];
+  rules = Merge[inserters, (LintMarkup[#, FontWeight->Bold, FontSize->Larger, FontColor->$color])& @* mergeCharacters];
 
-  If[Intersection[Keys[startInserters], Keys[infixInserters]] =!= {},
-    Throw["intersection start and infix", "Unhandled"]
-  ];
-
-  If[Intersection[Keys[endInserters], Keys[infixInserters]] =!= {},
-    Throw["intersection end and infix", "Unhandled"]
-  ];
-
-  rules = Join[startInserters, endInserters, infixInserters];
   rules = Normal[rules];
 
   (*
@@ -283,6 +285,25 @@ modify[lineIn_String, {starts_, ends_, infixs_}, lineNumber_] :=
 
   under
   ]
+
+mergeCharacters[{LintTimesCharacter}] = LintTimesCharacter
+mergeCharacters[{LintOneCharacter}] = LintOneCharacter
+mergeCharacters[{LintAllCharacter}] = LintAllCharacter
+mergeCharacters[{LintNullCharacter}] = LintNullCharacter
+mergeCharacters[{"("}] = "("
+mergeCharacters[{")"}] = ")"
+
+mergeCharacters[{LintTimesCharacter, LintOneCharacter}] = LintTimesOneCharacter
+mergeCharacters[{LintTimesCharacter, LintAllCharacter}] = LintAllTimesCharacter
+mergeCharacters[{LintAllCharacter, LintTimesCharacter}] = LintAllTimesCharacter
+mergeCharacters[{LintTimesCharacter, LintOneCharacter, LintAllCharacter}] = LintAllTimesOneCharacter
+mergeCharacters[{LintAllCharacter, LintOneCharacter, LintTimesCharacter}] = LintAllTimesOneCharacter
+
+mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
+mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
+mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
+mergeCharacters[{")", LintTimesCharacter, LintOneCharacter}] = LintCloseTimesOneCharacter
+mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
 
 (*
 return {line, col} for all \[Times] symbols
@@ -324,23 +345,20 @@ processChildren[nodes_List] :=
   processPar /@ pars
   ]
 
-implicitTimesLinesReport[linesIn:{___String}, implicitTimesIn:{___InfixNode}, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
+implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
 Catch[
- Module[{implicitTimes, sources, starts, ends, infixs, lines, hashes,
-  lineNumberExclusions, lineHashExclusions, implicitTimesExcludedByLineNumber, tmp, linesToModify},
+ Module[{implicitTokens, sources, starts, ends, infixs, lines, hashes,
+  lineNumberExclusions, lineHashExclusions, implicitTokensExcludedByLineNumber, tmp, linesToModify, times, ones, alls, nulls,
+  charInfos, charInfoPoss},
 
-    If[implicitTimes === {},
+    If[implicitTokensIn === {},
       Throw[{}]
     ];
 
-    implicitTimes = implicitTimesIn;
+    implicitTokens = implicitTokensIn;
 
     lines = linesIn;
     hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
-
-    If[$Debug,
-      Print["lines: ", lines];
-    ];
 
     lineNumberExclusions = lineNumberExclusionsIn;
 
@@ -349,16 +367,16 @@ Catch[
     lineHashExclusions = lineHashExclusionsIn;
 
     (* Association of lineNumber -> All *)
-    tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]] ], i -> All, Nothing], {i, 1, Length[lines]}]];
+    tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]]], i -> All, Nothing], {i, 1, Length[lines]}]];
     lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
 
 
     (*
     implicitTimes that match the line numbers and tags in lineNumberExclusions
     *)
-    implicitTimesExcludedByLineNumber = Catenate[KeyValueMap[Function[{line, tags},
+    implicitTokensExcludedByLineNumber = Catenate[KeyValueMap[Function[{line, tags},
         If[tags === All,
-          Cases[implicitTimes, InfixNode[_, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
+          Cases[implicitTokens, _[_, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
           ,
           (* warn? *)
           {}
@@ -366,45 +384,61 @@ Catch[
       ],
       lineNumberExclusions]];
 
-    implicitTimes = Complement[implicitTimes, implicitTimesExcludedByLineNumber];
+    implicitTokens = Complement[implicitTokens, implicitTokensExcludedByLineNumber];
 
 
-    (*
-    Make sure to sort implicitTimes before taking
-    *)
-    implicitTimes = SortBy[implicitTimes, #[[3, Key[Source]]]&];
-
-    implicitTimes = Take[implicitTimes, UpTo[$ImplicitTimesLimit]];
 
 
-    sources = #[Source]& /@ implicitTimes[[All, 3]];
+    times = Cases[implicitTokens, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], _]];
+    sources = #[Source]& /@ times[[All, 3]];
 
-   starts = sources[[All, 1]];
-   ends = sources[[All, 2]];
+   starts = {"(", #[[1]], #[[2]]}& /@ sources[[All, 1]];
+   ends = {")", #[[1]], #[[2]]}& /@ sources[[All, 2]];
 
-   infixs = processChildren /@ implicitTimes[[All, 2]];
 
-   If[$Debug,
-    Print["infixs: ", infixs];
-   ];
+   ones = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitOne, _, _], {0, Infinity}]];
+   alls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitAll, _, _], {0, Infinity}]];
+   nulls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitNull, _, _], {0, Infinity}]];
 
-   infixs = Flatten[infixs, 1];
+   times = processChildren /@ times[[All, 2]];
 
-   If[$Debug,
-    Print["infixs: ", infixs];
-   ];
+   times = Flatten[times, 1];
 
    (*
     resolve BestImplicitTimesPlacement with actual columns now
    *)
-   infixs = Map[resolveInfix[#, lines]&, infixs];
+   times = Map[resolveInfix[#, lines]&, times];
 
-   linesToModify = Union[starts[[All, 1]] ~Join~ ends[[All, 1]] ~Join~ infixs[[All, 1]] ];
+   ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
+   alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
+   nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
+
+  infixs = times ~Join~ ones ~Join~ alls ~Join~ nulls;
+
+   charInfos = starts ~Join~ ends ~Join~ infixs;
+
+   If[$Debug,
+    Print["charInfos: ", charInfos]
+   ];
+
+   (*
+   Make sure to sort using Union before taking
+   *)
+   charInfoPoss = Union[charInfos[[All, 2;;3]]];
+
+   charInfoPoss = Take[charInfoPoss, UpTo[$ImplicitTokensLimit]];
+
+    
+    charInfos = SortBy[charInfos, #[[2;;3]]&];
+
+    charInfos = Cases[charInfos, {_, line_, col_} /; MemberQ[charInfoPoss, {line, col}]];
+
+   linesToModify = Union[charInfos[[All, 2]]];
 
    Table[
 
      InspectedLineObject[lines[[i]], i, hashes[[i]], {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
-                                  modify[lines[[i]], {starts, ends, infixs}, i]},
+                                  modify[lines[[i]], charInfos, i]},
                                   {}]
     ,
     {i, linesToModify}
@@ -428,15 +462,15 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
   Which[
     span[[1, 1]] != span[[2, 1]],
       (* different lines, so place \[Times] at end of first line *)
-      {span[[1, 1]], StringLength[lines[[span[[1, 1]] ]] ] + 1}
+      {LintTimesCharacter, span[[1, 1]], StringLength[lines[[span[[1, 1]] ]] ] + 1}
     ,
     span[[1, 2]] == span[[2, 2]],
       (* contiguous *)
-      {span[[1, 1]], span[[1, 2]]}
+      {LintTimesCharacter, span[[1, 1]], span[[1, 2]]}
     ,
     span[[1, 2]] + 1 == span[[2, 2]],
       (* optimization case to avoid calling TokenizeString: only 1 space between *)
-      {span[[1, 1]], span[[1, 2]]}
+      {LintTimesCharacter, span[[1, 1]], span[[1, 2]]}
     ,
     True,
       (* do actual work to figure out best placement *)
@@ -524,11 +558,11 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
         goalCol = goals[[1]];
       ];
 
-      {goalLine, goalCol}
+      {LintTimesCharacter, goalLine, goalCol}
   ]]
 
 resolveInfix[infix_, lines:{___String}] :=
-  infix
+  {LintTimesCharacter} ~Join~ infix
 
 
 

@@ -17,6 +17,17 @@ LintErrorContinuationIndicatorCharacter
 LintContinuationCharacter
 
 LintTimesCharacter
+LintOneCharacter
+LintAllCharacter
+LintNullCharacter
+LintTimesOneCharacter
+LintAllTimesCharacter
+LintAllTimesOneCharacter
+
+LintOpenOneCharacter
+LintAllCloseCharacter
+LintOpenOpenCharacter
+LintCloseTimesOneCharacter
 
 LintEOFCharacter
 
@@ -679,11 +690,39 @@ Format[LintContinuationCharacter, OutputForm] := "\\"
 
 
 
-LintTimesCharacter::usage = "LintTimesCharacter represents a times operator in formatted output."
-
 Format[LintTimesCharacter, StandardForm] := "\[Times]"
 Format[LintTimesCharacter, OutputForm] := "x"
 
+Format[LintOneCharacter, StandardForm] := "1"
+Format[LintOneCharacter, OutputForm] := "1"
+
+Format[LintAllCharacter, StandardForm] := "All"
+Format[LintAllCharacter, OutputForm] := "All"
+
+Format[LintNullCharacter, StandardForm] := "Null"
+Format[LintNullCharacter, OutputForm] := "Null"
+
+Format[LintTimesOneCharacter, StandardForm] := "\[Times]1"
+Format[LintTimesOneCharacter, OutputForm] := "x1"
+
+Format[LintAllTimesCharacter, StandardForm] := "All\[Times]"
+Format[LintAllTimesCharacter, OutputForm] := "Allx"
+
+Format[LintAllTimesOneCharacter, StandardForm] := "All\[Times]1"
+Format[LintAllTimesOneCharacter, OutputForm] := "Allx1"
+
+
+Format[LintOpenOneCharacter, StandardForm] := "(1"
+Format[LintOpenOneCharacter, OutputForm] := "(1"
+
+Format[LintAllCloseCharacter, StandardForm] := "All)"
+Format[LintAllCloseCharacter, OutputForm] := "All)"
+
+Format[LintOpenOpenCharacter, StandardForm] := "(("
+Format[LintOpenOpenCharacter, OutputForm] := "(("
+
+Format[LintCloseTimesOneCharacter, StandardForm] := ")\[Times]1"
+Format[LintCloseTimesOneCharacter, OutputForm] := ")x1"
 
 
 LintEOFCharacter::usage = "LintEOFCharacter represents an EOF in formatted output."
