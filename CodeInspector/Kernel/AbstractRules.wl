@@ -1987,7 +1987,7 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
       AppendTo[issues, InspectionObject["PatternRule", "The same named pattern occurs on lhs and rhs.", "Error", <|
         Source -> lhsPatternName[[3, Key[Source] ]],
         "AdditionalSources" -> rhsOccurringPatterns[[All, 3, Key[Source] ]],
-        ConfidenceLevel -> 0.9 |>]]
+        ConfidenceLevel -> 0.8 |>]]
     ];
     ,
     {lhsPatternName, lhsPatternNames}
