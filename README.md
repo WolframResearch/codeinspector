@@ -14,8 +14,6 @@ Out[2]= If[a,b,b]
         line 1:  If[a,b,b] 
                       ^ ^  
                 DuplicateClauses Error Both branches are the same.
-
-In[3]:= 
 ```
 
 In a front end:
@@ -39,7 +37,7 @@ Out[2]= PacletObject[CodeInspector, 1.0, <>]
 
 CodeInspector depends on the CodeParser paclet. Make sure that the paclets can be found on your system:
 ```
-In[3]:= Needs["CodeInspector`"]
+In[1]:= Needs["CodeInspector`"]
 ```
 
 
@@ -49,15 +47,13 @@ After CodeParser and CodeInspector are installed, CodeInspector can be used.
 
 Return the list of all problems found in a string of code:
 ```
-In[3]:= CodeInspect["If[a,b,b]"]
+In[1]:= Needs["CodeInspector`"]
 
-Out[3]= {DuplicateClauses Error Both branches are the same.}
+In[2]:= CodeInspect["If[a,b,b]"]
 
-In[4]:= 
+Out[2]= {DuplicateClauses Error Both branches are the same.}
 ```
 
 Summarize the problems found in a source code file:
 
-![Collatz1](docs/collatz1.png)
-
-![Collatz2](docs/collatz2.png)
+![Collatz](docs/collatz.png)

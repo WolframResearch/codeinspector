@@ -30,6 +30,10 @@ set(WL_PACLET_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
 
+set(WL_PACLET_EXAMPLES
+	${PROJECT_SOURCE_DIR}/CodeInspector/Resources/Examples/Collatz.m
+)
+
 set(WL_GENERATE_CREATEPACLETARCHIVE_SOURCES
 	${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl
 )
@@ -103,8 +107,18 @@ foreach(SRC ${WL_PACLET_SOURCES})
 	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC})
 endforeach()
 
+foreach(SRC ${WL_PACLET_EXAMPLES})
+	get_filename_component(BARE_SRC ${SRC} NAME)
+	add_custom_command(
+    OUTPUT ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Examples/${BARE_SRC}
+    COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Examples/${BARE_SRC}
+    DEPENDS ${SRC})
+	list(APPEND COPIED_WL_PACLET_EXAMPLES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Examples/${BARE_SRC})
+endforeach()
+
 set(PACLET_SOURCES
 	${COPIED_WL_PACLET_SOURCES}
+	${COPIED_WL_PACLET_EXAMPLES}
 	${WL_GENERATE_CREATEPACLETARCHIVE_SOURCES}
 )
 
