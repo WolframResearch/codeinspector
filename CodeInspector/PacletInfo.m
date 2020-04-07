@@ -7,6 +7,11 @@ Paclet[
   Creator ->"Brenton Bostick <brenton@wolfram.com>",
   Extensions -> {
     {"Kernel", Root -> "Kernel", Context -> "CodeInspector`"},
-    {"Documentation", Language -> "English", MainPage -> "Guides/CodeInspector"}
+    {"Documentation", Language -> "English", MainPage -> "Guides/CodeInspector"},
+    {"Resource", Root->"Resources",
+      Resources -> {
+        {"Collatz","Examples/Collatz.m"}
+      }
+    }
   }
 ]
