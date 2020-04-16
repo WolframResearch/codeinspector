@@ -30,13 +30,7 @@ TestMatch[
 
 
 
-TestMatch[
-	CodeInspect["{ a;;\nb }"]
-	,
-	{ InspectionObject["EndOfLine", _, "Warning", _], InspectionObject["SpanDifferentLine", _, "Warning", _] }
-	,
-	TestID->"ConcreteRules-20190522-S2L6J4"
-]
+
 
 
 
