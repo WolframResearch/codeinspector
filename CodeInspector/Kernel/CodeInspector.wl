@@ -320,6 +320,10 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
 
+  If[FailureQ[cst],
+    Throw[cst]
+  ];
+
   (*
   Make sure to use Infinity
   *)

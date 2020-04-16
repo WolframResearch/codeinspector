@@ -13,6 +13,8 @@ Needs["CodeInspector`Utils`"]
 
 
 
+CodeInspectBoxSummarize::usage = "CodeInspectBoxSummarize[box] returns a box inspection summary object."
+
 Options[CodeInspectBoxSummarize] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
@@ -42,7 +44,7 @@ CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules,
-  processedBox},
+  processedBox, cst},
 
  lints = lintsIn;
 
@@ -77,11 +79,18 @@ Catch[
  confidence = OptionValue[ConfidenceLevel];
 
  If[lints === Automatic,
-    lints = CodeConcreteParseBox[box,
+
+    cst = CodeConcreteParseBox[box];
+
+    lints = CodeInspectCST[cst,
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
       "AbstractRules" -> abstractRules];
+  ];
+
+  If[FailureQ[lints],
+    Throw[lints]
   ];
 
   processedBox = box;
