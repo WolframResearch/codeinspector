@@ -213,7 +213,7 @@ CallNode[LeafNode[Symbol, "Alternatives", _], _, _] -> scanAlternatives,
 
 
 
-CallNode[LeafNode[Symbol, "Slot" | "SlotSequence", _], _, _] -> scanSlots,
+CallNode[LeafNode[Token`Hash | Token`HashHash, _, _] | _SlotNode | SlotSequenceNode, _, _] -> scanSlots,
 
 
 CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming", _], _, _] -> scanSolverCalls,

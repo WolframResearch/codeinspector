@@ -14,11 +14,10 @@ Needs["CodeInspector`Utils`"]
 
 
 blankPat =
-  LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+  LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
   _BlankNode |
   _BlankSequenceNode |
   _BlankNullSequenceNode |
-  _OptionalDefaultNode |
   _PatternBlankNode |
   _PatternBlankSequenceNode |
   _PatternBlankNullSequenceNode |
@@ -479,28 +478,46 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     <implicit Times> ___a?f
     *)
     Switch[p,
-      {LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
-        OptionalDefaultNode[_, {_, _}, _] |
-        PatternBlankNode[_, {_, _}, _] |
-        PatternBlankSequenceNode[_, {_, _}, _] |
-        PatternBlankNullSequenceNode[_, {_, _}, _]
+      {LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
+        (*
+        NOT THESE
+        _BlankNode |
+        _BlankSequenceNode |
+        _BlankNullSequenceNode |
+        *)
+        _PatternBlankNode |
+        _PatternBlankSequenceNode |
+        _PatternBlankNullSequenceNode |
+        _PatternOptionalDefaultNode
         ,
         LeafNode[Token`Fake`ImplicitTimes, _, _]}
         ,
         AppendTo[errorSrcs, p[[2, 3, Key[Source] ]] ];
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _],
-        LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+        LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
         _BlankNode |
         _BlankSequenceNode |
         _BlankNullSequenceNode |
-        _OptionalDefaultNode |
+        (*
+        NOT THESE
+        _PatternBlankNode |
+        _PatternBlankSequenceNode |
+        _PatternBlankNullSequenceNode |
+        _PatternOptionalDefaultNode
+        *)
         BinaryNode[PatternTest | Condition, {
-          LeafNode[Blank | BlankSequence | BlankNullSequence | OptionalDefault, _, _] |
+          LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
           _BlankNode |
           _BlankSequenceNode |
-          _BlankNullSequenceNode |
-          _OptionalDefaultNode, ___ }, _]}
+          _BlankNullSequenceNode
+          (*
+          NOT THESE
+          _PatternBlankNode |
+          _PatternBlankSequenceNode |
+          _PatternBlankNullSequenceNode |
+          _PatternOptionalDefaultNode
+          *), ___ }, _]}
         ,
         AppendTo[errorSrcs, p[[1, 3, Key[Source] ]] ];
       ,
@@ -1052,7 +1069,7 @@ Catch[
   heuristic
   if # or ## occur in LHS of Rule, then there is no problem, assume (a->b)& is the intended parse
   *)
-  If[!FreeQ[ruleChild1, LeafNode[Slot | SlotSequence, _, _]],
+  If[!FreeQ[ruleChild1, LeafNode[Token`Hash | Token`HashHash, _, _] | _SlotNode | _SlotSequenceNode],
     Throw[{}]
   ];
 
@@ -1313,13 +1330,7 @@ Catch[
   bring in heuristics for when a_:b is valid
   If b has Patterns or Blanks, then b is NOT a valid optional and warn
   *)
-  If[FreeQ[opt, LeafNode[Blank | BlankSequence | BlankNullSequence, _, _] |
-                _BlankNode |
-                _BlankSequenceNode |
-                _BlankNullSequenceNode |
-                _PatternBlankNode |
-                _PatternBlankSequenceNode |
-                _PatternBlankNullSequenceNode |
+  If[FreeQ[opt, blankPat |
                 BinaryNode[Pattern, _, _] |
                 (* also check for Alternatives *)
                 InfixNode[Alternatives, _, _]
