@@ -11,11 +11,24 @@ set(PACLET "CodeInspector")
 set(WOLFRAMKERNEL ${WOLFRAMKERNEL_DEFAULT} CACHE FILEPATH "Path to WolframKernel")
 set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
 set(LOCAL_BUILD OFF CACHE BOOL "Local build")
+# Work-around for bug 349779 is to pause ~1 second
+set(BUG349779_PAUSE 1 CACHE STRING "Bug 349779 pause")
+#
+# Evidence suggests that when bug 349779 strikes, the kernel does exit after 30 minutes
+# So double that and cross fingers.
+#
+# Related bugs: 349779
+# Related issues: RE-514227
+#
+set(BUG349779_TIMEOUT 3600 CACHE STRING "Bug 349779 timeout")
 
 message(STATUS "PACLET: ${PACLET}")
 message(STATUS "WOLFRAMKERNEL: ${WOLFRAMKERNEL}")
 message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 message(STATUS "LOCAL_BUILD: ${LOCAL_BUILD}")
+message(STATUS "CMAKE_SIZEOF_VOID_P: ${CMAKE_SIZEOF_VOID_P}")
+message(STATUS "BUG349779_PAUSE: ${BUG349779_PAUSE}")
+message(STATUS "BUG349779_TIMEOUT: ${BUG349779_TIMEOUT}")
 
 set(WL_PACLET_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AbstractRules.wl
@@ -204,7 +217,7 @@ add_custom_command(
 		${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl
 		${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	COMMAND
-		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DPACLET=${PACLET} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
+		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/${PACLET}/Generate/CreatePacletArchive.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DPACLET=${PACLET} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -DBUG349779_TIMEOUT=${BUG349779_TIMEOUT} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	VERBATIM
 	WORKING_DIRECTORY
 		${PROJECT_SOURCE_DIR}
