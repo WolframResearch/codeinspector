@@ -15,13 +15,9 @@ Needs["CodeInspector`Utils`"]
 
 blankPat =
   LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
-  _BlankNode |
-  _BlankSequenceNode |
-  _BlankNullSequenceNode |
-  _PatternBlankNode |
-  _PatternBlankSequenceNode |
-  _PatternBlankNullSequenceNode |
-  _PatternOptionalDefaultNode
+  CompoundNode[
+    Blank | BlankSequence | BlankNullSequence |
+    PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, _, _]
 
 
 
@@ -134,9 +130,7 @@ experimental
 BinaryNode[Pattern, {_, InfixNode[Alternatives, _, _]}, _] -> scanAlternativesPatterns,
 *)
 
-BinaryNode[Optional, {PatternBlankNode[PatternBlank, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
-BinaryNode[Optional, {PatternBlankSequenceNode[PatternBlankSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
-BinaryNode[Optional, {PatternBlankNullSequenceNode[PatternBlankNullSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
+BinaryNode[Optional, {CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
 
 
 (*
@@ -174,19 +168,7 @@ scan for something like Rule___
 
 Last[StringSplit[sym, "`"]] will return the symbol name, e.g. A`Bar => Bar
 *)
-PatternBlankNode[PatternBlank, {
-  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
-  ___}, _] -> scanUppercasePatternBlank,
-
-PatternBlankSequenceNode[PatternBlankSequence, {
-  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
-  ___}, _] -> scanUppercasePatternBlank,
-
-PatternBlankNullSequenceNode[PatternBlankNullSequence, {
-  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
-  ___}, _] -> scanUppercasePatternBlank,
-
-PatternOptionalDefaultNode[PatternOptionalDefault, {
+CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, {
   LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
   ___}, _] -> scanUppercasePatternBlank,
 
@@ -479,16 +461,17 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     *)
     Switch[p,
       {LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
-        (*
-        NOT THESE
-        _BlankNode |
-        _BlankSequenceNode |
-        _BlankNullSequenceNode |
-        *)
-        _PatternBlankNode |
-        _PatternBlankSequenceNode |
-        _PatternBlankNullSequenceNode |
-        _PatternOptionalDefaultNode
+        CompoundNode[
+          (*
+          NOT THESE
+          Blank |
+          BlankSequence |
+          BlankNullSequence |
+          *)
+          PatternBlank |
+          PatternBlankSequence |
+          PatternBlankNullSequence |
+          PatternOptionalDefault, _, _]
         ,
         LeafNode[Token`Fake`ImplicitTimes, _, _]}
         ,
@@ -496,28 +479,30 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _],
         LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
-        _BlankNode |
-        _BlankSequenceNode |
-        _BlankNullSequenceNode |
-        (*
-        NOT THESE
-        _PatternBlankNode |
-        _PatternBlankSequenceNode |
-        _PatternBlankNullSequenceNode |
-        _PatternOptionalDefaultNode
-        *)
-        BinaryNode[PatternTest | Condition, {
-          LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
-          _BlankNode |
-          _BlankSequenceNode |
-          _BlankNullSequenceNode
+        CompoundNode[
+          Blank |
+          BlankSequence |
+          BlankNullSequence
           (*
           NOT THESE
-          _PatternBlankNode |
-          _PatternBlankSequenceNode |
-          _PatternBlankNullSequenceNode |
-          _PatternOptionalDefaultNode
-          *), ___ }, _]}
+          PatternBlank |
+          PatternBlankSequence |
+          PatternBlankNullSequence |
+          PatternOptionalDefault
+          *), _, _] |
+        BinaryNode[PatternTest | Condition, {
+          LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
+          CompoundNode[
+            Blank |
+            BlankSequence |
+            BlankNullSequence
+            (*
+            NOT THESE
+            PatternBlank |
+            PatternBlankSequence |
+            PatternBlankNullSequence |
+            PatternOptionalDefault
+            *), _, _], ___ }, _]}
         ,
         AppendTo[errorSrcs, p[[1, 3, Key[Source] ]] ];
       ,
@@ -1069,7 +1054,7 @@ Catch[
   heuristic
   if # or ## occur in LHS of Rule, then there is no problem, assume (a->b)& is the intended parse
   *)
-  If[!FreeQ[ruleChild1, LeafNode[Token`Hash | Token`HashHash, _, _] | _SlotNode | _SlotSequenceNode],
+  If[!FreeQ[ruleChild1, LeafNode[Token`Hash | Token`HashHash, _, _] | CompoundNode[Slot | SlotSequence, _, _]],
     Throw[{}]
   ];
 
