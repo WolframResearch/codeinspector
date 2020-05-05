@@ -93,7 +93,11 @@ Options[CodeInspect] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  CharacterEncoding -> "UTF-8"
+  CharacterEncoding -> "UTF-8",
+  (*
+  Pass through to CodeConcreteParse
+  *)
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
 
@@ -102,7 +106,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-CodeInspect[File[file_String], OptionsPattern[]] :=
+CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
 Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules},
 
@@ -137,7 +141,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     ];
   ];
 
-  cst = CodeConcreteParse[File[full]];
+  cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
 
   If[FailureQ[cst],
     Throw[cst]
@@ -174,7 +178,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
 
 
-CodeInspect[string_String, OptionsPattern[]] :=
+CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
  Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
@@ -190,7 +194,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cst = CodeConcreteParse[string];
+  cst = CodeConcreteParse[string, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
   If[FailureQ[cst],
     Throw[cst]
@@ -207,7 +211,7 @@ Catch[
 
 
 
-CodeInspect[bytes_List, OptionsPattern[]] :=
+CodeInspect[bytes_List, opts:OptionsPattern[]] :=
 Catch[
  Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
 
@@ -223,7 +227,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cst = CodeConcreteParse[bytes];
+  cst = CodeConcreteParse[bytes, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
   If[FailureQ[cst],
     Throw[cst]

@@ -17,6 +17,12 @@ $LintLimit
 $Underlight
 
 
+(*
+Number of characters per line to consider "long" and truncate
+*)
+$LineTruncationLimit = 500
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -43,10 +49,6 @@ How many lints to keep?
 *)
 $LintLimit = 20
 
-(*
-Number of characters per line to consider "long" and truncate
-*)
-$LineTruncationLimit = 500
 
 
 
@@ -69,9 +71,8 @@ Options[CodeInspectSummarize] = {
   CharacterEncoding -> "UTF-8",
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {},
-  ConfidenceLevel :> $ConfidenceLevel
+  ConfidenceLevel :> $ConfidenceLevel,
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
 
@@ -89,9 +90,9 @@ lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
 CodeInspectSummarize[File[file_String], lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, full, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
-  lintedLines, unusedLineHashExclusions, hashes, confidence, performanceGoal, concreteRules,
-  aggregateRules, abstractRules, bytes, str},
+ Module[{lints, full, lines, tagExclusions, severityExclusions,
+  lintedLines, confidence, performanceGoal, concreteRules,
+  aggregateRules, abstractRules, bytes, str, tabWidth},
 
  lints = lintsIn;
 
@@ -113,17 +114,9 @@ Catch[
   severityExclusions = {}
  ];
 
- lineNumberExclusions = OptionValue["LineNumberExclusions"];
- If[lineNumberExclusions === None,
-  lineNumberExclusions = {}
- ];
-
- lineHashExclusions = OptionValue["LineHashExclusions"];
- If[lineHashExclusions === None,
-  lineHashExclusions = {}
- ];
-
  confidence = OptionValue[ConfidenceLevel];
+
+ tabWidth = OptionValue["TabWidth"];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -139,7 +132,9 @@ Catch[
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules];
+      "AbstractRules" -> abstractRules,
+      "TabWidth" -> tabWidth
+    ];
   ];
 
    bytes = Import[full, "Byte"];
@@ -148,15 +143,9 @@ Catch[
 
    lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
-   If[!empty[lineHashExclusions],
-    hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
-    unusedLineHashExclusions = Complement[lineHashExclusions, hashes];
-    If[!empty[unusedLineHashExclusions],
-      Message[CodeInspect::unusedLineHashExclusions, full, unusedLineHashExclusions];
-    ];
-  ];
+   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
   InspectedFileObject[full, lintedLines]
 ]]
 
@@ -166,8 +155,8 @@ Catch[
 
 CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
-  confidence, performanceGoal, concreteRules, aggregateRules, abstractRules},
+ Module[{lints, lines, tagExclusions, severityExclusions, lintedLines,
+  confidence, performanceGoal, concreteRules, aggregateRules, abstractRules, tabWidth},
 
  lints = lintsIn;
 
@@ -189,17 +178,9 @@ Catch[
   severityExclusions = {}
  ];
 
- lineNumberExclusions = OptionValue["LineNumberExclusions"];
- If[lineNumberExclusions === None,
-  lineNumberExclusions = {}
- ];
-
- lineHashExclusions = OptionValue["LineHashExclusions"];
- If[lineHashExclusions === None,
-  lineHashExclusions = {}
- ];
-
  confidence = OptionValue[ConfidenceLevel];
+
+ tabWidth = OptionValue["TabWidth"];
 
 
  If[StringLength[string] == 0,
@@ -211,13 +192,16 @@ Catch[
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules];
+      "AbstractRules" -> abstractRules,
+      "TabWidth" -> tabWidth
+    ];
   ];
-
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
+  lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
+
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -227,8 +211,9 @@ Catch[
 
 CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions, lintedLines,
-  confidence, string, performanceGoal, concreteRules, aggregateRules, abstractRules},
+ Module[{lints, lines, tagExclusions, severityExclusions, lintedLines,
+  confidence, string, performanceGoal, concreteRules, aggregateRules, abstractRules,
+  tabWidth},
 
  lints = lintsIn;
 
@@ -250,38 +235,29 @@ Catch[
   severityExclusions = {}
  ];
 
- lineNumberExclusions = OptionValue["LineNumberExclusions"];
- If[lineNumberExclusions === None,
-  lineNumberExclusions = <||>
- ];
-
- lineHashExclusions = OptionValue["LineHashExclusions"];
- If[lineHashExclusions === None,
-  lineHashExclusions = {}
- ];
-
  confidence = OptionValue[ConfidenceLevel];
 
+ tabWidth = OptionValue["TabWidth"];
 
  If[lints === Automatic,
     lints = CodeInspect[bytes,
       PerformanceGoal -> performanceGoal,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules];
+      "AbstractRules" -> abstractRules,
+      "TabWidth" -> tabWidth
+    ];
   ];
-
 
   string = SafeString[bytes];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, lineNumberExclusions, lineHashExclusions, confidence];
+  lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
+
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
   InspectedBytesObject[string, lintedLines]
 ]]
-
-
-
 
 
 
@@ -291,13 +267,12 @@ These InspectionObjects cannot be reported. `1`"
 InspectedLineObject::truncation = "Truncation limit reached. Inspected line may not display properly."
 
 
-
 (*
 Return a list of LintedLines
 *)
-lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_List, severityExclusions_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List, confidence_] :=
+lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_List, severityExclusions_List, confidence_] :=
 Catch[
-Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExcludedByLineNumber, tmp, sources, warningsLines,
+Module[{lints, lines, hashes, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
   additionalSources, shadowing, confidenceTest, badLints, truncated},
   
@@ -339,37 +314,21 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
   lines = linesIn;
   lines = Append[lines, ""];
 
-  hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
-
   If[AnyTrue[lines, (StringLength[#] > $LineTruncationLimit)&],
     truncated = True;
   ];
 
   lines = StringTake[#, UpTo[$LineTruncationLimit]]& /@ lines;
 
-
-
-  lineNumberExclusions = lineNumberExclusionsIn;
-
-  lineNumberExclusions = expandLineNumberExclusions[lineNumberExclusions];
-
-
-  lineHashExclusions = lineHashExclusionsIn;
-
-  (* Association of lineNumber -> All *)
-  tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]] ], i -> All, Nothing], {i, 1, Length[lines]}]];
-  lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
-
-
   If[!empty[tagExclusions],
     lints = DeleteCases[lints, InspectionObject[Alternatives @@ tagExclusions, _, _, _]];
     If[$Debug,
       Print["lints: ", lints];
     ];
+  ];
 
-    If[empty[lints],
-      Throw[{}]
-    ];
+  If[empty[lints],
+    Throw[{}]
   ];
 
   If[!empty[severityExclusions],
@@ -377,27 +336,6 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
     If[$Debug,
       Print["lints: ", lints];
     ];
-
-    If[empty[lints],
-      Throw[{}]
-    ];
-  ];
-
-  (*
-  lints that match the line numbers and tags in lineNumberExclusions
-  *)
-  lintsExcludedByLineNumber = Catenate[KeyValueMap[Function[{line, tags},
-      If[tags === All,
-        Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
-        ,
-        Cases[lints, InspectionObject[tag_ /; MemberQ[tags, tag], _, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
-      ]
-    ],
-    lineNumberExclusions]];
-
-  lints = Complement[lints, lintsExcludedByLineNumber];
-  If[$Debug,
-    Print["lints: ", lints];
   ];
 
   If[empty[lints],
@@ -508,28 +446,28 @@ Module[{lints, lines, hashes, lineNumberExclusions, lineHashExclusions, lintsExc
           With[
             {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
             ,
-            {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
+            {lineSource = lines[[i]], lineNumber = i,
               lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               lints = Union[Flatten[Values[lintsPerColumn]]]}
             ,
-            InspectedLineObject[lineSource, lineNumber, hash, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+            InspectedLineObject[lineSource, lineNumber, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength]
           ]
           ,
           With[
             {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
             ,
-            {lineSource = lines[[i]], lineNumber = i, hash = hashes[[i]],
+            {lineSource = lines[[i]], lineNumber = i,
               lineList = ListifyLine[lines[[i]], lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               lints = Union[Flatten[Values[lintsPerColumn]]]
             }
             ,
-            InspectedLineObject[lineSource, lineNumber, hash, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
+            InspectedLineObject[lineSource, lineNumber, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength]
           ]
         ]
         ,
         (* elided *)
-        InspectedLineObject["", i, "", {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True]
+        InspectedLineObject["", i, {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True]
       ]
     ,
     {i, linesToModify}
@@ -547,11 +485,13 @@ Options[createUnderlineList] = {
   "EndOfFile" -> False
 }
 
-createUnderlineList[line_String, lineNumber_Integer, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
+createUnderlineList[lineIn_String, lineNumber_Integer, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Catch[
- Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn},
+ Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn, line},
 
- lineIsEmpty = (line == "");
+  line = lineIn;
+
+  lineIsEmpty = (line == "");
 
   lintsPerColumn = lintsPerColumnIn;
 
@@ -614,11 +554,6 @@ Catch[
     Print["markupPerColumn: ", markupPerColumn];
   ];
 
-  (*
-  FIXME: revisit this if we ever need to preserve \t in the underline for whatever reason
-  The \t characters are preserved in Implicit Times markup because .e.g, tabs need to be
-  send to Sublime to get the spacing correct for ( \[Times] ) stuff
-  *)
   under = Table[LintSpaceIndicatorCharacter, {StringLength[line]}];
   
   under = Join[{" "}, under, {" "}];

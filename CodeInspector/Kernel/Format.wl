@@ -301,7 +301,7 @@ Module[{g, bolded},
 
 
 
-InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, hash, content, lintList] represents a formatted line of output."
+InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, content, lintList] represents a formatted line of output."
 
 Options[InspectedLineObject] = {
 	"MaxLineNumberLength" -> 5,
@@ -317,7 +317,7 @@ Style[Underscript[line, under], ScriptSizeMultipliers->1]
 But there is no guarantee that monospace fonts will be respected
 So brute-force it with Grid so that it looks good
 *)
-Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], StandardForm] :=
+Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints,
 	grid, red, darkerOrange, blue},
@@ -431,7 +431,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	*)
 	grid = Grid[
 		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
-		{{formatLeftColumn[lineSource, lineNumber, hash, opts], Spacer[10],
+		{{formatLeftColumn[lineSource, lineNumber, opts], Spacer[10],
 			Column[{Grid[grid,
 						Spacings -> {0, 0},
 						ItemSize -> $LintedLintItemSize,
@@ -466,7 +466,7 @@ with Grid in OutputForm. bug?
 
 underlineList is not used in OutputForm
 *)
-Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, hash_String, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], OutputForm] :=
+Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
 	endingAdditionalLintsThisLine},
@@ -541,7 +541,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 
 
 
-Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, hash_String, lineList_List, lints:{___InspectionObject}, opts___], StandardForm] :=
+Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, lineList_List, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, elided, startingLints, grid},
 	
@@ -573,14 +573,14 @@ Module[{lineSource, endingLints, elided, startingLints, grid},
 
 	Grid[
 		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
-		{{formatLeftColumn[lineSource, lineNumber, hash, opts], Spacer[20],
+		{{formatLeftColumn[lineSource, lineNumber, opts], Spacer[20],
 			Column[{Grid[grid,
 						Spacings -> {0, 0}, ItemSize -> $LintedLintItemSize] } ~Join~ endingLints ]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}],
 			Alignment -> Top, Spacings -> {0, 0}]
 ]]
 
-Format[InspectedLineObject[lineSource_String, lineNumber_Integer, hash_String, lineList_List, lints:{___InspectionObject}, opts___], OutputForm] :=
+Format[InspectedLineObject[lineSource_String, lineNumber_Integer, lineList_List, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 
@@ -620,7 +620,7 @@ Options[formatLeftColumn] = {
 	"MaxLineNumberLength" -> 5
 }
 
-formatLeftColumn[lineSource_String, lineNumber_Integer, hash_String, opts___] :=
+formatLeftColumn[lineSource_String, lineNumber_Integer, opts___] :=
 Catch[
 Module[{label, maxLineNumberLength, paddedLineNumber},
 	
@@ -641,16 +641,12 @@ Module[{label, maxLineNumberLength, paddedLineNumber},
 	ActionMenu CopyToClipboard with Evaluator->None:
 	bug 374583
 	*)
-
-	With[{escaped = escapeString[hash]},
-
 	ActionMenu[
 		Tooltip[
 			label,
 			"Click to open menu...", TooltipDelay -> Automatic], {
 		"Copy line source" :> CopyToClipboard[lineSource],
-		"Copy line number" :> CopyToClipboard[lineNumber],
-		"Copy line hash" :> CopyToClipboard[escaped] }, Appearance -> None, DefaultBaseStyle -> {}]
+		"Copy line number" :> CopyToClipboard[lineNumber]}, Appearance -> None, DefaultBaseStyle -> {}
 	]
 ]]
 

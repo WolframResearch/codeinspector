@@ -37,7 +37,8 @@ $ImplicitTokensLimit = 20
 CodeInspectImplicitTokens::usage = "CodeInspectImplicitTokens[code] returns a list of implicit tokens in code."
 
 Options[CodeInspectImplicitTokens] = {
-  PerformanceGoal -> "Speed"
+  PerformanceGoal -> "Speed",
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
 
@@ -46,7 +47,7 @@ $fileByteCountMaxLimit = 3*^6
 
 
 
-CodeInspectImplicitTokens[File[file_String], OptionsPattern[]] :=
+CodeInspectImplicitTokens[File[file_String], opts:OptionsPattern[]] :=
 Catch[
  Module[{full, performanceGoal, cst},
 
@@ -66,7 +67,7 @@ Catch[
      ];
     ];
 
-    cst = CodeConcreteParse[File[full]];
+    cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
 
     CodeInspectImplicitTokensCST[cst]
 ]]
@@ -75,11 +76,11 @@ Catch[
 
 
 
-CodeInspectImplicitTokens[string_String, OptionsPattern[]] :=
+CodeInspectImplicitTokens[string_String, opts:OptionsPattern[]] :=
 Catch[
 Module[{cst},
 
-  cst = CodeConcreteParse[string];
+  cst = CodeConcreteParse[string, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
   CodeInspectImplicitTokensCST[cst]
 ]]
@@ -110,18 +111,16 @@ Module[{times, agg, spans, nulls},
 CodeInspectImplicitTokensSummarize::usage = "CodeInspectImplicitTokensSummarize[code] returns an inspection summary object."
 
 Options[CodeInspectImplicitTokensSummarize] = {
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {}
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
-CodeInspectImplicitTokensSummarize[File[file_String], implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTokensSummarize[File[file_String], implicitTokensIn:_List:Automatic, opts:OptionsPattern[]] :=
 Catch[
-Module[{implicitTokens, full, lines, lineNumberExclusions, lineHashExclusions, lintedLines, bytes, str},
+Module[{implicitTokens, full, lines, lintedLines, bytes, str, tabWidth},
 
   implicitTokens = implicitTokensIn;
 
-  lineNumberExclusions = OptionValue["LineNumberExclusions"];
-  lineHashExclusions = OptionValue["LineHashExclusions"];
+  tabWidth = OptionValue["TabWidth"];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -133,7 +132,7 @@ Module[{implicitTokens, full, lines, lineNumberExclusions, lineHashExclusions, l
   ];
 
   If[implicitTokens === Automatic,
-    implicitTokens = CodeInspectImplicitTokens[File[full]];
+    implicitTokens = CodeInspectImplicitTokens[File[full], FilterRules[{opts}, Options[CodeInspectImplicitTokens]]];
   ];
 
   bytes = Import[full, "Byte"];
@@ -142,7 +141,9 @@ Module[{implicitTokens, full, lines, lineNumberExclusions, lineHashExclusions, l
 
   lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = implicitTokensLinesReport[lines, implicitTokens, lineNumberExclusions, lineHashExclusions];
+  lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
+
+  lintedLines = implicitTokensLinesReport[lines, implicitTokens];
   InspectedFileObject[full, lintedLines]
 ]]
 
@@ -152,12 +153,11 @@ Module[{implicitTokens, full, lines, lineNumberExclusions, lineHashExclusions, l
 
 CodeInspectImplicitTokensSummarize[string_String, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
 Catch[
-Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedLines},
+Module[{implicitTokens, lines, lintedLines, tabWidth},
 
   implicitTokens = implicitTokensIn;
 
-  lineNumberExclusions = OptionValue["LineNumberExclusions"];
-  lineHashExclusions = OptionValue["LineHashExclusions"];
+  tabWidth = OptionValue["TabWidth"];
 
   If[StringLength[string] == 0,
     Throw[Failure["EmptyString", <||>]]
@@ -169,7 +169,9 @@ Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedL
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = implicitTokensLinesReport[lines, implicitTokens, lineNumberExclusions, lineHashExclusions];
+  lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
+
+  lintedLines = implicitTokensLinesReport[lines, implicitTokens];
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -177,13 +179,12 @@ Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedL
 
 
 Options[CodeInspectImplicitTokensCSTSummarize] = {
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {}
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
 CodeInspectImplicitTokensCSTSummarize[cst_, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
 Catch[
-Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedLines, string},
+Module[{implicitTokens, lines, lintedLines, string, tabWidth},
 
   If[FailureQ[cst],
     Throw[cst]
@@ -191,8 +192,7 @@ Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedL
 
   implicitTokens = implicitTokensIn;
 
-  lineNumberExclusions = OptionValue["LineNumberExclusions"];
-  lineHashExclusions = OptionValue["LineHashExclusions"];
+  tabWidth = OptionValue["TabWidth"];
 
   If[implicitTokens === Automatic,
     implicitTokens = CodeInspectImplicitTokensCST[cst];
@@ -202,7 +202,9 @@ Module[{implicitTokens, lines, lineNumberExclusions, lineHashExclusions, lintedL
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
-  lintedLines = implicitTokensLinesReport[lines, implicitTokens, lineNumberExclusions, lineHashExclusions];
+  lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
+
+  lintedLines = implicitTokensLinesReport[lines, implicitTokens];
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -264,12 +266,8 @@ modify[lineIn_String, charInfos:{{_, _, _}...}, lineNumber_] :=
   rules = Merge[inserters, (LintMarkup[#, FontWeight->Bold, FontSize->Larger, FontColor->$color])& @* mergeCharacters];
 
   rules = Normal[rules];
-
-  (*
-  preserve tabs and convert everything else to spaces
-  *)
-  under = Characters[line];
-  under = Replace[under, {"\t" -> "\t", _ -> " "}, {1}];
+  
+  under = Table[" ", {StringLength[line]}];
 
   (*
   extend line to be able to insert \[Times] after the line, when ImplicitTimes spans lines
@@ -345,11 +343,10 @@ processChildren[nodes_List] :=
   processPar /@ pars
   ]
 
-implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List, lineNumberExclusionsIn_Association, lineHashExclusionsIn_List] :=
+implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
  Module[{implicitTokens, sources, starts, ends, infixs, lines, hashes,
-  lineNumberExclusions, lineHashExclusions, implicitTokensExcludedByLineNumber, tmp, linesToModify, times, ones, alls, nulls,
-  charInfos, charInfoPoss},
+  tmp, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss},
 
     If[implicitTokensIn === {},
       Throw[{}]
@@ -358,36 +355,8 @@ Catch[
     implicitTokens = implicitTokensIn;
 
     lines = linesIn;
-    hashes = (IntegerString[Hash[#], 16, 16])& /@ lines;
 
-    lineNumberExclusions = lineNumberExclusionsIn;
-
-    lineNumberExclusions = expandLineNumberExclusions[lineNumberExclusions];
-
-    lineHashExclusions = lineHashExclusionsIn;
-
-    (* Association of lineNumber -> All *)
-    tmp = Association[Table[If[MemberQ[lineHashExclusions, hashes[[i]]], i -> All, Nothing], {i, 1, Length[lines]}]];
-    lineNumberExclusions = lineNumberExclusions ~Join~ tmp;
-
-
-    (*
-    implicitTimes that match the line numbers and tags in lineNumberExclusions
-    *)
-    implicitTokensExcludedByLineNumber = Catenate[KeyValueMap[Function[{line, tags},
-        If[tags === All,
-          Cases[implicitTokens, _[_, _, KeyValuePattern[Source -> {{line1_ /; line1 == line, _}, {_, _}}]]]
-          ,
-          (* warn? *)
-          {}
-        ]
-      ],
-      lineNumberExclusions]];
-
-    implicitTokens = Complement[implicitTokens, implicitTokensExcludedByLineNumber];
-
-
-
+    lines = StringTake[#, UpTo[$LineTruncationLimit]]& /@ lines;
 
     times = Cases[implicitTokens, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], _]];
     sources = #[Source]& /@ times[[All, 3]];
