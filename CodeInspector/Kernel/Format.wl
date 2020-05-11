@@ -108,6 +108,8 @@ Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLine
 Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], OutputForm] :=
 	Column[{Row[{file}], ""} ~Join~ lintedLines, Left]
 
+Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], ScriptForm] :=
+	Format[lintedFile, OutputForm]
 
 
 
@@ -132,6 +134,8 @@ Module[{string},
 	Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
 ]
 
+Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___InspectedLineObject}], ScriptForm] :=
+	Format[lintedString, OutputForm]
 
 
 (*
