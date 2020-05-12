@@ -345,8 +345,7 @@ processChildren[nodes_List] :=
 
 implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
- Module[{implicitTokens, sources, starts, ends, infixs, lines, hashes,
-  tmp, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss},
+ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss},
 
     If[implicitTokensIn === {},
       Throw[{}]
@@ -406,7 +405,7 @@ Catch[
 
    Table[
 
-     InspectedLineObject[lines[[i]], i, hashes[[i]], {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
+     InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
                                   modify[lines[[i]], charInfos, i]},
                                   {}]
     ,
