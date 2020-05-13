@@ -77,9 +77,8 @@ InspectionObject[   _,     _, severity_, _]["Severity"] := severity
 
 
 
-InspectedLineObject[_, lineNumber_,     _, _,      _, ___]["LineNumber"] := lineNumber
-InspectedLineObject[_,           _, hash_, _,      _, ___]["Hash"] := hash
-InspectedLineObject[_,           _,     _, _, lints_, ___]["Lints"] := lints
+InspectedLineObject[_, lineNumber_, _,      _, ___]["LineNumber"] := lineNumber
+InspectedLineObject[_,           _, _, lints_, ___]["Lints"] := lints
 
 
 
