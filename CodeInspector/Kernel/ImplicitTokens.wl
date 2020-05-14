@@ -25,12 +25,10 @@ Needs["CodeInspector`Utils`"]
 
 
 
-
 (*
 How many implicit tokens to keep?
 *)
 $ImplicitTokensLimit = 20
-
 
 
 
@@ -151,7 +149,7 @@ Module[{implicitTokens, full, lines, lintedLines, bytes, str, tabWidth},
 
 
 
-CodeInspectImplicitTokensSummarize[string_String, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTokensSummarize[string_String, implicitTokensIn:_List:Automatic, opts:OptionsPattern[]] :=
 Catch[
 Module[{implicitTokens, lines, lintedLines, tabWidth},
 
@@ -301,6 +299,7 @@ mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
 mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
 mergeCharacters[{")", LintNullCharacter}] = LintNullCloseCharacter
 mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
+mergeCharacters[{")", ")"}] = LintCloseCloseCharacter
 mergeCharacters[{")", LintTimesCharacter, LintOneCharacter}] = LintCloseTimesOneCharacter
 mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
 

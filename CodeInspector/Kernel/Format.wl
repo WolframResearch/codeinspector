@@ -28,6 +28,7 @@ LintOpenOneCharacter
 LintAllCloseCharacter
 LintNullCloseCharacter
 LintOpenOpenCharacter
+LintCloseCloseCharacter
 LintCloseTimesOneCharacter
 
 LintEOFCharacter
@@ -724,6 +725,9 @@ Format[LintNullCloseCharacter, OutputForm] := "Null)"
 
 Format[LintOpenOpenCharacter, StandardForm] := "(("
 Format[LintOpenOpenCharacter, OutputForm] := "(("
+
+Format[LintCloseCloseCharacter, StandardForm] := "))"
+Format[LintCloseCloseCharacter, OutputForm] := "))"
 
 Format[LintCloseTimesOneCharacter, StandardForm] := ")\[Times]1"
 Format[LintCloseTimesOneCharacter, OutputForm] := ")x1"
