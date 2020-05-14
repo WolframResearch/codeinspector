@@ -22,6 +22,12 @@ Needs["CodeInspector`Utils`"]
 
 
 
+(*
+How many bracket mismatches to keep?
+*)
+$BracketMismatchesLimit = 1
+
+
 
 CodeInspectBracketMismatches::usage = "CodeInspectBracketMismatches[code] returns a list of bracket mismatches in code."
 
@@ -279,6 +285,8 @@ Catch[
     sources = #[Source]& /@ mismatches[[All, 3]];
 
    infixs = sources[[All, 1]];
+
+    infixs = Take[infixs, UpTo[$BracketMismatchesLimit]];
 
    If[$Debug,
     Print["infixs: ", infixs];
