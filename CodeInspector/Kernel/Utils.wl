@@ -35,6 +35,8 @@ FIXME: when a dependency on CodeFormatter is created, then use those functions a
 *)
 replaceTabs
 
+tabReplacementFunc
+
 
 Begin["`Private`"]
 

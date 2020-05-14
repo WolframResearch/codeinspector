@@ -34,6 +34,7 @@ set(WL_PACLET_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AbstractRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AggregateRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Boxes.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/BracketMismatches.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/CodeInspector.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ConcreteRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/External.wl

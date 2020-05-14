@@ -88,7 +88,7 @@ Module[{cst},
 
 
 
-CodeInspectImplicitTokensCST[cst_, OptionsPattern[]] :=
+CodeInspectImplicitTokensCST[cst_] :=
 Catch[
 Module[{times, agg, spans, nulls},
 
@@ -164,7 +164,7 @@ Module[{implicitTokens, lines, lintedLines, tabWidth},
   ];
 
   If[implicitTokens === Automatic,
-    implicitTokens = CodeInspectImplicitTokens[string];
+    implicitTokens = CodeInspectImplicitTokens[string, FilterRules[{opts}, Options[CodeInspectImplicitTokens]]];
   ];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
