@@ -299,9 +299,13 @@ mergeCharacters[{LintAllCharacter, LintOneCharacter, LintTimesCharacter}] = Lint
 
 mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
 mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
+mergeCharacters[{")", LintNullCharacter}] = LintNullCloseCharacter
 mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
 mergeCharacters[{")", LintTimesCharacter, LintOneCharacter}] = LintCloseTimesOneCharacter
 mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
+
+mergeCharacters[args___] := Failure["InternalUnhandled", <|"Function"->mergeCharacters, "Arguments"->{args}|>]
+
 
 (*
 return {line, col} for all \[Times] symbols
