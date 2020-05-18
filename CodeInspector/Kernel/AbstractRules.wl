@@ -2013,13 +2013,15 @@ https://mathematica.stackexchange.com/questions/124199/functions-with-both-optio
 
 Related issues:
 https://github.com/WolframResearch/codeinspector/issues/2
+https://github.com/WolframResearch/codeinspector/issues/3
 *)
 
 Attributes[scanOptionsPattern] = {HoldRest}
 
 scanOptionsPattern[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, optionalChildren, optionalPattern},
+Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, optionalChildren, optionalPattern, insideSet,
+  definition},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -2065,6 +2067,37 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
 
   If[!MatchQ[previous, CallNode[LeafNode[Symbol, "Optional", _], _, _]],
     Throw[issues]
+  ];
+
+  (*
+  Now scan all the way up to determine whether inside a Set[] or SetDelayed[]
+  *)
+  insideSet = False;
+  While[True,
+    If[parentPos == {},
+      Break[]
+    ];
+    parentPos = Drop[parentPos, -1];
+    parent = Extract[ast, parentPos];
+    If[ListQ[parent],
+      parentPos = Drop[parentPos, -1];
+      parent = Extract[ast, parentPos];
+    ];
+    If[MatchQ[parent, CallNode[LeafNode[Symbol, "Set" | "SetDelayed", _], _, _]],
+      insideSet = True;
+      Break[]
+    ];
+  ];
+
+  If[insideSet,
+    definition = parent[[3, Key["Definition"]]];
+    If[definition == "SyntaxInformation",
+      (*
+      Allow code like this to pass:
+      SyntaxInformation[f] = {"ArgumentsPattern" -> {_., OptionsPattern[]}}
+      *)
+      Throw[issues]
+    ];
   ];
 
   optional = previous;
