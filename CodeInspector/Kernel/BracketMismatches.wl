@@ -34,7 +34,7 @@ CodeInspectBracketMismatches::usage = "CodeInspectBracketMismatches[code] return
 Options[CodeInspectBracketMismatches] = {
   PerformanceGoal -> "Speed",
   "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
-  "SourceConvention" -> ("SourceConvention" /. Options[CodeConcreteParse])
+  SourceConvention -> (SourceConvention /. Options[CodeConcreteParse])
 }
 
 
@@ -106,7 +106,7 @@ CodeInspectBracketMismatchesSummarize::usage = "BracketMismatchSummarize[code] r
 
 Options[CodeInspectBracketMismatchesSummarize] = {
   "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
-  "SourceConvention" -> ("SourceConvention" /. Options[CodeConcreteParse])
+  SourceConvention -> (SourceConvention /. Options[CodeConcreteParse])
 }
 
 CodeInspectBracketMismatchesSummarize[File[file_String], bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
