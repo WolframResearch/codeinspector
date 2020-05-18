@@ -12,23 +12,28 @@ LintSpaceIndicatorCharacter
 
 LintErrorIndicatorCharacter
 
+LintMissingOpenerIndicatorCharacter
+LintMissingCloserIndicatorCharacter
+
 LintErrorContinuationIndicatorCharacter
 
 LintContinuationCharacter
 
-LintTimesCharacter
-LintOneCharacter
+(*
+There is confidence to believe that these are all possible combinations of implicit characters in syntactically valid text
+*)
 LintAllCharacter
 LintNullCharacter
-LintTimesOneCharacter
-LintAllTimesCharacter
-LintAllTimesOneCharacter
-
-LintOpenOneCharacter
+LintOneCharacter
+LintTimesCharacter
 LintAllCloseCharacter
-LintNullCloseCharacter
-LintOpenOpenCharacter
+LintAllTimesCharacter
 LintCloseCloseCharacter
+LintCloseTimesCharacter
+LintOpenOneCharacter
+LintOpenOpenCharacter
+LintTimesOneCharacter
+LintAllTimesOneCharacter
 LintCloseTimesOneCharacter
 
 LintEOFCharacter
@@ -678,6 +683,18 @@ Format[LintErrorIndicatorCharacter, StandardForm] := "\[ErrorIndicator]"
 Format[LintErrorIndicatorCharacter, OutputForm] := "^"
 
 
+LintMissingOpenerIndicatorCharacter::usage = "LintMissingOpenerIndicatorCharacter represents an error indicator in formatted output."
+
+Format[LintMissingOpenerIndicatorCharacter, StandardForm] := "\[ErrorIndicator]"
+Format[LintMissingOpenerIndicatorCharacter, OutputForm] := "^"
+
+
+LintMissingCloserIndicatorCharacter::usage = "LintMissingCloserIndicatorCharacter represents an error indicator in formatted output."
+
+Format[LintMissingCloserIndicatorCharacter, StandardForm] := "\[ErrorIndicator]"
+Format[LintMissingCloserIndicatorCharacter, OutputForm] := "^"
+
+
 LintErrorContinuationIndicatorCharacter::usage = "LintErrorContinuationIndicatorCharacter represents an error continuation indicator in formatted output."
 
 Format[LintErrorContinuationIndicatorCharacter, StandardForm] := "\[ErrorIndicator]"
@@ -720,14 +737,14 @@ Format[LintOpenOneCharacter, OutputForm] := "(1"
 Format[LintAllCloseCharacter, StandardForm] := "All)"
 Format[LintAllCloseCharacter, OutputForm] := "All)"
 
-Format[LintNullCloseCharacter, StandardForm] := "Null)"
-Format[LintNullCloseCharacter, OutputForm] := "Null)"
-
 Format[LintOpenOpenCharacter, StandardForm] := "(("
 Format[LintOpenOpenCharacter, OutputForm] := "(("
 
 Format[LintCloseCloseCharacter, StandardForm] := "))"
 Format[LintCloseCloseCharacter, OutputForm] := "))"
+
+Format[LintCloseTimesCharacter, StandardForm] := ")\[Times]"
+Format[LintCloseTimesCharacter, OutputForm] := ")x"
 
 Format[LintCloseTimesOneCharacter, StandardForm] := ")\[Times]1"
 Format[LintCloseTimesOneCharacter, OutputForm] := ")x1"

@@ -33,7 +33,8 @@ CodeInspectBracketMismatches::usage = "CodeInspectBracketMismatches[code] return
 
 Options[CodeInspectBracketMismatches] = {
   PerformanceGoal -> "Speed",
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
+  "SourceConvention" -> ("SourceConvention" /. Options[CodeConcreteParse])
 }
 
 
@@ -104,7 +105,8 @@ Module[{mismatches, agg},
 CodeInspectBracketMismatchesSummarize::usage = "BracketMismatchSummarize[code] returns an inspection summary object."
 
 Options[CodeInspectBracketMismatchesSummarize] = {
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
+  "SourceConvention" -> ("SourceConvention" /. Options[CodeConcreteParse])
 }
 
 CodeInspectBracketMismatchesSummarize[File[file_String], bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
@@ -229,22 +231,24 @@ $color = severityColor[{
 (*
 Return list of characters representing the under line
 *)
-modify[lineIn_String, {infixs_}, lineNumber_] :=
+modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_] :=
  Module[{line, infixCols, infixInserters, under,
-  rules},
-
-  infixCols = Cases[infixs, {lineNumber, col_} :> col];
+  rules, missingOpenerCols, missingCloserCols, missingOpenerInserters, missingCloserInserters},
 
   line = lineIn;
 
-  infixInserters = AssociationMap[LintMarkup[LintErrorIndicatorCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, infixCols];
+  missingOpenerCols = Cases[missingOpenerStarts, {lineNumber, col_} :> col];
+  missingCloserCols = Cases[missingCloserStarts, {lineNumber, col_} :> col];
+
+  missingOpenerInserters = AssociationMap[LintMarkup[LintMissingOpenerIndicatorCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, missingOpenerCols];
+  missingCloserInserters = AssociationMap[LintMarkup[LintMissingCloserIndicatorCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, missingCloserCols];
 
   If[$Debug,
     Print["lineNumber: ", lineNumber];
     Print["infixInserters: ", infixInserters];
   ];
 
-  rules = Join[infixInserters];
+  rules = Join[missingOpenerInserters, missingCloserInserters];
   rules = Normal[rules];
 
   under = Table[" ", {StringLength[line]}];
@@ -268,7 +272,8 @@ modify[lineIn_String, {infixs_}, lineNumber_] :=
 
 bracketMismatchesLinesReport[linesIn:{___String}, bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}] :=
 Catch[
- Module[{mismatches, sources, infixs, lines, linesToModify},
+ Module[{mismatches, infixs, lines, linesToModify, missingOpeners, missingClosers, missingOpenerStarts,
+   missingCloserStarts},
 
     If[bracketMismatchesIn === {},
       Throw[{}]
@@ -282,22 +287,22 @@ Catch[
       Print["lines: ", lines];
     ];
 
-    sources = #[Source]& /@ mismatches[[All, 3]];
+    mismatches = Take[mismatches, UpTo[$BracketMismatchesLimit]];
 
-   infixs = sources[[All, 1]];
+    missingOpeners = Cases[mismatches, CodeParser`SyntaxErrorNode[SyntaxError`UnexpectedCloser, _, _]];
 
-    infixs = Take[infixs, UpTo[$BracketMismatchesLimit]];
+    missingClosers = Cases[mismatches, CodeParser`GroupMissingCloserNode[_, _, _]];
 
-   If[$Debug,
-    Print["infixs: ", infixs];
-   ];
+    missingOpenerStarts = missingOpeners[[All, 3, Key[Source], 1]];
 
-   linesToModify = Union[ infixs[[All, 1]] ];
+    missingCloserStarts = missingClosers[[All, 3, Key[Source], 1]];
+
+   linesToModify = Union[missingOpenerStarts[[All, 1]], missingCloserStarts[[All, 1]]];
 
    Table[
 
      InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
-                                  modify[lines[[i]], {infixs}, i]},
+                                  modify[lines[[i]], {missingOpenerStarts, missingCloserStarts}, i]},
                                   {}]
     ,
     {i, linesToModify}

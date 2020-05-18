@@ -282,26 +282,33 @@ modify[lineIn_String, charInfos:{{_, _, _}...}, lineNumber_] :=
   under
   ]
 
-mergeCharacters[{LintTimesCharacter}] = LintTimesCharacter
-mergeCharacters[{LintOneCharacter}] = LintOneCharacter
-mergeCharacters[{LintAllCharacter}] = LintAllCharacter
-mergeCharacters[{LintNullCharacter}] = LintNullCharacter
 mergeCharacters[{"("}] = "("
 mergeCharacters[{")"}] = ")"
+mergeCharacters[{LintAllCharacter}] = LintAllCharacter
+mergeCharacters[{LintNullCharacter}] = LintNullCharacter
+mergeCharacters[{LintOneCharacter}] = LintOneCharacter
+mergeCharacters[{LintTimesCharacter}] = LintTimesCharacter
 
-mergeCharacters[{LintTimesCharacter, LintOneCharacter}] = LintTimesOneCharacter
-mergeCharacters[{LintTimesCharacter, LintAllCharacter}] = LintAllTimesCharacter
+mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
+mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
+mergeCharacters[{")", ")"}] = LintCloseCloseCharacter
+mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
+mergeCharacters[{")", LintTimesCharacter}] = LintCloseTimesCharacter
 mergeCharacters[{LintAllCharacter, LintTimesCharacter}] = LintAllTimesCharacter
-mergeCharacters[{LintTimesCharacter, LintOneCharacter, LintAllCharacter}] = LintAllTimesOneCharacter
+mergeCharacters[{LintOneCharacter, LintTimesCharacter}] = LintTimesOneCharacter
+
+mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
 mergeCharacters[{LintAllCharacter, LintOneCharacter, LintTimesCharacter}] = LintAllTimesOneCharacter
 
-mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
-mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
-mergeCharacters[{")", LintNullCharacter}] = LintNullCloseCharacter
-mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
-mergeCharacters[{")", ")"}] = LintCloseCloseCharacter
-mergeCharacters[{")", LintTimesCharacter, LintOneCharacter}] = LintCloseTimesOneCharacter
-mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
+
+(*
+Only possible with invalid syntax
+We do not care so much about annotating invalid syntax, so just return a space
+*)
+mergeCharacters[{")", LintNullCharacter}] = " "
+mergeCharacters[{LintAllCharacter, LintOneCharacter}] = " "
+mergeCharacters[{")", ")", LintAllCharacter}] = " "
+mergeCharacters[{")", ")", LintNullCharacter}] = " "
 
 mergeCharacters[args___] := Failure["InternalUnhandled", <|"Function"->mergeCharacters, "Arguments"->{args}|>]
 
