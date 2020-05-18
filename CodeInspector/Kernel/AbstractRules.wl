@@ -2011,6 +2011,8 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
 Explained here:
 https://mathematica.stackexchange.com/questions/124199/functions-with-both-optional-arguments-and-options/124208#124208
 
+Related issues:
+https://github.com/WolframResearch/codeinspector/issues/2
 *)
 
 Attributes[scanOptionsPattern] = {HoldRest}
@@ -2076,7 +2078,11 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
     optionalPattern = optionalPattern[[2, 2]]
   ];
 
-  If[MatchQ[optionalPattern, CallNode[LeafNode[Symbol, "Blank" | "BlankSequence" | "BlankNullSequence", _], {}, _]],
+  If[MatchQ[optionalPattern,
+      CallNode[LeafNode[Symbol, "Blank" | "BlankSequence" | "BlankNullSequence", _], {}, _] |
+      CallNode[LeafNode[Symbol, "Blank", _], {LeafNode[Symbol, "List", _]}, _]
+    ]
+    ,
     AppendTo[issues, InspectionObject["OptionsPattern", "``Optional`` occurs before ``OptionsPattern`` and may bind arguments intended for ``OptionsPattern``.", "Error", <|
       Source -> optionalPattern[[3, Key[Source]]],
       "AdditionalSources" -> { data[Source] },
