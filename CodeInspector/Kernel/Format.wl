@@ -316,7 +316,8 @@ InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, conten
 
 Options[InspectedLineObject] = {
 	"MaxLineNumberLength" -> 5,
-	"Elided" -> False
+	"Elided" -> False,
+	"Environ" -> False
 }
 
 (*
@@ -331,11 +332,12 @@ So brute-force it with Grid so that it looks good
 Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints,
-	grid, red, darkerOrange, blue},
+	grid, red, darkerOrange, blue, environ},
 
 	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
 	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
+	environ = OptionValue[InspectedLineObject, {opts}, "Environ"];
 
 	If[elided,
 		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
@@ -401,8 +403,10 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	As a test: Create a HUGE single line lint, so that there are hundreds of partitions
 	Make sure that only the partitions with errors are displayed.
 	*)
-	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
-
+	If[!environ,
+		grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
+	];
+	
 	grid = Flatten[grid, 1];
 
 	(*
@@ -442,7 +446,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	*)
 	grid = Grid[
 		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
-		{{formatLeftColumn[lineSource, lineNumber, opts], Spacer[10],
+		{{formatLeftColumn[lineSource, lineNumber, FilterRules[{opts}, Options[formatLeftColumn]]], Spacer[10],
 			Column[{Grid[grid,
 						Spacings -> {0, 0},
 						ItemSize -> $LintedLintItemSize,
@@ -584,7 +588,7 @@ Module[{lineSource, endingLints, elided, startingLints, grid},
 
 	Grid[
 		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
-		{{formatLeftColumn[lineSource, lineNumber, opts], Spacer[20],
+		{{formatLeftColumn[lineSource, lineNumber, FilterRules[{opts}, Options[formatLeftColumn]]], Spacer[20],
 			Column[{Grid[grid,
 						Spacings -> {0, 0}, ItemSize -> $LintedLintItemSize] } ~Join~ endingLints ]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}],
