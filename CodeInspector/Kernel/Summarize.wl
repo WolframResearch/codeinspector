@@ -150,6 +150,19 @@ Catch[
 ]]
 
 
+(*
+Allow lints themselves to be summarized
+
+Since we have an explicit lint that we want to summarize, then make sure that "TagExclusions" and
+ConfidenceLevel do not interfere with summarizing
+*)
+CodeInspectSummarize[lint:InspectionObject[_, _, _, KeyValuePattern["File" -> _]], OptionsPattern[]] :=
+  Module[{file},
+
+    file = lint[[4, Key["File"]]];
+
+    CodeInspectSummarize[File[file], {lint}, "SeverityExclusions" -> {}, "TagExclusions" -> {}, ConfidenceLevel -> 0.0]
+  ]
 
 
 
