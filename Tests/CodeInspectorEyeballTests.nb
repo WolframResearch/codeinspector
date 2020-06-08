@@ -119,7 +119,7 @@ Cell[BoxData[
   3.796034456689707*^9}},ExpressionUUID->"dd45a013-536f-4fa3-b3e0-\
 180ccb95b3a0"]
 }, Open  ]]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -309,7 +309,7 @@ RGBColor[a,b,c]],RGBColor[a,b,c,d],RGBColor@@(N[Round[100 \
 #]/100]&/@{a,b,c,d})]\>\"", "]"}]], "Input",ExpressionUUID->"9c87a34f-fd5b-\
 47d3-a9b0-79d56270b571"]
 }, Open  ]]
-}, Closed]]
+}, Open  ]]
 },
 WindowSize->{1221, 751},
 WindowMargins->{{12, Automatic}, {Automatic, 24}},
@@ -362,9 +362,9 @@ Cell[3198, 97, 510, 13, 30, "Input",ExpressionUUID->"654682de-a63e-407b-8eff-656
 Cell[3711, 112, 119, 0, 35, "Text",ExpressionUUID->"61c46267-a3b8-4ed4-bfce-e76b8afdac7d"],
 Cell[3833, 114, 243, 5, 30, "Input",ExpressionUUID->"dd45a013-536f-4fa3-b3e0-180ccb95b3a0"]
 }, Open  ]]
-}, Closed]],
+}, Open  ]],
 Cell[CellGroupData[{
-Cell[4125, 125, 89, 0, 53, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
+Cell[4125, 125, 89, 0, 67, "Section",ExpressionUUID->"c318bf45-50ca-458c-97d0-29e1d02aac47"],
 Cell[4217, 127, 152, 2, 30, "Input",ExpressionUUID->"24ecec98-e18a-4d27-9f49-da720ba33971"],
 Cell[CellGroupData[{
 Cell[4394, 133, 93, 0, 54, "Subsection",ExpressionUUID->"92bf7584-3663-4c3f-958e-73e5c69ac282"],
@@ -393,7 +393,7 @@ Cell[10180, 280, 334, 7, 199, "Input",ExpressionUUID->"3f729853-ef6d-4c38-8cf1-2
 Cell[10517, 289, 357, 8, 30, "Input",ExpressionUUID->"28000e59-ed82-4986-a886-66cc45b0690a"],
 Cell[10877, 299, 694, 10, 136, "Input",ExpressionUUID->"9c87a34f-fd5b-47d3-a9b0-79d56270b571"]
 }, Open  ]]
-}, Closed]]
+}, Open  ]]
 }
 ]
 *)
