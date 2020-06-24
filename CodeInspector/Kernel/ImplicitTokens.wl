@@ -133,7 +133,13 @@ Module[{implicitTokens, full, lines, lintedLines, bytes, str, tabWidth},
     implicitTokens = CodeInspectImplicitTokens[File[full], FilterRules[{opts}, Options[CodeInspectImplicitTokens]]];
   ];
 
+  (*
+  Was:
   bytes = Import[full, "Byte"];
+
+  but this is slow
+  *)
+  bytes = Normal[ReadByteArray[full]] /. EndOfFile -> {};
 
   str = SafeString[bytes];
 

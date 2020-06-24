@@ -141,7 +141,13 @@ Catch[
     ];
   ];
 
-   bytes = Import[full, "Byte"];
+  (*
+  Was:
+  bytes = Import[full, "Byte"];
+
+  but this is slow
+  *)
+  bytes = Normal[ReadByteArray[full]] /. EndOfFile -> {};
 
    str = SafeString[bytes];
 
