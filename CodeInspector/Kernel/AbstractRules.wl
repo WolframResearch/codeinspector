@@ -361,11 +361,18 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
   *)
   filtered = DeleteCases[children, CallNode[_, { CallNode[LeafNode[Symbol, "Blank", _], _, _], _ }, _]];
 
-  counts = CountsBy[filtered, ToFullFormString[#[[2, 1]] ]&];
+  counts = CountsBy[filtered, ToFullFormString[#[[2, 1]]]&];
 
   dupKeys = Keys[Select[counts, # > 1&]];
 
-  expensiveChildren = ToFullFormString[#[[2, 1]] ]& /@ filtered;
+  expensiveChildren = ToFullFormString[#[[2, 1]]]& /@ filtered;
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[expensiveChildren, FailureQ],
+    Throw[issues]
+  ];
 
   selecteds = Function[key, Pick[filtered, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -375,9 +382,9 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
       Continue[]
     ];
 
-    srcs = #[[2, 1, 3, Key[Source] ]]& /@ selected;
+    srcs = #[[2, 1, 3, Key[Source]]]& /@ selected;
 
-    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]] ], DeleteNode, <|Source->#|>]&, srcs];
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "``Association`` has duplicated keys.", "Error", <|
       Source -> First[srcs],
@@ -418,11 +425,18 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
     Throw[issues]
   ];
 
-  counts = CountsBy[children, ToFullFormString[#[[2, 1]] ]&];
+  counts = CountsBy[children, ToFullFormString[#[[2, 1]]]&];
 
   dupKeys = Keys[Select[counts, # > 1&]];
 
-  expensiveChildren = ToFullFormString[#[[2, 1]] ]& /@ children;
+  expensiveChildren = ToFullFormString[#[[2, 1]]]& /@ children;
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[expensiveChildren, FailureQ],
+    Throw[issues]
+  ];
 
   selecteds = Function[key, Pick[children, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -438,9 +452,9 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
     So make Remark for now
     *)
 
-    srcs = #[[2, 1, 3, Key[Source] ]]& /@ selected;
+    srcs = #[[2, 1, 3, Key[Source]]]& /@ selected;
 
-    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]] ], DeleteNode, <|Source->#|>]&, srcs];
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "Duplicate keys in list of rules.", "Remark", <|
       Source -> First[srcs],
@@ -505,13 +519,20 @@ Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
   Scan[(If[MatchQ[#, CallNode[LeafNode[Symbol, "Set", _], _, _]],
     AppendTo[issues, InspectionObject["WhichSet", "``Which`` has ``=`` as a clause.\n\
 Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
-  ];)&, children[[;;;;2]] ];
+  ];)&, children[[;;;;2]]];
 
   counts = CountsBy[children[[;;;;2]], ToFullFormString];
 
   dupKeys = Keys[Select[counts, # > 1&]];
 
   expensiveChildren = ToFullFormString /@ children[[;;;;2]];
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[expensiveChildren, FailureQ],
+    Throw[issues]
+  ];
 
   selecteds = Function[key, Pick[children[[;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -521,7 +542,7 @@ Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
       Continue[]
     ];
 
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", <|
       Source -> First[srcs],
@@ -567,7 +588,7 @@ Module[{ast, node, children, data, src, cases, issues, selected, srcs, span, cou
   If[MatchQ[children[[1]], LeafNode[Symbol, "$OperatingSystem", _]],
     cases = Cases[children[[2;;-1;;2]], LeafNode[String, "\"Linux\"", _], {0, Infinity}];
     If[cases =!= {},
-      src = cases[[1, 3, Key[Source] ]];
+      src = cases[[1, 3, Key[Source]]];
       AppendTo[issues, InspectionObject["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.", "Error", <|
         Source -> src,
         ConfidenceLevel -> 0.95, CodeActions -> {
@@ -612,6 +633,13 @@ Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
   dupKeys = Keys[Select[counts, # > 1&]];
 
   expensiveChildren = ToFullFormString /@ children[[2;;;;2]];
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[expensiveChildren, FailureQ],
+    Throw[issues]
+  ];
 
   selecteds = Function[key, Pick[children[[2;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -711,7 +739,7 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
     selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
 
     If[!empty[selected],
-      srcs = #[[3, Key[Source] ]]& /@ selected;
+      srcs = #[[3, Key[Source]]]& /@ selected;
       AppendTo[issues, InspectionObject["DuplicateClauses", "Both branches are the same.", "Error", <|
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
@@ -803,8 +831,8 @@ Module[{ast, node, patSymbol, name, rhs, children, patterns, issues},
   Scan[(
     If[#[[2, 1]]["String"] == name,
       AppendTo[issues, InspectionObject["DuplicatePatternName", "Pattern name " <> format[name] <> " occurs inside pattern with same name.", "Error", <|
-        Source -> #[[2, 1, 3, Key[Source] ]],
-        "AdditionalSources" -> { patSymbol[[3, Key[Source] ]] }, ConfidenceLevel -> 0.95 |> ]];
+        Source -> #[[2, 1, 3, Key[Source]]],
+        "AdditionalSources" -> { patSymbol[[3, Key[Source]]] }, ConfidenceLevel -> 0.95 |> ]];
     ];
   )&, patterns];
 
@@ -938,7 +966,7 @@ Catch[
   Scan[
     AppendTo[issues, InspectionObject["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
       #[[3]],
-      CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source] ]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
+      CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
       ,
       unusedParams
   ];
@@ -965,8 +993,8 @@ Catch[
 
     AppendTo[issues,
       InspectionObject["LeakedVariable", "Leaked variable in ``Module``: " <> format[paramString] <> ".", "Warning", <|
-        Source -> #[[3, Key[Source] ]],
-        "AdditionalSources" -> ( #[[3, Key[Source] ]]& /@ paramUses ),
+        Source -> #[[3, Key[Source]]],
+        "AdditionalSources" -> ( #[[3, Key[Source]]]& /@ paramUses ),
         ConfidenceLevel -> 0.75 |>
       ]
     ])&
@@ -1057,7 +1085,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedP
   selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateVariables", "Duplicate variables in ``DynamicModule``.", "Error", <|
       Source -> First[srcs],
@@ -1183,7 +1211,7 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], Con
       selected = Select[varsList, counts[ToFullFormString[#]] > 1&];
 
       If[!empty[selected],
-        srcs = #[[3, Key[Source] ]]& /@ selected;
+        srcs = #[[3, Key[Source]]]& /@ selected;
 
         AppendTo[issues, InspectionObject["DuplicateVariables", "Duplicate variables in ``With``.", "Error", <|
           Source -> First[srcs],
@@ -1291,7 +1319,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
@@ -1364,7 +1392,7 @@ Module[{ast, node, children, data, issues, opt, pats},
   opt = children[[2]];
   pats = Cases[opt, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
   Scan[(
-    AppendTo[issues, InspectionObject["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2, 1]] ]] <> " in ``Optional``.", "Error", <|
+    AppendTo[issues, InspectionObject["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2, 1]]]] <> " in ``Optional``.", "Error", <|
       #[[3]],
       ConfidenceLevel -> 0.95|>]]
   )&, pats];
@@ -1713,7 +1741,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts},
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", <|
       Source -> First[srcs],
@@ -1747,7 +1775,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts},
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
@@ -1794,7 +1822,7 @@ Module[{ast, node, children, data, selected, issues, blanks, counts},
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source] ]]& /@ selected;
+    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", <|
       Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
@@ -1874,7 +1902,7 @@ Module[{ast, node, children, data},
   cases = Cases[children, CallNode[LeafNode[Symbol, "EvenQ" | "OddQ" | "PrimeQ", _], _, _], Infinity];
 
   Scan[(AppendTo[issues, InspectionObject["BadSolverCall", "*Q function in symbolic solver. Did you mean to do this?", "Error", <|
-    Source -> #[[3, Key[Source] ]],
+    Source -> #[[3, Key[Source]]],
     ConfidenceLevel -> 0.90|>]])&
     ,
     cases
@@ -1920,8 +1948,8 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
 
     If[!empty[rhsOccurringSymbols],
       AppendTo[issues, InspectionObject["PatternRule", "The same symbol occurs on lhs and rhs of ``Rule``. Did you mean ``RuleDelayed``?", "Error", <|
-        Source -> lhsPatternName[[3, Key[Source] ]],
-        "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source] ]],
+        Source -> lhsPatternName[[3, Key[Source]]],
+        "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source]]],
         ConfidenceLevel -> 0.8 |>]]
     ];
     ,
@@ -1995,8 +2023,8 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
 
     If[!empty[rhsOccurringPatterns],
       AppendTo[issues, InspectionObject["PatternRule", "The same named pattern occurs on lhs and rhs.", "Error", <|
-        Source -> lhsPatternName[[3, Key[Source] ]],
-        "AdditionalSources" -> rhsOccurringPatterns[[All, 3, Key[Source] ]],
+        Source -> lhsPatternName[[3, Key[Source]]],
+        "AdditionalSources" -> rhsOccurringPatterns[[All, 3, Key[Source]]],
         ConfidenceLevel -> 0.8 |>]]
     ];
     ,

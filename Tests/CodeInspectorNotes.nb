@@ -79,7 +79,7 @@ Cell[BoxData[
   RowBox[{"\"\<CodeInspector\>\"", ",", 
    RowBox[{"\"\<UpdateSites\>\"", "\[Rule]", "True"}]}], "]"}]], "Input",Expre\
 ssionUUID->"3617a860-9445-49bf-b4c3-ca03b7b1679f"]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -2749,9 +2749,9 @@ Cell[1851, 58, 223, 4, 30, "Input",ExpressionUUID->"89e7e16a-62a8-4a06-88ba-cb55
 Cell[2077, 64, 229, 6, 30, "Input",ExpressionUUID->"87bec54f-d2cd-4997-a46d-b3bdf665cf94"],
 Cell[2309, 72, 139, 2, 30, "Input",ExpressionUUID->"01b37e36-bbaa-40ff-98db-1f1388b9a8c3"],
 Cell[2451, 76, 216, 4, 30, "Input",ExpressionUUID->"3617a860-9445-49bf-b4c3-ca03b7b1679f"]
-}, Closed]],
+}, Open  ]],
 Cell[CellGroupData[{
-Cell[2704, 85, 78, 0, 53, "Section",ExpressionUUID->"9263b767-fa90-4d67-823a-e15090e310aa"],
+Cell[2704, 85, 78, 0, 67, "Section",ExpressionUUID->"9263b767-fa90-4d67-823a-e15090e310aa"],
 Cell[2785, 87, 115, 1, 30, "Input",ExpressionUUID->"8c3c8514-c44a-47fc-9f25-d1148fa315f6"],
 Cell[2903, 90, 146, 3, 30, "Input",ExpressionUUID->"8de5eb21-018f-4adb-b782-112a96b6bd2d"],
 Cell[3052, 95, 175, 3, 35, "Text",ExpressionUUID->"5691a06b-26bd-4ad6-bc39-964c44a1eedd"],
