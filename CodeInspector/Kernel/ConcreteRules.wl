@@ -244,7 +244,7 @@ scanCalls[pos_List, cstIn_] :=
 Attributes[scanErrorNodes] = {HoldRest}
 
 scanErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, tag, data, tagString, children, leaf, issues, multilineStrings},
+ Module[{cst, node, tag, data, tagString, children, issues, multilineStrings},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
@@ -254,12 +254,47 @@ scanErrorNodes[pos_List, cstIn_] :=
   issues = {};
 
   Switch[tag,
+    Token`Error`ExpectedEqual,
+      AppendTo[issues, InspectionObject["ExpectedEqual", "Expected ``=``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnhandledDot,
+      AppendTo[issues, InspectionObject["UnhandledDot", "Unhandled ``.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnhandledCharacter,
+      AppendTo[issues, InspectionObject["UnhandledCharacter", "Unhandled character.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`ExpectedLetterlike,
+      AppendTo[issues, InspectionObject["ExpectedLetterlike", "Expected letterlike.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`ExpectedAccuracy,
+      AppendTo[issues, InspectionObject["ExpectedAccuracy", "Expected accuracy.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`ExpectedExponent,
+      AppendTo[issues, InspectionObject["ExpectedExponent", "Expected exponent.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
     Token`Error`Aborted,
-      leaf = children[[1]];
       AppendTo[issues, InspectionObject["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedOperand,
       AppendTo[issues, InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnrecognizedDigit,
+      AppendTo[issues, InspectionObject["UnrecognizedDigit", "Unrecognized digit.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`ExpectedDigit,
+      AppendTo[issues, InspectionObject["ExpectedDigit", "Expected digit.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnsupportedCharacter,
+      AppendTo[issues, InspectionObject["UnsupportedCharacter", "Unsupported character.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`InvalidBase,
+      AppendTo[issues, InspectionObject["InvalidBase", "Invalid base.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnsupportedToken,
+      AppendTo[issues, InspectionObject["UnsupportedToken", "Unsupported token.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    Token`Error`UnexpectedCloser,
+      AppendTo[issues, InspectionObject["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnterminatedComment,
       AppendTo[issues, InspectionObject["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
@@ -279,6 +314,9 @@ scanErrorNodes[pos_List, cstIn_] :=
             <| Source -> { { #[[1]], #[[2]] }, { #[[1]], #[[2]] + 1  } }, ConfidenceLevel -> 0.9 |>]])&[s[[3, Key[Source], 1]] ];
         ], multilineStrings
       ];
+    ,
+    Token`Error`UnterminatedFileString,
+      AppendTo[issues, InspectionObject["UnterminatedFileString", "Unterminated file string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     _,
       tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
@@ -302,23 +340,11 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
   data = node[[3]];
 
   Switch[tag,
-    SyntaxError`ExpectedOperand,
-      {InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
     SyntaxError`ExpectedTilde,
       {InspectionObject["ExpectedTilde", "Expected ``~``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    SyntaxError`ColonError,
-      {InspectionObject["ColonError", "Invalid syntax for ``:``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
     SyntaxError`ExpectedSet,
       {InspectionObject["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    SyntaxError`ExpectedIntegrand,
-      {InspectionObject["ExpectedIntegrand", "Expected integrand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
-    ,
-    SyntaxError`UnexpectedCloser,
-      {InspectionObject["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     _,
       tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
