@@ -306,7 +306,7 @@ Attributes[CodeInspectCST] = {HoldFirst}
 
 CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
-Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
+Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start,
   ignoredNodes, beginStaticAnalysisIgnoreNodePoss, endPos, siblingsPos, siblings, candidate, endFound},
 
@@ -388,17 +388,15 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
 
   prog = 0;
   start = Now;
-  KeyValueMap[(
+  KeyValueMap[Function[{pat, func},
     If[$Debug,
-      Print[#];
+      Print[pat];
     ];
-    pat = #1;
-    func = #2;
     poss = Position[cst, pat];
-    AppendTo[lints, Map[(func[#, cst])&, poss]];
+    AppendTo[lints, Map[Function[pos, func[pos, cst]], poss]];
     prog++;
     $ConcreteLintProgress = Floor[100 * prog / Length[concreteRules]];
-    )&, concreteRules];
+    ], concreteRules];
   $ConcreteLintTime = Now - start;
 
 
@@ -420,17 +418,15 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
 
   prog = 0;
   start = Now;
-  KeyValueMap[(
+  KeyValueMap[Function[{pat, func},
     If[$Debug,
-      Print[#];
+      Print[pat];
     ];
-    pat = #1;
-    func = #2;
     poss = Position[agg, pat];
-    AppendTo[lints, Map[(func[#, agg])&, poss]];
+    AppendTo[lints, Map[Function[pos, func[pos, agg]], poss]];
     prog++;
     $AggregateLintProgress = Floor[100 * prog / Length[aggregateRules]];
-    )&, aggregateRules];
+    ], aggregateRules];
   $AggregateLintTime = Now - start;
 
 
@@ -453,17 +449,15 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, pat, func, poss, lints,
 
   prog = 0;
   start = Now;
-  KeyValueMap[(
+  KeyValueMap[Function[{pat, func},
     If[$Debug,
-      Print[#];
+      Print[pat];
     ];
-    pat = #1;
-    func = #2;
     poss = Position[ast, pat];
-    AppendTo[lints, Map[(func[#, ast])&, poss]];
+    AppendTo[lints, Map[Function[pos, func[pos, ast]], poss]];
     prog++;
     $AbstractLintProgress = Floor[100 * prog / Length[abstractRules]];
-    )&, abstractRules];
+    ], abstractRules];
   $AbstractLintTime = Now - start;
 
   lints = Flatten[lints];
