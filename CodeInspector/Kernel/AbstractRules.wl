@@ -476,7 +476,7 @@ Attributes[scanWhichs] = {HoldRest}
 scanWhichs[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, issues, span, selected, lintData, srcs, counts, selecteds,
-  dupKeys, expensiveChildren},
+  dupKeys, expensiveChildren, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -542,7 +542,9 @@ Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
       Continue[]
     ];
 
-    srcs = #[[3, Key[Source]]]& /@ selected;
+    firsts = firstTokenWithSource /@ selected;
+
+    srcs = #[[3, Key[Source]]]& /@ firsts;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", <|
       Source -> First[srcs],
@@ -562,7 +564,7 @@ Attributes[scanSwitchs] = {HoldRest}
 scanSwitchs[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, src, cases, issues, selected, srcs, span, counts,
-  dupKeys, expensiveChildren},
+  dupKeys, expensiveChildren, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -649,9 +651,11 @@ Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
       Continue[]
     ];
 
-    srcs = #[[3, Key[Source]]]& /@ selected;
+    firsts = firstTokenWithSource /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error", <|
+    srcs = #[[3, Key[Source]]]& /@ firsts;
+
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95 |> ]
@@ -703,7 +707,7 @@ Attributes[scanIfs] = {HoldRest}
 
 scanIfs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, issues, selected, srcs, counts},
+ Module[{ast, node, children, data, issues, selected, srcs, counts, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -746,8 +750,9 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
     selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
 
     If[!empty[selected],
-      srcs = #[[3, Key[Source]]]& /@ selected;
       AppendTo[issues, InspectionObject["DuplicateClauses", "Both branches are the same.", "Error", <|
+      firsts = firstTokenWithSource /@ selected;
+      srcs = #[[3, Key[Source]]]& /@ firsts;
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
     ];
@@ -1755,7 +1760,7 @@ Attributes[scanAnds] = {HoldRest}
 
 scanAnds[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, consts, counts},
+Module[{ast, node, children, data, selected, issues, consts, counts, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1783,9 +1788,12 @@ Module[{ast, node, children, data, selected, issues, consts, counts},
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", <|
+    firsts = firstTokenWithSource /@ selected;
+
+    srcs = #[[3, Key[Source]]]& /@ firsts;
+
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95 |> ]];
@@ -1799,7 +1807,7 @@ Attributes[scanOrs] = {HoldRest}
 
 scanOrs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, consts, counts},
+Module[{ast, node, children, data, selected, issues, consts, counts, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1824,9 +1832,12 @@ Module[{ast, node, children, data, selected, issues, consts, counts},
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
+    firsts = firstTokenWithSource /@ selected;
+
+    srcs = #[[3, Key[Source]]]& /@ firsts;
+
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
   ];
 
@@ -1838,7 +1849,7 @@ Attributes[scanAlternatives] = {HoldRest}
 
 scanAlternatives[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, blanks, counts},
+Module[{ast, node, children, data, selected, issues, blanks, counts, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1878,9 +1889,12 @@ Module[{ast, node, children, data, selected, issues, blanks, counts},
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
-    srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", <|
+    firsts = firstTokenWithSource /@ selected;
+
+    srcs = #[[3, Key[Source]]]& /@ firsts;
+
       Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
   ];
 

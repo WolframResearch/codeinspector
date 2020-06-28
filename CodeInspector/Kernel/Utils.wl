@@ -38,6 +38,10 @@ replaceTabs
 tabReplacementFunc
 
 
+
+firstTokenWithSource
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -491,6 +495,22 @@ Module[{lines},
   StringJoin[Riffle[lines, newline]]
 ]
 
+
+
+
+
+firstTokenWithSource[node_] :=
+  Catch[
+  Module[{cases},
+    cases = Cases[node, (LeafNode | ErrorNode)[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
+    If[cases != {},
+      Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
+    ];
+    cases = Cases[node, CallNode[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
+    If[cases != {},
+      Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
+    ];
+  ]]
 
 
 
