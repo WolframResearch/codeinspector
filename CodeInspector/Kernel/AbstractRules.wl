@@ -361,10 +361,6 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
   *)
   filtered = DeleteCases[children, CallNode[_, { CallNode[LeafNode[Symbol, "Blank", _], _, _], _ }, _]];
 
-  counts = CountsBy[filtered, ToFullFormString[#[[2, 1]]]&];
-
-  dupKeys = Keys[Select[counts, # > 1&]];
-
   expensiveChildren = ToFullFormString[#[[2, 1]]]& /@ filtered;
 
   (*
@@ -373,6 +369,10 @@ Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupK
   If[AnyTrue[expensiveChildren, FailureQ],
     Throw[issues]
   ];
+
+  counts = CountsBy[filtered, ToFullFormString[#[[2, 1]]]&];
+
+  dupKeys = Keys[Select[counts, # > 1&]];
 
   selecteds = Function[key, Pick[filtered, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -425,10 +425,6 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
     Throw[issues]
   ];
 
-  counts = CountsBy[children, ToFullFormString[#[[2, 1]]]&];
-
-  dupKeys = Keys[Select[counts, # > 1&]];
-
   expensiveChildren = ToFullFormString[#[[2, 1]]]& /@ children;
 
   (*
@@ -437,6 +433,10 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
   If[AnyTrue[expensiveChildren, FailureQ],
     Throw[issues]
   ];
+
+  counts = CountsBy[children, ToFullFormString[#[[2, 1]]]&];
+
+  dupKeys = Keys[Select[counts, # > 1&]];
 
   selecteds = Function[key, Pick[children, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -521,10 +521,6 @@ Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
 Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
   ];)&, children[[;;;;2]]];
 
-  counts = CountsBy[children[[;;;;2]], ToFullFormString];
-
-  dupKeys = Keys[Select[counts, # > 1&]];
-
   expensiveChildren = ToFullFormString /@ children[[;;;;2]];
 
   (*
@@ -533,6 +529,10 @@ Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
   If[AnyTrue[expensiveChildren, FailureQ],
     Throw[issues]
   ];
+
+  counts = CountsBy[children[[;;;;2]], ToFullFormString];
+
+  dupKeys = Keys[Select[counts, # > 1&]];
 
   selecteds = Function[key, Pick[children[[;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -628,10 +628,6 @@ Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
    ]
   ];
 
-  counts = CountsBy[children[[2;;;;2]], ToFullFormString];
-
-  dupKeys = Keys[Select[counts, # > 1&]];
-
   expensiveChildren = ToFullFormString /@ children[[2;;;;2]];
 
   (*
@@ -640,6 +636,10 @@ Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
   If[AnyTrue[expensiveChildren, FailureQ],
     Throw[issues]
   ];
+
+  counts = CountsBy[children[[2;;;;2]], ToFullFormString];
+
+  dupKeys = Keys[Select[counts, # > 1&]];
 
   selecteds = Function[key, Pick[children[[2;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -730,6 +730,13 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
   If[Length[children] >= 3,
 
     counts = CountsBy[children[[2;;3]], ToFullFormString];
+
+    (*
+    bail out if there are errors and ToFullFormString has failed
+    *)
+    If[AnyTrue[Keys[counts], FailureQ],
+      Throw[issues]
+    ];
 
     (*
     Do not warn about  If[a, _, _]
@@ -951,6 +958,13 @@ Catch[
 
   counts = CountsBy[vars, ToFullFormString];
 
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[Keys[counts], FailureQ],
+    Throw[issues]
+  ];
+
   selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
@@ -1082,6 +1096,13 @@ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedP
 
   counts = CountsBy[vars, ToFullFormString];
 
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[Keys[counts], FailureQ],
+    Throw[issues]
+  ];
+
   selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
@@ -1205,8 +1226,15 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], Con
 
   Scan[
     Function[varsList,
-      
+    
       counts = CountsBy[varsList, ToFullFormString];
+
+      (*
+      bail out if there are errors and ToFullFormString has failed
+      *)
+      If[AnyTrue[Keys[counts], FailureQ],
+        Throw[issues]
+      ];
 
       selected = Select[varsList, counts[ToFullFormString[#]] > 1&];
 
@@ -1315,6 +1343,13 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   vars = varsWithSet ~Join~ varsWithoutSet;
 
   counts = CountsBy[vars, ToFullFormString];
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[Keys[counts], FailureQ],
+    Throw[issues]
+  ];
 
   selected = Select[vars, counts[ToFullFormString[#]] > 1&];
 
@@ -1738,6 +1773,13 @@ Module[{ast, node, children, data, selected, issues, consts, counts},
 
   counts = CountsBy[children, ToFullFormString];
 
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[Keys[counts], FailureQ],
+    Throw[issues]
+  ];
+
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
   If[!empty[selected],
@@ -1771,6 +1813,13 @@ Module[{ast, node, children, data, selected, issues, consts, counts},
     ConfidenceLevel -> 0.95|>]])&, consts];
 
   counts = CountsBy[children, ToFullFormString];
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[Keys[counts], FailureQ],
+    Throw[issues]
+  ];
 
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
@@ -1818,6 +1867,13 @@ Module[{ast, node, children, data, selected, issues, blanks, counts},
     ConfidenceLevel -> 0.95|>]])&, blanks];
 
   counts = CountsBy[children, ToFullFormString];
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[Keys[counts], FailureQ],
+    Throw[issues]
+  ];
 
   selected = Select[children, counts[ToFullFormString[#]] > 1&];
 
