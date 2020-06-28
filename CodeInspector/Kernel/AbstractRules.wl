@@ -546,7 +546,7 @@ Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", <|
+    AppendTo[issues, InspectionObject["DuplicateClausesWhich", "Duplicate clauses in ``Which``.", "Error", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95 |> ]
@@ -653,9 +653,9 @@ Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
 
     firsts = firstTokenWithSource /@ selected;
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error", <|
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
+    AppendTo[issues, InspectionObject["DuplicateClausesSwitch", "Duplicate clauses in ``Switch``.", "Error", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95 |> ]
@@ -750,9 +750,9 @@ Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>
     selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
 
     If[!empty[selected],
-      AppendTo[issues, InspectionObject["DuplicateClauses", "Both branches are the same.", "Error", <|
       firsts = firstTokenWithSource /@ selected;
       srcs = #[[3, Key[Source]]]& /@ firsts;
+      AppendTo[issues, InspectionObject["DuplicateClausesIf", "Both branches of ``If`` are the same.", "Error", <|
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
     ];
@@ -1789,11 +1789,11 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts},
 
   If[!empty[selected],
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", <|
     firsts = firstTokenWithSource /@ selected;
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
+    AppendTo[issues, InspectionObject["DuplicateClausesAnd", "Duplicate clauses in ``And``.", "Error", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95 |> ]];
@@ -1833,11 +1833,11 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts},
 
   If[!empty[selected],
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
     firsts = firstTokenWithSource /@ selected;
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
+    AppendTo[issues, InspectionObject["DuplicateClausesOr", "Duplicate clauses in ``Or``.", "Error",
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
   ];
 
@@ -1890,11 +1890,11 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts},
 
   If[!empty[selected],
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error", <|
     firsts = firstTokenWithSource /@ selected;
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
+    AppendTo[issues, InspectionObject["DuplicateClausesAlternatives", "Duplicate clauses in ``Alternatives``.", "Error", <|
       Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
   ];
 
