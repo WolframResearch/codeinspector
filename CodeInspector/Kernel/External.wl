@@ -24,6 +24,46 @@ needed
 *)
 
 
+OpenInEditor[file_String] :=
+Module[{},
+	Switch[{$InterfaceEnvironment, $Editor},
+		{"Macintosh", "Sublime Text"},
+			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file]
+			,
+		{"Macintosh", "Visual Studio Code"},
+			Run["/usr/local/bin/code -g " <> file]
+			,
+		{_, "FrontEnd"},
+			(* Editor "FrontEnd" is supported in all environments. *)
+			NotebookOpen[file]
+			,
+		_,
+			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
+			SystemOpen[file]
+	]
+]
+
+
+OpenInEditor[file_String, line_Integer] :=
+Module[{},
+	Switch[{$InterfaceEnvironment, $Editor},
+		{"Macintosh", "Sublime Text"},
+			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line]]
+			,
+		{"Macintosh", "Visual Studio Code"},
+			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line]]
+			,
+		{_, "FrontEnd"},
+			(* Editor "FrontEnd" is supported in all environments. *)
+			NotebookOpen[file]
+			,
+		_,
+			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
+			SystemOpen[file]
+	]
+]
+
+
 OpenInEditor[file_String, line_Integer, col_Integer] :=
 Module[{},
 	Switch[{$InterfaceEnvironment, $Editor},
@@ -42,7 +82,6 @@ Module[{},
 			SystemOpen[file]
 	]
 ]
-
 
 
 End[]
