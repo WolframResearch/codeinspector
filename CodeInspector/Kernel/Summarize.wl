@@ -377,6 +377,13 @@ Module[{lints, lines, sources, warningsLines,
   confidenceTest = LessEqualThan[$MaxConfidenceLevel];
   lints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
 
+
+  (*
+
+  Disable shadow filtering for now
+
+  Below is quadratic time
+
   (*
   If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
   *)
@@ -390,6 +397,9 @@ Module[{lints, lines, sources, warningsLines,
   If[$Debug,
     Print["lints: ", lints];
   ];
+  *)
+
+
 
   If[empty[lints],
     Throw[{}]
