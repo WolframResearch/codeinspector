@@ -334,7 +334,7 @@ SyntaxError ExpectedSymbol:
 TestMatch[
 	CodeInspect["1:2"]
 	,
-	{InspectionObject["ColonError", _, _, _]}
+	{InspectionObject["PatternColonError", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-F9Z1T6"
 ]

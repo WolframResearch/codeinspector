@@ -2262,6 +2262,9 @@ Module[{ast, node, tag, data, tagString, children},
     "OpenSquare",
       {InspectionObject["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
+    "PatternColonError",
+      {InspectionObject["PatternColonError", "Invalid syntax for ``:``: LHS must be a symbol.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
     _,
       {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
