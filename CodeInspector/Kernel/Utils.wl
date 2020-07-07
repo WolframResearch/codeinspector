@@ -225,7 +225,7 @@ distrib[
 	StringReplace[s, {
 		RegularExpression["``(.*?)``"] :> bold["$1"],
 		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"],
-		RegularExpression["\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }] ]
+		RegularExpression["\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }]]
 
 gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
 
@@ -428,7 +428,7 @@ uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]
 
 isFirstError[lints:{_InspectionObject..}, lineNumber_Integer, column_Integer] :=
 Module[{any},
-  any = MemberQ[First /@ {#[[4, Key[Source] ]]} ~Join~ Lookup[#[[4]], "AdditionalSources", {}], {lineNumber, column}]& /@ lints;
+  any = MemberQ[First /@ {#[[4, Key[Source]]]} ~Join~ Lookup[#[[4]], "AdditionalSources", {}], {lineNumber, column}]& /@ lints;
   Or @@ any
 ]
 

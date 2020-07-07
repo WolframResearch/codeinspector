@@ -240,7 +240,7 @@ Module[{agg, node, children, data, issues, srcs},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -249,8 +249,8 @@ Module[{agg, node, children, data, issues, srcs},
   Do[
 
     Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
     ];
 
     ,
@@ -289,7 +289,7 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -301,11 +301,11 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs},
       (*
       People like putting & on another line for some reason
       *)
-      {a_, b:LeafNode[Token`Amp, _, _]} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[lowConfSrcs, p[[2, 3, Key[Source] ]] ]
+      {a_, b:LeafNode[Token`Amp, _, _]} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[lowConfSrcs, p[[2, 3, Key[Source]]]]
       ,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[highConfSrcs, p[[2, 3, Key[Source] ]] ];
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[highConfSrcs, p[[2, 3, Key[Source]]]];
     ];
 
     ,
@@ -363,7 +363,7 @@ Module[{agg, node, children, data, issues, pairs, srcs},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -377,11 +377,11 @@ Module[{agg, node, children, data, issues, pairs, srcs},
     ];
 
     Switch[p,
-      {n_, i:LeafNode[Token`Fake`ImplicitTimes, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      {n_, i:LeafNode[Token`Fake`ImplicitTimes, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
       ,
-      {i:LeafNode[Token`Fake`ImplicitTimes, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+      {i:LeafNode[Token`Fake`ImplicitTimes, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
@@ -475,7 +475,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
         ,
         LeafNode[Token`Fake`ImplicitTimes, _, _]}
         ,
-        AppendTo[errorSrcs, p[[2, 3, Key[Source] ]] ];
+        AppendTo[errorSrcs, p[[2, 3, Key[Source]]]];
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _],
         LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
@@ -504,13 +504,13 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
             PatternOptionalDefault
             *), _, _], ___ }, _]}
         ,
-        AppendTo[errorSrcs, p[[1, 3, Key[Source] ]] ];
+        AppendTo[errorSrcs, p[[1, 3, Key[Source]]]];
       ,
       {_, LeafNode[Token`Fake`ImplicitTimes, _, _]},
-        AppendTo[warningSrcs, p[[2, 3, Key[Source] ]] ];
+        AppendTo[warningSrcs, p[[2, 3, Key[Source]]]];
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _], _},
-        AppendTo[warningSrcs, p[[1, 3, Key[Source] ]] ];
+        AppendTo[warningSrcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
@@ -570,10 +570,10 @@ Module[{agg, node, data, issues, children, pairs, srcs},
 
     Switch[p,
       {_, LeafNode[Token`Fake`ImplicitTimes, _, _]},
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
       ,
       {LeafNode[Token`Fake`ImplicitTimes, _, _], _},
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
@@ -615,7 +615,7 @@ Module[{agg, node, children, data, issues, srcs},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -627,11 +627,11 @@ Module[{agg, node, children, data, issues, srcs},
       Continue[]
     ];
     Switch[p,
-      {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
       ,
-      {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+      {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
@@ -670,7 +670,7 @@ Module[{agg, node, children, data, issues, srcs},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -684,8 +684,8 @@ Module[{agg, node, children, data, issues, srcs},
   Do[
 
     Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
     ];
 
     ,
@@ -732,7 +732,7 @@ Catch[
     Switch[node,
       BinaryNode[Span, _, _],
 
-        src = node[[2, 2, 3, Key[Source] ]];
+        src = node[[2, 2, 3, Key[Source]]];
 
         AppendTo[issues, InspectionObject["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
           <|  Source -> src,
@@ -749,7 +749,7 @@ Catch[
         (*
         Pick second ;;
         *)
-        src = node[[2, 4, 3, Key[Source] ]];
+        src = node[[2, 4, 3, Key[Source]]];
 
         AppendTo[issues, InspectionObject["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
           <|  Source -> src,
@@ -768,7 +768,7 @@ Catch[
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -784,11 +784,11 @@ Catch[
     ];
 
     Switch[p,
-      {n_, i:LeafNode[Token`SemiSemi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      {n_, i:LeafNode[Token`SemiSemi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
       ,
-      {i:LeafNode[Token`SemiSemi, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[1, 3, Key[Source] ]] ];
+      {i:LeafNode[Token`SemiSemi, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
@@ -839,7 +839,7 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis, semi},
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source] ]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
     Throw[issues]
   ];
 
@@ -852,8 +852,8 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis, semi},
     ];
 
     Switch[p,
-      {n_, i:LeafNode[Token`Semi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[ 3, Key[Source], 1, 1 ]],
-        AppendTo[srcs, p[[2, 3, Key[Source] ]] ];
+      {n_, i:LeafNode[Token`Semi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
     ];
 
     ,
@@ -1545,7 +1545,7 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
   If[context == "System`",
 
-    src = sym[[3, Key[Source] ]];
+    src = sym[[3, Key[Source]]];
 
     AppendTo[issues, InspectionObject["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
                       <|  Source->src,
@@ -1553,7 +1553,7 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
     ,
     (* not in System`*)
 
-    src = sym[[3, Key[Source] ]];
+    src = sym[[3, Key[Source]]];
 
     AppendTo[issues, InspectionObject["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
                       <|  Source->src,

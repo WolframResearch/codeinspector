@@ -311,7 +311,7 @@ scanErrorNodes[pos_List, cstIn_] :=
         (AppendTo[issues,
           InspectionObject["MultilineString", "Multiline string.", "Warning",
             (* just mark the opening quote here *)
-            <| Source -> { { #[[1]], #[[2]] }, { #[[1]], #[[2]] + 1  } }, ConfidenceLevel -> 0.9 |>]])&[s[[3, Key[Source], 1]] ];
+            <| Source -> { { #[[1]], #[[2]] }, { #[[1]], #[[2]] + 1  } }, ConfidenceLevel -> 0.9 |>]])&[s[[3, Key[Source], 1]]];
         ], multilineStrings
       ];
     ,

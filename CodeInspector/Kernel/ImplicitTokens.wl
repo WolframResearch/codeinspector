@@ -446,7 +446,7 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
   Which[
     span[[1, 1]] != span[[2, 1]],
       (* different lines, so place \[Times] at end of first line *)
-      {LintTimesCharacter, span[[1, 1]], StringLength[lines[[span[[1, 1]] ]] ] + 1}
+      {LintTimesCharacter, span[[1, 1]], StringLength[lines[[span[[1, 1]]]]] + 1}
     ,
     span[[1, 2]] == span[[2, 2]],
       (* contiguous *)

@@ -398,7 +398,7 @@ Module[{lints, lines, sources, warningsLines,
   (*
   Make sure to sort lints before taking
   *)
-  lints = SortBy[lints, #[[4, Key[Source] ]]&];
+  lints = SortBy[lints, #[[4, Key[Source]]]&];
 
   lints = Take[lints, UpTo[$LintLimit]];
 
@@ -644,7 +644,7 @@ Module[{perColumn, endOfFile},
         Association[]
         ,
         end = Min[src[[2, 2]], $LineTruncationLimit];
-        Association[dropLastButLeaveAtleastOne[ Table[i -> lint, {i, start, end}] ]]
+        Association[dropLastButLeaveAtleastOne[ Table[i -> lint, {i, start, end}]]]
       ]
       ,
 
