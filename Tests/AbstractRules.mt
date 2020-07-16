@@ -105,7 +105,7 @@ DuplicateClauses
 TestMatch[
 	CodeInspect[" Which[a, 1, a, 2, b, 3, b, 4] "]
 	,
-	{InspectionObject["DuplicateClauses", _, _, _], InspectionObject["DuplicateClauses", _, _, _]}
+	{InspectionObject["DuplicateClausesWhich", _, _, _], InspectionObject["DuplicateClausesWhich", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X9U0J9"
 ]
@@ -172,7 +172,7 @@ DuplicateClauses
 TestMatch[
 	CodeInspect[" Switch[a, 1, 2, 1, 2] "]
 	,
-	{InspectionObject["DuplicateClauses", _, _, _]}
+	{InspectionObject["DuplicateClausesSwitch", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X0L3I6"
 ]
@@ -187,7 +187,7 @@ DuplicateClauses
 TestMatch[
 	CodeInspect[" If[a, b, b] "]
 	,
-	{InspectionObject["DuplicateClauses", _, _, _]}
+	{InspectionObject["DuplicateClausesIf", _, _, _]}
 	,
 	TestID->"AbstractRules-20190717-B6J9M6"
 ]
