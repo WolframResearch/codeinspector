@@ -44,6 +44,8 @@ SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
 
 GroupMissingCloserNode[_, _, _] -> scanGroupMissingCloserNodes,
 
+UnterminatedGroupNode[_, _, _] -> scanUnterminatedGroupNodes,
+
 KeyValuePattern[SyntaxIssues -> _] -> scanSyntaxIssues,
 
 
@@ -374,6 +376,25 @@ scanGroupMissingCloserNodes[pos_List, cstIn_] :=
   {InspectionObject["GroupMissingCloser", "Missing closer.", "Fatal", <| openerData, ConfidenceLevel -> 1.0 |>]}
 ]
 
+
+Attributes[scanUnterminatedGroupNodes] = {HoldRest}
+
+scanUnterminatedGroupNodes[pos_List, cstIn_] :=
+ Module[{cst, node, data, opener, openerData},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  data = node[[3]];
+
+  (*
+  Only report the opener
+
+  The contents can be arbitrarily complex
+  *)
+  opener = node[[2, 1]];
+  openerData = opener[[3]];
+
+  {InspectionObject["UnterminatedGroup", "Missing closer.", "Fatal", <| openerData, ConfidenceLevel -> 1.0 |>]}
+]
 
 
 Attributes[scanSyntaxIssues] = {HoldRest}

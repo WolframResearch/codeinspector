@@ -110,7 +110,7 @@ Options[CodeInspectBracketMismatchesSummarize] = {
   SourceConvention -> (SourceConvention /. Options[CodeConcreteParse])
 }
 
-CodeInspectBracketMismatchesSummarize[File[file_String], bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
+CodeInspectBracketMismatchesSummarize[File[file_String], bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|SyntaxErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
 Catch[
 Module[{mismatches, full, lines, lintedLines, bytes, str, tabWidth},
 
@@ -153,7 +153,7 @@ Module[{mismatches, full, lines, lintedLines, bytes, str, tabWidth},
 
 
 
-CodeInspectBracketMismatchesSummarize[string_String, bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
+CodeInspectBracketMismatchesSummarize[string_String, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|SyntaxErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
 Catch[
 Module[{mismatches, lines, lintedLines, tabWidth},
 
@@ -184,7 +184,7 @@ Options[CodeInspectBracketMismatchesCSTSummarize] = {
   "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
-CodeInspectBracketMismatchesCSTSummarize[cst_, bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}:Automatic, OptionsPattern[]] :=
+CodeInspectBracketMismatchesCSTSummarize[cst_, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|SyntaxErrorNode)[_, _, _]...}:Automatic, OptionsPattern[]] :=
 Catch[
 Module[{mismatches, lines, lintedLines, string, tabWidth},
 
@@ -217,7 +217,7 @@ bracketMismatches[agg_] :=
 Catch[
 Module[{mismatches},
 
-  mismatches = Cases[agg, GroupMissingCloserNode[_, _, _] | SyntaxErrorNode[SyntaxError`UnexpectedCloser, _, _], {0, Infinity}];
+  mismatches = Cases[agg, GroupMissingCloserNode[_, _, _] | UnterminatedGroupNode[_, _, _] | SyntaxErrorNode[SyntaxError`UnexpectedCloser, _, _], {0, Infinity}];
 
   mismatches
 ]]
@@ -277,7 +277,7 @@ modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_]
 
 
 
-bracketMismatchesLinesReport[linesIn:{___String}, bracketMismatchesIn:{(GroupMissingCloserNode|SyntaxErrorNode)[_, _, _]...}] :=
+bracketMismatchesLinesReport[linesIn:{___String}, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|SyntaxErrorNode)[_, _, _]...}] :=
 Catch[
  Module[{mismatches, infixs, lines, linesToModify, missingOpeners, missingClosers, missingOpenerStarts,
    missingCloserStarts},
@@ -296,9 +296,9 @@ Catch[
 
     mismatches = Take[mismatches, UpTo[$BracketMismatchesLimit]];
 
-    missingOpeners = Cases[mismatches, CodeParser`SyntaxErrorNode[SyntaxError`UnexpectedCloser, _, _]];
+    missingOpeners = Cases[mismatches, SyntaxErrorNode[SyntaxError`UnexpectedCloser, _, _]];
 
-    missingClosers = Cases[mismatches, CodeParser`GroupMissingCloserNode[_, _, _]];
+    missingClosers = Cases[mismatches, GroupMissingCloserNode[_, _, _] | UnterminatedGroupNode[_, _, _]];
 
     missingOpenerStarts = missingOpeners[[All, 3, Key[Source], 1]];
 
