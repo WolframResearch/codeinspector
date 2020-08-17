@@ -174,6 +174,9 @@ CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | Pa
 
 
 
+InfixNode[MessageName, children_ /; Length[children] > 3, _] -> scanMessageName,
+
+
 (*
 Tags: SyntaxError MaxExpressionDepth etc.
 *)
@@ -1563,6 +1566,28 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
   issues
 ]
 
+
+
+
+Attributes[scanMessageName] = {HoldRest}
+
+scanMessageName[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, rand},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  children = node[[2]];
+
+  rand = children[[5]];
+
+  data = rand[[3]];
+
+  issues = {};
+
+  AppendTo[issues, InspectionObject["MessageName", "Unexpected argument to ``MessageName``.", "Error", <|Source->data[Source], ConfidenceLevel->0.9|>]];
+
+  issues
+]
 
 
 
