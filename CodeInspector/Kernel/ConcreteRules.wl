@@ -38,6 +38,11 @@ TernaryNode[Span, _, _] -> scanTernarySpans,
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
 
+InfixNode[Dot, _, _] -> scanDots,
+
+PostfixNode[Repeated, _, _] -> scanRepeateds,
+
+
 ErrorNode[_, _, _] -> scanErrorNodes,
 
 SyntaxErrorNode[_, _, _] -> scanSyntaxErrorNodes,
@@ -240,6 +245,75 @@ scanCalls[pos_List, cstIn_] :=
 ]
 
 
+
+(*
+Check for  a_..b
+
+Prior to 12.2,  a_..b  was parsed as Times[(a_).., b]
+
+12.2 and onward,  a_..b  is parsed as Dot[a_., b]
+
+Related bugs: 390755
+*)
+
+Attributes[scanDots] = {HoldRest}
+
+scanDots[pos_List, cstIn_] :=
+ Module[{cst, node, children, underPoss, dot, issues},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+
+  issues = {};
+
+  underPoss = Position[children, LeafNode[Token`UnderDot, _, _] | CompoundNode[PatternOptionalDefault, _, _], {1}];
+
+  Function[{pos1},
+    If[pos1[[1]] + 1 <= Length[children] && MatchQ[Extract[children, pos1 + 1], LeafNode[Token`Dot, _, _]],
+      dot = Extract[children, pos1[[1]] + 1];
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly.", "Error", <| dot[[3]], ConfidenceLevel -> 1.0 |>]]
+    ]
+  ] /@ underPoss;
+
+  issues
+]
+
+
+(*
+Check for  _... and a_...
+
+Prior to 12.2,  _...  was parsed as (_)...
+
+12.2 and onward,  _...  is parsed as (_.)..
+
+Related bugs: 390755
+
+No need to also compatibility check for _.... because this was invalid prior to 12.2
+
+*)
+
+(*
+"This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly."
+*)
+
+Attributes[scanRepeateds] = {HoldRest}
+
+scanRepeateds[pos_List, cstIn_] :=
+ Module[{cst, node, children, rand, issues, rator},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+  rand = children[[1]];
+
+  issues = {};
+
+  If[MatchQ[rand, LeafNode[Token`UnderDot, _, _] | CompoundNode[PatternOptionalDefault, _, _]],
+    rator = children[[-1]];
+    AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly.", "Error", <| rator[[3]], ConfidenceLevel -> 1.0 |>]]
+  ];
+
+  issues
+]
 
 
 
