@@ -3,6 +3,8 @@ BeginPackage["CodeInspector`Utils`"]
 
 expandLineNumberExclusions
 
+severityToInteger
+
 severityColor
 
 severityColorNewStyle
