@@ -412,7 +412,7 @@ Module[{lints, lines, sources, warningsLines,
 
   severityToInteger maps "Remark" -> 1 and "Fatal" -> 4, so make sure to negate that
   *)
-  lints = SortBy[lints, {-severityToInteger[#[[1]]]&, #[[4, Key[Source]]]&}];
+  lints = SortBy[lints, {-severityToInteger[#[[3]]]&, #[[4, Key[Source]]]&}];
 
   lints = Take[lints, UpTo[$LintLimit]];
 
