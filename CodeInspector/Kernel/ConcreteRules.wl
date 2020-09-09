@@ -404,14 +404,22 @@ Attributes[scanSyntaxIssues] = {HoldRest}
 Just directly convert SyntaxIssues to Lints
 *)
 scanSyntaxIssues[pos_List, cstIn_] :=
-Module[{cst, data, issues, syntaxIssues},
+Module[{cst, data, issues, syntaxIssues, issuesToReturn, formatIssues},
   cst = cstIn;
   data = Extract[cst, {pos}][[1]];
   issues = data[SyntaxIssues];
 
+  issuesToReturn = {};
+
   syntaxIssues = Cases[issues, SyntaxIssue[_, _, _, _]];
 
-  InspectionObject @@@ syntaxIssues
+  issuesToReturn = issuesToReturn ~Join~ (InspectionObject[#[[1]], #[[2]], #[[3]], #[[4]]]& /@ syntaxIssues);
+
+  formatIssues = Cases[issues, FormatIssue[_, _, _, _]];
+
+  issuesToReturn = issuesToReturn ~Join~ (InspectionObject[#[[1]], #[[2]], #[[3]], <|#[[4]], ConfidenceLevel -> 1.0|>]& /@ formatIssues);
+
+  issuesToReturn
 ]
 
 
