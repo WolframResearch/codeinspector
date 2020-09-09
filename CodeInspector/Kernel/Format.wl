@@ -834,7 +834,7 @@ Module[{s, color, weight, setup, opts},
 
 
 
-LintBold[content_] := LintMarkup[content, "Program", FontWeight->Bold, FontColor->Black]
+LintBold[content_] := LintMarkup[content, "Program", FontWeight->Bold]
 
 LintPreserve[content_] := LintMarkup[content]
 
