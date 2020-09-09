@@ -406,7 +406,7 @@ Attributes[scanListsOfRules] = {HoldRest}
 
 scanListsOfRules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren},
+Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren, parentPos, parent},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -414,6 +414,24 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
 
   issues = {};
   
+
+  parentPos = pos;
+  If[parentPos != {},
+    parentPos = Most[parentPos];
+    parent = Extract[ast, {parentPos}][[1]];
+    If[ListQ[parent],
+      parentPos = Most[parentPos];
+      parent = Extract[ast, {parentPos}][[1]];
+    ];
+
+    If[MatchQ[parent, CallNode[LeafNode[Symbol, "Graph", _], _, _]],
+      (*
+      Graph[{1->2, 1->3}] is ok for list of rules
+      *)
+      Throw[issues]
+    ]
+  ];
+
   keys = children[[All, 2, 1]];
 
   (*
