@@ -67,12 +67,9 @@ InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes
 InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
                                 !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
 
+InfixNode[Dot, _, _] -> scanDots,
 
-(*
-Tags: DotDifferentLine
-*)
-InfixNode[Dot, _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanDots,
+PostfixNode[Repeated, _, _] -> scanRepeateds,
 
 TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
 
@@ -611,47 +608,108 @@ Module[{agg, node, children, data, issues, srcs},
   children = node[[2]];
   data = node[[3]];
 
-  srcs = {};
-
   issues = {};
 
   (*
   Only check if LineCol-style
   *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
+  If[MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
 
-  pairs = Partition[children, 2, 1];
+    srcs = {};
 
-  Do[
-    If[!MatchQ[p, {_, LeafNode[Token`Dot, _, _]} |
-                    {LeafNode[Token`Dot, _, _], _}],
-      Continue[]
-    ];
-    Switch[p,
-      {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
+    pairs = Partition[children, 2, 1];
+
+    Do[
+      If[!MatchQ[p, {_, LeafNode[Token`Dot, _, _]} |
+                      {LeafNode[Token`Dot, _, _], _}],
+        Continue[]
+      ];
+      Switch[p,
+        {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
+          AppendTo[srcs, p[[2, 3, Key[Source]]]];
+        ,
+        {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
+          AppendTo[srcs, p[[1, 3, Key[Source]]]];
+      ];
+
       ,
-      {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[1, 3, Key[Source]]]];
+      {p, pairs}
     ];
 
-    ,
-    {p, pairs}
+    srcs = DeleteDuplicates[srcs];
+
+    Scan[(
+      AppendTo[issues, InspectionObject["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
+        <|Source -> #,
+          ConfidenceLevel -> 0.85
+        |>]];
+      )&, srcs];
+
   ];
 
-  srcs = DeleteDuplicates[srcs];
 
-  Scan[(
-    AppendTo[issues, InspectionObject["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
-      <|Source -> #,
-        ConfidenceLevel -> 0.85
-      |>]];
-    )&, srcs];
+  (*
+  Check for  a_..b
+
+  Prior to 12.2,  a_..b  was parsed as Times[(a_).., b]
+
+  12.2 and onward,  a_..b  is parsed as Dot[a_., b]
+
+  https://mathematica.stackexchange.com/questions/203434/repeated-string-pattern-difference-between-the-frontend-and-wolframscript
+
+  Related bugs: 390755
+  *)
+  underPoss = Position[children, LeafNode[Token`UnderDot, _, _] | CompoundNode[PatternOptionalDefault, _, _], {1}];
+
+  Function[{pos1},
+    If[pos1[[1]] + 1 <= Length[children] && MatchQ[Extract[children, pos1 + 1], LeafNode[Token`Dot, _, _]],
+      dot = Extract[children, pos1[[1]] + 1];
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly.", "Warning", <| dot[[3]], ConfidenceLevel -> 1.0 |>]]
+    ]
+  ] /@ underPoss;
+
 
   issues
 ]]
+
+
+(*
+Check for  _... and a_...
+
+Prior to 12.2,  _...  was parsed as (_)...
+
+12.2 and onward,  _...  is parsed as (_.)..
+
+https://mathematica.stackexchange.com/questions/203434/repeated-string-pattern-difference-between-the-frontend-and-wolframscript
+
+Related bugs: 390755
+
+No need to also compatibility check for _.... because this was invalid prior to 12.2
+
+*)
+
+Attributes[scanRepeateds] = {HoldRest}
+
+scanRepeateds[pos_List, cstIn_] :=
+ Module[{cst, node, children, rand, issues, rator},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+  rand = children[[1]];
+
+  issues = {};
+
+  If[MatchQ[rand, LeafNode[Token`UnderDot, _, _] | CompoundNode[PatternOptionalDefault, _, _]],
+    rator = children[[-1]];
+    AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly.", "Warning", <| rator[[3]], ConfidenceLevel -> 1.0 |>]]
+  ];
+
+  issues
+]
+
+
+
+
 
 
 
@@ -1299,39 +1357,48 @@ Catch[
 Attributes[scanPatternBlankOptionals] = {HoldRest}
 
 (*
-warn about a_:b  which is Optional[Pattern[a, _], b]  and not a:b
+warn about a_:b  which is Optional[Pattern[a, _], b]  and not the same as  a:b
 *)
 scanPatternBlankOptionals[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt},
+ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt, issues},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
+
+  issues = {};
 
   patternBlank = children[[1]];
   patternBlankChildren = patternBlank[[2]];
   pattern = patternBlankChildren[[1]];
   opt = children[[3]];
 
-  (*
-  bring in heuristics for when a_:b is valid
-  If b has Patterns or Blanks, then b is NOT a valid optional and warn
-  *)
-  If[FreeQ[opt, blankPat |
-                BinaryNode[Pattern, _, _] |
-                (* also check for Alternatives *)
-                InfixNode[Alternatives, _, _]
-                ],
-    Throw[{}]
-  ];
+  Which[
+    MatchQ[opt, InfixNode[Alternatives, _, _]],
+      (*
+      The FE changed how:
+      i_:0|1
+      is parsed in 12.1
 
-  {InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
+      https://mathematica.stackexchange.com/questions/224987/i-01-varies-in-v12-1-incompatible-change-or-bug
+      *)
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.1``. Earlier versions treated this syntax incorrectly.", "Warning", <| data, ConfidenceLevel -> 1.0 |>]]
+    ,
+    (*
+    bring in heuristics for when a_:b is valid
+    If b has Patterns or Blanks, then b is NOT a valid optional and warn
+    *)
+    !FreeQ[opt, blankPat | BinaryNode[Pattern, _, _]],
+      AppendTo[issues, InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
 Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
                         pattern,
                         LeafNode[Token`Colon, ":", <||>],
                         opt}, <||>]]] <> "?\n\
-This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <| data, ConfidenceLevel -> 0.85|>]}
+This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <| data, ConfidenceLevel -> 0.85|>]]
+  ];
+
+  issues
 ]]
 
 
