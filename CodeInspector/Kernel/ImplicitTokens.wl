@@ -438,7 +438,7 @@ BestImplicitTimesPlacement[span_] is something like {{startLine_, startCol_}, {e
 *)
 resolveInfix[BestImplicitTimesPlacement[span_], lines:{___String}] :=
 Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candidates, edges, offset, intersection,
-	mean, comments, gaps, excludes, goals},
+	mean, commentsOrMBWhitespace, gaps, excludes, goals},
 
   If[$Debug,
     Print["resolveInfix: ", {BestImplicitTimesPlacement[span], lines}];
@@ -485,8 +485,15 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
 
       (*
       any space is a candidate
+
+      ADDENDUM: only testing actual Whitespace with StringLength of 1
+
+      Something like:
+      a\[ThinSpace]b
+
+      should NOT get a \[Times] character in the middle of ThinSpace!
       *)
-      spaces = Cases[tokens, LeafNode[Whitespace, _, _]];
+      spaces = Cases[tokens, LeafNode[Whitespace, s_ /; StringLength[s] == 1, _]];
       spaceRanges = offset - 1 + Flatten[Range @@ #[[3, Key[Source], All, 2]]& /@ spaces];
       
       If[$Debug,
@@ -497,16 +504,22 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       the gaps on either side of a comment are only candidates if they are not next to a space (because the space
       itself is preferred) 
       *)
-      comments = Cases[tokens, LeafNode[Token`Comment, _, _]];
-      gaps = #[[3, Key[Source], 1, 2]]& /@ comments;
-      excludes = SequenceCases[tokens, {LeafNode[Whitespace, _, _], c:LeafNode[Token`Comment, _, _]} :> c];
-      gaps = offset - 1 + Complement[gaps, excludes];
+      commentsOrMBWhitespace = Cases[tokens, LeafNode[Token`Comment, _, _] | LeafNode[Whitespace, s_ /; StringLength[s] > 1, _]];
+      gaps = Union[Flatten[#[[3, Key[Source], All, 2]]& /@ commentsOrMBWhitespace]];
+
+      excludes = SequenceCases[tokens, {LeafNode[Whitespace, s_ /; StringLength[s] == 1, _], c:LeafNode[Token`Comment, _, _] | LeafNode[Whitespace, s_ /; StringLength[s] > 1, _]} :> c];
+      gaps = Complement[gaps, #[[3, Key[Source], 1, 2]]& /@ excludes];
+
+      excludes = SequenceCases[tokens, {c:LeafNode[Token`Comment, _, _] | LeafNode[Whitespace, s_ /; StringLength[s] > 1, _], LeafNode[Whitespace, s_ /; StringLength[s] == 1, _]} :> c];
+      gaps = Complement[gaps, #[[3, Key[Source], 2, 2]]& /@ excludes];
+
+      gaps = offset - 1 + gaps;
 
       If[$Debug,
         Print["gaps: ", gaps];
       ];
 
-      edges = offset - 1 + {0, StringLength[line]+1};
+      edges = offset - 1 + {(*0, *)StringLength[line]+1};
 
       If[$Debug,
         Print["edges: ", edges];
