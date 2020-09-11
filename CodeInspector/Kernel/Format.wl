@@ -145,6 +145,36 @@ Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___Inspe
 	Format[lintedString, OutputForm]
 
 
+
+InspectedBytesObject::usage = "InspectedBytesObject[bytes, lintedLines] represents a formatted object of linted lines found in bytes."
+
+Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], StandardForm] :=
+Module[{string},
+
+	string = SafeString[bytesIn];
+
+	string = StringReplace[string, $characterReplacementRules];
+
+	Interpretation[
+		Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
+		,
+		lintedString]
+]
+
+Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], OutputForm] :=
+Module[{string},
+
+	string = SafeString[bytesIn];
+
+	string = StringReplace[string, $characterReplacementRules];
+
+	Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
+]
+
+Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], ScriptForm] :=
+	Format[lintedBytes, OutputForm]
+
+
 (*
 to be overridden
 *)

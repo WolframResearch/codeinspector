@@ -279,7 +279,7 @@ Catch[
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
-  InspectedBytesObject[string, lintedLines]
+  InspectedBytesObject[bytes, lintedLines]
 ]]
 
 
