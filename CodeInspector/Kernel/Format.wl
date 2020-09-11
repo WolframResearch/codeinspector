@@ -108,7 +108,7 @@ InspectedFileObject::usage = "InspectedFileObject[file, lintedLines] represents 
 
 Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], StandardForm] :=
 	Interpretation[
-		Framed[Column[{Row[{file}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
+		Framed[Column[{Row[{File[file]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
 		,
 		lintedFile]
 
