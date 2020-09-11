@@ -186,21 +186,15 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 
 
 newLintStyle[lint:InspectionObject[tag_, description_, severity_, data_]] :=
-Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
+Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggestions, rows},
 
-	bolded = boldify[description];
-
-	boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
-
-	If[$Debug,
-		Print["data: ", data];
-	];
+	actions = Lookup[data, CodeActions, {}];
 
 	If[TrueQ[$Interactive],
-		actions = Lookup[data, CodeActions, {}];
-		If[$Debug,
-			Print["actions: ", actions];
-		];
+		
+		bolded = boldify[description];
+
+		boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
 
 		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>] };
 
@@ -215,6 +209,22 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col},
 					menuItems;
 		,
 		(* non-Interactive *)
+
+		bolded = boldify[description];
+		
+		If[actions != {},
+		
+			suggestions = #[[1]]& /@ actions;
+			
+			suggestions = boldify /@ suggestions;
+
+			rows = {Row[bolded]} ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ (Row /@ suggestions);
+
+			boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
+			,
+			(* no CodeActions *)
+			boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
+		];
 
 		If[KeyExistsQ[data, "File"],
 
@@ -319,11 +329,22 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 ]]
 
 Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], OutputForm] :=
-Module[{g, bolded},
+Module[{g, bolded, actions},
 
 	bolded = boldify[description];
 
+	actions = Lookup[data, CodeActions, {}];
+
 	g = gridify[bolded];
+
+	If[actions != {},
+		
+		suggestions = #[[1]]& /@ actions;
+		
+		suggestions = boldify /@ suggestions;
+
+		g = g ~Join~ {{}} ~Join~ {{"Suggestions:"}} ~Join~ suggestions ~Join~ {{}};
+	];
 
 	g[[1]] = {LintBold[tag],
 					" ",
