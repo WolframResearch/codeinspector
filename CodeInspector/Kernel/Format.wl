@@ -701,7 +701,7 @@ Module[{label, maxLineNumberLength, paddedLineNumber},
 	If[TrueQ[CodeInspector`Summarize`$Underlight],
 		label = Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False];
 		,
-		label = Framed[Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False]];
+		label = Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False];
 	];
 
 	(*
