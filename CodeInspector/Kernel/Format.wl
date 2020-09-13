@@ -26,6 +26,7 @@ LintAllCharacter
 LintNullCharacter
 LintOneCharacter
 LintTimesCharacter
+LintExpectedOperandCharacter
 LintAllCloseCharacter
 LintAllTimesCharacter
 LintCloseCloseCharacter
@@ -33,6 +34,9 @@ LintCloseTimesCharacter
 LintOpenOneCharacter
 LintOpenOpenCharacter
 LintTimesOneCharacter
+LintExpectedOperandTimesCharacter
+LintExpectedOperandCloseCharacter
+LintOpenExpectedOperandCharacter
 LintAllTimesOneCharacter
 LintCloseTimesOneCharacter
 
@@ -779,6 +783,9 @@ Format[LintNullCharacter, OutputForm] := "Null"
 Format[LintTimesOneCharacter, StandardForm] := "\[Times]1"
 Format[LintTimesOneCharacter, OutputForm] := "x1"
 
+Format[LintExpectedOperandCharacter, StandardForm] := "\[EmptySquare]"
+Format[LintExpectedOperandCharacter, OutputForm] := "[]"
+
 Format[LintAllTimesCharacter, StandardForm] := "All\[Times]"
 Format[LintAllTimesCharacter, OutputForm] := "Allx"
 
@@ -800,6 +807,15 @@ Format[LintCloseCloseCharacter, OutputForm] := "))"
 
 Format[LintCloseTimesCharacter, StandardForm] := ")\[Times]"
 Format[LintCloseTimesCharacter, OutputForm] := ")x"
+
+Format[LintExpectedOperandCloseCharacter, StandardForm] := "\[EmptySquare])"
+Format[LintExpectedOperandCloseCharacter, OutputForm] := "[])"
+
+Format[LintExpectedOperandTimesCharacter, StandardForm] := "\[EmptySquare]"
+Format[LintExpectedOperandTimesCharacter, OutputForm] := "[]x"
+
+Format[LintOpenExpectedOperandCharacter, StandardForm] := "(\[EmptySquare])"
+Format[LintOpenExpectedOperandCharacter, OutputForm] := "([]"
 
 Format[LintCloseTimesOneCharacter, StandardForm] := ")\[Times]1"
 Format[LintCloseTimesOneCharacter, OutputForm] := ")x1"

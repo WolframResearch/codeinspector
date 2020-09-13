@@ -89,7 +89,7 @@ Module[{cst},
 
 CodeInspectImplicitTokensCST[cst_] :=
 Catch[
-Module[{times, agg, spans, nulls},
+Module[{times, agg, spans, nulls, ops},
 
   If[FailureQ[cst],
     Throw[cst]
@@ -100,8 +100,9 @@ Module[{times, agg, spans, nulls},
   times = implicitTimes[agg];
   spans = implicitSpans[agg];
   nulls = implicitNulls[agg];
+  ops = expectedOperands[agg];
 
-  Join[times, spans, nulls]
+  Join[times, spans, nulls, ops]
 ]]
 
 
@@ -243,6 +244,18 @@ Module[{nulls},
   nulls
 ]]
 
+expectedOperands[aggIn_] :=
+Catch[
+Module[{ops, poss, agg},
+
+  agg = aggIn;
+
+  poss = Position[agg, ErrorNode[Token`Error`ExpectedOperand, _, _]];
+
+  ops = Extract[agg, (#[[;; -3]])]& /@ poss;
+
+  ops
+]]
 
 
 
@@ -295,29 +308,35 @@ mergeCharacters[{LintAllCharacter}] = LintAllCharacter
 mergeCharacters[{LintNullCharacter}] = LintNullCharacter
 mergeCharacters[{LintOneCharacter}] = LintOneCharacter
 mergeCharacters[{LintTimesCharacter}] = LintTimesCharacter
+mergeCharacters[{LintExpectedOperandCharacter}] = LintExpectedOperandCharacter
 
 mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
 mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
 mergeCharacters[{")", ")"}] = LintCloseCloseCharacter
 mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
 mergeCharacters[{")", LintTimesCharacter}] = LintCloseTimesCharacter
+mergeCharacters[{")", LintExpectedOperandCharacter}] = LintExpectedOperandCloseCharacter
 mergeCharacters[{LintAllCharacter, LintTimesCharacter}] = LintAllTimesCharacter
 mergeCharacters[{LintOneCharacter, LintTimesCharacter}] = LintTimesOneCharacter
+mergeCharacters[{LintExpectedOperandCharacter, LintTimesCharacter}] = LintExpectedOperandTimesCharacter
+mergeCharacters[{"(", LintExpectedOperandCharacter}] = LintOpenExpectedOperandCharacter
 
 mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
 mergeCharacters[{LintAllCharacter, LintOneCharacter, LintTimesCharacter}] = LintAllTimesOneCharacter
 
 
 (*
-Only possible with invalid syntax
-We do not care so much about annotating invalid syntax, so just return a space
-*)
-mergeCharacters[{")", LintNullCharacter}] = " "
-mergeCharacters[{LintAllCharacter, LintOneCharacter}] = " "
-mergeCharacters[{")", ")", LintAllCharacter}] = " "
-mergeCharacters[{")", ")", LintNullCharacter}] = " "
+Anything else that is unhandled is ignored
 
-mergeCharacters[args___] := Failure["InternalUnhandled", <|"Function"->mergeCharacters, "Arguments"->{args}|>]
+An arbitrary number of open parens can be required to merge
+
+e.g., with a&a&a&a&a&a&a&a&a&a&a&a&a&
+
+This is valid syntax that requires 12 open parens in the same location
+
+Obviously, we cannot have a dedicated symbol for all combinations
+*)
+mergeCharacters[_] = " "
 
 
 (*
@@ -362,7 +381,7 @@ processChildren[nodes_List] :=
 
 implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
- Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss},
+ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops},
 
     If[implicitTokensIn === {},
       Throw[{}]
@@ -384,6 +403,7 @@ Catch[
    ones = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitOne, _, _], {0, Infinity}]];
    alls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitAll, _, _], {0, Infinity}]];
    nulls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitNull, _, _], {0, Infinity}]];
+   ops = Union[Cases[implicitTokens, ErrorNode[Token`Error`ExpectedOperand, _, _], {0, Infinity}]];
 
    times = processChildren /@ times[[All, 2]];
 
@@ -397,8 +417,9 @@ Catch[
    ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
    alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
    nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
+   ops = {LintExpectedOperandCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ops;
 
-  infixs = times ~Join~ ones ~Join~ alls ~Join~ nulls;
+  infixs = times ~Join~ ones ~Join~ alls ~Join~ nulls ~Join~ ops;
 
    charInfos = starts ~Join~ ends ~Join~ infixs;
 
