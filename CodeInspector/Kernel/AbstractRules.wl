@@ -909,7 +909,7 @@ Attributes[scanModules] = {HoldRest}
 scanModules[pos_List, astIn_] :=
 Catch[
  Module[{ast, node, children, data, selected, params, issues, vars, usedSymbols, unusedParams, counts,
-  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString},
+  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString, errs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -963,21 +963,35 @@ Catch[
 
 
   params = children[[1, 2]];
+
+
+  errs = {};
+
   vars = # /. {
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[Symbol, _, _], _}, _] :> sym,
-      sym:LeafNode[Symbol, _, _] :> sym,
-      (*
+    sym:LeafNode[Symbol, _, _] :> sym,
+    (*
 
-      Compiler syntax includes:
-      Module[{ Typed[x, "Integer64"] }, x]
+    Compiler syntax includes:
+    Module[{ Typed[x, "Integer64"] }, x]
 
-      TODO: support this
+    TODO: support this
 
-      CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
-      *)
-      err_ :> (AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-                "does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)}& /@ params;
+    CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
+    *)
+    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
+  }& /@ params;
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+    Throw[issues]
+  ];
+
+  Scan[(AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
+    "does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   counts = CountsBy[vars, ToFullFormString];
 
@@ -1047,7 +1061,7 @@ Attributes[scanDynamicModules] = {HoldRest}
 
 scanDynamicModules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts},
+Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts, errs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1109,13 +1123,26 @@ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedP
   ];
 
   params = children[[1, 2]];
+
+
+  errs = {};
+
   vars = # /. {
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[Symbol, _, _], _}, _] :> sym,
-      sym:LeafNode[Symbol, _, _] :> sym,
-      err_ :> (AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-        " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)
+    sym:LeafNode[Symbol, _, _] :> sym,
+    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
   }& /@ params;
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+    Throw[issues]
+  ];
+
+  Scan[(AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
+    "does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   counts = CountsBy[vars, ToFullFormString];
 
@@ -1164,7 +1191,7 @@ Attributes[scanWiths] = {HoldRest}
 scanWiths[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
-  usedBody, unusedParams, counts},
+  usedBody, unusedParams, counts, errs},
   
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1232,12 +1259,25 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   ];
 
   paramLists = Most[children][[All, 2]];
-   
+
+
+  errs = {};
+
   varsAndVals = Function[{list}, # /. {
-    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
-    err_ :> (AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[err]] <> " does not have proper form.\n\
-This may be ok if ``With`` is handled programmatically.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]]; Nothing)
+    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
+      sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
+    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
   }& /@ list] /@ paramLists;
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+    Throw[issues]
+  ];
+
+  Scan[(AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <> "does not have proper form.\n\
+This may be ok if ``With`` is handled programmatically.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   varsAndVals = DeleteCases[varsAndVals, {}];
 
@@ -1303,7 +1343,7 @@ Attributes[scanBlocks] = {HoldRest}
 scanBlocks[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, varsWithoutSet,
-  toDelete, counts},
+  toDelete, counts, errs},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1355,13 +1395,25 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   varsWithSet = {};
   varsWithoutSet = {};
 
+
+  errs = {};
+
   Scan[# /. {
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[_, _, _], _}, _] :> (AppendTo[varsWithSet, sym]),
-      sym:LeafNode[Symbol, _, _] :> (AppendTo[varsWithoutSet, sym]),
-      err_ :> (AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[err]] <>
-        " does not have proper form.", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]])
+    sym:LeafNode[Symbol, _, _] :> (AppendTo[varsWithoutSet, sym]),
+    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
   }&, params];
+
+  (*
+  bail out if there are errors and ToFullFormString has failed
+  *)
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+    Throw[issues]
+  ];
+
+  Scan[(AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
+    "does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   vars = varsWithSet ~Join~ varsWithoutSet;
 
