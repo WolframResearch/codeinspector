@@ -142,7 +142,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["a_..b"]
 	,
-	{ InspectionObject["BackwardsCompatibility", _, _, _], InspectionObject["UnexpectedCharacter", _, _, _] }
+	{ InspectionObject["UnexpectedCharacter", _, _, _], InspectionObject["BackwardsCompatibility", _, _, _] }
 	,
 	TestID->"ConcreteRules-20200821-G8T2K3"
 ]
@@ -150,7 +150,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["a_..."]
 	,
-	{ InspectionObject["BackwardsCompatibility", _, _, _], InspectionObject["UnexpectedCharacter", _, _, _] }
+	{ InspectionObject["UnexpectedCharacter", _, _, _], InspectionObject["BackwardsCompatibility", _, _, _] }
 	,
 	TestID->"ConcreteRules-20200821-R7H2A4"
 ]
