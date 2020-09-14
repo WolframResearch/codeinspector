@@ -1390,7 +1390,11 @@ Catch[
     bring in heuristics for when a_:b is valid
     If b has Patterns or Blanks, then b is NOT a valid optional and warn
     *)
-    !FreeQ[opt, blankPat | BinaryNode[Pattern, _, _]],
+    !FreeQ[opt,
+      blankPat |
+      BinaryNode[Pattern, _, _] |
+      (* also check for Alternatives *)
+      InfixNode[Alternatives, _, _]],
       AppendTo[issues, InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
 Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
                         pattern,
