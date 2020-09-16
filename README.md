@@ -5,10 +5,11 @@ CodeInspector has a large collection of rules that can be used to inspect Wolfra
 
 In a stand-alone kernel:
 ```
-In[1]:= Needs["CodeInspector`"]
+Needs["CodeInspector`"]
 
-In[2]:= CodeInspectSummarize["If[a,b,b]"]
-
+CodeInspectSummarize["If[a,b,b]"]
+```
+```
 Out[2]= If[a,b,b]
 
         line 1:  If[a,b,b] 
@@ -28,16 +29,13 @@ In a front end:
 
 Install CodeInspector and dependencies from the paclet server:
 ```
-In[1]:= PacletInstall["CodeParser"]
-			PacletInstall["CodeInspector"]
-
-Out[1]= PacletObject[CodeParser, 1.0, <>]
-Out[2]= PacletObject[CodeInspector, 1.0, <>]
+PacletInstall["CodeParser"]
+PacletInstall["CodeInspector"]
 ```
 
 CodeInspector depends on the CodeParser paclet. Make sure that the paclets can be found on your system:
 ```
-In[1]:= Needs["CodeInspector`"]
+Needs["CodeInspector`"]
 ```
 
 
@@ -47,10 +45,11 @@ After CodeParser and CodeInspector are installed, CodeInspector can be used.
 
 Return the list of all problems found in a string of code:
 ```
-In[1]:= Needs["CodeInspector`"]
+Needs["CodeInspector`"]
 
-In[2]:= CodeInspect["If[a,b,b]"]
-
+CodeInspect["If[a,b,b]"]
+```
+```
 Out[2]= {DuplicateClauses Error Both branches are the same.}
 ```
 
