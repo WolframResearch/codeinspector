@@ -991,7 +991,7 @@ Catch[
   ];
 
   Scan[(AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
-    "does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
+    " does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   counts = CountsBy[vars, ToFullFormString];
 
@@ -1276,7 +1276,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
     Throw[issues]
   ];
 
-  Scan[(AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <> "does not have proper form.\n\
+  Scan[(AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <> " does not have proper form.\n\
 This may be ok if ``With`` is handled programmatically.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   varsAndVals = DeleteCases[varsAndVals, {}];
@@ -1413,7 +1413,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   ];
 
   Scan[(AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
-    "does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
+    " does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
 
   vars = varsWithSet ~Join~ varsWithoutSet;
 
