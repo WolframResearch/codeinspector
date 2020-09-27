@@ -256,8 +256,8 @@ Module[{agg, node, children, data, issues, srcs},
   Do[
 
     Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[ 3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
@@ -754,7 +754,7 @@ Module[{agg, node, children, data, issues, srcs},
 
     Switch[p,
       {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
     ];
 
     ,
