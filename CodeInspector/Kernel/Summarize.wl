@@ -655,11 +655,17 @@ Module[{perColumn, endOfFile},
       (* staying within same line *)
       {{lineNumber, _}, {lineNumber, _}},
       start = src[[1, 2]];
-      If[start > $LineTruncationLimit,
-        Association[]
+      Which[
+        start > $LineTruncationLimit,
+          Association[]
         ,
-        end = Min[src[[2, 2]], $LineTruncationLimit];
-        Association[dropLastButLeaveAtleastOne[ Table[i -> lint, {i, start, end}]]]
+        src[[2, 2]] > $LineTruncationLimit,
+          end = $LineTruncationLimit;
+          Association[Table[i -> lint, {i, start, end}]]
+        ,
+        True,
+          end = Min[src[[2, 2]], $LineTruncationLimit];
+          Association[dropLastButLeaveAtleastOne[Table[i -> lint, {i, start, end}]]]
       ]
       ,
 
@@ -670,8 +676,15 @@ Module[{perColumn, endOfFile},
 
       (* extend from previous lines, and end on this line *)
       {_, {lineNumber, _}},
-      end = Min[src[[2, 2]], $LineTruncationLimit];
-      Association[0 -> lint, dropLastButLeaveAtleastOne[Table[i -> lint, {i, 1, end}]]]
+      Which[
+        src[[2, 2]] > $LineTruncationLimit,
+          end = $LineTruncationLimit;
+          Association[0 -> lint, Table[i -> lint, {i, 1, end}]]
+        ,
+        True,
+          end = Min[src[[2, 2]], $LineTruncationLimit];
+          Association[0 -> lint, dropLastButLeaveAtleastOne[Table[i -> lint, {i, 1, end}]]]
+      ]
       ,
 
       (* extend from previous lines, and also extend into next lines  *)
