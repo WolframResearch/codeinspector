@@ -17,10 +17,7 @@ $LintLimit
 $Underlight
 
 
-(*
-Number of characters per line to consider "long" and truncate
-*)
-$LineTruncationLimit = 500
+$LineTruncationLimit
 
 
 Begin["`Private`"]
@@ -49,6 +46,10 @@ How many lints to keep?
 *)
 $LintLimit = 20
 
+(*
+Number of characters per line to consider "long" and truncate
+*)
+$LineTruncationLimit = Infinity
 
 (*
 How many lines to include above and below each lint
@@ -495,7 +496,7 @@ Module[{lints, lines, sources, warningsLines,
             {lineSource = lines[[i]],
               lineNumber = i,
               lineList = ListifyLine[lines[[i]],
-              lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+                lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               lints = Union[Flatten[Values[lintsPerColumn]]],
               environ = MemberQ[environLines, i]
             }
@@ -503,13 +504,14 @@ Module[{lints, lines, sources, warningsLines,
             InspectedLineObject[lineSource, lineNumber, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
           ]
           ,
+          (* else *)
           With[
             {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
             ,
             {lineSource = lines[[i]],
               lineNumber = i,
               lineList = ListifyLine[lines[[i]],
-              lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+                lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
               lints = Union[Flatten[Values[lintsPerColumn]]],
               environ = MemberQ[environLines, i]
@@ -633,6 +635,10 @@ possibly also 0 -> lints and len+1 -> lints
 createLintsPerColumn[line_String, lints_List, lineNumber_Integer, OptionsPattern[]] :=
 Module[{perColumn, endOfFile},
 
+  If[$Debug,
+    Print["createLintsPerColumn: lineNumber: ", lineNumber];
+  ];
+
   endOfFile = OptionValue["EndOfFile"];
 
   (*
@@ -726,6 +732,10 @@ pad with " " on either side to allow for \[Continuation] markers and \[Times] ma
 *)
 ListifyLine[lineIn_String, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Module[{line, lintsPerColumn},
+
+  If[$Debug,
+    Print["ListifyLine: line: ", lineIn];
+  ];
 
   line = lineIn;
 
