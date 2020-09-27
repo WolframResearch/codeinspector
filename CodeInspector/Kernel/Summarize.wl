@@ -446,15 +446,14 @@ Module[{lints, lines, sources, warningsLines,
 
    environLinesTentative = Clip[(# + {-$EnvironBuffer, $EnvironBuffer}), {1, Length[lines]}]& /@ warningsLines;
    environLinesTentative = Range @@@ environLinesTentative;
-   environLinesTentative = Union[Flatten[environLinesTentative]];
 
    elidedLines = {};
 
    linesToModify = Range @@@ warningsLines;
 
-   environLines = Complement[environLinesTentative, linesToModify];
+   environLines = MapThread[Complement, {environLinesTentative, linesToModify}];
 
-   linesToModify = Union[linesToModify, environLines];
+   linesToModify = MapThread[Union, {linesToModify, environLines}];
 
    If[$Debug,
     Print["linesToModify before: ", linesToModify];
@@ -476,10 +475,12 @@ Module[{lints, lines, sources, warningsLines,
       ])& /@ linesToModify;
 
    linesToModify = Union[Flatten[linesToModify]];
+   environLines = Union[Flatten[environLines]];
 
    If[$Debug,
     Print["linesToModify after: ", linesToModify];
     Print["elidedLines: ", elidedLines];
+    Print["environLines: ", environLines];
    ];
 
    maxLineNumberLength = Max[IntegerLength /@ linesToModify];
