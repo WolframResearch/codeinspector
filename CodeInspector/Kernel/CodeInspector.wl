@@ -11,6 +11,11 @@ CodeInspectBox
 CodeInspectCST
 
 
+CodeInspectAgg
+
+CodeInspectAST
+
+
 
 CodeInspectSummarize
 
@@ -347,6 +352,13 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     Throw[cst]
   ];
 
+  If[empty[concreteRules] && empty[aggregateRules] && empty[abstractRules],
+
+    lints = Flatten[lints];
+    
+    Throw[lints]
+  ];
+
   (*
   Make sure to use Infinity
   *)
@@ -420,6 +432,13 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   $ConcreteLintTime = Now - start;
 
 
+  If[empty[aggregateRules] && empty[abstractRules],
+
+    lints = Flatten[lints];
+
+    Throw[lints]
+  ];
+
   agg = Aggregate[cst];
 
   cst =.;
@@ -450,6 +469,12 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   $AggregateLintTime = Now - start;
 
 
+  If[empty[abstractRules],
+
+    lints = Flatten[lints];
+
+    Throw[lints]
+  ];
 
   ast = Abstract[agg];
 
@@ -466,6 +491,143 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   If[$Debug,
     Print["abstractRules"];
   ];
+
+  prog = 0;
+  start = Now;
+  KeyValueMap[Function[{pat, func},
+    If[$Debug,
+      Print[pat];
+    ];
+    poss = Position[ast, pat];
+    AppendTo[lints, Map[Function[pos, func[pos, ast]], poss]];
+    prog++;
+    $AbstractLintProgress = Floor[100 * prog / Length[abstractRules]];
+    ], abstractRules];
+  $AbstractLintTime = Now - start;
+
+  lints = Flatten[lints];
+
+  lints
+]]
+
+
+
+Options[CodeInspectAgg] = {
+  PerformanceGoal -> "Speed",
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules
+}
+
+Attributes[CodeInspectAgg] = {HoldFirst}
+
+CodeInspectAgg[aggIn_, OptionsPattern[]] :=
+Catch[
+Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
+  prog, performanceGoal, start},
+
+  If[$Debug,
+    Print["CodeInspectAgg"];
+  ];
+
+  agg = aggIn;
+
+  lints = {};
+
+  performanceGoal = OptionValue[PerformanceGoal];
+  aggregateRules = OptionValue["AggregateRules"];
+  abstractRules = OptionValue["AbstractRules"];
+
+  If[$Debug,
+    Print["aggregateRules"];
+  ];
+
+  prog = 0;
+  start = Now;
+  KeyValueMap[Function[{pat, func},
+    If[$Debug,
+      Print[pat];
+    ];
+    poss = Position[agg, pat];
+    AppendTo[lints, Map[Function[pos, func[pos, agg]], poss]];
+    prog++;
+    $AggregateLintProgress = Floor[100 * prog / Length[aggregateRules]];
+    ], aggregateRules];
+  $AggregateLintTime = Now - start;
+
+
+  If[empty[abstractRules],
+
+    lints = Flatten[lints];
+
+    Throw[lints]
+  ];
+
+  ast = Abstract[agg];
+
+  agg =.;
+
+  If[FailureQ[ast],
+    Throw[ast]
+  ];
+
+  If[$Debug,
+    Print["ast: ", ast];
+  ];
+
+  If[$Debug,
+    Print["abstractRules"];
+  ];
+
+  prog = 0;
+  start = Now;
+  KeyValueMap[Function[{pat, func},
+    If[$Debug,
+      Print[pat];
+    ];
+    poss = Position[ast, pat];
+    AppendTo[lints, Map[Function[pos, func[pos, ast]], poss]];
+    prog++;
+    $AbstractLintProgress = Floor[100 * prog / Length[abstractRules]];
+    ], abstractRules];
+  $AbstractLintTime = Now - start;
+
+  lints = Flatten[lints];
+
+  lints
+]]
+
+
+
+Options[CodeInspectAST] = {
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules
+}
+
+Attributes[CodeInspectAST] = {HoldFirst}
+
+CodeInspectAST[astIn_, OptionsPattern[]] :=
+Catch[
+Module[{abstractRules, ast, poss, lints,
+  prog, performanceGoal, start},
+
+  If[$Debug,
+    Print["CodeInspectAST"];
+  ];
+
+  ast = astIn;
+
+  lints = {};
+
+  performanceGoal = OptionValue[PerformanceGoal];
+  abstractRules = OptionValue["AbstractRules"];
+
+  If[$Debug,
+    Print["abstractRules"];
+  ];
+
+  lints = {};
 
   prog = 0;
   start = Now;
