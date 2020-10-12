@@ -10,6 +10,8 @@ CodeInspectBracketMismatchesCST
 CodeInspectBracketMismatchesCSTSummarize
 
 
+CodeInspectBracketMismatchesAgg
+
 
 Begin["`Private`"]
 
@@ -94,6 +96,19 @@ Module[{mismatches, agg},
   ];
 
   agg = Aggregate[cst];
+
+  mismatches = bracketMismatches[agg];
+
+  mismatches
+]]
+
+CodeInspectBracketMismatchesAgg[agg_] :=
+Catch[
+Module[{mismatches},
+
+  If[FailureQ[agg],
+    Throw[agg]
+  ];
 
   mismatches = bracketMismatches[agg];
 
@@ -212,7 +227,6 @@ Module[{mismatches, lines, lintedLines, string, tabWidth},
 
 
 
-
 bracketMismatches[agg_] :=
 Catch[
 Module[{mismatches},
@@ -221,8 +235,6 @@ Module[{mismatches},
 
   mismatches
 ]]
-
-
 
 
 
