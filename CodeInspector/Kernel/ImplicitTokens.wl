@@ -10,6 +10,8 @@ CodeInspectImplicitTokensCST
 CodeInspectImplicitTokensCSTSummarize
 
 
+CodeInspectImplicitTokensAgg
+
 
 $ImplicitTokensLimit
 
@@ -96,6 +98,22 @@ Module[{times, agg, spans, nulls, ops},
   ];
 
   agg = Aggregate[cst];
+
+  times = implicitTimes[agg];
+  spans = implicitSpans[agg];
+  nulls = implicitNulls[agg];
+  ops = expectedOperands[agg];
+
+  Join[times, spans, nulls, ops]
+]]
+
+CodeInspectImplicitTokensAgg[agg_] :=
+Catch[
+Module[{times, spans, nulls, ops},
+
+  If[FailureQ[agg],
+    Throw[agg]
+  ];
 
   times = implicitTimes[agg];
   spans = implicitSpans[agg];
