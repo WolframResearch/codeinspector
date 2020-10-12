@@ -45,6 +45,13 @@ $AggregateLintTime
 $AbstractLintProgress
 $AbstractLintTime
 
+
+(*
+Messages
+*)
+CodeInspector
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -57,10 +64,23 @@ Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Summarize`"]
 
+Needs["PacletManager`"] (* for PacletInformation *)
 
+
+
+CodeInspector::old = "The old Lint paclet has been renamed to CodeInspector. Uninstall Lint paclet from your system."
 
 If[PacletFind["Lint"] != {},
-  Message[General::obspkg, "Lint`"]
+  Message[CodeInspector::old]
+]
+
+
+CodeInspector::versions = "CodeParser version `1` and CodeInspector version `2` are different. There may be unexpected problems."
+
+codeParserVersion = "Version" /. PacletInformation["CodeParser"]
+codeInspectorVersion = "Version" /. PacletInformation["CodeInspector"]
+If[StringSplit[codeParserVersion, "."][[1;;2]] != StringSplit[codeInspectorVersion, "."][[1;;2]],
+  Message[CodeInspector::versions, codeParserVersion, codeInspectorVersion]
 ]
 
 
