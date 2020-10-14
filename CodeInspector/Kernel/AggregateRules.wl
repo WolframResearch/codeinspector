@@ -170,6 +170,13 @@ CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | Pa
   ___}, _] -> scanUppercasePatternBlank,
 
 
+CompoundNode[Blank | BlankSequence | BlankNullSequence, {_, LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _]}, _] ->
+  scanBlankPredicate,
+
+
+BinaryNode[PatternTest, {LeafNode[Symbol, _, _], _, LeafNode[Symbol, _, _]}, _] ->
+  scanSymbolPatternTest,
+
 
 InfixNode[MessageName, children_ /; Length[children] > 3, _] -> scanMessageName,
 
@@ -1639,6 +1646,62 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 ]
 
 
+Attributes[scanBlankPredicate] = {HoldRest}
+
+scanBlankPredicate[pos_List, aggIn_] :=
+  Catch[
+  Module[{agg, node, tag, data, children, src, predName, pred},
+    agg = aggIn;
+    node = Extract[agg, {pos}][[1]];
+    tag = node[[1]];
+    children = node[[2]];
+    data = node[[3]];
+
+    pred = children[[2]];
+
+    predName = pred["String"];
+
+    issues = {};
+
+    src = pred[[3, Key[Source]]];
+
+    AppendTo[issues, InspectionObject["BlankPredicate", "Unexpected predicate after blank.", "Error",
+      <| Source->src,
+         ConfidenceLevel->0.95,
+         CodeActions -> {
+          CodeAction["Insert ``?``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Question, "?", <||>] |>] } |>]];
+
+    issues
+  ]]
+
+
+Attributes[scanSymbolPatternTest] = {HoldRest}
+
+scanSymbolPatternTest[pos_List, aggIn_] :=
+  Catch[
+  Module[{agg, node, tag, data, children, src, a, q, b},
+    agg = aggIn;
+    node = Extract[agg, {pos}][[1]];
+    tag = node[[1]];
+    children = node[[2]];
+    data = node[[3]];
+
+    a = children[[1]];
+    q = children[[2]];
+    b = children[[3]];
+
+    issues = {};
+
+    src = q[[3, Key[Source]]];
+
+    AppendTo[issues, InspectionObject["SymbolPatternTest", "Unexpected ``PatternTest`` after symbol.", "Error",
+      <| Source->src,
+         ConfidenceLevel->0.95,
+         CodeActions -> {
+          CodeAction["Insert ``_``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]];
+
+    issues
+  ]]
 
 
 Attributes[scanMessageName] = {HoldRest}
