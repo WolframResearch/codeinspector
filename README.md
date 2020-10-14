@@ -27,13 +27,21 @@ In a front end:
 
 ## Setup
 
+CodeInspector and its dependencies are included in Mathematica 12.2.
+
+For older versions, you can install from the paclet server.
+
+The minimum version for CodeInspector is Mathematica 11.0.
+
+CodeInspector depends on [CodeParser](https://github.com/WolframResearch/codeparser).
+
 Install CodeInspector and dependencies from the paclet server:
 ```
 PacletInstall["CodeParser"]
 PacletInstall["CodeInspector"]
 ```
 
-CodeInspector depends on the CodeParser paclet. Make sure that the paclets can be found on your system:
+Make sure that the paclets can be found on your system:
 ```
 Needs["CodeInspector`"]
 ```
@@ -56,3 +64,5 @@ Out[2]= {DuplicateClauses Error Both branches are the same.}
 Summarize the problems found in a source code file:
 
 ![Collatz](docs/collatz.png)
+
+The input to `CodeInspect` and `CodeInspectSummarize` may be a string, a `File`, or a list of bytes.
