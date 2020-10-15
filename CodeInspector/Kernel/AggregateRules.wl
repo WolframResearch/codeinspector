@@ -1679,7 +1679,7 @@ Attributes[scanSymbolPatternTest] = {HoldRest}
 
 scanSymbolPatternTest[pos_List, aggIn_] :=
   Catch[
-  Module[{agg, node, tag, data, children, src, a, q, b},
+  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc},
     agg = aggIn;
     node = Extract[agg, {pos}][[1]];
     tag = node[[1]];
@@ -1692,13 +1692,15 @@ scanSymbolPatternTest[pos_List, aggIn_] :=
 
     issues = {};
 
-    src = q[[3, Key[Source]]];
+    aSrc = a[[3, Key[Source]]];
+    qSrc = q[[3, Key[Source]]];
 
     AppendTo[issues, InspectionObject["SymbolPatternTest", "Unexpected ``PatternTest`` after symbol.", "Error",
-      <| Source->src,
+      <| Source->qSrc,
          ConfidenceLevel->0.95,
          CodeActions -> {
-          CodeAction["Insert ``_``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]];
+          CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
+          CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]];
 
     issues
   ]]
