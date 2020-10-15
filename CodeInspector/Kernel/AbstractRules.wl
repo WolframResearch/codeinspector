@@ -113,7 +113,8 @@ Scan some symbols that are intuitive, yet do not exist
 *)
 LeafNode[Symbol,
   "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | "RealQ" | "FalseQ" | "RationalQ" |
-  "ComplexQ" | "SymbolQ" | "Match" | "UnSameQ" | "StringMatch", _] -> scanBadSymbols,
+  "ComplexQ" | "SymbolQ" | "Match" | "UnSameQ" | "StringMatch" |
+  "OptionsQ", _] -> scanBadSymbols,
 
 (*
 
@@ -1549,6 +1550,11 @@ Module[{ast, node, name, data, issues, src},
       AppendTo[issues, InspectionObject["BadSymbol", "``StringMatch`` does not exist in **System`** context.", "Error", <|
         Source -> src, ConfidenceLevel -> 0.95, CodeActions -> {
           CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[StringMatchQ]|>]}|>]]
+    ,
+    "OptionsQ",
+      AppendTo[issues, InspectionObject["BadSymbol", "``OptionsQ`` does not exist in **System`** context.", "Error", <|
+        Source -> src, ConfidenceLevel -> 0.95, CodeActions -> {
+          CodeAction["Replace with ``OptionQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionQ]|>]}|>]]
     ,
     _,
       (* everything else *)
