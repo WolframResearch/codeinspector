@@ -1679,7 +1679,7 @@ Attributes[scanSymbolPatternTest] = {HoldRest}
 
 scanSymbolPatternTest[pos_List, aggIn_] :=
   Catch[
-  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc},
+  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName},
     agg = aggIn;
     node = Extract[agg, {pos}][[1]];
     tag = node[[1]];
@@ -1692,12 +1692,30 @@ scanSymbolPatternTest[pos_List, aggIn_] :=
 
     issues = {};
 
+    aName = a["String"];
+
+    (*
+    Heuristic here:
+
+    In something like:
+
+    pat?test
+
+    pat is being used as a pattern, so ok
+    *)
+    If[StringContainsQ[aName, "pat", IgnoreCase -> True],
+      Throw[issues]
+    ];
+
     aSrc = a[[3, Key[Source]]];
     qSrc = q[[3, Key[Source]]];
 
     AppendTo[issues, InspectionObject["SymbolPatternTest", "Unexpected ``PatternTest`` after symbol.", "Error",
       <| Source->qSrc,
-         ConfidenceLevel->0.95,
+         (*
+         Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
+         *)
+         ConfidenceLevel->0.85,
          CodeActions -> {
           CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
           CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]];
