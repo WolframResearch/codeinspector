@@ -66,7 +66,8 @@ $existsTest = Not @* KeyExistsQ[ConfidenceLevel]
 
 
 
-CodeInspectSummarize::usage = "CodeInspectSummarize[code] returns an inspection summary object."
+CodeInspectSummarize::usage = "CodeInspectSummarize[code] returns an inspection summary object. \
+code can be a string, a file, or a list of bytes."
 
 Options[CodeInspectSummarize] = {
   PerformanceGoal -> "Speed",
