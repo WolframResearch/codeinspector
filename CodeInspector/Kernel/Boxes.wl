@@ -7,6 +7,7 @@ Needs["CodeInspector`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`ConcreteRules`"]
+Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`Utils`"]
 
 
