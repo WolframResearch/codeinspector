@@ -22,7 +22,6 @@ find_program(CODEPARSER_EXE
 
 set(PACLET "CodeInspector")
 set(WOLFRAMKERNEL ${WOLFRAMKERNEL_DEFAULT} CACHE FILEPATH "Path to WolframKernel")
-set(BUILD_DOCS OFF CACHE BOOL "Build documentation")
 set(LOCAL_BUILD OFF CACHE BOOL "Local build")
 # Work-around for bug 349779 is to pause ~1 second
 set(BUG349779_PAUSE 1 CACHE STRING "Bug 349779 pause")
@@ -38,7 +37,6 @@ set(BUG349779_TIMEOUT 3600 CACHE STRING "Bug 349779 timeout")
 message(STATUS "CMAKE_VERSION: ${CMAKE_VERSION}")
 message(STATUS "PACLET: ${PACLET}")
 message(STATUS "WOLFRAMKERNEL: ${WOLFRAMKERNEL}")
-message(STATUS "BUILD_DOCS: ${BUILD_DOCS}")
 message(STATUS "LOCAL_BUILD: ${LOCAL_BUILD}")
 message(STATUS "CMAKE_SIZEOF_VOID_P: ${CMAKE_SIZEOF_VOID_P}")
 message(STATUS "BUG349779_PAUSE: ${BUG349779_PAUSE}")
@@ -70,29 +68,6 @@ set(WL_GENERATE_CREATEPACLETARCHIVE_SOURCES
 set(PACLETINFO_SOURCE
 	${PROJECT_SOURCE_DIR}/${PACLET}/PacletInfo.m
 )
-
-set(DOCUMENTATION_NOTEBOOK_PATHS
-	English/Guides/CodeInspector.nb
-	English/ReferencePages/Symbols/CodeInspect.nb
-	English/ReferencePages/Symbols/CodeInspectSummarize.nb
-	English/ReferencePages/Symbols/InspectedFileObject.nb
-	English/ReferencePages/Symbols/InspectedLineObject.nb
-	English/ReferencePages/Symbols/InspectedStringObject.nb
-	English/ReferencePages/Symbols/InspectionObject.nb
-	English/Tutorials/CodeInspectorTutorial.nb
-	English/Tutorials/ReleaseNotes.nb
-	English/Tutorials/WritingAdditionalRules.nb
-)
-
-#
-# Setup documentation notebook paths
-#
-foreach(NB_PATH ${DOCUMENTATION_NOTEBOOK_PATHS})
-	set(SRC ${PROJECT_SOURCE_DIR}/${PACLET}/Documentation/${NB_PATH})
-	set(BUILT ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Documentation/${NB_PATH})
-	list(APPEND DOCUMENTATION_SOURCE ${SRC})
-	list(APPEND BUILT_DOCUMENTATION ${BUILT})
-endforeach()
 
 
 
@@ -171,61 +146,19 @@ set(PACLET_SOURCES
 
 
 
-if(BUILD_DOCS)
-
-list(APPEND PACLET_SOURCES
-	${BUILT_DOCUMENTATION}
-)
-
-endif(BUILD_DOCS)
 
 
 
 
 
-#
-# docs target
-#
-
-if(BUILD_DOCS)
-
-add_custom_target(docs
-	DEPENDS
-		${BUILT_DOCUMENTATION}
-)
-
-set(DOCS_APPPATH /Applications/Eclipse.app/Contents/Eclipse/configuration/org.eclipse.osgi/525/0/.cp/MathematicaSource/ CACHE PATH "Path of MathematicaSource inside Workbench installation")
-
-message(STATUS "DOCS_APPPATH: ${DOCS_APPPATH}")
-
-if (NOT IS_DIRECTORY ${DOCS_APPPATH})
-message(FATAL_ERROR "DOCS_APPPATH (${DOCS_APPPATH}) does not exist")
-endif(NOT IS_DIRECTORY ${DOCS_APPPATH})
-
-set(DOCS_JLINKPATH /Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/ CACHE PATH "Path of JLink")
-
-message(STATUS "DOCS_JLINKPATH: ${DOCS_JLINKPATH}")
-
-if (NOT IS_DIRECTORY ${DOCS_JLINKPATH})
-message(FATAL_ERROR "DOCS_JLINKPATH (${DOCS_JLINKPATH}) does not exist")
-endif(NOT IS_DIRECTORY ${DOCS_JLINKPATH})
 
 
-#
-# build the docs
-#
-add_custom_command(
-	OUTPUT
-		${BUILT_DOCUMENTATION}
-	DEPENDS
-		${DOCUMENTATION_SOURCE}
-	COMMAND
-		ant -DmathExe=${WOLFRAMKERNEL} -DappPath=${DOCS_APPPATH} -Djlinkpath=${DOCS_JLINKPATH} -DinputDir=${PROJECT_SOURCE_DIR}/${PACLET}/Documentation/ -DoutputDir=${PROJECT_BINARY_DIR}/paclet/${PACLET}/Documentation/ -file ${DOCS_APPPATH}/DocumentationBuild/SystemFiles/ant/Build/notebook.xml
-	WORKING_DIRECTORY
-		${PROJECT_SOURCE_DIR}
-)
 
-endif(BUILD_DOCS)
+
+
+
+
+
 
 
 
