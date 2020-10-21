@@ -292,7 +292,7 @@ modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_]
 bracketMismatchesLinesReport[linesIn:{___String}, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|SyntaxErrorNode)[_, _, _]...}] :=
 Catch[
  Module[{mismatches, infixs, lines, linesToModify, missingOpeners, missingClosers, missingOpenerStarts,
-   missingCloserStarts},
+   missingCloserStarts, maxLineNumberLength},
 
     If[bracketMismatchesIn === {},
       Throw[{}]
@@ -318,11 +318,13 @@ Catch[
 
    linesToModify = Union[missingOpenerStarts[[All, 1]], missingCloserStarts[[All, 1]]];
 
+   maxLineNumberLength = Max[IntegerLength /@ linesToModify];
+
    Table[
 
      InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
                                   modify[lines[[i]], {missingOpenerStarts, missingCloserStarts}, i]},
-                                  {}]
+                                  {}, "MaxLineNumberLength" -> maxLineNumberLength]
     ,
     {i, linesToModify}
     ]

@@ -399,7 +399,8 @@ processChildren[nodes_List] :=
 
 implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
- Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops},
+ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops,
+  maxLineNumberLength},
 
     If[implicitTokensIn === {},
       Throw[{}]
@@ -459,11 +460,13 @@ Catch[
 
    linesToModify = Union[charInfos[[All, 2]]];
 
+   maxLineNumberLength = Max[IntegerLength /@ linesToModify];
+
    Table[
 
      InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
                                   modify[lines[[i]], charInfos, i]},
-                                  {}]
+                                  {}, "MaxLineNumberLength" -> maxLineNumberLength]
     ,
     {i, linesToModify}
     ]
