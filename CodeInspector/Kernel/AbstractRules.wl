@@ -1025,9 +1025,16 @@ Catch[
 
 
 
+  (*
+  Now scan for leaked variables from String functions
+
+  Related threads:
+  https://mail-archive.wolfram.com/archive/l-kernel/2019/Apr00/0105.html
+  https://mail-archive.wolfram.com/archive/t-alpha-scannerframeworks/2019/Dec00/0000.html
+  *)
   stringFunctions =
     Cases[children[[2]],
-      CallNode[LeafNode[Symbol, "StringReplace" | "StringReplaceList" | "StringSplit" | "StringCases", _], _, _], {0, Infinity}];
+      CallNode[LeafNode[Symbol, "StringReplace" | "StringReplaceList" | "StringSplit" | "StringCases" | "StringTrim", _], _, _], {0, Infinity}];
 
   ruleDelayedRHSs =
     Flatten[
