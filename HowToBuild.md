@@ -7,7 +7,7 @@ CodeInspector uses CMake to generate build scripts.
 Here is an example transcript using the default make generator to build CodeInspector:
 
 ```
-cd codeparser
+cd codeinspector
 mkdir build
 cd build
 cmake ..
