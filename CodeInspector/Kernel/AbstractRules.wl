@@ -494,10 +494,13 @@ Attributes[scanWhichs] = {HoldRest}
 
 scanWhichs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues, span, selected, lintData, srcs, counts, selecteds,
-  dupKeys, expensiveChildren, firsts},
+Module[{ast, node, head, children, data, issues, selected, srcs, counts, selecteds,
+  first,
+  dupKeys, expensiveChildren, firsts,
+  choice1, choice2},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
+  head = node[[1]];
   children = node[[2]];
   data = node[[3]];
   
@@ -517,28 +520,73 @@ Module[{ast, node, children, data, issues, span, selected, lintData, srcs, count
     Throw[issues]
   ];
 
+  first = children[[1]];
 
-  If[MatchQ[children[[1]], LeafNode[Symbol, "$OperatingSystem", _]],
-    span = children[[1, 3]];
-   AppendTo[issues, 
-    InspectionObject["SwitchWhichConfusion", "``Which`` has ``$OperatingSystem`` in first place.\n\
-Did you mean ``Switch``?", "Error", <|span, ConfidenceLevel -> 0.75|>]];
+  If[MatchQ[first, LeafNode[Symbol, "$OperatingSystem", _]],
+    AppendTo[issues,
+      InspectionObject["SwitchWhichConfusion", "``Which`` has ``$OperatingSystem`` in first place.", "Error", <|
+        Source -> head[[3, Key[Source]]],
+        "AdditionalSources" -> {first[[3, Key[Source]]]},
+        CodeActions -> {
+          CodeAction["Replace ``Which`` with ``Switch``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[Switch], Source -> head[[3, Key[Source]]] |>]}, ConfidenceLevel -> 0.75|>
+      ]
+    ]
   ];
 
   If[MatchQ[children[[-2]], CallNode[LeafNode[Symbol, "Blank", _], _, _]],
-    lintData = children[[-2, 3]];
-   AppendTo[issues, 
-    InspectionObject["SwitchWhichConfusion", "``_`` is not a test.", "Error", <|
-      lintData,
-      CodeActions -> {
-        CodeAction["Replace ``_`` with ``True``", ReplaceNode, <|
-          "ReplacementNode" -> ToNode[True], Source->lintData[Source] |>]}, ConfidenceLevel -> 1.0 |>]];
+    AppendTo[issues, 
+      InspectionObject["SwitchWhichConfusion", "``_`` is not a test.", "Error", <|
+        Source -> children[[-2, 3, Key[Source]]],
+        CodeActions -> {
+          CodeAction["Replace ``_`` with ``True``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[True], Source -> children[[-2, 3, Key[Source]]] |>]}, ConfidenceLevel -> 1.0 |>
+      ]
+    ]
   ];
 
-  Scan[(If[MatchQ[#, CallNode[LeafNode[Symbol, "Set", _], _, _]],
-    AppendTo[issues, InspectionObject["WhichSet", "``Which`` has ``=`` as a clause.\n\
-Did you mean ``==``?", "Error", <|#[[3]], ConfidenceLevel -> 0.85|>]];
-  ];)&, children[[;;;;2]]];
+  Scan[
+    Function[{child},
+      If[MatchQ[child, CallNode[LeafNode[Symbol, "Set", _], {_, _}, _]],
+
+        (*
+        TODO: need to convert from abstract Set[a, b] to concrete a == b
+        also need to convert from abstract Set[a, b] to concrete (a = b)
+        *)
+        (* choice1 = BinaryNode[Equal, {
+          child[[2, 1]],
+          LeafNode[Token`Whitespace, " ", <||>],
+          LeafNode[Token`EqualEqual, "==", <||>],
+          LeafNode[Token`Whitespace, " ", <||>],
+          child[[2, 2]]}, <||>]; *)
+
+        (* choice2 = GroupNode[GroupParen, {
+          LeafNode[Token`OpenParen, "(", <||>],
+          child,
+          LeafNode[Token`CloseParen, ")", <||>]
+          }, <||>]; *)
+
+        AppendTo[issues,
+          InspectionObject["WhichSet", "``Which`` has ``=`` as a clause.", "Error", <|
+            Source -> child[[3, Key[Source]]],
+            ConfidenceLevel -> 0.85,
+            CodeActions -> {
+              (* CodeAction["Replace = with ==", ReplaceNode, <|
+                "ReplacementNode" -> choice1,
+                Source -> child[[3, Key[Source]]]
+              |>], *)
+              (* CodeAction["Wrap with ()", ReplaceNode, <|
+                "ReplacementNode" -> choice2,
+                Source -> child[[3, Key[Source]]]
+              |>] *)
+            }
+          |>]
+        ];
+      ];
+    ]
+    ,
+    children[[;;;;2]]
+  ];
 
   expensiveChildren = ToFullFormString /@ children[[;;;;2]];
 
@@ -582,7 +630,7 @@ Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, src, cases, issues, selected, srcs, span, counts,
+Module[{ast, node, children, data, src, cases, issues, selected, srcs, counts,
   dupKeys, expensiveChildren, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -642,11 +690,18 @@ Module[{ast, node, children, data, src, cases, issues, selected, srcs, span, cou
   
    presence of False makes it less likely that True is unintended
    *)
-   If[FreeQ[children[[2;;-4;;2]], LeafNode[Symbol, "False", _]],
-    span = children[[-2, 3]];
-    AppendTo[issues, InspectionObject["SwitchWhichConfusion", "``Switch`` has ``True`` in last place.\n\
-Did you mean ``_``?", "Warning", <|span, ConfidenceLevel -> 0.75|>]];
-   ]
+    If[FreeQ[children[[2;;-4;;2]], LeafNode[Symbol, "False", _]],
+      AppendTo[issues,
+        InspectionObject["SwitchWhichConfusion", "``Switch`` has ``True`` in last place.", "Warning", <|
+          Source -> children[[-2, 3, Key[Source]]],
+          ConfidenceLevel -> 0.75,
+          CodeActions -> {
+            CodeAction["Replace True with _", ReplaceNode, <|
+              Source -> children[[-2, 3, Key[Source]]],
+              "ReplacementNode" -> LeafNode[Token`Under, "_", <||>] |>] } |>
+        ]
+      ]
+    ]
   ];
 
   expensiveChildren = ToFullFormString /@ children[[2;;;;2]];
@@ -726,7 +781,8 @@ Attributes[scanIfs] = {HoldRest}
 
 scanIfs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, issues, selected, srcs, counts, firsts},
+ Module[{ast, node, children, data, issues, selected, srcs, counts, firsts,
+  child, choice1, choice2},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -744,9 +800,43 @@ Catch[
       Throw[issues];
   ];
 
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Set", _], _, _]],
-    AppendTo[issues, InspectionObject["IfSet", "``If`` has ``=`` as first argument.\n\
-Did you mean ``==``?", "Warning", <| children[[1, 3]], ConfidenceLevel -> 0.85|>]];
+  child = children[[1]];
+
+  If[MatchQ[child, CallNode[LeafNode[Symbol, "Set", _], {_, _}, _]],
+
+    (*
+    TODO: need to convert from abstract Set[a, b] to concrete a == b
+    also need to convert from abstract Set[a, b] to concrete (a = b)
+    *)
+    (* choice1 = BinaryNode[Equal, {
+      child[[2, 1]],
+      LeafNode[Token`Whitespace, " ", <||>],
+      LeafNode[Token`EqualEqual, "==", <||>],
+      LeafNode[Token`Whitespace, " ", <||>],
+      child[[2, 2]]}, <||>]; *)
+
+    (* choice2 = GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      child,
+      LeafNode[Token`CloseParen, ")", <||>]
+      }, <||>]; *)
+
+    AppendTo[issues,
+      InspectionObject["IfSet", "``If`` has ``=`` as first argument.", "Warning", <|
+        Source -> child[[3, Key[Source]]],
+        ConfidenceLevel -> 0.85,
+        CodeActions -> {
+          (* CodeAction["Replace = with ==", ReplaceNode, <|
+            "ReplacementNode" -> choice1,
+            Source -> child[[3, Key[Source]]]
+          |>], *)
+          (* CodeAction["Wrap with ()", ReplaceNode, <|
+            "ReplacementNode" -> choice2,
+            Source -> child[[3, Key[Source]]]
+          |>] *)
+        }
+      |>]
+    ];
   ];
 
   srcs = {};
@@ -876,7 +966,7 @@ Attributes[scanControls] = {HoldRest}
 
 scanControls[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, data, parentPos, parent, s},
+ Module[{ast, node, parentPos, parent, s},
   If[pos == {},
     (* top node, no parent *)
     Throw[{}]
@@ -884,7 +974,6 @@ Catch[
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   s = node["String"];
-  data = node[[3]];
   
   parentPos = Most[pos];
   parent = Extract[ast, {parentPos}][[1]];
@@ -897,9 +986,14 @@ Catch[
     Throw[{}]
   ];
 
-  {InspectionObject["Control", format[s] <> " appears but is not called.\n\
-Did you mean " <> format[s<>"[]"] <>"?", "Warning", <|data, ConfidenceLevel -> 0.85|>]}
-
+  {InspectionObject["Control", format[s] <> " appears but is not called.", "Warning", <|
+    Source -> node[[3, Key[Source]]],
+    CodeActions -> {
+      CodeAction["Add []", ReplaceNode, <|
+        Source -> node[[3, Key[Source]]],
+        (* node is a Symbol, so it is ok to insert here *)
+        "ReplacementNode" -> CallNode[{node}, {LeafNode[Token`OpenSquare, "[", <||>], LeafNode[Token`CloseSquare, "]", <||>]}, <||>] |>] },
+    ConfidenceLevel -> 0.85|>]}
 ]]
 
 
@@ -1663,8 +1757,27 @@ Module[{ast, node, var, data},
   data = node[[3]];
 
   {InspectionObject["LoadJavaClassSystem", "``LoadJavaClass[\"java.lang.System\"]`` redefines symbols in **System`** context.\n\
-This can interfere with system functionality.\n\
-Did you mean ``LoadJavaCLass[\"java.lang.System\", AllowShortContext->False]``?", "Warning", <|data, ConfidenceLevel -> 0.95|>]}
+This can interfere with system functionality.", "Warning", <|
+    Source -> data[[Key[Source]]],
+    ConfidenceLevel -> 0.95,
+    CodeActions -> {
+      CodeAction["Replace with LoadJavaClass[\"java.lang.System\", AllowShortContext->False]", ReplaceNode, <|
+        "ReplacementNode" ->
+          CallNode[{LeafNode[Symbol, "LoadJavaClass", <||>]}, {
+            GroupNode[GroupSquare, {
+              LeafNode[Token`OpenSquare, "[", <||>],
+              InfixNode[Comma, {
+                LeafNode[String, "\"java.lang.System\"", <||>],
+                LeafNode[Token`Comma, ",", <||>],
+                LeafNode[Whitespace, " ", <||>],
+                BinaryNode[Rule, {
+                  LeafNode[Symbol, "AllowShortContext", <||>],
+                  LeafNode[Token`MinusGreater, "->", <||>],
+                  LeafNode[Symbol, "False", <||>]}, <||>]}, <||>],
+                LeafNode[Token`CloseSquare, "]", <||>]}, <||>]}, <||>],
+        Source -> data[[Key[Source]]]
+      |>]
+    }|>]}
 ]]
 
 
@@ -1680,8 +1793,14 @@ Module[{ast, node, str, strData},
   str = node[[1, 1]];
   strData = str[[3]];
 
-  {InspectionObject["SuspiciousPrivateContext", "Suspicious context: ``\"Private`\"``.\n\
-Did you mean ``\"`Private`\"``?", "Error", <|strData, ConfidenceLevel -> 0.95|>]}
+  {InspectionObject["SuspiciousPrivateContext", "Suspicious context: ``\"Private`\"``.", "Error", <|
+    Source -> strData[[Key[Source]]],
+    ConfidenceLevel -> 0.95,
+    CodeActions -> {
+      CodeAction["Replace with \"`Private`\"", ReplaceNode, <|
+        "ReplacementNode" -> ToNode["`Private`"],
+        Source -> strData[[Key[Source]]]
+      |>] } |>]}
 ]]
 
 
@@ -2100,10 +2219,29 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
     rhsOccurringSymbols = Select[rhsSymbols, (ToFullFormString[#] == fullForm)&];
 
     If[!empty[rhsOccurringSymbols],
-      AppendTo[issues, InspectionObject["PatternRule", "The same symbol occurs on lhs and rhs of ``Rule``. Did you mean ``RuleDelayed``?", "Error", <|
-        Source -> lhsPatternName[[3, Key[Source]]],
-        "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source]]],
-        ConfidenceLevel -> 0.8 |>]]
+      
+      (*
+      TODO: need to go from abstract Rule[a, b] to concrete a :> b
+      *)
+      (* choice = BinaryNode[RuleDelayed, {
+        lhs,
+        LeafNode[Token`ColonGreater, ":>", <||>],
+        rhs
+        }, <||>]; *)
+
+      AppendTo[issues,
+        InspectionObject["PatternRule", "The same symbol occurs on lhs and rhs of ``Rule``.", "Error", <|
+          Source -> lhsPatternName[[3, Key[Source]]],
+          "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source]]],
+          ConfidenceLevel -> 0.8,
+          CodeActions -> {
+            (* CodeAction["Replace with -> with :>", ReplaceNode, <|
+              "ReplacementNode" -> choice1,
+              Source -> data[[Key[Source]]]
+            |>] *)
+          }
+        |>]
+      ]
     ];
     ,
     {lhsPatternName, lhsPatternNames}

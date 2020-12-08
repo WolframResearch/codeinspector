@@ -1071,24 +1071,64 @@ Catch[
   *)
   Switch[patternTestArg2,
     LeafNode[Symbol, "Association", _],
-      AppendTo[issues, InspectionObject["AssociationCall", "Calling ``Association`` as a function.\n\
-Did you mean ``AssociationQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
+      AppendTo[issues,
+        InspectionObject["AssociationCall", "Calling ``Association`` as a function.", "Error", <|
+          Source -> patternTestArg2[[3, Key[Source]]],
+          CodeActions -> { CodeAction["Replace with AssociationQ", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[AssociationQ],
+            Source -> patternTestArg2[[3, Key[Source]]]
+          |>] },
+          ConfidenceLevel -> 0.95 |>
+        ]
+      ];
     ,
     LeafNode[Symbol, "String", _],
-      AppendTo[issues, InspectionObject["StringCall", "Calling ``String`` as a function.\n\
-Did you mean ``StringQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
+      AppendTo[issues,
+        InspectionObject["StringCall", "Calling ``String`` as a function.", "Error", <|
+          Source -> patternTestArg2[[3, Key[Source]]],
+          CodeActions -> { CodeAction["Replace with StringQ", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[StringQ],
+            Source -> patternTestArg2[[3, Key[Source]]]
+          |>] },
+          ConfidenceLevel -> 0.95 |>
+        ]
+      ];
     ,
     LeafNode[Symbol, "Integer", _],
-      AppendTo[issues, InspectionObject["IntegerCall", "Calling ``Integer`` as a function.\n\
-Did you mean ``IntegerQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
+      AppendTo[issues,
+        InspectionObject["IntegerCall", "Calling ``Integer`` as a function.", "Error", <|
+          Source -> patternTestArg2[[3, Key[Source]]],
+          CodeActions -> { CodeAction["Replace with IntegerQ", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[IntegerQ],
+            Source -> patternTestArg2[[3, Key[Source]]]
+          |>] },
+          ConfidenceLevel -> 0.95 |>
+        ]
+      ];
     ,
     LeafNode[Symbol, "Real", _],
-      AppendTo[issues, InspectionObject["RealCall", "Calling ``Real`` as a function.\n\
-Did you mean ``RealQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
+      AppendTo[issues,
+        InspectionObject["RealCall", "Calling ``Real`` as a function.", "Error", <|
+          Source -> patternTestArg2[[3, Key[Source]]],
+          CodeActions -> { CodeAction["Replace with Developer`RealQ", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[ToNode[Developer`RealQ]],
+            Source -> patternTestArg2[[3, Key[Source]]]
+          |>] },
+          ConfidenceLevel -> 0.95 |>
+        ]
+      ];
     ,
     LeafNode[Symbol, "Failure", _],
-      AppendTo[issues, InspectionObject["FailureCall", "Calling ``Failure`` as a function.\n\
-Did you mean ``FailureQ``?", "Error", <| patternTestArg2[[3]], ConfidenceLevel -> 0.95 |>]];
+      AppendTo[issues,
+        InspectionObject["FailureCall", "Calling ``Failure`` as a function.", "Error", <|
+          Source -> patternTestArg2[[3, Key[Source]]],
+          CodeActions -> { CodeAction["Replace with FailureQ", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[FailureQ],
+            Source -> patternTestArg2[[3, Key[Source]]]
+          |>] },
+          ConfidenceLevel -> 0.95 |>
+        ]
+      ];
     ,
     _,
       Throw[Failure["Internal", <||>]]
@@ -1107,7 +1147,8 @@ warn about a->b& which parses as (a->b)& and not a->(b&)
 *)
 scanRuleFunctions[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, parentPos, parent},
+ Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, parentPos, parent,
+  choice1, choice2},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1190,25 +1231,46 @@ Catch[
   ruleHead = rule[[1]];
   ruleChild2 = rule[[2, 3]];
 
+  choice1 = BinaryNode[ruleHead, {
+    ruleChild1,
+    LeafNode[Token`Whitespace, " ", <||>],
+    rule[[2, 2]],
+    LeafNode[Token`Whitespace, " ", <||>],
+    GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      PostfixNode[Function, {
+        ruleChild2,
+        LeafNode[Token`Amp, "&", <||>] }, <||>],
+      LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>];
+
+  choice2 = PostfixNode[Function, {
+    GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      BinaryNode[ruleHead, {
+        ruleChild1,
+        LeafNode[Token`Whitespace, " ", <||>],
+        rule[[2, 2]],
+        LeafNode[Token`Whitespace, " ", <||>],
+        ruleChild2
+      }, rule[[3]]],
+      LeafNode[Token`CloseParen, ")", <||>] }, <||>],
+    LeafNode[Token`Amp, "&", <||>] }, <||>];
+
   {InspectionObject["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low.\n\
-``" <> SymbolName[ruleHead] <> "`` " <> format[ToInputFormString[rule]] <> " is inside a ``Function``.\n\
-Did you mean " <>
-      format[ToInputFormString[BinaryNode[ruleHead, {
-        ruleChild1,
-        rule[[2, 2]],
-        GroupNode[GroupParen, {
-          LeafNode[Token`OpenParen, "(", <||>],
-          PostfixNode[Function, {
-            ruleChild2,
-            LeafNode[Token`Amp, "&", <||>] }, <||>],
-          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]]] <> " or " <>
-      format[ToInputFormString[PostfixNode[Function, {
-                          GroupNode[GroupParen, {
-                            LeafNode[Token`OpenParen, "(", <||>],
-                            rule,
-                            LeafNode[Token`CloseParen, ")", <||>] }, <||>],
-                          LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?", "Warning", <| data, ConfidenceLevel -> 0.75 |> ]}
+``" <> SymbolName[ruleHead] <> "`` is inside ``Function``.", "Warning", <|
+    Source -> data[[Key[Source]]],
+    ConfidenceLevel -> 0.75,
+    CodeActions -> {
+      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+        "ReplacementNode" -> choice1,
+        Source -> data[[Key[Source]]]
+      |>],
+      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+        "ReplacementNode" -> choice2,
+        Source -> data[[Key[Source]]]
+      |>]
+    } |> ]}
 ]]
 
 
@@ -1220,7 +1282,8 @@ warn about a?b& which parses as (a?b)& and not a?(b&)
 *)
 scanPatternTestFunctions[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, patternTest, patternTestChildren, patternTestArg1, patternTestArg2},
+ Module[{agg, node, data, children, patternTest, patternTestChildren, patternTestArg1, patternTestArg2,
+  choice1, choice2},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1230,24 +1293,40 @@ Catch[
   patternTestChildren = patternTest[[2]];
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[3]];
+
+  choice1 = BinaryNode[PatternTest, {
+    patternTestArg1,
+    LeafNode[Token`Question, "?", <||>],
+    GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      PostfixNode[Function, {
+        patternTestArg2,
+        LeafNode[Token`Amp, "&", <||>] }, <||>],
+      LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>];
+
+  choice2 = PostfixNode[Function, {
+    GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      patternTest,
+      LeafNode[Token`CloseParen, ")", <||>] }, <||>],
+    LeafNode[Token`Amp, "&", <||>]}, <||>];
+
   {InspectionObject["SuspiciousPatternTestFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-``?`` is inside a ``Function``.\n\
-Did you mean " <>
-  format[ToInputFormString[BinaryNode[PatternTest, {
-                        patternTestArg1,
-                        LeafNode[Token`Question, "?", <||>],
-                        GroupNode[GroupParen, {
-                          LeafNode[Token`OpenParen, "(", <||>],
-                          PostfixNode[Function, {
-                            patternTestArg2,
-                            LeafNode[Token`Amp, "&", <||>] }, <||>],
-                          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]]] <> 
-          " or " <> format[ToInputFormString[PostfixNode[Function, {
-                                            GroupNode[GroupParen, {
-                                              LeafNode[Token`OpenParen, "(", <||>],
-                                              patternTest,
-                                              LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>]]] <> "?", "Warning", <| data, ConfidenceLevel -> 0.75 |>]}
+``PatternTest`` is inside ``Function``.", "Warning", <|
+    Source -> data[[Key[Source]]],
+    ConfidenceLevel -> 0.75,
+    CodeActions -> {
+      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+        "ReplacementNode" -> choice1,
+        Source -> data[[Key[Source]]]
+      |>],
+      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+        "ReplacementNode" -> choice2,
+        Source -> data[[Key[Source]]]
+      |>]
+    }
+  |>]}
 ]]
 
 
@@ -1267,7 +1346,8 @@ warn about a?b[#]& which parses as (a?b[#])& and not a?(b[#]&)
 *)
 scanPatternTestCallFunctions[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, call, patternTest, callChildren, patternTestChildren, patternTestArg1, patternTestArg2},
+ Module[{agg, node, data, children, call, patternTest, callChildren, patternTestChildren, patternTestArg1, patternTestArg2,
+  choice1, choice2},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1278,27 +1358,42 @@ Catch[
   callChildren = call[[2]];
   patternTestChildren = patternTest[[2]];
   patternTestArg1 = patternTestChildren[[1]];
-  patternTestArg2 = patternTestChildren[[2]];
+  patternTestArg2 = patternTestChildren[[3]];
+
+  choice1 = BinaryNode[PatternTest, {
+    patternTestArg1,
+    LeafNode[Token`Question, "?", <||>],
+    GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      PostfixNode[Function, {
+        CallNode[patternTestArg2, callChildren, <||>],
+        LeafNode[Token`Amp, "&", <||>] }, <||>],
+      LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>];
+
+  choice2 = PostfixNode[Function, {
+    CallNode[GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      patternTest,
+      LeafNode[Token`CloseParen, ")", <||>] }, <||>], callChildren, <||>],
+    LeafNode[Token`Amp, "&", <||>] }, <||>];
 
   {InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-Call to ``PatternTest`` " <> format[ToInputFormString[call]] <> " is inside a ``Function``.\n\
-Did you mean " <> format[ToInputFormString[BinaryNode[PatternTest, {
-                                        patternTestArg1,
-                                        LeafNode[Token`Question, "?", <||>],
-                                        GroupNode[GroupParen, {
-                                          LeafNode[Token`OpenParen, "(", <||>],
-                                          PostfixNode[Function, {
-                                            CallNode[patternTestArg2, callChildren, <||>],
-                                            LeafNode[Token`Amp, "&", <||>] }, <||>],
-                                          LeafNode[Token`CloseParen, ")", <||>] }, <||>] }, <||>]]] <>
-  " or " <> format[ToInputFormString[PostfixNode[Function, {
-                                    CallNode[GroupNode[GroupParen, {
-                                      LeafNode[Token`OpenParen, "(", <||>],
-                                      patternTest,
-                                      LeafNode[Token`CloseParen, ")", <||>] }, <||>], callChildren, <||>],
-                                    LeafNode[Token`Amp, "&", <||>] }, <||>]]] <> "?",
-    "Warning", <| data, ConfidenceLevel -> 0.75 |>]}
+Call to ``PatternTest`` " <> format[ToInputFormString[call]] <> " is inside ``Function``.",
+    "Warning", <|
+    Source -> data[[Key[Source]]],
+    ConfidenceLevel -> 0.75,
+    CodeActions -> {
+      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+        "ReplacementNode" -> choice1,
+        Source -> data[[Key[Source]]]
+      |>],
+      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+        "ReplacementNode" -> choice2,
+        Source -> data[[Key[Source]]]
+      |>]
+    }
+  |>]}
 ]]
 
 
@@ -1369,7 +1464,8 @@ warn about a_:b  which is Optional[Pattern[a, _], b]  and not the same as  a:b
 *)
 scanPatternBlankOptionals[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt, issues},
+ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt, issues,
+  choice},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1402,12 +1498,25 @@ Catch[
       BinaryNode[Pattern, _, _] |
       (* also check for Alternatives *)
       InfixNode[Alternatives, _, _]],
-      AppendTo[issues, InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
-Did you mean " <> format[ToInputFormString[BinaryNode[Pattern, {
-                        pattern,
-                        LeafNode[Token`Colon, ":", <||>],
-                        opt}, <||>]]] <> "?\n\
-This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <| data, ConfidenceLevel -> 0.85|>]]
+
+      choice = BinaryNode[Pattern, {
+        pattern,
+        LeafNode[Token`Colon, ":", <||>],
+        opt}, <||>];
+
+      AppendTo[issues,
+        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
+This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <|
+          Source -> data[[Key[Source]]],
+          ConfidenceLevel -> 0.85,
+          CodeActions -> {
+            CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
+              "ReplacementNode" -> choice,
+              Source -> data[[Key[Source]]]
+            |>]
+          }
+        |>]
+      ]
   ];
 
   issues
@@ -1455,7 +1564,8 @@ a | b ~~ c
 *)
 scanAlternativesStringExpression[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, stringExpArgRest, alternatives, alternativesChildren, alternativesMost, alternativesLast},
+ Module[{agg, node, data, children, stringExpArgRest, alternatives, alternativesChildren, alternativesMost, alternativesLast,
+  choice1, choice2},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1468,23 +1578,50 @@ Catch[
 
   stringExpArgRest = children[[3;;;;2]];
 
-  {InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``. The precedence of ``|`` is higher than ``~~``.\n\
-Did you mean " <> format[ToInputFormString[InfixNode[Alternatives,
-                                          Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
-                                                                    LeafNode[Token`OpenParen, "(", <||>],
-                                                                    InfixNode[StringExpression,
-                                                                      Riffle[
-                                                                        {alternativesLast} ~Join~ stringExpArgRest,
-                                                                        LeafNode[Token`TildeTilde, "~~", <||>]], <||>],
-                                                                    LeafNode[Token`CloseParen, ")", <||>]}, <||>]},
-                                                  LeafNode[Token`Bar, "|", <||>]], <||>]]] <>
-" or " <> format[ToInputFormString[InfixNode[StringExpression,
-                                      Riffle[{GroupNode[GroupParen, {
-                                                  LeafNode[Token`OpenParen, "(", <||>],
-                                                  alternatives,
-                                                  LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~
-                                                stringExpArgRest,
-                                              LeafNode[Token`TildeTilde, "~~", <||>]], <||>]]] <> "?", "Remark", <| data, ConfidenceLevel -> 0.75 |>]}
+  choice1 = InfixNode[Alternatives,
+    Flatten[Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      InfixNode[StringExpression,
+        Flatten[Riffle[
+          {alternativesLast} ~Join~ stringExpArgRest
+          ,
+          {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+        ]], <||>],
+      LeafNode[Token`CloseParen, ")", <||>]}, <||>]}
+      ,
+      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+    ]], <||>];
+
+  choice2 = InfixNode[StringExpression,
+    Flatten[Riffle[{GroupNode[GroupParen, {
+      LeafNode[Token`OpenParen, "(", <||>],
+      InfixNode[Alternatives,
+        Flatten[Riffle[
+          alternativesChildren
+          ,
+          {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+        ]], <||>],
+      LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~ stringExpArgRest
+      ,
+      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+    ]], <||>];
+
+  {InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``.\n\
+The precedence of ``|`` is higher than ``~~``.\n\
+``Alternatives`` is inside ``StringExpression``.", "Remark", <|
+    Source -> data[[Key[Source]]],
+    ConfidenceLevel -> 0.75,
+    CodeActions -> {
+      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+        "ReplacementNode" -> choice1,
+        Source -> data[[Key[Source]]]
+      |>],
+      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+        "ReplacementNode" -> choice2,
+        Source -> data[[Key[Source]]]
+      |>]
+    }
+  |>]}
 ]]
 
 
