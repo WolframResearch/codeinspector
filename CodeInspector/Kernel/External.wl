@@ -33,6 +33,9 @@ Module[{},
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file]
 			,
+		{"Macintosh", "Eclipse"},
+			Run["open -a /Applications/Eclipse.app " <> file]
+			,
 		{_, "FrontEnd"},
 			(* Editor "FrontEnd" is supported in all environments. *)
 			NotebookOpen[file]
@@ -53,6 +56,9 @@ Module[{},
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line]]
 			,
+		{"Macintosh", "Eclipse"},
+			Run["open -a /Applications/Eclipse.app " <> file]
+			,
 		{_, "FrontEnd"},
 			(* Editor "FrontEnd" is supported in all environments. *)
 			NotebookOpen[file]
@@ -72,6 +78,9 @@ Module[{},
 			,
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
+			,
+		{"Macintosh", "Eclipse"},
+			Run["open -a /Applications/Eclipse.app " <> file]
 			,
 		{_, "FrontEnd"},
 			(* Editor "FrontEnd" is supported in all environments. *)
