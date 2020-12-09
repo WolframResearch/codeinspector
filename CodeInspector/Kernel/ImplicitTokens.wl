@@ -50,27 +50,27 @@ $fileByteCountMaxLimit = 3*^6
 
 CodeInspectImplicitTokens[File[file_String], opts:OptionsPattern[]] :=
 Catch[
- Module[{full, performanceGoal, cst},
+Module[{full, performanceGoal, cst},
 
- performanceGoal = OptionValue[PerformanceGoal];
+  performanceGoal = OptionValue[PerformanceGoal];
 
-   full = FindFile[file];
+  full = FindFile[file];
   If[FailureQ[full],
     Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
   ];
 
-   If[performanceGoal == "Speed",
+  If[performanceGoal == "Speed",
     If[FileByteCount[full] > $fileByteCountMaxLimit,
-     Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
-     ];
-    If[FileByteCount[full] < $fileByteCountMinLimit,
-     Throw[Failure["FileTooSmall", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
-     ];
+      Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
     ];
+    If[FileByteCount[full] < $fileByteCountMinLimit,
+      Throw[Failure["FileTooSmall", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+    ];
+  ];
 
-    cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
+  cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
 
-    CodeInspectImplicitTokensCST[cst]
+  CodeInspectImplicitTokensCST[cst]
 ]]
 
 
@@ -286,7 +286,7 @@ $color = severityColor[{InspectionObject["ImplicitTimes", "ImplicitTimes", "Impl
 
 
 modify[lineIn_String, charInfos:{{_, _, _}...}, lineNumber_] :=
- Module[{line, cols, inserters, under, rules},
+Module[{line, cols, inserters, under, rules},
 
   cols = Cases[charInfos, {char_, lineNumber, col_} :> {char, col}];
 
@@ -318,7 +318,7 @@ modify[lineIn_String, charInfos:{{_, _, _}...}, lineNumber_] :=
   under = Join[{" "}, under];
 
   under
-  ]
+]
 
 mergeCharacters[{"("}] = "("
 mergeCharacters[{")"}] = ")"
@@ -361,19 +361,19 @@ mergeCharacters[_] = " "
 return {line, col} for all \[Times] symbols
 *)
 processPar[{left_, LeafNode[Token`Fake`ImplicitTimes, _, _], right_}] :=
- Module[{leftSource, rightSource},
+Module[{leftSource, rightSource},
 
   leftSource = left[[3, Key[Source] ]];
   rightSource = right[[3, Key[Source] ]];
-   (*
-   same line
-   
-   this is symbolically represented as the best placement between left and right at this stage
+  (*
+  same line
 
-   Actual tokenization needs to occur later to figure out the actual column
-   *)
-   BestImplicitTimesPlacement[{leftSource[[2]], rightSource[[1]]}]
-   ]
+  this is symbolically represented as the best placement between left and right at this stage
+
+  Actual tokenization needs to occur later to figure out the actual column
+  *)
+  BestImplicitTimesPlacement[{leftSource[[2]], rightSource[[1]]}]
+]
 
 (*
 other tokens in InfixNode[Time, ] such as LeafNode[Token`Star]
@@ -387,7 +387,7 @@ nodes is something like { 1, ImplicitTimes, 2 } and we just want {1, 2} pairs
 we will disregard the ImplicitTimes tokens that come in, because they may not have Source that looks good
 *)
 processChildren[nodes_List] :=
- Module[{pars},
+Module[{pars},
 
   If[$Debug,
     Print["processChildren nodes: ", nodes];
@@ -395,81 +395,80 @@ processChildren[nodes_List] :=
 
   pars = Partition[nodes, 3, 2];
   processPar /@ pars
-  ]
+]
 
 implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
- Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops,
+Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops,
   maxLineNumberLength},
 
-    If[implicitTokensIn === {},
-      Throw[{}]
-    ];
+  If[implicitTokensIn === {},
+    Throw[{}]
+  ];
 
-    implicitTokens = implicitTokensIn;
+  implicitTokens = implicitTokensIn;
 
-    lines = linesIn;
+  lines = linesIn;
 
-    lines = StringTake[#, UpTo[$LineTruncationLimit]]& /@ lines;
+  lines = StringTake[#, UpTo[$LineTruncationLimit]]& /@ lines;
 
-    times = Cases[implicitTokens, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], _]];
-    sources = #[Source]& /@ times[[All, 3]];
+  times = Cases[implicitTokens, InfixNode[Times, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitTimes, _, _], 1], _]];
+  sources = #[Source]& /@ times[[All, 3]];
 
-   starts = {"(", #[[1]], #[[2]]}& /@ sources[[All, 1]];
-   ends = {")", #[[1]], #[[2]]}& /@ sources[[All, 2]];
+  starts = {"(", #[[1]], #[[2]]}& /@ sources[[All, 1]];
+  ends = {")", #[[1]], #[[2]]}& /@ sources[[All, 2]];
 
 
-   ones = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitOne, _, _], {0, Infinity}]];
-   alls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitAll, _, _], {0, Infinity}]];
-   nulls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitNull, _, _], {0, Infinity}]];
-   ops = Union[Cases[implicitTokens, ErrorNode[Token`Error`ExpectedOperand, _, _], {0, Infinity}]];
+  ones = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitOne, _, _], {0, Infinity}]];
+  alls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitAll, _, _], {0, Infinity}]];
+  nulls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitNull, _, _], {0, Infinity}]];
+  ops = Union[Cases[implicitTokens, ErrorNode[Token`Error`ExpectedOperand, _, _], {0, Infinity}]];
 
-   times = processChildren /@ times[[All, 2]];
+  times = processChildren /@ times[[All, 2]];
 
-   times = Flatten[times, 1];
+  times = Flatten[times, 1];
 
-   (*
-    resolve BestImplicitTimesPlacement with actual columns now
-   *)
-   times = Map[resolveInfix[#, lines]&, times];
+  (*
+  resolve BestImplicitTimesPlacement with actual columns now
+  *)
+  times = Map[resolveInfix[#, lines]&, times];
 
-   ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
-   alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
-   nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
-   ops = {LintExpectedOperandCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ops;
+  ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
+  alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
+  nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
+  ops = {LintExpectedOperandCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ops;
 
   infixs = times ~Join~ ones ~Join~ alls ~Join~ nulls ~Join~ ops;
 
-   charInfos = starts ~Join~ ends ~Join~ infixs;
+  charInfos = starts ~Join~ ends ~Join~ infixs;
 
-   If[$Debug,
+  If[$Debug,
     Print["charInfos: ", charInfos]
-   ];
+  ];
 
-   (*
-   Make sure to sort using Union before taking
-   *)
-   charInfoPoss = Union[charInfos[[All, 2;;3]]];
+  (*
+  Make sure to sort using Union before taking
+  *)
+  charInfoPoss = Union[charInfos[[All, 2;;3]]];
 
-   charInfoPoss = Take[charInfoPoss, UpTo[$ImplicitTokensLimit]];
+  charInfoPoss = Take[charInfoPoss, UpTo[$ImplicitTokensLimit]];
 
-    
-    charInfos = SortBy[charInfos, #[[2;;3]]&];
+  charInfos = SortBy[charInfos, #[[2;;3]]&];
 
-    charInfos = Cases[charInfos, {_, line_, col_} /; MemberQ[charInfoPoss, {line, col}]];
+  charInfos = Cases[charInfos, {_, line_, col_} /; MemberQ[charInfoPoss, {line, col}]];
 
-   linesToModify = Union[charInfos[[All, 2]]];
+  linesToModify = Union[charInfos[[All, 2]]];
 
-   maxLineNumberLength = Max[IntegerLength /@ linesToModify];
+  maxLineNumberLength = Max[IntegerLength /@ linesToModify];
 
-   Table[
+  Table[
 
      InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
                                   modify[lines[[i]], charInfos, i]},
                                   {}, "MaxLineNumberLength" -> maxLineNumberLength]
     ,
     {i, linesToModify}
-    ]
+  ]
 ]]
 
 
@@ -480,7 +479,7 @@ BestImplicitTimesPlacement[span_] is something like {{startLine_, startCol_}, {e
 *)
 resolveInfix[BestImplicitTimesPlacement[span_], lines:{___String}] :=
 Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candidates, edges, offset, intersection,
-	mean, commentsOrMBWhitespace, gaps, excludes, goals},
+  mean, commentsOrMBWhitespace, gaps, excludes, goals},
 
   If[$Debug,
     Print["resolveInfix: ", {BestImplicitTimesPlacement[span], lines}];
@@ -599,7 +598,8 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       ];
 
       {LintTimesCharacter, goalLine, goalCol}
-  ]]
+  ]
+]
 
 resolveInfix[infix_, lines:{___String}] :=
   {LintTimesCharacter} ~Join~ infix
