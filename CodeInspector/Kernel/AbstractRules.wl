@@ -407,14 +407,15 @@ Attributes[scanListsOfRules] = {HoldRest}
 
 scanListsOfRules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren, parentPos, parent},
+Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren, parentPos, parent,
+  confidence},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
   issues = {};
-  
+  confidence = 0.95;
 
   parentPos = pos;
   If[parentPos != {},
@@ -425,11 +426,11 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
       parent = Extract[ast, {parentPos}][[1]];
     ];
 
-    If[MatchQ[parent, CallNode[LeafNode[Symbol, "Graph", _], _, _]],
+    If[MatchQ[parent, CallNode[LeafNode[Symbol, "Graph" | "NetGraph" | "WordCloud", _], _, _]],
       (*
-      Graph[{1->2, 1->3}] is ok for list of rules
+      Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
       *)
-      Throw[issues]
+      confidence = 0.1;
     ]
   ];
 
@@ -457,6 +458,9 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
 
   dupKeys = Keys[Select[counts, # > 1&]];
 
+  (*
+  selecteds is { {Rule[], Rule[]}, {Rule[], Rule[]} }
+  *)
   selecteds = Function[key, Pick[children, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
   Do[
@@ -465,20 +469,14 @@ Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys
       Continue[]
     ];
 
-    (*
-    It is perfectly valid to have things like {1 -> NetPort["Output"], 1 -> 2 -> NetPort["Sum"]} in NetGraph
-
-    So make Remark for now
-    *)
-
     srcs = #[[2, 1, 3, Key[Source]]]& /@ selected;
 
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
-    AppendTo[issues, InspectionObject["DuplicateKeys", "Duplicate keys in list of rules.", "Remark", <|
+    AppendTo[issues, InspectionObject["DuplicateKeys", "Duplicate keys in list of rules.", "Warning", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
-      CodeActions -> actions, ConfidenceLevel -> 1.0 |> ]
+      CodeActions -> actions, ConfidenceLevel -> confidence |> ]
     ];
     ,
     {selected, selecteds}
