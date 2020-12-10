@@ -39,7 +39,8 @@ CodeInspectImplicitTokens::usage = "CodeInspectImplicitTokens[code] returns a li
 
 Options[CodeInspectImplicitTokens] = {
   PerformanceGoal -> "Speed",
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
+  "AllowedImplicitTokens" -> {"*", ",", ";;", "?"}
 }
 
 
@@ -70,12 +71,8 @@ Module[{full, performanceGoal, cst},
 
   cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
 
-  CodeInspectImplicitTokensCST[cst]
+  CodeInspectImplicitTokensCST[cst, FilterRules[{opts}, Options[CodeInspectImplicitTokensCST]]]
 ]]
-
-
-
-
 
 CodeInspectImplicitTokens[string_String, opts:OptionsPattern[]] :=
 Catch[
@@ -83,15 +80,18 @@ Module[{cst},
 
   cst = CodeConcreteParse[string, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
-  CodeInspectImplicitTokensCST[cst]
+  CodeInspectImplicitTokensCST[cst, FilterRules[{opts}, Options[CodeInspectImplicitTokensCST]]]
 ]]
 
 
 
+Options[CodeInspectImplicitTokensCST] = {
+  "AllowedImplicitTokens" -> {"*", ",", ";;", "?"}
+}
 
-CodeInspectImplicitTokensCST[cst_] :=
+CodeInspectImplicitTokensCST[cst_, opts:OptionsPattern[]] :=
 Catch[
-Module[{times, agg, spans, nulls, ops},
+Module[{agg},
 
   If[FailureQ[cst],
     Throw[cst]
@@ -99,28 +99,55 @@ Module[{times, agg, spans, nulls, ops},
 
   agg = Aggregate[cst];
 
-  times = implicitTimes[agg];
-  spans = implicitSpans[agg];
-  nulls = implicitNulls[agg];
-  ops = expectedOperands[agg];
-
-  Join[times, spans, nulls, ops]
+  CodeInspectImplicitTokensAgg[agg, opts]
 ]]
 
-CodeInspectImplicitTokensAgg[agg_] :=
+
+Options[CodeInspectImplicitTokensAgg] = {
+  "AllowedImplicitTokens" -> {"*", ",", ";;", "?"}
+}
+
+CodeInspectImplicitTokensAgg[agg_, OptionsPattern[]] :=
 Catch[
-Module[{times, spans, nulls, ops},
+Module[{times, spans, commaNulls, compoundExpressionNulls, ops, allowed},
+
+  allowed = OptionValue["AllowedImplicitTokens"];
+
+  If[allowed === All,
+    allowed = {"*", ",", ";;", ";", "?"}
+  ];
 
   If[FailureQ[agg],
     Throw[agg]
   ];
 
-  times = implicitTimes[agg];
-  spans = implicitSpans[agg];
-  nulls = implicitNulls[agg];
-  ops = expectedOperands[agg];
+  times = {};
+  spans = {};
+  commaNulls = {};
+  compoundExpressionNulls = {};
+  ops = {};
 
-  Join[times, spans, nulls, ops]
+  If[MemberQ[allowed, "*"],
+    times = implicitTimes[agg];
+  ];
+
+  If[MemberQ[allowed, ";;"],
+    spans = implicitSpans[agg];
+  ];
+
+  If[MemberQ[allowed, ","],
+    commaNulls = implicitCommaNulls[agg];
+  ];
+
+  If[MemberQ[allowed, ";"],
+    compoundExpressionNulls = implicitCompoundExpressionNulls[agg];
+  ];
+
+  If[MemberQ[allowed, "?"],
+    ops = expectedOperands[agg];
+  ];
+
+  Join[times, spans, commaNulls, compoundExpressionNulls, ops]
 ]]
 
 
@@ -253,11 +280,20 @@ Module[{spans},
   spans
 ]]
 
-implicitNulls[agg_] :=
+implicitCommaNulls[agg_] :=
 Catch[
 Module[{nulls},
 
-  nulls = Cases[agg, InfixNode[Comma | CompoundExpression, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitNull, _, _], 1], _], {0, Infinity}];
+  nulls = Cases[agg, InfixNode[Comma, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitNull, _, _], 1], _], {0, Infinity}];
+
+  nulls
+]]
+
+implicitCompoundExpressionNulls[agg_] :=
+Catch[
+Module[{nulls},
+
+  nulls = Cases[agg, InfixNode[CompoundExpression, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitNull, _, _], 1], _], {0, Infinity}];
 
   nulls
 ]]
@@ -335,6 +371,7 @@ mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
 mergeCharacters[{")", LintTimesCharacter}] = LintCloseTimesCharacter
 mergeCharacters[{")", LintExpectedOperandCharacter}] = LintExpectedOperandCloseCharacter
 mergeCharacters[{LintAllCharacter, LintTimesCharacter}] = LintAllTimesCharacter
+mergeCharacters[{LintAllCharacter, LintOneCharacter}] = LintAllOneCharacter
 mergeCharacters[{LintOneCharacter, LintTimesCharacter}] = LintTimesOneCharacter
 mergeCharacters[{LintExpectedOperandCharacter, LintTimesCharacter}] = LintExpectedOperandTimesCharacter
 mergeCharacters[{"(", LintExpectedOperandCharacter}] = LintOpenExpectedOperandCharacter
@@ -354,8 +391,12 @@ This is valid syntax that requires 12 open parens in the same location
 
 Obviously, we cannot have a dedicated symbol for all combinations
 *)
-mergeCharacters[_] = " "
-
+mergeCharacters[unhandled_] := (
+  If[$Debug,
+    Message[mergeCharacters::unhandled, unhandled]
+  ];
+  " "
+)
 
 (*
 return {line, col} for all \[Times] symbols

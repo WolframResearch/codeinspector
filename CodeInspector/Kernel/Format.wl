@@ -28,6 +28,7 @@ LintOneCharacter
 LintTimesCharacter
 LintExpectedOperandCharacter
 LintAllCloseCharacter
+LintAllOneCharacter
 LintAllTimesCharacter
 LintCloseCloseCharacter
 LintCloseTimesCharacter
@@ -788,6 +789,9 @@ Format[LintExpectedOperandCharacter, OutputForm] := "[]"
 
 Format[LintAllTimesCharacter, StandardForm] := "All\[Times]"
 Format[LintAllTimesCharacter, OutputForm] := "Allx"
+
+Format[LintAllOneCharacter, StandardForm] := "All1"
+Format[LintAllOneCharacter, OutputForm] := "All1"
 
 Format[LintAllTimesOneCharacter, StandardForm] := "All\[Times]1"
 Format[LintAllTimesOneCharacter, OutputForm] := "Allx1"
