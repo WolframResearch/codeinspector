@@ -685,6 +685,13 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 ]]
 
 
+Format[InspectedLineObject[row_List], StandardForm] :=
+	Row[row]
+
+Format[InspectedLineObject[row_List], OutputForm] :=
+	Row[row]
+
+
 
 
 Options[formatLeftColumn] = {

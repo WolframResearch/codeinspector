@@ -158,6 +158,13 @@ Catch[
    lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
+
+  If[lintedLines == {},
+    lintedLines = {InspectedLineObject[{"No issues found at ConfidenceLevel ", confidence}]}
+    ,
+    lintedLines = {InspectedLineObject[{"Found the following issues at ConfidenceLevel ", confidence}]} ~Join~ lintedLines
+  ];
+
   InspectedFileObject[full, lintedLines]
 ]]
 
@@ -227,6 +234,13 @@ Catch[
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
+
+  If[lintedLines == {},
+    lintedLines = {InspectedLineObject[{"No issues found at ConfidenceLevel ", confidence}]}
+    ,
+    lintedLines = {InspectedLineObject[{"Found the following issues at ConfidenceLevel ", confidence}]} ~Join~ lintedLines
+  ];
+
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -281,6 +295,13 @@ Catch[
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
+
+  If[lintedLines == {},
+    lintedLines = {InspectedLineObject[{"No issues found at ConfidenceLevel ", confidence}]}
+    ,
+    lintedLines = {InspectedLineObject[{"Found the following issues at ConfidenceLevel ", confidence}]} ~Join~ lintedLines
+  ];
+
   InspectedBytesObject[bytes, lintedLines]
 ]]
 
