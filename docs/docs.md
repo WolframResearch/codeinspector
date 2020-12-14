@@ -45,3 +45,20 @@ if something is indeed a problem, then Severity should denote how severe it is. 
 ConfidenceLevel is supposed to denote the confidence that this is actually a problem. ConfidenceLevel -> 0.0 means no confidence at all, while ConfidenceLevel -> 1.0 means something like mismatched brackets in a function.
 
 Note that even "obvious" problems don't necessarily have ConfidenceLevel -> 1.0
+
+
+## Rules
+
+Concrete rules: where whitespace matters
+issues from parser
+syntax errors
+issues with comments
+
+
+Aggregate rules: the operator syntax matters
+implicit Times across lines
+bad precedences
+
+
+Abstract rules: what most people want
+

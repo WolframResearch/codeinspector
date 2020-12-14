@@ -10,9 +10,20 @@ Begin["`Private`"]
 
 (*
 
+For "Visual Studio Code":
+
+As a 1-time setup, you must run "Shell Command: Install 'code' command in PATH" in the Command Palette of VSCode
+
+https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line
+
+
 For "Visual Studio Code", the better command would be just "code"
 
-But I cannot figure out how to have the command run in the shell, so that "code" is found.
+But if Mathematica is launched from Finder/LaunchServices, then PATH does not contain /usr/local/bin
+
+NOTE: launching Mathematica from Terminal would allow /usr/local/bin to be added to PATH
+
+Related links: https://mathematica.stackexchange.com/a/99708/63281
 
 
 Running without the shell is bad also, because it means that other commands that depend on the shell are not run
