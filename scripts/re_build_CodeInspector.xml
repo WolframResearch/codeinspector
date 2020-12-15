@@ -10,17 +10,40 @@
 	<property environment='env' />
 	<import file='${env.RE_ANTLIBRARY_HOME}/ant-lib.xml' />
 
+
+	<target name='Component.CodeInspector.init.custom' extensionOf='Component.init.custom'>
+
+		<!-- - CMake generates makefiles here -->
+		<property name='build.dir' value='${checkout_directory}${file.separator}${component}${file.separator}build' />
+
+	</target>
+
+	<target name='Component.CodeInspector.prebuild' extensionOf='Component.prebuild'>
+
+		<delete dir='${build.dir}' />
+		<mkdir dir='${build.dir}' />
+	</target>
+
 	<!--
 		Component (platform-independent)
 	-->
 
 	<target name='Component.CodeInspector.execute' extensionOf='Component.execute'>
 
-		<copy todir='${files_directory}'>
-			<fileset dir='${basedir}' >
-			<include name='${component}/**/*.m' />
-			<include name='${component}/**/*.wl' />
-			</fileset>
+		<re-cmake-exec dir="${build.dir}">
+			<arg line='-G &quot;${env.CMAKE_GENERATOR}&quot;' />
+			<arg line='-DWOLFRAMKERNEL=${mathExe}' />  
+			<arg value='${checkout_directory}/${component}' /> 
+		</re-cmake-exec> 
+
+		<re-cmake-exec dir="${build.dir}">
+			<arg line='--build .' /> 
+			<arg line='--target paclet' /> 
+		</re-cmake-exec> 
+		
+		<mkdir dir='${files_directory}/${component}' />
+		<copy todir='${files_directory}/${component}'>
+			<fileset dir='${build.dir}${file.separator}paclet${file.separator}${component}' />
 		</copy>
 
 	</target>
