@@ -170,7 +170,8 @@ CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | Pa
   ___}, _] -> scanUppercasePatternBlank,
 
 
-CompoundNode[Blank | BlankSequence | BlankNullSequence, {_, LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _]}, _] ->
+CompoundNode[Blank | BlankSequence | BlankNullSequence, {_,
+  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]}, _] ->
   scanBlankPredicate,
 
 
@@ -1799,6 +1800,21 @@ scanBlankPredicate[pos_List, aggIn_] :=
     predName = pred["String"];
 
     issues = {};
+
+    (*
+    white-list
+    *)
+    If[MemberQ[{
+      (*
+      the special functions that end in Q, but are not functions that return Booleans
+      *)
+      "EllipticNomeQ", "HypergeometricPFQ", "InverseEllipticNomeQ", "LegendreQ", "MarcumQ", "PartitionsQ", "QHypergeometricPFQ",
+      (*
+      2-arg functions
+      *)
+      "MemberQ", "StringContainsQ"}, predName],
+      Throw[issues]
+    ];
 
     src = pred[[3, Key[Source]]];
 
