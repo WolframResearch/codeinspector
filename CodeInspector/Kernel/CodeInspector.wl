@@ -402,7 +402,7 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     Print["ignoredNodes: ", ignoredNodes];
   ];
 
-  ignoredNodesSrcMemberFunc = SourceMemberQ[ignoredNodes[[All, 3, Key[Source] ]] ];
+  ignoredNodesSrcMemberFunc = SourceMemberQ[ignoredNodes[[All, 3, Key[Source]]]];
   
   
 

@@ -235,7 +235,7 @@ Attributes[scanPrefixs] = {HoldRest}
 
 scanPrefixs[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs},
+Module[{agg, node, children, data, issues, srcs, pairs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -283,7 +283,7 @@ Attributes[scanPostfixs] = {HoldRest}
 
 scanPostfixs[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs},
+Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -611,7 +611,7 @@ Attributes[scanDots] = {HoldRest}
 
 scanDots[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs},
+Module[{agg, node, children, data, issues, srcs, pairs, underPoss, dot},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -727,7 +727,7 @@ Attributes[scanTernaryTildes] = {HoldRest}
 
 scanTernaryTildes[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs},
+Module[{agg, node, children, data, issues, srcs, filtered, pairs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -785,7 +785,7 @@ Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, children, data, issues, src},
+ Module[{agg, node, children, data, issues, src, pairs, srcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1732,7 +1732,7 @@ Catch[
 Attributes[scanUppercasePatternBlank] = {HoldRest}
 
 scanUppercasePatternBlank[pos_List, aggIn_] :=
- Module[{agg, node, tag, data, children, src, sym, context, name},
+ Module[{agg, node, tag, data, children, src, sym, context, name, issues},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   tag = node[[1]];
@@ -1788,7 +1788,7 @@ Attributes[scanBlankPredicate] = {HoldRest}
 
 scanBlankPredicate[pos_List, aggIn_] :=
   Catch[
-  Module[{agg, node, tag, data, children, src, predName, pred},
+  Module[{agg, node, tag, data, children, src, predName, pred, issues},
     agg = aggIn;
     node = Extract[agg, {pos}][[1]];
     tag = node[[1]];
@@ -1832,7 +1832,7 @@ Attributes[scanSymbolPatternTest] = {HoldRest}
 
 scanSymbolPatternTest[pos_List, aggIn_] :=
   Catch[
-  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName},
+  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues},
     agg = aggIn;
     node = Extract[agg, {pos}][[1]];
     tag = node[[1]];

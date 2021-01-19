@@ -265,7 +265,7 @@ Nothing
 Attributes[scanBadCalls] = {HoldRest}
 
 scanBadCalls[pos_List, astIn_] :=
-Module[{ast, node, data, head, issues},
+Module[{ast, node, data, head, name, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   head = node[[1]];
@@ -342,7 +342,7 @@ Attributes[scanAssocs] = {HoldRest}
 
 scanAssocs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues, actions, counts, selected, srcs, dupKeys, expensiveChildren, filtered},
+Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dupKeys, expensiveChildren, filtered},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -407,7 +407,7 @@ Attributes[scanListsOfRules] = {HoldRest}
 
 scanListsOfRules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren, parentPos, parent,
+Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKeys, actions, expensiveChildren, parentPos, parent,
   confidence},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -628,7 +628,7 @@ Attributes[scanSwitchs] = {HoldRest}
 
 scanSwitchs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, src, cases, issues, selected, srcs, counts,
+Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
   dupKeys, expensiveChildren, firsts},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -926,7 +926,7 @@ Attributes[scanPatterns] = {HoldRest}
 
 scanPatterns[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, patSymbol, name, rhs, children, patterns, issues},
+Module[{ast, node, patSymbol, name, rhs, children, data, patterns, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   
@@ -1002,7 +1002,7 @@ Attributes[scanModules] = {HoldRest}
 scanModules[pos_List, astIn_] :=
 Catch[
  Module[{ast, node, children, data, selected, params, issues, vars, usedSymbols, unusedParams, counts,
-  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString, errs},
+  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString, errs, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1161,7 +1161,7 @@ Attributes[scanDynamicModules] = {HoldRest}
 
 scanDynamicModules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts, errs},
+Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts, errs, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1291,7 +1291,7 @@ Attributes[scanWiths] = {HoldRest}
 scanWiths[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
-  usedBody, unusedParams, counts, errs},
+  usedBody, usedAtVariousScopes, unusedParams, counts, errs, srcs},
   
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1419,8 +1419,8 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[2]], Con
 
   usedAtVariousScopes = FoldList[Join[#1, ToFullFormString /@ Cases[#2, LeafNode[Symbol, _, _], {0, Infinity}]]&, usedBody, vals // Reverse] // Reverse;
 
-  unusedParams = Function[{vars, useds},
-    Select[vars, Function[{c}, !MemberQ[useds, ToFullFormString[c]]]]] @@@ Transpose[{vars, Most[usedAtVariousScopes]}];
+  unusedParams = Function[{vars1, useds},
+    Select[vars1, Function[{c}, !MemberQ[useds, ToFullFormString[c]]]]] @@@ Transpose[{vars1, Most[usedAtVariousScopes]}];
 
   unusedParams = Flatten[unusedParams];
 
@@ -1443,7 +1443,7 @@ Attributes[scanBlocks] = {HoldRest}
 scanBlocks[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, varsWithoutSet,
-  toDelete, counts, errs},
+  toDelete, vars, counts, errs, srcs, used, unusedParams},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1965,7 +1965,7 @@ Attributes[scanAnds] = {HoldRest}
 
 scanAnds[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, consts, counts, firsts},
+Module[{ast, node, children, data, selected, issues, consts, counts, firsts, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2012,7 +2012,7 @@ Attributes[scanOrs] = {HoldRest}
 
 scanOrs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, consts, counts, firsts},
+Module[{ast, node, children, data, selected, issues, consts, counts, firsts, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2054,7 +2054,7 @@ Attributes[scanAlternatives] = {HoldRest}
 
 scanAlternatives[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, issues, blanks, counts, firsts},
+Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2115,7 +2115,7 @@ Attributes[scanSlots] = {HoldRest}
 
 scanSlots[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, foundFunction, parent},
+Module[{ast, node, children, data, parentPos, foundFunction, parent, issues},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2166,7 +2166,7 @@ Attributes[scanSolverCalls] = {HoldRest}
 
 scanSolverCalls[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data},
+Module[{ast, node, children, data, issues, cases},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -2199,7 +2199,7 @@ Attributes[scanPatternRules] = {HoldRest}
 scanPatternRules[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
-  rhsOccurringSymbols, rhsSymbols, fullForm},
+  rhsOccurringSymbols, rhsSymbols, fullForm, issues},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -2263,7 +2263,7 @@ Attributes[scanImageSizes] = {HoldRest}
 
 scanImageSizes[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data},
+Module[{ast, node, children, data, issues},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -2292,7 +2292,7 @@ Attributes[scanRHSPatterns] = {HoldRest}
 scanRHSPatterns[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
-  rhsOccurringPatterns, fullForm, rhsPatterns, rhsPatternNames},
+  rhsOccurringPatterns, fullForm, rhsPatterns, rhsPatternNames, issues},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -2348,7 +2348,7 @@ Attributes[scanOptionsPattern] = {HoldRest}
 scanOptionsPattern[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, optionalChildren, optionalPattern, insideSet,
-  definition},
+  definition, issues, actualPos},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];

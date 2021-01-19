@@ -404,8 +404,8 @@ return {line, col} for all \[Times] symbols
 processPar[{left_, LeafNode[Token`Fake`ImplicitTimes, _, _], right_}] :=
 Module[{leftSource, rightSource},
 
-  leftSource = left[[3, Key[Source] ]];
-  rightSource = right[[3, Key[Source] ]];
+  leftSource = left[[3, Key[Source]]];
+  rightSource = right[[3, Key[Source]]];
   (*
   same line
 

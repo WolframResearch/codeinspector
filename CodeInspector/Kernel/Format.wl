@@ -334,7 +334,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu},
 ]]
 
 Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], OutputForm] :=
-Module[{g, bolded, actions},
+Module[{g, bolded, actions, suggestions},
 
 	bolded = boldify[description];
 
@@ -441,7 +441,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	(*
 	Make sure to sort lints
 	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source] ]]&];
+	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
 	];
@@ -587,7 +587,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 	(*
 	Make sure to sort lints
 	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source] ]]&];
+	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
 	];

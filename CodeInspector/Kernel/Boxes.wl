@@ -144,7 +144,7 @@ Module[{sevColor, srcs, processedBox},
 
 replaceBox[box_, src_, sevColor_] :=
 Catch[
-Module[{processedBox, srcInter},
+Module[{processedBox, srcInter, extracted},
 
   If[!MatchQ[Last[src], Intra[___]],
       (*
