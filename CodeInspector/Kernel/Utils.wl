@@ -90,20 +90,20 @@ Module[{maxSeverity},
 	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
 	Switch[maxSeverity,
 		"Formatting" | "Remark" | "ImplicitTimes", {
-				RGBColor[{0/255, 118/255, 255/255}] (*primary icon color*), 
-				RGBColor[{255/255, 255/255, 255/255}] (*secondary icon color*), 
-				RGBColor[{203/255, 230/255, 255/255}] (*primary bar color*), 
-				RGBColor[{5/255, 89/255, 218/255}] } (*secondary bar color*), 
+				RGBColor[0/255, 118/255, 255/255] (*primary icon color*), 
+				RGBColor[255/255, 255/255, 255/255] (*secondary icon color*), 
+				RGBColor[203/255, 230/255, 255/255] (*primary bar color*), 
+				RGBColor[5/255, 89/255, 218/255] } (*secondary bar color*), 
 		"Warning", {
 				GrayLevel[118/255] (*primary icon color*), 
 				GrayLevel[255/255] (*secondary icon color*), 
 				GrayLevel[230/255] (*primary bar color*), 
 				GrayLevel[89/255] } (*secondary bar color*), 
 		"Error" | "Fatal", {
-				RGBColor[{255/255, 118/255, 0/255}] (*primary icon color*), 
-				RGBColor[{255/255, 255/255, 255/255}] (*secondary icon color*), 
-				RGBColor[{255/255, 230/255, 203/255}] (*primary bar color*), 
-				RGBColor[{218/255, 89/255, 5/255}] } (*secondary bar color*)
+				RGBColor[255/255, 118/255, 0/255] (*primary icon color*), 
+				RGBColor[255/255, 255/255, 255/255] (*secondary icon color*), 
+				RGBColor[255/255, 230/255, 203/255] (*primary bar color*), 
+				RGBColor[218/255, 89/255, 5/255] } (*secondary bar color*)
 	]
 ]
 
