@@ -58,8 +58,8 @@ expandLineNumberExclusions[a] =>
 
 *)
 expandLineNumberExclusions[lineNumberExclusions_Association] :=
-  Merge[KeyValueMap[Function[{key, value},
-    Association[(# -> value)& /@ (If[IntegerQ[key], List @ key, List @@ key])]], lineNumberExclusions], Catenate]
+	Merge[KeyValueMap[Function[{key, value},
+		Association[(# -> value)& /@ (If[IntegerQ[key], List @ key, List @@ key])]], lineNumberExclusions], Catenate]
 
 
 
@@ -152,50 +152,50 @@ shadows[lint1:InspectionObject[lint1Tag_, _, lint1Severity__, lint1Data_], lint2
 	Which[
 		lint1 === lint2,
 			False
-    ,
+		,
 		KeyExistsQ[lint1Data, CodeActions] &&
-      (!KeyExistsQ[lint2Data, CodeActions] || lint1Data[CodeActions] =!= lint2Data[CodeActions]),
-      (*
-      If lint1 has CodeActions and lint2 does not, then keep lint1
-      If they both have CodeActions, then only keep lint1 if the actions are different
-      *)
+			(!KeyExistsQ[lint2Data, CodeActions] || lint1Data[CodeActions] =!= lint2Data[CodeActions]),
+			(*
+			If lint1 has CodeActions and lint2 does not, then keep lint1
+			If they both have CodeActions, then only keep lint1 if the actions are different
+			*)
 			False
-    ,
+		,
 		!SourceMemberQ[lint2Data[Source], lint1Data[Source]],
 			False
-    ,
+		,
 		MatchQ[lint1Tag, "UnhandledCharacter" | "AbstractSyntaxError"] && lint2Tag == "UnrecognizedCharacter",
 			(*
 			"UnrecognizedCharacter" is the "root" cause, so keep it and get rid of "UnhandledCharacter"
 			*)
 			True
-    ,
+		,
 		lint1Tag == "UnrecognizedCharacter" && MatchQ[lint2Tag, "UnhandledCharacter" | "AbstractSyntaxError"],
 			False
-    ,
+		,
 		lint1Tag == "UnexpectedCharacter" && lint2Tag == "CharacterEncoding",
 			(*
 			"CharacterEncoding" is the "root" cause, so keep it and get rid of "UnexpectedCharacter"
 			*)
 			True
-    ,
+		,
 		lint1Tag == "CharacterEncoding" && lint2Tag == "UnexpectedCharacter",
 			False
-    ,
+		,
 		severityToInteger[lint1Severity] < severityToInteger[lint2Severity],
 			True
-    ,
-    severityToInteger[lint1Severity] == severityToInteger[lint2Severity] &&
-      lint1Data[ConfidenceLevel] <= lint2Data[ConfidenceLevel],
-      (*
-      Given all of this:
-      lint1 is SourceMemberQ of lint2
-      same severity
-      same confidence
-      then get rid of lint1
-      *)
-      True
-    ,
+		,
+		severityToInteger[lint1Severity] == severityToInteger[lint2Severity] &&
+			lint1Data[ConfidenceLevel] <= lint2Data[ConfidenceLevel],
+			(*
+			Given all of this:
+			lint1 is SourceMemberQ of lint2
+			same severity
+			same confidence
+			then get rid of lint1
+			*)
+			True
+		,
 		True,
 			False
 	]
@@ -228,9 +228,9 @@ do not send ?? markup
 FIXME: what to do about ?? contents?
 *)
 plainify[s_String] := StringReplace[s, {
-  RegularExpression["``(.*?)``"] :> "$1",
-  RegularExpression["\\*\\*(.*?)\\*\\*"] :> "$1",
-  RegularExpression["\\?\\?(.*?)\\?\\?"] :> "$1"}]
+	RegularExpression["``(.*?)``"] :> "$1",
+	RegularExpression["\\*\\*(.*?)\\*\\*"] :> "$1",
+	RegularExpression["\\?\\?(.*?)\\?\\?"] :> "$1"}]
 
 
 
@@ -416,24 +416,24 @@ uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]
 
 isFirstError[lints:{_InspectionObject..}, lineNumber_Integer, column_Integer] :=
 Module[{any},
-  any = MemberQ[First /@ {#[[4, Key[Source]]]} ~Join~ Lookup[#[[4]], "AdditionalSources", {}], {lineNumber, column}]& /@ lints;
-  Or @@ any
+	any = MemberQ[First /@ {#[[4, Key[Source]]]} ~Join~ Lookup[#[[4]], "AdditionalSources", {}], {lineNumber, column}]& /@ lints;
+	Or @@ any
 ]
 
 
 
 firstTokenWithSource[node_] :=
-  Catch[
-  Module[{cases},
-    cases = Cases[node, (LeafNode | ErrorNode)[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
-    If[cases != {},
-      Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
-    ];
-    cases = Cases[node, CallNode[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
-    If[cases != {},
-      Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
-    ];
-  ]]
+	Catch[
+	Module[{cases},
+		cases = Cases[node, (LeafNode | ErrorNode)[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
+		If[cases != {},
+			Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
+		];
+		cases = Cases[node, CallNode[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
+		If[cases != {},
+			Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
+		];
+	]]
 
 
 
