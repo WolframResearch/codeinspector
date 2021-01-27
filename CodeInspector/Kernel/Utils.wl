@@ -255,11 +255,11 @@ $invisibleBMPCharacters = {
 	"\.05",
 	"\.06",
 	"\.07",
-	"\.08",
+	"\b",
 	(*\t*)
 	(*\n*)
 	"\.0b",
-	"\.0c",
+	"\f",
 	(*\r*)
 	"\.0e",
 	"\.0f",
@@ -274,53 +274,52 @@ $invisibleBMPCharacters = {
 	"\.18",
 	"\.19",
 	"\.1a",
-	"\.1b",
+	"\[RawEscape]",
 	"\.1c",
 	"\.1d",
 	"\.1e",
 	"\.1f",
+
+	(*
+	DEL
+	*)
 	"\.7f",
+
+	(*
+	ZERO WIDTH NON-JOINER
+	*)
+	"\:200c",
+
+	(*
+	ZERO WIDTH JOINER
+	*)
+	"\:200d",
+
+	(*
+	LINE SEPARATOR
+	*)
+	"\:2028",
+
+	(*
+	WORD JOINER
+	*)
+	"\[NoBreak]",
+
+	(*
+	FUNCTION APPLICATION
+	*)
+	"\:2061",
 
 	(*
 	Virtual BOM character
 	*)
-	"\:e001",
-
-  (*
-  ZERO WIDTH SPACE
-  *)
-  "\:200b",
-
-  (*
-  ZERO WIDTH NON-JOINER
-  *)
-  "\:200c",
-
-  (*
-  ZERO WIDTH JOINER
-  *)
-  "\:200d",
-
-  (*
-  LINE SEPARATOR
-  *)
-  "\:2028",
-
-  (*
-  WORD JOINER
-  *)
-  "\:2060",
-
-  (*
-  FUNCTION APPLICATION
-  *)
-  "\:2061"
+	"\:e001"
 } ~Join~
 
-  (*
-  C1
-  *)
-  CharacterRange["\:0080", "\:009f"] ~Join~
+	(*
+	C1
+	*)
+	CharacterRange["\.80", "\.9f"] ~Join~
 
 	(*
 	Unicode non-characters
@@ -342,62 +341,51 @@ StringLength["\|10ffff"] => 8 (or 2 if coming from FE!)
 *)
 If[$VersionNumber >= 12.0,
 
-  $invisibleNonBMPCharacters = {
-  	(*
-  	Unicode non-characters
-  	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
-  	*)
-  	"\|00fffe",
-  	"\|00ffff",
-  	"\|01fffe",
-  	"\|01ffff",
-  	"\|02fffe",
-  	"\|02ffff",
-  	"\|03fffe",
-  	"\|03ffff",
-  	"\|04fffe",
-  	"\|04ffff",
-  	"\|05fffe",
-  	"\|05ffff",
-  	"\|06fffe",
-  	"\|06ffff",
-  	"\|07fffe",
-  	"\|07ffff",
-  	"\|08fffe",
-  	"\|08ffff",
-  	"\|09fffe",
-  	"\|09ffff",
-  	"\|0afffe",
-  	"\|0affff",
-  	"\|0bfffe",
-  	"\|0bffff",
-  	"\|0cfffe",
-  	"\|0cffff",
-  	"\|0dfffe",
-  	"\|0dffff",
-  	"\|0efffe",
-  	"\|0effff",
-  	"\|0ffffe",
-  	"\|0fffff",
-  	"\|10fffe",
-  	"\|10ffff"
-  } ~Join~
-
-  (*
-  Plane 15 PUA
-  *)
-  CharacterRange["\|0f0000", "\|0ffffd"] ~Join~
-
-  (*
-  Plane 16 PUA
-  *)
-  CharacterRange["\|100000", "\|10fffd"]
-
-  ,
-  (*
-  $VersionNumber < 12.0
-  *)
-  $invisibleNonBMPCharacters = {}
+	$invisibleNonBMPCharacters = {
+		(*
+		Unicode non-characters
+		https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
+		*)
+		"\|00fffe",
+		"\|00ffff",
+		"\|01fffe",
+		"\|01ffff",
+		"\|02fffe",
+		"\|02ffff",
+		"\|03fffe",
+		"\|03ffff",
+		"\|04fffe",
+		"\|04ffff",
+		"\|05fffe",
+		"\|05ffff",
+		"\|06fffe",
+		"\|06ffff",
+		"\|07fffe",
+		"\|07ffff",
+		"\|08fffe",
+		"\|08ffff",
+		"\|09fffe",
+		"\|09ffff",
+		"\|0afffe",
+		"\|0affff",
+		"\|0bfffe",
+		"\|0bffff",
+		"\|0cfffe",
+		"\|0cffff",
+		"\|0dfffe",
+		"\|0dffff",
+		"\|0efffe",
+		"\|0effff",
+		"\|0ffffe",
+		"\|0fffff",
+		"\|10fffe",
+		"\|10ffff"
+	}
+	,
+	(*
+	$VersionNumber < 12.0
+	*)
+	$invisibleNonBMPCharacters = {}
 ]
 
 EndStaticAnalysisIgnore[]
