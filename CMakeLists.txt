@@ -47,7 +47,7 @@ else(CODEPARSER_EXE)
 message(STATUS "Optional tool CODEPARSER_EXE was not found; skipping")
 endif(CODEPARSER_EXE)
 
-set(WL_PACLET_SOURCES
+set(STATIC_WL_PACLET_KERNEL_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AbstractRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/AggregateRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Boxes.wl
@@ -61,7 +61,7 @@ set(WL_PACLET_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
 
-set(WL_PACLET_EXAMPLES
+set(STATIC_WL_PACLET_RESOURCES_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Resources/Examples/Collatz.m
 )
 
@@ -105,36 +105,42 @@ add_custom_command(
 )
 list(APPEND COPIED_WL_PACLET_SOURCES ${COPIED_PACLETINFO})
 
-foreach(SRC ${WL_PACLET_SOURCES})
-	get_filename_component(BARE_SRC ${SRC} NAME)
+#
+# static Kernel sources
+#
+foreach(SRC ${STATIC_WL_PACLET_KERNEL_SOURCES})
+	file(RELATIVE_PATH REL ${PROJECT_SOURCE_DIR}/${PACLET}/Kernel/ ${SRC})
 	add_custom_command(
 		OUTPUT
-			${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
+			${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${REL}
 		COMMAND
 			${CMAKE_COMMAND} -DSRC=${SRC} -DCODEPARSER_EXE=${CODEPARSER_EXE} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -DBUG349779_TIMEOUT=${BUG349779_TIMEOUT} -P ${PROJECT_SOURCE_DIR}/cmake/InspectFile.cmake
 		COMMAND
-			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC}
+			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${REL}
 		DEPENDS
 			${SRC}
 			${PROJECT_SOURCE_DIR}/cmake/InspectFile.cmake
 	)
-	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${BARE_SRC})
+	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${REL})
 endforeach()
 
-foreach(SRC ${WL_PACLET_EXAMPLES})
-	get_filename_component(BARE_SRC ${SRC} NAME)
+#
+# static Resources sources
+#
+foreach(SRC ${STATIC_WL_PACLET_RESOURCES_SOURCES})
+	file(RELATIVE_PATH REL ${PROJECT_SOURCE_DIR}/${PACLET}/Resources/ ${SRC})
 	add_custom_command(
 		OUTPUT
-			${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Examples/${BARE_SRC}
+			${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/${REL}
 		#
-		# Do not inspect examples
+		# Do not inspect Resources sources
 		#
 		COMMAND
-			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Examples/${BARE_SRC}
+			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/${REL}
 		DEPENDS
 			${SRC}
 	)
-	list(APPEND COPIED_WL_PACLET_EXAMPLES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Examples/${BARE_SRC})
+	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/${REL})
 endforeach()
 
 
@@ -145,7 +151,6 @@ endforeach()
 
 set(PACLET_SOURCES
 	${COPIED_WL_PACLET_SOURCES}
-	${COPIED_WL_PACLET_EXAMPLES}
 )
 
 if(LOCAL_BUILD)
@@ -165,13 +170,13 @@ add_custom_target(paclet
 add_custom_command(
 	OUTPUT
 		${PACLET_OUTPUT}
+	COMMAND
+		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/CodeTools/Generate/CreatePacletArchive.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DPACLET=${PACLET} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -DBUG349779_TIMEOUT=${BUG349779_TIMEOUT} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	DEPENDS
 		${PACLET_SOURCES}
 		${PROJECT_SOURCE_DIR}/CodeTools/Generate/CreatePacletArchive.wl
 		${PROJECT_SOURCE_DIR}/CodeTools/Generate/GenerateSources.wl
 		${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
-	COMMAND
-		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/CodeTools/Generate/CreatePacletArchive.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DPACLET=${PACLET} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -DBUG349779_TIMEOUT=${BUG349779_TIMEOUT} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	VERBATIM
 	WORKING_DIRECTORY
 		${PROJECT_SOURCE_DIR}
