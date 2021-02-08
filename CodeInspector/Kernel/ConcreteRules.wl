@@ -35,6 +35,11 @@ BinaryNode[Span, _, _] -> scanBinarySpans,
 TernaryNode[Span, _, _] -> scanTernarySpans,
 *)
 
+(*
+Tags: ImplicitTimesAcrossLines
+*)
+InfixNode[Times, {___, LeafNode[Token`Fake`ImplicitTimes, _, _], LeafNode[Whitespace, _, _]..., LeafNode[Token`Newline, _, _], ___}, _] -> scanImplicitTimesAcrossLines,
+
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
 ErrorNode[_, _, _] -> scanErrorNodes,
@@ -210,7 +215,62 @@ Module[{cst, node, children, data, issues, poss, i, j},
 
 
 
+Attributes[scanImplicitTimesAcrossLines] = {HoldRest}
 
+(*
+This works for all Source conventions
+*)
+scanImplicitTimesAcrossLines[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs, i},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  i = 1;
+
+  While[i <= Length[children],
+
+    While[i <= Length[children] && !MatchQ[children[[i]], LeafNode[Token`Fake`ImplicitTimes, _, _]],
+       i++;
+    ];
+
+    If[i > Length[children],
+      Break[]
+    ];
+
+    implicitTimes = children[[i]];
+
+    i++;
+
+    While[i <= Length[children] && MatchQ[children[[i]], LeafNode[Whitespace, _, _]],
+       i++;
+    ];
+
+    If[i <= Length[children] && MatchQ[children[[i]], LeafNode[Token`Newline, _, _]],
+      AppendTo[srcs, implicitTimes[[3, Key[Source]]]];
+      i++;
+    ];
+  ];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Error",
+      <|Source -> #,
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+                  CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>] |>],
+                  CodeAction["Insert ``;``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
+                  CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+      |>]];
+    )&, srcs];
+
+  issues
+]]
 
 
 

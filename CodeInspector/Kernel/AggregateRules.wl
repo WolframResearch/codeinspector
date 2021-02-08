@@ -50,22 +50,21 @@ PostfixNode[
   KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPostfixs,
 
 
+
 (*
 Tags: ImplicitTimesAcrossLines
 *)
 InfixNode[Times,
-  children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1],
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanImplicitTimes,
+  children_ /;
+    !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
+    !FreeQ[children, blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _] -> scanImplicitTimesBlanks,
 
-(*
-Tags: ImplicitTimesAcrossLines
-*)
-InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-                                !FreeQ[children, blankPat |
-                                                  BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _] -> scanImplicitTimesBlanks,
+InfixNode[Times,
+  children_ /;
+    !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
+    !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
 
-InfixNode[Times, children_ /; !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-                                !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
+
 
 InfixNode[Dot, _, _] -> scanDots,
 
@@ -336,78 +335,6 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
         ConfidenceLevel -> 0.85
       |>]];
     )&, lowConfSrcs];
-
-  issues
-]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Attributes[scanImplicitTimes] = {HoldRest}
-
-scanImplicitTimes[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, pairs, srcs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  pairs = Partition[children, 2, 1];
-
-  Do[
-
-    If[!MatchQ[p, {_, LeafNode[Token`Fake`ImplicitTimes, _, _]} |
-                    {LeafNode[Token`Fake`ImplicitTimes, _, _], _}],
-      Continue[]
-    ];
-
-    Switch[p,
-      {n_, i:LeafNode[Token`Fake`ImplicitTimes, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
-      ,
-      {i:LeafNode[Token`Fake`ImplicitTimes, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[1, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Error",
-      <|Source -> #,
-        ConfidenceLevel -> 0.95,
-        CodeActions -> {
-                  CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>] |>],
-                  CodeAction["Insert ``;``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
-                  CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
-      |>]];
-    )&, srcs];
 
   issues
 ]]
