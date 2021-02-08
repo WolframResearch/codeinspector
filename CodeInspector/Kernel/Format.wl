@@ -26,6 +26,7 @@ LintAllCharacter
 LintNullCharacter
 LintOneCharacter
 LintTimesCharacter
+LintSpaceTimesCharacter
 LintExpectedOperandCharacter
 LintAllCloseCharacter
 LintAllOneCharacter
@@ -800,6 +801,9 @@ Format[LintContinuationCharacter, OutputForm] := "\\"
 
 Format[LintTimesCharacter, StandardForm] := "\[Times]"
 Format[LintTimesCharacter, OutputForm] := "x"
+
+Format[LintSpaceTimesCharacter, StandardForm] := " \[Times]"
+Format[LintSpaceTimesCharacter, OutputForm] := " x"
 
 Format[LintOneCharacter, StandardForm] := "1"
 Format[LintOneCharacter, OutputForm] := "1"

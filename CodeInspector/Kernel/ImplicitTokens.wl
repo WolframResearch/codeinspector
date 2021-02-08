@@ -362,22 +362,23 @@ mergeCharacters[{LintAllCharacter}] = LintAllCharacter
 mergeCharacters[{LintNullCharacter}] = LintNullCharacter
 mergeCharacters[{LintOneCharacter}] = LintOneCharacter
 mergeCharacters[{LintTimesCharacter}] = LintTimesCharacter
+mergeCharacters[{LintSpaceTimesCharacter}] = LintSpaceTimesCharacter
 mergeCharacters[{LintExpectedOperandCharacter}] = LintExpectedOperandCharacter
 
 mergeCharacters[{"(", "("}] = LintOpenOpenCharacter
 mergeCharacters[{"(", LintOneCharacter}] = LintOpenOneCharacter
 mergeCharacters[{")", ")"}] = LintCloseCloseCharacter
 mergeCharacters[{")", LintAllCharacter}] = LintAllCloseCharacter
-mergeCharacters[{")", LintTimesCharacter}] = LintCloseTimesCharacter
+mergeCharacters[{")", LintTimesCharacter | LintSpaceTimesCharacter}] = LintCloseTimesCharacter
 mergeCharacters[{")", LintExpectedOperandCharacter}] = LintExpectedOperandCloseCharacter
-mergeCharacters[{LintAllCharacter, LintTimesCharacter}] = LintAllTimesCharacter
+mergeCharacters[{LintAllCharacter, LintTimesCharacter | LintSpaceTimesCharacter}] = LintAllTimesCharacter
 mergeCharacters[{LintAllCharacter, LintOneCharacter}] = LintAllOneCharacter
-mergeCharacters[{LintOneCharacter, LintTimesCharacter}] = LintTimesOneCharacter
-mergeCharacters[{LintExpectedOperandCharacter, LintTimesCharacter}] = LintExpectedOperandTimesCharacter
+mergeCharacters[{LintOneCharacter, LintTimesCharacter | LintSpaceTimesCharacter}] = LintTimesOneCharacter
+mergeCharacters[{LintExpectedOperandCharacter, LintTimesCharacter | LintSpaceTimesCharacter}] = LintExpectedOperandTimesCharacter
 mergeCharacters[{"(", LintExpectedOperandCharacter}] = LintOpenExpectedOperandCharacter
 
-mergeCharacters[{")", LintOneCharacter, LintTimesCharacter}] = LintCloseTimesOneCharacter
-mergeCharacters[{LintAllCharacter, LintOneCharacter, LintTimesCharacter}] = LintAllTimesOneCharacter
+mergeCharacters[{")", LintOneCharacter, LintTimesCharacter | LintSpaceTimesCharacter}] = LintCloseTimesOneCharacter
+mergeCharacters[{LintAllCharacter, LintOneCharacter, LintTimesCharacter | LintSpaceTimesCharacter}] = LintAllTimesOneCharacter
 
 
 (*
@@ -474,6 +475,10 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
   *)
   times = Map[resolveInfix[#, lines]&, times];
 
+  If[$Debug,
+    Print["times after resolveInfix: ", times];
+  ];
+
   ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
   alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
   nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
@@ -517,6 +522,8 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
 (*
 
 BestImplicitTimesPlacement[span_] is something like {{startLine_, startCol_}, {endLine_, endCol_}}
+
+returns {LintTimesCharacter, line, column}
 *)
 resolveInfix[BestImplicitTimesPlacement[span_], lines:{___String}] :=
 Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candidates, edges, offset, intersection,
@@ -536,8 +543,11 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
       {LintTimesCharacter, span[[1, 1]], span[[1, 2]]}
     ,
     span[[1, 2]] + 1 == span[[2, 2]],
-      (* optimization case to avoid calling TokenizeString: only 1 space between *)
-      {LintTimesCharacter, span[[1, 1]], span[[1, 2]]}
+      (*
+      optimization case to avoid calling TokenizeString: only 1 space between
+      Use LintSpaceTimesCharacter here to display a space before the \[Times] for better appearance
+      *)
+      {LintSpaceTimesCharacter, span[[1, 1]], span[[1, 2]]}
     ,
     True,
       (* do actual work to figure out best placement *)
@@ -624,18 +634,17 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
 
       Which[
         Length[goals] == 1,
-        (* only 1 possibility *)
-        goalCol = goals[[1]];
+          (* only 1 possibility *)
+          goalCol = goals[[1]];
         ,
         intersection = Intersection[goals, spaceRanges];
-        intersection =!= {}
-        ,
-        (* always prefer spaces over gaps or edges *)
-        goalCol = intersection[[1]];
+        intersection =!= {},
+          (* always prefer spaces over gaps or edges *)
+          goalCol = intersection[[1]];
         ,
         True,
-        (* only comments; arbitrarily choose one *)
-        goalCol = goals[[1]];
+          (* only comments; arbitrarily choose one *)
+          goalCol = goals[[1]];
       ];
 
       {LintTimesCharacter, goalLine, goalCol}
