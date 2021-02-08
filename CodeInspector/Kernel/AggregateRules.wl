@@ -64,6 +64,7 @@ InfixNode[Times,
     !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
     !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
 
+BinaryNode[Set | SetDelayed | UpSetDelayed, {InfixNode[Times, {_, LeafNode[Token`Fake`ImplicitTimes, _, _], _}, _], _, _}, _] -> scanSetImplicitTimes,
 
 
 InfixNode[Dot, _, _] -> scanDots,
@@ -530,6 +531,39 @@ Module[{agg, node, data, issues, children, pairs, srcs},
   issues
 ]
 
+
+
+Attributes[scanSetImplicitTimes] = {HoldRest}
+
+scanSetImplicitTimes[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, head, implicitTimes, src, lhs, lhsChildren},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  lhs = children[[1]];
+  lhsChildren = lhs[[2]];
+
+  implicitTimes = lhsChildren[[2]];
+
+  src = implicitTimes[[3, Key[Source]]];
+
+  issues = {};
+
+  AppendTo[issues, InspectionObject["ImplicitTimesInSet", "Suspicious implicit ``Times`` in " <> SymbolName[head] <> ".", "Error",
+    <|Source -> src,
+      ConfidenceLevel -> 0.95,
+      CodeActions -> {
+                CodeAction["Insert ``*``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Star, "*", <||>] |>],
+                CodeAction["Insert ``;``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
+                CodeAction["Insert ``,``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+    |>]
+  ];
+
+  issues
+]
 
 
 
