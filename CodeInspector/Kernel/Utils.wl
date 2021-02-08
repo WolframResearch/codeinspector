@@ -38,9 +38,13 @@ lexOrderingForLists
 
 
 
+scopingDataObjectToLints
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
+Needs["CodeParser`Scoping`"] (* for scopingDataObject *)
 Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
@@ -436,6 +440,56 @@ lexOrderingForLists[a_, {}] := -1
 lexOrderingForLists[a_, b_] :=
   Order[Take[a, 1], Take[b, 1]] /. 
     0 :> lexOrderingForLists[Drop[a, 1], Drop[b, 1]]
+
+
+
+scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope : "Module" | "DynamicModule"}, modifiers_]] :=
+Module[{text},
+	
+	text = lastScope <> " " <> "variable";
+	
+	(*
+	create separate lints for Unused and Shadowed
+	*)
+
+	modifiers /. {
+		"unused" -> InspectionObject["UnusedModuleVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+		"shadowed" -> InspectionObject["ShadowedModuleVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+		"error" -> InspectionObject["ModuleVariableError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
+	}
+]
+
+scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope : "Block" | "Internal`InheritedBlock"}, modifiers_]] :=
+Module[{text},
+	
+	text = lastScope <> " " <> "variable";
+	
+	(*
+	create separate lints for Unused and Shadowed
+	*)
+
+	modifiers /. {
+		"unused" -> InspectionObject["UnusedBlockVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+		"shadowed" -> InspectionObject["ShadowedBlockVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+		"error" -> InspectionObject["BlockVariableError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
+	}
+]
+
+scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope_}, modifiers_]] :=
+Module[{text},
+	
+	text = lastScope <> " " <> "parameter";
+	
+	(*
+	create separate lints for Unused and Shadowed
+	*)
+
+	modifiers /. {
+		"unused" -> InspectionObject["UnusedParameter", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+		"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+		"error" -> InspectionObject["ParameterError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
+	}
+]
 
 
 

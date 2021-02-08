@@ -61,6 +61,7 @@ Begin["`Private`"]
 
 Needs["CodeParser`"]
 Needs["CodeParser`Abstract`"]
+Needs["CodeParser`Scoping`"]
 Needs["CodeParser`Utils`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
@@ -68,6 +69,7 @@ Needs["CodeInspector`Boxes`"]
 Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Summarize`"]
+Needs["CodeInspector`Utils`"]
 
 Needs["PacletManager`"] (* for PacletInformation *)
 
@@ -342,7 +344,8 @@ CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start,
-  ignoredNodes, beginStaticAnalysisIgnoreNodePoss, endPos, siblingsPos, siblings, candidate, endFound},
+  ignoredNodes, beginStaticAnalysisIgnoreNodePoss, endPos, siblingsPos, siblings, candidate, endFound,
+  scopingData, scopingLints},
 
   If[$Debug,
     Print["CodeInspectCST"];
@@ -513,6 +516,23 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     $AbstractLintProgress = Floor[100 * prog / Length[abstractRules]];
     ], abstractRules];
   $AbstractLintTime = Now - start;
+
+  
+  (*
+  scoping data
+  If there are any Abstract rules, then also doing scoping rules
+  *)
+  scopingData = ScopingData[ast];
+
+  (*
+  Filter those that have non-empty modifiers
+  *)
+  scopingData = Cases[scopingData, scopingDataObject[_, _, {_, ___}]];
+
+  scopingLints = scopingDataObjectToLints /@ scopingData;
+
+  lints = lints ~Join~ scopingLints;
+
 
   lints = Flatten[lints];
 

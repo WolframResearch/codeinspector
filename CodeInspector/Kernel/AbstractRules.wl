@@ -228,12 +228,6 @@ CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], rhs_ /;
 
 
 
-(*
-Do a basic scan for Patterns in rhs here, this is just a preliminary scan
-*)
-CallNode[LeafNode[Symbol, "RuleDelayed" | "SetDelayed", _], {lhs_, rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]]}, _] -> scanRHSPatterns,
-
-
 CallNode[LeafNode[Symbol, "OptionsPattern", _], {}, _] -> scanOptionsPattern,
 
 
@@ -1001,7 +995,7 @@ Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, selected, params, issues, vars, usedSymbols, unusedParams, counts,
+ Module[{ast, node, children, data, selected, params, issues, vars, counts,
   ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString, errs, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1104,18 +1098,6 @@ Catch[
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
   ];
 
-  usedSymbols = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
-  unusedParams = Select[vars, Function[{c}, !MemberQ[usedSymbols, ToFullFormString[c]]]];
-
-  Scan[
-    AppendTo[issues, InspectionObject["UnusedVariables", "Unused variable in ``Module``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
-      #[[3]],
-      CodeActions -> { CodeAction["Delete", DeleteNode, <|Source->#[[3, Key[Source]]]|>]}, ConfidenceLevel -> 1.0 |> ]]&
-      ,
-      unusedParams
-  ];
-
-
 
   (*
   Now scan for leaked variables from String functions
@@ -1161,7 +1143,7 @@ Attributes[scanDynamicModules] = {HoldRest}
 
 scanDynamicModules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, params, issues, vars, used, unusedParams, counts, errs, srcs},
+Module[{ast, node, children, data, selected, params, issues, vars, counts, errs, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1265,15 +1247,6 @@ Module[{ast, node, children, data, selected, params, issues, vars, used, unusedP
     ];
   ];
 
-  used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
-  unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
-
-  Scan[AppendTo[issues, InspectionObject["UnusedVariables", "Unused variable in ``DynamicModule``: " <>
-    format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 1.0|>]]&
-    ,
-    unusedParams
-  ];
-
   issues
 ]]
 
@@ -1291,7 +1264,7 @@ Attributes[scanWiths] = {HoldRest}
 scanWiths[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
-  usedBody, usedAtVariousScopes, unusedParams, counts, errs, srcs},
+  counts, errs, srcs},
   
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1413,25 +1386,6 @@ This may be ok if ``With`` is handled programmatically.", "Error", <|#[[2]], Con
     ,
     vars
   ];
-  
-
-  usedBody = ToFullFormString /@ Cases[Last[children], LeafNode[Symbol, _, _], {0, Infinity}];
-
-  usedAtVariousScopes = FoldList[Join[#1, ToFullFormString /@ Cases[#2, LeafNode[Symbol, _, _], {0, Infinity}]]&, usedBody, vals // Reverse] // Reverse;
-
-  unusedParams = Function[{vars1, useds},
-    Select[vars1, Function[{c}, !MemberQ[useds, ToFullFormString[c]]]]] @@@ Transpose[{vars1, Most[usedAtVariousScopes]}];
-
-  unusedParams = Flatten[unusedParams];
-
-  Scan[
-    AppendTo[issues,
-      InspectionObject["UnusedVariables", "Unused variable in ``With``: " <> format[ToFullFormString[#]] <> ".", "Warning", <|
-        #[[3]],
-        ConfidenceLevel -> 1.0|>]]&
-    ,
-    unusedParams
-  ];
 
   issues
 ]]
@@ -1443,7 +1397,7 @@ Attributes[scanBlocks] = {HoldRest}
 scanBlocks[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, varsWithoutSet,
-  toDelete, vars, counts, errs, srcs, used, unusedParams},
+  vars, counts, errs, srcs},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1535,53 +1489,8 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
       <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
   ];
 
-  (*
-  Give unused Block variables its own tag
-  *)
-
-  used = ToFullFormString /@ Cases[children[[2]], LeafNode[Symbol, _, _], {0, Infinity}];
-  unusedParams = Select[vars, Function[{c}, !MemberQ[used, ToFullFormString[c]]]];
-
-  (*
-  Now we will use heuristics to pare down the list of unused variables in Block
-  *)
-
-  (*
-  if you have Block[{x = 1}, b]  then it is probably on purpose
-  i.e., setting x to a value shows intention
-  *)
-  toDelete = varsWithSet;
-  unusedParams = Complement[unusedParams, toDelete];
-
-  (*
-  Blocking fully-qualified symbol is probably on purpose
-  *)
-  toDelete = Select[unusedParams, fullyQualifiedSymbolQ];
-  unusedParams = Complement[unusedParams, toDelete];
-
-  (*
-  after removing fully-qualified symbols, now scan for lowercase symbols and only let those through
-
-  on the assumption that lowercase symbols will be treated as "local" variables
-  *)
-  unusedParams = Select[unusedParams, lowercaseSymbolQ];
-  
-  Scan[AppendTo[issues, InspectionObject["UnusedBlockVariables", "Unused variable in " <> format[head["String"]] <> ": " <>
-    format[ToFullFormString[#]] <> ".", "Warning", <|#[[3]], ConfidenceLevel -> 0.90|>]]&, unusedParams];
-
   issues
 ]]
-
-(*
-if there is a ` anywhere in the symbol, then assume it is fully-qualified
-*)
-fullyQualifiedSymbolQ[LeafNode[Symbol, s_, _]] :=
-  StringContainsQ[s, "`"]
-
-lowercaseSymbolQ[LeafNode[Symbol, s_, _]] :=
-  StringMatchQ[s, RegularExpression["[a-z].*"]]
-
-
 
 
 
@@ -2280,53 +2189,6 @@ Module[{ast, node, children, data, issues},
 ]]
 
 
-
-
-
-
-
-
-
-Attributes[scanRHSPatterns] = {HoldRest}
-
-scanRHSPatterns[pos_List, astIn_] :=
-Catch[
-Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
-  rhsOccurringPatterns, fullForm, rhsPatterns, rhsPatternNames, issues},
-
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-
-  lhs = children[[1]];
-  rhs = children[[2]];
-  lhsPatterns = Cases[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
-  rhsPatterns = Cases[rhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _], {0, Infinity}];
-
-  lhsPatternNames = #[[2, 1]]& /@ lhsPatterns;
-  rhsPatternNames = #[[2, 1]]& /@ rhsPatterns;
-
-  Do[
-    
-    fullForm = ToFullFormString[lhsPatternName];
-
-    rhsOccurringPatterns = Select[rhsPatternNames, (ToFullFormString[#] == fullForm)&];
-
-    If[!empty[rhsOccurringPatterns],
-      AppendTo[issues, InspectionObject["PatternRule", "The same named pattern occurs on lhs and rhs.", "Error", <|
-        Source -> lhsPatternName[[3, Key[Source]]],
-        "AdditionalSources" -> rhsOccurringPatterns[[All, 3, Key[Source]]],
-        ConfidenceLevel -> 0.8 |>]]
-    ];
-    ,
-    {lhsPatternName, lhsPatternNames}
-  ];
-
-  issues
-]]
 
 
 
