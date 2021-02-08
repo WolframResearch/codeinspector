@@ -142,13 +142,47 @@ Module[{sevColor, srcs, processedBox},
 
 
 
-replaceBox[box_, src_, sevColor_] :=
-Catch[
-Module[{processedBox, srcInter, extracted},
+replaceBox[box_, srcIn_, sevColor_] :=
+Module[{src, processedBox, srcInter, extracted},
 
-  If[!MatchQ[Last[src], Intra[___]],
+  src = srcIn;
+
+  Switch[src,
+
+    {___, Intra[___]},
       (*
-      There is no Intra in the position, so we can just use ReplacePart
+      Intra
+      *)
+      srcInter = Most[src];
+
+      extracted = Extract[box, {srcInter}][[1]];
+
+      processedBox = 
+        ReplacePart[
+          box, srcInter -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+
+      processedBox
+    ,
+    After[_],
+      (*
+      After
+
+      Just use the previous
+      *)
+
+      src = src[[1]];
+
+      extracted = Extract[box, src];
+
+      processedBox = 
+        ReplacePart[
+          box, src -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+
+      processedBox
+    ,
+    _,
+      (*
+      There is no Intra | After in the position, so we can just use ReplacePart
       *)
       
       extracted = Extract[box, src];
@@ -157,22 +191,9 @@ Module[{processedBox, srcInter, extracted},
         ReplacePart[
           box, src -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
 
-      Throw[processedBox]
-  ];
-
-  (*
-  There is Intra in the position
-  *)
-  srcInter = Most[src];
-
-  extracted = Extract[box, {srcInter}][[1]];
-
-  processedBox = 
-    ReplacePart[
-      box, srcInter -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
-
-  processedBox
-]]
+      processedBox
+  ]
+]
 
 
 
