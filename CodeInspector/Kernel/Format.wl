@@ -237,15 +237,32 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggest
 
 				file = data["File"];
 
-				line = data[[Key[Source], 1, 1]];
-				col = data[[Key[Source], 1, 2]];
+				If[FileExistsQ[file],
 
-				items = With[{file = file, line = line, col = col}, {
-					"\"" <> ToString[tag] <> "\"" :> Null,
-					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
-					Delimiter,
-					"Open in editor" :> OpenInEditor[file, line, col] }]
+					line = data[[Key[Source], 1, 1]];
+					col = data[[Key[Source], 1, 2]];
 
+					items = With[{file = file, line = line, col = col}, {
+						"\"" <> ToString[tag] <> "\"" :> Null,
+						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
+						Delimiter,
+						"Open in editor" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
+
+					,
+
+					(*
+					May be doing something like:
+					ImportString["If[a, b, b]", {"WL", "CodeInspections"}]
+
+					Technically, CodeInspect was called with File[file], but that was a temp file and it is now deleted
+
+					So do not show "Open in editor"
+					*)
+
+					items = {
+						"\"" <> ToString[tag] <> "\"" :> Null,
+						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+				]
 				,
 
 				(*
@@ -255,8 +272,13 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggest
 				items = {
 					"\"" <> ToString[tag] <> "\"" :> Null,
 					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-			];
+			]
 			,
+
+			(*
+			May not have been called with a file
+			*)
+
 			items = {
 				"\"" <> ToString[tag] <> "\"" :> Null,
 				"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }

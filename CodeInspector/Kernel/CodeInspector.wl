@@ -115,10 +115,15 @@ code can be a string, a file, or a list of bytes."
 
 Options[CodeInspect] = {
   PerformanceGoal -> "Speed",
+
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
+  
+  "Editor" -> Automatic,
+
   CharacterEncoding -> "UTF-8",
+  
   (*
   Pass through to CodeConcreteParse
   *)
@@ -133,12 +138,14 @@ $fileByteCountMaxLimit = 3*^6
 
 CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
-Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules},
+Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules, editor},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
+
+  editor = OptionValue["Editor"];
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -190,6 +197,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
   lints = Table[
     data = lint[[4]];
     data["File"] = full;
+    data["Editor"] = editor;
     lint[[4]] = data;
     lint
     ,

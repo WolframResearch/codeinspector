@@ -8,6 +8,10 @@ $Editor
 Begin["`Private`"]
 
 
+
+OpenInEditor::fail = "Cannot open file in editor: `1` (`2`)"
+
+
 (*
 
 For "Visual Studio Code":
@@ -35,71 +39,112 @@ needed
 *)
 
 
-OpenInEditor[file_String] :=
-Module[{},
-	Switch[{$InterfaceEnvironment, $Editor},
+Options[OpenInEditor] = {
+	"Editor" -> Automatic
+}
+
+
+OpenInEditor[file_String, OptionsPattern[]] :=
+Module[{editor, res},
+
+	editor = OptionValue["Editor"];
+	If[editor === Automatic,
+		editor = $Editor
+	];
+
+	Switch[{$InterfaceEnvironment, editor},
 		{"Macintosh", "Sublime Text"},
 			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file]
-			,
+		,
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file]
-			,
+		,
 		{"Macintosh", "Eclipse"},
 			Run["open -a /Applications/Eclipse.app " <> file]
-			,
+		,
 		{_, "FrontEnd"},
 			(* Editor "FrontEnd" is supported in all environments. *)
-			NotebookOpen[file]
-			,
+			res = NotebookOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "FrontEnd"]
+			];
+		,
 		_,
 			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
-			SystemOpen[file]
+			res = SystemOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "SystemOpen"]
+			];
 	]
 ]
 
 
-OpenInEditor[file_String, line_Integer] :=
-Module[{},
-	Switch[{$InterfaceEnvironment, $Editor},
+OpenInEditor[file_String, line_Integer, OptionsPattern[]] :=
+Module[{editor, res},
+
+	editor = OptionValue["Editor"];
+	If[editor === Automatic,
+		editor = $Editor
+	];
+
+	Switch[{$InterfaceEnvironment, editor},
 		{"Macintosh", "Sublime Text"},
 			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line]]
-			,
+		,
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line]]
-			,
+		,
 		{"Macintosh", "Eclipse"},
 			Run["open -a /Applications/Eclipse.app " <> file]
-			,
+		,
 		{_, "FrontEnd"},
 			(* Editor "FrontEnd" is supported in all environments. *)
-			NotebookOpen[file]
-			,
+			res = NotebookOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "FrontEnd"]
+			];
+		,
 		_,
 			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
-			SystemOpen[file]
+			res = SystemOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "SystemOpen"]
+			];
 	]
 ]
 
 
-OpenInEditor[file_String, line_Integer, col_Integer] :=
-Module[{},
-	Switch[{$InterfaceEnvironment, $Editor},
+OpenInEditor[file_String, line_Integer, col_Integer, OptionsPattern[]] :=
+Module[{editor, res},
+
+	editor = OptionValue["Editor"];
+	If[editor === Automatic,
+		editor = $Editor
+	];
+
+	Switch[{$InterfaceEnvironment, editor},
 		{"Macintosh", "Sublime Text"},
 			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-			,
+		,
 		{"Macintosh", "Visual Studio Code"},
 			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-			,
+		,
 		{"Macintosh", "Eclipse"},
 			Run["open -a /Applications/Eclipse.app " <> file]
-			,
+		,
 		{_, "FrontEnd"},
 			(* Editor "FrontEnd" is supported in all environments. *)
-			NotebookOpen[file]
-			,
+			res = NotebookOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "FrontEnd"]
+			];
+		,
 		_,
 			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
-			SystemOpen[file]
+			res = SystemOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "SystemOpen"]
+			];
 	]
 ]
 
