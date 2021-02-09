@@ -141,9 +141,24 @@ Module[{processedBox},
   processedBox = processedBox /. s_String :> StringReplace[s, $characterReplacementRules];
 
   Interpretation[
-    Framed[Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
+    (*
+    Framed
+    Background color
+
+    looks better when calling CodeInspectSummarize directly and you want a formatted object thing
+    *)
+    (* Framed[Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5] *)
+    
+    (*
+    no frame
+    no background color
+
+    looks better for duplicating the input and marking up in an AttachedCell underneath
+    *)
+    Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0]
     ,
-    processedBox]
+    processedBox
+  ]
 ]
 
 
