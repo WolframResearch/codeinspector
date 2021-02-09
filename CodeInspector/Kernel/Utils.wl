@@ -33,6 +33,11 @@ isFirstError
 firstTokenWithSource
 
 
+
+lexOrderingForLists
+
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -422,6 +427,15 @@ firstTokenWithSource[node_] :=
 			Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
 		];
 	]]
+
+
+
+lexOrderingForLists[{}, {}] := 0
+lexOrderingForLists[{}, b_] := 1
+lexOrderingForLists[a_, {}] := -1
+lexOrderingForLists[a_, b_] :=
+  Order[Take[a, 1], Take[b, 1]] /. 
+    0 :> lexOrderingForLists[Drop[a, 1], Drop[b, 1]]
 
 
 

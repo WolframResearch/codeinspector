@@ -94,9 +94,31 @@ Catch[
     Throw[lints]
   ];
 
+  (*
+  First, expand any AdditionalSources into their own "lints"
+  *)
+  lints = Flatten[expandLint /@ lints];
+
+  (*
+  Then sort
+
+  given the srcs {{1, 3}, {1, 3, 1, 1}}
+
+  it is important to process {1, 3, 1, 1} first because adding the StyleBox changes the shape of box, so must work from more-specific to less-specific positions
+
+  For example, the boxes of this expression:
+  f[%[[]]]
+
+  which are:
+  RowBox[{"f", "[", RowBox[{"%", "[", RowBox[{"[", "]"}], "]"}], "]"}]
+
+  give lints with positions {1, 3} and {1, 3, 1, 1}
+  *)
+  lints = ReverseSortBy[lints, #[[4, Key[Source]]]&, lexOrderingForLists];
+
   processedBox = box;
   Do[
-    processedBox = processBox[processedBox, lint];
+    processedBox = replaceBox[processedBox, lint];
     ,
     {lint, lints}
   ];
@@ -126,26 +148,19 @@ Module[{processedBox},
 
 
 
+(*
+Expand any AdditionalSources into their own lints
+*)
+expandLint[lint_] :=
+  InspectionObject[lint[[1]], lint[[2]], lint[[3]], <|Source -> #|>]& /@ {lint[[4, Key[Source]]]} ~Join~ Lookup[lint[[4]], "AdditionalSources", {}]
 
 
 
-processBox[box_, lint_] :=
-Module[{sevColor, srcs, processedBox},
+replaceBox[box_, lint_] :=
+Module[{src, sevColor, processedBox, srcInter, extracted},
+
+  src = lint[[4, Key[Source]]];
   sevColor = severityColor[{lint}];
-  srcs = {lint[[4, Key[Source] ]]} ~Join~ Lookup[lint[[4]], "AdditionalSources", {}];
-
-  processedBox = box;
-  Scan[(processedBox = replaceBox[processedBox, #, sevColor])&, srcs];
-
-  processedBox
-]
-
-
-
-replaceBox[box_, srcIn_, sevColor_] :=
-Module[{src, processedBox, srcInter, extracted},
-
-  src = srcIn;
 
   Switch[src,
 
