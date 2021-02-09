@@ -307,7 +307,7 @@ UnusedVariables
 TestMatch[
 	CodeInspect[" Module[{a}, b] "]
 	,
-	{InspectionObject["UnusedVariables", _, _, _]}
+	{InspectionObject["UnusedModuleVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-A3S7S9"
 ]
@@ -315,7 +315,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Module[{a}, b] "]
 	,
-	{InspectionObject["UnusedVariables", _, _, _]}
+	{InspectionObject["UnusedModuleVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-V4X7X0"
 ]
@@ -381,7 +381,7 @@ UnusedVariables
 TestMatch[
 	CodeInspect[" DynamicModule[{a}, b] "]
 	,
-	{InspectionObject["UnusedVariables", _, _, _]}
+	{InspectionObject["UnusedModuleVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-I7M0H0"
 ]
@@ -453,7 +453,7 @@ UnusedVariables
 TestMatch[
 	CodeInspect[" With[{a=2}, b] "]
 	,
-	{InspectionObject["UnusedVariables", _, _, _]}
+	{InspectionObject["UnusedParameter", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-Q7Z2V1"
 ]
@@ -522,7 +522,7 @@ UnusedBlockVariables
 TestMatch[
 	CodeInspect[" Block[{a}, b] "]
 	,
-	{InspectionObject["UnusedBlockVariables", _, _, _]}
+	{InspectionObject["UnusedBlockVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-Q7K3O8"
 ]
