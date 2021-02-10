@@ -45,7 +45,7 @@ CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules,
-  processedBox, cst},
+  processedBox, cst, expandedLints},
 
  lints = lintsIn;
 
@@ -97,7 +97,7 @@ Catch[
   (*
   First, expand any AdditionalSources into their own "lints"
   *)
-  lints = Flatten[expandLint /@ lints];
+  expandedLints = Flatten[expandLint /@ lints];
 
   (*
   Then sort
@@ -114,15 +114,19 @@ Catch[
 
   give lints with positions {1, 3} and {1, 3, 1, 1}
   *)
-  lints = ReverseSortBy[lints, #[[4, Key[Source]]]&, lexOrderingForLists];
+  expandedLints = ReverseSortBy[expandedLints, #[[4, Key[Source]]]&, lexOrderingForLists];
 
   processedBox = box;
   Do[
     processedBox = replaceBox[processedBox, lint];
     ,
-    {lint, lints}
+    {lint, expandedLints}
   ];
 
+  (*
+  Keep the original list of lints with "AdditionalSources"
+  i.e. do not use expandedLints here
+  *)
   InspectedBoxObject[processedBox, lints]
 ]]
 
