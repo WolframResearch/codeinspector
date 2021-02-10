@@ -162,9 +162,28 @@ Catch[
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
 
   If[lintedLines == {},
-    lintedLines = {InspectedLineObject[{"No issues found at ConfidenceLevel ", confidence}]}
+    lintedLines = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{Text["No issues."]}]
+    }
     ,
-    lintedLines = {InspectedLineObject[{"Found the following issues at ConfidenceLevel ", confidence}]} ~Join~ lintedLines
+    lintedLines = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }]
+    } ~Join~ lintedLines
   ];
 
   InspectedFileObject[full, lintedLines]
@@ -238,9 +257,28 @@ Catch[
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
 
   If[lintedLines == {},
-    lintedLines = {InspectedLineObject[{"No issues found at ConfidenceLevel ", confidence}]}
+    lintedLines = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{Text["No issues."]}]
+    }
     ,
-    lintedLines = {InspectedLineObject[{"Found the following issues at ConfidenceLevel ", confidence}]} ~Join~ lintedLines
+    lintedLines = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }]
+    } ~Join~ lintedLines
   ];
 
   InspectedStringObject[string, lintedLines]
@@ -299,9 +337,28 @@ Catch[
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
 
   If[lintedLines == {},
-    lintedLines = {InspectedLineObject[{"No issues found at ConfidenceLevel ", confidence}]}
+    lintedLines = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{Text["No issues."]}]
+    }
     ,
-    lintedLines = {InspectedLineObject[{"Found the following issues at ConfidenceLevel ", confidence}]} ~Join~ lintedLines
+    lintedLines = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }]
+    } ~Join~ lintedLines
   ];
 
   InspectedBytesObject[bytes, lintedLines]

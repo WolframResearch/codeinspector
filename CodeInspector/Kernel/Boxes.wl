@@ -41,7 +41,7 @@ lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
 CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
- Module[{lints, lineNumberExclusions, lineHashExclusions, tagExclusions, severityExclusions,
+ Module[{lints, tagExclusions, severityExclusions,
   confidence, performanceGoal, concreteRules, aggregateRules, abstractRules,
   processedBox, cst, expandedLints},
 
@@ -63,16 +63,6 @@ Catch[
  severityExclusions = OptionValue["SeverityExclusions"];
  If[severityExclusions === None,
   severityExclusions = {}
- ];
-
- lineNumberExclusions = OptionValue["LineNumberExclusions"];
- If[lineNumberExclusions === None,
-  lineNumberExclusions = {}
- ];
-
- lineHashExclusions = OptionValue["LineHashExclusions"];
- If[lineHashExclusions === None,
-  lineHashExclusions = {}
  ];
 
  confidence = OptionValue[ConfidenceLevel];
@@ -123,8 +113,35 @@ Catch[
 
   (*
   Keep the original list of lints with "AdditionalSources"
+
   i.e. do not use expandedLints here
   *)
+
+  If[lints == {},
+    lints = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{Text["No issues."]}]
+    }
+    ,
+    lints = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }]
+    } ~Join~ lints
+  ];
+
   InspectedBoxObject[processedBox, lints]
 ]]
 
@@ -149,8 +166,10 @@ Module[{processedBox},
       no background color
 
       looks better for duplicating the input and marking up in an AttachedCell underneath
+
+      delete any textual InspectedLineObject
       *)
-      Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0]
+      Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ DeleteCases[lints, _InspectedLineObject], Left, 0]
       ,
       processedBox
     ]
