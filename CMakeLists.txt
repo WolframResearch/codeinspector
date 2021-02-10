@@ -82,6 +82,14 @@ CheckWolframKernel()
 CheckPacletInfo()
 
 
+#
+# ForceVersionInstall was added in 12.1
+#
+if(NOT ${VERSION_NUMBER} GREATER_EQUAL 1210)
+message(WARNING "VERSION_NUMBER is below 1210; installing paclets via CMake may not work.")
+endif()
+
+
 file(MAKE_DIRECTORY
 	${PROJECT_BINARY_DIR}/paclet/${PACLET}
 )
