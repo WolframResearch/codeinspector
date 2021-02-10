@@ -12,8 +12,6 @@ Needs["CodeInspector`Utils`"]
 
 
 
-
-
 CodeInspectBoxSummarize::usage = "CodeInspectBoxSummarize[box] returns a box inspection summary object."
 
 Options[CodeInspectBoxSummarize] = {
@@ -26,7 +24,7 @@ Options[CodeInspectBoxSummarize] = {
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {},
-  ConfidenceLevel :> $ConfidenceLevel
+  ConfidenceLevel :> $DefaultConfidenceLevel
 }
 
 (*

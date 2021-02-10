@@ -4,6 +4,8 @@ ListifyLine
 
 
 
+$DefaultConfidenceLevel
+
 $DefaultTagExclusions
 
 $DefaultSeverityExclusions
@@ -58,7 +60,7 @@ $EnvironBuffer = 1
 
 
 
-$ConfidenceLevel = 0.95
+$DefaultConfidenceLevel = 0.95
 
 $MaxConfidenceLevel = 1.0
 
@@ -77,7 +79,7 @@ Options[CodeInspectSummarize] = {
   CharacterEncoding -> "UTF-8",
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
-  ConfidenceLevel :> $ConfidenceLevel,
+  ConfidenceLevel :> $DefaultConfidenceLevel,
   "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
