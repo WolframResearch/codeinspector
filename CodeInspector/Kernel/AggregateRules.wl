@@ -552,7 +552,7 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, lhs, lhsChi
 
   issues = {};
 
-  AppendTo[issues, InspectionObject["ImplicitTimesInSet", "Suspicious implicit ``Times`` in " <> SymbolName[head] <> ".", "Error",
+  AppendTo[issues, InspectionObject["ImplicitTimesInSet", "Suspicious implicit ``Times`` in ``" <> SymbolName[head] <> "``.", "Error",
     <|Source -> src,
       ConfidenceLevel -> 0.95,
       CodeActions -> {
