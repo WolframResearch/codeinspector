@@ -24,7 +24,8 @@ Options[CodeInspectBoxSummarize] = {
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   "LineNumberExclusions" -> <||>,
   "LineHashExclusions" -> {},
-  ConfidenceLevel :> $DefaultConfidenceLevel
+  ConfidenceLevel :> $DefaultConfidenceLevel,
+  "LintLimit" :> $DefaultLintLimit
 }
 
 (*
@@ -42,7 +43,7 @@ lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, tagExclusions, severityExclusions,
-  confidence, performanceGoal, concreteRules, aggregateRules, abstractRules,
+  confidence, lintLimit, performanceGoal, concreteRules, aggregateRules, abstractRules,
   processedBox, cst, expandedLints},
 
  lints = lintsIn;
@@ -66,6 +67,8 @@ Catch[
  ];
 
  confidence = OptionValue[ConfidenceLevel];
+
+ lintLimit = OptionValue["LintLimit"];
 
  If[lints === Automatic,
 
@@ -123,6 +126,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -135,6 +139,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]

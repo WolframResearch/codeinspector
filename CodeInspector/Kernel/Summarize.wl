@@ -13,7 +13,7 @@ $DefaultSeverityExclusions
 
 $LintedLineLimit
 
-$LintLimit
+$DefaultLintLimit
 
 
 $Underlight
@@ -46,7 +46,7 @@ $LintedLineLimit = 10
 (*
 How many lints to keep?
 *)
-$LintLimit = 20
+$DefaultLintLimit = 100
 
 (*
 Number of characters per line to consider "long" and truncate
@@ -80,6 +80,7 @@ Options[CodeInspectSummarize] = {
   "TagExclusions" -> $DefaultTagExclusions,
   "SeverityExclusions" -> $DefaultSeverityExclusions,
   ConfidenceLevel :> $DefaultConfidenceLevel,
+  "LintLimit" :> $DefaultLintLimit,
   "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
 }
 
@@ -99,7 +100,7 @@ lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 CodeInspectSummarize[File[file_String], lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, full, lines, tagExclusions, severityExclusions,
-  lintedLines, confidence, performanceGoal, concreteRules,
+  lintedLines, confidence, lintLimit, performanceGoal, concreteRules,
   aggregateRules, abstractRules, bytes, str, tabWidth},
 
  lints = lintsIn;
@@ -123,6 +124,8 @@ Catch[
  ];
 
  confidence = OptionValue[ConfidenceLevel];
+
+ lintLimit = OptionValue["LintLimit"];
 
  tabWidth = OptionValue["TabWidth"];
 
@@ -159,7 +162,7 @@ Catch[
 
    lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   If[lintedLines == {},
     lintedLines = {
@@ -167,6 +170,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -179,6 +183,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -209,7 +214,7 @@ CodeInspectSummarize[lint:InspectionObject[_, _, _, KeyValuePattern["File" -> _]
 CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, tagExclusions, severityExclusions, lintedLines,
-  confidence, performanceGoal, concreteRules, aggregateRules, abstractRules, tabWidth},
+  confidence, lintLimit, performanceGoal, concreteRules, aggregateRules, abstractRules, tabWidth},
 
  lints = lintsIn;
 
@@ -233,6 +238,8 @@ Catch[
 
  confidence = OptionValue[ConfidenceLevel];
 
+ lintLimit = OptionValue["LintLimit"];
+
  tabWidth = OptionValue["TabWidth"];
 
 
@@ -254,7 +261,7 @@ Catch[
 
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   If[lintedLines == {},
     lintedLines = {
@@ -262,6 +269,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -274,6 +282,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -291,7 +300,7 @@ Catch[
 CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, lines, tagExclusions, severityExclusions, lintedLines,
-  confidence, string, performanceGoal, concreteRules, aggregateRules, abstractRules,
+  confidence, lintLimit, string, performanceGoal, concreteRules, aggregateRules, abstractRules,
   tabWidth},
 
  lints = lintsIn;
@@ -316,6 +325,8 @@ Catch[
 
  confidence = OptionValue[ConfidenceLevel];
 
+ lintLimit = OptionValue["LintLimit"];
+
  tabWidth = OptionValue["TabWidth"];
 
  If[lints === Automatic,
@@ -334,7 +345,7 @@ Catch[
 
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
-  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence];
+  lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   If[lintedLines == {},
     lintedLines = {
@@ -342,6 +353,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -354,6 +366,7 @@ Catch[
         Column[{
           Text["Settings:"],
           ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
@@ -375,7 +388,7 @@ InspectedLineObject::truncation = "Truncation limit reached. Inspected line may 
 (*
 Return a list of LintedLines
 *)
-lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_List, severityExclusions_List, confidence_] :=
+lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_List, severityExclusions_List, confidence_, lintLimit_] :=
 Catch[
 Module[{lints, lines, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
@@ -496,7 +509,7 @@ Module[{lints, lines, sources, warningsLines,
   *)
   lints = SortBy[lints, {-severityToInteger[#[[3]]]&, #[[4, Key[Source]]]&}];
 
-  lints = Take[lints, UpTo[$LintLimit]];
+  lints = Take[lints, UpTo[lintLimit]];
 
   (*
   These are the lints we will be working with
