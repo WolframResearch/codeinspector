@@ -502,11 +502,6 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   *)
   scopingData = ScopingData[ast];
 
-  (*
-  Filter those that have non-empty modifiers
-  *)
-  scopingData = Cases[scopingData, scopingDataObject[_, _, {_, ___}]];
-
   scopingLints = scopingDataObjectToLints /@ scopingData;
 
   lints = lints ~Join~ scopingLints;

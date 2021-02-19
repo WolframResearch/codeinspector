@@ -453,11 +453,16 @@ Module[{text},
 	create separate lints for Unused and Shadowed
 	*)
 
-	modifiers /. {
-		"unused" -> InspectionObject["UnusedModuleVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-		"shadowed" -> InspectionObject["ShadowedModuleVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-		"error" -> InspectionObject["ModuleVariableError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
-	}
+	Replace[modifiers,
+		{
+			"unused" -> InspectionObject["UnusedModuleVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedModuleVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ModuleVariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			_ :> Sequence @@ {}
+		}
+		,
+		{1}
+	]
 ]
 
 scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope : "Block" | "Internal`InheritedBlock"}, modifiers_]] :=
@@ -469,11 +474,40 @@ Module[{text},
 	create separate lints for Unused and Shadowed
 	*)
 
-	modifiers /. {
-		"unused" -> InspectionObject["UnusedBlockVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-		"shadowed" -> InspectionObject["ShadowedBlockVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-		"error" -> InspectionObject["BlockVariableError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
-	}
+	Replace[modifiers,
+		{
+			"unused" -> InspectionObject["UnusedBlockVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedBlockVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["BlockVariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			_ :> Sequence @@ {}
+		}
+		,
+		{1}
+	]
+]
+
+(*
+A naked # at top-level will have scope of {}
+*)
+scopingDataObjectToLints[scopingDataObject[src_, {}, modifiers_]] :=
+Module[{text},
+	
+	text = "object";
+	
+	(*
+	create separate lints for Unused and Shadowed
+	*)
+
+	Replace[modifiers,
+		{
+			"unused" -> InspectionObject["UnusedObject", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedObject", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ObjectError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			_ :> Sequence @@ {}
+		}
+		,
+		{1}
+	]
 ]
 
 scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope_}, modifiers_]] :=
@@ -485,11 +519,16 @@ Module[{text},
 	create separate lints for Unused and Shadowed
 	*)
 
-	modifiers /. {
-		"unused" -> InspectionObject["UnusedParameter", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-		"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-		"error" -> InspectionObject["ParameterError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
-	}
+	Replace[modifiers,
+		{
+			"unused" -> InspectionObject["UnusedParameter", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			_ :> Sequence @@ {}
+		}
+		,
+		{1}
+	]
 ]
 
 

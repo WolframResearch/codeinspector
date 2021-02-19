@@ -214,9 +214,6 @@ CallNode[LeafNode[Symbol, "Alternatives", _], _, _] -> scanAlternatives,
 
 
 
-CallNode[LeafNode[Symbol, "Slot" | "SlotSequence", <||>], _, _] -> scanSlots,
-
-
 CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming", _], _, _] -> scanSolverCalls,
 
 
@@ -2014,60 +2011,6 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, src
 
   issues
 ]]
-
-
-
-
-
-
-Attributes[scanSlots] = {HoldRest}
-
-scanSlots[pos_List, astIn_] :=
-Catch[
-Module[{ast, node, children, data, parentPos, foundFunction, parent, issues},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
-
-  parentPos = pos;
-  foundFunction = False;
-  While[True,
-      If[parentPos == {},
-            Break[]
-      ];
-      parentPos = Drop[parentPos, -1];
-      parent = Extract[ast, parentPos];
-      If[ListQ[parent],
-            parentPos = Drop[parentPos, -1];
-            parent = Extract[ast, parentPos];
-      ];
-      If[MatchQ[parent, CallNode[LeafNode[Symbol, "Function", _], _, _]],
-            foundFunction = True;
-            Break[]
-      ];
-  ];
-
-  If[!foundFunction,
-    (*
-    This is not more confident because there are lots of examples of using # with no containing Function:
-
-    Algebra work
-    doing Function @@ {#}
-    etc.
-
-    *)
-    AppendTo[issues, InspectionObject["MissingFunction", "There is no containing ``Function``.", "Error", <|
-      Source -> data[Source],
-      ConfidenceLevel -> 0.90 |>]]
-  ];
-
-  issues
-]]
-
-
 
 
 
