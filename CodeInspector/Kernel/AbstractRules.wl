@@ -2210,7 +2210,7 @@ Attributes[scanOptionsPattern] = {HoldRest}
 scanOptionsPattern[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, optionalChildren, optionalPattern, insideSet,
-  definition, issues, actualPos},
+  definition, definitions, issues, actualPos},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
