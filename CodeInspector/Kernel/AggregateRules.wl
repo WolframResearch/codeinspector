@@ -1766,14 +1766,17 @@ scanBlankPredicate[pos_List, aggIn_] :=
     white-list
     *)
     If[MemberQ[{
-      (*
-      the special functions that end in Q, but are not functions that return Booleans
-      *)
-      "EllipticNomeQ", "HypergeometricPFQ", "InverseEllipticNomeQ", "LegendreQ", "MarcumQ", "PartitionsQ", "QHypergeometricPFQ",
-      (*
-      2-arg functions
-      *)
-      "MemberQ", "StringContainsQ"}, predName],
+        (*
+        the special functions that end in Q, but are not functions that return Booleans
+        *)
+        "EllipticNomeQ", "HypergeometricPFQ", "InverseEllipticNomeQ", "LegendreQ", "MarcumQ", "PartitionsQ", "QHypergeometricPFQ"
+        (*
+        2-arg functions
+
+        TODO: what to do with these?
+        *)
+        (* "MemberQ", "StringContainsQ", "FreeQ", "StringFreeQ", "MatchQ", "StringMatchQ" *)
+        }, predName],
       Throw[issues]
     ];
 
