@@ -37,12 +37,6 @@ InspectedBoxObject
 
 
 
-BeginStaticAnalysisIgnore
-EndStaticAnalysisIgnore
-
-
-
-
 $ConcreteLintProgress
 $ConcreteLintTime
 $AggregateLintProgress
@@ -59,17 +53,18 @@ CodeInspector
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Abstract`"]
-Needs["CodeParser`Scoping`"]
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`Boxes`"]
 Needs["CodeInspector`ConcreteRules`"]
+Needs["CodeInspector`DisabledRegions`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Abstract`"]
+Needs["CodeParser`Scoping`"]
+Needs["CodeParser`Utils`"]
 
 Needs["PacletManager`"] (* for PacletInformation *)
 
@@ -140,7 +135,8 @@ $fileByteCountMaxLimit = 3*^6
 
 CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
-Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules, editor},
+Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules,
+  editor, disabledRegions},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -181,12 +177,15 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     Throw[cst]
   ];
 
+  disabledRegions = DisabledRegions[cst];
+
   lints = CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules
+    "AbstractRules" -> abstractRules,
+    "DisabledRegions" -> disabledRegions
   ];
 
   If[FailureQ[lints],
@@ -215,7 +214,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
 CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -235,12 +234,15 @@ Catch[
     Throw[cst]
   ];
 
+  disabledRegions = DisabledRegions[cst];
+
   CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules
+    "AbstractRules" -> abstractRules,
+    "DisabledRegions" -> disabledRegions
   ]
 ]]
 
@@ -248,7 +250,7 @@ Catch[
 
 CodeInspect[bytes_List, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -268,12 +270,15 @@ Catch[
     Throw[cst]
   ];
 
+  disabledRegions = DisabledRegions[cst];
+
   CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules
+    "AbstractRules" -> abstractRules,
+    "DisabledRegions" -> disabledRegions
   ]
 ]]
 
@@ -287,7 +292,7 @@ Options[CodeInspectBox] = {
 
 CodeInspectBox[box_, OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
 
   performanceGoal = OptionValue[PerformanceGoal];
   concreteRules = OptionValue["ConcreteRules"];
@@ -307,35 +312,26 @@ Catch[
     Throw[cst]
   ];
 
+  disabledRegions = DisabledRegions[cst];
+
   CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules]
+    "AbstractRules" -> abstractRules,
+    "DisabledRegions" -> disabledRegions
+  ]
 ]]
 
-
-
-
-
-
-
-beginStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "BeginStaticAnalysisIgnore" | "CodeInspector`BeginStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
-
-beginStaticAnalysisIgnoreCallPat = beginStaticAnalysisIgnoreCallPat0 | InfixNode[CompoundExpression, {beginStaticAnalysisIgnoreCallPat0, LeafNode[Token`Semi, _, _], LeafNode[Token`Fake`ImplicitNull, _, _]}, _]
-
-
-endStaticAnalysisIgnoreCallPat0 = CallNode[{LeafNode[Symbol, "EndStaticAnalysisIgnore" | "CodeInspector`EndStaticAnalysisIgnore", _]}, {GroupNode[GroupSquare, _, _]}, _]
-
-endStaticAnalysisIgnoreCallPat = endStaticAnalysisIgnoreCallPat0 | InfixNode[CompoundExpression, {endStaticAnalysisIgnoreCallPat0, LeafNode[Token`Semi, _, _], LeafNode[Token`Fake`ImplicitNull, _, _]}, _]
 
 
 Options[CodeInspectCST] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules
+  "AbstractRules" :> $DefaultAbstractRules,
+  "DisabledRegions" -> {}
 }
 
 Attributes[CodeInspectCST] = {HoldFirst}
@@ -343,9 +339,8 @@ Attributes[CodeInspectCST] = {HoldFirst}
 CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
-  ignoredNodesSrcMemberFunc, prog, concreteRules, performanceGoal, start,
-  ignoredNodes, beginStaticAnalysisIgnoreNodePoss, endPos, siblingsPos, siblings, candidate, endFound,
-  scopingData, scopingLints},
+  prog, concreteRules, performanceGoal, start,
+  scopingData, scopingLints, disabledRegions},
 
   If[$Debug,
     Print["CodeInspectCST"];
@@ -359,6 +354,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
+  disabledRegions = OptionValue["DisabledRegions"];
+
+  If[$Debug,
+    Print["disabledRegions: ", disabledRegions]
+  ];
 
   If[FailureQ[cst],
     Throw[cst]
@@ -367,62 +367,20 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   If[empty[concreteRules] && empty[aggregateRules] && empty[abstractRules],
 
     lints = Flatten[lints];
-    
+
+    lints = Select[lints,
+      Function[{lint},
+        AllTrue[disabledRegions,
+          Function[{region},
+            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          ]
+        ]
+      ]
+    ];
+
     Throw[lints]
   ];
 
-  (*
-  Make sure to use Infinity
-  *)
-  
-  ignoredNodes = {};
-
-  beginStaticAnalysisIgnoreNodePoss = Position[cst, beginStaticAnalysisIgnoreCallPat];
-
-  ignoredNodes = Reap[
-  Do[
-    siblingsPos = Most[beginPos];
-    siblings = Extract[cst, {siblingsPos}][[1]];
-    endFound = False;
-    Do[
-      candidate = siblings[[pos]];
-      If[MatchQ[candidate, endStaticAnalysisIgnoreCallPat],
-        endPos = pos;
-        endFound = True;
-        Break[]
-      ]
-      ,
-      {pos, Last[beginPos]+1, Length[siblings]}
-    ];
-    If[endFound,
-      staticAnalysisIgnoreChildren = siblings[[(Last[beginPos]+1);;(endPos-1)]];
-      Sow[staticAnalysisIgnoreChildren]
-      ,
-      Message[EndStaticAnalysisIgnore::missing]
-    ]
-    ,
-    {beginPos, beginStaticAnalysisIgnoreNodePoss}
-  ]][[2]];
-
-  If[!empty[ignoredNodes],
-    ignoredNodes = ignoredNodes[[1]];
-    ignoredNodes = Flatten[ignoredNodes];
-  ];
-
-  If[$Debug,
-    Print["ignoredNodes: ", ignoredNodes];
-  ];
-
-  ignoredNodesSrcMemberFunc = SourceMemberQ[ignoredNodes[[All, 3, Key[Source]]]];
-  
-  
-
-
-  cst = removeIgnoredNodes[cst, ignoredNodesSrcMemberFunc];
-  
-  If[$Debug,
-    Print["cst: ", cst];
-  ];
 
   If[$Debug,
     Print["concreteRules"];
@@ -447,6 +405,16 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   If[empty[aggregateRules] && empty[abstractRules],
 
     lints = Flatten[lints];
+
+    lints = Select[lints,
+      Function[{lint},
+        AllTrue[disabledRegions,
+          Function[{region},
+            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          ]
+        ]
+      ]
+    ];
 
     Throw[lints]
   ];
@@ -484,6 +452,16 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   If[empty[abstractRules],
 
     lints = Flatten[lints];
+
+    lints = Select[lints,
+      Function[{lint},
+        AllTrue[disabledRegions,
+          Function[{region},
+            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          ]
+        ]
+      ]
+    ];
 
     Throw[lints]
   ];
@@ -536,6 +514,16 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Flatten[lints];
 
+  lints = Select[lints,
+    Function[{lint},
+      AllTrue[disabledRegions,
+        Function[{region},
+          !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+        ]
+      ]
+    ]
+  ];
+
   lints
 ]]
 
@@ -544,7 +532,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 Options[CodeInspectAgg] = {
   PerformanceGoal -> "Speed",
   "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules
+  "AbstractRules" :> $DefaultAbstractRules,
+  "DisabledRegions" -> {}
 }
 
 Attributes[CodeInspectAgg] = {HoldFirst}
@@ -552,7 +541,7 @@ Attributes[CodeInspectAgg] = {HoldFirst}
 CodeInspectAgg[aggIn_, OptionsPattern[]] :=
 Catch[
 Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
-  prog, performanceGoal, start},
+  prog, performanceGoal, start, disabledRegions},
 
   If[$Debug,
     Print["CodeInspectAgg"];
@@ -565,6 +554,11 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
   performanceGoal = OptionValue[PerformanceGoal];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
+  disabledRegions = OptionValue["DisabledRegions"];
+
+  If[$Debug,
+    Print["disabledRegions: ", disabledRegions]
+  ];
 
   If[$Debug,
     Print["aggregateRules"];
@@ -587,6 +581,16 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
   If[empty[abstractRules],
 
     lints = Flatten[lints];
+
+    lints = Select[lints,
+      Function[{lint},
+        AllTrue[disabledRegions,
+          Function[{region},
+            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          ]
+        ]
+      ]
+    ];
 
     Throw[lints]
   ];
@@ -622,6 +626,16 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Flatten[lints];
 
+  lints = Select[lints,
+    Function[{lint},
+      AllTrue[disabledRegions,
+        Function[{region},
+          !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+        ]
+      ]
+    ]
+  ];
+
   lints
 ]]
 
@@ -631,7 +645,8 @@ Options[CodeInspectAST] = {
   PerformanceGoal -> "Speed",
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules
+  "AbstractRules" :> $DefaultAbstractRules,
+  "DisabledRegions" -> {}
 }
 
 Attributes[CodeInspectAST] = {HoldFirst}
@@ -639,7 +654,7 @@ Attributes[CodeInspectAST] = {HoldFirst}
 CodeInspectAST[astIn_, OptionsPattern[]] :=
 Catch[
 Module[{abstractRules, ast, poss, lints,
-  prog, performanceGoal, start},
+  prog, performanceGoal, start, disabledRegions},
 
   If[$Debug,
     Print["CodeInspectAST"];
@@ -651,6 +666,11 @@ Module[{abstractRules, ast, poss, lints,
 
   performanceGoal = OptionValue[PerformanceGoal];
   abstractRules = OptionValue["AbstractRules"];
+  disabledRegions = OptionValue["DisabledRegions"];
+
+  If[$Debug,
+    Print["disabledRegions: ", disabledRegions]
+  ];
 
   If[$Debug,
     Print["abstractRules"];
@@ -673,6 +693,16 @@ Module[{abstractRules, ast, poss, lints,
 
   lints = Flatten[lints];
 
+  lints = Select[lints,
+    Function[{lint},
+      AllTrue[disabledRegions,
+        Function[{region},
+          !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+        ]
+      ]
+    ]
+  ];
+  
   lints
 ]]
 

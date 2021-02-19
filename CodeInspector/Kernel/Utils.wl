@@ -246,7 +246,9 @@ plainify[s_String] := StringReplace[s, {
 
 
 
-BeginStaticAnalysisIgnore[]
+
+(* ::CodeInspect::Push:: *)
+(* ::CodeInspect::Disable::UnexpectedCharacter:: *)
 
 (*
 Replace invisible characters with \[UnknownGlyph]
@@ -337,7 +339,6 @@ $invisibleBMPCharacters = {
 	CharacterRange["\:fdd0", "\:fdef"]
 
 
-
 (*
 Handling of \|XXXXXX notation did not become correct until version 12.0
 
@@ -355,8 +356,8 @@ If[$VersionNumber >= 12.0,
 		Unicode non-characters
 		https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
 		*)
-		"\|00fffe",
-		"\|00ffff",
+		"\:fffe",
+		"\:ffff",
 		"\|01fffe",
 		"\|01ffff",
 		"\|02fffe",
@@ -397,7 +398,6 @@ If[$VersionNumber >= 12.0,
 	$invisibleNonBMPCharacters = {}
 ]
 
-EndStaticAnalysisIgnore[]
 
 $invisibleCharacters = $invisibleBMPCharacters ~Join~ $invisibleNonBMPCharacters
 
@@ -405,6 +405,7 @@ $characterReplacementRules = {
 	Alternatives @@ $invisibleCharacters -> "\[UnknownGlyph]"
 }
 
+(* ::CodeInspect::Pop:: *)
 
 
 uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
@@ -490,6 +491,9 @@ Module[{text},
 		"error" -> InspectionObject["ParameterError", "Error " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>]
 	}
 ]
+
+
+
 
 
 
