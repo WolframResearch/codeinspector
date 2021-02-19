@@ -626,7 +626,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 
 	grid = Flatten[grid, 1];
 
-	Row[{Row[{"line ", paddedLineNumber, ": "}],
+	Row[{Row[{paddedLineNumber, " "}],
 			Column[{Column[Row /@ grid]} ~Join~
 			endingLints] }]
 ]]
@@ -704,7 +704,7 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 	TODO: properly remove partitions that do not have errors in them
 	*)
 	
-	Row[{Row[{"line ", paddedLineNumber, ": "}], Column[{Column[Row /@ grid]} ~Join~ endingLints] }]
+	Row[{Row[{paddedLineNumber, " "}], Column[{Column[Row /@ grid]} ~Join~ endingLints] }]
 ]]
 
 
@@ -730,9 +730,9 @@ Module[{label, maxLineNumberLength, paddedLineNumber},
 	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
 	If[TrueQ[CodeInspector`Summarize`$Underlight],
-		label = Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False];
+		label = Style[Row[{paddedLineNumber, " "}], ShowStringCharacters->False];
 		,
-		label = Style[Row[{"line", " ", paddedLineNumber, ":"}], ShowStringCharacters->False];
+		label = Style[Row[{paddedLineNumber, " "}], ShowStringCharacters->False];
 	];
 
 	(*
