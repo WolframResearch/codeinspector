@@ -2279,14 +2279,27 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
   ];
 
   If[insideSet,
-    definition = parent[[3, Key["Definition"]]];
-    If[definition == "SyntaxInformation",
+    definitions = parent[[3, Key["Definitions"]]];
+    Which[
       (*
-      Allow code like this to pass:
-      SyntaxInformation[f] = {"ArgumentsPattern" -> {_., OptionsPattern[]}}
+      may not be at top-level and "Definitions" may be not present
+
+      Ex:
+      InitializePublicHelp[]:=
+      (
+        SyntaxInformation[SendMessage] = {"ArgumentsPattern" -> {_, _., OptionsPattern[]}};
+      )
       *)
-      Throw[issues]
-    ];
+      MissingQ[definitions],
+        Throw[issues]
+      ,
+      AnyTrue[definitions, (#[[2]] == "SyntaxInformation")&],
+        (*
+        Allow code like this to pass:
+        SyntaxInformation[f] = {"ArgumentsPattern" -> {_., OptionsPattern[]}}
+        *)
+        Throw[issues]
+    ]
   ];
 
   optional = previous;
