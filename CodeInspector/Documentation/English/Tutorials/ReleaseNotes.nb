@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     65528,       1507]
-NotebookOptionsPosition[     44438,       1122]
-NotebookOutlinePosition[     44908,       1139]
-CellTagsIndexPosition[     44865,       1136]
+NotebookDataLength[     72803,       1690]
+NotebookOptionsPosition[     49037,       1257]
+NotebookOutlinePosition[     49507,       1274]
+CellTagsIndexPosition[     49464,       1271]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1117,12 +1117,147 @@ Cell["Fix symbols in wrong context", "Text",
  CellChangeTimes->{{3.8166252625387897`*^9, 3.81662526568652*^9}, 
    3.816625673377645*^9},
  CellID->1418965192,ExpressionUUID->"ea127b60-590d-41c7-94fb-3b6064a42769"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["1.2", "Section",
+ CellChangeTimes->{{3.822824221714437*^9, 3.822824223655924*^9}},
+ CellID->1563112065,ExpressionUUID->"c6415a7a-d039-451b-8113-ed821e39cbe7"],
+
+Cell["March 25, 2021", "Text",
+ CellChangeTimes->{{3.822824233793511*^9, 3.822824249038164*^9}, {
+  3.825677249810317*^9, 3.8256772534210787`*^9}},
+ CellID->1652935849,ExpressionUUID->"39347947-b83b-4c4c-871a-cf1a3e412f54"],
+
+Cell["\<\
+Add StringTrim to functions to scan for leaking Module variables\
+\>", "Text",
+ CellChangeTimes->{{3.8228242562586*^9, 3.822824256805437*^9}, 
+   3.825679618894045*^9},
+ CellID->373638291,ExpressionUUID->"220ed62e-8d07-4abb-bac0-1ca1426cb78c"],
+
+Cell["\<\
+Go through and replace all \"Did you mean...?\" with CodeActions\
+\>", "Text",
+ CellID->945757930,ExpressionUUID->"8c6882b8-a3ea-4b18-bfa7-37f50d88ff89"],
+
+Cell["Add support for Eclipse as an editor", "Text",
+ CellID->893691815,ExpressionUUID->"cc7e383a-56e8-4d4b-8669-f3372276a840"],
+
+Cell["\<\
+Give much lower confidence to {a -> 1, a-> 2} when it appears in Graph, \
+NetGraph, WordCloud\
+\>", "Text",
+ CellID->1752645218,ExpressionUUID->"7fadacc6-6b29-4b20-9045-0c1f1a1bdf1c"],
+
+Cell["\<\
+Add option \"AllowedImplicitTokens\" to CodeInspectImplicitTokens
+
+This can be a list of special character strings representing the various \
+implicit tokens to allow.\
+\>", "Text",
+ CellID->1822476674,ExpressionUUID->"1044ebd9-a2b6-4cd2-99ac-26ffa528dcf1"],
+
+Cell["Add OptionPattern to bad symbols", "Text",
+ CellID->806202757,ExpressionUUID->"aaf7b421-02ca-4c39-94df-ecac9ccf579f"],
+
+Cell["Handle FormatIssues that may come from abstracting", "Text",
+ CellID->1375407976,ExpressionUUID->"7e71b658-f078-449a-ac47-f3602bc05344"],
+
+Cell["Update BlankPredicate scan with whitelisted symbols", "Text",
+ CellID->967876324,ExpressionUUID->"efaa9c92-4e3d-4c6c-a4f0-532820ca172d"],
+
+Cell["\<\
+Add rule catching implicit Times in Set:
+
+a = 1; b = 2 c = 3;
+
+forgotten ; leads to parsing as (2 c) = 3\
+\>", "Text",
+ CellID->2056235090,ExpressionUUID->"f7d4ca2c-8168-429e-9d2e-ffdd4ce5d10e"],
+
+Cell["Add \"Editor\" option to CodeInspect", "Text",
+ CellID->1836310106,ExpressionUUID->"295824d0-d099-4037-87a2-08cecbdaa802"],
+
+Cell["\<\
+Add a note about handling Q-functions that take more than 1 arg
+
+It is unclear what to do with them. If _FreeQ appears, it may still be \
+incorrect code, but the correct code is not _?FreeQ\
+\>", "Text",
+ CellID->1376460505,ExpressionUUID->"8850088e-d922-42d7-8ee5-79b520ceefb6"],
+
+Cell["Update default lint limit to 100 and wire it in as an option", "Text",
+ CellID->1477862051,ExpressionUUID->"11e9bc2f-5548-4c97-8e88-6dcf1335bb59"],
+
+Cell["\<\
+Add experimental support for disabled regions comment syntax
+
+Example:
+
+(* ::CodeInspect::Push:: *)
+(* ::CodeInspect::Disable::DuplicateClausesIf:: *)
+
+If[a, b, b]
+
+(* ::CodeInspect::Pop:: *)\
+\>", "Text",
+ CellID->631629955,ExpressionUUID->"c1f29e44-3c5b-4fa6-bfd6-e3290f0bc701"],
+
+Cell["\<\
+Add a higher confidence to Times appearing in variable declarations (probably \
+a missing comma)\
+\>", "Text",
+ CellID->1766408684,ExpressionUUID->"6836a2ce-9878-4fdb-ac6f-a34e3d9961b9"],
+
+Cell["\<\
+If MessageName has a 3rd argument, then check against recognized languages\
+\>", "Text",
+ CellID->2034368047,ExpressionUUID->"5bdc57ec-1841-4968-ac03-9a638af64b36"],
+
+Cell["\<\
+Bring in heuristic for PatternBlankOptional
+
+If the pattern name contains \"pat\", then assume it is used as a pattern\
+\>", "Text",
+ CellID->368321072,ExpressionUUID->"2e371333-6ca0-42c6-ad6e-bd49a4beaeba"],
+
+Cell["Allow a?(b|c) to be flagged", "Text",
+ CellID->1324386450,ExpressionUUID->"7bff59a5-c141-469e-8ff0-699ed7047053"],
+
+Cell["\<\
+Parameterize some lints with an \"Argument\" and allow the disabled regions \
+syntax to take an additional argument that specifies this\
+\>", "Text",
+ CellID->295063995,ExpressionUUID->"a0df426a-435d-4801-ac21-b896028f03c3"],
+
+Cell["\<\
+Allow inspecting and summarizing of Cells, Notebooks, CellObjects, and \
+NotebookObjects\
+\>", "Text",
+ CellID->564758700,ExpressionUUID->"3f54b845-c00f-46f5-ad14-b17c1e545dd0"],
+
+Cell["\<\
+Add support for suppressed regions to Notebooks
+
+add \"InheritedProperties\" option to allow CellIndex to be passed down
+
+Use InheritedProperties to allow suppressed regions to work at top-level in \
+notebooks
+
+Fill in in-the-blind suppressed region comment syntax for comment cells\
+\>", "Text",
+ CellID->499526130,ExpressionUUID->"1c5acb95-1174-4b70-8f98-a75eb7176933"],
+
+Cell["increase $ImplicitTokensLimit to 100", "Text",
+ CellID->1022090787,ExpressionUUID->"daf41911-b4d5-4937-83e5-be0140efb463"]
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{700, 770},
-WindowMargins->{{4, Automatic}, {Automatic, 0}},
-FrontEndVersion->"12.2 for Mac OS X x86 (64-bit) (December 3, 2020)",
+WindowSize->{906, 922},
+WindowMargins->{{20, Automatic}, {Automatic, 47}},
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (March 21, 2021)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "TutorialPageStyles.nb", 
   CharacterEncoding -> "UTF-8"],
 ExpressionUUID->"ecb1f3dc-f424-4ee8-b390-de9b41132f08"
@@ -1507,6 +1642,54 @@ Cell[44010, 1111, 184, 2, 23, "Text",ExpressionUUID->"80e3e8dc-a7de-4ab6-b558-d7
  CellID->94465146],
 Cell[44197, 1115, 213, 3, 23, "Text",ExpressionUUID->"ea127b60-590d-41c7-94fb-3b6064a42769",
  CellID->1418965192]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44447, 1123, 164, 2, 43, "Section",ExpressionUUID->"c6415a7a-d039-451b-8113-ed821e39cbe7",
+ CellID->1563112065],
+Cell[44614, 1127, 223, 3, 23, "Text",ExpressionUUID->"39347947-b83b-4c4c-871a-cf1a3e412f54",
+ CellID->1652935849],
+Cell[44840, 1132, 253, 5, 23, "Text",ExpressionUUID->"220ed62e-8d07-4abb-bac0-1ca1426cb78c",
+ CellID->373638291],
+Cell[45096, 1139, 163, 3, 23, "Text",ExpressionUUID->"8c6882b8-a3ea-4b18-bfa7-37f50d88ff89",
+ CellID->945757930],
+Cell[45262, 1144, 127, 1, 23, "Text",ExpressionUUID->"cc7e383a-56e8-4d4b-8669-f3372276a840",
+ CellID->893691815],
+Cell[45392, 1147, 193, 4, 23, "Text",ExpressionUUID->"7fadacc6-6b29-4b20-9045-0c1f1a1bdf1c",
+ CellID->1752645218],
+Cell[45588, 1153, 267, 6, 81, "Text",ExpressionUUID->"1044ebd9-a2b6-4cd2-99ac-26ffa528dcf1",
+ CellID->1822476674],
+Cell[45858, 1161, 123, 1, 23, "Text",ExpressionUUID->"aaf7b421-02ca-4c39-94df-ecac9ccf579f",
+ CellID->806202757],
+Cell[45984, 1164, 142, 1, 23, "Text",ExpressionUUID->"7e71b658-f078-449a-ac47-f3602bc05344",
+ CellID->1375407976],
+Cell[46129, 1167, 142, 1, 23, "Text",ExpressionUUID->"efaa9c92-4e3d-4c6c-a4f0-532820ca172d",
+ CellID->967876324],
+Cell[46274, 1170, 204, 7, 139, "Text",ExpressionUUID->"f7d4ca2c-8168-429e-9d2e-ffdd4ce5d10e",
+ CellID->2056235090],
+Cell[46481, 1179, 128, 1, 23, "Text",ExpressionUUID->"295824d0-d099-4037-87a2-08cecbdaa802",
+ CellID->1836310106],
+Cell[46612, 1182, 289, 6, 98, "Text",ExpressionUUID->"8850088e-d922-42d7-8ee5-79b520ceefb6",
+ CellID->1376460505],
+Cell[46904, 1190, 152, 1, 23, "Text",ExpressionUUID->"11e9bc2f-5548-4c97-8e88-6dcf1335bb59",
+ CellID->1477862051],
+Cell[47059, 1193, 290, 12, 284, "Text",ExpressionUUID->"c1f29e44-3c5b-4fa6-bfd6-e3290f0bc701",
+ CellID->631629955],
+Cell[47352, 1207, 196, 4, 23, "Text",ExpressionUUID->"6836a2ce-9878-4fdb-ac6f-a34e3d9961b9",
+ CellID->1766408684],
+Cell[47551, 1213, 174, 3, 23, "Text",ExpressionUUID->"5bdc57ec-1841-4968-ac03-9a638af64b36",
+ CellID->2034368047],
+Cell[47728, 1218, 217, 5, 81, "Text",ExpressionUUID->"2e371333-6ca0-42c6-ad6e-bd49a4beaeba",
+ CellID->368321072],
+Cell[47948, 1225, 119, 1, 23, "Text",ExpressionUUID->"7bff59a5-c141-469e-8ff0-699ed7047053",
+ CellID->1324386450],
+Cell[48070, 1228, 234, 4, 40, "Text",ExpressionUUID->"a0df426a-435d-4801-ac21-b896028f03c3",
+ CellID->295063995],
+Cell[48307, 1234, 187, 4, 23, "Text",ExpressionUUID->"3f54b845-c00f-46f5-ad14-b17c1e545dd0",
+ CellID->564758700],
+Cell[48497, 1240, 381, 10, 197, "Text",ExpressionUUID->"1c5acb95-1174-4b70-8f98-a75eb7176933",
+ CellID->499526130],
+Cell[48881, 1252, 128, 1, 23, "Text",ExpressionUUID->"daf41911-b4d5-4937-83e5-be0140efb463",
+ CellID->1022090787]
 }, Open  ]]
 }, Open  ]]
 }
