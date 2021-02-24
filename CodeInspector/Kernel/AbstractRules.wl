@@ -1064,18 +1064,33 @@ Catch[
 
     CallNode[SymbolNode["Typed", {}, _], { sym:SymbolNode[_, _, _], _ }, _] :> sym
     *)
-    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
+    err_ :> (AppendTo[errs, err]; Nothing)
   }& /@ params;
 
   (*
   bail out if there are errors and ToFullFormString has failed
   *)
-  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#]]&],
     Throw[issues]
   ];
 
-  Scan[(AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
-    " does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
+  Scan[Function[{err},
+      Switch[err,
+        (*
+        Likely missing comma
+        *)
+        CallNode[LeafNode[Symbol, "Times", _], _, _],
+          AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+        ,
+        _,
+          AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+      ]
+    ]
+    ,
+    errs
+  ];
 
   counts = CountsBy[vars, ToFullFormString];
 
@@ -1210,18 +1225,33 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[Symbol, _, _], _}, _] :> sym,
     sym:LeafNode[Symbol, _, _] :> sym,
-    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
+    err_ :> (AppendTo[errs, err]; Nothing)
   }& /@ params;
 
   (*
   bail out if there are errors and ToFullFormString has failed
   *)
-  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#]]&],
     Throw[issues]
   ];
 
-  Scan[(AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
-    "does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
+  Scan[Function[{err},
+      Switch[err,
+        (*
+        Likely missing comma
+        *)
+        CallNode[LeafNode[Symbol, "Times", _], _, _],
+          AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+        ,
+        _,
+          AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+      ]
+    ]
+    ,
+    errs
+  ];
 
   counts = CountsBy[vars, ToFullFormString];
 
@@ -1336,18 +1366,33 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   varsAndVals = Function[{list}, # /. {
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[Symbol, _, _], val_}, _] :> {sym, val},
-    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
+    err_ :> (AppendTo[errs, err]; Nothing)
   }& /@ list] /@ paramLists;
 
   (*
   bail out if there are errors and ToFullFormString has failed
   *)
-  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#]]&],
     Throw[issues]
   ];
 
-  Scan[(AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <> " does not have proper form.\n\
-This may be ok if ``With`` is handled programmatically.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
+  Scan[Function[{err},
+      Switch[err,
+        (*
+        Likely missing comma
+        *)
+        CallNode[LeafNode[Symbol, "Times", _], _, _],
+          AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+        ,
+        _,
+          AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+      ]
+    ]
+    ,
+    errs
+  ];
 
   varsAndVals = DeleteCases[varsAndVals, {}];
 
@@ -1453,18 +1498,33 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
       sym:LeafNode[_, _, _], _}, _] :> (AppendTo[varsWithSet, sym]),
     sym:LeafNode[Symbol, _, _] :> (AppendTo[varsWithoutSet, sym]),
-    err_ :> (AppendTo[errs, {err, #[[3]]}]; Nothing)
+    err_ :> (AppendTo[errs, err]; Nothing)
   }&, params];
 
   (*
   bail out if there are errors and ToFullFormString has failed
   *)
-  If[AnyTrue[errs, FailureQ[ToFullFormString[#[[1]]]]&],
+  If[AnyTrue[errs, FailureQ[ToFullFormString[#]]&],
     Throw[issues]
   ];
 
-  Scan[(AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[#[[1]]]] <>
-    " does not have proper form.", "Error", <|#[[2]], ConfidenceLevel -> 0.85|>]])&, errs];
+  Scan[Function[{err},
+      Switch[err,
+        (*
+        Likely missing comma
+        *)
+        CallNode[LeafNode[Symbol, "Times", _], _, _],
+          AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+        ,
+        _,
+          AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+      ]
+    ]
+    ,
+    errs
+  ];
 
   vars = varsWithSet ~Join~ varsWithoutSet;
 
