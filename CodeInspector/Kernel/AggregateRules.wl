@@ -1426,7 +1426,7 @@ warn about a_:b  which is Optional[Pattern[a, _], b]  and not the same as  a:b
 *)
 scanPatternBlankOptionals[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt, issues,
+Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt, issues,
   choice},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
@@ -1440,8 +1440,7 @@ Catch[
   pattern = patternBlankChildren[[1]];
   opt = children[[3]];
 
-  Which[
-    MatchQ[opt, InfixNode[Alternatives, _, _]],
+  If[MatchQ[opt, InfixNode[Alternatives, _, _]],
       (*
       The FE changed how:
       i_:0|1
@@ -1450,7 +1449,18 @@ Catch[
       https://mathematica.stackexchange.com/questions/224987/i-01-varies-in-v12-1-incompatible-change-or-bug
       *)
       AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.1``. Earlier versions treated this syntax incorrectly.", "Warning", <| data, ConfidenceLevel -> 1.0 |>]]
-    ,
+  ];
+  
+  (*
+  bring in heuristics for when a_:b is valid
+  If a is named XXXpat, then assume that it is being used as a pattern and do not warn
+  *)
+  Which[
+    StringContainsQ[pattern[[2]], "pat", IgnoreCase -> True],
+      Throw[issues]
+  ];
+
+  Which[
     (*
     bring in heuristics for when a_:b is valid
     If b has Patterns or Blanks, then b is NOT a valid optional and warn
