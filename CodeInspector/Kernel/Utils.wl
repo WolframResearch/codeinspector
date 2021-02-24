@@ -450,7 +450,8 @@ Module[{text},
 	text = lastScope <> " " <> "variable";
 	
 	(*
-	create separate lints for Unused and Shadowed
+	create separate lints for Unused, Shadowed, etc.
+	and ignore other modifiers
 	*)
 
 	Replace[modifiers,
@@ -471,7 +472,8 @@ Module[{text},
 	text = lastScope <> " " <> "variable";
 	
 	(*
-	create separate lints for Unused and Shadowed
+	create separate lints for Unused, Shadowed, etc.
+	and ignore other modifiers
 	*)
 
 	Replace[modifiers,
@@ -487,23 +489,34 @@ Module[{text},
 ]
 
 (*
-A naked # at top-level will have scope of {}
+For example, a naked # at top-level will have scope of {}
 *)
-scopingDataObjectToLints[scopingDataObject[src_, {}, modifiers_]] :=
-Module[{text},
-	
-	text = "object";
-	
-	(*
-	create separate lints for Unused and Shadowed
-	*)
+scopingDataObjectToLints[scopingDataObject[src_, scope:{}, modifiers_]] :=
+Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedObject", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"shadowed" -> InspectionObject["ShadowedObject", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"error" -> InspectionObject["ObjectError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			_ :> Sequence @@ {}
+			"error" -> InspectionObject["UnscopedObjectError", "Unscoped object error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			(*
+			The only modifier should be "error"
+			*)
+			_ :> Failure["Unhandled", <| "Function" -> scopingDataObjectToLints, "Arguments" -> {scopingDataObject[src, scope, modifiers]} |>]
+		}
+		,
+		{1}
+	]
+]
+
+scopingDataObjectToLints[scopingDataObject[src_, scope:{___, "Error"}, modifiers_]] :=
+Module[{},
+
+	Replace[modifiers,
+		{
+			"error" -> InspectionObject["ParameterError", "Parameter error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			(*
+			The only modifier should be "error"
+			*)
+			_ :> Failure["Unhandled", <| "Function" -> scopingDataObjectToLints, "Arguments" -> {scopingDataObject[src, scope, modifiers]} |>]
 		}
 		,
 		{1}
@@ -516,7 +529,8 @@ Module[{text},
 	text = lastScope <> " " <> "parameter";
 	
 	(*
-	create separate lints for Unused and Shadowed
+	create separate lints for Unused, Shadowed, etc.
+	and ignore other modifiers
 	*)
 
 	Replace[modifiers,
