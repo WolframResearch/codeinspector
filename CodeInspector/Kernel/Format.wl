@@ -1001,38 +1001,7 @@ resetANSICode[] = "\[RawEscape][0m"
 
 $prettyTooltipTemplateDisplayFunction = Function[
      TagBox[
-      TooltipBox[
-       #1,
-       FrameBox[
-        StyleBox[
-         #2,
-         "Text",
-         FontColor -> RGBColor[
-          0.537255,
-          0.537255,
-          0.537255
-         ],
-         FontSize -> 12,
-         FontWeight -> "Plain",
-         FontTracking -> "Plain",
-         StripOnInput -> False
-        ],
-        Background -> RGBColor[
-         0.960784,
-         0.960784,
-         0.960784
-        ],
-        FrameStyle -> RGBColor[
-         0.898039,
-         0.898039,
-         0.898039
-        ],
-        FrameMargins -> 8,
-        StripOnInput -> False
-       ],
-       TooltipDelay -> 0.1,
-       TooltipStyle -> {Background -> None, CellFrame -> 0}
-      ],
+      #1,
       Function[
        Annotation[
         #1,
@@ -1190,8 +1159,7 @@ With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunct
              #6,
              Appearance -> None,
              Method -> "Queued"
-            ],
-            "\"View suggestions\""
+            ]
            },
            "PrettyTooltipTemplateXXX"
            ,
