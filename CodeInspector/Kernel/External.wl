@@ -62,18 +62,17 @@ Module[{editor, res},
 		{"Macintosh", "Eclipse"},
 			Run["open -a /Applications/Eclipse.app " <> file]
 		,
-		{_, "FrontEnd"},
+		{_, "SystemOpen"},
+			res = SystemOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "SystemOpen"]
+			];
+		,
+		_,
 			(* Editor "FrontEnd" is supported in all environments. *)
 			res = NotebookOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "FrontEnd"]
-			];
-		,
-		_,
-			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
-			res = SystemOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "SystemOpen"]
 			];
 	]
 ]
@@ -97,18 +96,17 @@ Module[{editor, res},
 		{"Macintosh", "Eclipse"},
 			Run["open -a /Applications/Eclipse.app " <> file]
 		,
-		{_, "FrontEnd"},
+		{_, "SystemOpen"},
+			res = SystemOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "SystemOpen"]
+			];
+		,
+		_,
 			(* Editor "FrontEnd" is supported in all environments. *)
 			res = NotebookOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "FrontEnd"]
-			];
-		,
-		_,
-			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
-			res = SystemOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "SystemOpen"]
 			];
 	]
 ]
@@ -132,18 +130,17 @@ Module[{editor, res},
 		{"Macintosh", "Eclipse"},
 			Run["open -a /Applications/Eclipse.app " <> file]
 		,
-		{_, "FrontEnd"},
+		{_, "SystemOpen"},
+			res = SystemOpen[file];
+			If[FailureQ[res],
+				Message[OpenInEditor::fail, file, "SystemOpen"]
+			];
+		,
+		_,
 			(* Editor "FrontEnd" is supported in all environments. *)
 			res = NotebookOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "FrontEnd"]
-			];
-		,
-		_,
-			(* If no editor is specified or supported, use SystemOpen as global fallback. *)
-			res = SystemOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "SystemOpen"]
 			];
 	]
 ]

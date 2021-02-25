@@ -192,7 +192,7 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 
 
 newLintStyle[lint:InspectionObject[tag_, description_, severity_, data_]] :=
-Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggestions, rows},
+Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggestions, rows, resolvedEditor},
 
 	actions = Lookup[data, CodeActions, {}];
 
@@ -243,11 +243,19 @@ Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggest
 					line = data[[Key[Source], 1, 1]];
 					col = data[[Key[Source], 1, 2]];
 
-					items = With[{file = file, line = line, col = col}, {
+					resolvedEditor = Lookup[data, "Editor", Automatic];
+					If[resolvedEditor === Automatic,
+						resolvedEditor = $Editor
+					];
+					If[!StringQ[resolvedEditor],
+						resolvedEditor = "FrontEnd"
+					];
+
+					items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
 						"\"" <> ToString[tag] <> "\"" :> Null,
 						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
 						Delimiter,
-						"Open in editor" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
+						"Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
 
 					,
 
