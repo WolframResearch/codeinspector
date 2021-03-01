@@ -857,7 +857,7 @@ Attributes[scanCompoundExpressions] = {HoldRest}
 
 scanCompoundExpressions[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, pairs, srcs, straySemis, semi},
+Module[{agg, node, children, data, issues, pairs, srcs, straySemis},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];

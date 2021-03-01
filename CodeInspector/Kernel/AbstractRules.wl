@@ -483,7 +483,7 @@ Attributes[scanWhichs] = {HoldRest}
 
 scanWhichs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, head, children, data, issues, selected, srcs, counts, selecteds,
+Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
   first,
   dupKeys, expensiveChildren, firsts,
   choice1, choice2},
@@ -1130,19 +1130,20 @@ Catch[
 
   ruleDelayedRHSParams = Select[vars, Function[{c}, MemberQ[ToFullFormString /@ ruleDelayedRHSSymbols, ToFullFormString[c]]]];
 
-  Scan[(
+  Scan[
+    Function[{ruleDelayedRHSParam},
+      paramString = ToFullFormString[ruleDelayedRHSParam];
 
-    paramString = ToFullFormString[#];
+      paramUses = Select[ruleDelayedRHSSymbols, (ToFullFormString[#] == paramString)&];
 
-    paramUses = Select[ruleDelayedRHSSymbols, ToFullFormString[#] == paramString&];
-
-    AppendTo[issues,
-      InspectionObject["LeakedVariable", "Leaked variable in ``Module``: " <> format[paramString] <> ".", "Warning", <|
-        Source -> #[[3, Key[Source]]],
-        "AdditionalSources" -> ( #[[3, Key[Source]]]& /@ paramUses ),
-        ConfidenceLevel -> 0.75 |>
+      AppendTo[issues,
+        InspectionObject["LeakedVariable", "Leaked variable in ``Module``: " <> format[paramString] <> ".", "Warning", <|
+          Source -> ruleDelayedRHSParam[[3, Key[Source]]],
+          "AdditionalSources" -> ( #[[3, Key[Source]]]& /@ paramUses ),
+          ConfidenceLevel -> 0.75 |>
+        ]
       ]
-    ])&
+    ]
     ,
     ruleDelayedRHSParams
   ];
@@ -1262,7 +1263,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
     Throw[issues]
   ];
 
-  selected = Select[vars, counts[ToFullFormString[#]] > 1&];
+  selected = Select[vars, (counts[ToFullFormString[#]] > 1)&];
 
   If[!empty[selected],
     srcs = #[[3, Key[Source]]]& /@ selected;
