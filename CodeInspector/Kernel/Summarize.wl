@@ -421,16 +421,7 @@ Module[{lints, lines, sources, warningsLines,
     Throw[{}]
   ];
 
-  (*
-  Add a fake line.
-
-  Syntax errors may continue to the end of the file (EOF), and the source location of EOF is {lastLine+1, 0}.
-  i.e., it is after all content in the file.
-
-  We want to hash the fake line that is added at the end.
-  *)
   lines = linesIn;
-  lines = Append[lines, ""];
 
   If[AnyTrue[lines, (StringLength[#] > $LineTruncationLimit)&],
     truncated = True;
