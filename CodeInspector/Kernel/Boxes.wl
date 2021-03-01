@@ -120,6 +120,10 @@ Catch[
   i.e. do not use expandedLints here
   *)
 
+  (*
+  Add a fake InspectedLineObject giving a listing of the settings used
+  This can be easily removed if not wanted
+  *)
   If[lints == {},
     lints = {
       InspectedLineObject[{
@@ -157,24 +161,42 @@ Catch[
 
 InspectedBoxObject::usage = "InspectedBoxObject[box] represents a formatted object of lints found in box."
 
-Format[InspectedBoxObject[processedBoxIn_, lints_], StandardForm] :=
-Module[{processedBox},
+Format[InspectedBoxObject[processedBoxIn_, lintsIn_], StandardForm] :=
+Module[{lints, processedBox},
+
+  lints = lintsIn;
+
 
   processedBox = processedBoxIn;
 
   processedBox = processedBox /. s_String :> StringReplace[s, $characterReplacementRules];
 
+  
   If[TrueQ[CodeInspector`Format`$Attached],
+    (*
+    Attached, so delete any textual InspectedLineObjects
+    *)
+    lints = DeleteCases[lints, _InspectedLineObject]
+  ];
+
+  (*
+  add formatting instructions
+  *)
+  lints = CodeInspector`Format`insertFormatInspectionObjectsAsPills /@ lints;
+
+
+  If[TrueQ[CodeInspector`Format`$Attached],
+    (*
+    $Attached is True, so probably running in CodeAssistance where InspectedBoxObjects are attached to the actual input
+    *)
     Interpretation[
       (*
       no frame
       no background color
 
       looks better for duplicating the input and marking up in an AttachedCell underneath
-
-      delete any textual InspectedLineObject
       *)
-      Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ DeleteCases[lints, _InspectedLineObject], Left, 0]
+      Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0]
       ,
       processedBox
     ]
