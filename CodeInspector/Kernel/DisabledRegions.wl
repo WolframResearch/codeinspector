@@ -7,49 +7,74 @@ Begin["`Private`"]
 Needs["CodeParser`"]
 
 
-codeInspectPushPat = LeafNode[Token`Comment, "(* ::CodeInspect::Push:: *)", _]
-codeInspectPopPat = LeafNode[Token`Comment, "(* ::CodeInspect::Pop:: *)", _]
+(*
 
-codeInspectDisablePat = LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ ":: *)"], _]
+Please use this syntax:
+
+(* CodeInspect::Begin *)
+(* CodeInspect::Disable::DuplicateClausesIf *)
+
+If[a, b, b]
+
+(* CodeInspect::End *)
+
+
+*)
+
+
+codeInspectBeginPat = LeafNode[Token`Comment, "(* ::CodeInspect::Push:: *)" | "(* CodeInspect::Begin *)", _]
+
+codeInspectEndPat = LeafNode[Token`Comment, "(* ::CodeInspect::Pop:: *)" | "(* CodeInspect::End *)", _]
+
+codeInspectDisablePat =
+  LeafNode[
+    Token`Comment,
+    str_String /; StringMatchQ[str, ("(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ ":: *)") | ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ " *)")],
+    _
+  ]
 
 
 
 DisabledRegions[cstIn_] :=
 Catch[
-Module[{cst, codeInspectPushPatNodePoss, disabledRegions, siblingsPos, siblings, popFound, candidate, popPos, disableds},
+Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings, endFound, candidate, endPos, disableds},
 
   cst = cstIn;
 
-  codeInspectPushPatNodePoss = Position[cst, codeInspectPushPat];
+  codeInspectBeginPatNodePoss = Position[cst, codeInspectBeginPat];
 
   disabledRegions = {};
   Do[
-    siblingsPos = Most[pushPos];
+    siblingsPos = Most[beginPos];
     siblings = Extract[cst, {siblingsPos}][[1]];
-    popFound = False;
+    endFound = False;
     disableds = {};
     Do[
       candidate = siblings[[pos]];
       Switch[candidate,
-        codeInspectPopPat,
-          popPos = Most[pushPos] ~Join~ {pos};
-          popFound = True;
+        codeInspectEndPat,
+          endPos = Most[beginPos] ~Join~ {pos};
+          endFound = True;
           Break[]
         ,
         codeInspectDisablePat,
-          disableds = disableds ~Join~ StringCases[candidate[[2]], "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> d]
+          disableds = disableds ~Join~
+            StringCases[candidate[[2]], {
+              "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> d,
+              "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ " *)" :> d
+            }]
       ]
       ,
-      {pos, Last[pushPos]+1, Length[siblings]}
+      {pos, Last[beginPos]+1, Length[siblings]}
     ];
-    If[popFound,
-      AppendTo[disabledRegions, {rangeStart[Extract[cst, pushPos][[3, Key[Source]]]], rangeEnd[Extract[cst, popPos][[3, Key[Source]]]], disableds}]
+    If[endFound,
+      AppendTo[disabledRegions, {rangeStart[Extract[cst, beginPos][[3, Key[Source]]]], rangeEnd[Extract[cst, endPos][[3, Key[Source]]]], disableds}]
       ,
-      Message[DisabledRegions::missingpop];
+      Message[DisabledRegions::missingpop, cst[[3]]];
       Throw[{}]
     ]
     ,
-    {pushPos, codeInspectPushPatNodePoss}
+    {beginPos, codeInspectBeginPatNodePoss}
   ];
 
   disabledRegions
