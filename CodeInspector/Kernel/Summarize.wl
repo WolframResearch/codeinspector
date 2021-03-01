@@ -16,9 +16,6 @@ $LintedLineLimit
 $DefaultLintLimit
 
 
-$Underlight
-
-
 $LineTruncationLimit
 
 
@@ -574,36 +571,19 @@ Module[{lints, lines, sources, warningsLines,
    Table[
 
       If[!MemberQ[elidedLines, i],
-        If[TrueQ[$Underlight],
-          With[
-            {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
-            ,
-            {lineSource = lines[[i]],
-              lineNumber = i,
-              lineList = ListifyLine[lines[[i]],
-                lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-              lints = Union[Flatten[Values[lintsPerColumn]]],
-              environ = MemberQ[environLines, i]
-            }
-            ,
-            InspectedLineObject[lineSource, lineNumber, lineList, lints, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
-          ]
+        With[
+          {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
           ,
-          (* else *)
-          With[
-            {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
-            ,
-            {lineSource = lines[[i]],
-              lineNumber = i,
-              lineList = ListifyLine[lines[[i]],
-                lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-              underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-              lints = Union[Flatten[Values[lintsPerColumn]]],
-              environ = MemberQ[environLines, i]
-            }
-            ,
-            InspectedLineObject[lineSource, lineNumber, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
-          ]
+          {lineSource = lines[[i]],
+            lineNumber = i,
+            lineList = ListifyLine[lines[[i]],
+              lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+            underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+            lints = Union[Flatten[Values[lintsPerColumn]]],
+            environ = MemberQ[environLines, i]
+          }
+          ,
+          InspectedLineObject[lineSource, lineNumber, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
         ]
         ,
         (* elided *)
@@ -698,7 +678,7 @@ Catch[
   
   under = Join[{" "}, under, {" "}];
 
-  markupPerColumn = KeyMap[#+1&, markupPerColumn];
+  markupPerColumn = KeyMap[(#+1)&, markupPerColumn];
 
   markupPerColumn = Normal[markupPerColumn];
 
@@ -834,11 +814,7 @@ Module[{line, lintsPerColumn},
   
   line = Characters[line];
 
-  If[TrueQ[$Underlight],
-    lintsPerColumn = KeyValueMap[#1 -> LintMarkup[line[[#1]], FontVariations -> {"Underlight" -> severityColor[#2]}]&, lintsPerColumn];
-    ,
-    lintsPerColumn = KeyValueMap[#1 -> LintMarkup[line[[#1]], FontWeight->Bold, FontColor->severityColor[#2]]&, lintsPerColumn];
-  ];
+  lintsPerColumn = KeyValueMap[(#1 -> LintMarkup[line[[#1]], FontWeight->Bold, FontColor->severityColor[#2]])&, lintsPerColumn];
 
   line = ReplacePart[line, lintsPerColumn];
 
