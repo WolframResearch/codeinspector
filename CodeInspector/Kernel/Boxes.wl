@@ -159,7 +159,7 @@ Catch[
 
 
 
-InspectedBoxObject::usage = "InspectedBoxObject[box] represents a formatted object of lints found in box."
+InspectedBoxObject::usage = "InspectedBoxObject[box, lints] represents a formatted object of lints found in box."
 
 Format[InspectedBoxObject[processedBoxIn_, lintsIn_], StandardForm] :=
 Module[{lints, processedBox},

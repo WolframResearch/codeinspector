@@ -534,7 +534,7 @@ Module[{g, bolded, actions, suggestions},
 
 
 
-InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, content, lintList] represents a formatted line of output."
+InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, content, lints] represents a formatted line of output."
 
 Options[InspectedLineObject] = {
 	"MaxLineNumberLength" -> 5,
