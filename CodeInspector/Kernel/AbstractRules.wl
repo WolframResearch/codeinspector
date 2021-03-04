@@ -267,37 +267,75 @@ Module[{ast, node, data, head, name, issues},
 
     Switch[name,
     "String",
-      AppendTo[issues, InspectionObject["BadCall", "``String`` is not a function.", "Error", <|
-        Source -> data[Source],
-        CodeActions -> {
-          CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <|
-            "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues,
+        InspectionObject["BadCall", "``String`` is not a function.", "Error",
+          <|
+            Source -> data[Source],
+            CodeActions -> {
+              CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <|
+                "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>]
+            },
+            ConfidenceLevel -> 0.90,
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "Integer",
-      AppendTo[issues, InspectionObject["BadCall", "``Integer`` is not a function.", "Error", <|
-        Source -> data[Source],
-        CodeActions -> {
-          CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <|
-            "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues,
+        InspectionObject["BadCall", "``Integer`` is not a function.", "Error",
+          <|
+            Source -> data[Source],
+            CodeActions -> {
+              CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <|
+                "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>]
+            },
+            ConfidenceLevel -> 0.90,
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "Real",
-      AppendTo[issues, InspectionObject["BadCall", "``Real`` is not a function.", "Error", <|
-        Source -> data[Source],
-        CodeActions -> {
-          CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <|
-            "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.90 |>]]
+      AppendTo[issues,
+        InspectionObject["BadCall", "``Real`` is not a function.", "Error",
+          <|
+            Source -> data[Source],
+            CodeActions -> {
+              CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <|
+                "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>]
+            },
+            ConfidenceLevel -> 0.90,
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "True",
-      AppendTo[issues, InspectionObject["BadCall", "``True`` is not a function.", "Error", <|
-        Source -> data[Source],
-        CodeActions -> {
-          CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <|
-            "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>] }, ConfidenceLevel -> 0.95 |>]]
+      AppendTo[issues,
+        InspectionObject["BadCall", "``True`` is not a function.", "Error",
+          <|
+            Source -> data[Source],
+            CodeActions -> {
+              CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <|
+                "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>]
+            },
+            ConfidenceLevel -> 0.95,
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     _,
-      AppendTo[issues, InspectionObject["BadCall", format[name] <> " is not a function.", "Error", <|
-        data,
-        ConfidenceLevel -> 0.90 |> ]]
+      AppendTo[issues,
+        InspectionObject["BadCall", format[name] <> " is not a function.", "Error",
+          <|
+            data,
+            ConfidenceLevel -> 0.90,
+            "Argument" -> name
+          |>
+        ]
+      ]
   ];
 
   issues
@@ -602,10 +640,11 @@ Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClausesWhich", "Duplicate clauses in ``Which``.", "Error", <|
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Which``.", "Error", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
-      ConfidenceLevel -> 0.95 |> ]
+      ConfidenceLevel -> 0.95,
+      "Argument" -> "Which" |> ]
     ];
     ,
     {selected, selecteds}
@@ -718,10 +757,11 @@ Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClausesSwitch", "Duplicate clauses in ``Switch``.", "Error", <|
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Switch``.", "Error", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
-      ConfidenceLevel -> 0.95 |> ]
+      ConfidenceLevel -> 0.95,
+      "Argument" -> "Switch" |> ]
     ];
     ,
     {selected, selecteds}
@@ -850,9 +890,11 @@ Catch[
     If[!empty[selected],
       firsts = firstTokenWithSource /@ selected;
       srcs = #[[3, Key[Source]]]& /@ firsts;
-      AppendTo[issues, InspectionObject["DuplicateClausesIf", "Both branches of ``If`` are the same.", "Error", <|
+      AppendTo[issues, InspectionObject["DuplicateClauses", "Both branches of ``If`` are the same.", "Error", <|
         Source -> First[srcs],
-        "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 0.95|>]]
+        "AdditionalSources" -> Rest[srcs],
+        ConfidenceLevel -> 0.95,
+        "Argument" -> "If"|>]]
     ];
   ];
 
@@ -1593,44 +1635,114 @@ Module[{ast, node, name, data, issues, src},
 
   Switch[name,
     "Failed",
-      AppendTo[issues, InspectionObject["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.75, CodeActions -> {
-          CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]} |>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.75,
+            CodeActions -> {
+              CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "Boolean",
-      AppendTo[issues, InspectionObject["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.75, CodeActions -> {
-          CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]}|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.75,
+            CodeActions -> {
+              CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "Match",
-      AppendTo[issues, InspectionObject["BadSymbol", "``Match`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.75, CodeActions -> {
-          CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]}|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``Match`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.75,
+            CodeActions -> {
+              CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "UnSameQ",
-      AppendTo[issues, InspectionObject["BadSymbol", "``UnSameQ`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.95, CodeActions -> {
-          CodeAction["Replace with ``UnsameQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[UnsameQ]|>]}|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``UnSameQ`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace with ``UnsameQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[UnsameQ]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "StringMatch",
-      AppendTo[issues, InspectionObject["BadSymbol", "``StringMatch`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.95, CodeActions -> {
-          CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[StringMatchQ]|>]}|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``StringMatch`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[StringMatchQ]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "OptionsQ",
-      AppendTo[issues, InspectionObject["BadSymbol", "``OptionsQ`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.95, CodeActions -> {
-          CodeAction["Replace with ``OptionQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionQ]|>]}|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``OptionsQ`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace with ``OptionQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionQ]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     "OptionPattern",
-      AppendTo[issues, InspectionObject["BadSymbol", "``OptionPattern`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.95, CodeActions -> {
-          CodeAction["Replace with ``OptionsPattern``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionsPattern]|>]}|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``OptionPattern`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace with ``OptionsPattern``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionsPattern]|>]
+            },
+            "Argument" -> name
+          |>
+        ]
+      ]
     ,
     _,
       (* everything else *)
-      AppendTo[issues, InspectionObject["BadSymbol", "``" <> name <> "`` does not exist in **System`** context.", "Error", <|
-        Source -> src, ConfidenceLevel -> 0.75|>]]
+      AppendTo[issues,
+        InspectionObject["BadSymbol", "``" <> name <> "`` does not exist in **System`** context.", "Error",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.75,
+            "Argument" -> name
+          |>
+        ]
+      ]
   ];
 
   issues
@@ -1965,10 +2077,11 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClausesAnd", "Duplicate clauses in ``And``.", "Error", <|
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
-      ConfidenceLevel -> 0.95 |> ]];
+      ConfidenceLevel -> 0.95,
+      "Argument" -> "And"|> ]];
   ];
 
   issues
@@ -2009,8 +2122,12 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClausesOr", "Duplicate clauses in ``Or``.", "Error",
-      <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
+      <| Source->First[srcs],
+      "AdditionalSources"->Rest[srcs],
+      ConfidenceLevel -> 0.95,
+      "Argument" -> "Or"
+      |> ]];
   ];
 
   issues
@@ -2066,8 +2183,13 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, src
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClausesAlternatives", "Duplicate clauses in ``Alternatives``.", "Error", <|
-      Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 0.95 |> ]];
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error",
+      <|
+        Source->First[srcs],
+        "AdditionalSources"->Rest[srcs],
+        ConfidenceLevel -> 0.95,
+        "Argument" -> "Alternatives"
+      |> ]];
   ];
 
   issues

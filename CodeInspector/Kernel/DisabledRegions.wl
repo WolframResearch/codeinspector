@@ -11,25 +11,31 @@ Needs["CodeParser`"]
 
 Please use this syntax:
 
-(* CodeInspect::Begin *)
+(* CodeInspect::Push *)
 (* CodeInspect::Disable::DuplicateClausesIf *)
 
 If[a, b, b]
 
-(* CodeInspect::End *)
+(* CodeInspect::Pop *)
 
 
 *)
 
 
-codeInspectBeginPat = LeafNode[Token`Comment, "(* ::CodeInspect::Push:: *)" | "(* CodeInspect::Begin *)", _]
+codeInspectBeginPat = LeafNode[Token`Comment, "(* ::CodeInspect::Push:: *)" | "(* CodeInspect::Begin *)" | "(* CodeInspect::Push *)", _]
 
-codeInspectEndPat = LeafNode[Token`Comment, "(* ::CodeInspect::Pop:: *)" | "(* CodeInspect::End *)", _]
+codeInspectEndPat = LeafNode[Token`Comment, "(* ::CodeInspect::Pop:: *)" | "(* CodeInspect::End *)" | "(* CodeInspect::Pop *)", _]
 
 codeInspectDisablePat =
   LeafNode[
     Token`Comment,
-    str_String /; StringMatchQ[str, ("(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ ":: *)") | ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ " *)")],
+    str_String /;
+      StringMatchQ[str,
+        ("(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ ":: *)") |
+        ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ " *)") |
+        ("(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ "::" ~~ LetterCharacter... ~~ ":: *)") |
+        ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ "::" ~~ LetterCharacter... ~~ " *)")
+      ],
     _
   ]
 
@@ -60,8 +66,10 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
         codeInspectDisablePat,
           disableds = disableds ~Join~
             StringCases[candidate[[2]], {
-              "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> d,
-              "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ " *)" :> d
+              "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> {d},
+              "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ " *)" :> {d},
+              "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ ":: *)" :> {d, a},
+              "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ " *)" :> {d, a}
             }]
       ]
       ,

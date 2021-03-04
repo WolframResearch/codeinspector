@@ -372,7 +372,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
       Function[{lint},
         AllTrue[disabledRegions,
           Function[{region},
-            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+            AllTrue[region[[3]],
+              Function[{disabled},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              ]
+            ]
           ]
         ]
       ]
@@ -410,7 +414,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
       Function[{lint},
         AllTrue[disabledRegions,
           Function[{region},
-            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+            AllTrue[region[[3]],
+              Function[{disabled},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              ]
+            ]
           ]
         ]
       ]
@@ -457,7 +465,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
       Function[{lint},
         AllTrue[disabledRegions,
           Function[{region},
-            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+            AllTrue[region[[3]],
+              Function[{disabled},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              ]
+            ]
           ]
         ]
       ]
@@ -513,7 +525,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     Function[{lint},
       AllTrue[disabledRegions,
         Function[{region},
-          !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          AllTrue[region[[3]],
+            Function[{disabled},
+              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+            ]
+          ]
         ]
       ]
     ]
@@ -581,7 +597,11 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
       Function[{lint},
         AllTrue[disabledRegions,
           Function[{region},
-            !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+            AllTrue[region[[3]],
+              Function[{disabled},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              ]
+            ]
           ]
         ]
       ]
@@ -625,7 +645,11 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
     Function[{lint},
       AllTrue[disabledRegions,
         Function[{region},
-          !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          AllTrue[region[[3]],
+            Function[{disabled},
+              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+            ]
+          ]
         ]
       ]
     ]
@@ -692,7 +716,11 @@ Module[{abstractRules, ast, poss, lints,
     Function[{lint},
       AllTrue[disabledRegions,
         Function[{region},
-          !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || !MemberQ[region[[3]], lint[[1]]]
+          AllTrue[region[[3]],
+            Function[{disabled},
+              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+            ]
+          ]
         ]
       ]
     ]
@@ -701,6 +729,22 @@ Module[{abstractRules, ast, poss, lints,
   lints
 ]]
 
+
+
+isEnabled[InspectionObject[tag1_, _, _, KeyValuePattern["Argument" -> arg1_]], {tag2_, arg2_}] :=
+  !(tag1 === tag2 && arg1 === arg2)
+
+(*
+The lint has an Argument, but there is no argument in the disabled
+*)
+isEnabled[InspectionObject[_, _, _, KeyValuePattern["Argument" -> _]], {_}] :=
+  True
+
+isEnabled[InspectionObject[tag1_, _, _, _], {tag2_, _}] :=
+  !(tag1 === tag2)
+
+isEnabled[InspectionObject[tag1_, _, _, _], {tag2_}] :=
+  !(tag1 === tag2)
 
 
 End[]
