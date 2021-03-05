@@ -172,6 +172,8 @@ Catch[
           "SeverityExclusions" -> severityExclusions
         }]
       }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -184,7 +186,9 @@ Catch[
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
-      }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}]
     } ~Join~ lintedLines
   ];
 
@@ -271,6 +275,8 @@ Catch[
           "SeverityExclusions" -> severityExclusions
         }]
       }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -283,7 +289,9 @@ Catch[
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
-      }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}]
     } ~Join~ lintedLines
   ];
 
@@ -355,6 +363,8 @@ Catch[
           "SeverityExclusions" -> severityExclusions
         }]
       }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -367,7 +377,9 @@ Catch[
           "TagExclusions" -> tagExclusions,
           "SeverityExclusions" -> severityExclusions
         }]
-      }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}]
     } ~Join~ lintedLines
   ];
 
