@@ -108,13 +108,9 @@ must handle Condition
 CallNode[LeafNode[Symbol, "Replace" | "ReplaceAll" | "ReplaceRepeated", _], _, _] -> scanReplaces,
 *)
 
-(*
-Scan some symbols that are intuitive, yet do not exist
-*)
-LeafNode[Symbol,
-  "AnyFalse" | "AllFalse" | "Failed" | "Boolean" | "RealQ" | "FalseQ" | "RationalQ" |
-  "ComplexQ" | "SymbolQ" | "Match" | "UnSameQ" | "StringMatch" |
-  "OptionsQ" | "OptionPattern", _] -> scanBadSymbols,
+
+
+
 
 (*
 
@@ -1615,135 +1611,6 @@ Module[{ast, node, children, data, issues, opt, pats},
       #[[3]],
       ConfidenceLevel -> 0.95|>]]
   )&, pats];
-
-  issues
-]
-
-
-Attributes[scanBadSymbols] = {HoldRest}
-
-scanBadSymbols[pos_List, astIn_] :=
-Module[{ast, node, name, data, issues, src},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  name = node["String"];
-  data = node[[3]];
-
-  issues = {};
-
-  src = data[Source];
-
-  Switch[name,
-    "Failed",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.75,
-            CodeActions -> {
-              CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "Boolean",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.75,
-            CodeActions -> {
-              CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "Match",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``Match`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.75,
-            CodeActions -> {
-              CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "UnSameQ",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``UnSameQ`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.95,
-            CodeActions -> {
-              CodeAction["Replace with ``UnsameQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[UnsameQ]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "StringMatch",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``StringMatch`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.95,
-            CodeActions -> {
-              CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[StringMatchQ]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "OptionsQ",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``OptionsQ`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.95,
-            CodeActions -> {
-              CodeAction["Replace with ``OptionQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionQ]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "OptionPattern",
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``OptionPattern`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.95,
-            CodeActions -> {
-              CodeAction["Replace with ``OptionsPattern``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionsPattern]|>]
-            },
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    _,
-      (* everything else *)
-      AppendTo[issues,
-        InspectionObject["BadSymbol", "``" <> name <> "`` does not exist in **System`** context.", "Error",
-          <|
-            Source -> src,
-            ConfidenceLevel -> 0.75,
-            "Argument" -> name
-          |>
-        ]
-      ]
-  ];
 
   issues
 ]
