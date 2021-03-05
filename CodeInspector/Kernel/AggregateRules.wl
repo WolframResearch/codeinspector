@@ -176,7 +176,7 @@ CompoundNode[Blank | BlankSequence | BlankNullSequence, {_,
   scanBlankPredicate,
 
 
-BinaryNode[PatternTest, {LeafNode[Symbol, _, _], _, LeafNode[Symbol, _, _]}, _] ->
+BinaryNode[PatternTest, {LeafNode[Symbol, _, _], _, _}, _] ->
   scanSymbolPatternTest,
 
 
