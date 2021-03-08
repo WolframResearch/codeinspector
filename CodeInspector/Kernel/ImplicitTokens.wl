@@ -396,7 +396,7 @@ mergeCharacters[unhandled_] := (
   If[$Debug,
     Message[mergeCharacters::unhandled, unhandled]
   ];
-  " "
+  LintUnhandledCharacter
 )
 
 (*

@@ -44,6 +44,8 @@ LintCloseTimesOneCharacter
 
 LintEOFCharacter
 
+LintUnhandledCharacter
+
 
 
 
@@ -1019,6 +1021,9 @@ LintEOFCharacter::usage = "LintEOFCharacter represents an EOF in formatted outpu
 Format[LintEOFCharacter, StandardForm] := "\[FilledSquare]"
 Format[LintEOFCharacter, OutputForm] := "EOF"
 
+
+Format[LintUnhandledCharacter, StandardForm] := " "
+Format[LintUnhandledCharacter, OutputForm] := " "
 
 
 
