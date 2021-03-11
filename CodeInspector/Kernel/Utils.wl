@@ -74,7 +74,7 @@ expandLineNumberExclusions[lineNumberExclusions_Association] :=
 
 
 
-severityToInteger["ImplicitTimes" | "Formatting"] = 0
+severityToInteger["ImplicitTimes" | "Formatting" | "Scoping"] = 0
 severityToInteger["Remark"] = 1
 severityToInteger["Warning"] = 2
 severityToInteger["Error"] = 3
@@ -87,7 +87,7 @@ severityColor[lints:{_InspectionObject..}] :=
 Module[{maxSeverity},
 	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
 	Switch[maxSeverity,
-		"Formatting" | "Remark" | "ImplicitTimes", Blue,
+		"Formatting" | "Remark" | "ImplicitTimes" | "Scoping", Blue,
 		"Warning", Darker[Orange],
 		"Error" | "Fatal", Red
 	]
@@ -98,7 +98,7 @@ severityColorNewStyle[lints:{_InspectionObject..}] :=
 Module[{maxSeverity},
 	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
 	Switch[maxSeverity,
-		"Formatting" | "Remark" | "ImplicitTimes", {
+		"Formatting" | "Remark" | "ImplicitTimes" | "Scoping", {
 				RGBColor[0/255, 118/255, 255/255] (*primary icon color*), 
 				RGBColor[255/255, 255/255, 255/255] (*secondary icon color*), 
 				RGBColor[203/255, 230/255, 255/255] (*primary bar color*), 
@@ -456,8 +456,8 @@ Module[{text},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedModuleVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"shadowed" -> InspectionObject["ShadowedModuleVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedModuleVariable", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedModuleVariable", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			"error" -> InspectionObject["ModuleVariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			_ :> Sequence @@ {}
 		}
@@ -478,8 +478,8 @@ Module[{text},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedBlockVariable", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"shadowed" -> InspectionObject["ShadowedBlockVariable", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedBlockVariable", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedBlockVariable", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			"error" -> InspectionObject["BlockVariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			_ :> Sequence @@ {}
 		}
@@ -535,8 +535,8 @@ Module[{text},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedParameter", "Unused " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> text, "Remark", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedParameter", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			"error" -> InspectionObject["ParameterError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			_ :> Sequence @@ {}
 		}
