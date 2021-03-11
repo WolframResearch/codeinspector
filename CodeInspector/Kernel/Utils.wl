@@ -523,6 +523,31 @@ Module[{},
 	]
 ]
 
+scopingDataObjectToLints[scopingDataObject[src_, {___, "Function"}, modifiers_]] :=
+Module[{text},
+	
+	(*
+	Use the text "Slot" instead of "Function parameter"
+	*)
+	text = "Slot";
+	
+	(*
+	create separate lints for Unused, Shadowed, etc.
+	and ignore other modifiers
+	*)
+
+	Replace[modifiers,
+		{
+			"unused" -> InspectionObject["UnusedParameter", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			_ :> Sequence @@ {}
+		}
+		,
+		{1}
+	]
+]
+
 scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope_}, modifiers_]] :=
 Module[{text},
 	
