@@ -2357,6 +2357,12 @@ Module[{ast, node, tag, data, tagString, children},
     "PatternColonError",
       {InspectionObject["PatternColonError", "Invalid syntax for ``:``: LHS must be a symbol.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
+    "TagSetError",
+      {InspectionObject["TagSetError", "Invalid syntax for ``/: =``: LHS must be a symbol.", "Error", <| data, ConfidenceLevel -> 0.95 |>]}
+    ,
+    "TagSetDelayedError",
+      {InspectionObject["TagSetDelayedError", "Invalid syntax for ``/: :=``: LHS must be a symbol.", "Error", <| data, ConfidenceLevel -> 0.95 |>]}
+    ,
     _,
       {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
