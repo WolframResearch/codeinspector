@@ -65,6 +65,7 @@ Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`DisabledRegions`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Summarize`"]
+Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
 Needs["CodeParser`"]
 Needs["CodeParser`Abstract`"]
@@ -118,6 +119,7 @@ code can be a string, a file, or a list of bytes."
 Options[CodeInspect] = {
   PerformanceGoal -> "Speed",
 
+  "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
@@ -141,9 +143,10 @@ $fileByteCountMaxLimit = 3*^6
 CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
 Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules,
-  editor, disabledRegions},
+  editor, disabledRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
+  tokenRules = OptionValue["TokenRules"];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
@@ -187,6 +190,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
   lints = CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
+    "TokenRules" -> tokenRules,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
@@ -219,9 +223,10 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
 CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
+  tokenRules = OptionValue["TokenRules"];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
@@ -244,6 +249,7 @@ Catch[
   CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
+    "TokenRules" -> tokenRules,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
@@ -255,9 +261,10 @@ Catch[
 
 CodeInspect[bytes_List, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
+  tokenRules = OptionValue["TokenRules"];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
@@ -280,6 +287,7 @@ Catch[
   CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
+    "TokenRules" -> tokenRules,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
@@ -291,6 +299,7 @@ Catch[
 
 Options[CodeInspectCST] = {
   PerformanceGoal -> "Speed",
+  "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
@@ -303,7 +312,7 @@ CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
-  scopingData, scopingLints, disabledRegions},
+  scopingData, scopingLints, disabledRegions, tokenRules},
 
   If[$Debug,
     Print["CodeInspectCST"];
@@ -314,6 +323,7 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   lints = {};
 
   performanceGoal = OptionValue[PerformanceGoal];
+  tokenRules = OptionValue["TokenRules"];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
@@ -326,6 +336,42 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   If[FailureQ[cst],
     Throw[cst]
   ];
+
+  If[empty[tokenRules] && empty[concreteRules] && empty[aggregateRules] && empty[abstractRules],
+
+    lints = Flatten[lints];
+
+    lints = Select[lints,
+      Function[{lint},
+        AllTrue[disabledRegions,
+          Function[{region},
+            AllTrue[region[[3]],
+              Function[{disabled},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ];
+
+    Throw[lints]
+  ];
+
+
+  If[$Debug,
+    Print["tokenRules"];
+  ];
+
+  
+  KeyValueMap[Function[{pat, func},
+    If[$Debug,
+      Print[pat];
+    ];
+    poss = Position[cst, pat];
+    AppendTo[lints, Map[Function[pos, func[pos, cst]], poss]];
+    ], tokenRules];
+
 
   If[empty[concreteRules] && empty[aggregateRules] && empty[abstractRules],
 
@@ -352,8 +398,6 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   If[$Debug,
     Print["concreteRules"];
   ];
-
-  lints = {};
 
   prog = 0;
   start = Now;

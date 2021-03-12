@@ -9,6 +9,7 @@ Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`DisabledRegions`"]
 Needs["CodeInspector`Summarize`"]
+Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
 
 
@@ -59,6 +60,7 @@ CodeInspectSummarize[b_RowBox, opts:OptionsPattern[]] :=
 
 Options[CodeInspectBox] = {
   PerformanceGoal -> "Speed",
+  "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules
@@ -66,9 +68,10 @@ Options[CodeInspectBox] = {
 
 CodeInspectBox[box_, OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
+  tokenRules = OptionValue["TokenRules"];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
@@ -91,6 +94,7 @@ Catch[
   CodeInspectCST[
     cst,
     PerformanceGoal -> performanceGoal,
+    "TokenRules" -> tokenRules,
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
@@ -104,6 +108,7 @@ CodeInspectBoxSummarize::usage = "CodeInspectBoxSummarize[box] returns a box ins
 
 Options[CodeInspectBoxSummarize] = {
   PerformanceGoal -> "Speed",
+  "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
@@ -132,11 +137,12 @@ CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
 Catch[
  Module[{lints, tagExclusions, severityExclusions,
   confidence, lintLimit, performanceGoal, concreteRules, aggregateRules, abstractRules,
-  processedBox, cst, expandedLints},
+  processedBox, cst, expandedLints, tokenRules},
 
  lints = lintsIn;
 
  performanceGoal = OptionValue[PerformanceGoal];
+ tokenRules = OptionValue["TokenRules"];
  concreteRules = OptionValue["ConcreteRules"];
  aggregateRules = OptionValue["AggregateRules"];
  abstractRules = OptionValue["AbstractRules"];
@@ -164,6 +170,7 @@ Catch[
 
     lints = CodeInspectCST[cst,
       PerformanceGoal -> performanceGoal,
+      "TokenRules" -> tokenRules,
       "ConcreteRules" -> concreteRules,
       "AggregateRules" -> aggregateRules,
       "AbstractRules" -> abstractRules];

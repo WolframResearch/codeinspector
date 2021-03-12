@@ -65,6 +65,7 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTokens.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/TokenRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
 
