@@ -447,7 +447,7 @@ lexOrderingForLists[a_, b_] :=
 scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope : "Module" | "DynamicModule"}, modifiers_]] :=
 Module[{text},
 	
-	text = lastScope <> " " <> "variable";
+	text = "``" <> lastScope <> "`` " <> "variable";
 	
 	(*
 	create separate lints for Unused, Shadowed, etc.
@@ -469,7 +469,7 @@ Module[{text},
 scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope : "Block" | "Internal`InheritedBlock"}, modifiers_]] :=
 Module[{text},
 	
-	text = lastScope <> " " <> "variable";
+	text = "``" <> lastScope <> "`` " <> "variable";
 	
 	(*
 	create separate lints for Unused, Shadowed, etc.
@@ -488,15 +488,37 @@ Module[{text},
 	]
 ]
 
-(*
-For example, a naked # at top-level will have scope of {}
-*)
 scopingDataObjectToLints[scopingDataObject[src_, scope:{}, modifiers_]] :=
+Module[{},
+	
+	(*
+	Currently, Slot is only possibility for unscoped error
+
+	FIXME: guard against other unscoped errors in the future
+	*)
+
+	Replace[modifiers,
+		{
+			(*
+			lower confidence because this is somewhat common
+			*)
+			"error" -> InspectionObject["UnscopedObjectError", "Unscoped ``Slot`` error", "Error", <|Source -> src, ConfidenceLevel -> 0.80|>],
+			(*
+			The only modifier should be "error"
+			*)
+			_ :> Failure["Unhandled", <| "Function" -> scopingDataObjectToLints, "Arguments" -> {scopingDataObject[src, scope, modifiers]} |>]
+		}
+		,
+		{1}
+	]
+]
+
+scopingDataObjectToLints[scopingDataObject[src_, scope:{___, "SetDelayed" | "RuleDelayed" | "TagSetDelayed" | "UpSetDelayed", "Error"}, modifiers_]] :=
 Module[{},
 
 	Replace[modifiers,
 		{
-			"error" -> InspectionObject["UnscopedObjectError", "Unscoped object error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", "Pattern error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -529,7 +551,7 @@ Module[{text},
 	(*
 	Use the text "Slot" instead of "Function parameter"
 	*)
-	text = "Slot";
+	text = "``Slot``";
 	
 	(*
 	create separate lints for Unused, Shadowed, etc.
@@ -551,7 +573,7 @@ Module[{text},
 scopingDataObjectToLints[scopingDataObject[src_, {___, lastScope_}, modifiers_]] :=
 Module[{text},
 	
-	text = lastScope <> " " <> "parameter";
+	text = "``" <> lastScope <> "`` " <> "parameter";
 	
 	(*
 	create separate lints for Unused, Shadowed, etc.
