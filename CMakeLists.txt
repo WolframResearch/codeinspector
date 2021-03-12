@@ -70,6 +70,7 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 )
 
 set(PROCESSED_SYMBOLS_DATA_FILES
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BadSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BuiltinFunctions.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/Constants.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ExperimentalSymbols.wl

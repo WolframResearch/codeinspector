@@ -13,6 +13,7 @@ Paclet[
       Resources -> {
         {"Collatz","Examples/Collatz.m"},
         
+        {"BadSymbols", "Data/BadSymbols.wl"},
         {"BuiltinFunctions", "Data/BuiltinFunctions.wl"},
         {"Constants", "Data/Constants.wl"},
         {"ExperimentalSymbols", "Data/ExperimentalSymbols.wl"},
