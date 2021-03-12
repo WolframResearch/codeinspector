@@ -68,6 +68,22 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )
 
+set(PROCESSED_SYMBOLS_DATA_FILES
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BuiltinFunctions.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/Constants.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ExperimentalSymbols.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/FreeCharacters.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/FreeLongNames.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ObsoleteSymbols.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SystemCharacters.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SystemLongNames.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/UndocumentedCharacters.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/UndocumentedLongNames.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/UndocumentedSymbols.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/UnsupportedCharacters.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/UnsupportedLongNames.wl
+)
+
 set(STATIC_WL_PACLET_RESOURCES_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Resources/Examples/Collatz.m
 )
@@ -137,6 +153,22 @@ foreach(SRC ${STATIC_WL_PACLET_KERNEL_SOURCES})
 			${PROJECT_SOURCE_DIR}/cmake/InspectFile.cmake
 	)
 	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${REL})
+endforeach()
+
+#
+# processed Data sources
+#
+foreach(SRC ${PROCESSED_SYMBOLS_DATA_FILES})
+	file(RELATIVE_PATH REL ${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ ${SRC})
+	add_custom_command(
+		OUTPUT
+			${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Data/${REL}
+		COMMAND
+			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Data/${REL}
+		DEPENDS
+			${SRC}
+	)
+	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/Data/${REL})
 endforeach()
 
 #

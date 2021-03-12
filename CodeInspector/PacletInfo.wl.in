@@ -11,7 +11,21 @@ Paclet[
     {"Documentation", Language -> "English", MainPage -> "Guides/CodeInspector"},
     {"Resource", Root->"Resources",
       Resources -> {
-        {"Collatz","Examples/Collatz.m"}
+        {"Collatz","Examples/Collatz.m"},
+        
+        {"BuiltinFunctions", "Data/BuiltinFunctions.wl"},
+        {"Constants", "Data/Constants.wl"},
+        {"ExperimentalSymbols", "Data/ExperimentalSymbols.wl"},
+        {"FreeCharacters", "Data/FreeCharacters.wl"},
+        {"FreeLongNames", "Data/FreeLongNames.wl"},
+        {"ObsoleteSymbols", "Data/ObsoleteSymbols.wl"},
+        {"SystemCharacters", "Data/SystemCharacters.wl"},
+        {"SystemLongNames", "Data/SystemLongNames.wl"},
+        {"UndocumentedCharacters", "Data/UndocumentedCharacters.wl"},
+        {"UndocumentedLongNames", "Data/UndocumentedLongNames.wl"},
+        {"UndocumentedSymbols", "Data/UndocumentedSymbols.wl"},
+        {"UnsupportedCharacters", "Data/UnsupportedCharacters.wl"},
+        {"UnsupportedLongNames", "Data/UnsupportedLongNames.wl"}
       }
     }
   }
