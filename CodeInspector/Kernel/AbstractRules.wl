@@ -148,11 +148,6 @@ ContextNode[{LeafNode[String, "\"Private`\"", _]}, _, _] -> scanPrivateContextNo
 
 
 
-LeafNode[Symbol, "$HistoryLength" | "$Line", _] -> scanSessionSymbols,
-
-CallNode[LeafNode[Symbol, "In" | "Out" | "InString", _], _, _] -> scanSessionCalls,
-
-
 (*
 
 too noisy
@@ -1752,38 +1747,6 @@ Module[{ast, node, str, strData},
       |>] } |>]}
 ]]
 
-
-
-Attributes[scanSessionSymbols] = {HoldRest}
-
-scanSessionSymbols[pos_List, astIn_] :=
-Catch[
-Module[{ast, node, data},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  data = node[[3]];
-
-  {InspectionObject["SuspiciousSessionSymbol", "Suspicious use of session symbol " <> format[node["String"]] <> ".", "Warning", <|
-    data,
-    ConfidenceLevel -> 0.55|>]}
-]]
-
-
-
-Attributes[scanSessionCalls] = {HoldRest}
-
-scanSessionCalls[pos_List, astIn_] :=
-Catch[
-Module[{ast, node, data, head},
-  ast = astIn;
-  node = Extract[ast, {pos}][[1]];
-  head = node[[1]];
-  data = node[[3]];
-
-  {InspectionObject["SuspiciousSessionSymbol", "Suspicious use of session function " <> format[head["String"]] <> ".", "Warning", <|
-    data,
-    ConfidenceLevel -> 0.55|>]}
-]]
 
 
 

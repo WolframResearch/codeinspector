@@ -20,6 +20,7 @@ Paclet[
         {"FreeCharacters", "Data/FreeCharacters.wl"},
         {"FreeLongNames", "Data/FreeLongNames.wl"},
         {"ObsoleteSymbols", "Data/ObsoleteSymbols.wl"},
+        {"SessionSymbols", "Data/SessionSymbols.wl"},
         {"SystemCharacters", "Data/SystemCharacters.wl"},
         {"SystemLongNames", "Data/SystemLongNames.wl"},
         {"UndocumentedCharacters", "Data/UndocumentedCharacters.wl"},

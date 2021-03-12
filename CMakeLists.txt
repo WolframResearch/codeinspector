@@ -77,6 +77,7 @@ set(PROCESSED_SYMBOLS_DATA_FILES
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/FreeCharacters.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/FreeLongNames.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ObsoleteSymbols.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SessionSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SystemCharacters.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SystemLongNames.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/UndocumentedCharacters.wl

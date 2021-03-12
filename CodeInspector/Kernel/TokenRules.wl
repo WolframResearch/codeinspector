@@ -20,8 +20,10 @@ TODO: when targeting 12.1 as a minimum, then use paclet["AssetLocation", "BadSym
 location = "Location" /. PacletInformation["CodeInspector"];
 
 WolframLanguageSyntax`Generate`$badSymbols = Get[FileNameJoin[{location, "Resources", "Data", "BadSymbols.wl"}]]
+WolframLanguageSyntax`Generate`$sessionSymbols = Get[FileNameJoin[{location, "Resources", "Data", "SessionSymbols.wl"}]]
 
 badSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$badSymbols
+sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessionSymbols
 
 
 
@@ -187,6 +189,16 @@ Module[{cst, node, data, str, issues, src},
               |>
             ]
           ]
+      ]
+    ,
+    StringMatchQ[str, sessionSymbolsStringPat],
+      AppendTo[issues,
+        InspectionObject["SuspiciousSessionSymbol", "Suspicious use of session symbol " <> format[str] <> ".", "Warning",
+          <|
+            Source -> src,
+            ConfidenceLevel -> 0.55
+          |>
+        ]
       ]
     ,
     True,
