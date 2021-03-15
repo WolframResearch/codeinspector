@@ -140,7 +140,7 @@ StartOfLineNode[Information, _, _] -> scanInformation,
 TODO: maybe should be experimental?
 *)
 
-InfixNode[StringExpression, {InfixNode[Alternatives, _, _], __}, _] -> scanAlternativesStringExpression,
+InfixNode[StringExpression, {___, InfixNode[Alternatives, _, _], ___}, _] -> scanAlternativesStringExpression,
 
 
 
@@ -1537,64 +1537,146 @@ a | b ~~ c
 *)
 scanAlternativesStringExpression[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, stringExpArgRest, alternatives, alternativesChildren, alternativesMost, alternativesLast,
-  choice1, choice2},
+ Module[{agg, node, data, children, alternativesChildren, alternativesMost, alternativesLast,
+  issues, alternativess, actions, alternativesPos, choice, action, alternativesFirst, alternativesRest,
+  stringExpArgsBefore, stringExpArgsAfter, rands},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
+  rands = children[[;;;;2]];
   data = node[[3]];
 
-  alternatives = children[[1]];
-  alternativesChildren = alternatives[[2, ;;;;2]];
-  alternativesMost = Most[alternativesChildren];
-  alternativesLast = Last[alternativesChildren];
+  issues = {};
 
-  stringExpArgRest = children[[3;;;;2]];
+  alternativess = Cases[rands, InfixNode[Alternatives, _, _]];
 
-  choice1 = InfixNode[Alternatives,
-    Flatten[Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
-      LeafNode[Token`OpenParen, "(", <||>],
+  Do[
+    alternativesPos = Position[rands, alternatives][[1]];
+    stringExpArgsBefore = rands[[;;alternativesPos[[1]]-1]];
+    stringExpArgsAfter = rands[[alternativesPos[[1]]+1;;]];
+
+    alternativesChildren = alternatives[[2, ;;;;2]];
+
+    actions = {};
+
+    If[alternativesPos[[1]] > 1,
+      (*
+      wrap preceding StringExpression children with first alternatives child
+      *)
+      
+      alternativesFirst = First[alternativesChildren];
+      alternativesRest = Rest[alternativesChildren];
+
+      If[!empty[stringExpArgsBefore],
+
+        choice =
+          InfixNode[StringExpression,
+            Flatten[betterRiffle[{
+              InfixNode[Alternatives,
+                Flatten[Riffle[{GroupNode[GroupParen, {
+                  LeafNode[Token`OpenParen, "(", <||>],
+                  InfixNode[StringExpression,
+                    Flatten[Riffle[
+                      stringExpArgsBefore ~Join~ {alternativesFirst}
+                      ,
+                      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+                    ]], <||>],
+                  LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~ alternativesRest
+                  ,
+                  {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+                ]], <||>
+              ]} ~Join~ stringExpArgsAfter
+              ,
+              {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+            ]], <||>];
+
+          action =
+            CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
+              "ReplacementNode" -> choice,
+              Source -> data[[Key[Source]]]
+            |>];
+
+          AppendTo[actions, action];
+      ];
+    ];
+
+    If[alternativesPos[[1]] < Length[children],
+      (*
+      wrap last alternatives child with succeeding StringExpression children
+      *)
+
+      alternativesMost = Most[alternativesChildren];
+      alternativesLast = Last[alternativesChildren];
+
+      If[!empty[stringExpArgsAfter],
+
+        choice =
+          InfixNode[StringExpression,
+            Flatten[betterRiffle[stringExpArgsBefore ~Join~ {
+              InfixNode[Alternatives,
+                Flatten[Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
+                  LeafNode[Token`OpenParen, "(", <||>],
+                  InfixNode[StringExpression,
+                    Flatten[Riffle[
+                      {alternativesLast} ~Join~ stringExpArgsAfter
+                      ,
+                      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+                    ]], <||>],
+                  LeafNode[Token`CloseParen, ")", <||>]}, <||>]}
+                  ,
+                  {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+                ]], <||>]}
+              ,
+              {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+            ]], <||>];
+
+          action =
+            CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
+              "ReplacementNode" -> choice,
+              Source -> data[[Key[Source]]]
+            |>];
+
+          AppendTo[actions, action];
+      ];
+    ];
+
+    (*
+    just wrap Alternatives with parens
+    *)
+    choice =
       InfixNode[StringExpression,
-        Flatten[Riffle[
-          {alternativesLast} ~Join~ stringExpArgRest
+        Flatten[Riffle[stringExpArgsBefore ~Join~ 
+          {GroupNode[GroupParen, {
+            LeafNode[Token`OpenParen, "(", <||>],
+            alternatives,
+            LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~
+          stringExpArgsAfter
           ,
           {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-        ]], <||>],
-      LeafNode[Token`CloseParen, ")", <||>]}, <||>]}
-      ,
-      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-    ]], <||>];
+        ]], <||>];
 
-  choice2 = InfixNode[StringExpression,
-    Flatten[Riffle[{GroupNode[GroupParen, {
-      LeafNode[Token`OpenParen, "(", <||>],
-      InfixNode[Alternatives,
-        Flatten[Riffle[
-          alternativesChildren
-          ,
-          {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-        ]], <||>],
-      LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~ stringExpArgRest
-      ,
-      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-    ]], <||>];
+    action =
+      CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
+        "ReplacementNode" -> choice,
+        Source -> data[[Key[Source]]]
+      |>];
 
-  {InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``.\n\
+    AppendTo[actions, action];
+
+    AppendTo[issues,
+      InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``.\n\
 The precedence of ``|`` is higher than ``~~``.\n\
 ``Alternatives`` is inside ``StringExpression``.", "Remark", <|
-    Source -> data[[Key[Source]]],
-    ConfidenceLevel -> 0.75,
-    CodeActions -> {
-      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
-        "ReplacementNode" -> choice1,
-        Source -> data[[Key[Source]]]
-      |>],
-      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
-        "ReplacementNode" -> choice2,
-        Source -> data[[Key[Source]]]
+        Source -> data[[Key[Source]]],
+        ConfidenceLevel -> 0.75,
+        CodeActions -> actions
       |>]
-    }
-  |>]}
+    ]
+    ,
+    {alternatives, alternativess}
+  ];
+
+  issues
 ]]
 
 

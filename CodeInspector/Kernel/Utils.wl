@@ -41,6 +41,9 @@ lexOrderingForLists
 scopingDataObjectToLints
 
 
+betterRiffle
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -599,6 +602,20 @@ Module[{text},
 
 
 
+
+(*
+It is convenient to have a function that does:
+
+betterRiffle[{1}, {2}] => {1}
+
+Unfortunately, Riffle does this:
+Riffle[{1}, {2}] => {1, 2}
+
+So introduce betterRiffle
+*)
+betterRiffle[{a_}, _] := {a}
+
+betterRiffle[a_, b_] := Riffle[a, b]
 
 
 
