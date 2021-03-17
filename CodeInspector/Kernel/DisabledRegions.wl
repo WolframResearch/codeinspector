@@ -109,27 +109,18 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
   Do[
     siblingsPos = Most[beginPos];
     siblings = Extract[cst, {siblingsPos}][[1]];
-
-    Print["siblings: ", siblings];
-
     endFound = False;
     disableds = {};
     Do[
       candidate = siblings[[pos]];
       Switch[candidate,
         codeInspectEndPat,
-          Print[1];
           endPos = Most[beginPos] ~Join~ {pos};
           endFound = True;
           Break[]
         ,
         codeInspectDisablePat,
-          Print[2];
           disableds = disableds ~Join~ disabledsFromCandidate[candidate]
-        ,
-        _,
-          Print[3, " ", candidate];
-          Null
       ]
       ,
       {pos, Last[beginPos]+1, Length[siblings]}
