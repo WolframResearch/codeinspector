@@ -141,7 +141,7 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
 
 disabledsFromCandidate[LeafNode[Token`Comment, str_, _]] :=
   StringCases[str, {
-      "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> {d},
+      "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ " *)" :> {d},
       "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ " *)" :> {d, a}
   }]
 
