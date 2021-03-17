@@ -12,7 +12,7 @@ Needs["CodeParser`"]
 Please use this syntax:
 
 (* CodeInspect::Push *)
-(* CodeInspect::Disable::DuplicateClausesIf *)
+(* CodeInspect::Disable::DuplicateClauses::If *)
 
 If[a, b, b]
 
@@ -22,22 +22,74 @@ If[a, b, b]
 *)
 
 
-codeInspectBeginPat = LeafNode[Token`Comment, "(* ::CodeInspect::Push:: *)" | "(* CodeInspect::Begin *)" | "(* CodeInspect::Push *)", _]
+codeInspectBeginPat =
+  LeafNode[Token`Comment, "(* CodeInspect::Push *)", _] |
+  CellNode[Cell, {
+      GroupNode[Comment, {
+        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+        LeafNode[String, " ", _],
+        BoxNode[RowBox, {{
+            LeafNode[String, "CodeInspect", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, "Push", _]
+          }}, _],
+        LeafNode[String, " ", _], LeafNode[Token`Boxes`StarCloseParen, "*)", _]
+      }, _]
+    }, _]
 
-codeInspectEndPat = LeafNode[Token`Comment, "(* ::CodeInspect::Pop:: *)" | "(* CodeInspect::End *)" | "(* CodeInspect::Pop *)", _]
+codeInspectEndPat =
+  LeafNode[Token`Comment, "(* CodeInspect::Pop *)", _] |
+  CellNode[Cell, {
+      GroupNode[Comment, {
+          LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+          LeafNode[String, " ", _],
+          BoxNode[RowBox, {{
+              LeafNode[String, "CodeInspect", _],
+              LeafNode[String, "::", _],
+              LeafNode[String, "Pop" (* | "End" *), _]
+            }}, _],
+          LeafNode[String, " ", _], LeafNode[Token`Boxes`StarCloseParen, "*)", _]
+        }, _]
+    }, _]
 
 codeInspectDisablePat =
   LeafNode[
     Token`Comment,
     str_String /;
       StringMatchQ[str,
-        ("(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ ":: *)") |
         ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ " *)") |
-        ("(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ "::" ~~ LetterCharacter... ~~ ":: *)") |
         ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ "::" ~~ LetterCharacter... ~~ " *)")
       ],
     _
-  ]
+  ] |
+  CellNode[Cell, {
+      GroupNode[Comment, {
+        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+        LeafNode[String, " ", _],
+        BoxNode[RowBox, {{
+          LeafNode[String, "CodeInspect", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, "Disable", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, _, _]}}, _],
+          LeafNode[String, " ", _],
+          LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]
+    }, _] |
+  CellNode[Cell, {
+      GroupNode[Comment, {
+        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+        LeafNode[String, " ", _],
+        BoxNode[RowBox, {{
+          LeafNode[String, "CodeInspect", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, "Disable", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, _, _],
+          LeafNode[String, "::", _],
+          LeafNode[String, _, _]}}, _],
+        LeafNode[String, " ", _],
+        LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]
+    }, _]
 
 
 
@@ -49,28 +101,35 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
 
   codeInspectBeginPatNodePoss = Position[cst, codeInspectBeginPat];
 
+  If[$Debug,
+    Print["codeInspectBeginPatNodePoss: ", codeInspectBeginPatNodePoss]
+  ];
+
   disabledRegions = {};
   Do[
     siblingsPos = Most[beginPos];
     siblings = Extract[cst, {siblingsPos}][[1]];
+
+    Print["siblings: ", siblings];
+
     endFound = False;
     disableds = {};
     Do[
       candidate = siblings[[pos]];
       Switch[candidate,
         codeInspectEndPat,
+          Print[1];
           endPos = Most[beginPos] ~Join~ {pos};
           endFound = True;
           Break[]
         ,
         codeInspectDisablePat,
-          disableds = disableds ~Join~
-            StringCases[candidate[[2]], {
-              "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> {d},
-              "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ " *)" :> {d},
-              "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ ":: *)" :> {d, a},
-              "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ " *)" :> {d, a}
-            }]
+          Print[2];
+          disableds = disableds ~Join~ disabledsFromCandidate[candidate]
+        ,
+        _,
+          Print[3, " ", candidate];
+          Null
       ]
       ,
       {pos, Last[beginPos]+1, Length[siblings]}
@@ -87,6 +146,54 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
 
   disabledRegions
 ]]
+
+
+disabledsFromCandidate[LeafNode[Token`Comment, str_, _]] :=
+  StringCases[str, {
+      "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> {d},
+      "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ " *)" :> {d, a}
+  }]
+
+disabledsFromCandidate[
+  CellNode[Cell, {
+      GroupNode[Comment, {
+        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+        LeafNode[String, " ", _],
+        BoxNode[RowBox, {{
+          LeafNode[String, "CodeInspect", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, "Disable", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, d_, _]}}, _],
+          LeafNode[String, " ", _],
+          LeafNode[Token`Boxes`StarCloseParen, "*)", _]
+      }
+      ,
+      _]
+    }, _]
+  ] := {d}
+
+disabledsFromCandidate[
+  CellNode[Cell, {
+      GroupNode[Comment, {
+          LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+          LeafNode[String, " ", _],
+          BoxNode[RowBox, {{
+            LeafNode[String, "CodeInspect", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, "Disable", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, d_, _],
+            LeafNode[String, "::", _],
+            LeafNode[String, a_, _]}}, _],
+          LeafNode[String, " ", _],
+          LeafNode[Token`Boxes`StarCloseParen, "*)", _]
+        }
+        ,
+        _]
+    }, _]
+  ] := {d, a}
+
 
 
 (*

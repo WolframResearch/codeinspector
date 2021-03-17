@@ -7,8 +7,96 @@ Needs["CodeInspector`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`ConcreteRules`"]
+Needs["CodeInspector`DisabledRegions`"]
 Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`Utils`"]
+
+
+CodeInspect[nb_NotebookObject, opts:OptionsPattern[]] :=
+  CodeInspect[NotebookGet[nb]]
+
+CodeInspectSummarize[nb_NotebookObject, opts:OptionsPattern[]] :=
+  CodeInspectSummarize[NotebookGet[nb]]
+
+
+CodeInspect[cell_CellObject, opts:OptionsPattern[]] :=
+  CodeInspect[NotebookRead[cell]]
+
+CodeInspectSummarize[cell_CellObject, opts:OptionsPattern[]] :=
+  CodeInspectSummarize[NotebookRead[cell]]
+
+
+CodeInspect[Notebook[cells_, ___], opts:OptionsPattern[]] :=
+  Flatten[CodeInspect /@ cells]
+
+CodeInspectSummarize[nb_Notebook, opts:OptionsPattern[]] :=
+Module[{inspected},
+  inspected = CodeInspect[nb];
+  InspectedNotebookObject[nb, inspected]
+]
+
+
+CodeInspect[Cell[BoxData[b_], _, ___], opts:OptionsPattern[]] :=
+  CodeInspectBox[b, opts]
+
+CodeInspect[Cell[___], opts:OptionsPattern[]] :=
+  {}
+
+CodeInspectSummarize[c_Cell, opts:OptionsPattern[]] :=
+Module[{inspected},
+  inspected = CodeInspect[c];
+  InspectedCellObject[c, inspected]
+]
+
+
+CodeInspect[b_RowBox, opts:OptionsPattern[]] :=
+  CodeInspectBox[b, opts]
+
+CodeInspectSummarize[b_RowBox, opts:OptionsPattern[]] :=
+  CodeInspectBoxSummarize[b, opts]
+
+
+
+Options[CodeInspectBox] = {
+  PerformanceGoal -> "Speed",
+  "ConcreteRules" :> $DefaultConcreteRules,
+  "AggregateRules" :> $DefaultAggregateRules,
+  "AbstractRules" :> $DefaultAbstractRules
+}
+
+CodeInspectBox[box_, OptionsPattern[]] :=
+Catch[
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
+
+  performanceGoal = OptionValue[PerformanceGoal];
+  concreteRules = OptionValue["ConcreteRules"];
+  aggregateRules = OptionValue["AggregateRules"];
+  abstractRules = OptionValue["AbstractRules"];
+
+  $ConcreteLintProgress = 0;
+  $AggregateLintProgress = 0;
+  $AbstractLintProgress = 0;
+  $ConcreteLintTime = Quantity[0, "Seconds"];
+  $AggregateLintTime = Quantity[0, "Seconds"];
+  $AbstractLintTime = Quantity[0, "Seconds"];
+
+  cst = CodeConcreteParseBox[box];
+
+  If[FailureQ[cst],
+    Throw[cst]
+  ];
+
+  disabledRegions = DisabledRegions[cst];
+
+  CodeInspectCST[
+    cst,
+    PerformanceGoal -> performanceGoal,
+    "ConcreteRules" -> concreteRules,
+    "AggregateRules" -> aggregateRules,
+    "AbstractRules" -> abstractRules,
+    "DisabledRegions" -> disabledRegions
+  ]
+]]
 
 
 

@@ -6,6 +6,10 @@ Functions
 
 CodeInspect
 
+(*
+CodeInspectBox exists because it is ambiguous whether or not the string "123" is supposed to
+be interpreted as an integer or as a box
+*)
 CodeInspectBox
 
 CodeInspectCST
@@ -34,7 +38,8 @@ InspectedBytesObject
 InspectedLineObject
 
 InspectedBoxObject
-
+InspectedCellObject
+InspectedNotebookObject
 
 
 $ConcreteLintProgress
@@ -265,48 +270,6 @@ Catch[
   $AbstractLintTime = Quantity[0, "Seconds"];
 
   cst = CodeConcreteParse[bytes, FilterRules[{opts}, Options[CodeConcreteParse]]];
-
-  If[FailureQ[cst],
-    Throw[cst]
-  ];
-
-  disabledRegions = DisabledRegions[cst];
-
-  CodeInspectCST[
-    cst,
-    PerformanceGoal -> performanceGoal,
-    "ConcreteRules" -> concreteRules,
-    "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules,
-    "DisabledRegions" -> disabledRegions
-  ]
-]]
-
-
-Options[CodeInspectBox] = {
-  PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
-  "AggregateRules" :> $DefaultAggregateRules,
-  "AbstractRules" :> $DefaultAbstractRules
-}
-
-CodeInspectBox[box_, OptionsPattern[]] :=
-Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions},
-
-  performanceGoal = OptionValue[PerformanceGoal];
-  concreteRules = OptionValue["ConcreteRules"];
-  aggregateRules = OptionValue["AggregateRules"];
-  abstractRules = OptionValue["AbstractRules"];
-
-  $ConcreteLintProgress = 0;
-  $AggregateLintProgress = 0;
-  $AbstractLintProgress = 0;
-  $ConcreteLintTime = Quantity[0, "Seconds"];
-  $AggregateLintTime = Quantity[0, "Seconds"];
-  $AbstractLintTime = Quantity[0, "Seconds"];
-
-  cst = CodeConcreteParseBox[box];
 
   If[FailureQ[cst],
     Throw[cst]
