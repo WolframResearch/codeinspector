@@ -223,9 +223,14 @@ replace `` and ** markup
 boldify[s_String] :=
 distrib[
 	StringReplace[s, {
-		RegularExpression["``(.*?)``"] :> bold["$1"],
-		RegularExpression["\\*\\*(.*?)\\*\\*"] :> bold["$1"],
-		RegularExpression["\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }]]
+		(*
+		there may be \n inside of `` group, so turn on (?s) "single line mode" to allow . to match newlines
+
+		FIXME: probably there should be some sanitization of characters in `` groups
+		*)
+		RegularExpression["(?s)``(.*?)``"] :> bold["$1"],
+		RegularExpression["(?s)\\*\\*(.*?)\\*\\*"] :> bold["$1"],
+		RegularExpression["(?s)\\?\\?(.*?)\\?\\?"] :> preserve["$1"] }]]
 
 gridify[bolded_List] := Flatten[Partition[#, UpTo[$LintDescriptionLimit]]& /@ SequenceSplit[bolded, {"\n" | LintBold["\n", _]}], 1]
 
@@ -237,9 +242,9 @@ do not send ?? markup
 FIXME: what to do about ?? contents?
 *)
 plainify[s_String] := StringReplace[s, {
-	RegularExpression["``(.*?)``"] :> "$1",
-	RegularExpression["\\*\\*(.*?)\\*\\*"] :> "$1",
-	RegularExpression["\\?\\?(.*?)\\?\\?"] :> "$1"}]
+	RegularExpression["(?s)``(.*?)``"] :> "$1",
+	RegularExpression["(?s)\\*\\*(.*?)\\*\\*"] :> "$1",
+	RegularExpression["(?s)\\?\\?(.*?)\\?\\?"] :> "$1"}]
 
 
 
@@ -247,8 +252,8 @@ plainify[s_String] := StringReplace[s, {
 
 
 
-(* ::CodeInspect::Push:: *)
-(* ::CodeInspect::Disable::UnexpectedCharacter:: *)
+(* CodeInspect::Push *)
+(* CodeInspect::Disable::UnexpectedCharacter *)
 
 (*
 Replace invisible characters with \[UnknownGlyph]
@@ -405,7 +410,7 @@ $characterReplacementRules = {
 	Alternatives @@ $invisibleCharacters -> "\[UnknownGlyph]"
 }
 
-(* ::CodeInspect::Pop:: *)
+(* CodeInspect::Pop *)
 
 
 uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
