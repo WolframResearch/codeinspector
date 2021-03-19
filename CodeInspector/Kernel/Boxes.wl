@@ -253,7 +253,7 @@ Catch[
 
 InspectedBoxObject::usage = "InspectedBoxObject[box, lints] represents a formatted object of lints found in box."
 
-Format[InspectedBoxObject[processedBoxIn_, lintsIn_], StandardForm] :=
+Format[o:InspectedBoxObject[processedBoxIn_, lintsIn_], StandardForm] :=
 Module[{lints, processedBox},
 
   lints = lintsIn;
@@ -290,7 +290,7 @@ Module[{lints, processedBox},
       *)
       Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0]
       ,
-      processedBox
+      o
     ]
     ,
     Interpretation[
@@ -302,7 +302,7 @@ Module[{lints, processedBox},
       *)
       Framed[Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
       ,
-      processedBox
+      o
     ]
   ]
 ]

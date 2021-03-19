@@ -167,7 +167,7 @@ Module[{string},
 	Interpretation[
 		Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
 		,
-		lintedString]
+		lintedBytes]
 ]
 
 Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], OutputForm] :=
@@ -722,7 +722,7 @@ underlineList is not used in OutputForm
 Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
-	endingAdditionalLintsThisLine},
+	endingAdditionalLintsThisLine, lineSource},
 
 	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
