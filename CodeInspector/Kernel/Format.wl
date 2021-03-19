@@ -356,6 +356,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 				{
 					Row[CodeInspector`Utils`boldify[description]],
 					If[KeyExistsQ[data, CodeActions], BoxForm`SummaryItem[{"Suggestions: ", Row[boldify[#["Label"]]]& /@ data[CodeActions]}], Nothing],
+					If[KeyExistsQ[data, CellIndex], BoxForm`SummaryItem[{"CellIndex: ", data[CellIndex]}], Nothing],
 					BoxForm`SummaryItem[{"Source: ", data[Source]}]
 				}
 				,
