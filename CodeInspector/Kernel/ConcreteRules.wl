@@ -222,7 +222,7 @@ This works for all Source conventions
 *)
 scanImplicitTimesAcrossLines[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs, i},
+Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
