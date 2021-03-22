@@ -7,10 +7,10 @@ Begin["`Private`"]
 Needs["CodeParser`"]
 
 
-codeInspectPushPat = LeafNode[Token`Comment, "(* ::CodeInspect::Push:: *)", _]
-codeInspectPopPat = LeafNode[Token`Comment, "(* ::CodeInspect::Pop:: *)", _]
+codeInspectPushPat = LeafNode[Token`Comment, "(* " <> "::CodeInspect::Push::" <> " *)", _]
+codeInspectPopPat = LeafNode[Token`Comment, "(* " <> "::CodeInspect::Pop::" <> " *)", _]
 
-codeInspectDisablePat = LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::CodeInspect::Disable::" ~~ LetterCharacter... ~~ ":: *)"], _]
+codeInspectDisablePat = LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* " ~~ "::CodeInspect::Disable::" ~~ LetterCharacter... ~~ "::" ~~ " *)"], _]
 
 
 
@@ -37,7 +37,7 @@ Module[{cst, codeInspectPushPatNodePoss, disabledRegions, siblingsPos, siblings,
           Break[]
         ,
         codeInspectDisablePat,
-          disableds = disableds ~Join~ StringCases[candidate[[2]], "(* ::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ ":: *)" :> d]
+          disableds = disableds ~Join~ StringCases[candidate[[2]], "(* " ~~ "::CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ " *)" :> d]
       ]
       ,
       {pos, Last[pushPos]+1, Length[siblings]}
