@@ -189,7 +189,7 @@ Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedL
 
 displayAsSingleLine[s_String] :=
 Module[{lines},
-	lines = StringSplit[s, "\r\n" | "\n" | "\r", All];
+	lines = StringSplit[StringTrim[s], "\r\n" | "\n" | "\r", All];
 	If[Length[lines] == 1 && StringLength[lines[[1]]] <= $LintedLineWidth,
 		lines[[1]]
 		,
