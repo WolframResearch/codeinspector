@@ -315,6 +315,67 @@ Module[{lints, processedBox},
 ]
 
 
+Format[o:InspectedCellObject[Null, lintsIn_], StandardForm] :=
+Module[{lints},
+
+  lints = lintsIn;
+  
+  If[TrueQ[CodeInspector`Format`$Attached],
+    (*
+    Attached, so delete any textual InspectedLineObjects
+    *)
+    lints = DeleteCases[lints, _InspectedLineObject]
+  ];
+
+  (*
+  add formatting instructions
+  *)
+  lints = CodeInspector`Format`insertFormatInspectionObjectsAsPills /@ lints;
+
+  Interpretation[
+    (*
+    Framed
+    Background color
+
+    looks better when calling CodeInspectSummarize directly and you want a formatted object thing
+    *)
+    Framed[Column[{Row[{"Cell", "[", "\[Ellipsis]", "]"}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
+    ,
+    o
+  ]
+]
+
+
+Format[o:InspectedNotebookObject[Null, lintsIn_], StandardForm] :=
+Module[{lints},
+
+  lints = lintsIn;
+  
+  If[TrueQ[CodeInspector`Format`$Attached],
+    (*
+    Attached, so delete any textual InspectedLineObjects
+    *)
+    lints = DeleteCases[lints, _InspectedLineObject]
+  ];
+
+  (*
+  add formatting instructions
+  *)
+  lints = CodeInspector`Format`insertFormatInspectionObjectsAsPills /@ lints;
+
+  Interpretation[
+    (*
+    Framed
+    Background color
+
+    looks better when calling CodeInspectSummarize directly and you want a formatted object thing
+    *)
+    Framed[Column[{Row[{"Notebook", "[", "\[Ellipsis]", "]"}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
+    ,
+    o
+  ]
+]
+
 
 (*
 Expand any AdditionalSources into their own lints
