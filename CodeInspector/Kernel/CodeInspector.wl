@@ -303,7 +303,11 @@ Options[CodeInspectCST] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  "SuppressedRegions" -> {}
+  "SuppressedRegions" -> {},
+  (*
+  Properties to pass from cst to lints
+  *)
+  "InheritedProperties" -> {}
 }
 
 Attributes[CodeInspectCST] = {HoldFirst}
@@ -312,13 +316,14 @@ CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
-  scopingData, scopingLints, suppressedRegions, tokenRules},
+  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, data},
 
   If[$Debug,
     Print["CodeInspectCST"];
   ];
 
   cst = cstIn;
+  data = cst[[3]];
 
   lints = {};
 
@@ -328,10 +333,13 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
+  inheritedProperties = OptionValue["InheritedProperties"];
 
   If[$Debug,
     Print["suppressedRegions: ", suppressedRegions]
   ];
+
+  isActive = makeIsActiveFunc[suppressedRegions];
 
   If[FailureQ[cst],
     Throw[cst]
@@ -377,19 +385,9 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Flatten[lints];
 
-    lints = Select[lints,
-      Function[{lint},
-        AllTrue[suppressedRegions,
-          Function[{region},
-            AllTrue[region[[3]],
-              Function[{suppressed},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ];
+    lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+    lints = Select[lints, isActive];
 
     Throw[lints]
   ];
@@ -417,19 +415,9 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Flatten[lints];
 
-    lints = Select[lints,
-      Function[{lint},
-        AllTrue[suppressedRegions,
-          Function[{region},
-            AllTrue[region[[3]],
-              Function[{suppressed},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ];
+    lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+    lints = Select[lints, isActive];
 
     Throw[lints]
   ];
@@ -468,19 +456,9 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Flatten[lints];
 
-    lints = Select[lints,
-      Function[{lint},
-        AllTrue[suppressedRegions,
-          Function[{region},
-            AllTrue[region[[3]],
-              Function[{suppressed},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ];
+    lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+    lints = Select[lints, isActive];
 
     Throw[lints]
   ];
@@ -528,19 +506,9 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Flatten[lints];
 
-  lints = Select[lints,
-    Function[{lint},
-      AllTrue[suppressedRegions,
-        Function[{region},
-          AllTrue[region[[3]],
-            Function[{suppressed},
-              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-            ]
-          ]
-        ]
-      ]
-    ]
-  ];
+  lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+  lints = Select[lints, isActive];
 
   lints
 ]]
@@ -551,7 +519,8 @@ Options[CodeInspectAgg] = {
   PerformanceGoal -> "Speed",
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  "SuppressedRegions" -> {}
+  "SuppressedRegions" -> {},
+  "InheritedProperties" -> {}
 }
 
 Attributes[CodeInspectAgg] = {HoldFirst}
@@ -559,13 +528,14 @@ Attributes[CodeInspectAgg] = {HoldFirst}
 CodeInspectAgg[aggIn_, OptionsPattern[]] :=
 Catch[
 Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
-  prog, performanceGoal, start, suppressedRegions},
+  prog, performanceGoal, start, suppressedRegions, isActive, inheritedProperties, data},
 
   If[$Debug,
     Print["CodeInspectAgg"];
   ];
 
   agg = aggIn;
+  data = agg[[3]];
 
   lints = {};
 
@@ -573,10 +543,13 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
+  inheritedProperties = OptionValue["InheritedProperties"];
 
   If[$Debug,
     Print["suppressedRegions: ", suppressedRegions]
   ];
+
+  isActive = makeIsActiveFunc[suppressedRegions];
 
   If[$Debug,
     Print["aggregateRules"];
@@ -600,19 +573,9 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Flatten[lints];
 
-    lints = Select[lints,
-      Function[{lint},
-        AllTrue[suppressedRegions,
-          Function[{region},
-            AllTrue[region[[3]],
-              Function[{suppressed},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ];
+    lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+    lints = Select[lints, isEnabled];
 
     Throw[lints]
   ];
@@ -648,19 +611,9 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Flatten[lints];
 
-  lints = Select[lints,
-    Function[{lint},
-      AllTrue[suppressedRegions,
-        Function[{region},
-          AllTrue[region[[3]],
-            Function[{suppressed},
-              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-            ]
-          ]
-        ]
-      ]
-    ]
-  ];
+  lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+  lints = Select[lints, isActive];
 
   lints
 ]]
@@ -672,7 +625,8 @@ Options[CodeInspectAST] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  "SuppressedRegions" -> {}
+  "SuppressedRegions" -> {},
+  "InheritedProperties" -> {}
 }
 
 Attributes[CodeInspectAST] = {HoldFirst}
@@ -680,23 +634,27 @@ Attributes[CodeInspectAST] = {HoldFirst}
 CodeInspectAST[astIn_, OptionsPattern[]] :=
 Catch[
 Module[{abstractRules, ast, poss, lints,
-  prog, performanceGoal, start, suppressedRegions},
+  prog, performanceGoal, start, suppressedRegions, isActive, inheritedProperties, data},
 
   If[$Debug,
     Print["CodeInspectAST"];
   ];
 
   ast = astIn;
+  data = ast[[3]];
 
   lints = {};
 
   performanceGoal = OptionValue[PerformanceGoal];
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
+  inheritedProperties = OptionValue["InheritedProperties"];
 
   If[$Debug,
     Print["suppressedRegions: ", suppressedRegions]
   ];
+
+  isActive = makeIsActiveFunc[suppressedRegions];
 
   If[$Debug,
     Print["abstractRules"];
@@ -718,40 +676,52 @@ Module[{abstractRules, ast, poss, lints,
   $AbstractLintTime = Now - start;
 
   lints = Flatten[lints];
-
-  lints = Select[lints,
-    Function[{lint},
-      AllTrue[suppressedRegions,
-        Function[{region},
-          AllTrue[region[[3]],
-            Function[{suppressed},
-              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isActive[lint, suppressed]
-            ]
-          ]
-        ]
-      ]
-    ]
-  ];
   
+  lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+  lints = Select[lints, isActive];
+
   lints
 ]]
 
 
+(*
+returns a function lint -> True|False
+*)
+makeIsActiveFunc[suppressedRegions_] :=
+  Function[{lint},
+    AllTrue[suppressedRegions,
+      Function[{region},
+        !SourceMemberQ[region[[1;;2]], lint] ||
+          AllTrue[region[[3]],
+            Function[{suppressed}, isTagActive[lint, suppressed]]
+          ]
+      ]
+    ]
+  ]
 
-isActive[InspectionObject[tag1_, _, _, KeyValuePattern["Argument" -> arg1_]], {tag2_, arg2_}] :=
+
+isTagActive[InspectionObject[tag1_, _, _, KeyValuePattern["Argument" -> arg1_]], {tag2_, arg2_}] :=
   !(tag1 === tag2 && arg1 === arg2)
 
 (*
 The lint has an Argument, but there is no argument in the suppressed
 *)
-isActive[InspectionObject[_, _, _, KeyValuePattern["Argument" -> _]], {_}] :=
+isTagActive[InspectionObject[_, _, _, KeyValuePattern["Argument" -> _]], {_}] :=
   True
 
-isActive[InspectionObject[tag1_, _, _, _], {tag2_, _}] :=
+isTagActive[InspectionObject[tag1_, _, _, _], {tag2_, _}] :=
   !(tag1 === tag2)
 
-isActive[InspectionObject[tag1_, _, _, _], {tag2_}] :=
+isTagActive[InspectionObject[tag1_, _, _, _], {tag2_}] :=
   !(tag1 === tag2)
+
+
+insertInheritedProperties[o:InspectionObject[_, _, _, _], _Association, {}] :=
+  o
+
+insertInheritedProperties[InspectionObject[tag_, desc_, sev_, data1_Association], data_Association, inheritedProperties_] :=
+  InspectionObject[tag, desc, sev, <|data1, KeyTake[data, inheritedProperties]|>]
 
 
 End[]

@@ -619,6 +619,19 @@ betterRiffle[a_, b_] := Riffle[a, b]
 
 
 
+(*
+Overload SourceMemberQ for InspectionObject and CellIndex
+*)
+SourceMemberQ[{<|CellIndex -> start_|>, <|CellIndex -> end_|>}, InspectionObject[_, _, _, KeyValuePattern[CellIndex -> {index_}]]] := (
+	start <= index <= end
+)
+
+SourceMemberQ[{<|Source -> start_|>, <|Source -> end_|>}, InspectionObject[_, _, _, KeyValuePattern[Source -> src_]]] := (
+	SourceMemberQ[{start, end}, src]
+)
+
+
+
 End[]
 
 EndPackage[]

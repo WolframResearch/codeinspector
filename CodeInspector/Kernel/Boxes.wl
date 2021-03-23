@@ -27,26 +27,149 @@ CodeInspectSummarize[cell_CellObject, opts:OptionsPattern[]] :=
   CodeInspectSummarize[NotebookRead[cell]]
 
 
-CodeInspect[Notebook[cells_, ___], opts:OptionsPattern[]] :=
-  Flatten[CodeInspect /@ cells]
+CodeInspect[nb_Notebook, opts:OptionsPattern[]] :=
+Module[{cst, suppressedRegions},
 
-CodeInspectSummarize[nb_Notebook, opts:OptionsPattern[]] :=
-Module[{inspected},
-  inspected = CodeInspect[nb];
-  InspectedNotebookObject[nb, inspected]
+  cst = CodeConcreteParse[nb];
+  suppressedRegions = SuppressedRegions[cst];
+  (*
+  IMPLEMENTATION DETAIL:
+  it is important that CodeInspectCST is called on the CellNodes, so that
+  the CellIndex property can be treated as inherited inside of CodeInspectCST and inserted
+  into the InspectionObjects
+  *)
+  Flatten[If[FailureQ[#], {}, CodeInspectCST[#, opts, "SuppressedRegions" -> suppressedRegions, "InheritedProperties" -> {CellIndex}]]& /@ cst[[2]]]
 ]
 
 
-CodeInspect[Cell[BoxData[b_], _, ___], opts:OptionsPattern[]] :=
-  CodeInspectBox[b, opts]
+CodeInspectSummarize[nbIn_Notebook, opts:OptionsPattern[]] :=
+Module[{nb, lints, tagExclusions, severityExclusions, confidence, lintLimit},
+  
+  nb = nbIn;
+
+  (*
+  Support None for the various exclusion options
+  *)
+  tagExclusions = OptionValue["TagExclusions"];
+  If[tagExclusions === None,
+    tagExclusions = {}
+  ];
+
+  severityExclusions = OptionValue["SeverityExclusions"];
+  If[severityExclusions === None,
+    severityExclusions = {}
+  ];
+
+  confidence = OptionValue[ConfidenceLevel];
+
+  lintLimit = OptionValue["LintLimit"];
+
+  lints = CodeInspect[nb];
+
+  (*
+  TODO: use notebook title or thumbnail of notebook or something
+  *)
+
+  If[lints == {},
+    lints = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}],
+      InspectedLineObject[{Text["No issues."]}]
+    }
+    ,
+    lints = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}]
+    } ~Join~ lints
+  ];
+
+  InspectedNotebookObject[Null, lints]
+]
+
+
+CodeInspect[c:Cell[BoxData[_], _, ___], opts:OptionsPattern[]] :=
+  CodeInspectCST[CodeConcreteParse[c], opts]
 
 CodeInspect[Cell[___], opts:OptionsPattern[]] :=
   {}
 
-CodeInspectSummarize[c_Cell, opts:OptionsPattern[]] :=
-Module[{inspected},
-  inspected = CodeInspect[c];
-  InspectedCellObject[c, inspected]
+CodeInspectSummarize[cIn_Cell, opts:OptionsPattern[]] :=
+Module[{c, lints, tagExclusions, severityExclusions, confidence, lintLimit},
+  
+  c = cIn;
+
+  (*
+  Support None for the various exclusion options
+  *)
+  tagExclusions = OptionValue["TagExclusions"];
+  If[tagExclusions === None,
+    tagExclusions = {}
+  ];
+
+  severityExclusions = OptionValue["SeverityExclusions"];
+  If[severityExclusions === None,
+    severityExclusions = {}
+  ];
+
+  confidence = OptionValue[ConfidenceLevel];
+
+  lintLimit = OptionValue["LintLimit"];
+
+  lints = CodeInspect[c];
+
+  If[lints == {},
+    lints = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}],
+      InspectedLineObject[{Text["No issues."]}]
+    }
+    ,
+    lints = {
+      InspectedLineObject[{
+        Column[{
+          Text["Settings:"],
+          ConfidenceLevel -> confidence,
+          "LintLimit" -> lintLimit,
+          "TagExclusions" -> tagExclusions,
+          "SeverityExclusions" -> severityExclusions
+        }]
+      }],
+      InspectedLineObject[{}],
+      InspectedLineObject[{}]
+    } ~Join~ lints
+  ];
+
+  (*
+  TODO: use thumbnail of cell or something
+  *)
+  InspectedCellObject[Null, lints]
 ]
 
 
