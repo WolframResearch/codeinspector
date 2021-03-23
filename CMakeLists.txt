@@ -60,11 +60,11 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/BracketMismatches.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/CodeInspector.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ConcreteRules.wl
-	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/DisabledRegions.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/External.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTokens.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/SuppressedRegions.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/TokenRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
 )

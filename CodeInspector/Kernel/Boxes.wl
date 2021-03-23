@@ -7,8 +7,8 @@ Needs["CodeInspector`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`ConcreteRules`"]
-Needs["CodeInspector`DisabledRegions`"]
 Needs["CodeInspector`Summarize`"]
+Needs["CodeInspector`SuppressedRegions`"]
 Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
 
@@ -68,7 +68,7 @@ Options[CodeInspectBox] = {
 
 CodeInspectBox[box_, OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions, tokenRules},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, suppressedRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
   tokenRules = OptionValue["TokenRules"];
@@ -89,7 +89,7 @@ Catch[
     Throw[cst]
   ];
 
-  disabledRegions = DisabledRegions[cst];
+  suppressedRegions = SuppressedRegions[cst];
 
   CodeInspectCST[
     cst,
@@ -98,7 +98,7 @@ Catch[
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
-    "DisabledRegions" -> disabledRegions
+    "SuppressedRegions" -> suppressedRegions
   ]
 ]]
 

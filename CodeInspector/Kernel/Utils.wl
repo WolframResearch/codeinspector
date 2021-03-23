@@ -256,7 +256,7 @@ plainify[s_String] := StringReplace[s, {
 
 
 (* CodeInspect::Push *)
-(* CodeInspect::Disable::UnexpectedCharacter *)
+(* CodeInspect::Suppress::UnexpectedCharacter *)
 
 (*
 Replace invisible characters with \[UnknownGlyph]

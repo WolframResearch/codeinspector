@@ -62,9 +62,9 @@ Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`Boxes`"]
 Needs["CodeInspector`ConcreteRules`"]
-Needs["CodeInspector`DisabledRegions`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Summarize`"]
+Needs["CodeInspector`SuppressedRegions`"]
 Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
 Needs["CodeParser`"]
@@ -143,7 +143,7 @@ $fileByteCountMaxLimit = 3*^6
 CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
 Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules,
-  editor, disabledRegions, tokenRules},
+  editor, suppressedRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
   tokenRules = OptionValue["TokenRules"];
@@ -185,7 +185,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     Throw[cst]
   ];
 
-  disabledRegions = DisabledRegions[cst];
+  suppressedRegions = SuppressedRegions[cst];
 
   lints = CodeInspectCST[
     cst,
@@ -194,7 +194,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
-    "DisabledRegions" -> disabledRegions
+    "SuppressedRegions" -> suppressedRegions
   ];
 
   If[FailureQ[lints],
@@ -223,7 +223,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
 CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions, tokenRules},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, suppressedRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
   tokenRules = OptionValue["TokenRules"];
@@ -244,7 +244,7 @@ Catch[
     Throw[cst]
   ];
 
-  disabledRegions = DisabledRegions[cst];
+  suppressedRegions = SuppressedRegions[cst];
 
   CodeInspectCST[
     cst,
@@ -253,7 +253,7 @@ Catch[
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
-    "DisabledRegions" -> disabledRegions
+    "SuppressedRegions" -> suppressedRegions
   ]
 ]]
 
@@ -261,7 +261,7 @@ Catch[
 
 CodeInspect[bytes_List, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, disabledRegions, tokenRules},
+ Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, suppressedRegions, tokenRules},
 
   performanceGoal = OptionValue[PerformanceGoal];
   tokenRules = OptionValue["TokenRules"];
@@ -282,7 +282,7 @@ Catch[
     Throw[cst]
   ];
 
-  disabledRegions = DisabledRegions[cst];
+  suppressedRegions = SuppressedRegions[cst];
 
   CodeInspectCST[
     cst,
@@ -291,7 +291,7 @@ Catch[
     "ConcreteRules" -> concreteRules,
     "AggregateRules" -> aggregateRules,
     "AbstractRules" -> abstractRules,
-    "DisabledRegions" -> disabledRegions
+    "SuppressedRegions" -> suppressedRegions
   ]
 ]]
 
@@ -303,7 +303,7 @@ Options[CodeInspectCST] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  "DisabledRegions" -> {}
+  "SuppressedRegions" -> {}
 }
 
 Attributes[CodeInspectCST] = {HoldFirst}
@@ -312,7 +312,7 @@ CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
-  scopingData, scopingLints, disabledRegions, tokenRules},
+  scopingData, scopingLints, suppressedRegions, tokenRules},
 
   If[$Debug,
     Print["CodeInspectCST"];
@@ -327,10 +327,10 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
-  disabledRegions = OptionValue["DisabledRegions"];
+  suppressedRegions = OptionValue["SuppressedRegions"];
 
   If[$Debug,
-    Print["disabledRegions: ", disabledRegions]
+    Print["suppressedRegions: ", suppressedRegions]
   ];
 
   If[FailureQ[cst],
@@ -343,11 +343,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Select[lints,
       Function[{lint},
-        AllTrue[disabledRegions,
+        AllTrue[suppressedRegions,
           Function[{region},
             AllTrue[region[[3]],
-              Function[{disabled},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              Function[{suppressed},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
               ]
             ]
           ]
@@ -379,11 +379,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Select[lints,
       Function[{lint},
-        AllTrue[disabledRegions,
+        AllTrue[suppressedRegions,
           Function[{region},
             AllTrue[region[[3]],
-              Function[{disabled},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              Function[{suppressed},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
               ]
             ]
           ]
@@ -419,11 +419,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Select[lints,
       Function[{lint},
-        AllTrue[disabledRegions,
+        AllTrue[suppressedRegions,
           Function[{region},
             AllTrue[region[[3]],
-              Function[{disabled},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              Function[{suppressed},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
               ]
             ]
           ]
@@ -470,11 +470,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Select[lints,
       Function[{lint},
-        AllTrue[disabledRegions,
+        AllTrue[suppressedRegions,
           Function[{region},
             AllTrue[region[[3]],
-              Function[{disabled},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              Function[{suppressed},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
               ]
             ]
           ]
@@ -530,11 +530,11 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Select[lints,
     Function[{lint},
-      AllTrue[disabledRegions,
+      AllTrue[suppressedRegions,
         Function[{region},
           AllTrue[region[[3]],
-            Function[{disabled},
-              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+            Function[{suppressed},
+              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
             ]
           ]
         ]
@@ -551,7 +551,7 @@ Options[CodeInspectAgg] = {
   PerformanceGoal -> "Speed",
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  "DisabledRegions" -> {}
+  "SuppressedRegions" -> {}
 }
 
 Attributes[CodeInspectAgg] = {HoldFirst}
@@ -559,7 +559,7 @@ Attributes[CodeInspectAgg] = {HoldFirst}
 CodeInspectAgg[aggIn_, OptionsPattern[]] :=
 Catch[
 Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
-  prog, performanceGoal, start, disabledRegions},
+  prog, performanceGoal, start, suppressedRegions},
 
   If[$Debug,
     Print["CodeInspectAgg"];
@@ -572,10 +572,10 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
   performanceGoal = OptionValue[PerformanceGoal];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
-  disabledRegions = OptionValue["DisabledRegions"];
+  suppressedRegions = OptionValue["SuppressedRegions"];
 
   If[$Debug,
-    Print["disabledRegions: ", disabledRegions]
+    Print["suppressedRegions: ", suppressedRegions]
   ];
 
   If[$Debug,
@@ -602,11 +602,11 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Select[lints,
       Function[{lint},
-        AllTrue[disabledRegions,
+        AllTrue[suppressedRegions,
           Function[{region},
             AllTrue[region[[3]],
-              Function[{disabled},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+              Function[{suppressed},
+                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
               ]
             ]
           ]
@@ -650,11 +650,11 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Select[lints,
     Function[{lint},
-      AllTrue[disabledRegions,
+      AllTrue[suppressedRegions,
         Function[{region},
           AllTrue[region[[3]],
-            Function[{disabled},
-              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+            Function[{suppressed},
+              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
             ]
           ]
         ]
@@ -672,7 +672,7 @@ Options[CodeInspectAST] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  "DisabledRegions" -> {}
+  "SuppressedRegions" -> {}
 }
 
 Attributes[CodeInspectAST] = {HoldFirst}
@@ -680,7 +680,7 @@ Attributes[CodeInspectAST] = {HoldFirst}
 CodeInspectAST[astIn_, OptionsPattern[]] :=
 Catch[
 Module[{abstractRules, ast, poss, lints,
-  prog, performanceGoal, start, disabledRegions},
+  prog, performanceGoal, start, suppressedRegions},
 
   If[$Debug,
     Print["CodeInspectAST"];
@@ -692,10 +692,10 @@ Module[{abstractRules, ast, poss, lints,
 
   performanceGoal = OptionValue[PerformanceGoal];
   abstractRules = OptionValue["AbstractRules"];
-  disabledRegions = OptionValue["DisabledRegions"];
+  suppressedRegions = OptionValue["SuppressedRegions"];
 
   If[$Debug,
-    Print["disabledRegions: ", disabledRegions]
+    Print["suppressedRegions: ", suppressedRegions]
   ];
 
   If[$Debug,
@@ -721,11 +721,11 @@ Module[{abstractRules, ast, poss, lints,
 
   lints = Select[lints,
     Function[{lint},
-      AllTrue[disabledRegions,
+      AllTrue[suppressedRegions,
         Function[{region},
           AllTrue[region[[3]],
-            Function[{disabled},
-              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, disabled]
+            Function[{suppressed},
+              !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isActive[lint, suppressed]
             ]
           ]
         ]
@@ -738,19 +738,19 @@ Module[{abstractRules, ast, poss, lints,
 
 
 
-isEnabled[InspectionObject[tag1_, _, _, KeyValuePattern["Argument" -> arg1_]], {tag2_, arg2_}] :=
+isActive[InspectionObject[tag1_, _, _, KeyValuePattern["Argument" -> arg1_]], {tag2_, arg2_}] :=
   !(tag1 === tag2 && arg1 === arg2)
 
 (*
-The lint has an Argument, but there is no argument in the disabled
+The lint has an Argument, but there is no argument in the suppressed
 *)
-isEnabled[InspectionObject[_, _, _, KeyValuePattern["Argument" -> _]], {_}] :=
+isActive[InspectionObject[_, _, _, KeyValuePattern["Argument" -> _]], {_}] :=
   True
 
-isEnabled[InspectionObject[tag1_, _, _, _], {tag2_, _}] :=
+isActive[InspectionObject[tag1_, _, _, _], {tag2_, _}] :=
   !(tag1 === tag2)
 
-isEnabled[InspectionObject[tag1_, _, _, _], {tag2_}] :=
+isActive[InspectionObject[tag1_, _, _, _], {tag2_}] :=
   !(tag1 === tag2)
 
 

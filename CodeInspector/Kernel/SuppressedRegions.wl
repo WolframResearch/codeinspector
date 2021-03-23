@@ -1,6 +1,6 @@
-BeginPackage["CodeInspector`DisabledRegions`"]
+BeginPackage["CodeInspector`SuppressedRegions`"]
 
-DisabledRegions
+SuppressedRegions
 
 Begin["`Private`"]
 
@@ -12,7 +12,7 @@ Needs["CodeParser`"]
 Please use this syntax:
 
 (* CodeInspect::Push *)
-(* CodeInspect::Disable::DuplicateClauses::If *)
+(* CodeInspect::Suppress::DuplicateClauses::If *)
 
 If[a, b, b]
 
@@ -52,13 +52,13 @@ codeInspectEndPat =
         }, _]
     }, _]
 
-codeInspectDisablePat =
+codeInspectSuppressPat =
   LeafNode[
     Token`Comment,
     str_String /;
       StringMatchQ[str,
-        ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ " *)") |
-        ("(* CodeInspect::Disable::" ~~ LetterCharacter... ~~ "::" ~~ LetterCharacter... ~~ " *)")
+        ("(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ LetterCharacter... ~~ " *)") |
+        ("(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ LetterCharacter... ~~ "::" ~~ LetterCharacter... ~~ " *)")
       ],
     _
   ] |
@@ -69,7 +69,7 @@ codeInspectDisablePat =
         BoxNode[RowBox, {{
           LeafNode[String, "CodeInspect", _],
           LeafNode[String, "::", _],
-          LeafNode[String, "Disable", _],
+          LeafNode[String, "Suppress" | "Disable", _],
           LeafNode[String, "::", _],
           LeafNode[String, _, _]}}, _],
           LeafNode[String, " ", _],
@@ -82,7 +82,7 @@ codeInspectDisablePat =
         BoxNode[RowBox, {{
           LeafNode[String, "CodeInspect", _],
           LeafNode[String, "::", _],
-          LeafNode[String, "Disable", _],
+          LeafNode[String, "Suppress" | "Disable", _],
           LeafNode[String, "::", _],
           LeafNode[String, _, _],
           LeafNode[String, "::", _],
@@ -93,9 +93,9 @@ codeInspectDisablePat =
 
 
 
-DisabledRegions[cstIn_] :=
+SuppressedRegions[cstIn_] :=
 Catch[
-Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings, endFound, candidate, endPos, disableds},
+Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblings, endFound, candidate, endPos, suppresseds},
 
   cst = cstIn;
 
@@ -105,12 +105,12 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
     Print["codeInspectBeginPatNodePoss: ", codeInspectBeginPatNodePoss]
   ];
 
-  disabledRegions = {};
+  suppressedRegions = {};
   Do[
     siblingsPos = Most[beginPos];
     siblings = Extract[cst, {siblingsPos}][[1]];
     endFound = False;
-    disableds = {};
+    suppresseds = {};
     Do[
       candidate = siblings[[pos]];
       Switch[candidate,
@@ -119,33 +119,33 @@ Module[{cst, codeInspectBeginPatNodePoss, disabledRegions, siblingsPos, siblings
           endFound = True;
           Break[]
         ,
-        codeInspectDisablePat,
-          disableds = disableds ~Join~ disabledsFromCandidate[candidate]
+        codeInspectSuppressPat,
+          suppresseds = suppresseds ~Join~ suppressedsFromCandidate[candidate]
       ]
       ,
       {pos, Last[beginPos]+1, Length[siblings]}
     ];
     If[endFound,
-      AppendTo[disabledRegions, {rangeStart[Extract[cst, beginPos][[3, Key[Source]]]], rangeEnd[Extract[cst, endPos][[3, Key[Source]]]], disableds}]
+      AppendTo[suppressedRegions, {rangeStart[Extract[cst, beginPos][[3, Key[Source]]]], rangeEnd[Extract[cst, endPos][[3, Key[Source]]]], suppresseds}]
       ,
-      Message[DisabledRegions::missingpop, cst[[3]]];
+      Message[SuppressedRegions::missingpop, cst[[3]]];
       Throw[{}]
     ]
     ,
     {beginPos, codeInspectBeginPatNodePoss}
   ];
 
-  disabledRegions
+  suppressedRegions
 ]]
 
 
-disabledsFromCandidate[LeafNode[Token`Comment, str_, _]] :=
+suppressedsFromCandidate[LeafNode[Token`Comment, str_, _]] :=
   StringCases[str, {
-      "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ " *)" :> {d},
-      "(* CodeInspect::Disable::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ " *)" :> {d, a}
+      "(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ d:LetterCharacter... ~~ " *)" :> {d},
+      "(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ d:LetterCharacter... ~~ "::" ~~ a:LetterCharacter... ~~ " *)" :> {d, a}
   }]
 
-disabledsFromCandidate[
+suppressedsFromCandidate[
   CellNode[Cell, {
       GroupNode[Comment, {
         LeafNode[Token`Boxes`OpenParenStar, "(*", _],
@@ -153,7 +153,7 @@ disabledsFromCandidate[
         BoxNode[RowBox, {{
           LeafNode[String, "CodeInspect", _],
           LeafNode[String, "::", _],
-          LeafNode[String, "Disable", _],
+          LeafNode[String, "Suppress" | "Disable", _],
           LeafNode[String, "::", _],
           LeafNode[String, d_, _]}}, _],
           LeafNode[String, " ", _],
@@ -164,7 +164,7 @@ disabledsFromCandidate[
     }, _]
   ] := {d}
 
-disabledsFromCandidate[
+suppressedsFromCandidate[
   CellNode[Cell, {
       GroupNode[Comment, {
           LeafNode[Token`Boxes`OpenParenStar, "(*", _],
@@ -172,7 +172,7 @@ disabledsFromCandidate[
           BoxNode[RowBox, {{
             LeafNode[String, "CodeInspect", _],
             LeafNode[String, "::", _],
-            LeafNode[String, "Disable", _],
+            LeafNode[String, "Suppress" | "Disable", _],
             LeafNode[String, "::", _],
             LeafNode[String, d_, _],
             LeafNode[String, "::", _],
