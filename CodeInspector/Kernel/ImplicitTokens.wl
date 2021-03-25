@@ -31,7 +31,7 @@ Needs["CodeInspector`Utils`"]
 (*
 How many implicit tokens to keep?
 *)
-$ImplicitTokensLimit = 20
+$ImplicitTokensLimit = 100
 
 
 
