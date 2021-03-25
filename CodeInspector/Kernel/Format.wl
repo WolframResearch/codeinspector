@@ -961,66 +961,66 @@ Format[LintContinuationCharacter, OutputForm] := "\\"
 Format[LintTimesCharacter, StandardForm] := "\[Times]"
 Format[LintTimesCharacter, OutputForm] := "x"
 
-Format[LintSpaceTimesCharacter, StandardForm] := " \[Times]"
+Format[LintSpaceTimesCharacter, StandardForm] := "\[Times]"
 Format[LintSpaceTimesCharacter, OutputForm] := " x"
 
 Format[LintOneCharacter, StandardForm] := "1"
 Format[LintOneCharacter, OutputForm] := "1"
 
-Format[LintAllCharacter, StandardForm] := "All"
-Format[LintAllCharacter, OutputForm] := "All"
+Format[LintAllCharacter, StandardForm] := "A"
+Format[LintAllCharacter, OutputForm] := "A"
 
-Format[LintNullCharacter, StandardForm] := "Null"
-Format[LintNullCharacter, OutputForm] := "Null"
+Format[LintNullCharacter, StandardForm] := "N"
+Format[LintNullCharacter, OutputForm] := "N"
 
-Format[LintTimesOneCharacter, StandardForm] := "\[Times]1"
-Format[LintTimesOneCharacter, OutputForm] := "x1"
+Format[LintTimesOneCharacter, StandardForm] := "y"
+Format[LintTimesOneCharacter, OutputForm] := "y"
 
 Format[LintExpectedOperandCharacter, StandardForm] := "\[EmptySquare]"
-Format[LintExpectedOperandCharacter, OutputForm] := "[]"
+Format[LintExpectedOperandCharacter, OutputForm] := "e"
 
-Format[LintAllTimesCharacter, StandardForm] := "All\[Times]"
-Format[LintAllTimesCharacter, OutputForm] := "Allx"
+Format[LintAllTimesCharacter, StandardForm] := "B"
+Format[LintAllTimesCharacter, OutputForm] := "B"
 
-Format[LintAllOneCharacter, StandardForm] := "All1"
-Format[LintAllOneCharacter, OutputForm] := "All1"
+Format[LintAllOneCharacter, StandardForm] := "D"
+Format[LintAllOneCharacter, OutputForm] := "D"
 
-Format[LintAllTimesOneCharacter, StandardForm] := "All\[Times]1"
-Format[LintAllTimesOneCharacter, OutputForm] := "Allx1"
+Format[LintAllTimesOneCharacter, StandardForm] := "C"
+Format[LintAllTimesOneCharacter, OutputForm] := "C"
 
 
-Format[LintOpenOneCharacter, StandardForm] := "(1"
-Format[LintOpenOneCharacter, OutputForm] := "(1"
+Format[LintOpenOneCharacter, StandardForm] := "1"
+Format[LintOpenOneCharacter, OutputForm] := "1"
 
-Format[LintAllCloseCharacter, StandardForm] := "All)"
-Format[LintAllCloseCharacter, OutputForm] := "All)"
+Format[LintAllCloseCharacter, StandardForm] := "A"
+Format[LintAllCloseCharacter, OutputForm] := "A"
 
-Format[LintOpenOpenCharacter, StandardForm] := "(("
-Format[LintOpenOpenCharacter, OutputForm] := "(("
+Format[LintOpenOpenCharacter, StandardForm] := " "
+Format[LintOpenOpenCharacter, OutputForm] := " "
 
-Format[LintCloseCloseCharacter, StandardForm] := "))"
-Format[LintCloseCloseCharacter, OutputForm] := "))"
+Format[LintCloseCloseCharacter, StandardForm] := " "
+Format[LintCloseCloseCharacter, OutputForm] := " "
 
-Format[LintCloseTimesCharacter, StandardForm] := ")\[Times]"
-Format[LintCloseTimesCharacter, OutputForm] := ")x"
+Format[LintCloseTimesCharacter, StandardForm] := "\[Times]"
+Format[LintCloseTimesCharacter, OutputForm] := "x"
 
-Format[LintExpectedOperandCloseCharacter, StandardForm] := "\[EmptySquare])"
-Format[LintExpectedOperandCloseCharacter, OutputForm] := "[])"
+Format[LintExpectedOperandCloseCharacter, StandardForm] := "\[EmptySquare]"
+Format[LintExpectedOperandCloseCharacter, OutputForm] := "e"
 
 Format[LintExpectedOperandTimesCharacter, StandardForm] := "\[EmptySquare]"
-Format[LintExpectedOperandTimesCharacter, OutputForm] := "[]x"
+Format[LintExpectedOperandTimesCharacter, OutputForm] := "e"
 
-Format[LintOpenExpectedOperandCharacter, StandardForm] := "(\[EmptySquare])"
-Format[LintOpenExpectedOperandCharacter, OutputForm] := "([]"
+Format[LintOpenExpectedOperandCharacter, StandardForm] := "\[EmptySquare]"
+Format[LintOpenExpectedOperandCharacter, OutputForm] := "e"
 
-Format[LintCloseTimesOneCharacter, StandardForm] := ")\[Times]1"
-Format[LintCloseTimesOneCharacter, OutputForm] := ")x1"
+Format[LintCloseTimesOneCharacter, StandardForm] := "y"
+Format[LintCloseTimesOneCharacter, OutputForm] := "y"
 
 
 LintEOFCharacter::usage = "LintEOFCharacter represents an EOF in formatted output."
 
-Format[LintEOFCharacter, StandardForm] := "\[FilledSquare]"
-Format[LintEOFCharacter, OutputForm] := "EOF"
+Format[LintEOFCharacter, StandardForm] := " "
+Format[LintEOFCharacter, OutputForm] := " "
 
 
 Format[LintUnhandledCharacter, StandardForm] := " "
