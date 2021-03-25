@@ -408,9 +408,11 @@ Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dup
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "``Association`` has duplicated keys.", "Error", <|
-      Source -> First[srcs],
-      "AdditionalSources" -> Rest[srcs],
-      CodeActions -> actions, ConfidenceLevel -> 1.0 |> ]
+        Source -> First[srcs],
+        "AdditionalSources" -> Rest[srcs],
+        CodeActions -> actions, ConfidenceLevel -> 1.0,
+        "Argument" -> "Association"
+      |> ]
     ];
     ,
     {selected, selecteds}
@@ -494,9 +496,11 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "Duplicate keys in list of rules.", "Warning", <|
-      Source -> First[srcs],
-      "AdditionalSources" -> Rest[srcs],
-      CodeActions -> actions, ConfidenceLevel -> confidence |> ]
+          Source -> First[srcs],
+          "AdditionalSources" -> Rest[srcs],
+          CodeActions -> actions, ConfidenceLevel -> confidence,
+          "Argument" -> "ListOfRules"
+        |> ]
     ];
     ,
     {selected, selecteds}
@@ -526,15 +530,19 @@ Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
 
   If[empty[children],
     AppendTo[issues, 
-     InspectionObject["WhichArguments", "``Which`` does not have any arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+     InspectionObject["Arguments", "``Which`` does not have any arguments.", "Error", <|
+       data,
+       ConfidenceLevel -> 0.55,
+       "Argument" -> "Which"|>]];
     Throw[issues]
   ];
 
   If[!EvenQ[Length[children]],
     AppendTo[issues, 
-      InspectionObject["WhichArguments", "``Which`` does not have even number of arguments.", "Error", <|
+      InspectionObject["Arguments", "``Which`` does not have even number of arguments.", "Error", <|
         data,
-        ConfidenceLevel -> 0.55|>]];
+        ConfidenceLevel -> 0.55,
+        "Argument" -> "Which"|>]];
     Throw[issues]
   ];
 
@@ -659,17 +667,19 @@ Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
   issues = {};
 
   If[Length[children] == 1,
-    AppendTo[issues, InspectionObject["SwitchArguments", "``Switch`` only has one argument.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Switch`` only has one argument.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Switch"|>]];
     Throw[issues];
   ];
 
 
   If[!OddQ[Length[children]],
-    AppendTo[issues, InspectionObject["SwitchArguments", "``Switch`` does not have odd number of arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Switch`` does not have odd number of arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> ""|>]];
     Throw[issues];
   ];
 
@@ -693,9 +703,10 @@ Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
   *)
   If[Length[children] >= 5,
     If[MatchQ[children[[2;;-3]], { CallNode[LeafNode[Symbol, "Rule", _], _, _].. }],
-      AppendTo[issues, InspectionObject["SwitchArguments", "``Switch`` does not take ``Rules`` for arguments.", "Error", <|
+      AppendTo[issues, InspectionObject["Arguments", "``Switch`` does not take ``Rules`` for arguments.", "Error", <|
         data,
-        ConfidenceLevel -> 0.95|>]];
+        ConfidenceLevel -> 0.95,
+        "Argument" -> "Switch"|>]];
     ]
   ];
 
@@ -812,11 +823,17 @@ Catch[
 
   Which[
     Length[children] == 0,
-      AppendTo[issues, InspectionObject["IfArguments", "``If`` has zero arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+      AppendTo[issues, InspectionObject["Arguments", "``If`` has zero arguments.", "Error", <|
+        data,
+        ConfidenceLevel -> 0.55,
+        "Argument" -> "If"|>]];
       Throw[issues];
       ,
     Length[children] == 1,
-      AppendTo[issues, InspectionObject["IfArguments", "``If`` only has one argument.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+      AppendTo[issues, InspectionObject["Arguments", "``If`` only has one argument.", "Error", <|
+        data,
+        ConfidenceLevel -> 0.55,
+        "Argument" -> "If"|>]];
       Throw[issues];
   ];
 
@@ -960,9 +977,10 @@ Module[{ast, node, patSymbol, name, rhs, children, data, patterns, issues},
   issues = {};
 
   If[Length[children] != 2,
-    AppendTo[issues, InspectionObject["PatternArguments", "``Pattern`` takes 2 arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Pattern`` takes 2 arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.85|>]];
+      ConfidenceLevel -> 0.85,
+      "Argument" -> "Pattern"|>]];
     Throw[issues];
   ];
 
@@ -1035,9 +1053,10 @@ Catch[
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, InspectionObject["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Module`` does not have 2 arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Module"|>]];
     Throw[issues]
   ];
 
@@ -1052,9 +1071,10 @@ Catch[
   ];
 
   If[Length[children] != 2,
-    AppendTo[issues, InspectionObject["ModuleArguments", "``Module`` does not have 2 arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Module`` does not have 2 arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Module"|>]];
     Throw[issues]
   ];
 
@@ -1066,16 +1086,18 @@ Catch[
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, InspectionObject["ModuleArguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|
       children[[1, 3]],
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Module"|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["ModuleArgumentsEmpty", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
+    AppendTo[issues, InspectionObject["Arguments", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
       children[[1, 3]],
-      ConfidenceLevel -> 0.90|>]];
+      ConfidenceLevel -> 0.90,
+      "Argument" -> "Module"|>]];
   ];
 
 
@@ -1113,12 +1135,18 @@ Catch[
         Likely missing comma
         *)
         CallNode[LeafNode[Symbol, "Times", _], _, _],
-          AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.95,
+              "Argument" -> "Module"|>]]
         ,
         _,
-          AppendTo[issues, InspectionObject["ModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.85,
+              "Argument" -> "Module"|>]]
       ]
     ]
     ,
@@ -1198,9 +1226,10 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, InspectionObject["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "DynamicModule"|>]];
     Throw[issues]
   ];
 
@@ -1215,9 +1244,10 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
   ];
 
   If[!(Length[children] >= 2),
-    AppendTo[issues, InspectionObject["DynamicModuleArguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "DynamicModule"|>]];
     Throw[issues]
   ];
 
@@ -1240,14 +1270,18 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, InspectionObject["DynamicModuleArguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|
-      children[[1, 3]], ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|
+      children[[1, 3]],
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "DynamicModule"|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["DynamicModuleArgumentsEmpty", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
-      children[[1, 3]], ConfidenceLevel -> 0.90|>]];
+    AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
+      children[[1, 3]],
+      ConfidenceLevel -> 0.90,
+      "Argument" -> "DynamicModule"|>]];
   ];
 
   params = children[[1, 2]];
@@ -1275,12 +1309,18 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
         Likely missing comma
         *)
         CallNode[LeafNode[Symbol, "Times", _], _, _],
-          AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.95,
+              "Argument" -> "DynamicModule"|>]]
         ,
         _,
-          AppendTo[issues, InspectionObject["DynamicModuleArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.85,
+              "Argument" -> "DynamicModule"|>]]
       ]
     ]
     ,
@@ -1336,9 +1376,10 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
 
   If[empty[children],
     
-    AppendTo[issues, InspectionObject["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``With`` does not have 2 or more arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "With"|>]];
 
     Throw[issues];
   ];
@@ -1354,17 +1395,19 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   ];
 
   If[Length[children] < 2,
-    AppendTo[issues, InspectionObject["WithArguments", "``With`` does not have 2 or more arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``With`` does not have 2 or more arguments.", "Error", <|
       data,
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "With"|>]];
 
     Throw[issues];
   ];
 
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], _, _]...}],
-    AppendTo[issues, InspectionObject["WithArguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|
+    AppendTo[issues, InspectionObject["Arguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|
       Source -> {#[[1, 3, Key[Source], 1]], #[[-1, 3, Key[Source], 2]]}&[Most[children]],
-      ConfidenceLevel -> 0.55|>]];
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "With"|>]];
 
     Throw[issues];
   ];
@@ -1387,9 +1430,10 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   *)
   (* Having empty {} as With variable argument is not critical, but a warning may be issued *)
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
-    AppendTo[issues, InspectionObject["WithArgumentsEmpty", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark", <|
+    AppendTo[issues, InspectionObject["Arguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark", <|
       Source -> {#[[1, 3, Key[Source], 1]], #[[-1, 3, Key[Source], 2]]}&[Most[children]],
-      ConfidenceLevel -> 0.90|>]];
+      ConfidenceLevel -> 0.90,
+      "Argument" -> "With"|>]];
   ];
 
   paramLists = Most[children][[All, 2]];
@@ -1416,12 +1460,18 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
         Likely missing comma
         *)
         CallNode[LeafNode[Symbol, "Times", _], _, _],
-          AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.95,
+              "Argument" -> "With"|>]]
         ,
         _,
-          AppendTo[issues, InspectionObject["WithArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.85,
+              "Argument" -> "With"|>]]
       ]
     ]
     ,
@@ -1483,7 +1533,10 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   issues = {};
 
   If[empty[children],
-    AppendTo[issues, InspectionObject["BlockArguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, InspectionObject["Arguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Block"|>]];
     Throw[issues]
   ];
 
@@ -1498,7 +1551,10 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   ];
 
   If[Length[children] != 2,
-    AppendTo[issues, InspectionObject["BlockArguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|data, ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, InspectionObject["Arguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|
+      data,
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Block"|>]];
     Throw[issues]
   ];
 
@@ -1510,14 +1566,18 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   ];
 
   If[!MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
-    AppendTo[issues, InspectionObject["BlockArguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|
-      children[[1, 3]], ConfidenceLevel -> 0.55|>]];
+    AppendTo[issues, InspectionObject["Arguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|
+      children[[1, 3]],
+      ConfidenceLevel -> 0.55,
+      "Argument" -> "Block"|>]];
     Throw[issues]
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["BlockArgumentsEmpty", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
-      children[[1, 3]], ConfidenceLevel -> 0.90|>]];
+    AppendTo[issues, InspectionObject["Arguments", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
+      children[[1, 3]],
+      ConfidenceLevel -> 0.90,
+      "Argument" -> "Block"|>]];
   ];
 
   params = children[[1, 2]];
@@ -1548,12 +1608,18 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
         Likely missing comma
         *)
         CallNode[LeafNode[Symbol, "Times", _], _, _],
-          AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.95,
+              "Argument" -> "Block"|>]]
         ,
         _,
-          AppendTo[issues, InspectionObject["BlockArguments", "Variable " <> format[ToFullFormString[err]] <>
-            " does not have proper form.", "Error", <| Source -> err[[3, Key[Source]]], ConfidenceLevel -> 0.85|>]]
+          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+            " does not have proper form.", "Error", <|
+              Source -> err[[3, Key[Source]]],
+              ConfidenceLevel -> 0.85,
+              "Argument" -> "Block"|>]]
       ]
     ]
     ,

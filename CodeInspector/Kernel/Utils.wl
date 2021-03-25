@@ -464,9 +464,9 @@ Module[{text},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedModuleVariable", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"shadowed" -> InspectionObject["ShadowedModuleVariable", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"error" -> InspectionObject["ModuleVariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedVariable", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
+			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
+			"error" -> InspectionObject["VariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -486,9 +486,9 @@ Module[{text},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedBlockVariable", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"shadowed" -> InspectionObject["ShadowedBlockVariable", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"error" -> InspectionObject["BlockVariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedVariable", "Unused " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
+			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> text, "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
+			"error" -> InspectionObject["VariableError", text <> " error", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -500,7 +500,7 @@ scopingDataObjectToLints[scopingDataObject[src_, scope:{}, modifiers_]] :=
 Module[{},
 	
 	(*
-	Currently, Slot is only possibility for unscoped error
+	Currently, Slot is the only possibility for unscoped error
 
 	FIXME: guard against other unscoped errors in the future
 	*)
