@@ -63,7 +63,7 @@ WhichArguments
 TestMatch[
 	CodeInspect[" Which[] "]
 	,
-	{InspectionObject["WhichArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-J1K9V9"
 ]
@@ -71,7 +71,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Which[1] "]
 	,
-	{InspectionObject["WhichArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-V5Y3C5"
 ]
@@ -105,7 +105,7 @@ DuplicateClauses
 TestMatch[
 	CodeInspect[" Which[a, 1, a, 2, b, 3, b, 4] "]
 	,
-	{InspectionObject["DuplicateClausesWhich", _, _, _], InspectionObject["DuplicateClausesWhich", _, _, _]}
+	{InspectionObject["DuplicateClauses", _, _, _], InspectionObject["DuplicateClauses", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X9U0J9"
 ]
@@ -121,7 +121,7 @@ SwitchArguments
 TestMatch[
 	CodeInspect[" Switch[] "]
 	,
-	{InspectionObject["SwitchArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-D4B0S0"
 ]
@@ -129,7 +129,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Switch[1] "]
 	,
-	{InspectionObject["SwitchArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-E2M2S7"
 ]
@@ -137,7 +137,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Switch[1, 2] "]
 	,
-	{InspectionObject["SwitchArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-O2W9G5"
 ]
@@ -172,7 +172,7 @@ DuplicateClauses
 TestMatch[
 	CodeInspect[" Switch[a, 1, 2, 1, 2] "]
 	,
-	{InspectionObject["DuplicateClausesSwitch", _, _, _]}
+	{InspectionObject["DuplicateClauses", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X0L3I6"
 ]
@@ -187,7 +187,7 @@ DuplicateClauses
 TestMatch[
 	CodeInspect[" If[a, b, b] "]
 	,
-	{InspectionObject["DuplicateClausesIf", _, _, _]}
+	{InspectionObject["DuplicateClauses", _, _, _]}
 	,
 	TestID->"AbstractRules-20190717-B6J9M6"
 ]
@@ -261,7 +261,7 @@ ModuleArguments
 TestMatch[
 	CodeInspect[" Module[] "]
 	,
-	{InspectionObject["ModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-B5L5C3"
 ]
@@ -269,7 +269,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Module[1] "]
 	,
-	{InspectionObject["ModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-C7Y5J5"
 ]
@@ -277,7 +277,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Module[1, 2] "]
 	,
-	{InspectionObject["ModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-S4E7T5"
 ]
@@ -285,7 +285,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Module[{}] "]
 	,
-	{InspectionObject["ModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-H1R4I0"
 ]
@@ -307,7 +307,7 @@ UnusedVariables
 TestMatch[
 	CodeInspect[" Module[{a}, b] "]
 	,
-	{InspectionObject["UnusedModuleVariable", _, _, _]}
+	{InspectionObject["UnusedVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-A3S7S9"
 ]
@@ -315,7 +315,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Module[{a}, b] "]
 	,
-	{InspectionObject["UnusedModuleVariable", _, _, _]}
+	{InspectionObject["UnusedVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-V4X7X0"
 ]
@@ -334,7 +334,7 @@ DynamicModuleArguments
 TestMatch[
 	CodeInspect[" DynamicModule[] "]
 	,
-	{InspectionObject["DynamicModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-L8J1T4"
 ]
@@ -342,7 +342,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" DynamicModule[1] "]
 	,
-	{InspectionObject["DynamicModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-W2N3A3"
 ]
@@ -350,7 +350,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" DynamicModule[1, 2] "]
 	,
-	{InspectionObject["DynamicModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-V4L5J8"
 ]
@@ -358,7 +358,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" DynamicModule[{}] "]
 	,
-	{InspectionObject["DynamicModuleArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-D0L1F5"
 ]
@@ -381,7 +381,7 @@ UnusedVariables
 TestMatch[
 	CodeInspect[" DynamicModule[{a}, b] "]
 	,
-	{InspectionObject["UnusedModuleVariable", _, _, _]}
+	{InspectionObject["UnusedVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-I7M0H0"
 ]
@@ -398,7 +398,7 @@ WithArguments
 TestMatch[
 	CodeInspect[" With[] "]
 	,
-	{InspectionObject["WithArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-S0M2V2"
 ]
@@ -406,7 +406,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" With[1] "]
 	,
-	{InspectionObject["WithArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-U9S3P9"
 ]
@@ -414,7 +414,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" With[1, 2] "]
 	,
-	{InspectionObject["WithArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-M8E9Y5"
 ]
@@ -422,7 +422,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" With[{}] "]
 	,
-	{InspectionObject["WithArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-X9G8L3"
 ]
@@ -430,7 +430,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["With[{}, {}, 34]"]
 	,
-	{InspectionObject["WithArgumentsEmpty", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID -> "AbstractRules-20191120-N6B9B5"
 ]
@@ -473,7 +473,7 @@ BlockArguments
 TestMatch[
 	CodeInspect[" Block[] "]
 	,
-	{InspectionObject["BlockArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-O5T9E8"
 ]
@@ -481,7 +481,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Block[1] "]
 	,
-	{InspectionObject["BlockArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-P0N3N7"
 ]
@@ -489,7 +489,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Block[1, 2] "]
 	,
-	{InspectionObject["BlockArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-M5D6K6"
 ]
@@ -497,7 +497,7 @@ TestMatch[
 TestMatch[
 	CodeInspect[" Block[{}] "]
 	,
-	{InspectionObject["BlockArguments", _, _, _]}
+	{InspectionObject["Arguments", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-Y7G9I9"
 ]
@@ -522,7 +522,7 @@ UnusedBlockVariables
 TestMatch[
 	CodeInspect[" Block[{a}, b] "]
 	,
-	{InspectionObject["UnusedBlockVariable", _, _, _]}
+	{InspectionObject["UnusedVariable", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-Q7K3O8"
 ]
@@ -644,20 +644,5 @@ TestMatch[
 ]
 
 
-
-
-
-
-
-(*
-SuspiciousOut
-*)
-TestMatch[
-	CodeInspect["{ % }"]
-	,
-	{InspectionObject["SuspiciousSessionSymbol", _, _, _]}
-	,
-	TestID->"AbstractRules-20190522-O5O0L9"
-]
 
 
