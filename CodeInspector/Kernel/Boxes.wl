@@ -522,11 +522,14 @@ Module[{src, sevColor, processedBox, srcInter, extracted},
       *)
       srcInter = Most[src];
 
+      (*
+      srcInter could be {}, so make sure to accomodate that
+      *)
       extracted = Extract[box, {srcInter}][[1]];
 
       processedBox = 
         ReplacePart[
-          box, srcInter -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+          box, {srcInter} -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
 
       processedBox
     ,
@@ -539,24 +542,60 @@ Module[{src, sevColor, processedBox, srcInter, extracted},
 
       src = src[[1]];
 
-      extracted = Extract[box, src];
+      (*
+      src could be {}, so make sure to accomodate that
+      *)
+      extracted = Extract[box, {src}][[1]];
 
       processedBox = 
         ReplacePart[
-          box, src -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+          box, {src} -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
 
       processedBox
     ,
-    _,
+    Before[_],
       (*
-      There is no Intra | After in the position, so we can just use ReplacePart
+      Before
+
+      Just use the next
       *)
-      
-      extracted = Extract[box, src];
+
+      src = src[[1]];
+
+      (*
+      src could be {}, so make sure to accomodate that
+      *)
+      extracted = Extract[box, {src}][[1]];
 
       processedBox = 
         ReplacePart[
-          box, src -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+          box, {src} -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
+
+      processedBox
+    ,
+    Span[_, _],
+      (*
+      Span
+      *)
+
+      (*
+      FIXME: cannot use Extract with Span[{1}, {3}], so skip for now
+      FIXME: cannot use ReplacePart with Span, so skip for now
+      *)
+      box
+    ,
+    _,
+      (*
+      There is no Intra | After | Before | Span in the position, so we can just use ReplacePart
+
+      src could be {}, so make sure to accomodate that
+      *)
+      
+      extracted = Extract[box, {src}][[1]];
+
+      processedBox = 
+        ReplacePart[
+          box, {src} -> StyleBox[extracted, FontVariations -> {"Underlight" -> sevColor}]];
 
       processedBox
   ]
