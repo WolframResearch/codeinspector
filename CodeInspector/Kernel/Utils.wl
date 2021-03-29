@@ -565,30 +565,21 @@ Module[{},
 	]
 ]
 
-scopingDataObjectToLints[scopingDataObject[src_, {___, "Function"}, modifiers_, name_]] :=
+scopingDataObjectToLints[scopingDataObject[src_, scope:{___, "SlotFunction", "SlotFunction"}, modifiers_, name_]] :=
 Module[{},
-	
-	(*
-	Use the text "Slot" instead of "Function parameter"
-	*)
-	
-	(*
-	create separate lints for Unused, Shadowed, etc.
-	and ignore other modifiers
-	*)
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``Slot``: ``" <> name <> "``", "Scoping", <|
+			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed ``Slot`` caused by nested ``Function``s.", "Scoping", <|
 				Source -> src,
 				ConfidenceLevel -> 0.95,
-				CodeActions -> {
-					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
-				}
-			|>],
-			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``Slot``: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"error" -> InspectionObject["ParameterError", "``Slot`` error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			_ :> Sequence @@ {}
+				"AdditionalDescriptions" -> {"Consider using named ``Function`` parameters instead."}
+				|>
+			],
+			(*
+			The only modifier should be "shadowed"
+			*)
+			_ :> Failure["Unhandled", <| "Function" -> scopingDataObjectToLints, "Arguments" -> {scopingDataObject[src, scope, modifiers]} |>]
 		}
 		,
 		{1}
