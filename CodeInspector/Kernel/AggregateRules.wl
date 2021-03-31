@@ -185,8 +185,7 @@ CompoundNode[Blank | BlankSequence | BlankNullSequence, {_,
   scanBlankPredicate,
 
 
-BinaryNode[PatternTest, {LeafNode[Symbol, _, _], _, _}, _] ->
-  scanSymbolPatternTest,
+BinaryNode[PatternTest, _, _] -> scanPatternTest,
 
 
 InfixNode[MessageName, children_ /; Length[children] >= 5, _] -> scanMessageName,
@@ -1934,9 +1933,9 @@ scanBlankPredicate[pos_List, aggIn_] :=
   ]]
 
 
-Attributes[scanSymbolPatternTest] = {HoldRest}
+Attributes[scanPatternTest] = {HoldRest}
 
-scanSymbolPatternTest[pos_List, aggIn_] :=
+scanPatternTest[pos_List, aggIn_] :=
   Catch[
   Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues},
     agg = aggIn;
@@ -1949,35 +1948,58 @@ scanSymbolPatternTest[pos_List, aggIn_] :=
     q = children[[2]];
     b = children[[3]];
 
-    issues = {};
-
-    aName = a["String"];
-
-    (*
-    Heuristic here:
-
-    In something like:
-
-    pat?test
-
-    pat is being used as a pattern, so ok
-    *)
-    If[StringContainsQ[aName, "pat", IgnoreCase -> True],
-      Throw[issues]
-    ];
-
     aSrc = a[[3, Key[Source]]];
     qSrc = q[[3, Key[Source]]];
 
-    AppendTo[issues, InspectionObject["SymbolPatternTest", "Unexpected ``PatternTest`` after symbol.", "Error",
-      <| Source->qSrc,
-         (*
-         Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
-         *)
-         ConfidenceLevel->0.85,
-         CodeActions -> {
-          CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
-          CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]];
+    issues = {};
+
+    Which[
+      MatchQ[a, LeafNode[Symbol, _, _]],
+        aName = a["String"];
+        (*
+        Heuristic here:
+
+        In something like:
+
+        pat?test
+
+        pat is being used as a pattern, so ok
+        *)
+        If[StringContainsQ[aName, "pat", IgnoreCase -> True],
+          Throw[issues]
+        ];
+
+        AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
+          <| Source->qSrc,
+             (*
+             Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
+             *)
+             ConfidenceLevel->0.85,
+             CodeActions -> {
+              CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
+              CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]
+        ];
+      ,
+      !FreeQ[a,
+        LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder, _, _] |
+        CompoundNode[
+          Blank | BlankSequence | BlankNullSequence |
+          PatternBlank | PatternBlankSequence | PatternBlankNullSequence, _, _] |
+        PostfixNode[Repeated | RepeatedNull, _, _]],
+        (*
+        looks like a normal pattern on LHS of PatternTest
+        *)
+        Null
+      ,
+      True,
+        AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
+          <| Source->qSrc,
+             (*
+             Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
+             *)
+             ConfidenceLevel->0.85 |>]
+        ];
+    ];
 
     issues
   ]]
