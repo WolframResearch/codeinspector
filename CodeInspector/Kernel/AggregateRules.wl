@@ -1111,12 +1111,13 @@ warn about a->b& which parses as (a->b)& and not a->(b&)
 scanRuleFunctions[pos_List, aggIn_] :=
 Catch[
  Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, parentPos, parent,
-  choice1, choice2},
+  choice1, choice2, amp},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
   rule = children[[1]];
+  amp = children[[2]];
   ruleChild1 = rule[[2, 1]];
 
   (*
@@ -1222,7 +1223,8 @@ Catch[
   {InspectionObject["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low.\n\
 ``" <> SymbolName[ruleHead] <> "`` is inside ``Function``.", "Warning", <|
-    Source -> data[[Key[Source]]],
+    Source -> amp[[3, Key[Source]]],
+    "AdditionalSources" -> {rule[[2, 2, 3, Key[Source]]]},
     ConfidenceLevel -> 0.75,
     CodeActions -> {
       CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
