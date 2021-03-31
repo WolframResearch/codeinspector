@@ -39,8 +39,9 @@ CodeInspectImplicitTokens::usage = "CodeInspectImplicitTokens[code] returns a li
 
 Options[CodeInspectImplicitTokens] = {
   PerformanceGoal -> "Speed",
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
-  "AllowedImplicitTokens" -> {"*", ",", ";;", "?"}
+  "TabWidth" -> 1,
+  "AllowedImplicitTokens" -> {"*", ",", ";;", "?"},
+  SourceConvention -> "LineColumn"
 }
 
 
@@ -99,7 +100,7 @@ Module[{agg},
 
   agg = Aggregate[cst];
 
-  CodeInspectImplicitTokensAgg[agg, opts]
+  CodeInspectImplicitTokensAgg[agg, FilterRules[{opts}, Options[CodeInspectImplicitTokensAgg]]]
 ]]
 
 
@@ -156,7 +157,7 @@ Module[{times, spans, commaNulls, compoundExpressionNulls, ops, allowed},
 CodeInspectImplicitTokensSummarize::usage = "CodeInspectImplicitTokensSummarize[code] returns an inspection summary object."
 
 Options[CodeInspectImplicitTokensSummarize] = {
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  "TabWidth" -> 1
 }
 
 CodeInspectImplicitTokensSummarize[File[file_String], implicitTokensIn:_List:Automatic, opts:OptionsPattern[]] :=
@@ -230,9 +231,14 @@ Module[{implicitTokens, lines, lintedLines, tabWidth},
 
 
 Options[CodeInspectImplicitTokensCSTSummarize] = {
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  "TabWidth" -> 1
 }
 
+(*
+precondition:
+Source convention for implicitTokens is "LineColumn"
+
+*)
 CodeInspectImplicitTokensCSTSummarize[cst_, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
 Catch[
 Module[{implicitTokens, lines, lintedLines, string, tabWidth},
@@ -246,7 +252,7 @@ Module[{implicitTokens, lines, lintedLines, string, tabWidth},
   tabWidth = OptionValue["TabWidth"];
 
   If[implicitTokens === Automatic,
-    implicitTokens = CodeInspectImplicitTokensCST[cst];
+    implicitTokens = CodeInspectImplicitTokensCST[cst, FilterRules[{opts}, Options[CodeInspectImplicitTokensCST]]];
   ];
 
   string = ToSourceCharacterString[cst];
@@ -439,6 +445,11 @@ Module[{pars},
   processPar /@ pars
 ]
 
+(*
+precondition:
+Source convention for implicitTokens is "LineColumn"
+
+*)
 implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
 Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops,
@@ -479,6 +490,9 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
     Print["times after resolveInfix: ", times];
   ];
 
+  (*
+  Source convention for implicitTokens is "LineColumn"
+  *)
   ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
   alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
   nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
@@ -499,6 +513,9 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
 
   charInfoPoss = Take[charInfoPoss, UpTo[$ImplicitTokensLimit]];
 
+  (*
+  Source convention for implicitTokens is "LineColumn", so just sort by the structure itself
+  *)
   charInfos = SortBy[charInfos, #[[2;;3]]&];
 
   charInfos = Cases[charInfos, {_, line_, col_} /; MemberQ[charInfoPoss, {line, col}]];
@@ -520,6 +537,8 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
 
 
 (*
+precondition:
+Source convention for implicitTokens is "LineColumn"
 
 BestImplicitTimesPlacement[span_] is something like {{startLine_, startCol_}, {endLine_, endCol_}}
 

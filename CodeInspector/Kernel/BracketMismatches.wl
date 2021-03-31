@@ -36,8 +36,13 @@ CodeInspectBracketMismatches::usage = "CodeInspectBracketMismatches[code] return
 
 Options[CodeInspectBracketMismatches] = {
   PerformanceGoal -> "Speed",
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
-  SourceConvention -> (SourceConvention /. Options[CodeConcreteParse])
+  (*
+  Pass through to CodeConcreteParse
+  *)
+  CharacterEncoding -> "UTF-8",
+  SourceConvention -> "LineColumn",
+  "TabWidth" -> 1,
+  "FileFormat" -> Automatic
 }
 
 
@@ -68,7 +73,7 @@ Catch[
 
     cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
 
-    CodeInspectBracketMismatchesCST[cst]
+    CodeInspectBracketMismatchesCST[cst, FilterRules[{opts}, Options[CodeInspectBracketMismatchesCST]]]
 ]]
 
 
@@ -81,7 +86,7 @@ Module[{cst},
 
   cst = CodeConcreteParse[string, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
-  CodeInspectBracketMismatchesCST[cst]
+  CodeInspectBracketMismatchesCST[cst, FilterRules[{opts}, Options[CodeInspectBracketMismatchesCST]]]
 ]]
 
 
@@ -121,8 +126,13 @@ Module[{mismatches},
 CodeInspectBracketMismatchesSummarize::usage = "BracketMismatchSummarize[code] returns an inspection summary object."
 
 Options[CodeInspectBracketMismatchesSummarize] = {
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse]),
-  SourceConvention -> (SourceConvention /. Options[CodeConcreteParse])
+  (*
+  pass through to CodeInspect
+  *)
+  CharacterEncoding -> "UTF-8",
+  SourceConvention -> "LineColumn",
+  "TabWidth" -> 1,
+  "FileFormat" -> Automatic
 }
 
 CodeInspectBracketMismatchesSummarize[File[file_String], bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|ErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
@@ -196,9 +206,14 @@ Module[{mismatches, lines, lintedLines, tabWidth},
 
 
 Options[CodeInspectBracketMismatchesCSTSummarize] = {
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  "TabWidth" -> 1
 }
 
+(*
+precondition:
+Source convention for implicitTokens is "LineColumn"
+
+*)
 CodeInspectBracketMismatchesCSTSummarize[cst_, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|ErrorNode)[_, _, _]...}:Automatic, OptionsPattern[]] :=
 Catch[
 Module[{mismatches, lines, lintedLines, string, tabWidth},
@@ -212,7 +227,7 @@ Module[{mismatches, lines, lintedLines, string, tabWidth},
   tabWidth = OptionValue["TabWidth"];
 
   If[mismatches === Automatic,
-    mismatches = CodeInspectBracketMismatchesCST[cst];
+    mismatches = CodeInspectBracketMismatchesCST[cst, FilterRules[{opts}, Options[CodeInspectBracketMismatchesCST]]];
   ];
 
   string = ToSourceCharacterString[cst];
@@ -288,7 +303,11 @@ modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_]
   ]
 
 
+(*
+precondition:
+Source convention for implicitTokens is "LineColumn"
 
+*)
 bracketMismatchesLinesReport[linesIn:{___String}, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|ErrorNode)[_, _, _]...}] :=
 Catch[
  Module[{mismatches, infixs, lines, linesToModify, missingOpeners, missingClosers, missingOpenerStarts,

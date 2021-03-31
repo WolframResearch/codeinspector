@@ -650,12 +650,12 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 		Print["endingLints: ", endingLints];
 	];
 
-	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
-
 	(*
 	Make sure to sort lints
 	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
+	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&, conventionAgnosticSourceOrdering];
+
+	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
 
 	(*
 	add formatting instructions
@@ -810,12 +810,13 @@ Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, ending
 		Print["endingLints: ", endingLints];
 	];
 
-	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
-
 	(*
 	Make sure to sort lints
 	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&];
+	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&, conventionAgnosticSourceOrdering];
+
+	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
+	
 	If[$Debug,
 	 Print["endingLints: ", endingLints];
 	];

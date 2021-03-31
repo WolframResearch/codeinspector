@@ -121,21 +121,31 @@ CodeInspect::usage = "CodeInspect[code] returns a list of problems found in code
 code can be a string, a file, or a list of bytes."
 
 Options[CodeInspect] = {
+  "Editor" -> Automatic,
   PerformanceGoal -> "Speed",
-
   "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  
-  "Editor" -> Automatic,
-
-  CharacterEncoding -> "UTF-8",
-  
+  (*
+  filtering
+  *)
+  "TagExclusions" -> {},
+  "SeverityExclusions" -> {},
+  ConfidenceLevel -> 0.0,
+  "LintLimit" -> Infinity,
+  (*
+  Pass through to CodeInspectCST
+  *)
+  "SuppressedRegions" -> {},
+  "InheritedProperties" -> {},
   (*
   Pass through to CodeConcreteParse
   *)
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  CharacterEncoding -> "UTF-8",
+  SourceConvention -> "LineColumn",
+  "TabWidth" -> 1,
+  "FileFormat" -> Automatic
 }
 
 
@@ -146,14 +156,10 @@ $fileByteCountMaxLimit = 3*^6
 
 CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
-Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, cst, data, concreteRules,
-  editor, suppressedRegions, tokenRules},
+Module[{performanceGoal, full, lints, cst, data,
+  editor, suppressedRegions},
 
   performanceGoal = OptionValue[PerformanceGoal];
-  tokenRules = OptionValue["TokenRules"];
-  concreteRules = OptionValue["ConcreteRules"];
-  aggregateRules = OptionValue["AggregateRules"];
-  abstractRules = OptionValue["AbstractRules"];
 
   editor = OptionValue["Editor"];
 
@@ -163,11 +169,6 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
   $ConcreteLintTime = Quantity[0, "Seconds"];
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
-
-  encoding = OptionValue[CharacterEncoding];
-  If[encoding =!= "UTF-8",
-    Throw[Failure["OnlyUTF8Supported", <|"CharacterEncoding"->encoding|>]]
-  ];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -191,15 +192,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
   suppressedRegions = SuppressedRegions[cst];
 
-  lints = CodeInspectCST[
-    cst,
-    PerformanceGoal -> performanceGoal,
-    "TokenRules" -> tokenRules,
-    "ConcreteRules" -> concreteRules,
-    "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules,
-    "SuppressedRegions" -> suppressedRegions
-  ];
+  lints = CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions];
 
   If[FailureQ[lints],
     Throw[lints]
@@ -227,13 +220,7 @@ Module[{performanceGoal, aggregateRules, abstractRules, encoding, full, lints, c
 
 CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, suppressedRegions, tokenRules},
-
-  performanceGoal = OptionValue[PerformanceGoal];
-  tokenRules = OptionValue["TokenRules"];
-  concreteRules = OptionValue["ConcreteRules"];
-  aggregateRules = OptionValue["AggregateRules"];
-  abstractRules = OptionValue["AbstractRules"];
+ Module[{suppressedRegions, cst},
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -250,28 +237,14 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
-  CodeInspectCST[
-    cst,
-    PerformanceGoal -> performanceGoal,
-    "TokenRules" -> tokenRules,
-    "ConcreteRules" -> concreteRules,
-    "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules,
-    "SuppressedRegions" -> suppressedRegions
-  ]
+  CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
 ]]
 
 
 
 CodeInspect[bytes_List, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, suppressedRegions, tokenRules},
-
-  performanceGoal = OptionValue[PerformanceGoal];
-  tokenRules = OptionValue["TokenRules"];
-  concreteRules = OptionValue["ConcreteRules"];
-  aggregateRules = OptionValue["AggregateRules"];
-  abstractRules = OptionValue["AbstractRules"];
+ Module[{cst, suppressedRegions},
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -288,15 +261,7 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
-  CodeInspectCST[
-    cst,
-    PerformanceGoal -> performanceGoal,
-    "TokenRules" -> tokenRules,
-    "ConcreteRules" -> concreteRules,
-    "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules,
-    "SuppressedRegions" -> suppressedRegions
-  ]
+  CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
 ]]
 
 
@@ -311,7 +276,14 @@ Options[CodeInspectCST] = {
   (*
   Properties to pass from cst to lints
   *)
-  "InheritedProperties" -> {}
+  "InheritedProperties" -> {},
+  (*
+  filtering
+  *)
+  "TagExclusions" -> {},
+  "SeverityExclusions" -> {},
+  ConfidenceLevel -> 0.0,
+  "LintLimit" -> Infinity
 }
 
 Attributes[CodeInspectCST] = {HoldFirst}
@@ -320,7 +292,8 @@ CodeInspectCST[cstIn_, OptionsPattern[]] :=
 Catch[
 Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
-  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, data},
+  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, data,
+  tagExclusions, severityExclusions, confidence, lintLimit},
 
   If[$Debug,
     Print["CodeInspectCST"];
@@ -331,13 +304,22 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = {};
 
+  (*
+  not used, but may possibly be used in future
+  *)
   performanceGoal = OptionValue[PerformanceGoal];
+
   tokenRules = OptionValue["TokenRules"];
   concreteRules = OptionValue["ConcreteRules"];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
   inheritedProperties = OptionValue["InheritedProperties"];
+
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
   If[$Debug,
     Print["suppressedRegions: ", suppressedRegions]
@@ -356,6 +338,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
     lints = Select[lints, isActive];
+
+    lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
     Throw[lints]
   ];
@@ -382,6 +366,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
     lints = Select[lints, isActive];
+
+    lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
     Throw[lints]
   ];
@@ -412,6 +398,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
     lints = Select[lints, isActive];
+
+    lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
     Throw[lints]
   ];
@@ -453,6 +441,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
     lints = Select[lints, isActive];
+
+    lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
     Throw[lints]
   ];
@@ -504,6 +494,8 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Select[lints, isActive];
 
+  lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
+
   lints
 ]]
 
@@ -514,7 +506,17 @@ Options[CodeInspectAgg] = {
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
   "SuppressedRegions" -> {},
-  "InheritedProperties" -> {}
+  (*
+  Properties to pass from cst to lints
+  *)
+  "InheritedProperties" -> {},
+  (*
+  filtering
+  *)
+  "TagExclusions" -> {},
+  "SeverityExclusions" -> {},
+  ConfidenceLevel -> 0.0,
+  "LintLimit" -> Infinity
 }
 
 Attributes[CodeInspectAgg] = {HoldFirst}
@@ -522,7 +524,8 @@ Attributes[CodeInspectAgg] = {HoldFirst}
 CodeInspectAgg[aggIn_, OptionsPattern[]] :=
 Catch[
 Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
-  prog, performanceGoal, start, suppressedRegions, isActive, inheritedProperties, data},
+  prog, start, suppressedRegions, isActive, inheritedProperties, data,
+  tagExclusions, severityExclusions, confidence, lintLimit},
 
   If[$Debug,
     Print["CodeInspectAgg"];
@@ -533,11 +536,15 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = {};
 
-  performanceGoal = OptionValue[PerformanceGoal];
   aggregateRules = OptionValue["AggregateRules"];
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
   inheritedProperties = OptionValue["InheritedProperties"];
+
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
   If[$Debug,
     Print["suppressedRegions: ", suppressedRegions]
@@ -570,6 +577,8 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
     lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
     lints = Select[lints, isActive];
+
+    lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
     Throw[lints]
   ];
@@ -609,6 +618,8 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
   lints = Select[lints, isActive];
 
+  lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
+
   lints
 ]]
 
@@ -616,11 +627,19 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
 Options[CodeInspectAST] = {
   PerformanceGoal -> "Speed",
-  "ConcreteRules" :> $DefaultConcreteRules,
-  "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
   "SuppressedRegions" -> {},
-  "InheritedProperties" -> {}
+  (*
+  Properties to pass from cst to lints
+  *)
+  "InheritedProperties" -> {},
+  (*
+  filtering
+  *)
+  "TagExclusions" -> {},
+  "SeverityExclusions" -> {},
+  ConfidenceLevel -> 0.0,
+  "LintLimit" -> Infinity
 }
 
 Attributes[CodeInspectAST] = {HoldFirst}
@@ -628,7 +647,8 @@ Attributes[CodeInspectAST] = {HoldFirst}
 CodeInspectAST[astIn_, OptionsPattern[]] :=
 Catch[
 Module[{abstractRules, ast, poss, lints,
-  prog, performanceGoal, start, suppressedRegions, isActive, inheritedProperties, data},
+  prog, start, suppressedRegions, isActive, inheritedProperties, data,
+  tagExclusions, severityExclusions, confidence, lintLimit},
 
   If[$Debug,
     Print["CodeInspectAST"];
@@ -639,10 +659,14 @@ Module[{abstractRules, ast, poss, lints,
 
   lints = {};
 
-  performanceGoal = OptionValue[PerformanceGoal];
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
   inheritedProperties = OptionValue["InheritedProperties"];
+
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
   If[$Debug,
     Print["suppressedRegions: ", suppressedRegions]
@@ -674,6 +698,8 @@ Module[{abstractRules, ast, poss, lints,
   lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
   lints = Select[lints, isActive];
+
+  lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   lints
 ]]

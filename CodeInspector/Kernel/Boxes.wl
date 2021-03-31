@@ -2,7 +2,6 @@ BeginPackage["CodeInspector`Boxes`"]
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
@@ -11,35 +10,44 @@ Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`SuppressedRegions`"]
 Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
 
 
 CodeInspect[nb_NotebookObject, opts:OptionsPattern[]] :=
-  CodeInspect[NotebookGet[nb]]
+  CodeInspect[NotebookGet[nb], opts]
 
 CodeInspectSummarize[nb_NotebookObject, opts:OptionsPattern[]] :=
-  CodeInspectSummarize[NotebookGet[nb]]
+  CodeInspectSummarize[NotebookGet[nb], opts]
 
 
 CodeInspect[cell_CellObject, opts:OptionsPattern[]] :=
-  CodeInspect[NotebookRead[cell]]
+  CodeInspect[NotebookRead[cell], opts]
 
 CodeInspectSummarize[cell_CellObject, opts:OptionsPattern[]] :=
-  CodeInspectSummarize[NotebookRead[cell]]
+  CodeInspectSummarize[NotebookRead[cell], opts]
 
 
 CodeInspect[nb_Notebook, opts:OptionsPattern[]] :=
+Catch[
 Module[{cst, suppressedRegions},
 
-  cst = CodeConcreteParse[nb];
+  cst = CodeConcreteParse[nb, FilterRules[{opts}, Options[CodeConcreteParse]]];
+
+  If[FailureQ[cst],
+    Throw[cst]
+  ];
+
   suppressedRegions = SuppressedRegions[cst];
+
   (*
   IMPLEMENTATION DETAIL:
   it is important that CodeInspectCST is called on the CellNodes, so that
   the CellIndex property can be treated as inherited inside of CodeInspectCST and inserted
   into the InspectionObjects
   *)
-  Flatten[If[FailureQ[#], {}, CodeInspectCST[#, opts, "SuppressedRegions" -> suppressedRegions, "InheritedProperties" -> {CellIndex}]]& /@ cst[[2]]]
-]
+  Flatten[If[FailureQ[#], {}, CodeInspectCST[#, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions, "InheritedProperties" -> {CellIndex}]]& /@ cst[[2]]]
+]]
 
 
 CodeInspectSummarize[nbIn_Notebook, opts:OptionsPattern[]] :=
@@ -47,28 +55,19 @@ Module[{nb, lints, tagExclusions, severityExclusions, confidence, lintLimit},
   
   nb = nbIn;
 
-  (*
-  Support None for the various exclusion options
-  *)
   tagExclusions = OptionValue["TagExclusions"];
-  If[tagExclusions === None,
-    tagExclusions = {}
-  ];
-
   severityExclusions = OptionValue["SeverityExclusions"];
-  If[severityExclusions === None,
-    severityExclusions = {}
-  ];
-
   confidence = OptionValue[ConfidenceLevel];
-
   lintLimit = OptionValue["LintLimit"];
 
-  lints = CodeInspect[nb];
+  lints = CodeInspect[nb, FilterRules[{opts}, Options[CodeInspect]]];
 
   (*
   TODO: use notebook title or thumbnail of notebook or something
   *)
+
+  lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
+
 
   If[lints == {},
     lints = {
@@ -106,7 +105,19 @@ Module[{nb, lints, tagExclusions, severityExclusions, confidence, lintLimit},
 
 
 CodeInspect[c:Cell[BoxData[_], _, ___], opts:OptionsPattern[]] :=
-  CodeInspectCST[CodeConcreteParse[c], opts]
+Catch[
+Module[{cst, suppressedRegions},
+
+  cst = CodeConcreteParse[c, FilterRules[{opts}, Options[CodeConcreteParse]]];
+
+  If[FailureQ[cst],
+    Throw[cst]
+  ];
+
+  suppressedRegions = SuppressedRegions[cst];
+
+  CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
+]]
 
 CodeInspect[Cell[___], opts:OptionsPattern[]] :=
   {}
@@ -116,24 +127,14 @@ Module[{c, lints, tagExclusions, severityExclusions, confidence, lintLimit},
   
   c = cIn;
 
-  (*
-  Support None for the various exclusion options
-  *)
   tagExclusions = OptionValue["TagExclusions"];
-  If[tagExclusions === None,
-    tagExclusions = {}
-  ];
-
   severityExclusions = OptionValue["SeverityExclusions"];
-  If[severityExclusions === None,
-    severityExclusions = {}
-  ];
-
   confidence = OptionValue[ConfidenceLevel];
-
   lintLimit = OptionValue["LintLimit"];
 
-  lints = CodeInspect[c];
+  lints = CodeInspect[c, FilterRules[{opts}, Options[CodeInspect]]];
+
+  lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   If[lints == {},
     lints = {
@@ -174,10 +175,10 @@ Module[{c, lints, tagExclusions, severityExclusions, confidence, lintLimit},
 
 
 CodeInspect[b_RowBox, opts:OptionsPattern[]] :=
-  CodeInspectBox[b, opts]
+  CodeInspectBox[b, FilterRules[{opts}, Options[CodeInspectBox]]]
 
 CodeInspectSummarize[b_RowBox, opts:OptionsPattern[]] :=
-  CodeInspectBoxSummarize[b, opts]
+  CodeInspectBoxSummarize[b, FilterRules[{opts}, Options[CodeInspectBoxSummarize]]]
 
 
 
@@ -187,17 +188,14 @@ Options[CodeInspectBox] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules
+  (*
+  CodeConcreteParseBox has no options, so nothing to add here
+  *)
 }
 
-CodeInspectBox[box_, OptionsPattern[]] :=
+CodeInspectBox[box_, opts:OptionsPattern[]] :=
 Catch[
- Module[{aggregateRules, abstractRules, cst, concreteRules, performanceGoal, suppressedRegions, tokenRules},
-
-  performanceGoal = OptionValue[PerformanceGoal];
-  tokenRules = OptionValue["TokenRules"];
-  concreteRules = OptionValue["ConcreteRules"];
-  aggregateRules = OptionValue["AggregateRules"];
-  abstractRules = OptionValue["AbstractRules"];
+ Module[{cst, suppressedRegions},
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -206,7 +204,7 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
-  cst = CodeConcreteParseBox[box];
+  cst = CodeConcreteParseBox[box, FilterRules[{opts}, Options[CodeConcreteParseBox]]];
 
   If[FailureQ[cst],
     Throw[cst]
@@ -214,15 +212,7 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
-  CodeInspectCST[
-    cst,
-    PerformanceGoal -> performanceGoal,
-    "TokenRules" -> tokenRules,
-    "ConcreteRules" -> concreteRules,
-    "AggregateRules" -> aggregateRules,
-    "AbstractRules" -> abstractRules,
-    "SuppressedRegions" -> suppressedRegions
-  ]
+  CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
 ]]
 
 
@@ -235,13 +225,16 @@ Options[CodeInspectBoxSummarize] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  CharacterEncoding -> "UTF-8",
-  "TagExclusions" -> $DefaultTagExclusions,
-  "SeverityExclusions" -> $DefaultSeverityExclusions,
-  "LineNumberExclusions" -> <||>,
-  "LineHashExclusions" -> {},
+  (*
+  filtering
+  *)
+  "TagExclusions" :> $DefaultTagExclusions,
+  "SeverityExclusions" :> $DefaultSeverityExclusions,
   ConfidenceLevel :> $DefaultConfidenceLevel,
   "LintLimit" :> $DefaultLintLimit
+  (*
+  CodeConcreteParseBox has no options, so nothing to add here
+  *)
 }
 
 (*
@@ -256,47 +249,29 @@ Related bugs: 338218
 
 lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
-CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, tagExclusions, severityExclusions,
-  confidence, lintLimit, performanceGoal, concreteRules, aggregateRules, abstractRules,
-  processedBox, cst, expandedLints, tokenRules},
+ Module[{lints, processedBox, cst, expandedLints,
+  tagExclusions, severityExclusions, confidence, lintLimit},
 
  lints = lintsIn;
 
- performanceGoal = OptionValue[PerformanceGoal];
- tokenRules = OptionValue["TokenRules"];
- concreteRules = OptionValue["ConcreteRules"];
- aggregateRules = OptionValue["AggregateRules"];
- abstractRules = OptionValue["AbstractRules"];
-
- (*
-  Support None for the various exclusion options
- *)
  tagExclusions = OptionValue["TagExclusions"];
- If[tagExclusions === None,
-  tagExclusions = {}
- ];
-
  severityExclusions = OptionValue["SeverityExclusions"];
- If[severityExclusions === None,
-  severityExclusions = {}
- ];
-
  confidence = OptionValue[ConfidenceLevel];
-
  lintLimit = OptionValue["LintLimit"];
 
  If[lints === Automatic,
 
-    cst = CodeConcreteParseBox[box];
+    cst = CodeConcreteParseBox[box, FilterRules[{opts}, Options[CodeConcreteParseBox]]];
 
-    lints = CodeInspectCST[cst,
-      PerformanceGoal -> performanceGoal,
-      "TokenRules" -> tokenRules,
-      "ConcreteRules" -> concreteRules,
-      "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules];
+    If[FailureQ[cst],
+      Throw[cst]
+    ];
+
+    suppressedRegions = SuppressedRegions[cst];
+
+    lints = CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions];
   ];
 
   If[FailureQ[lints],
@@ -309,21 +284,9 @@ Catch[
   expandedLints = Flatten[expandLint /@ lints];
 
   (*
-  Then sort
-
-  given the srcs {{1, 3}, {1, 3, 1, 1}}
-
-  it is important to process {1, 3, 1, 1} first because adding the StyleBox changes the shape of box, so must work from more-specific to less-specific positions
-
-  For example, the boxes of this expression:
-  f[%[[]]]
-
-  which are:
-  RowBox[{"f", "[", RowBox[{"%", "[", RowBox[{"[", "]"}], "]"}], "]"}]
-
-  give lints with positions {1, 3} and {1, 3, 1, 1}
+  filterLints also sorts correctly
   *)
-  expandedLints = ReverseSortBy[expandedLints, #[[4, Key[Source]]]&, lexOrderingForLists];
+  expandedLints = filterLints[expandedLints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   processedBox = box;
   Do[

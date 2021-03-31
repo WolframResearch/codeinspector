@@ -44,6 +44,12 @@ scopingDataObjectToLints
 betterRiffle
 
 
+filterLints
+
+
+conventionAgnosticSourceOrdering
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -435,22 +441,93 @@ firstTokenWithSource[node_] :=
 	Module[{cases},
 		cases = Cases[node, (LeafNode | ErrorNode)[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
 		If[cases != {},
-			Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
+			Throw[First[SortBy[cases, #[[3, Key[Source]]]&, conventionAgnosticSourceOrdering]]]
 		];
 		cases = Cases[node, CallNode[_, _, KeyValuePattern[Source -> _]], {0, Infinity}];
 		If[cases != {},
-			Throw[First[SortBy[cases, #[[3, Key[Source]]]&]]]
+			Throw[First[SortBy[cases, #[[3, Key[Source]]]&, conventionAgnosticSourceOrdering]]]
 		];
 	]]
 
 
 
-lexOrderingForLists[{}, {}] := 0
-lexOrderingForLists[{}, b_] := 1
-lexOrderingForLists[a_, {}] := -1
-lexOrderingForLists[a_, b_] :=
-  Order[Take[a, 1], Take[b, 1]] /. 
-    0 :> lexOrderingForLists[Drop[a, 1], Drop[b, 1]]
+(*
+order deepest first
+
+given the srcs {{1, 3}, {1, 3, 1, 1}}
+
+it is important to process {1, 3, 1, 1} first because adding the StyleBox changes the shape of box, so must work from more-specific to less-specific positions
+
+For example, the boxes of this expression:
+f[%[[]]]
+
+which are:
+RowBox[{"f", "[", RowBox[{"%", "[", RowBox[{"[", "]"}], "]"}], "]"}]
+
+give lints with positions {1, 3} and {1, 3, 1, 1}
+*)
+positionSpecOrdering[{}, {}] := 0
+positionSpecOrdering[{}, b_List] := -1
+positionSpecOrdering[a_List, {}] := 1
+positionSpecOrdering[a_List, b_List] :=
+	Order[Take[a, 1], Take[b, 1]] /.
+		0 :> positionSpecOrdering[Drop[a, 1], Drop[b, 1]]
+
+(*
+Position-spec (or possibly SourceCharacterIndex)
+
+If this is SourceCharacterIndex, then the deepest-first behavior does not matter since sources are always length 2
+*)
+conventionAgnosticSourceOrdering[a:{_Integer...}, b:{_Integer...}] :=
+	positionSpecOrdering[a, b]
+
+(*
+Replace After[{1, 3, 2}] with {1, 3, 2.5} for easier processing
+*)
+conventionAgnosticSourceOrdering[a:After[{most___, last_}], b_] :=
+	conventionAgnosticSourceOrdering[{most, last + 0.5}, b]
+
+conventionAgnosticSourceOrdering[a_, b:After[{most___, last_}]] :=
+	conventionAgnosticSourceOrdering[a, {most, last + 0.5}]
+
+
+(*
+LineColumn
+
+just use natural order
+*)
+conventionAgnosticSourceOrdering[a:{{_Integer, _Integer}, {_Integer, _Integer}}, b:{{_Integer, _Integer}, {_Integer, _Integer}}] :=
+	Order[a, b]
+
+
+conventionAgnosticSourceOrdering[args___] := (
+	Message[conventionAgnosticSourceOrdering::unhandled, {args}];
+	$Failed
+)
+
+
+(*
+More severe before less severe
+
+So negate ordering result of severityToInteger[]
+*)
+severityOrdering[a_String, b_String] :=
+	-Order[severityToInteger[a], severityToInteger[b]]
+
+
+
+(*
+This is used in filterLints[] to order:
+first: severity
+then Source
+*)
+severityThenSourceOrdering[{aSev_, aSrc_}, {bSev_, bSrc_}] :=
+	severityOrdering[aSev, bSev] /. 0 :> conventionAgnosticSourceOrdering[aSrc, bSrc]
+
+
+
+
+
 
 
 
@@ -641,6 +718,115 @@ SourceMemberQ[{<|CellIndex -> start_|>, <|CellIndex -> end_|>}, InspectionObject
 SourceMemberQ[{<|Source -> start_|>, <|Source -> end_|>}, InspectionObject[_, _, _, KeyValuePattern[Source -> src_]]] := (
 	SourceMemberQ[{start, end}, src]
 )
+
+
+
+
+
+
+
+(*
+filter based on:
+SeverityExclusions
+TagExclusions
+ConfidenceLevel
+LintLimit
+
+This is called by CodeInspect and CodeInspectSummarize
+
+This function does not have options because:
+CodeInspect and CodeInspectSummarize have different values for the options and it doesn't make sense to give defaults here
+
+So values must be provided explicitly
+*)
+filterLints[lintsIn:{___InspectionObject}, tagExclusionsIn_, severityExclusionsIn_, confidence_, lintLimit_] :=
+Catch[
+Module[{lints, tagExclusions, severityExclusions, shadowing, confidenceTest, badLints},
+
+	lints = lintsIn;
+	tagExclusions = tagExclusionsIn;
+	severityExclusions = severityExclusionsIn;
+
+	(*
+	Support None for the various exclusion options
+	*)
+	If[tagExclusions === None,
+		tagExclusions = {}
+	];
+
+	If[severityExclusions === None,
+		severityExclusions = {}
+	];
+
+	If[!empty[tagExclusions],
+		lints = DeleteCases[lints, InspectionObject[Alternatives @@ tagExclusions, _, _, _]];
+		If[$Debug,
+			Print["lints: ", lints];
+		];
+	];
+
+	If[empty[lints],
+		Throw[{}]
+	];
+
+	If[!empty[severityExclusions],
+		lints = DeleteCases[lints, InspectionObject[_, _, Alternatives @@ severityExclusions, _]];
+		If[$Debug,
+			Print["lints: ", lints];
+		];
+	];
+
+	If[empty[lints],
+		Throw[{}]
+	];
+
+	badLints = Cases[lints, InspectionObject[_, _, _, data_?(Not @* KeyExistsQ[ConfidenceLevel])]];
+	If[!empty[badLints],
+		Message[InspectionObject::confidence, badLints]
+	];
+
+	confidenceTest = GreaterEqualThan[confidence];
+	lints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
+
+
+	(*
+
+	Disable shadow filtering for now
+
+	Below is quadratic time
+
+	(*
+	If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
+	*)
+	shadowing = Select[lints, Function[lint, AnyTrue[lints, shadows[lint, #]&]]];
+
+	If[$Debug,
+	Print["shadowing: ", shadowing];
+	];
+
+	lints = Complement[lints, shadowing];
+	If[$Debug,
+	Print["lints: ", lints];
+	];
+	*)
+
+	If[empty[lints],
+		Throw[{}]
+	];
+
+	(*
+	Make sure to sort lints before taking
+
+	Sort by severity, then sort by Source
+	*)
+	lints = SortBy[lints, {#[[3]], #[[4, Key[Source]]]}&, severityThenSourceOrdering];
+
+	lints = Take[lints, UpTo[lintLimit]];
+
+	lints
+]]
+
+
 
 
 

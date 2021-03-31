@@ -28,6 +28,7 @@ Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
 Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`Format`"]
+Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
 
 
@@ -59,9 +60,7 @@ $EnvironBuffer = 1
 
 $DefaultConfidenceLevel = 0.95
 
-$MaxConfidenceLevel = 1.0
 
-$existsTest = Not @* KeyExistsQ[ConfidenceLevel]
 
 
 
@@ -70,15 +69,24 @@ code can be a string, a file, or a list of bytes."
 
 Options[CodeInspectSummarize] = {
   PerformanceGoal -> "Speed",
+  "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
-  CharacterEncoding -> "UTF-8",
-  "TagExclusions" -> $DefaultTagExclusions,
-  "SeverityExclusions" -> $DefaultSeverityExclusions,
+  (*
+  filtering
+  *)
+  "TagExclusions" :> $DefaultTagExclusions,
+  "SeverityExclusions" :> $DefaultSeverityExclusions,
   ConfidenceLevel :> $DefaultConfidenceLevel,
   "LintLimit" :> $DefaultLintLimit,
-  "TabWidth" -> ("TabWidth" /. Options[CodeConcreteParse])
+  (*
+  pass through CodeInspect to CodeConcreteParse
+  *)
+  CharacterEncoding -> "UTF-8",
+  SourceConvention -> "LineColumn",
+  "TabWidth" -> 1,
+  "FileFormat" -> Automatic
 }
 
 
@@ -94,37 +102,20 @@ Related bugs: 338218
 
 lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
-CodeInspectSummarize[File[file_String], lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectSummarize[File[file_String], lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, full, lines, tagExclusions, severityExclusions,
-  lintedLines, confidence, lintLimit, performanceGoal, concreteRules,
-  aggregateRules, abstractRules, bytes, str, tabWidth},
+Module[{lints, full, lines,
+  tagExclusions, severityExclusions, confidence, lintLimit,
+  lintedLines, bytes, str, tabWidth},
 
- lints = lintsIn;
+  lints = lintsIn;
 
- performanceGoal = OptionValue[PerformanceGoal];
- concreteRules = OptionValue["ConcreteRules"];
- aggregateRules = OptionValue["AggregateRules"];
- abstractRules = OptionValue["AbstractRules"];
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
- (*
-  Support None for the various exclusion options
- *)
- tagExclusions = OptionValue["TagExclusions"];
- If[tagExclusions === None,
-  tagExclusions = {}
- ];
-
- severityExclusions = OptionValue["SeverityExclusions"];
- If[severityExclusions === None,
-  severityExclusions = {}
- ];
-
- confidence = OptionValue[ConfidenceLevel];
-
- lintLimit = OptionValue["LintLimit"];
-
- tabWidth = OptionValue["TabWidth"];
+  tabWidth = OptionValue["TabWidth"];
 
   full = FindFile[file];
   If[FailureQ[full],
@@ -136,13 +127,7 @@ Catch[
    ];
 
   If[lints === Automatic,
-    lints = CodeInspect[File[full],
-      PerformanceGoal -> performanceGoal,
-      "ConcreteRules" -> concreteRules,
-      "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules,
-      "TabWidth" -> tabWidth
-    ];
+    lints = CodeInspect[File[full], FilterRules[{opts}, Options[CodeInspect]]];
   ];
 
   (*
@@ -199,63 +184,40 @@ Catch[
 (*
 Allow lints themselves to be summarized
 
-Since we have an explicit lint that we want to summarize, then make sure that "TagExclusions" and
-ConfidenceLevel do not interfere with summarizing
+Since we have an explicit lint that we want to summarize, then make sure that filtering options
+do not interfere with summarizing
 *)
-CodeInspectSummarize[lint:InspectionObject[_, _, _, KeyValuePattern["File" -> _]], OptionsPattern[]] :=
+CodeInspectSummarize[lint:InspectionObject[_, _, _, KeyValuePattern["File" -> _]], opts:OptionsPattern[]] :=
   Module[{file},
 
     file = lint[[4, Key["File"]]];
 
-    CodeInspectSummarize[File[file], {lint}, "SeverityExclusions" -> {}, "TagExclusions" -> {}, ConfidenceLevel -> 0.0]
+    CodeInspectSummarize[File[file], {lint}, opts, "SeverityExclusions" -> {}, "TagExclusions" -> {}, ConfidenceLevel -> 0.0, "LintLimit" -> Infinity]
   ]
 
 
 
-CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, tagExclusions, severityExclusions, lintedLines,
-  confidence, lintLimit, performanceGoal, concreteRules, aggregateRules, abstractRules, tabWidth},
+ Module[{lints, lines,
+  tagExclusions, severityExclusions, confidence, lintLimit,
+  lintedLines, tabWidth},
 
  lints = lintsIn;
 
- performanceGoal = OptionValue[PerformanceGoal];
- concreteRules = OptionValue["ConcreteRules"];
- aggregateRules = OptionValue["AggregateRules"];
- abstractRules = OptionValue["AbstractRules"];
-
- (*
-  Support None for the various exclusion options
- *)
  tagExclusions = OptionValue["TagExclusions"];
- If[tagExclusions === None,
-  tagExclusions = {}
- ];
-
  severityExclusions = OptionValue["SeverityExclusions"];
- If[severityExclusions === None,
-  severityExclusions = {}
- ];
-
  confidence = OptionValue[ConfidenceLevel];
-
  lintLimit = OptionValue["LintLimit"];
 
  tabWidth = OptionValue["TabWidth"];
-
 
  If[StringLength[string] == 0,
   Throw[Failure["EmptyString", <||>]]
  ];
 
  If[lints === Automatic,
-    lints = CodeInspect[string,
-      PerformanceGoal -> performanceGoal,
-      "ConcreteRules" -> concreteRules,
-      "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules,
-      "TabWidth" -> tabWidth
-    ];
+    lints = CodeInspect[string, FilterRules[{opts}, Options[CodeInspect]]]
   ];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
@@ -302,46 +264,23 @@ Catch[
 
 
 
-CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, OptionsPattern[]] :=
+CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, lines, tagExclusions, severityExclusions, lintedLines,
-  confidence, lintLimit, string, performanceGoal, concreteRules, aggregateRules, abstractRules,
-  tabWidth},
+ Module[{lints, lines,
+  tagExclusions, severityExclusions, confidence, lintLimit,
+  lintedLines, string, tabWidth},
 
  lints = lintsIn;
 
- performanceGoal = OptionValue[PerformanceGoal];
- concreteRules = OptionValue["ConcreteRules"];
- aggregateRules = OptionValue["AggregateRules"];
- abstractRules = OptionValue["AbstractRules"];
-
- (*
-  Support None for the various exclusion options
- *)
  tagExclusions = OptionValue["TagExclusions"];
- If[tagExclusions === None,
-  tagExclusions = {}
- ];
-
  severityExclusions = OptionValue["SeverityExclusions"];
- If[severityExclusions === None,
-  severityExclusions = {}
- ];
-
  confidence = OptionValue[ConfidenceLevel];
-
  lintLimit = OptionValue["LintLimit"];
 
  tabWidth = OptionValue["TabWidth"];
 
  If[lints === Automatic,
-    lints = CodeInspect[bytes,
-      PerformanceGoal -> performanceGoal,
-      "ConcreteRules" -> concreteRules,
-      "AggregateRules" -> aggregateRules,
-      "AbstractRules" -> abstractRules,
-      "TabWidth" -> tabWidth
-    ];
+    lints = CodeInspect[bytes, FilterRules[{opts}, Options[CodeInspect]]];
   ];
 
   string = SafeString[bytes];
@@ -397,11 +336,11 @@ InspectedLineObject::truncation = "Truncation limit reached. Inspected line may 
 (*
 Return a list of LintedLines
 *)
-lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_List, severityExclusions_List, confidence_, lintLimit_] :=
+lintLinesReport[linesIn:{___String}, lintsIn:{___InspectionObject}, tagExclusions_, severityExclusions_, confidence_, lintLimit_] :=
 Catch[
 Module[{lints, lines, sources, warningsLines,
   linesToModify, maxLineNumberLength, lintsPerColumn, sourceLessLints, toRemove, startingPoint, startingPointIndex, elidedLines,
-  additionalSources, shadowing, confidenceTest, badLints, truncated, environLines, environLinesTentative},
+  additionalSources, truncated, environLines, environLinesTentative},
   
   lints = lintsIn;
   If[$Debug,
@@ -438,78 +377,12 @@ Module[{lints, lines, sources, warningsLines,
 
   lines = StringTake[#, UpTo[$LineTruncationLimit]]& /@ lines;
 
-  If[!empty[tagExclusions],
-    lints = DeleteCases[lints, InspectionObject[Alternatives @@ tagExclusions, _, _, _]];
-    If[$Debug,
-      Print["lints: ", lints];
-    ];
-  ];
+
+  lints = filterLints[lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
   If[empty[lints],
     Throw[{}]
   ];
-
-  If[!empty[severityExclusions],
-    lints = DeleteCases[lints, InspectionObject[_, _, Alternatives @@ severityExclusions, _]];
-    If[$Debug,
-      Print["lints: ", lints];
-    ];
-  ];
-
-  If[empty[lints],
-    Throw[{}]
-  ];
-
-
-  badLints = Cases[lints, InspectionObject[_, _, _, data_?$existsTest]];
-  If[!empty[badLints],
-    Message[InspectionObject::confidence, badLints]
-  ];
-
-  confidenceTest = GreaterEqualThan[confidence];
-  lints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
-
-  confidenceTest = LessEqualThan[$MaxConfidenceLevel];
-  lints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[ConfidenceLevel -> c_?confidenceTest]]];
-
-
-  (*
-
-  Disable shadow filtering for now
-
-  Below is quadratic time
-
-  (*
-  If a Fatal lint and an Error lint both have the same Source, then only keep the Fatal lint
-  *)
-  shadowing = Select[lints, Function[lint, AnyTrue[lints, shadows[lint, #]&]]];
-
-  If[$Debug,
-    Print["shadowing: ", shadowing];
-  ];
-
-  lints = Complement[lints, shadowing];
-  If[$Debug,
-    Print["lints: ", lints];
-  ];
-  *)
-
-
-
-  If[empty[lints],
-    Throw[{}]
-  ];
-  
-  (*
-  Make sure to sort lints before taking
-
-  Sort by severity, then sort by Source
-
-  severityToInteger maps "Remark" -> 1 and "Fatal" -> 4, so make sure to negate that
-  *)
-  lints = SortBy[lints, {-severityToInteger[#[[3]]]&, #[[4, Key[Source]]]&}];
-
-  lints = Take[lints, UpTo[lintLimit]];
 
   (*
   These are the lints we will be working with
