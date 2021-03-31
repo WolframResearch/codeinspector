@@ -1365,7 +1365,7 @@ Attributes[scanWiths] = {HoldRest}
 scanWiths[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
-  counts, errs, srcs},
+  counts, errs, srcs, cases},
   
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1430,10 +1430,25 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   *)
   (* Having empty {} as With variable argument is not critical, but a warning may be issued *)
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]...}],
-    AppendTo[issues, InspectionObject["Arguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark", <|
-      Source -> {#[[1, 3, Key[Source], 1]], #[[-1, 3, Key[Source], 2]]}&[Most[children]],
-      ConfidenceLevel -> 0.90,
-      "Argument" -> "With"|>]];
+
+    (*
+    Remove lists that do have arguments
+    *)
+    cases = DeleteCases[Most[children], CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]];
+
+    Do[
+      AppendTo[issues,
+        InspectionObject["Arguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark",
+          <|
+            Source -> child[[3, Key[Source]]],
+            ConfidenceLevel -> 0.90,
+            "Argument" -> "With"
+          |>
+        ]
+      ]
+      ,
+      {child, cases}
+    ]
   ];
 
   paramLists = Most[children][[All, 2]];
