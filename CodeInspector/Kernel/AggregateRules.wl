@@ -8,8 +8,17 @@ Begin["`Private`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
+(*
+Silence shadowing messages about CodeInspector`Utils` and CodeFormatter`Utils`
+FIXME: reorganize common utility functions into CodeTools`Utils`
+*)
+Quiet[
+Needs["CodeFormatter`"] (* for CodeFormatCST *)
+,
+{General::shdw}
+]
+
 Needs["CodeParser`"]
-Needs["CodeParser`ToString`"] (* for ToInputFormString *)
 Needs["CodeParser`Utils`"]
 
 
@@ -1197,9 +1206,9 @@ Catch[
 
   choice1 = BinaryNode[ruleHead, {
     ruleChild1,
-    LeafNode[Token`Whitespace, " ", <||>],
+    LeafNode[Whitespace, " ", <||>],
     rule[[2, 2]],
-    LeafNode[Token`Whitespace, " ", <||>],
+    LeafNode[Whitespace, " ", <||>],
     GroupNode[GroupParen, {
       LeafNode[Token`OpenParen, "(", <||>],
       PostfixNode[Function, {
@@ -1212,9 +1221,9 @@ Catch[
       LeafNode[Token`OpenParen, "(", <||>],
       BinaryNode[ruleHead, {
         ruleChild1,
-        LeafNode[Token`Whitespace, " ", <||>],
+        LeafNode[Whitespace, " ", <||>],
         rule[[2, 2]],
-        LeafNode[Token`Whitespace, " ", <||>],
+        LeafNode[Whitespace, " ", <||>],
         ruleChild2
       }, rule[[3]]],
       LeafNode[Token`CloseParen, ")", <||>] }, <||>],
@@ -1227,11 +1236,11 @@ The precedence of ``&`` is surprisingly low.\n\
     "AdditionalSources" -> {rule[[2, 2, 3, Key[Source]]]},
     ConfidenceLevel -> 0.75,
     CodeActions -> {
-      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
         Source -> data[[Key[Source]]]
       |>],
-      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice2,
         Source -> data[[Key[Source]]]
       |>]
@@ -1282,11 +1291,11 @@ The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surpr
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.75,
     CodeActions -> {
-      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
         Source -> data[[Key[Source]]]
       |>],
-      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice2,
         Source -> data[[Key[Source]]]
       |>]
@@ -1344,16 +1353,16 @@ Catch[
 
   {InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-Call to ``PatternTest`` " <> format[ToInputFormString[call]] <> " is inside ``Function``.",
+Call to ``PatternTest`` " <> format[CodeFormatCST[ContainerNode[File, {concretify[call]}, <||>]]] <> " is inside ``Function``.",
     "Warning", <|
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.75,
     CodeActions -> {
-      CodeAction["Replace with " <> format[ToInputFormString[choice1]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
         Source -> data[[Key[Source]]]
       |>],
-      CodeAction["Replace with " <> format[ToInputFormString[choice2]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice2,
         Source -> data[[Key[Source]]]
       |>]
@@ -1481,11 +1490,11 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
 
       AppendTo[issues,
         InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
-This may be ok if " <> format[ToInputFormString[pattern]] <> " is used as a pattern.", "Warning", <|
+This may be ok if " <> format[CodeFormatCST[ContainerNode[File, {concretify[pattern]}, <||>]]] <> " is used as a pattern.", "Warning", <|
           Source -> data[[Key[Source]]],
           ConfidenceLevel -> 0.85,
           CodeActions -> {
-            CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
+            CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
               "ReplacementNode" -> choice,
               Source -> data[[Key[Source]]]
             |>]
@@ -1572,33 +1581,37 @@ Catch[
       If[!empty[stringExpArgsBefore],
 
         choice =
-          InfixNode[StringExpression,
-            Flatten[betterRiffle[{
-              InfixNode[Alternatives,
-                Flatten[Riffle[{GroupNode[GroupParen, {
-                  LeafNode[Token`OpenParen, "(", <||>],
-                  InfixNode[StringExpression,
-                    Flatten[Riffle[
-                      stringExpArgsBefore ~Join~ {alternativesFirst}
-                      ,
-                      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-                    ]], <||>],
-                  LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~ alternativesRest
+          InfixNode[Alternatives,
+            Flatten[Riffle[{GroupNode[GroupParen, {
+              LeafNode[Token`OpenParen, "(", <||>],
+              InfixNode[StringExpression,
+                Flatten[Riffle[
+                  stringExpArgsBefore ~Join~ {alternativesFirst}
                   ,
-                  {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-                ]], <||>
-              ]} ~Join~ stringExpArgsAfter
+                  {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Whitespace, " ", <||>]}}
+                ]], <||>],
+              LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~ alternativesRest
               ,
-              {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+              {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Whitespace, " ", <||>]}}
             ]], <||>];
 
-          action =
-            CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
-              "ReplacementNode" -> choice,
-              Source -> data[[Key[Source]]]
-            |>];
+        If[!empty[stringExpArgsAfter],
+          choice =
+            InfixNode[StringExpression,
+              Flatten[betterRiffle[
+                {choice} ~Join~ stringExpArgsAfter
+                ,
+                {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Whitespace, " ", <||>]}}
+              ]], <||>]
+        ];
 
-          AppendTo[actions, action];
+        action =
+          CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
+            "ReplacementNode" -> choice,
+            Source -> data[[Key[Source]]]
+          |>];
+
+        AppendTo[actions, action];
       ];
     ];
 
@@ -1613,32 +1626,37 @@ Catch[
       If[!empty[stringExpArgsAfter],
 
         choice =
-          InfixNode[StringExpression,
-            Flatten[betterRiffle[stringExpArgsBefore ~Join~ {
-              InfixNode[Alternatives,
-                Flatten[Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
-                  LeafNode[Token`OpenParen, "(", <||>],
-                  InfixNode[StringExpression,
-                    Flatten[Riffle[
-                      {alternativesLast} ~Join~ stringExpArgsAfter
-                      ,
-                      {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-                    ]], <||>],
-                  LeafNode[Token`CloseParen, ")", <||>]}, <||>]}
+          InfixNode[Alternatives,
+            Flatten[Riffle[alternativesMost ~Join~ {GroupNode[GroupParen, {
+              LeafNode[Token`OpenParen, "(", <||>],
+              InfixNode[StringExpression,
+                Flatten[Riffle[
+                  {alternativesLast} ~Join~ stringExpArgsAfter
                   ,
-                  {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
-                ]], <||>]}
+                  {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Whitespace, " ", <||>]}}
+                ]], <||>],
+              LeafNode[Token`CloseParen, ")", <||>]}, <||>]}
               ,
-              {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+              {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`Bar, "|", <||>], LeafNode[Whitespace, " ", <||>]}}
             ]], <||>];
 
-          action =
-            CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
-              "ReplacementNode" -> choice,
-              Source -> data[[Key[Source]]]
-            |>];
+        If[!empty[stringExpArgsBefore],
+          choice =
+            InfixNode[StringExpression,
+              Flatten[betterRiffle[
+                stringExpArgsBefore ~Join~ {choice}
+                ,
+                {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Whitespace, " ", <||>]}}
+              ]], <||>]
+        ];
 
-          AppendTo[actions, action];
+        action =
+          CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
+            "ReplacementNode" -> choice,
+            Source -> data[[Key[Source]]]
+          |>];
+
+        AppendTo[actions, action];
       ];
     ];
 
@@ -1654,11 +1672,11 @@ Catch[
             LeafNode[Token`CloseParen, ")", <||>]}, <||>]} ~Join~
           stringExpArgsAfter
           ,
-          {{LeafNode[Token`Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Token`Whitespace, " ", <||>]}}
+          {{LeafNode[Whitespace, " ", <||>], LeafNode[Token`TildeTilde, "~~", <||>], LeafNode[Whitespace, " ", <||>]}}
         ]], <||>];
 
     action =
-      CodeAction["Replace with " <> format[ToInputFormString[choice]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
         "ReplacementNode" -> choice,
         Source -> data[[Key[Source]]]
       |>];
@@ -1981,6 +1999,33 @@ Module[{agg, node, data, issues, children, rand},
 
   issues
 ]
+
+
+
+
+
+
+
+
+concretify[node:CallNode[_List, _, _]] :=
+  Failure["InvalidHead", <|
+      "Message" -> "Head is a list (Possibly calling concretify on concrete syntax)",
+      "Function" -> concretify,
+      "Arguments" -> {node}
+    |>
+  ]
+
+(*
+Introduce list around head
+*)
+concretify[node:CallNode[head_, children_, data_]] :=
+  CallNode[{concretify[head]}, concretify /@ children, data]
+
+concretify[type_[tag_, children_, data_]] :=
+  type[tag, concretify /@ children, data]
+
+
+
 
 
 
