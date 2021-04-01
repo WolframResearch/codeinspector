@@ -10,29 +10,29 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     16304,        435]
+NotebookDataLength[     16342,        436]
 NotebookOptionsPosition[      9532,        293]
-NotebookOutlinePosition[     10258,        318]
-CellTagsIndexPosition[     10180,        313]
+NotebookOutlinePosition[     10296,        319]
+CellTagsIndexPosition[     10217,        314]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell[TextData[{
  "New in: ",
- Cell["XX", "HistoryData",
-  CellTags->"New",ExpressionUUID->"249e2e37-8b19-46e5-bb0f-d881de2d5453"],
+ Cell["??", "HistoryData",
+  CellTags->"New",ExpressionUUID->"68d34895-5dd7-4a27-b372-749e54853d96"],
  " | Modified in: ",
  Cell[" ", "HistoryData",
-  CellTags->"Modified",ExpressionUUID->"d8af3c52-7c46-4836-9933-aa49d3b1ceef"],
+  CellTags->"Modified",ExpressionUUID->"8513ead2-65b6-483e-8440-d9fa2d6e4557"],
  " | Obsolete in: ",
  Cell[" ", "HistoryData",
-  CellTags->"Obsolete",ExpressionUUID->"7d0c07cf-23e3-4deb-8bd1-d80368742197"],
+  CellTags->"Obsolete",ExpressionUUID->"ea15f7a7-ef49-41a9-b030-f827cd0bf52c"],
  " | Excised in: ",
  Cell[" ", "HistoryData",
-  CellTags->"Excised",ExpressionUUID->"117ca48a-9755-4ea8-8add-4324c06fa69d"]
+  CellTags->"Excised",ExpressionUUID->"11f9c4fa-77d2-42be-81d6-66789653ae9d"]
 }], "History",
- CellID->1247902091,ExpressionUUID->"3d9f8154-f0ab-411c-a0ae-8e3bee2d8158"],
+ CellID->1247902091,ExpressionUUID->"acf17c09-d41f-4197-83c0-bbf285da8e14"],
 
 Cell[CellGroupData[{
 
@@ -291,10 +291,11 @@ Cell[BoxData[
  CellID->589267740,ExpressionUUID->"257ac528-96d1-460e-8a00-02e4110f5895"]
 }, Open  ]]
 },
+ScreenStyleEnvironment->"FutureObject",
 WindowSize->{700, 770},
-WindowMargins->{{101, Automatic}, {38, Automatic}},
+WindowMargins->{{48, Automatic}, {Automatic, 59}},
 CellContext->"Global`",
-FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (January 25, 2020)",
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (March 31, 2021)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb", 
   CharacterEncoding -> "UTF-8"],
 ExpressionUUID->"a3577b52-0213-4689-8699-c8004a4489e4"
@@ -312,12 +313,12 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"ExtendedExamples", 9987, 306}
+ {"ExtendedExamples", 10024, 307}
  }
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 599, 14, 24, "History",ExpressionUUID->"3d9f8154-f0ab-411c-a0ae-8e3bee2d8158",
+Cell[558, 20, 599, 14, 24, "History",ExpressionUUID->"acf17c09-d41f-4197-83c0-bbf285da8e14",
  CellID->1247902091],
 Cell[CellGroupData[{
 Cell[1182, 38, 123, 1, 29, "CategorizationSection",ExpressionUUID->"bac3830f-2980-40b3-9eac-052b3688ff9e",
