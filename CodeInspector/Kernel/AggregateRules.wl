@@ -1236,11 +1236,11 @@ The precedence of ``&`` is surprisingly low.\n\
     "AdditionalSources" -> {rule[[2, 2, 3, Key[Source]]]},
     ConfidenceLevel -> 0.75,
     CodeActions -> {
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
         Source -> data[[Key[Source]]]
       |>],
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice2,
         Source -> data[[Key[Source]]]
       |>]
@@ -1291,11 +1291,11 @@ The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surpr
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.75,
     CodeActions -> {
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
         Source -> data[[Key[Source]]]
       |>],
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice2,
         Source -> data[[Key[Source]]]
       |>]
@@ -1353,16 +1353,16 @@ Catch[
 
   {InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
 The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-Call to ``PatternTest`` " <> format[CodeFormatCST[ContainerNode[File, {concretify[call]}, <||>]]] <> " is inside ``Function``.",
+Call to ``PatternTest`` " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[call]}, <||>]]]] <> " is inside ``Function``.",
     "Warning", <|
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.75,
     CodeActions -> {
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
         Source -> data[[Key[Source]]]
       |>],
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice2]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice2,
         Source -> data[[Key[Source]]]
       |>]
@@ -1490,11 +1490,11 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
 
       AppendTo[issues,
         InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
-This may be ok if " <> format[CodeFormatCST[ContainerNode[File, {concretify[pattern]}, <||>]]] <> " is used as a pattern.", "Warning", <|
+This may be ok if " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[pattern]}, <||>]]]] <> " is used as a pattern.", "Warning", <|
           Source -> data[[Key[Source]]],
           ConfidenceLevel -> 0.85,
           CodeActions -> {
-            CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
+            CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]]], ReplaceNode, <|
               "ReplacementNode" -> choice,
               Source -> data[[Key[Source]]]
             |>]
@@ -1606,7 +1606,7 @@ Catch[
         ];
 
         action =
-          CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
+          CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]]], ReplaceNode, <|
             "ReplacementNode" -> choice,
             Source -> data[[Key[Source]]]
           |>];
@@ -1651,7 +1651,7 @@ Catch[
         ];
 
         action =
-          CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
+          CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]]], ReplaceNode, <|
             "ReplacementNode" -> choice,
             Source -> data[[Key[Source]]]
           |>];
@@ -1676,7 +1676,7 @@ Catch[
         ]], <||>];
 
     action =
-      CodeAction["Replace with " <> format[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]], ReplaceNode, <|
+      CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice,
         Source -> data[[Key[Source]]]
       |>];
