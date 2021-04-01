@@ -10,30 +10,30 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     22304,        589]
+NotebookDataLength[     22341,        590]
 NotebookOptionsPosition[     12984,        397]
-NotebookOutlinePosition[     14179,        430]
-CellTagsIndexPosition[     14100,        425]
+NotebookOutlinePosition[     14216,        431]
+CellTagsIndexPosition[     14137,        426]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell[TextData[{
  "New in: ",
- Cell["XX", "HistoryData",
-  CellTags->"New",ExpressionUUID->"785bd546-f6db-4132-ac2a-6baab27101ef"],
+ Cell["??", "HistoryData",
+  CellTags->"New",ExpressionUUID->"d2716e6e-c6c5-4025-a249-b4cf68e00972"],
  " | Modified in: ",
  Cell[" ", "HistoryData",
-  CellTags->"Modified",ExpressionUUID->"d3dff7a4-204f-4cf1-8d94-1eafde8b1457"],
+  CellTags->"Modified",ExpressionUUID->"256a4700-1e6e-44e1-98f8-3bcaae236c1d"],
  " | Obsolete in: ",
  Cell[" ", "HistoryData",
-  CellTags->"Obsolete",ExpressionUUID->"4b0fa5df-8894-4ca3-adfb-30db9cd1f203"],
+  CellTags->"Obsolete",ExpressionUUID->"29f36548-5493-4145-bf67-77638088aa5b"],
  " | Excised in: ",
  Cell[" ", "HistoryData",
-  CellTags->"Excised",ExpressionUUID->"7df10a67-4ebe-4b67-9ccb-b642e7094a19"]
+  CellTags->"Excised",ExpressionUUID->"fb8a4416-e0a6-4234-8073-11ba8151487e"]
 }], "History",
  CellChangeTimes->{{3.823684973709194*^9, 3.823684973931514*^9}},
- CellID->341476719,ExpressionUUID->"ef6429aa-5785-4453-8c88-8d268623104b"],
+ CellID->341476719,ExpressionUUID->"5cec2eb8-180c-4a6d-97f7-4ff413a1b860"],
 
 Cell["Created by: brenton on 03-02-2021 08:39:10", "AuthorDate",
  CellID->138786875,ExpressionUUID->"64cd1855-68ab-47f5-ad3c-03304dedbeff"],
@@ -395,6 +395,7 @@ Cell["XXXX", "FunctionEssay",
  CellID->356990964,ExpressionUUID->"a08c1f65-c8d3-4041-b769-0fb7c3b60c2a"]
 }, Open  ]]
 },
+ScreenStyleEnvironment->"FutureObject",
 WindowSize->{700, 770},
 WindowMargins->{{505, Automatic}, {37, Automatic}},
 TaggingRules->{
@@ -406,7 +407,7 @@ TaggingRules->{
     "C:\\Workspace\\Pubs\\Documentation\\English\\", "$UseNewPageDialog" -> 
     ""}, "SecurityRisk" -> False, "SecurityExplanation" -> "", "Author" -> 
   "brenton", "CreationDate" -> "03-02-2021 08:39:10"},
-FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (February 25, 2021)",
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (March 31, 2021)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb", 
   CharacterEncoding -> "UTF-8"],
 ExpressionUUID->"732030c5-ef84-4b1e-8841-aef66a7e7ccf"
@@ -424,12 +425,12 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"ExtendedExamples", 13907, 418}
+ {"ExtendedExamples", 13944, 419}
  }
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 664, 15, 24, "History",ExpressionUUID->"ef6429aa-5785-4453-8c88-8d268623104b",
+Cell[558, 20, 664, 15, 24, "History",ExpressionUUID->"5cec2eb8-180c-4a6d-97f7-4ff413a1b860",
  CellID->341476719],
 Cell[1225, 37, 139, 1, 20, "AuthorDate",ExpressionUUID->"64cd1855-68ab-47f5-ad3c-03304dedbeff",
  CellID->138786875],
