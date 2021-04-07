@@ -1,7 +1,7 @@
 
 Paclet[
   Name -> "CodeInspector",
-  Version -> "1.2",
+  Version -> "1.3",
   WolframVersion -> "11.0+",
   Description -> "Find and report problems in Wolfram Language code.",
   Creator -> "Brenton Bostick <brenton@wolfram.com>",

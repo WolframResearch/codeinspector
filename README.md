@@ -20,6 +20,8 @@ Out[2]= If[a,b,b]
 In a front end:
 ![CodeInspectSummarize](docs/summarize.png)
 
+[Static Analysis Tools in the Wolfram Language](https://blog.wolfram.com/2021/04/06/static-analysis-tools-in-the-wolfram-language/)
+
 ["CodeParser and CodeInspector" on community.wolfram.com](https://community.wolfram.com/groups/-/m/t/1931315)
 
 [Finding Bugs in the Wolfram Language from WTC 2019: Watch Video (youtube)](https://www.youtube.com/watch?v=jMUVwLglt-c)
