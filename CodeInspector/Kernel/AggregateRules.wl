@@ -644,7 +644,12 @@ Module[{agg, node, children, data, issues, srcs, pairs, underPoss, dot},
   Function[{pos1},
     If[pos1[[1]] + 1 <= Length[children] && MatchQ[Extract[children, pos1 + 1], LeafNode[Token`Dot, _, _]],
       dot = Extract[children, pos1[[1]] + 1];
-      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly.", "Warning", <| dot[[3]], ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``.", "Warning", <|
+          Source -> dot[[3, Key[Source]]],
+          ConfidenceLevel -> 1.0,
+          "AdditionalDescriptions" -> {"Earlier versions treated this syntax incorrectly."}
+        |>]
+      ]
     ]
   ] /@ underPoss;
 
@@ -681,7 +686,12 @@ scanRepeateds[pos_List, cstIn_] :=
 
   If[MatchQ[rand, LeafNode[Token`UnderDot, _, _] | CompoundNode[PatternOptionalDefault, _, _]],
     rator = children[[-1]];
-    AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``. Earlier versions treated this syntax incorrectly.", "Warning", <| rator[[3]], ConfidenceLevel -> 1.0 |>]]
+    AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.2``.", "Warning", <|
+        Source -> rator[[3, Key[Source]]],
+        ConfidenceLevel -> 1.0,
+        "AdditionalDescriptions" -> {"Earlier versions treated this syntax incorrectly."}
+      |>]
+    ]
   ];
 
   issues
@@ -1229,12 +1239,14 @@ Catch[
       LeafNode[Token`CloseParen, ")", <||>] }, <||>],
     LeafNode[Token`Amp, "&", <||>] }, <||>];
 
-  {InspectionObject["SuspiciousRuleFunction", "Suspicious use of ``&``.\n\
-The precedence of ``&`` is surprisingly low.\n\
-``" <> SymbolName[ruleHead] <> "`` is inside ``Function``.", "Warning", <|
+  {InspectionObject["SuspiciousRuleFunction", "Suspicious use of ``&``.", "Warning", <|
     Source -> amp[[3, Key[Source]]],
     "AdditionalSources" -> {rule[[2, 2, 3, Key[Source]]]},
     ConfidenceLevel -> 0.75,
+    "AdditionalDescriptions" -> {
+      "The precedence of ``&`` is surprisingly low.",
+      "``" <> SymbolName[ruleHead] <> "`` is inside ``Function``."
+    },
     CodeActions -> {
       CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
@@ -1285,11 +1297,13 @@ Catch[
       LeafNode[Token`CloseParen, ")", <||>] }, <||>],
     LeafNode[Token`Amp, "&", <||>]}, <||>];
 
-  {InspectionObject["SuspiciousPatternTestFunction", "Suspicious use of ``&``.\n\
-The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-``PatternTest`` is inside ``Function``.", "Warning", <|
+  {InspectionObject["SuspiciousPatternTestFunction", "Suspicious use of ``&``.", "Warning", <|
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.75,
+    "AdditionalDescriptions" -> {
+      "The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.",
+      "``PatternTest`` is inside ``Function``."
+    },
     CodeActions -> {
       CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
@@ -1351,12 +1365,13 @@ Catch[
       LeafNode[Token`CloseParen, ")", <||>] }, <||>], callChildren, <||>],
     LeafNode[Token`Amp, "&", <||>] }, <||>];
 
-  {InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.\n\
-The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.\n\
-Call to ``PatternTest`` " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[call]}, <||>]]]] <> " is inside ``Function``.",
-    "Warning", <|
+  {InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``&``.", "Warning", <|
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.75,
+    "AdditionalDescriptions" -> {
+      "The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.",
+      "Call to ``PatternTest`` " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[call]}, <||>]]]] <> " is inside ``Function``."
+    },
     CodeActions -> {
       CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice1]}, <||>]]]], ReplaceNode, <|
         "ReplacementNode" -> choice1,
@@ -1460,7 +1475,12 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
 
       https://mathematica.stackexchange.com/questions/224987/i-01-varies-in-v12-1-incompatible-change-or-bug
       *)
-      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.1``. Earlier versions treated this syntax incorrectly.", "Warning", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This syntax changed in ``WL 12.1``.", "Warning", <|
+          Source -> data[Source],
+          ConfidenceLevel -> 1.0,
+          "AdditionalDescriptions" -> {"Earlier versions treated this syntax incorrectly."}
+        |>]
+      ]
   ];
   
   (*
@@ -1489,10 +1509,12 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
         opt}, <||>];
 
       AppendTo[issues,
-        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.\n\
-This may be ok if " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[pattern]}, <||>]]]] <> " is used as a pattern.", "Warning", <|
+        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.", "Warning", <|
           Source -> data[[Key[Source]]],
           ConfidenceLevel -> 0.85,
+          "AdditionalDescriptions" -> {
+            "This may be ok if " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[pattern]}, <||>]]]] <> " is used as a pattern."
+          },
           CodeActions -> {
             CodeAction["Replace with " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[choice]}, <||>]]]], ReplaceNode, <|
               "ReplacementNode" -> choice,
@@ -1684,11 +1706,10 @@ Catch[
     AppendTo[actions, action];
 
     AppendTo[issues,
-      InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``.\n\
-The precedence of ``|`` is higher than ``~~``.\n\
-``Alternatives`` is inside ``StringExpression``.", "Remark", <|
+      InspectionObject["SuspiciousAlternativesStringExpression", "Suspicious use of ``|``.", "Remark", <|
         Source -> data[[Key[Source]]],
         ConfidenceLevel -> 0.75,
+        "AdditionalDescriptions" -> {"The precedence of ``|`` is higher than ``~~``.", "``Alternatives`` is inside ``StringExpression``."},
         CodeActions -> actions
       |>]
     ]

@@ -1796,10 +1796,10 @@ Module[{ast, node, var, data},
   var = node[[2, 1]];
   data = node[[3]];
 
-  {InspectionObject["LoadJavaClassSystem", "``LoadJavaClass[\"java.lang.System\"]`` redefines symbols in **System`** context.\n\
-This can interfere with system functionality.", "Warning", <|
+  {InspectionObject["LoadJavaClassSystem", "``LoadJavaClass[\"java.lang.System\"]`` redefines symbols in **System`** context.", "Warning", <|
     Source -> data[[Key[Source]]],
     ConfidenceLevel -> 0.95,
+    "AdditionalDescriptions" -> {"This can interfere with system functionality"},
     CodeActions -> {
       CodeAction["Replace with LoadJavaClass[\"java.lang.System\", AllowShortContext->False]", ReplaceNode, <|
         "ReplacementNode" ->
@@ -2137,7 +2137,7 @@ Module[{ast, node, children, data, issues, cases},
 
   cases = Cases[children, CallNode[LeafNode[Symbol, "EvenQ" | "OddQ" | "PrimeQ", _], _, _], Infinity];
 
-  Scan[(AppendTo[issues, InspectionObject["BadSolverCall", "*Q function in symbolic solver. Did you mean to do this?", "Error", <|
+  Scan[(AppendTo[issues, InspectionObject["BadSolverCall", "*Q function in symbolic solver.", "Error", <|
     Source -> #[[3, Key[Source]]],
     ConfidenceLevel -> 0.90|>]])&
     ,
