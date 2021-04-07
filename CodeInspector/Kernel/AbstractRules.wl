@@ -412,7 +412,7 @@ Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dup
 
   counts = CountsBy[filtered, ToFullFormString[#[[2, 1]]]&];
 
-  dupKeys = Keys[Select[counts, # > 1&]];
+  dupKeys = Keys[Select[counts, (# > 1)&]];
 
   selecteds = Function[key, Pick[filtered, (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -501,7 +501,7 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
 
   counts = CountsBy[children, ToFullFormString[#[[2, 1]]]&];
 
-  dupKeys = Keys[Select[counts, # > 1&]];
+  dupKeys = Keys[Select[counts, (# > 1)&]];
 
   (*
   selecteds is { {Rule[], Rule[]}, {Rule[], Rule[]} }
@@ -648,7 +648,7 @@ Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
 
   counts = CountsBy[children[[;;;;2]], ToFullFormString];
 
-  dupKeys = Keys[Select[counts, # > 1&]];
+  dupKeys = Keys[Select[counts, (# > 1)&]];
 
   selecteds = Function[key, Pick[children[[;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -768,7 +768,7 @@ Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
 
   counts = CountsBy[children[[2;;;;2]], ToFullFormString];
 
-  dupKeys = Keys[Select[counts, # > 1&]];
+  dupKeys = Keys[Select[counts, (# > 1)&]];
 
   selecteds = Function[key, Pick[children[[2;;;;2]], (# == key)& /@ expensiveChildren]] /@ dupKeys;
 
@@ -916,7 +916,7 @@ Catch[
     *)
     counts = KeyDrop[counts, "Blank[]"];
 
-    selected = Select[children[[2;;3]], counts[ToFullFormString[#]] > 1&];
+    selected = Select[children[[2;;3]], (counts[ToFullFormString[#]] > 1)&];
 
     If[!empty[selected],
       firsts = firstTokenWithSource /@ selected;
@@ -1185,7 +1185,7 @@ Catch[
     Throw[issues]
   ];
 
-  selected = Select[vars, counts[ToFullFormString[#]] > 1&];
+  selected = Select[vars, (counts[ToFullFormString[#]] > 1)&];
 
   If[!empty[selected],
     srcs = #[[3, Key[Source]]]& /@ selected;
@@ -1557,7 +1557,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
         Throw[issues]
       ];
 
-      selected = Select[varsList, counts[ToFullFormString[#]] > 1&];
+      selected = Select[varsList, (counts[ToFullFormString[#]] > 1)&];
 
       If[!empty[selected],
         srcs = #[[3, Key[Source]]]& /@ selected;
@@ -1696,7 +1696,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     Throw[issues]
   ];
 
-  selected = Select[vars, counts[ToFullFormString[#]] > 1&];
+  selected = Select[vars, (counts[ToFullFormString[#]] > 1)&];
 
   If[!empty[selected],
     srcs = #[[3, Key[Source]]]& /@ selected;
@@ -2024,7 +2024,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
     Throw[issues]
   ];
 
-  selected = Select[children, counts[ToFullFormString[#]] > 1&];
+  selected = Select[children, (counts[ToFullFormString[#]] > 1)&];
 
   If[!empty[selected],
 
@@ -2069,7 +2069,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
     Throw[issues]
   ];
 
-  selected = Select[children, counts[ToFullFormString[#]] > 1&];
+  selected = Select[children, (counts[ToFullFormString[#]] > 1)&];
 
   If[!empty[selected],
 
@@ -2130,7 +2130,7 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, src
     Throw[issues]
   ];
 
-  selected = Select[children, counts[ToFullFormString[#]] > 1&];
+  selected = Select[children, (counts[ToFullFormString[#]] > 1)&];
 
   If[!empty[selected],
 
