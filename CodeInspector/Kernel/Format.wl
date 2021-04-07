@@ -354,7 +354,8 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 				BoxForm`GenericIcon[System`ProofObject]
 				,
 				{
-					Row[CodeInspector`Utils`boldify[description]],
+					Row[boldify[description]],
+					If[KeyExistsQ[data, "AdditionalDescriptions"], Sequence @@ (Row[boldify[#]]& /@ data["AdditionalDescriptions"]), Nothing],
 					If[KeyExistsQ[data, CodeActions], BoxForm`SummaryItem[{"Suggestions: ", Row[boldify[#["Label"]]]& /@ data[CodeActions]}], Nothing],
 					If[KeyExistsQ[data, CellIndex], BoxForm`SummaryItem[{"CellIndex: ", data[CellIndex]}], Nothing],
 					BoxForm`SummaryItem[{"Source: ", data[Source]}]
@@ -371,7 +372,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 						(*
 						Already displayed
 						*)
-						Source, ConfidenceLevel,
+						Source, ConfidenceLevel, "AdditionalDescriptions",
 						(*
 						Already handled
 						*)
@@ -399,7 +400,13 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 		
 		bolded = boldify[description];
 
-		boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
+		rows = {Row[bolded]};
+
+		If[KeyExistsQ[data, "AdditionalDescriptions"],
+			rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
+		];
+
+		boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
 
 		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>] };
 
@@ -414,10 +421,16 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 					menuItems;
 		,
 		(* non-Interactive *)
-
-		bolded = boldify[description];
 		
 		If[actions != {},
+
+			bolded = boldify[description];
+
+			rows = {Row[bolded]};
+
+			If[KeyExistsQ[data, "AdditionalDescriptions"],
+				rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
+			];
 
 			(*
 			TODO: it would be good to have CodeAction objects format themselves
@@ -425,12 +438,21 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 			*)
 			suggestions = Row[boldify[#["Label"]]]& /@ actions;
 
-			rows = {Row[bolded]} ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ suggestions;
+			rows = rows ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ suggestions;
 
 			boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
 			,
 			(* no CodeActions *)
-			boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
+
+			bolded = boldify[description];
+
+			rows = {Row[bolded]};
+
+			If[KeyExistsQ[data, "AdditionalDescriptions"],
+				rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
+			];
+
+			boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
 		];
 
 		If[KeyExistsQ[data, "File"],
