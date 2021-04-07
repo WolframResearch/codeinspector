@@ -31,7 +31,7 @@ In a front end:
 
 ## Setup
 
-CodeInspector and its dependencies are included in Mathematica 12.2.
+CodeInspector and its dependencies are included in Mathematica 12.2 and above.
 
 For older versions, you can install from the paclet server.
 
