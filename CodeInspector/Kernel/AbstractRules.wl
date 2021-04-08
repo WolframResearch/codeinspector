@@ -1404,10 +1404,25 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   ];
 
   If[!MatchQ[Most[children], {CallNode[LeafNode[Symbol, "List", _], _, _]...}],
-    AppendTo[issues, InspectionObject["Arguments", "``With`` does not have a ``List`` for most arguments.", "Error", <|
-      Source -> {#[[1, 3, Key[Source], 1]], #[[-1, 3, Key[Source], 2]]}&[Most[children]],
-      ConfidenceLevel -> 0.55,
-      "Argument" -> "With"|>]];
+
+    (*
+    Remove arguments that are not lists
+    *)
+    cases = DeleteCases[Most[children], CallNode[LeafNode[Symbol, "List", _], _, _]];
+
+    Do[
+      AppendTo[issues,
+        InspectionObject["Arguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Error",
+          <|
+            Source -> child[[3, Key[Source]]],
+            ConfidenceLevel -> 0.55,
+            "Argument" -> "With"
+          |>
+        ]
+      ]
+      ,
+      {child, cases}
+    ];
 
     Throw[issues];
   ];
