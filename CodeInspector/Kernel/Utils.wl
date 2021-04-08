@@ -100,6 +100,10 @@ Module[{maxSeverity},
 severityColorNewStyle[lints:{_InspectionObject..}] :=
 Module[{maxSeverity},
 	maxSeverity = MaximalBy[lints[[All, 3]], severityToInteger][[1]];
+	severityColorNewStyle[maxSeverity]
+]
+
+severityColorNewStyle[maxSeverity_] :=
 	Switch[maxSeverity,
 		"Formatting" | "Remark" | "ImplicitTimes" | "Scoping", {
 				RGBColor[0/255, 118/255, 255/255] (*primary icon color*), 
@@ -117,8 +121,6 @@ Module[{maxSeverity},
 				RGBColor[255/255, 230/255, 203/255] (*primary bar color*), 
 				RGBColor[218/255, 89/255, 5/255] } (*secondary bar color*)
 	]
-]
-
 
 
 
