@@ -1,0 +1,44 @@
+@@resource CodeInspectorStrings English
+{
+}
+@|
+@@resource CodeInspectorStrings ChineseSimplified
+{
+}
+@|
+@@resource CodeInspectorStrings ChineseTraditional
+{
+}
+@|
+@@resource CodeInspectorStrings Japanese
+{
+}
+@|
+@@resource CodeInspectorStrings Spanish
+{
+}
+@|
+@@resource CodeInspectorExpressions
+{
+}
+@|
+@@resource CodeInspectorLocalizedExpressions English
+{
+}
+@|
+@@resource CodeInspectorLocalizedExpressions ChineseSimplified
+{
+}
+@|
+@@resource CodeInspectorLocalizedExpressions ChineseTraditional
+{
+}
+@|
+@@resource CodeInspectorLocalizedExpressions Japanese
+{
+}
+@|
+@@resource CodeInspectorLocalizedExpressions Spanish
+{
+}
+@|
