@@ -341,7 +341,7 @@ niceToString[e_] := ToString[e]
 Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], StandardForm] :=
 Catch[
 Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
-	boldedBoxes, items, menuItems, file, line, col, suggestions, rows, resolvedEditor},
+	boldedBoxes, items, menuItems, file, line, col, suggestions, rows, resolvedEditor, icon},
 
 	If[!TrueQ[data["FormatInspectionObjectsAsPills"]],
 
@@ -349,13 +349,18 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 		Format as SummaryBox
 		*)
 
+		(*
+		Just hard-code with Warning gray until design review
+		*)
+		icon = RawBoxes[iconBoxesFromSeverity["Warning"]];
+
 		Throw[
 			RawBoxes@BoxForm`ArrangeSummaryBox[
 				InspectionObject
 				,
 				lint
 				,
-				BoxForm`GenericIcon[System`ProofObject]
+				icon
 				,
 				{
 					Row[boldify[description]],
@@ -556,6 +561,17 @@ Module[{g, bolded, actions, suggestions},
 
 
 
+iconBoxesFromSeverity[sev_] :=
+	With[
+		{color = severityColorNewStyle[sev]}
+		,
+		{func = $suggestionIconTemplateDisplayFunction, c1 = color[[1]], c2 = color[[2]]}
+		,
+  		TemplateBox[{c1, c2, Dynamic[{Automatic, 3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[Magnification])}]}, 
+   			"SuggestionIconTemplateXXX", 
+   			DisplayFunction -> func
+		]
+  	]
 
 
 
@@ -1288,7 +1304,6 @@ $suggestionIconTemplateDisplayFunction = Function[
        ]
       },
       ImageSize -> #3,
-      PlotRange -> #4,
       AspectRatio -> Automatic,
       BaselinePosition -> Scaled[0.1]
      ]
@@ -1370,7 +1385,7 @@ With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFun
        {
         {
          TemplateBox[
-          {#2, #3, {16., 16.}, {{1., 17.}, {1., 17.}}},
+          {#2, #3, {16., 16.}},
           "SuggestionIconTemplateXXX"
           ,
           DisplayFunction -> $suggestionIconTemplateDisplayFunction
