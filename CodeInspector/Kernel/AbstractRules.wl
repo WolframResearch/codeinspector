@@ -1365,7 +1365,7 @@ Attributes[scanWiths] = {HoldRest}
 scanWiths[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, vars, vals,
-  counts, errs, srcs, cases},
+  counts, errs, srcs, cases, argumentPos},
   
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1411,8 +1411,11 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
     cases = DeleteCases[Most[children], CallNode[LeafNode[Symbol, "List", _], _, _]];
 
     Do[
+
+      argumentPos = Position[Most[children], child][[1]];
+
       AppendTo[issues,
-        InspectionObject["Arguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Error",
+        InspectionObject["Arguments", "``With`` does not have a ``List`` for argument " <> ToString[argumentPos[[1]]] <> ".", "Error",
           <|
             Source -> child[[3, Key[Source]]],
             ConfidenceLevel -> 0.55,
@@ -1452,8 +1455,11 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
     cases = DeleteCases[Most[children], CallNode[LeafNode[Symbol, "List", _], { _, ___ }, _]];
 
     Do[
+
+      argumentPos = Position[Most[children], child][[1]];
+
       AppendTo[issues,
-        InspectionObject["Arguments", "``With`` does not have a ``List`` with arguments for most arguments.", "Remark",
+        InspectionObject["Arguments", "``With`` has an empty ``List`` for argument " <> ToString[argumentPos[[1]]] <> ".", "Error",
           <|
             Source -> child[[3, Key[Source]]],
             ConfidenceLevel -> 0.90,
