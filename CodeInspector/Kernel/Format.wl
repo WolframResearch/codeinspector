@@ -60,6 +60,8 @@ $LintsPerLineLimit
 
 $FormatInspectionObjectsAsPills
 
+$LintBoldFontWeight
+
 
 Begin["`Private`"]
 
@@ -104,6 +106,8 @@ $LintedLineWidth = 120
 $LintsPerLineLimit = 5
 
 
+
+$LintBoldFontWeight = "SemiBold"
 
 
 
@@ -705,9 +709,9 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 						Spacings -> {0, 0},
 						ItemSize -> $LintedLintItemSize,
 						ItemStyle -> {Automatic, Automatic,
-							(# -> {Bold, Red}& /@ red) ~Join~
-							(# -> {Bold, Darker[Orange]}& /@ darkerOrange) ~Join~
-							(# -> {Bold, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
+							(# -> {$LintBoldFontWeight, Red}& /@ red) ~Join~
+							(# -> {$LintBoldFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
+							(# -> {$LintBoldFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
 		,
 		Alignment -> {Left, Top}, Spacings -> {0, 0}];
@@ -1122,7 +1126,7 @@ Module[{s, color, weight, setup, opts},
 
 
 
-LintBold[content_] := LintMarkup[content, "Program", FontWeight->Bold]
+LintBold[content_] := LintMarkup[content, "Program", FontWeight->$LintBoldFontWeight]
 
 LintPreserve[content_] := LintMarkup[content]
 
@@ -1158,6 +1162,7 @@ colorANSICode[Automatic] = ""
 
 
 weightANSICode[Bold] = "\[RawEscape][1m"
+weightANSICode["SemiBold"] = "\[RawEscape][1m"
 weightANSICode[Automatic] = ""
 
 variationsANSICode[{"Underline"->True}] = "\[RawEscape][4m"
