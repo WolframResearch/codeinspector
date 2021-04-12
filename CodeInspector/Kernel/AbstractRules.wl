@@ -682,7 +682,7 @@ Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
     AppendTo[issues, InspectionObject["Arguments", "``Switch`` does not have odd number of arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> ""|>]];
+      "Argument" -> "Switch"|>]];
     Throw[issues];
   ];
 
