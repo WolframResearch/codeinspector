@@ -219,6 +219,9 @@ CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], rhs_ /;
 CallNode[LeafNode[Symbol, "OptionsPattern", _], {}, _] -> scanOptionsPattern,
 
 
+CallNode[LeafNode[Symbol, "MessageName", _], _, _] -> scanMessageName,
+
+
 (*
 cst of [x] is fine
 ast of [x] is an error
@@ -2386,12 +2389,65 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
 ]]
 
 
+Attributes[scanMessageName] = {HoldRest}
 
+scanMessageName[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, data, issues, src},
 
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  data = node[[3]];
+  src = data[Source];
 
+  issues = {};
 
+  Switch[node,
+    CallNode[LeafNode[Symbol, "MessageName", _], {LeafNode[Symbol, "CreateFile", _], LeafNode[String, "\"filex\"", _]}, _],
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This message changed in ``WL 12.3``.", "Warning", <|
+          Source -> src,
+          ConfidenceLevel -> 0.95,
+          CodeActions -> {
+            CodeAction["Replace with ``CreateFile::eexist``", ReplaceNode,
+              <|  Source -> src,
+                  "ReplacementNode" ->
+                    InfixNode[MessageName, {
+                      LeafNode[Symbol, "CreateFile", <||>],
+                      LeafNode[Token`ColonColon, "::", <||>],
+                      LeafNode[String, "eexist", <||>]}
+                      ,
+                      <||>
+                    ]
+              |>
+            ]
+          }
+        |>]
+      ]
+    ,
+    CallNode[LeafNode[Symbol, "MessageName", _], {LeafNode[Symbol, "CreateDirectory", _], LeafNode[String, "\"filex\"", _]}, _],
+      AppendTo[issues, InspectionObject["BackwardsCompatibility", "This message changed in ``WL 12.3``.", "Warning", <|
+          Source -> src,
+          ConfidenceLevel -> 0.95,
+          CodeActions -> {
+            CodeAction["Replace with ``CreateDirectory::eexist``", ReplaceNode,
+              <|  Source -> src,
+                  "ReplacementNode" ->
+                    InfixNode[MessageName, {
+                      LeafNode[Symbol, "CreateDirectory", <||>],
+                      LeafNode[Token`ColonColon, "::", <||>],
+                      LeafNode[String, "eexist", <||>]}
+                      ,
+                      <||>
+                    ]
+              |>
+            ]
+          }
+        |>]
+      ]
+  ];
 
-
+  issues
+]]
 
 
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
