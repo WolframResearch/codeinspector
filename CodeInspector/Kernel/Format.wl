@@ -427,7 +427,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 		menuItems = DeleteCases[menuItems, _?FailureQ];
 
 		items = {
-					"\"" <> ToString[tag] <> "\"" :> Null,
+					"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
 					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
 					Delimiter } ~Join~
 					menuItems;
@@ -487,7 +487,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 					];
 
 					items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
-						"\"" <> ToString[tag] <> "\"" :> Null,
+						"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
 						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
 						Delimiter,
 						"Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
@@ -504,7 +504,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 					*)
 
 					items = {
-						"\"" <> ToString[tag] <> "\"" :> Null,
+						"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
 						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
 				]
 				,
@@ -514,7 +514,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 				*)
 
 				items = {
-					"\"" <> ToString[tag] <> "\"" :> Null,
+					"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
 					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
 			]
 			,
@@ -524,7 +524,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 			*)
 
 			items = {
-				"\"" <> ToString[tag] <> "\"" :> Null,
+				"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
 				"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
 		]
 	];
