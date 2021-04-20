@@ -8,7 +8,7 @@ Paclet[
   BuildDate -> "",
   Extensions -> {
     {"Kernel", Root -> "Kernel", Context -> "CodeInspector`"},
-    {"Kernel", Root -> "Kernel", Context -> "LinterUI`"}
+    {"FrontEnd", Root -> "FrontEnd"},
     {"Documentation", Language -> "English", MainPage -> "Guides/CodeInspector"},
     {"Resource", Root->"Resources",
       Resources -> {

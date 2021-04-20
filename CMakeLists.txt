@@ -63,10 +63,15 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/External.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Format.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/ImplicitTokens.wl
+	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/LinterUI.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Summarize.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/SuppressedRegions.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/TokenRules.wl
 	${PROJECT_SOURCE_DIR}/CodeInspector/Kernel/Utils.wl
+)
+
+set(STATIC_WL_PACLET_FRONTEND_SOURCES
+	${PROJECT_SOURCE_DIR}/CodeInspector/FrontEnd/TextResources/CodeInspector.tr
 )
 
 set(PROCESSED_SYMBOLS_DATA_FILES
@@ -153,6 +158,25 @@ foreach(SRC ${STATIC_WL_PACLET_KERNEL_SOURCES})
 			${PROJECT_SOURCE_DIR}/cmake/InspectFile.cmake
 	)
 	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Kernel/${REL})
+endforeach()
+
+#
+# static FrontEnd sources
+#
+foreach(SRC ${STATIC_WL_PACLET_FRONTEND_SOURCES})
+	file(RELATIVE_PATH REL ${PROJECT_SOURCE_DIR}/${PACLET}/FrontEnd/ ${SRC})
+	add_custom_command(
+		OUTPUT
+			${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL}
+		#
+		# Do not inspect FrontEnd sources
+		#
+		COMMAND
+			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL}
+		DEPENDS
+			${SRC}
+	)
+	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL})
 endforeach()
 
 #
