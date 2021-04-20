@@ -1806,7 +1806,7 @@ Module[{ast, node, var, data},
     ConfidenceLevel -> 0.95,
     "AdditionalDescriptions" -> {"This can interfere with system functionality"},
     CodeActions -> {
-      CodeAction["Replace with LoadJavaClass[\"java.lang.System\", AllowShortContext->False]", ReplaceNode, <|
+      CodeAction["Replace with ``LoadJavaClass[\"java.lang.System\", AllowShortContext->False]``", ReplaceNode, <|
         "ReplacementNode" ->
           CallNode[{LeafNode[Symbol, "LoadJavaClass", <||>]}, {
             GroupNode[GroupSquare, {
@@ -2472,13 +2472,25 @@ Module[{ast, node, tag, data, tagString, children},
       {InspectionObject["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     "PatternColonError",
-      {InspectionObject["PatternColonError", "Invalid syntax for ``:``: LHS must be a symbol.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+      {InspectionObject["PatternColonError", "Invalid syntax for ``:``.", "Fatal", <|
+        Source -> data[Source],
+        ConfidenceLevel -> 1.0,
+        "AdditionalDescriptions" -> {"LHS must be a symbol."}
+      |>]}
     ,
     "TagSetError",
-      {InspectionObject["TagSetError", "Invalid syntax for ``/: =``: LHS must be a symbol.", "Error", <| data, ConfidenceLevel -> 0.95 |>]}
+      {InspectionObject["TagSetError", "Invalid syntax for ``/: =``.", "Error", <|
+        Source -> data[Source],
+        ConfidenceLevel -> 0.95,
+        "AdditionalDescriptions" -> {"LHS must be a symbol."}
+      |>]}
     ,
     "TagSetDelayedError",
-      {InspectionObject["TagSetDelayedError", "Invalid syntax for ``/: :=``: LHS must be a symbol.", "Error", <| data, ConfidenceLevel -> 0.95 |>]}
+      {InspectionObject["TagSetDelayedError", "Invalid syntax for ``/: :=``.", "Error", <|
+        Source -> data[Source],
+        ConfidenceLevel -> 0.95,
+        "AdditionalDescriptions" -> {"LHS must be a symbol."}
+      |>]}
     ,
     _,
       {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}

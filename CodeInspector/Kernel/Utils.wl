@@ -464,7 +464,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|
+			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|
 				Source -> src,
 				ConfidenceLevel -> 0.95,
 				"Argument" -> "Module",
@@ -472,8 +472,8 @@ Module[{},
 					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
-			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
-			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
+			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
+			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -491,7 +491,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|
+			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|
 				Source -> src,
 				ConfidenceLevel -> 0.95,
 				"Argument" -> "Block",
@@ -499,8 +499,8 @@ Module[{},
 					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
-			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
-			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
+			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
+			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -522,7 +522,7 @@ Module[{},
 			(*
 			lower confidence because this is somewhat common
 			*)
-			"error" -> InspectionObject["UnscopedObjectError", "Unscoped ``Slot`` error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.80|>],
+			"error" -> InspectionObject["UnscopedObjectError", "Unscoped ``Slot`` error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.80|>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -538,7 +538,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"error" -> InspectionObject["ParameterError", "Pattern error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", "Pattern error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -554,7 +554,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"error" -> InspectionObject["ParameterError", "Parameter error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", "Parameter error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -596,15 +596,15 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``", "Scoping", <|
+			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``.", "Scoping", <|
 				Source -> src,
 				ConfidenceLevel -> 0.95,
 				CodeActions -> {
 					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
-			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"error" -> InspectionObject["ParameterError", "``" <> lastScope <> "`` " <> "parameter error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", "``" <> lastScope <> "`` " <> "parameter error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			_ :> Sequence @@ {}
 		}
 		,

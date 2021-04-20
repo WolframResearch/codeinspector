@@ -1770,7 +1770,7 @@ Module[{agg, node, data, issues, op},
 
   issues = {};
 
-  AppendTo[issues, InspectionObject["PrefixPlus", "Unexpected prefix ``Plus``.", "Remark", <|Source->data[Source], ConfidenceLevel->0.9|>]];
+  AppendTo[issues, InspectionObject["PrefixPlus", "Unexpected prefix ``+``.", "Remark", <|Source->data[Source], ConfidenceLevel->0.9|>]];
 
   issues
 ]
