@@ -353,19 +353,9 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = Flatten[lints];
 
-    lints = Select[lints,
-      Function[{lint},
-        AllTrue[suppressedRegions,
-          Function[{region},
-            AllTrue[region[[3]],
-              Function[{suppressed},
-                !SourceMemberQ[region[[1;;2]], lint[[4, Key[Source]]]] || isEnabled[lint, suppressed]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ];
+    lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
+
+    lints = Select[lints, isActive];
 
     Throw[lints]
   ];
@@ -579,7 +569,7 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
 
     lints = insertInheritedProperties[#, data, inheritedProperties]& /@ lints;
 
-    lints = Select[lints, isEnabled];
+    lints = Select[lints, isActive];
 
     Throw[lints]
   ];
