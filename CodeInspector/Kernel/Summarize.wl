@@ -599,7 +599,9 @@ Module[{lints, lines, sources, warningsLines,
         ]
         ,
         (* elided *)
-        InspectedLineObject["", i, {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True, "Environ" -> environ]
+        With[{environ = MemberQ[environLines, i]},
+          InspectedLineObject["", i, {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True, "Environ" -> environ]
+        ]
       ]
     ,
     {i, linesToModify}
