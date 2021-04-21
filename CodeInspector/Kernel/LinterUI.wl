@@ -26,7 +26,7 @@ Needs["CodeInspector`"]
 $UIRoundingRadius = 4;
 
 
-colour = With[
+colorData = With[
 	{
 		errorSev3 = RGBColor[0.9400000000000001, 0.64, 0],
 		errorSev2 = RGBColor[1, 0.45, 0],
@@ -45,7 +45,7 @@ colour = With[
 		"Delimiter" -> GrayLevel[.85],
 		"CellBracketMarker" -> RGBColor[0.968627, 0.619608, 0.117647],
 		
-		(* Button colours. *)
+		(* Button colors. *)
 		"ButtonBack" -> White,
 		"ButtonBackHover" -> White,
 		"ButtonBackMouseDown" -> Hue[0.55, 0.33, 1],
@@ -56,14 +56,15 @@ colour = With[
 		"ButtonText" -> GrayLevel[0.2],
 		"ButtonTextHover" -> GrayLevel[0.2],
 		"ButtonTextInactive" -> GrayLevel[0.7],
-		"ApplyButtonText" -> White,
-		"ApplyButtonBack" -> Red,
-		"ApplyButtonBackHover" -> RGBColor[0.854902, 0, 0],
+		"ApplyButtonText" -> Black,
+		"ApplyButtonBack" -> RGBColor["#75ffb8"],
+		"ApplyButtonBackHover" -> RGBColor["#97ffd6"],
+		"ApplyButtonEdge" -> RGBColor["#6be5b8"],
 		"HashButtonBack" -> White,
 		"HashButtonBackHover" -> Hue[0.1, 0.26, 1],
 		"HashButtonEdge" -> RGBColor[Rational[81, 85], 0.79, 0.37],
 		
-		(* Raft colours. *)
+		(* Raft colors. *)
 		"RaftBack" -> GrayLevel[1],
 		"RaftItemHighlight" -> RGBColor[0.96, 0.97, 0.97],
 		"RaftBackHover" -> RGBColor[0.94, 0.95, 0.96],
@@ -85,37 +86,37 @@ colour = With[
 	|>];
 
 
-style = <|
+styleData = <|
 	
 	"SectionHeader" -> Function[
-		Style[#1, ##2, FontColor -> colour["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
+		Style[#1, ##2, FontColor -> colorData["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
 		
 	"RaftLabel" -> Function[
-		Style[Row[CodeInspector`Utils`boldify[#1]], ##2, FontColor -> colour["RaftLabel"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
+		Style[Row[CodeInspector`Utils`boldify[#1]], ##2, FontColor -> colorData["RaftLabel"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
 	
 	"RaftMenuItem" -> Function[
-		Style[#1, ##2, FontColor -> colour["RaftMenuItem"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
+		Style[#1, ##2, FontColor -> colorData["RaftMenuItem"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
 	
 	"Button" -> Function[
-		Style[#1, ##2, FontColor -> colour["ButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 14]],
+		Style[#1, ##2, FontColor -> colorData["ButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 14]],
 	
 	"ApplyButton" -> Function[
-		Style[#1, ##2, FontColor -> colour["ApplyButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]],
+		Style[#1, ##2, FontColor -> colorData["ApplyButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]],
 	
 	"FooterText" -> Function[
-		Style[#1, ##2, FontColor -> colour["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]]
+		Style[#1, ##2, FontColor -> colorData["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]]
 |>;
 
 
 inputStyle[boxes_, opts___] := StyleBox[boxes, "Input", opts, ShowStringCharacters -> True]
 
 
-icon = <|
+iconData = <|
 	
 	(* Exclamation mark. *)
-	"Exclam" -> Function[colour,
+	"Exclam" -> Function[color,
 		Graphics[
-			{EdgeForm[], FaceForm[colour],
+			{EdgeForm[], FaceForm[color],
 				FilledCurve[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}, 
 					{{0, 2, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}}, {{{9.015, 17.369999999999997}, {4.4558892299999995, 17.369999999999997}, {0.76, 13.64500928}, {0.76, 
 					9.049999999999999}, {0.76, 4.454992000000001}, {4.4558892299999995, 0.7300000000000004}, {9.015, 0.7300000000000004}, {13.574109499999999, 0.7300000000000004}, {17.270000000000003, 4.454992000000001}, {17.270000000000003, 
@@ -130,11 +131,41 @@ icon = <|
 					14.698928000000002}, {9.1039, 14.681999999999999}, {9.67359533, 14.748591999999999}, {10.248492579999999, 14.612789119999999}, {10.729499999999998, 14.298}, {11.021667309999996, 14.000360319999999}, {11.170132849999996, 13.58886464}, 
 					{11.135899999999998, 13.1716}, {11.140814899999997, 12.86200512}, {11.110992759999997, 12.55284288}, {11.046999999999997, 12.249999999999998}}}]},
 			AspectRatio -> Automatic, ImageSize -> 14{18./18, 19./18}, PlotRange -> {{0., 18.}, {0., 18.14}},
-			BaselinePosition -> Scaled[.2]]],
+			BaselinePosition -> Scaled[.1]]],
+	
+	(* Wrench *)
+	"Wrench" -> Function[color,
+	Graphics[{Dynamic[FaceForm[color]], FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 
+   3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 
+   3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, 
+   {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}}, 
+   {{{41.620000000000005, 79.49000000000001}, {88.06, 166.84}, {79.58371, 178.22885}, 
+   {77.81024000000001, 193.2685}, {83.40493000000001, 206.31659}, {88.99962000000002, 
+   219.36468}, {101.1166, 228.44845899999999}, {115.21000000000001, 230.16}, 
+   {117.27929999999999, 230.39726}, {119.2789, 229.326887}, {120.229, 227.473369}, 
+   {121.1792, 225.619852}, {120.88069999999999, 223.371493}, {119.48, 
+   221.82999999999998}, {102.93, 203.16}, {110.64, 179.97}, {134.58, 175.05}, {151.12, 
+   193.67}, {152.50730000000001, 195.27555}, {154.757, 195.83057}, {156.7319, 
+   195.05455999999998}, {158.7068, 194.27854000000002}, {159.9768, 192.34051}, {159.9, 
+   190.22}, {159.8107, 179.41018}, {155.32700000000003, 169.10197}, {147.48020000000002, 
+   161.66637999999998}, {139.6334, 154.23077999999998}, {129.099, 150.30789}, {118.3, 
+   150.8}, {71.85, 63.45000000000002}, {83.08525, 48.301999999999964}, {82.16295, 
+   27.35209999999998}, {69.64, 13.25}, {62.93, 5.699999999999989}, {53.94, 
+   1.6899999999999977}, {44.7, 0.1699999999999875}, {36.7, -1.1400000000000148}, {31.85, 
+   5.079999999999984}, {37.37, 11.269999999999982}, {51.160000000000004, 
+   26.829999999999984}, {46.51, 47.26999999999998}, {25.64, 49.43000000000001}, 
+   {11.850000000000001, 33.859999999999985}, {5.9, 26.859999999999985}, {-0.3, 
+   30.859999999999985}, {0.01, 40.079999999999984}, {0.20814600000000003, 
+   50.713599999999985}, {4.549653000000001, 60.84979999999999}, {12.11, 
+   68.32999999999998}, {19.98795, 75.95850000000002}, {30.66558, 79.99650000000003}, 
+   {41.620000000000005, 79.49000000000001}}}]}, AspectRatio -> Automatic, 
+ ImageSize -> 15{160./231, 231./231}, ImagePadding -> 1, PlotRange -> {{0., 159.9}, {0., 230.16}},
+ BaselinePosition -> Scaled[.155]],
+ HoldAll],
 	
 	(* Cell Bracket Icon. *)
-	"GoToPod" -> Function[colour,
-		Graphics[{FaceForm[colour],
+	"GoToPod" -> Function[color,
+		Graphics[{FaceForm[color],
   FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, 
       {0, 1, 0}, {1, 3, 3}}}, {{{4., 12.}, {21., 12.}, {23.2112, 12.}, {25., 10.2112}, 
       {25., 8.}, {25., 4.}, {25., 1.788800000000002}, {23.2112, 0.}, {21., 0.}, {4., 
@@ -171,45 +202,25 @@ icon = <|
 	],
 
 	(* Take-action chevron. *)
-	"TakeAction" -> Function[colour,
+	"TakeAction" -> Function[color,
 		(*With[
 			{chevron = Function[xPos, Line[{{-.5+xPos, 1}, {.5+xPos, 0}, {-.5+xPos, -1}}]]},
 			Graphics[
 				{
-					colour, AbsoluteThickness[1.8], CapForm["Round"], JoinForm["Miter"],
+					color, AbsoluteThickness[1.8], CapForm["Round"], JoinForm["Miter"],
 					chevron[0], chevron[1.5]},
 				AspectRatio \[Rule] Full, ImageSize \[Rule] .7{13, 11}, BaselinePosition \[Rule] Bottom]]*)
 		With[
 			{chevron = Function[xPos, Line[{{-.5+xPos, 1}, {.5+xPos, 0}, {-.5+xPos, -1}}]]},
 			Graphics[
 				{
-					colour, AbsoluteThickness[1.8], CapForm["Round"], JoinForm["Miter"],
+					color, AbsoluteThickness[1.8], CapForm["Round"], JoinForm["Miter"],
 					chevron[0]},
 				AspectRatio -> Full, ImageSize -> .7{8, 11}, BaselinePosition -> Bottom, ImageMargins -> {{0, 4}, {0, 0}}]]],
 	
-	(* Bin. *)
-	"Bin" -> Function[colour,
-		Graphics[{EdgeForm[], FaceForm[colour], {FilledCurve[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}}},
-			{{{7.81, 12.35}, {7.81, 13.36}, {5.81, 13.36}, {5.81, 12.35}, {2.8099999999999996, 12.35}, {2.8099999999999996, 11.34}, {10.81, 11.34}, {10.81, 12.35}, {7.81, 12.35}}}]}, 
-			{FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}},
-			{{{2.8099999999999996, 10.34}, {2.8099999999999996, 1.8099999999999987}, {2.8153789999999996, 0.9600799999999996}, {3.5001360000000004, 0.27088}, {4.35, 0.259999999999998}, {9.27, 0.259999999999998},
-			{10.12213, 0.2654999999999976}, {10.81002, 0.9578499999999988}, {10.81, 1.8099999999999987}, {10.81, 10.34}}, {{5.81, 2.269999999999998}, {4.81, 2.269999999999998}, {4.81, 8.27}, 
-			{5.81, 8.27}}, {{8.81, 2.269999999999998}, {7.81, 2.269999999999998}, {7.81, 8.27}, {8.81, 8.27}}}]}},
-			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{0., 13.62}, {0., 13.62}}, ImageMargins -> {{0, 0}, {0, 2}}]],
-	
-	(* Insert/Replace. *)
-	"Caret" -> Function[colour,
-		Graphics[{EdgeForm[], FaceForm[colour], {FilledCurve[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}}}, 
-			{{{9.53, 1.1599999999999984}, {6.81, 2.99}, {4.09, 1.1599999999999984}, {3.53, 1.9900000000000002}, {6.53, 3.99}, {6.7007270000000005, 4.099095999999999}, {6.919273000000001, 4.099095999999999}, {7.09, 3.99},
-			{10.09, 1.9900000000000002}}}]}, {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, 
-			{0, 1, 0}, {1, 3, 3}}}, {{{4.819999999999999, 12.29}, {8.8, 12.29}, {9.358327999999998, 12.29}, {9.81, 11.838327999999999}, {9.81, 11.28}, {9.81, 6.409999999999999}, {9.81, 5.851671999999999}, 
-			{9.358327999999998, 5.4}, {8.8, 5.4}, {4.819999999999999, 5.4}, {4.261672000000001, 5.4}, {3.8099999999999996, 5.851671999999999}, {3.8099999999999996, 6.409999999999999}, {3.8099999999999996, 11.28}, 
-			{3.8099999999999996, 11.838327999999999}, {4.261672000000001, 12.29}, {4.819999999999999, 12.29}}}]}},
-			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{0., 13.62}+{1, -1}, {0., 13.62}+{1, -1}}, ImageMargins -> {{0, 0}, {0, 2}}]],
-	
 	(* Ignore error in cell. *)
-	"IgnoreInCell" -> Function[colour,
-		Graphics[{EdgeForm[], FaceForm[colour], { 
+	"IgnoreInCell" -> Function[color,
+		Graphics[{EdgeForm[], FaceForm[color], { 
 			FilledCurve[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}}}, 
 				{{{11.69, 13.37}, {7.57, 13.37}, {7.57, 12.37}, {7.76, 12.37}, {11.19, 8.93}, {11.19, 1.2499999999999982}, {7.57, 1.2499999999999982}, {7.57, 0.24999999999999822}, {12.19, 0.24999999999999822}, {12.19, 13.37}},
 				{{9.17, 12.37}, {11.17, 12.37}, {11.17, 10.37}}}]}, { 
@@ -226,9 +237,9 @@ icon = <|
 				AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{-.5, 13.62}, {-.5, 13.62}}, ImageMargins -> {{0, 0}, {0, 2}}]],
 	
 	(* Ignore error in notebook. *)
-	"IgnoreInNotebook" -> Function[colour,
+	"IgnoreInNotebook" -> Function[color,
 		Graphics[{ 
-  {FaceForm[colour], 
+  {FaceForm[color], 
    FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 
     1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, 
     {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
@@ -254,7 +265,7 @@ icon = <|
     {6.439144000000001, 2.744589999999997}, {6.515315999999999, 2.9295799999999996}, 
     {6.591488, 3.1145599999999973}, {6.55006, 3.3271499999999996}, {6.41, 
     3.469999999999999}}}]}, 
-  {FaceForm[colour], 
+  {FaceForm[color], 
    FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 
      3, 3}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, 
      {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
@@ -283,8 +294,8 @@ icon = <|
  PlotRange -> {{0., 13.62}, {-.5, 13.62}}]],
 	
 	(* Ignore error always. *)
-	"IgnoreAlways" -> Function[colour,
-		Graphics[{EdgeForm[], FaceForm[colour], FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 
+	"IgnoreAlways" -> Function[color,
+		Graphics[{EdgeForm[], FaceForm[color], FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 
 			1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}}, {{{7.52, 6.81}, 
 			{10.739999999999998, 10.03}, {10.83466, 10.123883}, {10.8879, 10.251681}, {10.8879, 10.385}, {10.8879, 10.518318999999998}, {10.83466, 10.646117}, {10.739999999999998, 10.739999999999998}, 
 			{10.649269999999998, 10.836676999999998}, {10.522590000000001, 10.891518999999999}, {10.39, 10.891518999999999}, {10.25741, 10.891518999999999}, {10.13073, 10.836676999999998}, {10.04, 
@@ -297,8 +308,8 @@ icon = <|
 			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{-.5, 13.62}, {-.5, 13.62}}, ImageMargins -> {{0, 0}, {0, 2}}]],
 	
 	(* Info (used for documentation links). *)
-	"Info" -> Function[colour,
-		Graphics[{FaceForm[colour], 
+	"Info" -> Function[color,
+		Graphics[{FaceForm[color], 
 			FilledCurve[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}, {{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
 			3}}, {{1, 4, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{6.81, 13.}, {3.3913569999999997, 13.}, {0.62, 10.228643}, {0.62, 6.81}, 
 			{0.62, 3.3913600000000006}, {3.3913569999999997, 0.6199999999999992}, {6.81, 0.6199999999999992}, {10.228639999999999, 0.6199999999999992}, {13., 
@@ -314,8 +325,8 @@ icon = <|
 			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{0., 13.62}, {0., 13.62}}, ImageMargins -> {{0, 0}, {0, 2}}]],
 	
 	(* Link open arrow. *)
-	"OpenLinkArrow" -> Function[colour,
-		Graphics[{FaceForm[colour], 
+	"OpenLinkArrow" -> Function[color,
+		Graphics[{FaceForm[color], 
 			FilledCurve[{{{1, 4, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 
 			0}, {1, 3, 3}}}, {{{10.360000000000001, 10.09}, {10.311209999999999, 10.213465}, {10.21347, 10.311209999999999}, {10.09, 10.36}, {10.02754, 10.374876999999998}, 
 			{9.962460000000002, 10.374876999999998}, {9.9, 10.36}, {6.08, 10.36}, {5.803858, 10.36}, {5.58, 10.136142}, {5.58, 9.86}, {5.58, 9.583858}, {5.803858, 9.36}, {6.08, 
@@ -326,14 +337,14 @@ icon = <|
 			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{0., 13.62}, {0., 13.62}}(*, ImageMargins \[Rule] {{0, 0}, {0, 2}}*)]],
 	
 	(* Pop out icon. *)
-	"PopOut" -> (*Function[colour,
+	"PopOut" -> (*Function[color,
 		Graphics[{
-			colour, Disk[{0, 0}, 1],
+			color, Disk[{0, 0}, 1],
 			CapForm["Round"], White,
 			AbsoluteThickness[1.5], Line[{{.5{-1, 0}, .5{1, 0}}, {.5{0, 1}, .5{0, -1}}}]},
 			PlotRange -> 1, ImagePadding -> 1, ImageSize -> 15{1, 1}]]*)
-	Function[colour,
-		Graphics[{FaceForm[colour],
+	Function[color,
+		Graphics[{FaceForm[color],
 		FilledCurve[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}, {{1, 4, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, 
       {0, 1, 0}, {0, 1, 0}, {1, 3, 3}}, {{1, 4, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}}, 
      {{{7., 14.}, {3.134007, 14.}, {0., 10.865993}, {0., 7.}, {0., 3.134009999999998}, {3.134007, 0.}, {7., 0.}, {10.865990000000002, 0.}, {14., 3.134009999999998}, {14., 7.}, {14., 8.856515000000002}, 
@@ -347,9 +358,9 @@ icon = <|
       11.009306}, {10.729999999999999, 11.}, {10.85157, 10.948358}, {10.948359999999997, 10.851567}, {11., 10.73}, {11.00931, 10.667009}, {11.00931, 10.602991}, {11., 10.54}}}]},
 		ImageSize -> 15{1, 1}, PlotRange -> {{0., 14.}, {0., 14.}}, ImagePadding -> {{1, 1}, {1, 1}}, AspectRatio -> Automatic]
 		]
-		(*Function[colour,
+		(*Function[color,
 		Graphics[{ 
-  EdgeForm[], FaceForm[colour], 
+  EdgeForm[], FaceForm[color], 
   FilledCurve[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}, {{0, 2, 0}, {1, 3, 3}, {0, 
     1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}}, {{1, 4, 
     3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, 
@@ -373,12 +384,12 @@ icon = <|
  AspectRatio -> Automatic, ImageSize -> 15{1, 1}, PlotRange -> {{0., 14.}, {0., 14.}}]]*),
 	
 	(* Opener chevrons. *)
-	"DownChevron" -> Function[colour, Graphics[
-		{colour, AbsoluteThickness[2], CapForm["Round"],
+	"DownChevron" -> Function[color, Graphics[
+		{color, AbsoluteThickness[2], CapForm["Round"],
 			Line[{{-1, 0}, {0, -1}, {1, 0}}]},
 		ImagePadding -> {3{1, 1}, 3{1, 1}}, ImageSize -> {18, 11}, AspectRatio -> Full, BaselinePosition -> Bottom]],
-	"UpChevron" -> Function[colour, Graphics[
-		{colour, AbsoluteThickness[2], CapForm["Round"],
+	"UpChevron" -> Function[color, Graphics[
+		{color, AbsoluteThickness[2], CapForm["Round"],
 			Line[{{-1, 0}, {0, 1}, {1, 0}}]},
 		ImagePadding -> {3{1, 1}, 3{1, 1}}, ImageSize -> {18, 11}, AspectRatio -> Full, BaselinePosition -> Bottom]]
 |>;
@@ -387,13 +398,13 @@ icon = <|
 closeIcon[offset_, pos_] := With[{crossSize = 2.5, diskRad = 7},
 	Tooltip[
 		{
-			colour["UIDark"],
+			colorData["UIDark"],
 			Disk[Offset[offset, pos], Offset[diskRad]],
-			colour["UIBack"], AbsoluteThickness[1.5], CapForm["Round"],
+			colorData["UIBack"], AbsoluteThickness[1.5], CapForm["Round"],
 			Line[{{Offset[offset + crossSize {-1, 1}, pos], Offset[offset + crossSize {1, -1}, pos]},
 				{Offset[offset + crossSize {-1, -1}, pos], Offset[offset + crossSize {1, 1}, pos]}}]},
 				
-		"Close analysis pod."]]
+		"Close analysis pod"]]
 
 
 (* ::Text:: *)
@@ -421,50 +432,55 @@ button[
 		BaselinePosition -> Baseline,
 		Alignment -> {Center, Center},
 		"ActiveQ" -> True,
-		(* Hover colours for the text, background and frame. *)
-		"TextColour" -> colour["ButtonText"],
-		"TextHoverColour" -> colour["ButtonTextHover"],
-		"TextInactiveColour" -> colour["ButtonTextInactive"],
-		"BackColour" -> colour["ButtonBack"],
-		"BackHoverColour" -> colour["ButtonBackHover"],
-		"BackMouseDownColour" -> colour["ButtonBackMouseDown"],
-		"BackInactiveColour" -> colour["ButtonBackInactive"],
-		"EdgeColour" -> colour["ButtonEdge"],
-		"EdgeHoverColour" -> colour["ButtonEdgeHover"],
-		"EdgeInactiveColour" -> colour["ButtonEdgeInactive"]
+		(* Hover colors for the text, background and frame. *)
+		"TextColor" -> colorData["ButtonText"],
+		"TextHoverColor" -> colorData["ButtonTextHover"],
+		"TextInactiveColor" -> colorData["ButtonTextInactive"],
+		"BackColor" -> colorData["ButtonBack"],
+		"BackHoverColor" -> colorData["ButtonBackHover"],
+		"BackMouseDownColor" -> colorData["ButtonBackMouseDown"],
+		"BackInactiveColor" -> colorData["ButtonBackInactive"],
+		"EdgeColor" -> colorData["ButtonEdge"],
+		"EdgeHoverColor" -> colorData["ButtonEdgeHover"],
+		"EdgeInactiveColor" -> colorData["ButtonEdgeInactive"]
 	}]
 ] :=
 	Pane[ 
-		DynamicModule[{hoverQ = False, mouseDownQ = False},
+		DynamicModule[{hoverQ = False, mouseDownQ = False, fontColor},
 			DynamicWrapper[
 				EventHandler[
 					Highlighted[
-						style["Button"][
-							disp,
-							FontColor -> Dynamic @ Which[
-								TrueQ[!OptionValue["ActiveQ"]], OptionValue["TextInactiveColour"],
-								hoverQ, OptionValue["TextHoverColour"],
-								True, OptionValue["TextColour"]]],
+						DynamicWrapper[
+							styleData["Button"][
+								(* The button display might need to know the state of the button (for example, changing the color of an icon on hover).
+									Therefore, check if disp is a Function, and supply it with fontColor, hoverQ, and mouseDownQ if so. *)
+								If[Head[disp] === Function, disp[fontColor, hoverQ, mouseDownQ], disp],
+								FontColor -> Dynamic @ fontColor],
+							
+							fontColor = Which[
+								TrueQ[!OptionValue["ActiveQ"]], OptionValue["TextInactiveColor"],
+								hoverQ, OptionValue["TextHoverColor"],
+								True, OptionValue["TextColor"]]],
 						
 						FrameMargins -> OptionValue[FrameMargins], Alignment -> OptionValue[Alignment],
 						Frame -> True, ImageSize -> OptionValue[ImageSize], RoundingRadius -> 3,
 						
 						FrameStyle -> Dynamic @ Directive[AbsoluteThickness[.5], Which[
-							TrueQ[!OptionValue["ActiveQ"]], OptionValue["EdgeInactiveColour"],
-							hoverQ, OptionValue["EdgeHoverColour"],
-							True, OptionValue["EdgeColour"]]],
+							TrueQ[!OptionValue["ActiveQ"]], OptionValue["EdgeInactiveColor"],
+							hoverQ, OptionValue["EdgeHoverColor"],
+							True, OptionValue["EdgeColor"]]],
 						
 						Background -> Dynamic @ Which[
-							TrueQ[!OptionValue["ActiveQ"]], OptionValue["BackInactiveColour"],
-							hoverQ && mouseDownQ, OptionValue["BackMouseDownColour"],
-							hoverQ, OptionValue["BackHoverColour"],
-							True, OptionValue["BackColour"]]],
+							TrueQ[!OptionValue["ActiveQ"]], OptionValue["BackInactiveColor"],
+							hoverQ && mouseDownQ, OptionValue["BackMouseDownColor"],
+							hoverQ, OptionValue["BackHoverColor"],
+							True, OptionValue["BackColor"]]],
 					
 					{
 						"MouseDown" :> (mouseDownQ = True),
 						(* "ActiveQ" must be False and only False to inactivate the button. *)
 						(* Note that "MouseClicked" (or indeed Button) wasn't used for the button action becuase
-							there seems to be some bug that doesn't evaluate the "MouseClicked" action in some cases. Yet to characterise. *)
+							there seems to be some bug that doesn't evaluate the "MouseClicked" action in some cases. Yet to characterize. *)
 						"MouseUp" :> (
 								mouseDownQ = False;
 								If[hoverQ && OptionValue["ActiveQ"] =!= False, action])
@@ -481,8 +497,8 @@ popupPane[
 	caretPos_ /; Between[caretPos, {-1, 1}],
 	OptionsPattern[{
 		Alignment -> {Left, Top},
-		Background -> colour["PopupBack"],
-		FrameStyle -> Directive[{AbsoluteThickness[1], colour["PopupEdge"]}]
+		Background -> colorData["PopupBack"],
+		FrameStyle -> Directive[{AbsoluteThickness[1], colorData["PopupEdge"]}]
 	}]
 ] :=
 	(* safetyPadding is added to each edge to ensure that no lines are clipped when rendered by the FE. *)
@@ -630,7 +646,7 @@ constructRaftMenuItemLabel[raftType_, icon_, label_] :=
 			ImageMargins -> {{0, 0}, {0, 0}},
 			
 			(* Highlight the menu item on mouseover. *)
-			Background -> Dynamic[If[CurrentValue["MouseOver"], colour["RaftItemHighlight"], colour["RaftBack"]]]
+			Background -> Dynamic[If[CurrentValue["MouseOver"], colorData["RaftItemHighlight"], colorData["RaftBack"]]]
 		]
 	]
 
@@ -676,12 +692,12 @@ makeRaftMenuIgnoreItem[
 			(* ----- The menu item label ----- *)
 			
 			constructRaftMenuItemLabel[raftType, icon,
-				(* The lint tag is drawn in a different colour to the rest of the item.
+				(* The lint tag is drawn in a different color to the rest of the item.
 					If it has an "Argument", then display LintTag\:25b9Argument. *)
-				style["RaftMenuItem"][Row[label[
+				styleData["RaftMenuItem"][Row[label[
 					Style[If[argument === Missing["KeyAbsent", "Argument"],
 						lint["Tag"],
-						Row[{lint["Tag"], "\:25BB", argument}, "\[VeryThinSpace]"]], FontColor -> colour["UIDark"]]]]]],
+						Row[{lint["Tag"], "\:25BB", argument}, "\[VeryThinSpace]"]], FontColor -> colorData["UIDark"]]]]]],
 			
 			
 			(* ----- The menu item action ----- *)
@@ -726,14 +742,14 @@ makeRaftMenuCodeActionItem[
 				(* For deletion actions, use the trash icon. For replacement and insertion actions, use the caret icon. *)
 				Switch[codeAction[[2]],
 					Alternatives[CodeParser`DeleteNode, CodeParser`DeleteTriviaNode, CodeParser`DeleteText, CodeParser`DeleteTrivia],
-					icon["Bin"][colour["UIDark"]],
+					iconData["Wrench"][colorData["UIDark"]],
 					Alternatives[CodeParser`InsertNode, CodeParser`ReplaceNode, CodeParser`InsertNodeAfter, CodeParser`InsertText, CodeParser`InsertTextAfter, CodeParser`ReplaceText],
-					icon["Caret"][colour["UIDark"]],
+					iconData["Wrench"][colorData["UIDark"]],
 					(* Failsafe. *)
-					_, icon["Caret"][colour["UIDark"]]],
+					_, iconData["Wrench"][colorData["UIDark"]]],
 				
 				(* The code action label. Format pieces of code within the label with "Input" style, and enforce "StandardForm"'s font. *)
-					style["RaftMenuItem"][Row[
+					styleData["RaftMenuItem"][Row[
 						(* I'm using Brenton's boldify function to do the string-parsing, and then replacing his formatting wrappers with StyleBoxes. *)
 						Replace[CodeInspector`Utils`boldify[codeAction["Label"]],
 							CodeInspector`Format`LintMarkup[s_, ___] :>
@@ -793,12 +809,12 @@ makeRaftMenuDocsItem[
 			
 			(* The label is the docs info icon, followed by the name of the symbol, and an open-link arrow icon. *)
 			constructRaftMenuItemLabel[raftType,
-				icon["Info"][colour["UIDark"]],
+				iconData["Info"][colorData["UIDark"]],
 				Row[{
-					style["RaftMenuItem"][Row[CodeInspector`Utils`boldify["``" <> symbol <> "``"],
+					styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify["``" <> symbol <> "``"],
 						(* Fudge factor to get the icons and text to line up nicely. *)
 						BaselinePosition -> (Baseline -> Scaled[.135])]],
-					icon["OpenLinkArrow"][colour["UIDark"]]}]],
+					iconData["OpenLinkArrow"][colorData["UIDark"]]}]],
 			
 			
 			(* ----- The menu item action ----- *)
@@ -840,23 +856,23 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 			ignoreItems = {
 			
 				(* Cell *)
-				makeRaftMenuIgnoreItem[cell, icon["IgnoreInCell"][colour["UIDark"]],
+				makeRaftMenuIgnoreItem[cell, iconData["IgnoreInCell"][colorData["UIDark"]],
 					{"Ignore ", #, " errors in this cell"}&,
 					lint, Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 					
 				(* Notebook *)
-				makeRaftMenuIgnoreItem[ParentNotebook[cell], icon["IgnoreInNotebook"][colour["UIDark"]],
+				makeRaftMenuIgnoreItem[ParentNotebook[cell], iconData["IgnoreInNotebook"][colorData["UIDark"]],
 					{"Ignore ", #, " errors in this notebook"}&,
 					lint, Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 					
 				(* init.m *)
-				makeRaftMenuIgnoreItem[$FrontEnd, icon["IgnoreAlways"][colour["UIDark"]],
+				makeRaftMenuIgnoreItem[$FrontEnd, iconData["IgnoreAlways"][colorData["UIDark"]],
 					{"Ignore all ", #, " errors"}&,
 					lint, Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]]
 			},
 			
 			delimiter = Graphics[
-				{CapForm["Round"], colour["RaftDelimiter"], AbsoluteThickness[1],
+				{CapForm["Round"], colorData["RaftDelimiter"], AbsoluteThickness[1],
 					Line[{{-1, 0}, {1, 0}}]},
 				AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImageMargins -> {{0, 0}, 2{1, 1}},
 				ImagePadding -> {5{1, 1}, {0, 0}}, ImageSize -> {Full, 2}],
@@ -868,7 +884,7 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 				width so that it fits in the pod properly. *)
 			sumOfCellHMargins = Replace[Total[CodeInspector`LinterUI`lintedCells[notebookID][cell]["HMargins"]], Except[_?NumberQ] -> 70],
 			
-			hMarginsFudgeFactor = -2.5
+			hMarginsFudgeFactor = 14.5
 		},
 		
 		
@@ -905,7 +921,7 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 				ItemSize -> {Full, 0}, Spacings -> 0, Alignment -> Left],
 			
 			Frame -> True, FrameMargins -> 3, Background -> White, RoundingRadius -> 0,
-			FrameStyle -> Directive[AbsoluteThickness[1], colour["RaftFrame"]],
+			FrameStyle -> Directive[AbsoluteThickness[1], colorData["RaftFrame"]],
 			ImageMargins -> {
 				Switch[raftType,
 					"inPlace", {0, 0},
@@ -948,8 +964,8 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 											Grid[
 												(* The raft label contains: *)
 												{{
-													(* an exclamation icon, coloured according to the lint severity, *)
-													icon["Exclam"][colour[lint["Severity"]]], Spacer[6],
+													(* an exclamation icon, colored according to the lint severity, *)
+													iconData["Exclam"][colorData[lint["Severity"]]], Spacer[6],
 													(* a description of the lint. This underlines on mouseover, and has a double chevron icon at the end of it. *)
 													constrainWidth[
 														Style[
@@ -958,8 +974,8 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 																	(* Incase the lint description contains any newlines, or it has line-wrapped, we need to add its words
 																		individually to the Row, otherwise the "TakeAction" icon will appear floating to the right. Rather, we
 																		want it to appear directly after the last word, as if it were itself a character. *)
-																	Splice[style["RaftLabel"] /@ StringSplit[lintDescription]],
-																	icon["TakeAction"][colour["RaftLabel"]]},
+																	Splice[styleData["RaftLabel"] /@ StringSplit[lintDescription]],
+																	iconData["TakeAction"][colorData["RaftLabel"]]},
 																" ",
 																BaselinePosition -> Baseline],
 															FontVariations -> {"Underline" -> Dynamic[mouseOver]}],
@@ -975,21 +991,21 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 											(* Raft appearance options. *)
 											Alignment -> {Center, Baseline},
 											FrameMargins -> {{5, 5}, {3, 3}}, Frame -> True, RoundingRadius -> 1,
-											FrameStyle -> Directive[colour["RaftFrame"], AbsoluteThickness[1]],
+											FrameStyle -> Directive[colorData["RaftFrame"], AbsoluteThickness[1]],
 											(* Change the background according to the lint state. *)
 											Background -> Dynamic[Switch[ReleaseHold[lintState],
-												"inactive", colour["RaftBack"],
-												"active", colour["RaftBackOpen"],
-												"hoverMooring", colour["RaftBackHover"],
+												"inactive", colorData["RaftBack"],
+												"active", colorData["RaftBackOpen"],
+												"hoverMooring", colorData["RaftBackHover"],
 												(* If the raft type is in-place, then the "hoverInPlace" value could be due to the mouse hovering over the linted boxes, but
 													not the raft itself \[LongDash] so we must check to see if the raft is actually hovered over before highlighting its background. *)
 												"hoverInPlace",
 												Which[
-													raftType === "mooring", colour["RaftBackHover"],
-													raftType === "inPlace" && mouseOver, colour["RaftBackHover"],
-													True, colour["RaftBack"]],
+													raftType === "mooring", colorData["RaftBackHover"],
+													raftType === "inPlace" && mouseOver, colorData["RaftBackHover"],
+													True, colorData["RaftBack"]],
 												(* Failsafe. *)
-												_, colour["RaftBack"]]]],
+												_, colorData["RaftBack"]]]],
 										
 										
 										(* ----- Button action. ----- *)
@@ -1058,7 +1074,7 @@ confirmClosurePopup[cell_CellObject, uiAttachedCells_, Dynamic[popupPresentQ_]] 
 			popupPane[
 				(* Draw a button to discard the changes, and a button to apply them. Style the "discard" button with red text. *)
 				Row[{
-					button[Style["Discard Edits", colour["WarningText"]], NotebookDelete[ParentCell[EvaluationCell[]]]; NotebookDelete[uiAttachedCells]],
+					button[Style["Discard Edits", colorData["WarningText"]], NotebookDelete[ParentCell[EvaluationCell[]]]; NotebookDelete[uiAttachedCells]],
 					button[Style["Apply Edits"], applyChanges[cell]; NotebookDelete[ParentCell[EvaluationCell[]]]; NotebookDelete[uiAttachedCells]]}, Spacer[5]],
 				{225, 57},
 				1,
@@ -1073,24 +1089,26 @@ confirmClosurePopup[cell_CellObject, uiAttachedCells_, Dynamic[popupPresentQ_]] 
 
 
 popOutButton[] :=
-	Button[icon["PopOut"][colour["UIDark"]], Null, Appearance -> None, Tooltip -> "Open in code analysis palette."]
+	Button[iconData["PopOut"][colorData["UIDark"]], Null, Appearance -> None, Tooltip -> "Open in code analysis palette"]
 
 
 applyChangesButton[cell_CellObject] :=
 With[{notebookID = Last[ParentNotebook[cell]]},
 	button[
-		Style["Apply Edits", 13],
+		Function[col,
+			Row[{Style["Apply Edits", 13], Spacer[3], iconData["Wrench"][col]}, Alignment -> Baseline],
+			HoldAll],
 			
 		If[CodeInspector`LinterUI`lintedCells[notebookID][cell]["EditsMadeQ"],
 			applyChanges[cell]],
 		
 		"ActiveQ" :> TrueQ[CodeInspector`LinterUI`lintedCells[notebookID][cell]["EditsMadeQ"]],
-		"TextColour" -> colour["ApplyButtonText"],
-		"TextHoverColour" -> colour["ApplyButtonText"],
-		"BackColour" -> colour["ApplyButtonBack"],
-		"BackHoverColour" -> colour["ApplyButtonBackHover"],
-		"EdgeColour" -> colour["ApplyButtonBack"],
-		"EdgeHoverColour" -> colour["ApplyButtonBackHover"],
+		"TextColor" -> colorData["ApplyButtonText"],
+		"TextHoverColor" -> colorData["ApplyButtonText"],
+		"BackColor" -> colorData["ApplyButtonBack"],
+		"BackHoverColor" -> colorData["ApplyButtonBackHover"],
+		"EdgeColor" -> colorData["ApplyButtonEdge"],
+		"EdgeHoverColor" -> colorData["ApplyButtonEdge"],
 		ImageSize -> {Automatic, 17}, Alignment -> {Center, Scaled[-.05]}
 		]]
 
@@ -1099,7 +1117,6 @@ titleBar[cell_CellObject] :=
 	With[
 		{
 			roundingRad = $UIRoundingRadius - 1,
-			hMargins = CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"],
 			hMarginsFudgeFactor = {0, 0}
 		},
 			
@@ -1107,7 +1124,7 @@ titleBar[cell_CellObject] :=
 				Graphics[
 					{
 						(* Draw the title bar background \[LongDash] a rectangle with its top corners rounded. *)
-						colour["UIBack"],
+						colorData["UIBack"],
 						FilledCurve[BezierCurve[Join[
 							(* Top right corner. *)
 							Offset[roundingRad(# + {-1, -1}), {1, 1}]& /@ bezierCirclePts["Q1"][[2;;]],
@@ -1119,7 +1136,7 @@ titleBar[cell_CellObject] :=
 							Table[{1, -1}, 2]]]],
 						
 						(* The left-aligned pod title. *)
-						Text[style["SectionHeader"]["Code Analysis", FontColor->colour["UIDark"]], Offset[{8, 0}, {-1, 0}], {-1, 0}],
+						Text[styleData["SectionHeader"]["Code Analysis", FontColor->colorData["UIDark"]], Offset[{8, 0}, {-1, 0}], {-1, 0}],
 						
 						(* The right-aligned pop-out button. *)
 						(*Inset[popOutButton[], Offset[{-33, 0}, {1, 0}], {Center, Center}],*)
@@ -1141,12 +1158,10 @@ titleBar[cell_CellObject] :=
 										popupPresentQ = True;
 										AttachCell[
 											EvaluationBox[],
-											ExpressionCell[
-												confirmClosurePopup[
-													cell,
-													CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"],
-													Dynamic[popupPresentQ]],
-												Evaluator -> $evaluator],
+											confirmClosurePopup[
+												cell,
+												CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"],
+												Dynamic[popupPresentQ]],
 											{Right, Bottom}, Offset[{6, 2}, Automatic], {Right, Top},
 											RemovalConditions -> {"MouseClickOutside"}]],
 										
@@ -1165,7 +1180,6 @@ codePane[cell_CellObject, cellType_] :=
 	With[
 		{
 			notebookID = Last[ParentNotebook[cell]],
-			hMargins = CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"],
 			hMarginsFudgeFactor = {0, 0},
 			vContentPadding = {5, 4},
 			hContentPadding = {0, 0}
@@ -1199,10 +1213,10 @@ codePane[cell_CellObject, cellType_] :=
 				ImageMargins -> {{0, 0}, {0, 0}},
 				Alignment -> {Left, Top}, ImageSizeAction -> "Scrollable", AppearanceElements -> None, Scrollbars -> {Automatic, False}, ContentPadding -> False],
 				
-			Background -> colour["CodeBack"], RoundingRadius -> 0, ContentPadding -> False,
+			Background -> colorData["CodeBack"], RoundingRadius -> 0, ContentPadding -> False,
 			ImageMargins -> {hMarginsFudgeFactor, {0, 0}},
 			FrameMargins -> {$linterPodCellHMargins + hContentPadding, vContentPadding},
-			Frame -> True, FrameStyle -> Directive[colour["UIBack"], AbsoluteThickness[1]]]]
+			Frame -> True, FrameStyle -> Directive[colorData["UIBack"], AbsoluteThickness[1]]]]
 
 
 (* ::Subsection::Closed:: *)
@@ -1213,10 +1227,8 @@ mooring[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 	With[
 		{
 			notebookID = Last[ParentNotebook[cell]],
-			hMargins = CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"],
 			hMarginsFudgeFactor = {0, 0},
-			hContentPadding = {10, 10}, vContentPadding = {0, 0},
-			
+			vContentPadding = {0, 0},
 			raftColumn = Function[list,
 				Column[list, ItemSize -> {0, 0}, Spacings -> 0, Alignment -> Left]]
 		},
@@ -1252,7 +1264,7 @@ mooring[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 					ImageSize -> Automatic]],
 			
 			
-			Background -> colour["UIBack"], RoundingRadius -> 0, ImageSize -> Full,
+			Background -> colorData["UIBack"], RoundingRadius -> 0, ImageSize -> Full,
 			FrameMargins -> {$linterPodCellHMargins, vContentPadding},
 			ImageMargins -> {hMarginsFudgeFactor, {0, 0}}]]
 
@@ -1267,8 +1279,8 @@ With[{formatIcon = Function[Show[#, ImageSize -> {13, 9}, BaselinePosition -> Sc
 		(* Switch between "Show All v" and "Show Fewer ^" depending on showAllQ. *)
 		PaneSelector[
 			{
-				False -> Row[{Style["Show All", 12], formatIcon[icon["DownChevron"][colour["UIDark"]]]}, " "],
-				True -> Row[{Style["Show Fewer", 12], formatIcon[icon["UpChevron"][colour["UIDark"]]]}, " "]
+				False -> Row[{Style["Show All", 12], formatIcon[iconData["DownChevron"][colorData["UIDark"]]]}, " "],
+				True -> Row[{Style["Show Fewer", 12], formatIcon[iconData["UpChevron"][colorData["UIDark"]]]}, " "]
 			},
 			Dynamic[showAllQ],
 			ImageSize -> Automatic, ImageMargins -> 0, FrameMargins -> None, BaselinePosition -> (*(Scaled[0] -> Baseline)*)Baseline],
@@ -1283,7 +1295,6 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 	With[
 		{
 			roundingRad = $UIRoundingRadius - 1,
-			hMargins = CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"],
 			hMarginsFudgeFactor = {0, 0},
 			footerHeight = 21,
 			notebookID = Last[ParentNotebook[cell]]
@@ -1293,7 +1304,7 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 			DynamicWrapper[
 				Graphics[
 					{
-						colour["UIBack"],
+						colorData["UIBack"],
 						FilledCurve[BezierCurve[Join[
 							(* Top left corner. *)
 							Table[{-1, 1}, 2],
@@ -1309,7 +1320,7 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 						
 						(* The lint count and "Show All" button. *)
 						Inset[
-							Row[style["FooterText"] /@ {
+							Row[styleData["FooterText"] /@ {
 
 								Spacer[3],
 								
@@ -1363,7 +1374,7 @@ hashChangedOverlayClosePodButton[cell_CellObject] :=
 hashChangedOverlay[cell_] :=
 	Pane[
 		Column[{
-			style["SectionHeader"]["The cell contents have changed."],
+			styleData["SectionHeader"]["The cell contents have changed."],
 			Row[
 				{
 					hashChangedOverlayClosePodButton[cell],
@@ -1380,9 +1391,8 @@ hashChangedOverlay[cell_] :=
 lintPod[cell_CellObject, cellType_] :=
 	With[
 		{
-			hMargins = CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"],
 			delimiter = Function[vMargins, Graphics[
-				{AbsoluteThickness[1], colour["Delimiter"], CapForm["Round"],
+				{AbsoluteThickness[1], colorData["Delimiter"], CapForm["Round"],
 					Line[{{-1, 0}, {1, 0}}]},
 				AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> {(*10{1, 1}*){0, 0}, {0, 0}}, ImageSize -> {Full, 2},
 				BaselinePosition -> Scaled[.1], ImageMargins -> {{0, 0}, vMargins}]],
@@ -1426,15 +1436,15 @@ lintPod[cell_CellObject, cellType_] :=
 								Opacity[Dynamic @ If[cellHashChangedQ, .5, 1]]]*)contents,
 								
 							(* Add a border around the lint pod. *)
-							RoundingRadius -> $UIRoundingRadius, Background -> colour["UIBack"], FrameMargins -> 0,
-							Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], colour["UIEdge"]], 
+							RoundingRadius -> $UIRoundingRadius, Background -> colorData["UIBack"], FrameMargins -> 0,
+							Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], colorData["UIEdge"]], 
 							ImageMargins -> {$linterPodCellHMargins, {0, 0}}],
 						
-						(* The "inactive" overlay colour. *)
+						(* The "inactive" overlay color. *)
 						Highlighted[Invisible[contents],
 							(* Add a border around the lint pod. *)
-							RoundingRadius -> $UIRoundingRadius, Background -> Opacity[.8, colour["UIBack"]], FrameMargins -> 0,
-							Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], Lighter[colour["UIEdge"], .5]], 
+							RoundingRadius -> $UIRoundingRadius, Background -> Opacity[.8, colorData["UIBack"]], FrameMargins -> 0,
+							Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], Lighter[colorData["UIEdge"], .5]], 
 							ImageMargins -> {$linterPodCellHMargins, {0, 0}}],
 						
 						(* The controls for choosing whether to close the pod, or reanalyse the cell if the cell hash has changed. *)
@@ -1516,12 +1526,12 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, codeBoxes_] :=
 						Evaluate @ DynamicWrapperBox[
 							(* Underlight the linted boxes, and tie their background to the unique state variable for that lint. *)
 							StyleBox[source,
-								FontVariations -> {"Underlight" -> colour[lint["Severity"]]},
+								FontVariations -> {"Underlight" -> colorData[lint["Severity"]]},
 								(* Highlight the linted boxes if the lint state is "hoverXXXX" or "active". *)
 								Background -> Dynamic[Switch[ReleaseHold[lintState],
-									(* The severity 1 colour is a bit dark for highlighting compared to the others, so replace it with Pink. *)
-									"inactive", Opacity[.2, Replace[colour[lint["Severity"]], RGBColor[0.827451, 0.00392157, 0.00392157] -> Pink]],
-									"hoverInPlace" | "hoverMooring" | "active", colour["CodeHighlight"],
+									(* The severity 1 color is a bit dark for highlighting compared to the others, so replace it with Pink. *)
+									"inactive", Opacity[.2, Replace[colorData[lint["Severity"]], RGBColor[0.827451, 0.00392157, 0.00392157] -> Pink]],
+									"hoverInPlace" | "hoverMooring" | "active", colorData["CodeHighlight"],
 									(* Failsafe. *)
 									_, None]]],
 							
@@ -1704,8 +1714,8 @@ AttachAnalysis[
 						AttachCell[
 							cell,
 							ExpressionCell[
-								Button[icon["GoToPod"][colour["CellBracketMarker"]],
-									SelectionMove[podCellBurnt, All, Cell],
+								Button[iconData["GoToPod"][colorData["CellBracketMarker"]],
+									SelectionMove[cell, After, Cell],
 									Appearance -> None],
 								Evaluator -> $evaluator],
 							{"CellBracket", Top}]];
