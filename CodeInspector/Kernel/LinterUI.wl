@@ -4,14 +4,18 @@
 (*PackageHeader*)
 
 
+Needs["CodeParser`"]
+Needs["CodeInspector`"]
+
+
 Unprotect["CodeInspector`LinterUI`*"];
 ClearAll["CodeInspector`LinterUI`*"];
 BeginPackage["CodeInspector`LinterUI`"];
 
 
-ObjectAnalyze::usage = "ObjectAnalyze[] analyzes the \"Input\" and \"Code\" cells in the evaluation notebook.
-ObjectAnalyze[notebook] analyzes the \"Input\" and \"Code\" cells in notebook.
-ObjectAnalyze[{cell1, cell2, ...}] analyzes the given cells.";
+AttachAnalysis::usage = "AttachAnalysis[] attaches code analysis pods to the \"Input\" and \"Code\" cells in the evaluation notebook which contain issues.
+AttachAnalysis[notebook] attaches code analysis pods to the \"Input\" and \"Code\" cells in notebook which contain issues.
+AttachAnalysis[{cell1, cell2, ...}] attaches code analysis pods to the \"Input\" and \"Code\" cells in the list of cells.";
 
 
 Begin["`Private`"]
@@ -1348,7 +1352,7 @@ hashChangedOverlayButton[label_, action_] :=
 
 
 hashChangedOverlayReanalyseButton[cell_CellObject] :=
-	button["Reanalyze", ObjectAnalyze[{cell}]]
+	button["Reanalyze", AttachAnalysis[{cell}]]
 
 
 hashChangedOverlayClosePodButton[cell_CellObject] :=
@@ -1647,13 +1651,15 @@ analyseAction[
 	]
 
 
-ObjectAnalyze[
+AttachAnalysis[
 	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
 ] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] :=
 	Module[
 		{cells, notebookID, hMargins, hMarginsFudgeFactor = {-13, (*-13*)4}, vMargins = {5, 5}, podCell, bracketCell},
 
+		(* These should already be loaded, but just make sure. *)
 		Needs["CodeParser`"];
+		Needs["CodeInspector`"];
 		
 		If[ListQ[notebookOrCells],
 			(* If the arg is a list of cells, then assign it to cells and get the notebook ID.
@@ -1701,9 +1707,12 @@ ObjectAnalyze[
 									Appearance -> None]],
 							{"CellBracket", Top}]];
 
-				CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell}],
+				CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell}];
+				
+				(* Return an Association in which keys are the linted input/code cells, and values are the attached UI cells. *)
+				cell -> {podCell, bracketCell},
 
-			cells]]
+			cells] // Association]
 
 
 (* ::Section::Closed:: *)
@@ -1720,6 +1729,6 @@ EndPackage[];
 
 (* ::Input:: *)
 (*CreatePalette[Pane[Column[{*)
-(*Button["Analyze NB", ObjectAnalyze[InputNotebook[]]],*)
-(*Button["Analyze Cell(s)",ObjectAnalyze[SelectedCells[InputNotebook[]]]]*)
+(*Button["Analyze NB", AttachAnalysis[InputNotebook[]]],*)
+(*Button["Analyze Cell(s)",AttachAnalysis[SelectedCells[InputNotebook[]]]]*)
 (*}], FrameMargins -> 30], WindowTitle->"Analyze Code"]*)
