@@ -1114,7 +1114,7 @@ titleBar[cell_CellObject] :=
 						Text[style["SectionHeader"]["Code Analysis", FontColor->colour["UIDark"]], Offset[{8, 0}, {-1, 0}], {-1, 0}],
 						
 						(* The right-aligned pop-out button. *)
-						Inset[popOutButton[], Offset[{-33, 0}, {1, 0}], {Center, Center}],
+						(*Inset[popOutButton[], Offset[{-33, 0}, {1, 0}], {Center, Center}],*)
 						
 						(* The right-aligned Apply button. *)
 						(*Inset[applyChangesButton[cell], Offset[{-47, 0}, {1, 0}], {Right, Center}],*)
@@ -1340,23 +1340,14 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 SetAttributes[hashChangedOverlayButton, HoldRest]
 
 
-hashChangedOverlayButton[label_, action_] :=
-	Button[
-		Highlighted[
-			style["Button"][label],
-			ImageSize -> {120, 27}, RoundingRadius -> 27/2, Alignment -> {Center, Center},
-			Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], colour["HashButtonEdge"]],
-			Background -> Dynamic[If[CurrentValue["MouseOver"], colour["HashButtonBackHover"], colour["HashButtonBack"]]]],
-		action,
-		Appearance -> None]
-
-
 hashChangedOverlayReanalyseButton[cell_CellObject] :=
-	button["Reanalyze", AttachAnalysis[{cell}]]
+	button["Reanalyze", AttachAnalysis[{cell}], ImageSize -> {98, 19}]
 
 
 hashChangedOverlayClosePodButton[cell_CellObject] :=
-	button["Close", NotebookDelete[EvaluationCell[]]; NotebookDelete[CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["UIAttachedCells"]]]
+	button["Close",
+		NotebookDelete[EvaluationCell[]]; NotebookDelete[CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["UIAttachedCells"]],
+		ImageSize -> {98, 19}]
 
 
 hashChangedOverlay[cell_] :=
@@ -1707,10 +1698,10 @@ AttachAnalysis[
 									Appearance -> None]],
 							{"CellBracket", Top}]];
 
-				CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell}];
+				CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell};
 				
 				(* Return an Association in which keys are the linted input/code cells, and values are the attached UI cells. *)
-				cell -> {podCell, bracketCell},
+				cell -> {podCell, bracketCell}],
 
 			cells] // Association]
 
