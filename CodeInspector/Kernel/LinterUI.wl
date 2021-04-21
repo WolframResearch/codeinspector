@@ -4,13 +4,7 @@
 (*PackageHeader*)
 
 
-Needs["CodeParser`"]
-Needs["CodeInspector`"]
-
-
-Unprotect["CodeInspector`LinterUI`*"];
-ClearAll["CodeInspector`LinterUI`*"];
-BeginPackage["CodeInspector`LinterUI`"];
+BeginPackage["CodeInspector`LinterUI`"]
 
 
 AttachAnalysis::usage = "AttachAnalysis[] attaches code analysis pods to the \"Input\" and \"Code\" cells in the evaluation notebook which contain issues.
@@ -19,6 +13,10 @@ AttachAnalysis[{cell1, cell2, ...}] attaches code analysis pods to the \"Input\"
 
 
 Begin["`Private`"]
+
+
+Needs["CodeParser`"]
+Needs["CodeInspector`"]
 
 
 (* ::Section::Closed:: *)
@@ -542,6 +540,10 @@ popupPane[
 (*Support Functions*)
 
 
+(* Make sure that attached cells are evaluating in the same kernel that loaded the CodeInspector`LinterUI` context. *)
+$evaluator = CurrentValue[Evaluator];
+
+
 (* ::Text:: *)
 (*Construct a unique variable for a lint, of the form CodeInspector`LinterUI`LintStates`NbXXXXCellXXXXLintXXXXName.*)
 (*These will be used to store Raft cells, and to track when the user interacts with a lint.*)
@@ -996,14 +998,16 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 										If[!raftOpenQ,
 											raftMenu = AttachCell[EvaluationBox[],
 											
-												DynamicModule[{},
-													makeRaftMenu[cell, lint, ParentCell[EvaluationBox[]], Dynamic[itemClicked], raftType, Dynamic[raftMenu]],
-													Initialization :> (1),
-													(* Upon closure of the menu, set the lint state to "inactive". This is correct if the mouse has moved out of the menu/raft.
-														However, if the menu has been closed by clicking the raft itself, then the state *should* be set to "hoverXXXX" \[LongDash] but this
-														happens by the raft's button action after the menu's Deinitialization fires. (In other words, it's fine to potentially
-														incorrectly set the lint state to "inactive" here, becuase it will immediately corrected by the raft's button action.) *)
-													Deinitialization :> (raftOpenQ = False; Set @@ Append[lintState, "inactive"])],
+												ExpressionCell[
+													DynamicModule[{},
+														makeRaftMenu[cell, lint, ParentCell[EvaluationBox[]], Dynamic[itemClicked], raftType, Dynamic[raftMenu]],
+														Initialization :> (1),
+														(* Upon closure of the menu, set the lint state to "inactive". This is correct if the mouse has moved out of the menu/raft.
+															However, if the menu has been closed by clicking the raft itself, then the state *should* be set to "hoverXXXX" \[LongDash] but this
+															happens by the raft's button action after the menu's Deinitialization fires. (In other words, it's fine to potentially
+															incorrectly set the lint state to "inactive" here, becuase it will immediately corrected by the raft's button action.) *)
+														Deinitialization :> (raftOpenQ = False; Set @@ Append[lintState, "inactive"])],
+													Evaluator -> $evaluator],
 												
 												{Left, Bottom}, Offset[{0, 2}, 0], {Left, Top},
 												RemovalConditions -> {"MouseExit"}]];
@@ -1028,7 +1032,9 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 									TrackedSymbols :> {}],
 								
 								Initialization :> (1),		
-								Deinitialization :> Last[deinit]]]]]]];
+								Deinitialization :> Last[deinit]],
+
+							Evaluator -> $evaluator]]]]];
 		
 		(* Return the raft symbol. *)
 		ReleaseHold[head]
@@ -1061,7 +1067,9 @@ confirmClosurePopup[cell_CellObject, uiAttachedCells_, Dynamic[popupPresentQ_]] 
 			(* popupPresentQ is used to stop multiple confirmation popup cells being
 				attached if the user clicks on the "close" button multiple times. *)
 			Initialization :> (1),
-			Deinitialization :> (popupPresentQ = False)]]
+			Deinitialization :> (popupPresentQ = False)],
+		
+		Evaluator -> $evaluator]
 
 
 popOutButton[] :=
@@ -1133,10 +1141,12 @@ titleBar[cell_CellObject] :=
 										popupPresentQ = True;
 										AttachCell[
 											EvaluationBox[],
-											confirmClosurePopup[
-												cell,
-												CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"],
-												Dynamic[popupPresentQ]],
+											ExpressionCell[
+												confirmClosurePopup[
+													cell,
+													CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"],
+													Dynamic[popupPresentQ]],
+												Evaluator -> $evaluator],
 											{Right, Bottom}, Offset[{6, 2}, Automatic], {Right, Top},
 											RemovalConditions -> {"MouseClickOutside"}]],
 										
@@ -1305,7 +1315,7 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 								
 								(* Lint count. *)
 								"Showing", " ",
-								Dynamic[If[showAllQ, raftCount, minRafts]], " ",
+								Dynamic[If[showAllQ, raftCount, Clip[raftCount, {0, minRafts}]]], " ",
 								"of", " ",
 								Dynamic[raftCount], " ",
 								Dynamic[If[raftCount === 1, "Issue", "Issues"], FontSize -> 12],
@@ -1684,7 +1694,8 @@ AttachAnalysis[
 						ExpressionCell[
 							lintPod[cell, CodeInspector`LinterUI`lintedCells[notebookID][cell]["Type"]],
 							LineBreakWithin -> Automatic,
-							CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins}],
+							CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins},
+							Evaluator -> $evaluator],
 						"Inline"];
 				
 				(* Also attach a marker on the input/code cell bracket that takes you to the lint pod when clicked. *)
@@ -1695,7 +1706,8 @@ AttachAnalysis[
 							ExpressionCell[
 								Button[icon["GoToPod"][colour["CellBracketMarker"]],
 									SelectionMove[podCellBurnt, All, Cell],
-									Appearance -> None]],
+									Appearance -> None],
+								Evaluator -> $evaluator],
 							{"CellBracket", Top}]];
 
 				CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell};
@@ -1710,8 +1722,8 @@ AttachAnalysis[
 (*Package Footer*)
 
 
-End[];
-EndPackage[];
+End[]
+EndPackage[]
 
 
 (* ::Section:: *)
