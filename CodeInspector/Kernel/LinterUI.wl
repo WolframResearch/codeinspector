@@ -4,13 +4,9 @@
 (*PackageHeader*)
 
 
-Needs["CodeInspector`"];
-Needs["CodeParser`"];
-
-
-Unprotect["LinterUI`*"];
-ClearAll["LinterUI`*"];
-BeginPackage["LinterUI`"];
+Unprotect["CodeInspector`LinterUI`*"];
+ClearAll["CodeInspector`LinterUI`*"];
+BeginPackage["CodeInspector`LinterUI`"];
 
 
 ObjectAnalyze::usage = "ObjectAnalyze[] analyzes the \"Input\" and \"Code\" cells in the evaluation notebook.
@@ -131,7 +127,7 @@ icon = <|
 					12.673503360000002}, {6.89663238, 13.10104256}, {6.881399999999999, 13.530000000000001}, {6.89486708, 13.91046976}, {7.136015949999997, 14.24466112}, {7.491, 14.374799999999999}, {8.000101090000001, 14.59409472}, {8.55050639, 
 					14.698928000000002}, {9.1039, 14.681999999999999}, {9.67359533, 14.748591999999999}, {10.248492579999999, 14.612789119999999}, {10.729499999999998, 14.298}, {11.021667309999996, 14.000360319999999}, {11.170132849999996, 13.58886464}, 
 					{11.135899999999998, 13.1716}, {11.140814899999997, 12.86200512}, {11.110992759999997, 12.55284288}, {11.046999999999997, 12.249999999999998}}}]},
-			AspectRatio -> Automatic, ImageSize -> {18., 19.}, PlotRange -> {{0., 18.}, {0., 18.14}},
+			AspectRatio -> Automatic, ImageSize -> 14{18./18, 19./18}, PlotRange -> {{0., 18.}, {0., 18.14}},
 			BaselinePosition -> Scaled[.2]]],
 	
 	(* Cell Bracket Icon. *)
@@ -1355,8 +1351,8 @@ hashChangedOverlayReanalyseButton[cell_CellObject] :=
 	button["Reanalyze", ObjectAnalyze[{cell}]]
 
 
-hashChangedOverlayClosePodButton[] :=
-	button["Close", NotebookDelete[EvaluationCell[]]; NotebookDelete[CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"]]]
+hashChangedOverlayClosePodButton[cell_CellObject] :=
+	button["Close", NotebookDelete[EvaluationCell[]]; NotebookDelete[CodeInspector`LinterUI`lintedCells[Last[ParentNotebook[cell]]][cell]["UIAttachedCells"]]]
 
 
 hashChangedOverlay[cell_] :=
@@ -1365,7 +1361,7 @@ hashChangedOverlay[cell_] :=
 			style["SectionHeader"]["The cell contents have changed."],
 			Row[
 				{
-					hashChangedOverlayClosePodButton[],
+					hashChangedOverlayClosePodButton[cell],
 					hashChangedOverlayReanalyseButton[cell]},
 				Spacer[10]]
 		}, Spacings -> 1.1, Alignment -> Center],
@@ -1607,7 +1603,7 @@ analyseAction[
 	Module[
 		(* If the arg is a list of cells, then just assign it to cellsToLint.
 			Otherwise, the arg is a notebook object, so retrieve the cells in that notebook and assign to cellsToLint. *)
-		{cellsToLint = If[ListQ[notebookOrCells], notebookOrCells, Cells[notebookOrCells]], lintedCells},
+		{cellsToLint = If[ListQ[notebookOrCells], notebookOrCells, Cells[notebookOrCells]]},
 		
 		(* We only want to analyse "Input" and "Code" cells, so generate a list of all those cells in the notebook / given list of cells. *)
 		cellsToLint = Select[cellsToLint, MatchQ[CurrentValue[#, CellStyle], {"Code"} | {"Input"}]&];
@@ -1657,8 +1653,6 @@ ObjectAnalyze[
 	Module[
 		{cells, notebookID, hMargins, hMarginsFudgeFactor = {-13, (*-13*)4}, vMargins = {5, 5}, podCell, bracketCell},
 
-		(* These should already be loaded, but just make sure. *)
-		Needs["CodeInspector`"];
 		Needs["CodeParser`"];
 		
 		If[ListQ[notebookOrCells],
