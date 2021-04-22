@@ -602,7 +602,8 @@ popupPane[
 
 
 (* Make sure that attached cells are evaluating in the same kernel that loaded the CodeInspector`LinterUI` context. *)
-$evaluator = CurrentValue[Evaluator];
+(* Delay actually evaluating CurrentValue until needed. This prevents FrontEndObject::notavail messages in environments where there is no FE *)
+$evaluator := $evaluator = CurrentValue[Evaluator];
 
 
 (* ::Text:: *)
