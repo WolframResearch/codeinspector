@@ -43,7 +43,12 @@ colorData = With[
 		"PopupEdge" -> GrayLevel[0.75],
 		"PopupBack" -> GrayLevel[0.97],
 		"Delimiter" -> GrayLevel[.85],
-		"CellBracketMarker" -> RGBColor[0.968627, 0.619608, 0.117647],
+
+		(* Cell Bracket Button colors. *)
+		"CellBracketButtonText" -> Black,
+		"CellBracketButtonBack" -> GrayLevel[.95],
+		"CellBracketButtonHover" -> GrayLevel[.98],
+		"CellBracketButtonEdge" -> GrayLevel[.9],
 		
 		(* Button colors. *)
 		"ButtonBack" -> White,
@@ -82,7 +87,10 @@ colorData = With[
 		"Scoping" -> errorSev3,
 		"Warning" -> errorSev2,
 		"Error" -> errorSev1,
-		"Fatal" -> errorSev1
+		"Fatal" -> errorSev1,
+		3 -> errorSev3,
+		2 -> errorSev2,
+		1 -> errorSev1
 	|>];
 
 
@@ -104,7 +112,10 @@ styleData = <|
 		Style[#1, ##2, FontColor -> colorData["ApplyButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]],
 	
 	"FooterText" -> Function[
-		Style[#1, ##2, FontColor -> colorData["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]]
+		Style[#1, ##2, FontColor -> colorData["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]],
+
+	"CellBracketButton" -> Function[
+		Style[#1, ##2, FontColor -> colorData["CellBracketButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> "SemiBold", FontSize -> 10]]
 |>;
 
 
@@ -130,8 +141,42 @@ iconData = <|
 					12.673503360000002}, {6.89663238, 13.10104256}, {6.881399999999999, 13.530000000000001}, {6.89486708, 13.91046976}, {7.136015949999997, 14.24466112}, {7.491, 14.374799999999999}, {8.000101090000001, 14.59409472}, {8.55050639, 
 					14.698928000000002}, {9.1039, 14.681999999999999}, {9.67359533, 14.748591999999999}, {10.248492579999999, 14.612789119999999}, {10.729499999999998, 14.298}, {11.021667309999996, 14.000360319999999}, {11.170132849999996, 13.58886464}, 
 					{11.135899999999998, 13.1716}, {11.140814899999997, 12.86200512}, {11.110992759999997, 12.55284288}, {11.046999999999997, 12.249999999999998}}}]},
-			AspectRatio -> Automatic, ImageSize -> 14{18./18, 19./18}, PlotRange -> {{0., 18.}, {0., 18.14}},
+			AspectRatio -> Automatic, ImageSize -> 14{18./18, 19./18}, PlotRange -> {{0.76, 17.27}, {0.73, 17.37}}, ImagePadding -> .5,
 			BaselinePosition -> Scaled[.1]]],
+	
+	(* Tick Disk *)
+	"TickDisk" -> Function[{back, fore},
+	Graphics[{ 
+  {FaceForm[back], FilledCurve[{{{1, 4, 3}, {1, 3, 3}, 
+    {1, 3, 3}, {1, 3, 3}}}, {{{9., 4.5}, {9., 2.0147189999999995}, {6.9852810000000005, 
+    0.}, {4.5, 0.}, {2.014719, 0.}, {0., 2.0147189999999995}, {0., 4.5}, {0., 
+    6.9852810000000005}, {2.014719, 9.}, {4.5, 9.}, {6.9852810000000005, 9.}, {9., 
+    6.9852810000000005}, {9., 4.5}}}]}, {FaceForm[fore],
+   FilledCurve[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 
+    3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, 
+    {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}}, {{{3.44, 
+    3.3400000000000007}, {3.5874040000000003, 3.6843830000000004}, {3.757788, 
+    4.018469}, {3.9499999999999997, 4.340000000000001}, {4.18, 4.76}, {4.42, 
+    5.140000000000001}, {4.659999999999999, 5.5}, {4.8689279999999995, 5.815583}, 
+    {5.099481, 6.116303}, {5.35, 6.4}, {5.489060000000001, 6.554081}, 
+    {5.6359189999999995, 6.70094}, {5.79, 6.84}, {5.866028, 6.908950000000001}, 
+    {5.954185999999999, 6.963201}, {6.05, 7.}, {6.384963999999999, 7.025477}, 
+    {6.721852, 7.001895}, {7.05, 6.93}, {7.05, 6.93}, {7.13, 6.93}, {7.13, 6.88}, 
+    {7.13, 6.83}, {7.13, 6.8100000000000005}, {7.05, 6.76}, {6.531218000000001, 
+    6.255229}, {6.0776900000000005, 5.6874780000000005}, {5.7, 5.07}, {5.220852, 
+    4.337005000000001}, {4.812353, 3.5601889999999994}, {4.48, 2.75}, 
+    {4.359999999999999, 2.45}, {4.28, 2.16}, {4.22, 2.05}, {4.159999999999999, 
+    1.9400000000000004}, {3.74, 1.87}, {3.48, 1.87}, {3.268459, 1.8547019999999996}, 
+    {3.056923, 1.8997830000000002}, {2.8699999999999997, 2.}, {2.758893, 
+    2.152515000000001}, {2.6649890000000003, 2.316847}, {2.59, 2.49}, {2.417694, 
+    2.7582379999999986}, {2.2201280000000003, 3.0093819999999996}, {2., 3.24}, 
+    {1.77714, 3.4591640000000003}, {1.573089, 3.6966660000000005}, {1.3900000000000001, 
+    3.95}, {1.4024269999999999, 4.069742999999999}, {1.479075, 4.173218}, {1.59, 4.22}, 
+    {1.770281, 4.328650999999999}, {1.98025, 4.377644000000001}, {2.19, 4.36}, 
+    {2.348273, 4.341642}, {2.495986, 4.271303}, {2.61, 4.16}, {2.9114749999999994, 
+    3.912972}, {3.1893360000000004, 3.638458}, {3.44, 3.3400000000000007}}}]}}, 
+ AspectRatio -> Automatic, ImageSize -> 10{1., 1.}, PlotRange -> {{0., 9.}, {0., 9.}}, ImagePadding -> .5]
+	],
 	
 	(* Wrench *)
 	"Wrench" -> Function[color,
@@ -159,7 +204,7 @@ iconData = <|
    50.713599999999985}, {4.549653000000001, 60.84979999999999}, {12.11, 
    68.32999999999998}, {19.98795, 75.95850000000002}, {30.66558, 79.99650000000003}, 
    {41.620000000000005, 79.49000000000001}}}]}, AspectRatio -> Automatic, 
- ImageSize -> 15{160./231, 231./231}, ImagePadding -> 1, PlotRange -> {{0., 159.9}, {0., 230.16}},
+ ImageSize -> 15{160./231, 231./231}, ImagePadding -> .5, PlotRange -> {{0., 159.9}, {0., 230.16}},
  BaselinePosition -> Scaled[.155]],
  HoldAll],
 	
@@ -739,14 +784,8 @@ makeRaftMenuCodeActionItem[
 			
 			constructRaftMenuItemLabel[raftType, 
 			
-				(* For deletion actions, use the trash icon. For replacement and insertion actions, use the caret icon. *)
-				Switch[codeAction[[2]],
-					Alternatives[CodeParser`DeleteNode, CodeParser`DeleteTriviaNode, CodeParser`DeleteText, CodeParser`DeleteTrivia],
-					iconData["Wrench"][colorData["UIDark"]],
-					Alternatives[CodeParser`InsertNode, CodeParser`ReplaceNode, CodeParser`InsertNodeAfter, CodeParser`InsertText, CodeParser`InsertTextAfter, CodeParser`ReplaceText],
-					iconData["Wrench"][colorData["UIDark"]],
-					(* Failsafe. *)
-					_, iconData["Wrench"][colorData["UIDark"]]],
+				(* The action icon. *)
+				iconData["Wrench"][colorData["UIDark"]],
 				
 				(* The code action label. Format pieces of code within the label with "Input" style, and enforce "StandardForm"'s font. *)
 					styleData["RaftMenuItem"][Row[
@@ -781,7 +820,10 @@ makeRaftMenuCodeActionItem[
 				
 				(* Regenerate the rafts. *)
 				CodeInspector`LinterUI`lintedCells[notebookID][cell]["LintRafts"] =
-					makeRaftCell[cell, #]& /@ lints];
+					makeRaftCell[cell, #]& /@ lints;
+				
+				(* Update the list of InspectionObjects so that the Cell bracket button can update its lint counts. *)
+				CodeInspector`LinterUI`lintedCells[notebookID][cell]["Lints"] = lints];
 			
 			(* Inform the rest of the UI that an edit has been made. *)
 			CodeInspector`LinterUI`lintedCells[notebookID][cell]["EditsMadeQ"] = True;
@@ -1361,7 +1403,7 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 SetAttributes[hashChangedOverlayButton, HoldRest]
 
 
-hashChangedOverlayReanalyseButton[cell_CellObject] :=
+hashChangedOverlayReanalyzeButton[cell_CellObject] :=
 	button["Reanalyze", AttachAnalysis[{cell}], ImageSize -> {98, 19}]
 
 
@@ -1378,7 +1420,7 @@ hashChangedOverlay[cell_] :=
 			Row[
 				{
 					hashChangedOverlayClosePodButton[cell],
-					hashChangedOverlayReanalyseButton[cell]},
+					hashChangedOverlayReanalyzeButton[cell]},
 				Spacer[10]]
 		}, Spacings -> 1.1, Alignment -> Center],
 		ImageMargins -> {{0, 0}, {0, 16}}]
@@ -1447,7 +1489,7 @@ lintPod[cell_CellObject, cellType_] :=
 							Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], Lighter[colorData["UIEdge"], .5]], 
 							ImageMargins -> {$linterPodCellHMargins, {0, 0}}],
 						
-						(* The controls for choosing whether to close the pod, or reanalyse the cell if the cell hash has changed. *)
+						(* The controls for choosing whether to close the pod, or reanalyze the cell if the cell hash has changed. *)
 						hashChangedOverlay[cell]},
 					
 					(* If the cell hash has changed, display the linter pod body and the "Cell Has Changed" overlay.
@@ -1462,6 +1504,77 @@ lintPod[cell_CellObject, cellType_] :=
 				cellHashChangedQ =
 					(FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= CodeInspector`LinterUI`lintedCells[notebookID][cell]["Hash"]),
 				UpdateInterval -> .5]]]]
+
+
+(* ::Section::Closed:: *)
+(*Cell Bracket Button*)
+
+
+(* ::Text:: *)
+(*cellBracketButton is a small button that is drawn at the top of a linted cell's bracket. It displays a row of the lint severity counts for the cell, with color-keyed exclam icons. If there are no lints, it displays a tick. *)
+
+
+(* InspectionObject severity groupings. *)
+$severity3 = {"Formatting", "Remark", "ImplicitTimes", "Scoping"};
+$severity2 = {"Warning"};
+$severity1 = {"Error", "Fatal"};
+
+
+(* Calculate the number of lints for each severity in a given cell. *)
+lintSeverityCounts[cell_CellObject] :=
+	With[{notebookID = Last[ParentNotebook[cell]]},
+		Module[{severities},
+			severities = Through[CodeInspector`LinterUI`lintedCells[notebookID][cell]["Lints"]["Severity"]];
+			severities = Replace[
+				severities,
+				{Alternatives @@ $severity3 -> 3, Alternatives @@ $severity2 -> 2, Alternatives @@ $severity1 -> 1},
+				1];
+			(* Return an Association of the severity counts. *)
+			Association[Rule @@@ Tally[severities]]]]
+
+
+(* Display an exclam (color-keyed to the severity), and a number to show the lint count. *)
+cellBracketButtonCountIcon[severity_, count_] :=
+	Row[
+		{
+			Show[iconData["Exclam"][colorData[severity]], ImageSize -> 9{1, 1}, BaselinePosition -> Scaled[-.02]],
+			Spacer[1],
+			styleData["CellBracketButton"][count]},
+		Alignment -> Baseline]
+
+
+cellBracketButton[cell_CellObject] :=
+	With[{notebookID = Last[ParentNotebook[cell]]},
+		Cell[BoxData @ ToBoxes @
+			Tooltip[
+				button[
+					Pane[
+						(* Use isolatedDynamic to only update the button label when the severities of the cell's lints change. *)
+						isolatedDynamic[
+							Dynamic[CodeInspector`LinterUI`lintedCells[notebookID][cell]["Lints"]["Severity"]],
+							Row[
+								Riffle[
+									Replace[
+										KeyValueMap[cellBracketButtonCountIcon, lintSeverityCounts[cell]],
+										(* If there are zero lints, then display a tick. *)
+										{} -> {iconData["TickDisk"][colorData["ApplyButtonBack"], colorData["ApplyButtonText"]]}],
+									Spacer[3]]]],
+						BaselinePosition -> Scaled[-.06]],
+
+					(* Scroll the notebook to the bottom of the lint pod when clicked. *)
+					SelectionMove[cell, After, Cell],
+
+					"BackColor" -> colorData["CellBracketButtonBack"],
+					"BackHoverColor" -> colorData["CellBracketButtonHover"],
+					"EdgeColor" -> colorData["CellBracketButtonEdge"],
+					"EdgeHoverColor" -> colorData["CellBracketButtonEdge"],
+					ImageSize -> {Automatic, 14},
+					FrameMargins -> {3{1, 1}, {1, 1}},
+					Alignment -> {Center, Baseline}],
+
+				"Go to code analysis"],
+
+			Evaluator -> $evaluator]]
 
 
 (* ::Section::Closed:: *)
@@ -1599,6 +1712,8 @@ getCellInfo[cell_] :=
 				(* "LintRafts" are raft cells that will appear in place under marked-up boxes, and in the mooring.
 					There are two species, raftCell["inPlace"] and raftCell["mooring"]. *)
 				"LintRafts" -> (makeRaftCell[cell, #]& /@ lints),
+				(* "Lints" are the raw InspectionObjects. These are used to calculate the counts of each severity for the cell bracket button. *)
+				"Lints" -> lints,
 				(* "Hash" is the cell's "ShiftEnterHash" and will be used to check if a cell has been modified after
 					analysis, and thus if the analysis needs to be refreshed. *)
 				"Hash" -> FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]],
@@ -1612,7 +1727,7 @@ getCellInfo[cell_] :=
 				"HMargins" -> First[AbsoluteCurrentValue[cell, CellMargins]]|>]]
 
 
-analyseAction[
+analyzeAction[
 	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
 ] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] :=
 	Module[
@@ -1620,7 +1735,7 @@ analyseAction[
 			Otherwise, the arg is a notebook object, so retrieve the cells in that notebook and assign to cellsToLint. *)
 		{cellsToLint = If[ListQ[notebookOrCells], notebookOrCells, Cells[notebookOrCells]]},
 		
-		(* We only want to analyse "Input" and "Code" cells, so generate a list of all those cells in the notebook / given list of cells. *)
+		(* We only want to analyze "Input" and "Code" cells, so generate a list of all those cells in the notebook / given list of cells. *)
 		cellsToLint = Select[cellsToLint, MatchQ[CurrentValue[#, CellStyle], {"Code"} | {"Input"}]&];
 		
 		(* Create an association in which the keys are ("Input" and "Code") cell objects, and the values are
@@ -1678,7 +1793,7 @@ AttachAnalysis[
 			cells = notebookOrCells;
 			notebookID = Last[ParentNotebook[First[cells]]],
 			(* If the arg is a notebook, then calculate the notebook ID and assign the existing
-				linted cells to ``cells``, returning {} if the notebook has not yet been analysed. *)
+				linted cells to ``cells``, returning {} if the notebook has not yet been analyzed. *)
 			notebookID = Last[notebookOrCells];
 			cells = Quiet @ Replace[Keys[CodeInspector`LinterUI`lintedCells[notebookID]], Except[_List] -> {}]];
 		
@@ -1690,8 +1805,8 @@ AttachAnalysis[
 					cells
 				]["UIAttachedCells"]]];
 		
-		(* Analyse the notebook / cells. *)
-		cells = Keys[analyseAction[notebookOrCells]];
+		(* Analyze the notebook / cells. *)
+		cells = Keys[analyzeAction[notebookOrCells]];
 		
 		(* Attach the lint pods. *)
 		Map[
@@ -1710,15 +1825,12 @@ AttachAnalysis[
 				
 				(* Also attach a marker on the input/code cell bracket that takes you to the lint pod when clicked. *)
 				bracketCell = 
-					With[{podCellBurnt = podCell},
-						AttachCell[
-							cell,
-							ExpressionCell[
-								Button[iconData["GoToPod"][colorData["CellBracketMarker"]],
-									SelectionMove[cell, After, Cell],
-									Appearance -> None],
-								Evaluator -> $evaluator],
-							{"CellBracket", Top}]];
+					AttachCell[
+						cell,
+						cellBracketButton[cell],
+						{"CellBracket", Top},
+						{0, 0},
+						{Right, Top}];
 
 				CodeInspector`LinterUI`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell};
 				
