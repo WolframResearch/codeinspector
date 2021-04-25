@@ -81,7 +81,6 @@ Module[{nb, lints, tagExclusions, severityExclusions, confidence, lintLimit},
         }]
       }],
       InspectedLineObject[{}],
-      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -95,7 +94,6 @@ Module[{nb, lints, tagExclusions, severityExclusions, confidence, lintLimit},
           "SeverityExclusions" -> severityExclusions
         }]
       }],
-      InspectedLineObject[{}],
       InspectedLineObject[{}]
     } ~Join~ lints
   ];
@@ -148,7 +146,6 @@ Module[{c, lints, tagExclusions, severityExclusions, confidence, lintLimit},
         }]
       }],
       InspectedLineObject[{}],
-      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -162,7 +159,6 @@ Module[{c, lints, tagExclusions, severityExclusions, confidence, lintLimit},
           "SeverityExclusions" -> severityExclusions
         }]
       }],
-      InspectedLineObject[{}],
       InspectedLineObject[{}]
     } ~Join~ lints
   ];
@@ -322,7 +318,6 @@ Catch[
         }]
       }],
       InspectedLineObject[{}],
-      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -336,7 +331,6 @@ Catch[
           "SeverityExclusions" -> severityExclusions
         }]
       }],
-      InspectedLineObject[{}],
       InspectedLineObject[{}]
     } ~Join~ lints
   ];

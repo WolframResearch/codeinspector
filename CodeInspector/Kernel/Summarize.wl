@@ -158,7 +158,6 @@ Module[{lints, full, lines,
         }]
       }],
       InspectedLineObject[{}],
-      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -172,7 +171,6 @@ Module[{lints, full, lines,
           "SeverityExclusions" -> severityExclusions
         }]
       }],
-      InspectedLineObject[{}],
       InspectedLineObject[{}]
     } ~Join~ lintedLines
   ];
@@ -238,7 +236,6 @@ Catch[
         }]
       }],
       InspectedLineObject[{}],
-      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -252,7 +249,6 @@ Catch[
           "SeverityExclusions" -> severityExclusions
         }]
       }],
-      InspectedLineObject[{}],
       InspectedLineObject[{}]
     } ~Join~ lintedLines
   ];
@@ -303,7 +299,6 @@ Catch[
         }]
       }],
       InspectedLineObject[{}],
-      InspectedLineObject[{}],
       InspectedLineObject[{Text["No issues."]}]
     }
     ,
@@ -317,7 +312,6 @@ Catch[
           "SeverityExclusions" -> severityExclusions
         }]
       }],
-      InspectedLineObject[{}],
       InspectedLineObject[{}]
     } ~Join~ lintedLines
   ];
