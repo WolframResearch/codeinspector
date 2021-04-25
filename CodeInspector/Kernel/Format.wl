@@ -1160,11 +1160,11 @@ LintPreserve[content_] := LintMarkup[content]
 
 
 colorANSICode[GrayLevel[gray_]] :=
-	With[{code = ToString[232 + Round[gray*23]]},
+	With[{code = ToString[232 + Round[23 * gray]]},
 		"\[RawEscape][38;5;"<>code<>"m"
 	]
 colorANSICode[RGBColor[r_, g_, b_]] :=
-	With[{code = ToString[16 + 36*Round[5*r] + 6*Round[5*g] + Round[5*b]]},
+	With[{code = ToString[16 + {36, 6, 1} . Round[5 * {r, g, b}]]},
 		"\[RawEscape][38;5;"<>code<>"m"
 	]
 
