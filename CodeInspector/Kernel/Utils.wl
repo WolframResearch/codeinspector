@@ -57,6 +57,7 @@ Needs["CodeParser`Scoping`"] (* for scopingDataObject *)
 Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
+Needs["CodeInspector`SuppressedRegions`"] (* for suppressedRegion *)
 
 
 $shortenLimit = 100
@@ -263,8 +264,8 @@ plainify[s_String] := StringReplace[s, {
 
 
 
-(* CodeInspect::Push *)
-(* CodeInspect::Suppress::UnexpectedCharacter *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::UnexpectedCharacter:: *)
 
 (*
 Replace invisible characters with \[UnknownGlyph]
@@ -421,7 +422,7 @@ $characterReplacementRules = {
 	Alternatives @@ $invisibleCharacters -> "\[UnknownGlyph]"
 }
 
-(* CodeInspect::Pop *)
+(* :!CodeAnalysis::EndBlock:: *)
 
 
 uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
@@ -711,11 +712,11 @@ betterRiffle[a_, b_] := Riffle[a, b]
 (*
 Overload SourceMemberQ for InspectionObject and CellIndex
 *)
-SourceMemberQ[{<|CellIndex -> start_|>, <|CellIndex -> end_|>}, InspectionObject[_, _, _, KeyValuePattern[CellIndex -> {index_}]]] := (
+SourceMemberQ[suppressedRegion[<|CellIndex -> start_|>, <|CellIndex -> end_|>], InspectionObject[_, _, _, KeyValuePattern[CellIndex -> {index_}]]] := (
 	start <= index <= end
 )
 
-SourceMemberQ[{<|Source -> start_|>, <|Source -> end_|>}, InspectionObject[_, _, _, KeyValuePattern[Source -> src_]]] := (
+SourceMemberQ[suppressedRegion[<|Source -> start_|>, <|Source -> end_|>], InspectionObject[_, _, _, KeyValuePattern[Source -> src_]]] := (
 	SourceMemberQ[{start, end}, src]
 )
 

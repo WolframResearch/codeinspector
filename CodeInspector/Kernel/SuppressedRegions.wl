@@ -11,14 +11,14 @@ Needs["CodeParser`"]
 
 (*
 
-Please use this syntax:
+Example:
 
-(* CodeInspect::Push *)
-(* CodeInspect::Suppress::DuplicateClauses::If *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::DuplicateClauses::If:: *)
 
 If[a, b, b]
 
-(* CodeInspect::Pop *)
+(* :!CodeAnalysis::EndBlock:: *)
 
 
 *)
@@ -26,75 +26,75 @@ If[a, b, b]
 
 codeInspectBeginPat =
   (* in-the-clear parsed from text *)
-  LeafNode[Token`Comment, "(* CodeInspect::Push *)", _] |
+  LeafNode[Token`Comment, "(* :!CodeAnalysis::BeginBlock:: *)", _] |
   (* in-the-clear parsed from boxes *)
   CellNode[Cell, {
       GroupNode[Comment, {
         LeafNode[Token`Boxes`OpenParenStar, "(*", _],
         LeafNode[String, " ", _],
         BoxNode[RowBox, {{
-            LeafNode[String, "CodeInspect", _],
-            LeafNode[String, "::", _],
-            LeafNode[String, "Push", _]
-          }}, _],
-        LeafNode[String, " ", _], LeafNode[Token`Boxes`StarCloseParen, "*)", _]
-      }, _]
-    }, _] |
-  (* in-the-blind parsed from text *)
-  (*
-  yes, the <> is needed
-  Related bugs: 407007
-  *)
-  LeafNode[Token`Comment, "(* " <> "::CodeInspect::Push:: *)", _] |
-  (* in-the-blind parsed from boxes *)
-  CellNode[Cell, {
-      GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
-        BoxNode[RowBox, {{
-          LeafNode[String, "::", _],
-          LeafNode[String, "CodeInspect", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Push", _],
-          LeafNode[String, "::", _]}}, _],
+          LeafNode[String, ":", _],
+          BoxNode[RowBox, {{
+              LeafNode[String, "!", _],
+              BoxNode[RowBox, {{
+                LeafNode[String, "CodeAnalysis", _],
+                LeafNode[String, "::", _],
+                LeafNode[String, "BeginBlock", _],
+                LeafNode[String, "::", _]}}, _]}}, _]}}, _],
         LeafNode[String, " ", _],
         LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
 
 codeInspectEndPat =
   (* in-the-clear parsed from text *)
-  LeafNode[Token`Comment, "(* CodeInspect::Pop *)", _] |
+  LeafNode[Token`Comment, "(* :!CodeAnalysis::EndBlock:: *)", _] |
   (* in-the-clear parsed from boxes *)
-  CellNode[Cell, {
-      GroupNode[Comment, {
-          LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-          LeafNode[String, " ", _],
-          BoxNode[RowBox, {{
-              LeafNode[String, "CodeInspect", _],
-              LeafNode[String, "::", _],
-              LeafNode[String, "Pop", _]
-            }}, _],
-          LeafNode[String, " ", _], LeafNode[Token`Boxes`StarCloseParen, "*)", _]
-        }, _]
-    }, _] |
-  (* in-the-blind parsed from text *)
-  (*
-  yes, the <> is needed
-  Related bugs: 407007
-  *)
-  LeafNode[Token`Comment, "(* " <> "::CodeInspect::Pop:: *)", _] |
-  (* in-the-blind parsed from boxes *)
   CellNode[Cell, {
       GroupNode[Comment, {
         LeafNode[Token`Boxes`OpenParenStar, "(*", _],
         LeafNode[String, " ", _],
         BoxNode[RowBox, {{
-          LeafNode[String, "::", _],
-          LeafNode[String, "CodeInspect", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Pop", _],
-          LeafNode[String, "::", _]}}, _],
+          LeafNode[String, ":", _],
+          BoxNode[RowBox, {{
+              LeafNode[String, "!", _],
+              BoxNode[RowBox, {{
+                LeafNode[String, "CodeAnalysis", _],
+                LeafNode[String, "::", _],
+                LeafNode[String, "EndBlock", _],
+                LeafNode[String, "::", _]}}, _]}}, _]}}, _],
         LeafNode[String, " ", _],
         LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+
+codeInspectPackagePat =
+  (* in-the-blind parsed from text *)
+  LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Package::\"Tags\"" ~~ ___ ~~ ":: *)"], _] |
+  (* in-the-blind parsed from boxes *)
+  CellNode[Cell, {
+      GroupNode[Comment, {LeafNode[Token`Boxes`OpenParenStar, "(*", _], 
+  LeafNode[String, " ", _], 
+  BoxNode[
+   RowBox, {{BoxNode[
+      RowBox, {{LeafNode[String, "::", _], 
+        LeafNode[String, "Package", _], LeafNode[String, "::", _], 
+        LeafNode[String, "\"Tags\"", _]}}, _], 
+     LeafNode[String, "->", _], _}}, _], LeafNode[String, " ", _], 
+  LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+
+codeInspectCellPat =
+  (* in-the-blind parsed from text *)
+  LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Code:Initialization::\"Tags\"" ~~ ___ ~~ ":: *)"], _] |
+  (* in-the-blind parsed from boxes *)
+  CellNode[Cell, {
+      GroupNode[Comment, {LeafNode[Token`Boxes`OpenParenStar, "(*", _], 
+  LeafNode[String, " ", _], 
+  BoxNode[
+   RowBox, {{BoxNode[
+      RowBox, {{LeafNode[String, "::", _], 
+        LeafNode[String, "Code", _], LeafNode[String, "::", _], 
+        LeafNode[String, "Initialization", _], 
+        LeafNode[String, "::", _], 
+        LeafNode[String, "\"Tags\"", _]}}, _], 
+     LeafNode[String, "->", _], _}}, _], LeafNode[String, " ", _], 
+  LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
 
 codeInspectSuppressPat =
   (* in-the-clear with no arg parsed from text *)
@@ -102,7 +102,7 @@ codeInspectSuppressPat =
     Token`Comment,
     str_String /;
       StringMatchQ[str,
-        ("(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ " *)")
+        ("(* :!CodeAnalysis::Disable::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
       ],
     _
   ] |
@@ -111,7 +111,7 @@ codeInspectSuppressPat =
     Token`Comment,
     str_String /;
       StringMatchQ[str,
-        ("(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ " *)")
+        ("(* :!CodeAnalysis::Disable::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
       ],
     _
   ] |
@@ -121,9 +121,9 @@ codeInspectSuppressPat =
         LeafNode[Token`Boxes`OpenParenStar, "(*", _],
         LeafNode[String, " ", _],
         BoxNode[RowBox, {{
-          LeafNode[String, "CodeInspect", _],
+          LeafNode[String, "CodeAnalysis", _],
           LeafNode[String, "::", _],
-          LeafNode[String, "Suppress" | "Disable", _],
+          LeafNode[String, "Disable", _],
           LeafNode[String, "::", _],
           LeafNode[String, _, _]}}, _],
           LeafNode[String, " ", _],
@@ -135,73 +135,17 @@ codeInspectSuppressPat =
         LeafNode[Token`Boxes`OpenParenStar, "(*", _],
         LeafNode[String, " ", _],
         BoxNode[RowBox, {{
-          LeafNode[String, "CodeInspect", _],
+          LeafNode[String, "CodeAnalysis", _],
           LeafNode[String, "::", _],
-          LeafNode[String, "Suppress" | "Disable", _],
+          LeafNode[String, "Disable", _],
           LeafNode[String, "::", _],
           LeafNode[String, _, _],
           LeafNode[String, "::", _],
           LeafNode[String, _, _]}}, _],
         LeafNode[String, " ", _],
         LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]
-    }, _] |
-  (* in-the-blind with no arg parsed from text *)
-  LeafNode[
-    Token`Comment,
-    str_String /;
-      StringMatchQ[str,
-        (*
-        yes, the <> is needed
-        Related bugs: 407007
-        *)
-        ("(* " <> "::CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
-      ],
-    _
-  ] |
-  (* in-the-blind with 1 arg parsed from text *)
-  LeafNode[
-    Token`Comment,
-    str_String /;
-      StringMatchQ[str,
-        (*
-        yes, the <> is needed
-        Related bugs: 407007
-        *)
-        ("(* " <> "::CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
-      ],
-    _
-  ] |
-  (* in-the-blind with no arg parsed from boxes *)
-  CellNode[Cell, {
-      GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
-        BoxNode[RowBox, {{
-          LeafNode[String, "::", _],
-          LeafNode[String, "CodeInspect", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Suppress" | "Disable", _],
-          LeafNode[String, _, _],
-          LeafNode[String, "::", _]}}, _],
-        LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _] |
-  (* in-the-blind with 1 arg parsed from boxes *)
-  CellNode[Cell, {
-      GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
-        BoxNode[RowBox, {{
-          LeafNode[String, "::", _],
-          LeafNode[String, "CodeInspect", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Suppress" | "Disable", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, _, _],
-          LeafNode[String, "::", _],
-          LeafNode[String, _, _],
-          LeafNode[String, "::", _]}}, _],
-        LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+    }, _]
+  
 
 
 
@@ -242,7 +186,7 @@ Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblin
         suppressedRegion[rangeStart[Extract[cst, beginPos][[3]]], rangeEnd[Extract[cst, endPos][[3]]], suppresseds, <|"Toplevel" -> MatchQ[beginPos, {_, _}]|>]
       ]
       ,
-      Message[SuppressedRegions::missingpop, cst[[3]]];
+      Message[SuppressedRegions::missingpop];
       Throw[{}]
     ]
     ,
@@ -261,13 +205,13 @@ suppressedsFromCandidate[
     Token`Comment,
     str_String /;
       StringMatchQ[str,
-        ("(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ " *)")
+        ("(* :!CodeAnalysis::Disable::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
       ],
     _
   ]
 ] :=
   StringCases[str, {
-      "(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ d:(LetterCharacter ~~ LetterCharacter...) ~~ " *)" :> {d}
+      "(* :!CodeAnalysis::Disable::" ~~ d:(LetterCharacter ~~ LetterCharacter...) ~~ ":: *)" :> {d}
   }]
 
 (*
@@ -278,13 +222,13 @@ suppressedsFromCandidate[
     Token`Comment,
     str_String /;
       StringMatchQ[str,
-        ("(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ " *)")
+        ("(* :!CodeAnalysis::Disable::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
       ],
     _
   ]
 ] :=
   StringCases[str, {
-      "(* CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ d:(LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ a:(LetterCharacter ~~ LetterCharacter...) ~~ " *)" :> {d, a}
+      "(* :!CodeAnalysis::Disable::" ~~ d:(LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ a:(LetterCharacter ~~ LetterCharacter...) ~~ ":: *)" :> {d, a}
   }]
 
 (*
@@ -298,7 +242,7 @@ suppressedsFromCandidate[
       BoxNode[RowBox, {{
         LeafNode[String, "CodeInspect", _],
         LeafNode[String, "::", _],
-        LeafNode[String, "Suppress" | "Disable", _],
+        LeafNode[String, "Disable", _],
         LeafNode[String, "::", _],
         LeafNode[String, d_, _]}}, _],
         LeafNode[String, " ", _],
@@ -320,7 +264,7 @@ suppressedsFromCandidate[
         BoxNode[RowBox, {{
           LeafNode[String, "CodeInspect", _],
           LeafNode[String, "::", _],
-          LeafNode[String, "Suppress" | "Disable", _],
+          LeafNode[String, "Disable", _],
           LeafNode[String, "::", _],
           LeafNode[String, d_, _],
           LeafNode[String, "::", _],
@@ -333,98 +277,6 @@ suppressedsFromCandidate[
   }, _]
 ] := {d, a}
 
-
-
-(*
-in-the-blind with no arg parsed from text
-*)
-suppressedsFromCandidate[
-  LeafNode[
-    Token`Comment,
-    str_String /;
-      StringMatchQ[str,
-        (*
-        yes, the <> is needed
-        Related bugs: 407007
-        *)
-        ("(* " <> "::CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
-      ],
-    _
-  ]
-] :=
-  StringCases[str, {
-      (*
-      yes, the <> is needed
-      Related bugs: 407007
-      *)
-      "(* " <> "::CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ d:(LetterCharacter ~~ LetterCharacter...) ~~ ":: *)" :> {d}
-  }]
-
-(*
-in-the-blind with 1 arg parsed from text
-*)
-suppressedsFromCandidate[
-  LeafNode[
-    Token`Comment,
-    str_String /;
-      StringMatchQ[str,
-        (*
-        yes, the <> is needed
-        Related bugs: 407007
-        *)
-        ("(* " <> "::CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ (LetterCharacter ~~ LetterCharacter...) ~~ ":: *)")
-      ],
-    _
-  ]
-] :=
-  StringCases[str, {
-      (*
-      yes, the <> is needed
-      Related bugs: 407007
-      *)
-      "(* " <> "::CodeInspect::" ~~ ("Suppress" | "Disable") ~~ "::" ~~ d:(LetterCharacter ~~ LetterCharacter...) ~~ "::" ~~ a:(LetterCharacter ~~ LetterCharacter...) ~~ ":: *)" :> {d, a}
-  }]
-
-(*
-in-the-blind with no arg parsed from boxes
-*)
-suppressedsFromCandidate[
-  CellNode[Cell, {
-    GroupNode[Comment, {
-      LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-      LeafNode[String, " ", _],
-      BoxNode[RowBox, {{
-        LeafNode[String, "::", _],
-        LeafNode[String, "CodeInspect", _],
-        LeafNode[String, "::", _],
-        LeafNode[String, "Suppress" | "Disable", _],
-        LeafNode[String, d_, _],
-        LeafNode[String, "::", _]}}, _],
-      LeafNode[String, " ", _],
-      LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
-] := {d}
-
-(*
-in-the-blind with 1 arg parsed from boxes
-*)
-suppressedsFromCandidate[
-  CellNode[Cell, {
-    GroupNode[Comment, {
-      LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-      LeafNode[String, " ", _],
-      BoxNode[RowBox, {{
-        LeafNode[String, "::", _],
-        LeafNode[String, "CodeInspect", _],
-        LeafNode[String, "::", _],
-        LeafNode[String, "Suppress" | "Disable", _],
-        LeafNode[String, "::", _],
-        LeafNode[String, d_, _],
-        LeafNode[String, "::", _],
-        LeafNode[String, a_, _],
-        LeafNode[String, "::", _]}}, _],
-      LeafNode[String, " ", _],
-      LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
-] := {d, a}
 
 
 
