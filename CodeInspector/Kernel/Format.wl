@@ -106,8 +106,11 @@ $LintedLineWidth = 120
 $LintsPerLineLimit = 5
 
 
-
-$LintBoldFontWeight = "SemiBold"
+(*
+In Apr 26 2021 SW CodeTools meeting, SW wanted to have no bold at all.
+The Program style is enough to differentiate it from text
+*)
+$LintBoldFontWeight = "Medium"
 
 
 
@@ -1179,6 +1182,7 @@ colorANSICode[Automatic] = ""
 
 weightANSICode[Bold] = "\[RawEscape][1m"
 weightANSICode["SemiBold"] = "\[RawEscape][1m"
+weightANSICode["Medium"] = ""
 weightANSICode[Automatic] = ""
 
 variationsANSICode[{"Underline"->True}] = "\[RawEscape][4m"
