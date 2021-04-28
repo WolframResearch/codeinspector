@@ -26,6 +26,9 @@ CodeInspectSummarize
 CodeInspectBoxSummarize
 
 
+AttachAnalysis
+
+
 (*
 Objects
 *)
@@ -684,6 +687,25 @@ Module[{abstractRules, ast, poss, lints,
 
   lints
 ]]
+
+
+AttachAnalysis::usage = "AttachAnalysis[] attaches code analysis pods to the \"Input\" and \"Code\" cells in the evaluation notebook that contain issues.
+AttachAnalysis[notebook] attaches code analysis pods to the \"Input\" and \"Code\" cells in notebook that contain issues.
+AttachAnalysis[{cell1, cell2, ...}] attaches code analysis pods to the \"Input\" and \"Code\" cells in the list of cells that contain issues.";
+
+
+AttachAnalysis::nofe = "No front end available.";
+
+
+AttachAnalysis[
+	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
+] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] := 
+  If[TrueQ[$Notebooks],
+
+    CodeInspector`LinterUI`Private`attachAnalysisAction[notebookOrCells],
+
+    (* If $Notebooks isn't True, then a suitable front end isn't availabe. Throw a message saying this and return $Failed. *)
+    Message[nofe]; $Failed]
 
 
 (*
