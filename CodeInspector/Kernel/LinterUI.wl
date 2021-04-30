@@ -471,6 +471,7 @@ button[
 		FrameMargins -> {9{1, 1}, 0{1, 1}},
 		BaselinePosition -> Baseline,
 		Alignment -> {Center, Center},
+		Method -> "Preemptive",
 		"ActiveQ" -> True,
 		(* Hover colors for the text, background and frame. *)
 		"TextColor" -> colorData["ButtonText"],
@@ -487,8 +488,8 @@ button[
 ] :=
 	Pane[ 
 		DynamicModule[{hoverQ = False, mouseDownQ = False, fontColor},
-			DynamicWrapper[
-				EventHandler[
+			Button[
+				DynamicWrapper[
 					Highlighted[
 						DynamicWrapper[
 							styleData["Button"][
@@ -516,18 +517,13 @@ button[
 							hoverQ, OptionValue["BackHoverColor"],
 							True, OptionValue["BackColor"]]],
 					
-					{
-						"MouseDown" :> (mouseDownQ = True),
-						(* "ActiveQ" must be False and only False to inactivate the button. *)
-						(* Note that "MouseClicked" (or indeed Button) wasn't used for the button action becuase
-							there seems to be some bug that doesn't evaluate the "MouseClicked" action in some cases. Yet to characterize. *)
-						"MouseUp" :> (
-								mouseDownQ = False;
-								If[hoverQ && OptionValue["ActiveQ"] =!= False, action])
-					},
-					PassEventsDown -> True],
+					hoverQ = CurrentValue["MouseOver"];
+					mouseDownQ = CurrentValue["MouseButtonTest"]],
+
+				If[OptionValue["ActiveQ"] =!= False, action],
 				
-				hoverQ = CurrentValue["MouseOver"]]],
+				Appearance -> False,
+				Method -> OptionValue[Method]]],
 
 		FrameMargins -> None, BaselinePosition -> OptionValue[BaselinePosition], Alignment -> {Center, Center}]
 
@@ -595,6 +591,10 @@ popupPane[
 
 (* ::Section::Closed:: *)
 (*Support Functions*)
+
+
+SetAttributes[noRecursion, HoldFirst]
+noRecursion[expr_] := Dynamic[expr, UpdateInterval -> Infinity]
 
 
 (* ::Text:: *)
@@ -1032,7 +1032,7 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 												"active", colorData["RaftBackOpen"],
 												"hoverMooring", colorData["RaftBackHover"],
 												(* If the raft type is in-place, then the "hoverInPlace" value could be due to the mouse hovering over the linted boxes, but
-													not the raft itself \[LongDash] so we must check to see if the raft is actually hovered over before highlighting its background. *)
+													not the raft itself - so we must check to see if the raft is actually hovered over before highlighting its background. *)
 												"hoverInPlace",
 												Which[
 													raftType === "mooring", colorData["RaftBackHover"],
@@ -1053,7 +1053,7 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 														makeRaftMenu[cell, lint, ParentCell[EvaluationBox[]], Dynamic[itemClicked], raftType, Dynamic[raftMenu]],
 														Initialization :> (1),
 														(* Upon closure of the menu, set the lint state to "inactive". This is correct if the mouse has moved out of the menu/raft.
-															However, if the menu has been closed by clicking the raft itself, then the state *should* be set to "hoverXXXX" \[LongDash] but this
+															However, if the menu has been closed by clicking the raft itself, then the state *should* be set to "hoverXXXX" - but this
 															happens by the raft's button action after the menu's Deinitialization fires. (In other words, it's fine to potentially
 															incorrectly set the lint state to "inactive" here, becuase it will immediately corrected by the raft's button action.) *)
 														Deinitialization :> (raftOpenQ = False; Set @@ Append[lintState, "inactive"])]],
@@ -1152,7 +1152,7 @@ titleBar[cell_CellObject] :=
 			DynamicModule[{popupPresentQ = False},
 				Graphics[
 					{
-						(* Draw the title bar background \[LongDash] a rectangle with its top corners rounded. *)
+						(* Draw the title bar background - a rectangle with its top corners rounded. *)
 						colorData["UIBack"],
 						FilledCurve[BezierCurve[Join[
 							(* Top right corner. *)
@@ -1392,7 +1392,7 @@ SetAttributes[hashChangedOverlayButton, HoldRest]
 
 
 hashChangedOverlayReanalyzeButton[cell_CellObject] :=
-	button["Reanalyze Notebook", attachAnalysisAction[{cell}], ImageSize -> {98, 19}]
+	button["Reanalyze", attachAnalysisAction[{cell}], ImageSize -> {98, 19}, Method -> "Queued"]
 
 
 hashChangedOverlayClosePodButton[cell_CellObject] :=
@@ -1431,10 +1431,10 @@ lintPod[cell_CellObject, cellType_] :=
 		},
 		
 		DynamicModule[{showAllQ = False, cellHashChangedQ = False},
-			Module[
+			With[
 				{contents =
 					(* Stack all the lint pod components *)
-					Column[
+					noRecursion @ Column[
 						{
 							titleBar[cell],
 							delimiter[{4, 0}],
@@ -1446,7 +1446,7 @@ lintPod[cell_CellObject, cellType_] :=
 						ItemSize -> {Full, 0}, Spacings -> 0]},
 				
 				DynamicWrapper[
-					Overlay[
+					noRecursion @ Overlay[
 						{
 							(* The main linting pod body. *)
 							Highlighted[contents,
@@ -1480,7 +1480,7 @@ lintPod[cell_CellObject, cellType_] :=
 			
 			Initialization :> (1),
 			(* Clear the severity counts when the lint pod is removed. *)
-			Deinitialization :> (CodeInspector`LinterUI`Private`lintedCells[notebookID][cell]["SeverityCounts"] = <||>)]]
+			Deinitialization :> (Unset[CodeInspector`LinterUI`Private`lintedCells[notebookID][cell]])]]
 
 
 (* ::Section::Closed:: *)
@@ -1558,7 +1558,7 @@ cellBracketButton[cell_CellObject] :=
 	With[{notebookID = Last[ParentNotebook[cell]]},
 		Cell[BoxData @ ToBoxes @
 			Tooltip[
-				button[
+				noRecursion @ button[
 					Pane[
 						(* Use isolatedDynamic to update the button label only when the severities of the cell's lints change. *)
 						isolatedDynamic[
@@ -1690,58 +1690,50 @@ dockedCell[notebookOrCells_] :=
 		{notebookID = Last[notebook]},
 
 		Cell[BoxData @ ToBoxes @
-			(* performAnalysisQ tells the DynamicWrapper when to lint the notebook/cells. Once linting has been performed, performAnalysisQ
-				is set to False. Therefore, performAnalysisQ is tracked by elements that need to change appearance while linting is in progress. *)
-			DynamicModule[{objectsToAnalyze = notebookOrCells},
-				DynamicWrapper[
-					Graphics[
-						{
-							(* The left-aligned pod title and analysis-in-progress indicator. *)
-							Inset[
-								Row[
-									{
-										Pane[styleData["SectionHeader"]["Code Analysis"], BaselinePosition -> (Baseline -> Scaled[.65])],
-										Spacer[8],
-										Pane[
-											PaneSelector[
-												{
-													(* Display an activity indicator while analysis is in progress. *)
-													True -> ProgressIndicator[Appearance -> "Percolate"],
-													(* Display the agregate severity counts for all cells in the notebook. *)
-													False -> Pane[dockedCellSeverityCountsButton[notebook], BaselinePosition->Scaled[.5]],
-													_ -> Spacer[0]
-												},
-												Dynamic[performAnalysisQ[notebook]]],
-											BaselinePosition -> Scaled[.15]]},
-									Alignment -> Baseline],
+			(* performAnalysisQ tracks when an analysis is in progress. *)
+			DynamicModule[{},
+				noRecursion @ Graphics[
+					{
+						(* The left-aligned pod title and analysis-in-progress indicator. *)
+						Inset[
+							Row[
+								{
+									Pane[styleData["SectionHeader"]["Code Analysis"], BaselinePosition -> (Baseline -> Scaled[.65])],
+									Spacer[8],
+									Pane[
+										PaneSelector[
+											{
+												(* Display an activity indicator while analysis is in progress. *)
+												True -> ProgressIndicator[Appearance -> "Percolate"],
+												(* Display the agregate severity counts for all cells in the notebook. *)
+												False -> Pane[dockedCellSeverityCountsButton[notebook], BaselinePosition->Scaled[.5]],
+												_ -> Spacer[0]
+											},
+											Dynamic[performAnalysisQ[notebook]]],
+										BaselinePosition -> Scaled[.15]]},
+								Alignment -> Baseline],
 
-								Offset[{8, 0}, {-1, 0}], {-1, 0}],
-							
-							Inset[
-								button[
-									"Reanalyze",
-									attachAnalysisAction[EvaluationNotebook[]]],
-								Offset[{-26, 0}, {1, 0}], {1, 0}],
-							
-							(* Draw a "Close" button that clears the entire linter interface from a notebook. *)
-							Button[
-								Tooltip[closeIcon[{-11, 0}, {1, 0}], "Close analysis", TooltipDelay -> 0],
+							Offset[{8, 0}, {-1, 0}], {-1, 0}],
+						
+						Inset[
+							button[
+								"Reanalyze Notebook",
+								attachAnalysisAction[EvaluationNotebook[]],
+								Method -> "Queued"],
+							Offset[{-26, 0}, {1, 0}], {1, 0}],
+						
+						(* Draw a "Close" button that clears the entire linter interface from a notebook. *)
+						Button[
+							Tooltip[closeIcon[{-11, 0}, {1, 0}], "Close analysis", TooltipDelay -> 0],
 
-								NotebookDelete[
-									Flatten[Through[Values[CodeInspector`LinterUI`Private`lintedCells[notebookID]]["UIAttachedCells"]]]];
-								CurrentValue[EvaluationNotebook[], DockedCells] = Drop[CurrentValue[EvaluationNotebook[], DockedCells], -1];
-								CodeInspector`LinterUI`Private`lintedCells[notebookID] = <||>]
-							
-						},
+							NotebookDelete[
+								Flatten[Through[Values[CodeInspector`LinterUI`Private`lintedCells[notebookID]]["UIAttachedCells"]]]];
+							CurrentValue[EvaluationNotebook[], DockedCells] = Drop[CurrentValue[EvaluationNotebook[], DockedCells], -1];
+							CodeInspector`LinterUI`Private`lintedCells[notebookID] = <||>]
+						
+					},
 
-						ImageSize -> {Full, 23}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}],
-					
-					If[performAnalysisQ[notebook],
-						CodeInspector`LinterUI`Private`attachAnalysisAction[objectsToAnalyze];
-						performAnalysisQ[notebook] = False],
-					
-					SynchronousUpdating -> False
-				],
+					ImageSize -> {Full, 23}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}],
 
 				Initialization :> (dockedCellPresentQ[notebook] = True),
 				Deinitialization :> (dockedCellPresentQ[notebook] = False)
@@ -1957,16 +1949,32 @@ analyzeAction[
 	]
 
 
+(* The time in seconds before the lint-pod-attachment part of the analysis times out. *)
+CodeInspector`LinterUI`$AnalysisTimeout = 60;
+
+
 attachAnalysisAction[
 	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
 ] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] :=
 	Module[
-		{cells, notebookID, hMargins, hMarginsFudgeFactor = {-13, (*-13*)4}, vMargins = {5, 5}, podCell, bracketCell},
+		{cells, notebookID, cellAssoc, notebookObj},
 
 		(* These should already be loaded, but just make sure. *)
 		Needs["CodeParser`"];
 		Needs["CodeInspector`"];
-		
+
+		If[ListQ[notebookOrCells],
+			(* If the arg is a list of cells, then assign it to cells and get the notebook ID.
+				This assumes that all cells are from the same notebook. *)
+			cells = notebookOrCells;
+			notebookID = Last[notebookObj = ParentNotebook[First[cells]]],
+			(* If the arg is a notebook, then calculate the notebook ID and assign the existing
+				linted cells to ``cells``, returning {} if the notebook has not yet been analyzed. *)
+			notebookID = Last[notebookObj = notebookOrCells];
+			cells = Quiet @ Replace[Keys[CodeInspector`LinterUI`Private`lintedCells[notebookID]], Except[_List] -> {}]];
+
+		performAnalysisQ[notebookObj] = True;
+
 		(* If analyzing a notebook object, and the docked cell isn't attached, attach the docked cell. *)
 		If[
 			Head[notebookOrCells] === NotebookObject && !TrueQ[dockedCellPresentQ[notebookOrCells]],
@@ -1974,68 +1982,73 @@ attachAnalysisAction[
 				Append[
 					Flatten[{CurrentValue[notebookOrCells, DockedCells]}],
 					dockedCell[notebookOrCells]]];
+		
+		(* Delete any existing attached lint pod cells. *)
+		Quiet @ NotebookDelete[
+			Flatten @ Through[
+				Map[
+					CodeInspector`LinterUI`Private`lintedCells[notebookID],
+					cells
+				]["UIAttachedCells"]]];
+		
+		(* Analyze the notebook / cells. *)
+		cells = Keys[analyzeAction[notebookOrCells]];
 
-		If[
-			(* If analyzing a notebook object, *and* the docked cell is already present, *and* performAnalysisQ is False, then
-				set performAnalysisQ to True, and don't proceed with analysis here. This causes the docked cell to fire attachAnalysisAction again, but this time
-				performAnalysisQ is True, so the main body of this function evaluates and analyzes the notebook. *)
-			(* Thus, if analyzing a notebook object, the main body of this function \[LongDash] the analysis of the notebook \[LongDash] *only* fires if there is a docked cell, and if performAnalysisQ is True. *)
-			(* The reason we're doing this is that we can't just go ahead and delete the existing docked cell and attach a new one because
-				we need the analysis-in-progress indictor to display in the docked cell \[LongDash] which is tied to performAnalysisQ.*)
-			Head[notebookOrCells] === NotebookObject && TrueQ[dockedCellPresentQ[notebookOrCells]] && !TrueQ[performAnalysisQ[notebookOrCells]],
-
-			performAnalysisQ[notebookOrCells] = True;,
-
-			If[ListQ[notebookOrCells],
-				(* If the arg is a list of cells, then assign it to cells and get the notebook ID.
-					This assumes that all cells are from the same notebook. *)
-				cells = notebookOrCells;
-				notebookID = Last[ParentNotebook[First[cells]]],
-				(* If the arg is a notebook, then calculate the notebook ID and assign the existing
-					linted cells to ``cells``, returning {} if the notebook has not yet been analyzed. *)
-				notebookID = Last[notebookOrCells];
-				cells = Quiet @ Replace[Keys[CodeInspector`LinterUI`Private`lintedCells[notebookID]], Except[_List] -> {}]];
-			
-			(* Delete any existing attached lint pod cells. *)
-			Quiet @ NotebookDelete[
-				Flatten @ Through[
-					Map[
-						CodeInspector`LinterUI`Private`lintedCells[notebookID],
-						cells
-					]["UIAttachedCells"]]];
-			
-			(* Analyze the notebook / cells. *)
-			cells = Keys[analyzeAction[notebookOrCells]];
-			
-			(* Attach the lint pods. *)
-			Map[
+		(* Create the boxes for the lint-pod and cell-bracket-button cells *)
+		cellAssoc = 
+			Association @ Map[
 				Function[cell,
-					hMargins = CodeInspector`LinterUI`Private`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"];
-					(* The lint pod cell. *)
-					podCell = 
-						AttachCell[
-							cell,
-							ExpressionCell[
+					With[
+						{
+							hMargins = CodeInspector`LinterUI`Private`lintedCells[Last[ParentNotebook[cell]]][cell]["HMargins"],
+							hMarginsFudgeFactor = {-13, (*-13*)4},
+							vMargins = {5, 5}},
+
+						cell -> <|
+							
+							"LintPodBoxes" -> Cell[BoxData @ ToBoxes @
 								lintPod[cell, CodeInspector`LinterUI`Private`lintedCells[notebookID][cell]["Type"]],
 								LineBreakWithin -> Automatic,
 								CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins}],
-							"Inline"];
-					
-					(* Also attach a marker on the input/code cell bracket that takes you to the lint pod when clicked. *)
-					bracketCell = 
-						AttachCell[
-							cell,
-							cellBracketButton[cell],
-							{"CellBracket", Top},
-							{0, 0},
-							{Right, Top}];
 
-					CodeInspector`LinterUI`Private`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell};
-					
-					(* Return an Association in which keys are the linted input/code cells, and values are the attached UI cells. *)
-					cell -> {podCell, bracketCell}],
+							"CellBracketButtonBoxes" -> cellBracketButton[cell]|>]],
+				cells];
+		
+		(* Attach the lint pods preemptively, so that they are all rendered at once by the FE. *)
+		(* Achieve this by attaching an invisible cell to the notebook that evaluates preemptively, and then deletes itself once it has attached the lint pods. *)
+		AttachCell[
+			notebookObj,
 
-				cells] // Association]]
+			Cell[BoxData @ ToBoxes @
+				Dynamic[
+					KeyValueMap[
+						Function[{cell, uiCellBoxes},
+							With[
+								{
+									(* The lint pod cell. *)
+									podCell = AttachCell[cell, uiCellBoxes["LintPodBoxes"], "Inline"],
+									(* Also attach a marker on the input/code cell bracket that takes you to the lint pod when clicked. *)
+									bracketCell = AttachCell[cell, uiCellBoxes["CellBracketButtonBoxes"], {"CellBracket", Top}, {0, 0}, {Right, Top}]},
+
+							CodeInspector`LinterUI`Private`lintedCells[notebookID][cell]["UIAttachedCells"] = {podCell, bracketCell}]],
+
+						cellAssoc];
+					
+					Clear[cellAssoc];
+
+					performAnalysisQ[notebookObj] = False;
+
+					(* This is a workaround to the fact that deleting an attached cell by calling NotebookDelete[EvaluationCell[]] crashes the FE. *)
+					With[{evaluationCell = EvaluationCell[]},
+						SessionSubmit[ScheduledTask[NotebookDelete[evaluationCell], 1]]];
+					
+					Spacer[0],
+					
+					SynchronousUpdating -> True,
+					DestroyAfterEvaluation -> True],
+				DynamicEvaluationTimeout -> CodeInspector`LinterUI`$AnalysisTimeout],
+			
+			{Left, Top}];]
 
 
 (* ::Section::Closed:: *)
