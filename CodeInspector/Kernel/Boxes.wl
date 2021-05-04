@@ -504,7 +504,17 @@ Module[{lints},
 Expand any AdditionalSources into their own lints
 *)
 expandLint[lint_] :=
-  InspectionObject[lint[[1]], lint[[2]], lint[[3]], <|Source -> #|>]& /@ {lint[[4, Key[Source]]]} ~Join~ Lookup[lint[[4]], "AdditionalSources", {}]
+  InspectionObject[lint[[1]], lint[[2]], lint[[3]],
+    <|
+      Source -> #,
+      (*
+      drop Source: already added
+      drop "AdditionalSources": this already came from "AdditionalSources" !
+      Keep all other keys, but we really need to keep e.g., ConfidenceLevel
+      *)
+      KeyDrop[lint[[4]], {Source, "AdditionalSources"}]
+    |>
+  ]& /@ {lint[[4, Key[Source]]]} ~Join~ Lookup[lint[[4]], "AdditionalSources", {}]
 
 
 
