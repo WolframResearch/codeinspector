@@ -1462,7 +1462,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
       argumentPos = Position[Most[children], child][[1]];
 
       AppendTo[issues,
-        InspectionObject["Arguments", "``With`` has an empty ``List`` for argument " <> ToString[argumentPos[[1]]] <> ".", "Error",
+        InspectionObject["Arguments", "``With`` has an empty ``List`` for argument " <> ToString[argumentPos[[1]]] <> ".", "Remark",
           <|
             Source -> child[[3, Key[Source]]],
             ConfidenceLevel -> 0.90,
