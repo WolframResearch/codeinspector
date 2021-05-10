@@ -467,11 +467,18 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
   warningSrcs = DeleteDuplicates[warningSrcs];
   errorSrcs = DeleteDuplicates[errorSrcs];
 
+  (*
+  Also make sure to remove warnings that are also in errors
+  We do not want to give multiple lints for the same Source
+  *)
+  warningSrcs = Complement[warningSrcs, errorSrcs];
+
   Scan[(
     AppendTo[issues, InspectionObject["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Warning",
       <|Source->#,
         ConfidenceLevel -> 0.85,
         CodeActions -> {
+          CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>],
           CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
       |>]];
     )&, warningSrcs];
@@ -481,6 +488,7 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
       <|Source->#,
         ConfidenceLevel -> 0.85,
         CodeActions -> {
+          CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>],
           CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
       |>]];
     )&, errorSrcs];
