@@ -9,7 +9,7 @@ Paclet[
   Updating -> Automatic,
   Extensions -> {
     {"Kernel", Root -> "Kernel", Context -> "CodeInspector`"},
-    {"FrontEnd", Root -> "FrontEnd"},
+    {"FrontEnd", Root -> "FrontEnd", Prepend -> True},
     {"Documentation", Language -> "English", MainPage -> "Guides/CodeInspector"},
     {"Resource", Root->"Resources",
       Resources -> {
