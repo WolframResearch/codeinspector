@@ -464,7 +464,14 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
+			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|
+				Source -> src,
+				ConfidenceLevel -> 0.95,
+				"Argument" -> "Module",
+				CodeActions -> {
+					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+				}
+			|>],
 			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
 			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
 			_ :> Sequence @@ {}
@@ -484,7 +491,14 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
+			"unused" -> InspectionObject["UnusedVariable", "Unused " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|
+				Source -> src,
+				ConfidenceLevel -> 0.95,
+				"Argument" -> "Block",
+				CodeActions -> {
+					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+				}
+			|>],
 			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
 			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
 			_ :> Sequence @@ {}
@@ -565,7 +579,13 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``Slot``: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``Slot``: ``" <> name <> "``", "Scoping", <|
+				Source -> src,
+				ConfidenceLevel -> 0.95,
+				CodeActions -> {
+					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+				}
+			|>],
 			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``Slot``: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			"error" -> InspectionObject["ParameterError", "``Slot`` error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			_ :> Sequence @@ {}
@@ -585,7 +605,13 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"unused" -> InspectionObject["UnusedParameter", "Unused " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``", "Scoping", <|
+				Source -> src,
+				ConfidenceLevel -> 0.95,
+				CodeActions -> {
+					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+				}
+			|>],
 			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			"error" -> InspectionObject["ParameterError", "``" <> lastScope <> "`` " <> "parameter error: ``" <> name <> "``", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
 			_ :> Sequence @@ {}
