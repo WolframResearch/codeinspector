@@ -71,7 +71,10 @@ Module[{cst, node, data, str, issues, src},
             InspectionObject["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error",
               <|
                 Source -> src,
-                ConfidenceLevel -> 0.75,
+                (*
+                low confidence because people do define their own Boolean
+                *)
+                ConfidenceLevel -> 0.5,
                 CodeActions -> {
                   CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]
                 },
@@ -85,7 +88,10 @@ Module[{cst, node, data, str, issues, src},
             InspectionObject["BadSymbol", "``Match`` does not exist in **System`** context.", "Error",
               <|
                 Source -> src,
-                ConfidenceLevel -> 0.75,
+                (*
+                low confidence because people do define their own Match
+                *)
+                ConfidenceLevel -> 0.5,
                 CodeActions -> {
                   CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]
                 },
@@ -172,6 +178,40 @@ Module[{cst, node, data, str, issues, src},
                 ConfidenceLevel -> 0.95,
                 CodeActions -> {
                   CodeAction["Replace with ``InterpolatingPolynomial``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[InterpolatingPolynomial]|>]
+                },
+                "Argument" -> str
+              |>
+            ]
+          ]
+        ,
+        "RealQ",
+          AppendTo[issues,
+            InspectionObject["BadSymbol", "``RealQ`` does not exist in **System`** context.", "Error",
+              <|
+                Source -> src,
+                (*
+                low confidence because people do define their own RealQ
+                *)
+                ConfidenceLevel -> 0.5,
+                CodeActions -> {
+                  CodeAction["Replace with ``Developer`RealQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[Developer`RealQ]|>]
+                },
+                "Argument" -> str
+              |>
+            ]
+          ]
+        ,
+        "SymbolQ",
+          AppendTo[issues,
+            InspectionObject["BadSymbol", "``SymbolQ`` does not exist in **System`** context.", "Error",
+              <|
+                Source -> src,
+                (*
+                low confidence because people do define their own SymbolQ
+                *)
+                ConfidenceLevel -> 0.5,
+                CodeActions -> {
+                  CodeAction["Replace with ``Developer`SymbolQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[Developer`SymbolQ]|>]
                 },
                 "Argument" -> str
               |>

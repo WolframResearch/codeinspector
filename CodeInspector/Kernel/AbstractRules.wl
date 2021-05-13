@@ -28,7 +28,18 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 $DefaultAbstractRules = <|
 
 
-CallNode[LeafNode[Symbol, "String" | "Integer" | "Real" | "True", _], _, _] -> scanBadCalls,
+(*
+Do not include symbols such as:
+Real
+Symbol
+
+because these are handled as BadSymbol lints
+
+and BadSymbol casts shadow over BadCall
+
+Only include symbols here that are in System`
+*)
+CallNode[LeafNode[Symbol, "String" | "Integer" | "True", _], _, _] -> scanBadCalls,
 
 (*
 
@@ -283,21 +294,6 @@ Module[{ast, node, data, head, name, issues},
             CodeActions -> {
               CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <|
                 "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>]
-            },
-            ConfidenceLevel -> 0.90,
-            "Argument" -> name
-          |>
-        ]
-      ]
-    ,
-    "Real",
-      AppendTo[issues,
-        InspectionObject["BadCall", "``Real`` is not a function.", "Error",
-          <|
-            Source -> data[Source],
-            CodeActions -> {
-              CodeAction["Replace ``Real`` with ``Developer`RealQ``", ReplaceNode, <|
-                "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>]
             },
             ConfidenceLevel -> 0.90,
             "Argument" -> name
