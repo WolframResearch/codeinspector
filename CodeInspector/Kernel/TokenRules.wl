@@ -119,7 +119,10 @@ Module[{cst, node, data, str, issues, src},
             InspectionObject["BadSymbol", "``StringMatch`` does not exist in **System`** context.", "Error",
               <|
                 Source -> src,
-                ConfidenceLevel -> 0.95,
+                (*
+                low confidence because people do define their own StringMatch
+                *)
+                ConfidenceLevel -> 0.5,
                 CodeActions -> {
                   CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[StringMatchQ]|>]
                 },
@@ -213,6 +216,20 @@ Module[{cst, node, data, str, issues, src},
                 CodeActions -> {
                   CodeAction["Replace with ``Developer`SymbolQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[Developer`SymbolQ]|>]
                 },
+                "Argument" -> str
+              |>
+            ]
+          ]
+        ,
+        "FalseQ",
+          AppendTo[issues,
+            InspectionObject["BadSymbol", "``FalseQ`` does not exist in **System`** context.", "Error",
+              <|
+                Source -> src,
+                (*
+                low confidence because people do define their own FalseQ
+                *)
+                ConfidenceLevel -> 0.5,
                 "Argument" -> str
               |>
             ]
