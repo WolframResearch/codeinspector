@@ -1093,7 +1093,7 @@ Catch[
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["Arguments", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
+    AppendTo[issues, InspectionObject["NoVariables", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
       children[[1, 3]],
       ConfidenceLevel -> 0.90,
       "Argument" -> "Module"|>]];
@@ -1277,7 +1277,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
+    AppendTo[issues, InspectionObject["NoVariables", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
       children[[1, 3]],
       ConfidenceLevel -> 0.90,
       "Argument" -> "DynamicModule"|>]];
@@ -1458,7 +1458,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
       argumentPos = Position[Most[children], child][[1]];
 
       AppendTo[issues,
-        InspectionObject["Arguments", "``With`` has an empty ``List`` for argument " <> ToString[argumentPos[[1]]] <> ".", "Remark",
+        InspectionObject["NoParameters", "``With`` has an empty ``List`` for argument " <> ToString[argumentPos[[1]]] <> ".", "Remark",
           <|
             Source -> child[[3, Key[Source]]],
             ConfidenceLevel -> 0.90,
@@ -1609,7 +1609,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   ];
 
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["Arguments", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
+    AppendTo[issues, InspectionObject["NoVariables", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
       children[[1, 3]],
       ConfidenceLevel -> 0.90,
       "Argument" -> "Block"|>]];
