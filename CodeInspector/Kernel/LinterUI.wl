@@ -14,9 +14,6 @@ Needs["CodeParser`"]
 Needs["CodeInspector`"]
 
 
-CodeInspector`LinterUI`Private`contextsLoadedQ = True;
-
-
 (* ::Section::Closed:: *)
 (*Appearance Elements*)
 
@@ -1589,7 +1586,11 @@ SetAttributes[hashChangedOverlayButton, HoldRest]
 
 
 hashChangedOverlayReanalyzeButton[cell_CellObject] :=
-	button["Reanalyze", attachAnalysisAction[{cell}], ImageSize -> {98, 19}, Method -> "Queued"]
+	button["Reanalyze",
+		With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]];
+		attachAnalysisAction[{cell}],
+		ImageSize -> {98, 19},
+		Method -> "Queued"]
 
 
 hashChangedOverlayClosePodButton[cell_CellObject] :=
@@ -1598,16 +1599,25 @@ hashChangedOverlayClosePodButton[cell_CellObject] :=
 		ImageSize -> {98, 19}]
 
 
-hashChangedOverlay[cell_] :=
+hashChangedOverlay[cell_, Dynamic[overlayAttachedQ_]] :=
 	Pane[
-		Column[{
-			styleData["SectionHeader"]["The cell contents have changed."],
-			Row[
-				{
-					hashChangedOverlayClosePodButton[cell],
-					hashChangedOverlayReanalyzeButton[cell]},
-				Spacer[10]]
-		}, Spacings -> 1.1, Alignment -> Center],
+		DynamicModule[{},
+			DynamicWrapper[
+				Column[{
+					styleData["SectionHeader"]["The cell contents have changed."],
+					Row[
+						{
+							hashChangedOverlayClosePodButton[cell],
+							hashChangedOverlayReanalyzeButton[cell]},
+						Spacer[10]]
+				}, Spacings -> 1.1, Alignment -> Center],
+
+				(* If the changes to the input/code cell have been reversed, delete this overlay. *)
+				If[varValue[cell, "hashChangedQ"] === False,
+					With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]]]],
+
+			Initialization :> (overlayAttachedQ = True),
+			Deinitialization :> (overlayAttachedQ = False)],
 		ImageMargins -> {{0, 0}, {0, 16}}]
 
 
@@ -1626,7 +1636,7 @@ lintPod[cell_CellObject, cellType_] :=
 			minRafts = 2
 		},
 		
-		DynamicModule[{showAllQ = False, cellHashChangedQ = False},
+		DynamicModule[{showAllQ = False, cellHashChangedQ = False, overlayAttachedQ = False},
 			With[
 				{contents =
 					(* Stack all the lint pod components *)
@@ -1642,37 +1652,32 @@ lintPod[cell_CellObject, cellType_] :=
 						ItemSize -> {Full, 0}, Spacings -> 0]},
 				
 				DynamicWrapper[
+					(* We'll use an overlay to disable the lint pod when the cell's cryptohash changes. *)
 					noRecursion @ Overlay[
 						{
 							(* The main linting pod body. *)
 							Highlighted[contents,
-									
 								(* Add a border around the lint pod. *)
 								RoundingRadius -> $UIRoundingRadius, Background -> colorData["UIBack"], FrameMargins -> 0,
 								Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], colorData["UIEdge"]], 
-								ImageMargins -> {$linterPodCellHMargins, {0, 0}}],
-							
-							(* The "inactive" overlay color. *)
-							Highlighted[Invisible[contents],
-								(* Add a border around the lint pod. *)
-								RoundingRadius -> $UIRoundingRadius, Background -> Opacity[.8, colorData["UIBack"]], FrameMargins -> 0,
-								Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], Lighter[colorData["UIEdge"], .5]], 
-								ImageMargins -> {$linterPodCellHMargins, {0, 0}}],
-							
-							(* The controls for choosing whether to close the pod, or reanalyze the cell if the cell hash has changed. *)
-							hashChangedOverlay[cell]},
+								ImageMargins -> {$linterPodCellHMargins, {0, 0}}]},
 						
-						(* If the cell hash has changed, display the linter pod body and the "Cell Has Changed" overlay.
-							Otherwise, just display the body. *)
-						(*Dynamic[If[cellHashChangedQ, {1, 2}, {1}]]*)Dynamic[If[cellHashChangedQ, {1, 2, 3}, {1}]],
-						(* Ensure that the correct layer is interactable. *)
-						(*Dynamic[If[cellHashChangedQ, 2, 1]]*)Dynamic[If[cellHashChangedQ, 3, 1]],
+						{1},
+						(* Only make the overlay layer interactable . *)
+						Dynamic[If[cellHashChangedQ, None, 1, 1]],
 						Alignment -> {Center, Top}],
 					
-					
-					(* Check if the original input/output cell has been modified. *)
-					cellHashChangedQ =
-						(FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= varValue[cell, "Hash"])]],
+					With[
+						(* Check if the original input/output cell has been modified. *)
+						{changedQ = FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= varValue[cell, "Hash"]},
+						cellHashChangedQ = changedQ;
+						varSet[{cell, "hashChangedQ"}, changedQ];
+						(* If the cell hash has changed and there isn't already an overlay cell present, then attach the cell-has-changed overlay. *)
+						If[changedQ && !overlayAttachedQ, 
+							AttachCell[
+								EvaluationCell[],
+								hashChangedOverlay[cell, Dynamic[overlayAttachedQ]],
+								{Center, Top}, {0, 0}, {Center, Top}]]]]],
 			
 			Initialization :> (1),
 			Deinitialization :> (
@@ -1776,6 +1781,39 @@ cellBracketButton[cell_CellObject] :=
 				Alignment -> {Center, Baseline}],
 
 			"Go to code analysis"]]
+
+
+(* noLintsBracketMarker gets attached to cells that were analyzed but didn't produce lints. *)
+noLintsBracketMarker[cell_CellObject] :=
+	With[{originalHash = FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]]},
+
+		Cell[BoxData @ ToBoxes @ cellManagement @
+			DynamicWrapper[
+				Tooltip[
+					noRecursion @ button[
+						(* Just show the green tick. *)
+						Show[
+							iconData["TickDisk"][colorData["ApplyButtonBack"], colorData["ApplyButtonText"]],
+							ImageSize -> 9{1, 1}, BaselinePosition -> Scaled[.02]],
+
+						(* Delete the marker on click. *)
+						With[{evalCell = EvaluationCell[]},
+							SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]],
+
+						"BackColor" -> colorData["CellBracketButtonBack"],
+						"BackHoverColor" -> colorData["CellBracketButtonHover"],
+						"EdgeColor" -> colorData["CellBracketButtonEdge"],
+						"EdgeHoverColor" -> colorData["CellBracketButtonEdge"],
+						ImageSize -> {Automatic, 14},
+						FrameMargins -> {3{1, 1}, {1, 1}},
+						Alignment -> {Center, Baseline}],
+					
+					"Code Analysis found no issues"],
+				
+				(* If the cell is edited, then remove the bracket marker. *)
+				If[FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= originalHash,
+					With[{evalCell = EvaluationCell[]},
+						SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]]]]]]
 
 
 (* ::Section::Closed:: *)
@@ -2026,24 +2064,17 @@ analyzeAction[
 		(* Map getCellInfo over the cells to populate the lint variables. The output of this map is a
 			list of the cells that produced lints, so reassign cellsToLint to this. *)
 		{cellsToLintRefinement2 = getCellInfo /@ cellsToLintRefinement1},
-
-		(* Note that analyzeAction returns a list of all the cells that were linted, but the data required by the UI is stored in
-			the variables created by getCellInfo. When a code action is applied, the original input/code cell remains untouched,
-			and the changes are stored in the variable CodeInspector`LinterUI`Private`Vars`$$[NotebookID]$$[CellID]$$CellContents.
-			This happens in the makeRaftMenuCodeActionItem function, and you can see that
-			CodeInspector`LinterUI`Private`lintedCells[notebookID][cell]["CellContents"] is passed to this function in makeRaftMenu.
-			This continues to get updated as more code actions are applied, and finally it gets written into the original "Input"
-			or "Code" cell when the user clicks the Apply button. *)
 			
 		(* There may be lint pods already present in the notebook. Return only the newly-linted cells. *)
-		cellsToLintRefinement2]
+		(* Also return the cells that qualified for analysis (i.e. are input/code cells) but produced no lints. *)
+		{cellsToLintRefinement2, Complement[cellsToLintRefinement1, cellsToLintRefinement2]}]
 
 
 attachAnalysisAction[
 	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
 ] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] :=
 	Module[
-		{cells, cellAssoc, notebookObj},
+		{cells, cellAssoc, notebookObj, cleanCells},
 
 		(* These should already be loaded, but just make sure. *)
 		Needs["CodeParser`"];
@@ -2078,7 +2109,8 @@ attachAnalysisAction[
 					FEPrivate`FrontEndResource["CodeInspectorExpressions", "DockedCell"]]];
 		
 		(* Analyze the notebook / cells. *)
-		cells = analyzeAction[notebookOrCells];
+		(* cells are the cells that produced lints, and cleanCells are the input/code cells that didn't produce lints. We'll attach bracket markers to the clean ones. *)
+		{cells, cleanCells} = analyzeAction[notebookOrCells];
 
 		(* Create the boxes for the lint-pods and cell-bracket-buttons. *)
 		cellAssoc = 
@@ -2095,10 +2127,22 @@ attachAnalysisAction[
 							"LintPodBoxes" -> Cell[BoxData @ ToBoxes @
 								cellManagement @ lintPod[cell, varValue[cell, "Type"]],
 								LineBreakWithin -> Automatic,
-								CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins}],
+								CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins},
+								(* If the cell has been modified, reduce the opacity of the cell contents (inactivate the cell). *)
+								PrivateCellOptions -> {"ContentsOpacity" -> .3(*Dynamic[If[TrueQ[varValue[cell, "hashChangedQ"]], .3, 1]]*)}],
 
 							"CellBracketButtonBoxes" -> cellBracketButton[cell]|>]],
 				cells];
+		
+		(* Attach the clean cell bracket markers. *)
+		Map[
+			Function[cell,
+				(* Delete any existing bracket marker. *)
+				NotebookDelete[varValue[cell, "CleanCellBracketMarker"]];
+				With[
+					{markerCell = AttachCell[cell, noLintsBracketMarker[cell], {"CellBracket", Top}, {0, 0}, {Right, Top}]},
+					varSet[{cell, "CleanCellBracketMarker"}, markerCell]]],
+			cleanCells];
 		
 		(* Attach the lint pods and cell bracket buttons. *)
 		KeyValueMap[
@@ -2110,7 +2154,7 @@ attachAnalysisAction[
 						(* Also attach a marker on the input/code cell bracket that takes you to the lint pod when clicked. *)
 						bracketCell = AttachCell[cell, uiCellBoxes["CellBracketButtonBoxes"], {"CellBracket", Top}, {0, 0}, {Right, Top}]},
 				
-				varSet[{cell, "UIAttachedCells"}, {bracketCell, podCell}]]],
+					varSet[{cell, "UIAttachedCells"}, {bracketCell, podCell}]]],
 
 			cellAssoc];
 		

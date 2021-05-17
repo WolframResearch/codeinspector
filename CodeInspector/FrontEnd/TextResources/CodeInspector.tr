@@ -21,8 +21,7 @@
 @@resource CodeInspectorExpressions
 {
 "DockedCell" -> Cell[BoxData[
- DynamicModuleBox[{LinterUIDockedCell`Private`notebook$$, 
-  LinterUIDockedCell`Private`notebookID$$}, 
+ DynamicModuleBox[{LinterUIDockedCell`Private`notebook$$}, 
   GraphicsBox[{InsetBox[
      TemplateBox[{
        PaneBox[
@@ -42,9 +41,7 @@
             BaseStyle -> {"Deploy"}], {False, True} -> PaneBox[
             
             DynamicModuleBox[{
-             CodeInspector`LinterUI`Private`tracker$$ = 
-              CodeInspector`LinterUI`Private`DynamicTriggers`\
-dockedCellLintCounts}, 
+             CodeInspector`LinterUI`Private`tracker$$ = 0.9240446254864876}, 
              DynamicWrapperBox[
               DynamicBox[
                ToBoxes[
@@ -542,7 +539,11 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
           Flatten[
            CodeInspector`LinterUI`Private`varValue[
            LinterUIDockedCell`Private`notebook$$, All, "UIAttachedCells"]]]; 
-        CurrentValue[
+        Map[NotebookDelete, 
+          Flatten[
+           CodeInspector`LinterUI`Private`varValue[
+           LinterUIDockedCell`Private`notebook$$, All, 
+            "CleanCellBracketMarker"]]]; CurrentValue[
            EvaluationNotebook[], DockedCells] = 
          With[{LinterUIDockedCell`Private`dockedCells = CurrentValue[
               EvaluationNotebook[], DockedCells]}, 
@@ -852,7 +853,7 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
            Last[CodeInspector`LinterUI`Private`lint][CodeParser`Source]]], 
          "$"]], "$$", CodeInspector`LinterUI`Private`name]}; (
     LinterUIDockedCell`Private`notebook$$ = EvaluationNotebook[]; 
-    LinterUIDockedCell`Private`notebookID$$ = 
+    LinterUIDockedCell`Private`notebookID = 
      Last[LinterUIDockedCell`Private`notebook$$]))]],
  CellFrame->{{0, 0}, {1, 1}},
  CellFrameMargins->{{0, 0}, {0, 0}},
