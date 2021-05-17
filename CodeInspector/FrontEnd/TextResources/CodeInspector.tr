@@ -47,12 +47,12 @@
              TrackedSymbols :> {LinterUIDockedCell`Private`notebook$$}], 
             BaselinePosition -> Scaled[0.5]]}, 
          Dynamic[{
-           CodeInspector`LinterUI`Private`performAnalysisQ[
-           LinterUIDockedCell`Private`notebook$$], 
+           LinterUIDockedCell`Private`varValue[
+           LinterUIDockedCell`Private`notebook$$, "AnalysisInProgressQ"], 
            TrueQ[
-            CodeInspector`LinterUI`Private`dockedCellPresentQ[
-            LinterUIDockedCell`Private`notebook$$]]}], ImageSize -> 
-         Automatic], BaselinePosition -> Scaled[0.15]]},
+            LinterUIDockedCell`Private`varValue[
+            LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"]]}], 
+         ImageSize -> Automatic], BaselinePosition -> Scaled[0.15]]},
       "Row",
       DisplayFunction->(PaneBox[
         RowBox[{
@@ -503,14 +503,14 @@
         "Highlighted"],
        Appearance->False,
        ButtonFunction:>(Needs["CodeInspector`"]; 
-        CodeInspector`LinterUI`Private`dockedCellPresentQ[
-          LinterUIDockedCell`Private`notebook$$] = True; 
+        LinterUIDockedCell`Private`varSet[{
+          LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"}, True]; 
         CodeInspector`AttachAnalysis[LinterUIDockedCell`Private`notebook$$]),
        Evaluator->Automatic,
-       Method->"Preemptive"]}, Dynamic[
+       Method->"Queued"]}, Dynamic[
        TrueQ[
-        CodeInspector`LinterUI`Private`dockedCellPresentQ[
-        LinterUIDockedCell`Private`notebook$$]]],
+        LinterUIDockedCell`Private`varValue[
+        LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"]]],
       ImageSize->Automatic], Offset[{-26, 0}, {1, 0}], {1, 0}], 
     TagBox[
      TagBox[
@@ -524,14 +524,11 @@
        TooltipDelay->0,
        TooltipStyle->"TextStyling"],
       Annotation[#, "Close analysis", "Tooltip"]& ],
-     EventHandlerTag[{"MouseClicked" :> (Quiet[
-          NotebookDelete[
-           Flatten[
-            Through[
-             Values[
-              CodeInspector`LinterUI`Private`lintedCells[
-              LinterUIDockedCell`Private`notebookID$$]][
-             "UIAttachedCells"]]]]]; CurrentValue[
+     EventHandlerTag[{"MouseClicked" :> (Map[NotebookDelete, 
+          Flatten[
+           LinterUIDockedCell`Private`varValue[
+           LinterUIDockedCell`Private`notebook$$, All, "UIAttachedCells"]]]; 
+        CurrentValue[
            EvaluationNotebook[], DockedCells] = 
          With[{LinterUIDockedCell`Private`dockedCells = CurrentValue[
               EvaluationNotebook[], DockedCells]}, 
@@ -540,15 +537,18 @@
                Options[#, CellTags]] =!= {
               CellTags -> "CodeAnalysisDockedCell"}& , 
              LinterUIDockedCell`Private`dockedCells]]]; 
-        CodeInspector`LinterUI`Private`lintedCells[
-          LinterUIDockedCell`Private`notebookID$$] = Association[]), Method -> 
-       "Preemptive", PassEventsDown -> Automatic, PassEventsUp -> True}]]},
+        LinterUIDockedCell`Private`applyToVar[Remove, {
+           EvaluationNotebook[], All}]; 
+        LinterUIDockedCell`Private`varSet[{
+          LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"}, 
+          True]), Method -> "Preemptive", PassEventsDown -> Automatic, 
+       PassEventsUp -> True}]]},
    AspectRatio->Full,
    ImageSize->{Full, 23},
    PlotRange->{{-1, 1}, {-1, 1}}],
-  Deinitialization:>(
-   CodeInspector`LinterUI`Private`dockedCellPresentQ[
-    LinterUIDockedCell`Private`notebook$$] = False),
+  Deinitialization:>
+   LinterUIDockedCell`Private`varSet[{
+    LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"}, False],
   DynamicModuleValues:>{},
   Initialization:>({
     LinterUIDockedCell`Private`dockedCellSeverityCountsButton[
@@ -580,9 +580,7 @@
        Dynamic[
         Pattern[LinterUIDockedCell`Private`popupPresentQ, 
          Blank[]]]] := 
-     With[{LinterUIDockedCell`Private`notebookID = 
-        Last[LinterUIDockedCell`Private`notebook], 
-        LinterUIDockedCell`Private`paneWidth = Automatic, 
+     With[{LinterUIDockedCell`Private`paneWidth = Automatic, 
         LinterUIDockedCell`Private`maxPaneHeight = 200}, 
        Cell[
         BoxData[
@@ -592,10 +590,10 @@
             Pane[
              Column[
               Map[LinterUIDockedCell`Private`dockedCellMenuItem, 
-               Keys[
-                CodeInspector`LinterUI`Private`lintedCells[
-                LinterUIDockedCell`Private`notebookID]]], ItemSize -> {0, 0}, 
-              Spacings -> 0], {LinterUIDockedCell`Private`paneWidth, 
+               LinterUIDockedCell`Private`varValue[
+               LinterUIDockedCell`Private`notebook, All, "Cell"]], 
+              ItemSize -> {0, 0}, Spacings -> 0], {
+             LinterUIDockedCell`Private`paneWidth, 
               UpTo[LinterUIDockedCell`Private`maxPaneHeight]}, 
              ImageSizeAction -> "Scrollable", 
              Scrollbars -> {False, Automatic}, AppearanceElements -> None], 
@@ -609,9 +607,7 @@
             LinterUIDockedCell`Private`popupPresentQ = False)]]], 
         CellFrameMargins -> 0]], LinterUIDockedCell`Private`dockedCellMenuItem[
        Pattern[LinterUIDockedCell`Private`cell, 
-        Blank[CellObject]]] := 
-     With[{LinterUIDockedCell`Private`notebookID = Last[
-          ParentNotebook[LinterUIDockedCell`Private`cell]]}, 
+        Blank[CellObject]]] := With[{}, 
        Button[
         DynamicModule[{LinterUIDockedCell`Private`hoverQ = False}, 
          DynamicWrapper[
@@ -628,9 +624,8 @@
                   Flatten[{
                     MakeExpression[
                     Part[
-                    CodeInspector`LinterUI`Private`lintedCells[
-                    LinterUIDockedCell`Private`notebookID][
-                    LinterUIDockedCell`Private`cell]["CellContents"], 1, 1], 
+                    LinterUIDockedCell`Private`varValue[
+                    LinterUIDockedCell`Private`cell, "CellContents"], 1, 1], 
                     StandardForm]}]]]}, {
               LinterUIDockedCell`Private`expressionString = 
                StringTake[LinterUIDockedCell`Private`rawString, {14, -2}]}, {
