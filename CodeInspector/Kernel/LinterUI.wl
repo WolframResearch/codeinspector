@@ -1682,7 +1682,10 @@ lintPod[cell_CellObject, cellType_] :=
 				(* Clear the severity counts when the lint pod is removed. *)
 				(* This line is very important. Seeing as varValue is using Names["XXXX*"] to find groups of symbols, the
 					symbols for this cell must be completely Removed when the cell is deleted, otherwise varValue could return ghost symbols. *)
-				applyToVar[Remove, {cell, All}])]]
+				applyToVar[Remove, {cell, All}];
+				
+				(* Tickle the docked cell. *)
+				CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts = RandomReal[])]]
 
 
 (* ::Section::Closed:: *)
@@ -2113,7 +2116,10 @@ attachAnalysisAction[
 		
 		Clear[cellAssoc];
 		
-		varSet[{notebookObj, "AnalysisInProgressQ"}, False];]
+		varSet[{notebookObj, "AnalysisInProgressQ"}, False];
+		
+		(* Tickle the docked cell. *)
+		CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts = RandomReal[];]
 
 
 (* ::Section::Closed:: *)

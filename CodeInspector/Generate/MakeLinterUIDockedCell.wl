@@ -69,7 +69,7 @@ With[{},
 							With[
 								(* Convert the cell box contents into a string, so that it may be clipped to display the preview. *)
 								{rawString = ToString[First@Flatten@List@MakeExpression[
-										varValue[cell, "CellContents"][[1, 1]],
+										CodeInspector`LinterUI`Private`varValue[cell, "CellContents"][[1, 1]],
 										StandardForm]]},
 								(* rawString is of the form "HoldComplete[XXXX]". Extract "XXXX". *)
 								{expressionString = StringTake[rawString, {14, -2}]},
@@ -107,7 +107,7 @@ dockedCellPopupMenuCell[notebook_NotebookObject, Dynamic[popupPresentQ_]] :=
 			Highlighted[
 				Pane[
 					Column[
-						dockedCellMenuItem /@ varValue[notebook, All, "Cell"],
+						dockedCellMenuItem /@ CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
 						ItemSize -> {0, 0}, Spacings -> 0],
 					{paneWidth, UpTo[maxPaneHeight]},
 					(* The pane should scroll if its contents exceeds maxPaneHeight. *)
@@ -128,9 +128,7 @@ dockedCellSeverityCountsButton[notebook_NotebookObject] :=
 	DynamicModule[{popupPresentQ = False},
 		CodeInspector`LinterUI`Private`button[
 			Pane[
-				CodeInspector`LinterUI`Private`isolatedDynamic[
-					Dynamic[CodeInspector`LinterUI`Private`trackSeverities[notebook]],
-					CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook]],
+				CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook],
 				BaselinePosition -> Scaled[-.06]],
 			If[!popupPresentQ,
 				AttachCell[
@@ -167,10 +165,12 @@ dockedCell =
 												{True, True} -> ProgressIndicator[Appearance -> "Percolate"],
 												(* Display the agregate severity counts for all cells in the notebook. *)
 												{False, True} -> Pane[
-													Dynamic[dockedCellSeverityCountsButton[notebook], TrackedSymbols :> {notebook}],
+													CodeInspector`LinterUI`Private`isolatedDynamic[
+														Dynamic[CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts],
+														dockedCellSeverityCountsButton[notebook]],
 													BaselinePosition->Scaled[.5]]
 											},
-											Dynamic[{varValue[notebook, "AnalysisInProgressQ"], TrueQ[varValue[notebook, "DockedCellPresentQ"]]}],
+											Dynamic[{CodeInspector`LinterUI`Private`varValue[notebook, "AnalysisInProgressQ"], TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]}],
 											ImageSize -> Automatic],
 
 										BaselinePosition -> Scaled[.15]]},
@@ -199,12 +199,12 @@ dockedCell =
 											FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]]],
 
 										Needs["CodeInspector`"];
-										varSet[{notebook, "DockedCellPresentQ"}, True];
+										CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, True];
 										CodeInspector`AttachAnalysis[notebook],
 										Appearance -> False,
 										Method -> "Queued"]},
 
-									Dynamic[TrueQ[varValue[notebook, "DockedCellPresentQ"]]],
+									Dynamic[TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]],
 									ImageSize -> Automatic],
 
 							Offset[{-26, 0}, {1, 0}], {1, 0}],
@@ -217,7 +217,7 @@ dockedCell =
 								"Close analysis", TooltipDelay -> 0],
 
 							(* Delete the lint pods. *)
-							NotebookDelete /@ Flatten[varValue[notebook, All, "UIAttachedCells"]];
+							NotebookDelete /@ Flatten[CodeInspector`LinterUI`Private`varValue[notebook, All, "UIAttachedCells"]];
 
 							(* Delete docked cells with CellTags -> "AttachedAnalysisDockedCell" *)
 							CurrentValue[EvaluationNotebook[], DockedCells] = 
@@ -228,8 +228,8 @@ dockedCell =
 											Quiet[Options[#, CellTags]] =!= {CellTags -> "CodeAnalysisDockedCell"}&,
 											dockedCells]]];
 
-							applyToVar[Remove, {EvaluationNotebook[], All}];
-							varSet[{notebook, "DockedCellPresentQ"}, True]]
+							CodeInspector`LinterUI`Private`applyToVar[Remove, {EvaluationNotebook[], All}];
+							CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, True]]
 						
 					},
 
@@ -239,11 +239,15 @@ dockedCell =
 					notebook = EvaluationNotebook[];
 					notebookID = Last[notebook]),
 
-				Deinitialization :> varSet[{notebook, "DockedCellPresentQ"}, False]
+				Deinitialization :> CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False]
 			],
 			
 			(* Save the following definitions in the DynamicModule's Initialization option. *)
-			{dockedCellSeverityCountsButton, dockedCellPopupMenuCell, dockedCellMenuItem, $previewLength}],
+			{dockedCellSeverityCountsButton, dockedCellPopupMenuCell, dockedCellMenuItem, $previewLength,
+				CodeInspector`LinterUI`Private`applyToVar,
+				CodeInspector`LinterUI`Private`varValue,
+				CodeInspector`LinterUI`Private`varSet,
+				CodeInspector`LinterUI`Private`varNameString}],
 
 		Background -> GrayLevel[.97],
 		(* Draw frame lines at the top and bottom of the cell. *)
