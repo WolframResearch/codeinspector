@@ -2074,7 +2074,7 @@ attachAnalysisAction[
 	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
 ] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] :=
 	Module[
-		{cells, cellAssoc, notebookObj, cleanCells},
+		{cells, cellAssoc, notebookObj, cleanCells, cleanCellsAssoc},
 
 		(* These should already be loaded, but just make sure. *)
 		Needs["CodeParser`"];
@@ -2133,16 +2133,23 @@ attachAnalysisAction[
 
 							"CellBracketButtonBoxes" -> cellBracketButton[cell]|>]],
 				cells];
-		
+			
+		(* Create boxes for the clean cells bracket markers. *)
+		cleanCellsAssoc = Association[Function[cell, cell -> noLintsBracketMarker[cell]] /@ cleanCells];
+
+		(* We made the cell expressions for the UI cells before attaching them so that the attachemnt process can happen quickly. *)
+
+		(* Delete any existing bracket marker. *)
+		Function[cell, NotebookDelete[varValue[cell, "CleanCellBracketMarker"]]] /@ cleanCells;
+
 		(* Attach the clean cell bracket markers. *)
-		Map[
-			Function[cell,
-				(* Delete any existing bracket marker. *)
-				NotebookDelete[varValue[cell, "CleanCellBracketMarker"]];
+		KeyValueMap[
+			Function[{cell, uiCellBoxes},
+				(* Attach the new bracket marker and store its CellObject. *)
 				With[
-					{markerCell = AttachCell[cell, noLintsBracketMarker[cell], {"CellBracket", Top}, {0, 0}, {Right, Top}]},
+					{markerCell = AttachCell[cell, uiCellBoxes, {"CellBracket", Top}, {0, 0}, {Right, Top}]},
 					varSet[{cell, "CleanCellBracketMarker"}, markerCell]]],
-			cleanCells];
+			cleanCellsAssoc];
 		
 		(* Attach the lint pods and cell bracket buttons. *)
 		KeyValueMap[
