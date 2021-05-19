@@ -71,12 +71,9 @@ With[{},
 						(* Display $previewStringLength characters of the cell contents on the left of the menu item. *)
 						Inset[
 							With[
-								(* Convert the cell box contents into a string, so that it may be clipped to display the preview. *)
-								{rawString = ToString[First@Flatten@List@MakeExpression[
-										CodeInspector`LinterUI`Private`varValue[cell, "CellContents"][[1, 1]],
-										StandardForm]]},
-								(* rawString is of the form "HoldComplete[XXXX]". Extract "XXXX". *)
-								{expressionString = StringTake[rawString, {14, -2}]},
+								(* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
+								{expressionString = First[FrontEndExecute[
+									FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[cell, "CellContents"]], "InputText"]]]},
 								(* Clip expressionString to the preview length. *)
 								{previewString = StringTake[expressionString, {1, UpTo[$previewLength]}]},
 								(* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
@@ -97,8 +94,12 @@ With[{},
 				
 				hoverQ = CurrentValue["MouseOver"]]],
 		
-		(* When the menu item is clicked, delete the menu popup cell and scroll the notebook view to the given cell. *)
+		(* When the menu item is clicked, delete the menu popup cell... *)
 		NotebookDelete[EvaluationCell[]];
+		(* ...select the target cell and open any cell group that it might be in... *)
+		SelectionMove[cell, All, Cell];
+		With[{nb = ParentNotebook[cell]}, FrontEndExecute[FrontEnd`FrontEndToken[nb, "OpenSelectionParents"]]];
+		(*  ...and then scroll the notebook view to the cell *)
 		SelectionMove[cell, After, Cell],
 
 		Appearance -> None]]
@@ -134,7 +135,8 @@ dockedCellSeverityCountsButton[notebook_NotebookObject] :=
 			Pane[
 				CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook],
 				BaselinePosition -> Scaled[-.06]],
-			If[!popupPresentQ,
+			(* Only open the pop-up menu if there isn't one already present, and if there is a non-zero number of linted cells. *)
+			If[!popupPresentQ && Length[CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"]] =!= 0,
 				AttachCell[
 					EvaluationCell[],
 					dockedCellPopupMenuCell[notebook, Dynamic[popupPresentQ]],
@@ -162,7 +164,7 @@ dockedCell =
 									Pane[
 										PaneSelector[
 											{
-												(* If dockedCellPresentQ isn't True, then the docked cell is left over from a previous session. In which case, display neither a loading indicator nor lint counts. *)
+												(* If dockedCellPresentQ isn't True (meaning the docked cell is left over from a previous session) or kernelWasQuitQ is True, then display neither a loading indicator nor lint counts. *)
 												{False, False} -> Spacer[0],
 												{True, False} -> Spacer[0],
 												(* Display an activity indicator while analysis is in progress. *)
@@ -172,11 +174,15 @@ dockedCell =
 													CodeInspector`LinterUI`Private`isolatedDynamic[
 														Dynamic[CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts],
 														dockedCellSeverityCountsButton[notebook]],
-													BaselinePosition->Scaled[.5]]
-											},
-											Dynamic[{
-												CodeInspector`LinterUI`Private`varValue[notebook, "AnalysisInProgressQ"],
-												TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]}],
+													BaselinePosition->Scaled[.5]]},
+
+											Dynamic[
+												(* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
+												FEPrivate`EvaluatorStatus["Local"];
+												{
+													CodeInspector`LinterUI`Private`varValue[notebook, "AnalysisInProgressQ"],
+													TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]}],
+
 											ImageSize -> Automatic],
 
 										BaselinePosition -> Scaled[.15]]},
@@ -205,13 +211,24 @@ dockedCell =
 											Frame -> True,
 											FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]]],
 
+										(* Delete docked cells with CellTags -> "AttachedAnalysisDockedCell" *)
+										CurrentValue[EvaluationNotebook[], DockedCells] = 
+											With[{dockedCells = CurrentValue[EvaluationNotebook[], DockedCells]},
+												Pick[
+													dockedCells,
+													Map[
+														Quiet[Options[#, CellTags]] =!= {CellTags -> "CodeAnalysisDockedCell"}&,
+														dockedCells]]];
 										Needs["CodeInspector`"];
-										CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, True];
 										CodeInspector`AttachAnalysis[notebook],
 										Appearance -> False,
 										Method -> "Queued"]},
 
-									Dynamic[TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]],
+									Dynamic[
+										(* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
+										FEPrivate`EvaluatorStatus["Local"];
+										TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]],
+
 									ImageSize -> Automatic],
 
 							Offset[{-26, 0}, {1, 0}], {1, 0}],
@@ -246,8 +263,7 @@ dockedCell =
 					ImageSize -> {Full, 23}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}],
 
 				Initialization :> (
-					notebook = EvaluationNotebook[];
-					notebookID = Last[notebook]),
+					notebook = EvaluationNotebook[]),
 
 				Deinitialization :> CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False]
 			],
@@ -257,7 +273,8 @@ dockedCell =
 				CodeInspector`LinterUI`Private`applyToVar,
 				CodeInspector`LinterUI`Private`varValue,
 				CodeInspector`LinterUI`Private`varSet,
-				CodeInspector`LinterUI`Private`varNameString}],
+				CodeInspector`LinterUI`Private`varNameString,
+				CodeInspector`LinterUI`Private`extractFirstList}],
 
 		Background -> GrayLevel[.97],
 		(* Draw frame lines at the top and bottom of the cell. *)

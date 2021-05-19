@@ -41,7 +41,7 @@
             BaseStyle -> {"Deploy"}], {False, True} -> PaneBox[
             
             DynamicModuleBox[{
-             CodeInspector`LinterUI`Private`tracker$$ = 0.9240446254864876}, 
+             CodeInspector`LinterUI`Private`tracker$$ = 0.27980830061538975`}, 
              DynamicWrapperBox[
               DynamicBox[
                ToBoxes[
@@ -57,12 +57,12 @@ dockedCellLintCounts, CodeInspector`LinterUI`Private`tracker$$ =
                CodeInspector`LinterUI`Private`DynamicTriggers`\
 dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition -> 
             Scaled[0.5]]}, 
-         Dynamic[{
-           CodeInspector`LinterUI`Private`varValue[
-           LinterUIDockedCell`Private`notebook$$, "AnalysisInProgressQ"], 
-           TrueQ[
+         Dynamic[FEPrivate`EvaluatorStatus["Local"]; {
             CodeInspector`LinterUI`Private`varValue[
-            LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"]]}], 
+            LinterUIDockedCell`Private`notebook$$, "AnalysisInProgressQ"], 
+            TrueQ[
+             CodeInspector`LinterUI`Private`varValue[
+             LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"]]}], 
          ImageSize -> Automatic], BaselinePosition -> Scaled[0.15]]},
       "Row",
       DisplayFunction->(PaneBox[
@@ -513,15 +513,21 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
             GrayLevel[0.8]]]},
         "Highlighted"],
        Appearance->False,
-       ButtonFunction:>(Needs["CodeInspector`"]; 
-        CodeInspector`LinterUI`Private`varSet[{
-          LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"}, True]; 
+       ButtonFunction:>(CurrentValue[
+           EvaluationNotebook[], DockedCells] = 
+         With[{LinterUIDockedCell`Private`dockedCells = CurrentValue[
+              EvaluationNotebook[], DockedCells]}, 
+           Pick[LinterUIDockedCell`Private`dockedCells, 
+            Map[Quiet[
+               Options[#, CellTags]] =!= {
+              CellTags -> "CodeAnalysisDockedCell"}& , 
+             LinterUIDockedCell`Private`dockedCells]]]; 
+        Needs["CodeInspector`"]; 
         CodeInspector`AttachAnalysis[LinterUIDockedCell`Private`notebook$$]),
        Evaluator->Automatic,
-       Method->"Queued"]}, Dynamic[
-       TrueQ[
-        CodeInspector`LinterUI`Private`varValue[
-        LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"]]],
+       Method->"Queued"]}, Dynamic[FEPrivate`EvaluatorStatus["Local"]; TrueQ[
+         CodeInspector`LinterUI`Private`varValue[
+         LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"]]],
       ImageSize->Automatic], Offset[{-26, 0}, {1, 0}], {1, 0}], 
     TagBox[
      TagBox[
@@ -576,7 +582,10 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
          LinterUIDockedCell`Private`notebook], BaselinePosition -> 
          Scaled[-0.06]], 
         If[
-         Not[LinterUIDockedCell`Private`popupPresentQ], 
+         And[
+          Not[LinterUIDockedCell`Private`popupPresentQ], Length[
+            CodeInspector`LinterUI`Private`varValue[
+            LinterUIDockedCell`Private`notebook, All, "Cell"]] =!= 0], 
          AttachCell[
           EvaluationCell[], 
           LinterUIDockedCell`Private`dockedCellPopupMenuCell[
@@ -630,16 +639,13 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
                CodeInspector`LinterUI`Private`colorData["PopupBack"]]], 
              Rectangle[{-1, -1}, {1, 1}]}, 
             Inset[
-             With[{LinterUIDockedCell`Private`rawString = ToString[
-                 First[
-                  Flatten[{
-                    MakeExpression[
-                    Part[
+             With[{LinterUIDockedCell`Private`expressionString = First[
+                 FrontEndExecute[
+                  FrontEnd`ExportPacket[
+                   First[
                     CodeInspector`LinterUI`Private`varValue[
-                    LinterUIDockedCell`Private`cell, "CellContents"], 1, 1], 
-                    StandardForm]}]]]}, {
-              LinterUIDockedCell`Private`expressionString = 
-               StringTake[LinterUIDockedCell`Private`rawString, {14, -2}]}, {
+                    LinterUIDockedCell`Private`cell, "CellContents"]], 
+                   "InputText"]]]}, {
               LinterUIDockedCell`Private`previewString = 
                StringTake[LinterUIDockedCell`Private`expressionString, {1, 
                   UpTo[LinterUIDockedCell`Private`$previewLength]}]}, 
@@ -660,6 +666,12 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
            None], LinterUIDockedCell`Private`hoverQ = 
           CurrentValue["MouseOver"]]], NotebookDelete[
           EvaluationCell[]]; 
+        SelectionMove[LinterUIDockedCell`Private`cell, All, Cell]; 
+        With[{LinterUIDockedCell`Private`nb = 
+           ParentNotebook[LinterUIDockedCell`Private`cell]}, 
+          FrontEndExecute[
+           FrontEnd`FrontEndToken[
+           LinterUIDockedCell`Private`nb, "OpenSelectionParents"]]]; 
         SelectionMove[LinterUIDockedCell`Private`cell, After, Cell], 
         Appearance -> None]], LinterUIDockedCell`Private`$previewLength = 25, 
      CodeInspector`LinterUI`Private`applyToVar[
@@ -851,18 +863,12 @@ dockedCellLintCounts]], DynamicModuleValues :> {}], BaselinePosition ->
          Map[ToString, 
           CodeInspector`LinterUI`Private`extractFirstList[
            Last[CodeInspector`LinterUI`Private`lint][CodeParser`Source]]], 
-         "$"]], "$$", CodeInspector`LinterUI`Private`name]}; (
-    LinterUIDockedCell`Private`notebook$$ = EvaluationNotebook[]; 
-    LinterUIDockedCell`Private`notebookID = 
-     Last[LinterUIDockedCell`Private`notebook$$]))]],
- CellFrame->{{0, 0}, {1, 1}},
- CellFrameMargins->{{0, 0}, {0, 0}},
- CellFrameColor->GrayLevel[0.85],
- Background->GrayLevel[0.97],
- CellTags->"CodeAnalysisDockedCell"]}; (
-    LinterUIDockedCell`Private`notebook$$ = EvaluationNotebook[]; 
-    LinterUIDockedCell`Private`notebookID$$ = 
-     Last[LinterUIDockedCell`Private`notebook$$]))]],
+         "$"]], "$$", CodeInspector`LinterUI`Private`name], 
+     CodeInspector`LinterUI`Private`extractFirstList[
+       Pattern[CodeInspector`LinterUI`Private`expr, 
+        Blank[]]] := FirstCase[CodeInspector`LinterUI`Private`expr, 
+       Blank[List], {}, {0, Infinity}]}; 
+   LinterUIDockedCell`Private`notebook$$ = EvaluationNotebook[])]],
  CellFrame->{{0, 0}, {1, 1}},
  CellFrameMargins->{{0, 0}, {0, 0}},
  CellFrameColor->GrayLevel[0.85],

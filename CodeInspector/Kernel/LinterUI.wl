@@ -593,19 +593,21 @@ popupPane[
 (*Support Functions*)
 
 
-CodeInspector`LinterUI`Private`contextsLoadedQ = True;
-
-
+(* cellManagement removes its evaluation cell if the kernel is quit. *)
 cellManagement[expr_] :=
-	DynamicWrapper[
+	DynamicModule[{kernelWasQuitQ = False, originalSessionID = $SessionID},
+		DynamicWrapper[
 
-		PaneSelector[{True -> expr, False -> Spacer[0]},
-			Dynamic[TrueQ[CodeInspector`LinterUI`Private`contextsLoadedQ]],
-			ImageSize -> Automatic],
+			PaneSelector[{False -> Quiet[expr], True -> Spacer[0]},
+				Dynamic[kernelWasQuitQ],
+				ImageSize -> Automatic],
 
-		If[CodeInspector`LinterUI`Private`contextsLoadedQ =!= True,
-			With[{evalCell = EvaluationCell[]},
-				SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]]]]
+			If[kernelWasQuitQ,
+				NotebookDelete[EvaluationCell[]]],
+
+			SynchronousUpdating -> False],
+		
+		Initialization :> (kernelWasQuitQ = (originalSessionID =!= $SessionID))]
 
 
 SetAttributes[noRecursion, HoldFirst]
@@ -1587,7 +1589,7 @@ SetAttributes[hashChangedOverlayButton, HoldRest]
 
 hashChangedOverlayReanalyzeButton[cell_CellObject] :=
 	button["Reanalyze",
-		With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]];
+		With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]];
 		attachAnalysisAction[{cell}],
 		ImageSize -> {98, 19},
 		Method -> "Queued"]
@@ -1614,7 +1616,7 @@ hashChangedOverlay[cell_, Dynamic[overlayAttachedQ_]] :=
 
 				(* If the changes to the input/code cell have been reversed, delete this overlay. *)
 				If[varValue[cell, "hashChangedQ"] === False,
-					With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]]]],
+					With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]]]],
 
 			Initialization :> (overlayAttachedQ = True),
 			Deinitialization :> (overlayAttachedQ = False)],
@@ -1636,7 +1638,7 @@ lintPod[cell_CellObject, cellType_] :=
 			minRafts = 2
 		},
 		
-		DynamicModule[{showAllQ = False, cellHashChangedQ = False, overlayAttachedQ = False},
+		DynamicModule[{showAllQ = False, cellHashChangedQ = False, overlayAttachedQ = False, uiCellSize},
 			With[
 				{contents =
 					(* Stack all the lint pod components *)
@@ -1652,7 +1654,7 @@ lintPod[cell_CellObject, cellType_] :=
 						ItemSize -> {Full, 0}, Spacings -> 0]},
 				
 				DynamicWrapper[
-					(* We'll use an overlay to disable the lint pod when the cell's cryptohash changes. *)
+					(* Use an overlay to grey out and disable the lint pod when the cell's cryptohash changes. *)
 					noRecursion @ Overlay[
 						{
 							(* The main linting pod body. *)
@@ -1660,29 +1662,39 @@ lintPod[cell_CellObject, cellType_] :=
 								(* Add a border around the lint pod. *)
 								RoundingRadius -> $UIRoundingRadius, Background -> colorData["UIBack"], FrameMargins -> 0,
 								Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], colorData["UIEdge"]], 
-								ImageMargins -> {$linterPodCellHMargins, {0, 0}}]},
+								ImageMargins -> {$linterPodCellHMargins, {0, 0}}],
+							
+							(* The grey overlay layer. *)
+							Highlighted[Spacer[0],
+								RoundingRadius -> $UIRoundingRadius,
+								Background -> Opacity[.8, colorData["UIBack"]],
+								ImageSize -> Dynamic[{Full, Last[uiCellSize] - 2(*fudge factor*)}]]
+						},
 						
-						{1},
-						(* Only make the overlay layer interactable . *)
-						Dynamic[If[cellHashChangedQ, None, 1, 1]],
+						Dynamic[If[cellHashChangedQ, {1, 2}, {1}]],
+						(* Deactivate the lint pod if the cell hash has changed. *)
+						Dynamic[If[cellHashChangedQ, None, 1]],
 						Alignment -> {Center, Top}],
 					
 					With[
 						(* Check if the original input/output cell has been modified. *)
 						{changedQ = FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= varValue[cell, "Hash"]},
-						cellHashChangedQ = changedQ;
-						varSet[{cell, "hashChangedQ"}, changedQ];
-						(* If the cell hash has changed and there isn't already an overlay cell present, then attach the cell-has-changed overlay. *)
-						If[changedQ && !overlayAttachedQ, 
-							AttachCell[
-								EvaluationCell[],
-								hashChangedOverlay[cell, Dynamic[overlayAttachedQ]],
-								{Center, Top}, {0, 0}, {Center, Top}]]]]],
+						If[cellHashChangedQ =!= changedQ,
+							cellHashChangedQ = changedQ;
+							varSet[{cell, "hashChangedQ"}, changedQ];
+							(* If the cell hash has changed and there isn't already an overlay cell present, then attach the cell-has-changed overlay. *)
+							If[changedQ && !overlayAttachedQ,
+								(* Get the ImageSize of this UI cell to ensure the grey-out Overlay layer is displayed the correct size. *)
+								uiCellSize = AbsoluteCurrentValue[EvaluationCell[], CellSize];
+								AttachCell[
+									EvaluationCell[],
+									hashChangedOverlay[cell, Dynamic[overlayAttachedQ]],
+									{Center, Top}, {0, 0}, {Center, Top}]]]]]],
 			
 			Initialization :> (1),
 			Deinitialization :> (
 				(* Delete the cell bracket button. *)
-				NotebookDelete[First[varValue[cell, "UIAttachedCells"]]];
+				Quiet[NotebookDelete[First[varValue[cell, "UIAttachedCells"]]]];
 				
 				(* Clear the severity counts when the lint pod is removed. *)
 				(* This line is very important. Seeing as varValue is using Names["XXXX*"] to find groups of symbols, the
@@ -1714,8 +1726,9 @@ lintSeverityCounts[cell_CellObject] :=
 			Through[varValue[cell, "Lints"]["Severity"]],
 			{Alternatives @@ $severity3 -> 3, Alternatives @@ $severity2 -> 2, Alternatives @@ $severity1 -> 1},
 			1]},
+		{checked = Replace[severities, Except[_List] -> {}]},
 		(* Return an Association of the severity counts. *)
-		varSet[{cell, "SeverityCounts"}, Association[Rule @@@ Sort[Tally[severities]]]]]
+		varSet[{cell, "SeverityCounts"}, Association[Rule @@@ Sort[Tally[checked]]]]]
 
 
 lintIconDisplayOpts = {"exclamSize" -> 9, FontSize -> 10, FontWeight -> "SemiBold", BaselinePosition -> Scaled[.02]};
@@ -1751,7 +1764,7 @@ lintSeverityCountsIconRow[
 					KeyValueMap[
 						lintSeverityCountsIcon[#1, #2, opts]&,
 						Merge[
-							Replace[varValue[cellOrNotebook, All, "SeverityCounts"], Except[_Association] -> <||>, 1],
+							Replace[varValue[cellOrNotebook, All, "SeverityCounts"], Except[<|___Rule|>] -> <||>, 1],
 							Total]],
 					{Spacer[0]}]]},
 		Row[
@@ -1798,7 +1811,7 @@ noLintsBracketMarker[cell_CellObject] :=
 
 						(* Delete the marker on click. *)
 						With[{evalCell = EvaluationCell[]},
-							SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]],
+							SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]],
 
 						"BackColor" -> colorData["CellBracketButtonBack"],
 						"BackHoverColor" -> colorData["CellBracketButtonHover"],
@@ -1813,7 +1826,7 @@ noLintsBracketMarker[cell_CellObject] :=
 				(* If the cell is edited, then remove the bracket marker. *)
 				If[FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= originalHash,
 					With[{evalCell = EvaluationCell[]},
-						SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .01]]]]]]]
+						SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]]]]]]
 
 
 (* ::Section::Closed:: *)
@@ -2127,9 +2140,7 @@ attachAnalysisAction[
 							"LintPodBoxes" -> Cell[BoxData @ ToBoxes @
 								cellManagement @ lintPod[cell, varValue[cell, "Type"]],
 								LineBreakWithin -> Automatic,
-								CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins},
-								(* If the cell has been modified, reduce the opacity of the cell contents (inactivate the cell). *)
-								PrivateCellOptions -> {"ContentsOpacity" -> .3(*Dynamic[If[TrueQ[varValue[cell, "hashChangedQ"]], .3, 1]]*)}],
+								CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins}],
 
 							"CellBracketButtonBoxes" -> cellBracketButton[cell]|>]],
 				cells];
