@@ -53,7 +53,7 @@ addDefinitions[DynamicModule[args__], {syms__Symbol}] :=
 (*Docked Cell*)
 
 
-$previewLength = 25;
+$previewLength = 28;
 
 
 dockedCellMenuItem[cell_CellObject] :=
@@ -74,8 +74,10 @@ With[{},
 								(* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
 								{expressionString = First[FrontEndExecute[
 									FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[cell, "CellContents"]], "InputText"]]]},
+								(*  *)
+								{noLineBreaks = StringReplace[expressionString, "\n" | "\r" -> " "]},
 								(* Clip expressionString to the preview length. *)
-								{previewString = StringTake[expressionString, {1, UpTo[$previewLength]}]},
+								{previewString = StringTake[noLineBreaks, {1, UpTo[$previewLength]}]},
 								(* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
 								CodeInspector`LinterUI`Private`styleData["FixedWidth"][
 									If[StringLength[expressionString] > $previewLength,
@@ -109,44 +111,56 @@ dockedCellPopupMenuCell[notebook_NotebookObject, Dynamic[popupPresentQ_]] :=
 	With[{paneWidth = Automatic, maxPaneHeight = 200},
 		Cell[BoxData @ ToBoxes @
 			DynamicModule[{},
-			Highlighted[
-				Pane[
-					Column[
-						dockedCellMenuItem /@ CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
-						ItemSize -> {0, 0}, Spacings -> 0],
-					{paneWidth, UpTo[maxPaneHeight]},
-					(* The pane should scroll if its contents exceeds maxPaneHeight. *)
-					ImageSizeAction -> "Scrollable", Scrollbars -> {False, Automatic}, AppearanceElements -> None],
+				Highlighted[
+					Pane[
+						Column[
+							dockedCellMenuItem /@ CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
+							ItemSize -> {0, 0}, Spacings -> 0],
+						{paneWidth, UpTo[maxPaneHeight]},
+						(* The pane should scroll if its contents exceeds maxPaneHeight. *)
+						ImageSizeAction -> "Scrollable", Scrollbars -> {False, Automatic}, AppearanceElements -> None],
 
-				Background -> CodeInspector`LinterUI`Private`colorData["UIBack"], RoundingRadius -> 3,
-				Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], CodeInspector`LinterUI`Private`colorData["UIEdge"]],
-				(* Attached cells appear *underneath* docked cells, so align the top of the highlighted pane with the bottom of the docked cell. *)
-				FrameMargins -> {{4, 4}, {4, 4}}],
+					Background -> CodeInspector`LinterUI`Private`colorData["UIBack"], RoundingRadius -> 3,
+					Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], CodeInspector`LinterUI`Private`colorData["UIEdge"]],
+					(* Attached cells appear *underneath* docked cells, so align the top of the highlighted pane with the bottom of the docked cell. *)
+					FrameMargins -> {{4, 4}, {4, 7}}],
 
-				Initialization :> (popupPresentQ = True),
-				Deinitialization :> (popupPresentQ = False)],
+					Initialization :> (popupPresentQ = True),
+					Deinitialization :> (popupPresentQ = False)],
 			
 			CellFrameMargins -> 0]]
 
 
 dockedCellSeverityCountsButton[notebook_NotebookObject] :=
-	DynamicModule[{popupPresentQ = False},
-		CodeInspector`LinterUI`Private`button[
-			Pane[
-				CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook],
-				BaselinePosition -> Scaled[-.06]],
-			(* Only open the pop-up menu if there isn't one already present, and if there is a non-zero number of linted cells. *)
-			If[!popupPresentQ && Length[CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"]] =!= 0,
-				AttachCell[
-					EvaluationCell[],
-					dockedCellPopupMenuCell[notebook, Dynamic[popupPresentQ]],
-					{Left, Bottom},
-					Offset[{0, 1}, Automatic],
-					{Left, Top},
-					RemovalConditions -> {"MouseExit"}]],
-			ImageSize -> {Automatic, 14},
-			FrameMargins -> {3{1, 1}, {1, 1}},
-			Alignment -> {Center, Baseline}]]
+	With[{formatIcon = Function[Show[#, ImageSize -> {13, 9}, BaselinePosition -> Scaled[-.2]]]},
+		DynamicModule[{popupPresentQ = False, menuCell},
+			CodeInspector`LinterUI`Private`button[
+
+				Row[{
+					CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook, "exclamSize" -> 12, FontSize -> 14, FontWeight -> Plain],
+					Spacer[2],
+					PaneSelector[
+						{
+							False -> formatIcon[CodeInspector`LinterUI`Private`iconData["DownChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]],
+							True -> formatIcon[CodeInspector`LinterUI`Private`iconData["UpChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]]
+						},
+						Dynamic[popupPresentQ]
+					]
+				}],
+
+				(* Only open the pop-up menu if there isn't one already present, and if there is a non-zero number of linted cells. *)
+				If[!popupPresentQ && Length[CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"]] =!= 0,
+					menuCell = AttachCell[
+						EvaluationBox[],
+						dockedCellPopupMenuCell[notebook, Dynamic[popupPresentQ]],
+						{Left, Bottom},
+						Offset[{0, 0}, Automatic],
+						{Left, Top},
+						RemovalConditions -> {"MouseExit"}],
+					NotebookDelete[menuCell]],
+				ImageSize -> {Automatic, 19},
+				FrameMargins -> {6{1, 1}, {1, 1}},
+				Alignment -> {Center, Baseline}]]]
 
 
 dockedCell =
@@ -168,13 +182,11 @@ dockedCell =
 												{False, False} -> Spacer[0],
 												{True, False} -> Spacer[0],
 												(* Display an activity indicator while analysis is in progress. *)
-												{True, True} -> ProgressIndicator[Appearance -> "Percolate"],
+												{True, True} -> Pane[ProgressIndicator[Appearance -> "Percolate"], BaselinePosition -> Scaled[.05]],
 												(* Display the agregate severity counts for all cells in the notebook. *)
-												{False, True} -> Pane[
-													CodeInspector`LinterUI`Private`isolatedDynamic[
-														Dynamic[CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts],
-														dockedCellSeverityCountsButton[notebook]],
-													BaselinePosition->Scaled[.5]]},
+												{False, True} -> CodeInspector`LinterUI`Private`isolatedDynamic[
+													Dynamic[CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts],
+													dockedCellSeverityCountsButton[notebook]]},
 
 											Dynamic[
 												(* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
@@ -237,7 +249,11 @@ dockedCell =
 						Button[
 							Tooltip[
 								(* This is the resolved expression from evaluating CodeInspector`LinterUI`Private`closeIcon[{-11, 0}, {1, 0}] *)
-								{GrayLevel[0.4], Disk[Offset[{-11, 0}, {1, 0}], Offset[7]], GrayLevel[0.97], AbsoluteThickness[1.5], CapForm["Round"], Line[{{Offset[{-13.5, 2.5}, {1, 0}], Offset[{-8.5, -2.5}, {1, 0}]}, {Offset[{-13.5, -2.5}, {1, 0}], Offset[{-8.5, 2.5}, {1, 0}]}}]},
+								{
+									GrayLevel[0.6],
+									Disk[Offset[{-11, 0}, {1, 0}], Offset[6]],
+									GrayLevel[0.97], AbsoluteThickness[1.5], CapForm["Round"],
+									Line[{{Offset[{-13, 2}, {1, 0}], Offset[{-9, -2}, {1, 0}]}, {Offset[{-13, -2}, {1, 0}], Offset[{-9, 2}, {1, 0}]}}]},
 								"Close analysis", TooltipDelay -> 0],
 
 							(* Delete the lint pods. *)

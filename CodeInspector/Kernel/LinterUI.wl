@@ -32,6 +32,7 @@ colorData = With[
 		(* General. *)
 		"UIBack" -> GrayLevel[.97],
 		"UIEdge" -> GrayLevel[.85],
+		"CloseButton" -> GrayLevel[.6],
 		"CodeBack" -> RGBColor[0.99, 1, 1],
 		"UIDark" -> (*RGBColor[0.53, 0.34, 0]*)GrayLevel[.4],
 		"WarningText" -> RGBColor[0.89, 0.14, 0.05],
@@ -40,7 +41,7 @@ colorData = With[
 		"Delimiter" -> GrayLevel[.85],
 
 		(* Cell Bracket Button colors. *)
-		"CellBracketButtonText" -> Black,
+		"CellBracketButtonText" -> GrayLevel[.25],
 		"CellBracketButtonBack" -> GrayLevel[.95],
 		"CellBracketButtonHover" -> GrayLevel[.98],
 		"CellBracketButtonEdge" -> GrayLevel[.9],
@@ -56,19 +57,20 @@ colorData = With[
 		"ButtonText" -> GrayLevel[0.2],
 		"ButtonTextHover" -> GrayLevel[0.2],
 		"ButtonTextInactive" -> GrayLevel[0.7],
-		"ApplyButtonText" -> Black,
-		"ApplyButtonBack" -> RGBColor["#75ffb8"],
-		"ApplyButtonBackHover" -> RGBColor["#97ffd6"],
-		"ApplyButtonEdge" -> RGBColor["#6be5b8"],
+		"ApplyButtonText" -> RGBColor[1, 1, 1],
+		"ApplyButtonBack" -> RGBColor[0.247059, 0.666667, 0.301961],
+		"ApplyButtonBackHover" -> RGBColor[0.266667, 0.72549, 0.329412],
+		"ApplyButtonEdge" -> RGBColor[0.266667, 0.733333, 0.329412],
 		"HashButtonBack" -> White,
 		"HashButtonBackHover" -> Hue[0.1, 0.26, 1],
 		"HashButtonEdge" -> RGBColor[Rational[81, 85], 0.79, 0.37],
 		
 		(* Raft colors. *)
-		"RaftBack" -> GrayLevel[1],
+		"RaftBack" -> RGBColor[0.96, 0.97, 0.97],
+		"RaftMenuBack" -> White,
 		"RaftItemHighlight" -> RGBColor[0.96, 0.97, 0.97],
-		"RaftBackHover" -> RGBColor[0.94, 0.95, 0.96],
-		"RaftBackOpen" -> RGBColor[0.96, 0.97, 0.97],
+		"RaftBackHover" -> RGBColor[0.99, 1, 1],
+		"RaftBackOpen" -> RGBColor[0.94, 0.95, 0.96],
 		"RaftFrame" -> RGBColor["#C1D3E1"],
 		"RaftLabel" -> GrayLevel[0.2],
 		"RaftMenuItem" -> GrayLevel[0.2],
@@ -176,34 +178,46 @@ iconData = <|
  AspectRatio -> Automatic, ImageSize -> 10{1., 1.}, PlotRange -> {{0., 9.}, {0., 9.}}, ImagePadding -> .5]
 	],
 	
-	(* Wrench *)
-	"Wrench" -> Function[color,
-	Graphics[{Dynamic[FaceForm[color]], FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 
-   3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 
-   3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, 
-   {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}}}, 
-   {{{41.620000000000005, 79.49000000000001}, {88.06, 166.84}, {79.58371, 178.22885}, 
-   {77.81024000000001, 193.2685}, {83.40493000000001, 206.31659}, {88.99962000000002, 
-   219.36468}, {101.1166, 228.44845899999999}, {115.21000000000001, 230.16}, 
-   {117.27929999999999, 230.39726}, {119.2789, 229.326887}, {120.229, 227.473369}, 
-   {121.1792, 225.619852}, {120.88069999999999, 223.371493}, {119.48, 
-   221.82999999999998}, {102.93, 203.16}, {110.64, 179.97}, {134.58, 175.05}, {151.12, 
-   193.67}, {152.50730000000001, 195.27555}, {154.757, 195.83057}, {156.7319, 
-   195.05455999999998}, {158.7068, 194.27854000000002}, {159.9768, 192.34051}, {159.9, 
-   190.22}, {159.8107, 179.41018}, {155.32700000000003, 169.10197}, {147.48020000000002, 
-   161.66637999999998}, {139.6334, 154.23077999999998}, {129.099, 150.30789}, {118.3, 
-   150.8}, {71.85, 63.45000000000002}, {83.08525, 48.301999999999964}, {82.16295, 
-   27.35209999999998}, {69.64, 13.25}, {62.93, 5.699999999999989}, {53.94, 
-   1.6899999999999977}, {44.7, 0.1699999999999875}, {36.7, -1.1400000000000148}, {31.85, 
-   5.079999999999984}, {37.37, 11.269999999999982}, {51.160000000000004, 
-   26.829999999999984}, {46.51, 47.26999999999998}, {25.64, 49.43000000000001}, 
-   {11.850000000000001, 33.859999999999985}, {5.9, 26.859999999999985}, {-0.3, 
-   30.859999999999985}, {0.01, 40.079999999999984}, {0.20814600000000003, 
-   50.713599999999985}, {4.549653000000001, 60.84979999999999}, {12.11, 
-   68.32999999999998}, {19.98795, 75.95850000000002}, {30.66558, 79.99650000000003}, 
-   {41.620000000000005, 79.49000000000001}}}]}, AspectRatio -> Automatic, 
- ImageSize -> 15{160./231, 231./231}, ImagePadding -> .5, PlotRange -> {{0., 159.9}, {0., 230.16}},
- BaselinePosition -> Scaled[.155]],
+	(* Wand *)
+	"Wand" -> Function[color,
+	Graphics[{Dynamic[FaceForm[color]], {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 
+       0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 
+       1, 0}, {1, 3, 3}}}, {{{2., 12.39}, {2.29, 
+       11.5}, {2.4181459999999997, 11.11229}, {2.72229, 
+       10.808146}, {3.11, 10.68}, {4., 10.39}, {3.11, 
+       10.1}, {2.72229, 9.971854}, {2.4181459999999997, 
+       9.66771}, {2.29, 9.280000000000001}, {2., 8.39}, {1.71, 
+       9.280000000000001}, {1.5818539999999999, 9.66771}, {1.27771, 
+       9.971854}, {0.89, 10.1}, {0., 10.39}, {0.89, 10.68}, {1.27771, 
+       10.808146}, {1.5818539999999999, 11.11229}, {1.71, 
+       11.5}}}]}, {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {0, 
+       1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 
+       0}, {0, 1, 0}, {1, 3, 3}}}, {{{9.78, 15.}, {10.07, 
+       14.11}, {10.198149999999998, 13.722290000000001}, {10.50229, 
+       13.418146}, {10.89, 13.29}, {11.78, 13.}, {10.89, 
+       12.71}, {10.50229, 12.581854}, {10.198149999999998, 
+       12.277709999999999}, {10.07, 11.89}, {9.78, 11.}, {9.49, 
+       11.89}, {9.361854000000001, 12.277709999999999}, {9.05771, 
+       12.581854}, {8.67, 12.71}, {7.78, 13.}, {8.67, 
+       13.29}, {9.05771, 13.418146}, {9.361854000000001, 
+       13.722290000000001}, {9.49, 14.11}}}]}, {FilledCurve[{{{0, 2, 
+       0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 
+       1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}}}, {{{11.78, 
+       9.79}, {12.07, 8.91}, {12.19686, 8.519324}, {12.50089, 
+       8.211584}, {12.89, 8.08}, {13.78, 7.79}, {12.89, 
+       7.5}, {12.50055, 7.374698}, {12.1953, 7.069455}, {12.07, 
+       6.68}, {11.78, 5.790000000000001}, {11.49, 
+       6.68}, {11.364700000000001, 7.069455}, {11.059450000000002, 
+       7.374698}, {10.67, 7.5}, {9.78, 7.79}, {10.67, 
+       8.08}, {11.05911, 8.211584}, {11.363140000000001, 
+       8.519324}, {11.49, 8.91}}}]}, {FilledCurve[{{{0, 2, 0}, {0, 1, 
+       0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{6.91, 
+       11.}, {-0.8400000000000001, -1.3300000000000018}, {1.74, -3.}, \
+{9.49, 9.36}}, {{5.67, 7.5}, {7.1499999999999995, 
+       9.83}, {8.370000000000001, 9.059999999999999}, {6.89, 
+       6.73}}}]}}, AspectRatio -> Automatic, 
+ ImageSize -> 16 {14./15, 15./15}, 
+ PlotRange -> {{0., 13.7}, {0., 15.}}, ImagePadding -> .5, BaselinePosition -> Scaled[.2]],
  HoldAll],
 	
 	(* Cell Bracket Icon. *)
@@ -281,60 +295,100 @@ iconData = <|
 	
 	(* Ignore error in notebook. *)
 	"IgnoreInNotebook" -> Function[color,
-		Graphics[{ 
-  {FaceForm[color], 
-   FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 
-    1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, 
-    {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
-    3}}}, {{{4.08, 5.81}, {6.41, 8.139999999999999}, {6.504656, 8.233882999999999}, 
-    {6.557899, 8.361680999999999}, {6.557899, 8.495000000000001}, {6.557899, 
-    8.628318999999998}, {6.504656, 8.756117}, {6.41, 8.849999999999998}, 
-    {6.319267000000001, 8.946676999999998}, {6.192585999999999, 9.001519}, {6.06, 
-    9.001519}, {5.927413999999999, 9.001519}, {5.800733, 8.946676999999998}, {5.71, 
-    8.849999999999998}, {3.3699999999999997, 6.52}, {1., 8.849999999999998}, {0.906117, 
-    8.944655999999998}, {0.778319, 8.997899}, {0.645, 8.997899}, {0.511681, 8.997899}, 
-    {0.38388300000000003, 8.944655999999998}, {0.29000000000000004, 8.849999999999998}, 
-    {0.19534400000000002, 8.756117}, {0.142101, 8.628318999999998}, {0.142101, 
-    8.495000000000001}, {0.142101, 8.361680999999999}, {0.19534400000000002, 
-    8.233882999999999}, {0.29000000000000004, 8.139999999999999}, {2.66, 5.81}, 
-    {0.32999999999999996, 3.469999999999999}, {0.233323, 3.37927}, {0.17848100000000003, 
-    3.252589999999998}, {0.17848100000000003, 3.119999999999999}, {0.17848100000000003, 
-    2.987409999999999}, {0.233323, 2.86073}, {0.32999999999999996, 2.769999999999998}, 
-    {0.42231500000000005, 2.675790000000001}, {0.548115, 2.621880000000001}, 
-    {0.6799999999999999, 2.619999999999999}, {0.801135, 2.630259999999998}, 
-    {0.9146200000000001, 2.6834599999999984}, {1., 2.769999999999998}, 
-    {3.3699999999999997, 5.1}, {5.71, 2.769999999999998}, {5.80028, 2.67286}, {5.927396, 
-    2.61838}, {6.06, 2.619999999999999}, {6.260038, 2.6228099999999994}, 
-    {6.439144000000001, 2.744589999999997}, {6.515315999999999, 2.9295799999999996}, 
-    {6.591488, 3.1145599999999973}, {6.55006, 3.3271499999999996}, {6.41, 
-    3.469999999999999}}}]}, 
-  {FaceForm[color], 
-   FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 
-     3, 3}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, 
-     {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
-     0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, 
-     {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}}, 
-    {{{11.7, 13.37}, {5.26, 13.37}, {4.330546, 13.3645}, {3.579984, 12.60947}, {3.58, 
-     11.68}, {3.58, 8.84}, {4.64, 9.91}, {5.015796, 10.288039}, {5.526954999999999, 
-     10.500422}, {6.06, 10.5}, {6.589577, 10.497767}, {7.09665, 10.285588}, 
-     {7.470000000000001, 9.91}, {7.625710999999999, 9.752296999999999}, 
-     {7.7541269999999995, 9.569811}, {7.85, 9.37}, {10.44, 9.37}, {10.44, 8.62}, {8.05, 
-     8.62}, {8.05, 8.62}, {8.05, 8.54}, {8.05, 8.5}, {8.050422000000001, 7.966955}, 
-     {7.838039, 7.455796}, {7.46, 7.079999999999999}, {7.2700000000000005, 
-     6.889999999999999}, {11.48, 6.889999999999999}, {11.48, 6.139999999999999}, {6.48, 
-     6.139999999999999}, {6.1499999999999995, 5.81}, {7.470000000000001, 
-     4.529999999999999}, {7.58, 4.4}, {9.58, 4.4}, {9.58, 3.619999999999999}, {8., 
-     3.619999999999999}, {8.05171, 3.448030000000001}, {8.078647, 3.2695699999999963}, 
-     {8.08, 3.09}, {8.08, 1.985430000000001}, {7.184569, 1.0899999999999999}, {6.08, 
-     1.0899999999999999}, {5.546955, 1.0895799999999998}, {5.035796, 
-     1.3019599999999993}, {4.659999999999999, 1.6799999999999997}, {3.58, 
-     2.769999999999998}, {3.58, 1.9299999999999997}, {3.58, 1.00216}, {4.332162, 
-     0.24999999999999822}, {5.26, 0.24999999999999822}, {11.7, 0.24999999999999822}, 
-     {12.62947, 0.24997999999999898}, {13.384500000000001, 1.0005499999999987}, {13.39, 
-     1.9299999999999997}, {13.39, 11.68}, {13.39, 12.613361}, {12.633359999999998, 
-     13.37}, {11.7, 13.37}}, {{9.27, 11.11}, {5.09, 11.11}, {5.09, 11.86}, {9.27, 
-     11.86}}}]}}, AspectRatio -> Automatic, ImageSize -> {14., 14.}, 
- PlotRange -> {{0., 13.62}, {-.5, 13.62}}]],
+		Graphics[{FaceForm[color], {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+       3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 
+       3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 
+       3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 
+       3, 3}, {1, 3, 3}}}, {{{4.08, 5.81}, {6.41, 
+       8.139999999999999}, {6.504656, 8.233882999999999}, {6.557899, 
+       8.361680999999999}, {6.557899, 8.495000000000001}, {6.557899, 
+       8.628318999999998}, {6.504656, 8.756117}, {6.41, 
+       8.849999999999998}, {6.319267000000001, 
+       8.946676999999998}, {6.192585999999999, 9.001519}, {6.06, 
+       9.001519}, {5.927413999999999, 9.001519}, {5.800733, 
+       8.946676999999998}, {5.71, 
+       8.849999999999998}, {3.3699999999999997, 6.52}, {1., 
+       8.849999999999998}, {0.906117, 8.944655999999998}, {0.778319, 
+       8.997899}, {0.645, 8.997899}, {0.511681, 
+       8.997899}, {0.38388300000000003, 
+       8.944655999999998}, {0.29000000000000004, 
+       8.849999999999998}, {0.19534400000000002, 
+       8.756117}, {0.142101, 8.628318999999998}, {0.142101, 
+       8.495000000000001}, {0.142101, 
+       8.361680999999999}, {0.19534400000000002, 
+       8.233882999999999}, {0.29000000000000004, 
+       8.139999999999999}, {2.66, 5.81}, {0.32999999999999996, 
+       3.469999999999999}, {0.233323, 3.37927}, {0.17848100000000003, 
+       3.252589999999998}, {0.17848100000000003, 
+       3.119999999999999}, {0.17848100000000003, 
+       2.987409999999999}, {0.233323, 2.86073}, {0.32999999999999996, 
+       2.769999999999998}, {0.42231500000000005, 
+       2.675790000000001}, {0.548115, 
+       2.621880000000001}, {0.6799999999999999, 
+       2.619999999999999}, {0.801135, 
+       2.630259999999998}, {0.9146200000000001, 
+       2.6834599999999984}, {1., 
+       2.769999999999998}, {3.3699999999999997, 5.1}, {5.71, 
+       2.769999999999998}, {5.80028, 2.67286}, {5.927396, 
+       2.61838}, {6.06, 2.619999999999999}, {6.260038, 
+       2.6228099999999994}, {6.439144000000001, 
+       2.744589999999997}, {6.515315999999999, 
+       2.9295799999999996}, {6.591488, 3.1145599999999973}, {6.55006, 
+       3.3271499999999996}, {6.41, 
+       3.469999999999999}}}]}, {FilledCurve[{{{0, 2, 0}, {1, 3, 
+       3}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 
+       3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 
+       3}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 
+       3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}}}, {{{11.41, 
+       13.37}, {5.56, 13.37}, {4.455431, 13.37}, {3.56, 
+       12.474568999999999}, {3.56, 11.37}, {3.56, 8.87}, {4.56, 
+       9.87}, {4.56, 11.35}, {4.56, 11.902285}, {5.007714999999999, 
+       12.35}, {5.56, 12.35}, {11.41, 12.35}, {11.962280000000002, 
+       12.35}, {12.41, 11.902285}, {12.41, 11.35}, {12.41, 
+       2.269999999999998}, {12.41, 
+       1.7177199999999981}, {11.962280000000002, 
+       1.2699999999999978}, {11.41, 1.2699999999999978}, {6.76, 
+       1.2699999999999978}, {6.535926, 
+       1.1865599999999983}, {6.2990900000000005, 
+       1.1425799999999988}, {6.06, 1.1399999999999988}, {5.754477, 
+       1.1418599999999994}, {5.453442000000001, 
+       1.2136999999999993}, {5.18, 
+       1.3499999999999996}, {4.983297000000001, 
+       1.4418100000000003}, {4.803980999999999, 
+       1.5669899999999988}, {4.6499999999999995, 
+       1.7199999999999989}, {3.65, 2.7799999999999994}, {3.65, 
+       2.2799999999999994}, {3.65, 1.1754300000000004}, {4.545431, 
+       0.27999999999999936}, {5.6499999999999995, 
+       0.27999999999999936}, {11.5, 
+       0.27999999999999936}, {12.604569999999999, 
+       0.27999999999999936}, {13.5, 1.1754300000000004}, {13.5, 
+       2.2799999999999994}, {13.5, 11.35}, {13.50606, 
+       11.899863999999999}, {13.28545, 
+       12.427964999999999}, {12.89005, 
+       12.810122999999999}, {12.49465, 
+       13.192281}, {11.959340000000001, 13.394779}, {11.41, 
+       13.37}}}]}, {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 
+       0}, {0, 1, 0}}}, {{{5.63, 11.049999999999999}, {5.63, 
+       10.44}, {6.05695, 10.538877999999999}, {6.50484, 
+       10.489504}, {6.9, 10.299999999999999}, {9.53, 
+       10.299999999999999}, {9.53, 
+       11.049999999999999}}}]}, {FilledCurve[{{{1, 4, 3}, {0, 1, 
+       0}, {0, 1, 0}}}, {{{7.92, 3.7299999999999986}, {8.03962, 
+       3.499369999999999}, {8.078356, 3.2352599999999985}, {8.03, 
+       2.9800000000000004}, {9.41, 2.9800000000000004}, {9.41, 
+       3.7299999999999986}}}]}, {FilledCurve[{{{0, 2, 0}, {0, 1, 
+       0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{6.73, 
+       6.209999999999999}, {6.2, 5.819999999999999}, {6.67, 
+       5.459999999999999}, {11.219999999999999, 
+       5.459999999999999}, {11.219999999999999, 
+       6.209999999999999}, {6.73, 
+       6.209999999999999}}}]}, {FilledCurve[{{{1, 4, 3}, {0, 1, 
+       0}, {0, 1, 0}}}, {{{8., 8.7}, {8.051429, 
+       8.44585}, {8.016221999999999, 8.181795999999999}, {7.9, 
+       7.949999999999999}, {10.25, 7.949999999999999}, {10.25, 
+       8.7}}}]}}, AspectRatio -> Automatic, 
+ ImageSize -> 15{14./14, 14./14}, 
+ PlotRange -> {{0., 13.62}, {0., 13.62}}, ImagePadding -> .75]],
 	
 	(* Ignore error always. *)
 	"IgnoreAlways" -> Function[color,
@@ -365,7 +419,7 @@ iconData = <|
 			{{8.81, 9.79}, {8.810053, 9.512194000000001}, {8.587752, 9.285447}, {8.31, 9.28}, {7.51, 9.28}, {7.2283349999999995, 9.28}, {7., 9.508334999999999}, {7., 9.79}, 
 			{7., 10.62}, {7.005447, 10.897752}, {7.232194, 11.120052999999999}, {7.51, 11.12}, {8.350000000000001, 11.12}, {8.623907999999998, 11.11468}, {8.84468, 10.893908}, 
 			{8.850000000000001, 10.62}}}]},
-			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{0., 13.62}, {0., 13.62}}, ImageMargins -> {{0, 0}, {0, 2}}]],
+			AspectRatio -> Automatic, ImageSize -> {14., 14.}, PlotRange -> {{0., 13.62}, {0., 13.62}}, ImagePadding -> .5]],
 	
 	(* Link open arrow. *)
 	"OpenLinkArrow" -> Function[color,
@@ -438,9 +492,9 @@ iconData = <|
 |>;
 
 
-closeIcon[offset_, pos_] := With[{crossSize = 2.5, diskRad = 7},
+closeIcon[offset_, pos_] := With[{crossSize = 2, diskRad = 6},
 	{
-		colorData["UIDark"],
+		colorData["CloseButton"],
 		Disk[Offset[offset, pos], Offset[diskRad]],
 		colorData["UIBack"], AbsoluteThickness[1.5], CapForm["Round"],
 		Line[{{Offset[offset + crossSize {-1, 1}, pos], Offset[offset + crossSize {1, -1}, pos]},
@@ -486,46 +540,47 @@ button[
 		"EdgeInactiveColor" -> colorData["ButtonEdgeInactive"]
 	}]
 ] :=
-	Pane[ 
-		DynamicModule[{hoverQ = False, mouseDownQ = False, fontColor},
-			Button[
-				DynamicWrapper[
-					Highlighted[
-						DynamicWrapper[
-							styleData["Button"][
-								(* The button display might need to know the state of the button (for example, changing the color of an icon on hover).
-									Therefore, check if disp is a Function, and supply it with fontColor, hoverQ, and mouseDownQ if so. *)
+	DynamicModule[{hoverQ = False, mouseDownQ = False, fontColor},
+		Button[
+			DynamicWrapper[
+				Highlighted[
+					DynamicWrapper[
+						styleData["Button"][
+							(* The button display might need to know the state of the button (for example, changing the color of an icon on hover).
+								Therefore, check if disp is a Function, and supply it with fontColor, hoverQ, and mouseDownQ if so. *)
+							Pane[
 								If[Head[disp] === Function, disp[fontColor, hoverQ, mouseDownQ], disp],
-								FontColor -> Dynamic @ fontColor],
-							
-							fontColor = Which[
-								TrueQ[!OptionValue["ActiveQ"]], OptionValue["TextInactiveColor"],
-								hoverQ, OptionValue["TextHoverColor"],
-								True, OptionValue["TextColor"]]],
+								ContentPadding -> True, FrameMargins -> None, BaselinePosition -> Baseline],
+							FontColor -> Dynamic @ fontColor],
 						
-						FrameMargins -> OptionValue[FrameMargins], Alignment -> OptionValue[Alignment],
-						Frame -> True, ImageSize -> OptionValue[ImageSize], RoundingRadius -> 3,
-						
-						FrameStyle -> Dynamic @ Directive[AbsoluteThickness[.5], Which[
-							TrueQ[!OptionValue["ActiveQ"]], OptionValue["EdgeInactiveColor"],
-							hoverQ, OptionValue["EdgeHoverColor"],
-							True, OptionValue["EdgeColor"]]],
-						
-						Background -> Dynamic @ Which[
-							TrueQ[!OptionValue["ActiveQ"]], OptionValue["BackInactiveColor"],
-							hoverQ && mouseDownQ, OptionValue["BackMouseDownColor"],
-							hoverQ, OptionValue["BackHoverColor"],
-							True, OptionValue["BackColor"]]],
+						fontColor = Which[
+							TrueQ[!OptionValue["ActiveQ"]], OptionValue["TextInactiveColor"],
+							hoverQ, OptionValue["TextHoverColor"],
+							True, OptionValue["TextColor"]]],
 					
-					hoverQ = CurrentValue["MouseOver"];
-					mouseDownQ = CurrentValue["MouseButtonTest"]],
-
-				If[OptionValue["ActiveQ"] =!= False, action],
+					ContentPadding -> False,
+					FrameMargins -> OptionValue[FrameMargins], Alignment -> OptionValue[Alignment],
+					Frame -> True, ImageSize -> OptionValue[ImageSize], RoundingRadius -> 3,
+					
+					FrameStyle -> Dynamic @ Directive[AbsoluteThickness[.5], Which[
+						TrueQ[!OptionValue["ActiveQ"]], OptionValue["EdgeInactiveColor"],
+						hoverQ, OptionValue["EdgeHoverColor"],
+						True, OptionValue["EdgeColor"]]],
+					
+					Background -> Dynamic @ Which[
+						TrueQ[!OptionValue["ActiveQ"]], OptionValue["BackInactiveColor"],
+						hoverQ && mouseDownQ, OptionValue["BackMouseDownColor"],
+						hoverQ, OptionValue["BackHoverColor"],
+						True, OptionValue["BackColor"]]],
 				
-				Appearance -> False,
-				Method -> OptionValue[Method]]],
+				hoverQ = CurrentValue["MouseOver"];
+				mouseDownQ = CurrentValue["MouseButtonTest"]],
 
-		FrameMargins -> None, BaselinePosition -> OptionValue[BaselinePosition], Alignment -> {Center, Center}]
+			If[OptionValue["ActiveQ"] =!= False, action],
+			
+			Appearance -> None, ContentPadding -> False,
+			BaselinePosition -> OptionValue[BaselinePosition],
+			Method -> OptionValue[Method]]]
 
 
 popupPane[
@@ -773,7 +828,7 @@ constructRaftMenuItemLabel[raftType_, icon_, label_] :=
 		ImageMargins -> {{0, 0}, {0, 0}},
 		
 		(* Highlight the menu item on mouseover. *)
-		Background -> Dynamic[If[CurrentValue["MouseOver"], colorData["RaftItemHighlight"], colorData["RaftBack"]]]
+		Background -> Dynamic[If[CurrentValue["MouseOver"], colorData["RaftItemHighlight"], colorData["RaftMenuBack"]]]
 	]
 
 
@@ -901,7 +956,7 @@ makeRaftMenuCodeActionItem[
 			constructRaftMenuItemLabel[raftType, 
 			
 				(* The action icon. *)
-				iconData["Wrench"][colorData["UIDark"]],
+				iconData["Wand"][colorData["UIDark"]],
 				
 				(* The code action label. Format pieces of code within the label with "Input" style, and enforce "StandardForm"'s font. *)
 					styleData["RaftMenuItem"][Row[
@@ -959,11 +1014,7 @@ makeRaftMenuDocsItem[
 			(* The label is the docs info icon, followed by the name of the symbol, and an open-link arrow icon. *)
 			constructRaftMenuItemLabel[raftType,
 				iconData["Info"][colorData["UIDark"]],
-				Row[{
-					styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify["``" <> display <> "``"],
-						(* Fudge factor to get the icons and text to line up nicely. *)
-						BaselinePosition -> (Baseline -> Scaled[.135])]],
-					iconData["OpenLinkArrow"][colorData["UIDark"]]}]],
+				styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify["``" <> display <> "``"]]]],
 			
 			
 			(* ----- The menu item action ----- *)
@@ -1211,7 +1262,7 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 									Button[
 										Highlighted[
 											Grid[
-												(* The raft label contains: *)
+												(* --- The raft label contains: --- *)
 												{{
 													(* an exclamation icon, colored according to the lint severity, *)
 													iconData["Exclam"][colorData[lint["Severity"]]], Spacer[6],
@@ -1237,14 +1288,25 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 												ItemSize -> Automatic, Spacings -> {0, 0}, Alignment -> {Left, Baseline},
 												BaselinePosition -> Scaled[.05]],
 											
-											(* Raft appearance options. *)
+											(* --- Raft appearance options: --- *)
+
 											Alignment -> {Center, Baseline},
-											FrameMargins -> {{5, 5}, {3, 3}}, Frame -> True, RoundingRadius -> 1,
-											FrameStyle -> Directive[colorData["RaftFrame"], AbsoluteThickness[1]],
+											FrameMargins -> {{5, 5}, {3, 3}}, RoundingRadius -> 1,
+											Frame -> True,
+
+											(* Show the frame if the raft is in-place. For mooring rafts, only show the frame if the raft is active or hovered, or if the in-place raft is hovered. *)
+											FrameStyle -> Switch[raftType,
+												"inPlace",
+												Directive[colorData["RaftFrame"], AbsoluteThickness[1]],
+												"mooring",
+												Dynamic[Switch[varValue[cell, lint, "State"],
+													"active" | "hoverInPlace" | "hoverMooring", Directive[colorData["RaftFrame"], AbsoluteThickness[1]],
+													_, Directive[colorData["UIBack"], AbsoluteThickness[1]]]]],
+
 											(* Change the background according to the lint state. *)
 											Background -> Dynamic[Switch[
 												varValue[cell, lint, "State"],
-												"inactive", colorData["RaftBack"],
+												"inactive", Switch[raftType, "inPlace", colorData["RaftBack"], "mooring", colorData["UIBack"]],
 												"active", colorData["RaftBackOpen"],
 												"hoverMooring", colorData["RaftBackHover"],
 												(* If the raft type is in-place, then the "hoverInPlace" value could be due to the mouse hovering over the linted boxes, but
@@ -1338,7 +1400,7 @@ confirmClosurePopup[cell_CellObject, Dynamic[popupPresentQ_]] :=
 applyChangesButton[cell_CellObject] :=
 	button[
 		Function[col,
-			Row[{Style["Apply Edits", 13], Spacer[3], iconData["Wrench"][col]}, Alignment -> Baseline],
+			Style[Row[{"Apply Edits", Spacer[3], iconData["Wand"][col]}, Alignment -> Baseline], 13],
 			HoldAll],
 			
 		If[varValue[cell, "EditsMadeQ"], applyChanges[cell]],
@@ -1350,8 +1412,7 @@ applyChangesButton[cell_CellObject] :=
 		"BackHoverColor" -> colorData["ApplyButtonBackHover"],
 		"EdgeColor" -> colorData["ApplyButtonEdge"],
 		"EdgeHoverColor" -> colorData["ApplyButtonEdge"],
-		ImageSize -> {Automatic, 17}, Alignment -> {Center, Scaled[-.05]}
-		]
+		ImageSize -> {Automatic, 17}, Alignment -> {Center, Scaled[-.05]}]
 
 
 titleBar[cell_CellObject] := 
@@ -1468,19 +1529,15 @@ mooring[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 					{
 						(* Show a column of only minRafts in the condensed (default) view. *)
 						False -> raftColumn[
-							Riffle[
-								RawBoxes /@ Part[
-									Through[varValue[cell, "LintRafts"]["mooring"]],
-									;; UpTo[minRafts], 1, 1],
-								Spacer[{1, 5}]]],
+							RawBoxes /@ Part[
+								Through[varValue[cell, "LintRafts"]["mooring"]],
+								;; UpTo[minRafts], 1, 1]],
 					
 						(* Show a column of all the rafts in the expanded view. *)
 						True -> raftColumn[
-							Riffle[
-								RawBoxes /@ Part[
-									Through[varValue[cell, "LintRafts"]["mooring"]],
-									All, 1, 1],
-								Spacer[{1, 5}]]]},
+							RawBoxes /@ Part[
+								Through[varValue[cell, "LintRafts"]["mooring"]],
+								All, 1, 1]]},
 					
 					(* Show the expanded view if showAllQ has been set to True by the "Show All" button, or if the total
 						number of rafts is less than or equal to minRafts. *)
@@ -1500,14 +1557,14 @@ mooring[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 (*Footer Bar*)
 
 
-showAllButton[Dynamic[showAllQ_], cell_CellObject] :=
+showAllButton[Dynamic[showAllQ_]] :=
 With[{formatIcon = Function[Show[#, ImageSize -> {13, 9}, BaselinePosition -> Scaled[.1]]]},
 	button[
 		(* Switch between "Show All v" and "Show Fewer ^" depending on showAllQ. *)
 		PaneSelector[
 			{
-				False -> Row[{Style["Show All", 12], formatIcon[iconData["DownChevron"][colorData["UIDark"]]]}, " "],
-				True -> Row[{Style["Show Fewer", 12], formatIcon[iconData["UpChevron"][colorData["UIDark"]]]}, " "]
+				False -> Style[Row[{"Show All", " ", formatIcon[iconData["DownChevron"][colorData["UIDark"]]]}], 12],
+				True -> Style[Row[{"Show Fewer", " ", formatIcon[iconData["UpChevron"][colorData["UIDark"]]]}], 12]
 			},
 			Dynamic[showAllQ],
 			ImageSize -> Automatic, ImageMargins -> 0, FrameMargins -> None, BaselinePosition -> (*(Scaled[0] -> Baseline)*)Baseline],
@@ -1542,7 +1599,7 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 							Table[{1, 1}, 2]]]],
 						
 						(* The "Apply Edits" button. *)
-						Inset[applyChangesButton[cell], Offset[{-6, 1}, {1, 0}], {Right, Center}],
+						Inset[applyChangesButton[cell], Offset[{-6, 1}, {1, 0}], {1, 0}],
 						
 						(* The lint count and "Show All" button. *)
 						Inset[
@@ -1551,26 +1608,29 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 								Spacer[3],
 								
 								(* Lint count. *)
-								"Showing", " ",
-								Dynamic[If[showAllQ, raftCount, Clip[raftCount, {0, minRafts}]]], " ",
-								"of", " ",
-								Dynamic[raftCount], " ",
-								Dynamic[If[raftCount === 1, "Issue", "Issues"], FontSize -> 12],
+								Dynamic[If[TrueQ[raftCount > minRafts], "Showing ", ""]],
+								Dynamic[If[showAllQ, raftCount, Clip[raftCount, {0, minRafts}]]],
+								" ",
+								Dynamic[Which[
+									raftCount === 1, "issue found",
+									raftCount === 2 || raftCount === 0, "issues found",
+									True,
+									Row[{"of", " ", raftCount, " ", "issues found"}]]],
 								".",
-								
+
 								Spacer[5],
 								
 								(* Only display the "Show All" button if the raft count is more than minRafts. *)
 								PaneSelector[
-									{True -> "",
-										False -> showAllButton[Dynamic[showAllQ], cell]},
+									{True -> Spacer[0],
+										False -> showAllButton[Dynamic[showAllQ]]},
 											
 									Dynamic[TrueQ[raftCount <= minRafts]],
 									
 									ImageSize -> Automatic, ImageMargins -> 0, FrameMargins -> None]
 							}],
 								
-							Offset[{5, 2.5}, {-1, -1}], {-1, -1}]
+							Offset[{5, 2.5}, {-1, 0}], {-1, 0}]
 					},
 									
 					AspectRatio -> Full, ImageSize -> {Full, footerHeight}, PlotRange -> {{-1, 1}, {-1, 1}},
@@ -1582,9 +1642,6 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 
 (* ::Subsection::Closed:: *)
 (*Hash-Changed Overlay*)
-
-
-SetAttributes[hashChangedOverlayButton, HoldRest]
 
 
 hashChangedOverlayReanalyzeButton[cell_CellObject] :=
@@ -1780,7 +1837,7 @@ cellBracketButton[cell_CellObject] :=
 	Cell[BoxData @ ToBoxes @
 		cellManagement @ Tooltip[
 			noRecursion @ button[
-				lintSeverityCountsIconRow[cell],
+				Pane[lintSeverityCountsIconRow[cell], ContentPadding -> False, BaselinePosition -> (Scaled[-.15] -> Baseline)],
 
 				(* Scroll the notebook to the bottom of the lint pod when clicked. *)
 				SelectionMove[cell, After, Cell],
@@ -1928,7 +1985,7 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 						(* Set the initial state of the lint as "inactive", meaning that the linted boxes are neither being hovered
 							over ("hoverInPlace" or "hoverMooring"), nor is their raft open ("active"). Note that rafts appear both in-place in the marked-up
 							code, and in the raft mooring at the bottom, so it is necessary for them to share state variables. *)
-						varSet[{cell, lint, "lintState"}, "inactive"];
+						varSet[{cell, lint, "State"}, "inactive"];
 						
 						With[
 							{markup =
@@ -1939,7 +1996,7 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 										StyleBox[token,
 											FontVariations -> {"Underlight" -> colorData[lint["Severity"]]},
 											(* Highlight the linted boxes if the lint state is "hoverXXXX" or "active". *)
-											Background -> Dynamic[Switch[varValue[cell, lint, "lintState"],
+											Background -> Dynamic[Switch[varValue[cell, lint, "State"],
 												(* The severity 1 color is a bit dark for highlighting compared to the others, so replace it with Pink. *)
 												"inactive", Opacity[.2, Replace[colorData[lint["Severity"]], RGBColor[0.827451, 0.00392157, 0.00392157] -> Pink]],
 												"hoverInPlace" | "hoverMooring" | "active", colorData["CodeHighlight"],
@@ -1949,14 +2006,14 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 										mouseOver = CurrentValue["MouseOver"];
 										(* Update the lint state variable so that other instances of this lint (other sources, and rafts in
 											the mooring) know whether this lint is being hovered over. "active" takes presedence over "hoverXXXX". *)
-										If[mouseOver && !MatchQ[varValue[cell, lint, "lintState"], "active" | "hoverMooring"], varSet[{cell, lint, "lintState"}, "hoverInPlace"]];
+										If[mouseOver && !MatchQ[varValue[cell, lint, "State"], "active" | "hoverMooring"], varSet[{cell, lint, "State"}, "hoverInPlace"]];
 										(* Attach the lint raft on mouseover of the linted boxes (given the absence of an existing raft). *)
 										If[mouseOver && !raftAttachedQ,
 											raftAttachedQ = True;
 											AttachCell[EvaluationBox[],
 												varValue[cell, lint, "Raft"][
 													"inPlace",
-													Deinitialization :> (raftAttachedQ = False; varSet[{cell, lint, "lintState"}, "inactive"])],
+													Deinitialization :> (raftAttachedQ = False; varSet[{cell, lint, "State"}, "inactive"])],
 												
 												(* Check the mouse position and anchor the raft such that it isn't clipped by a window edge. *)
 												Sequence @@ With[{mousePos = First[Replace[MousePosition["WindowScaled"], None -> {.5, 0}]]},
