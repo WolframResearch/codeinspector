@@ -1123,7 +1123,6 @@ $operatorForms = {
 	"''" -> "Derivative",
 	"'''" -> "Derivative",
 	"\[PartialD]" -> "D",
-	"\@" -> "Sqrt",
 	"\[Del]" -> "Del",
 	"**" -> "NonCommutativeMultiply",
 	"\[Cross]" -> "Cross",
