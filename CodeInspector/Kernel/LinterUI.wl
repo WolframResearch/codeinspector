@@ -913,7 +913,7 @@ makeRaftMenuIgnoreItem[
 			
 			constructRaftMenuItemLabel[raftType, icon,
 				(* The lint tag is drawn in a different color to the rest of the item.
-					If it has an "Argument", then display LintTag\:25b9Argument. *)
+					If it has an "Argument", then display LintTag\:25bbArgument. *)
 				styleData["RaftMenuItem"][Row[label[
 					Style[If[argument === Missing["KeyAbsent", "Argument"],
 						lint["Tag"],
