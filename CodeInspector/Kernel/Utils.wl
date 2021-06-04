@@ -469,7 +469,7 @@ Module[{},
 				ConfidenceLevel -> 0.95,
 				"Argument" -> "Module",
 				CodeActions -> {
-					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+					CodeAction["Remove variable ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
 			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
@@ -496,7 +496,7 @@ Module[{},
 				ConfidenceLevel -> 0.95,
 				"Argument" -> "Block",
 				CodeActions -> {
-					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+					CodeAction["Remove variable ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
 			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
@@ -600,7 +600,7 @@ Module[{},
 				Source -> src,
 				ConfidenceLevel -> 0.95,
 				CodeActions -> {
-					CodeAction["Remove ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+					CodeAction["Remove parameter ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
 			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
