@@ -1950,7 +1950,7 @@ refineSources[lints_?(MatchQ[{___CodeInspector`InspectionObject}]), cell_CellObj
 		
 		(* Group the sources, then reverse-sort the groups by confidence and take the last (highest confidence) in each. *)
 		{filteredSources =
-			First /@ ReverseSortBy[#["Condifence"] &] /@ GatherBy[clippedSources2, #["Source"] &]},
+			First /@ ReverseSortBy[#["Confidence"] &] /@ GatherBy[clippedSources2, #["Source"] &]},
 		
 		(* Tidy up by grouping the sources by lint, and then extracting the sources and reverse-sorting them (so that the deepest
 			tokens are marked up first, thus avoiding invalidating the part specs for other lints).
