@@ -42,8 +42,7 @@
              BaseStyle -> {"Deploy"}], BaselinePosition -> Scaled[0.05]], {
            False, True} -> 
           DynamicModuleBox[{
-            CodeInspector`LinterUI`Private`tracker$$ = 0.31319318836198273`}, 
-            
+            CodeInspector`LinterUI`Private`tracker$$ = 0.24573051415433}, 
             DynamicWrapperBox[
              DynamicBox[
               ToBoxes[
@@ -572,122 +571,66 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
         Blank[NotebookObject]]] := 
      With[{LinterUIDockedCell`Private`formatIcon = 
         Show[#, ImageSize -> {13, 9}, BaselinePosition -> Scaled[-0.2]]& }, 
-       DynamicModule[{
-        LinterUIDockedCell`Private`popupPresentQ = False, 
-         LinterUIDockedCell`Private`menuCell}, 
-        CodeInspector`LinterUI`Private`button[
+       ActionMenu[
+        Highlighted[
          Row[{
            CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[
            LinterUIDockedCell`Private`notebook, "exclamSize" -> 12, FontSize -> 
             14, FontWeight -> Plain], 
            Spacer[2], 
-           PaneSelector[{False -> LinterUIDockedCell`Private`formatIcon[
-               CodeInspector`LinterUI`Private`iconData["DownChevron"][
-                CodeInspector`LinterUI`Private`colorData["UIDark"]]], True -> 
-             LinterUIDockedCell`Private`formatIcon[
-               CodeInspector`LinterUI`Private`iconData["UpChevron"][
-                CodeInspector`LinterUI`Private`colorData["UIDark"]]]}, 
-            Dynamic[LinterUIDockedCell`Private`popupPresentQ]]}], 
-         If[
-          And[
-           Not[LinterUIDockedCell`Private`popupPresentQ], Length[
-             CodeInspector`LinterUI`Private`varValue[
-             LinterUIDockedCell`Private`notebook, All, "Cell"]] =!= 0], 
-          LinterUIDockedCell`Private`menuCell = AttachCell[
-            EvaluationBox[], 
-            LinterUIDockedCell`Private`dockedCellPopupMenuCell[
-            LinterUIDockedCell`Private`notebook, 
-             Dynamic[LinterUIDockedCell`Private`popupPresentQ]], {
-            Left, Bottom}, 
-            Offset[{0, 0}, Automatic], {Left, Top}, 
-            RemovalConditions -> {"MouseExit"}], 
-          NotebookDelete[LinterUIDockedCell`Private`menuCell]], 
-         ImageSize -> {Automatic, 19}, FrameMargins -> {6 {1, 1}, {1, 1}}, 
-         Alignment -> {Center, Baseline}]]], 
-     LinterUIDockedCell`Private`dockedCellPopupMenuCell[
-       Pattern[LinterUIDockedCell`Private`notebook, 
-        Blank[NotebookObject]], 
-       Dynamic[
-        Pattern[LinterUIDockedCell`Private`popupPresentQ, 
-         Blank[]]]] := 
-     With[{LinterUIDockedCell`Private`paneWidth = Automatic, 
-        LinterUIDockedCell`Private`maxPaneHeight = 200}, 
-       Cell[
-        BoxData[
-         ToBoxes[
-          DynamicModule[{}, 
-           Highlighted[
-            Pane[
-             Column[
-              Map[LinterUIDockedCell`Private`dockedCellMenuItem, 
-               CodeInspector`LinterUI`Private`varValue[
-               LinterUIDockedCell`Private`notebook, All, "Cell"]], 
-              ItemSize -> {0, 0}, Spacings -> 0], {
-             LinterUIDockedCell`Private`paneWidth, 
-              UpTo[LinterUIDockedCell`Private`maxPaneHeight]}, 
-             ImageSizeAction -> "Scrollable", 
-             Scrollbars -> {False, Automatic}, AppearanceElements -> None], 
-            Background -> CodeInspector`LinterUI`Private`colorData["UIBack"], 
-            RoundingRadius -> 3, Frame -> True, FrameStyle -> Directive[
-              AbsoluteThickness[1], 
-              CodeInspector`LinterUI`Private`colorData["UIEdge"]], 
-            FrameMargins -> {{4, 4}, {4, 7}}], 
-           Initialization :> (LinterUIDockedCell`Private`popupPresentQ = 
-            True), Deinitialization :> (
-            LinterUIDockedCell`Private`popupPresentQ = False)]]], 
-        CellFrameMargins -> 0]], LinterUIDockedCell`Private`dockedCellMenuItem[
+           LinterUIDockedCell`Private`formatIcon[
+            CodeInspector`LinterUI`Private`iconData["DownChevron"][
+             CodeInspector`LinterUI`Private`colorData["UIDark"]]]}], 
+         ImageSize -> {Automatic, 19}, BaselinePosition -> Baseline, 
+         Background -> White, Frame -> True, FrameStyle -> Dynamic[
+           If[
+            CurrentValue["MouseOver"], 
+            Hue[0.55, 0.82, 0.87], 
+            GrayLevel[0.8]]], FrameMargins -> {6 {1, 1}, {1, 1}}, 
+         Alignment -> {Center, Baseline}], 
+        Map[LinterUIDockedCell`Private`dockedCellMenuItem, 
+         CodeInspector`LinterUI`Private`varValue[
+         LinterUIDockedCell`Private`notebook, All, "Cell"]], Appearance -> 
+        None]], Null, LinterUIDockedCell`Private`dockedCellMenuItem[
        Pattern[LinterUIDockedCell`Private`cell, 
-        Blank[CellObject]]] := With[{}, 
-       Button[
-        DynamicModule[{LinterUIDockedCell`Private`hoverQ = False}, 
-         DynamicWrapper[
-          Graphics[{{
-             Dynamic[
-              If[
-               TrueQ[LinterUIDockedCell`Private`hoverQ], 
-               CodeInspector`LinterUI`Private`colorData["RaftBackHover"], 
-               CodeInspector`LinterUI`Private`colorData["PopupBack"]]], 
-             Rectangle[{-1, -1}, {1, 1}]}, 
-            Inset[
-             With[{LinterUIDockedCell`Private`expressionString = First[
-                 FrontEndExecute[
-                  FrontEnd`ExportPacket[
-                   First[
-                    CodeInspector`LinterUI`Private`varValue[
-                    LinterUIDockedCell`Private`cell, "CellContents"]], 
-                   "InputText"]]]}, {
-              LinterUIDockedCell`Private`noLineBreaks = 
-               StringReplace[
-                LinterUIDockedCell`Private`expressionString, 
-                 Alternatives["\n", "\n"] -> " "]}, {
-              LinterUIDockedCell`Private`previewString = 
-               StringTake[LinterUIDockedCell`Private`noLineBreaks, {1, 
-                  UpTo[LinterUIDockedCell`Private`$previewLength]}]}, 
-              CodeInspector`LinterUI`Private`styleData["FixedWidth"][
-               If[
-               StringLength[LinterUIDockedCell`Private`expressionString] > 
-                LinterUIDockedCell`Private`$previewLength, 
-                StringJoin[
-                 StringDrop[LinterUIDockedCell`Private`previewString, -1], 
-                 "\[Ellipsis]"], LinterUIDockedCell`Private`previewString]]], 
-             
-             Offset[{8, 0}, {-1, 0}], {-1, 0}], 
-            Inset[
-             CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[
-             LinterUIDockedCell`Private`cell], 
-             Offset[{-8, 0}, {1, 0}], {1, 0}]}, ImageSize -> {300, 25}, 
-           AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> 
-           None], LinterUIDockedCell`Private`hoverQ = 
-          CurrentValue["MouseOver"]]], NotebookDelete[
-          EvaluationCell[]]; 
+        Blank[CellObject]]] := With[{}, Graphics[{
+          Inset[
+           With[{LinterUIDockedCell`Private`expressionString = First[
+               FrontEndExecute[
+                FrontEnd`ExportPacket[
+                 First[
+                  CodeInspector`LinterUI`Private`varValue[
+                  LinterUIDockedCell`Private`cell, "CellContents"]], 
+                 "InputText"]]]}, {
+            LinterUIDockedCell`Private`noLineBreaks = 
+             StringReplace[
+              LinterUIDockedCell`Private`expressionString, 
+               Alternatives["\n", "\n"] -> " "]}, {
+            LinterUIDockedCell`Private`previewString = 
+             StringTake[LinterUIDockedCell`Private`noLineBreaks, {1, 
+                UpTo[LinterUIDockedCell`Private`$previewLength]}]}, 
+            CodeInspector`LinterUI`Private`styleData["FixedWidth"][
+             If[
+             StringLength[LinterUIDockedCell`Private`expressionString] > 
+              LinterUIDockedCell`Private`$previewLength, 
+              StringJoin[
+               StringDrop[LinterUIDockedCell`Private`previewString, -1], 
+               "\[Ellipsis]"], 
+              LinterUIDockedCell`Private`previewString]]], {-1, 0}, {-1, 0}], 
+          
+          Inset[
+           CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[
+           LinterUIDockedCell`Private`cell], {1, 0}, {1, 0}]}, 
+         ImageSize -> {300, 25}, AspectRatio -> Full, 
+         PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> None] :> (
         SelectionMove[LinterUIDockedCell`Private`cell, All, Cell]; 
         With[{LinterUIDockedCell`Private`nb = 
            ParentNotebook[LinterUIDockedCell`Private`cell]}, 
           FrontEndExecute[
            FrontEnd`FrontEndToken[
            LinterUIDockedCell`Private`nb, "OpenSelectionParents"]]]; 
-        SelectionMove[LinterUIDockedCell`Private`cell, After, Cell], 
-        Appearance -> None]], LinterUIDockedCell`Private`$previewLength = 28, 
+        SelectionMove[LinterUIDockedCell`Private`cell, After, Cell])], 
+     LinterUIDockedCell`Private`$previewLength = 28, 
      CodeInspector`LinterUI`Private`applyToVar[
        Pattern[CodeInspector`LinterUI`Private`function, 
         Blank[]], {

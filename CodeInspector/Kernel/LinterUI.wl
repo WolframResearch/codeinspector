@@ -883,7 +883,7 @@ relintAndRemarkup[cell_CellObject, cellContents_] :=
 
 makeTagOptionList[lint_CodeInspector`InspectionObject] :=
 	With[
-		{tagArgument = Lookup[lint[[4]], "Argument", Nothing]},
+		{tagArgument = Lookup[lint[[4]], "Argument", Nothing, Splice[{"Subtags", #}]&]},
 		Join[
 			{CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"},
 			{lint["Tag"], tagArgument},
@@ -925,6 +925,15 @@ makeRaftMenuIgnoreItem[
 			(* Set the Enabled option for tag to False. *)
 			(* CurrentValue is used to set the option, but AbsoluteCurrentValue is used to query the option to ensure correct
 				scope inheritance. See https://stash.wolfram.com/projects/FE/repos/frontend/pull-requests/5783/overview *)
+			(* However, if an option has not been set for a given cell, then the inheritance of CurrentValue works as that of AbsoluteCurrentValue would.
+				For example, if an option is set at the notebook level, and the same option has not been set at the cell level, then CurrentValue[cell, opt] returns the notebook option value, rather than Inherited.
+				Therefore, before setting an option at the notebook level, we check to see if it's been set at the cell level, and if not, set it to Inherited. *)
+			If[
+				MatchQ[scope, _NotebookObject] &&
+				!BooleanQ[CurrentValue[cell, makeTagOptionList[lint]]],
+
+				CurrentValue[cell, makeTagOptionList[lint]] = Inherited];
+
 			CurrentValue[scope, makeTagOptionList[lint]] = False;
 			
 			(* Now re-lint, and re-markup the code. *)
@@ -1886,6 +1895,63 @@ noLintsBracketMarker[cell_CellObject] :=
 
 
 (* ::Section::Closed:: *)
+(*Tag Suppression Dialog*)
+
+getDisabledLints[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject])] :=
+	With[
+		{tagsPath = {CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"}},
+		{rawTagsAssoc = CurrentValue[scope, tagsPath]},
+		
+		(* Note on variable names:
+			The "Tags" options are structured as either (e.g.)
+			<|"ImplicitTimesAcrossLines" -> <|Enabled -> False|>|>
+			or (e.g.)
+			<|"DuplicateClauses" -> <|"Subtags" -> <|"If" -> <|Enabled -> False|>|>|>|>
+			if there are sub-tags to the tags.
+			The functions in the following KeyValueMap use variables "tag", "tagOptions", and "value" which correspond to this structure, such that:
+			<|tag -> tagOptions|>
+			and
+			<|tag -> <|[Tag Option] -> value|>|> *)
+		
+		(* From the raw association of tags and options, we want to find all tags for which Enabled is True or False
+			(i.e. explicitly-specced rather than Inherited) and return an list of all such tags, where sub-tags are given by {tag, sub-tag}. *)
+		
+		{unflattenedTags = Catch @ KeyValueMap[
+		
+			Function[{tag, tagOptions},
+				Catch @ Lookup[
+					(* If the tag option value isn't an association, then the tag hasn't been enabled/disabled. So return Nothing. *)
+					Replace[tagOptions, Except[_Association] :> Throw[Nothing]],
+					(* First look to see if the tag has subtags. *)
+					"Subtags",
+					(* If not, then look to see if the tag has an Enabled option. *)
+					
+					(* We're only interested in tags that have been explicitly enabled or disabled, so return Nothing if... *)
+					Catch @ Lookup[
+						(* ...the tag option value isn't an association,... *)
+						Replace[tagOptions, Except[_Association] :> Throw[Nothing]],
+						Enabled,
+						(* ...the tag's Enabled option value isn't specified,... *)
+						Nothing,
+						(* ...or the tag's Enabled value isn't boolean. *)
+						Function[value, Replace[value, {_?BooleanQ -> tag, _ -> Nothing}]]],
+					
+					(* If the tag does have subtags, then find those which are explicitly enabled/disabled. *)
+					Function[subTags,
+						{tag, #}& /@ Keys @ Select[subTags,
+							Function[subTag, Catch @ BooleanQ @ Lookup[
+								Replace[subTag, Except[_Association] :> Throw[Nothing]],
+								Enabled,
+								Nothing,
+								Replace[{Except[_?BooleanQ] -> Nothing}]]]]]]],
+			
+			(* If the "Tags" option value isn't an association, then no tags have been enabled/disabled. So return an empty list. *)
+			Replace[rawTagsAssoc, Except[_Association] :> Throw[{}]]]},
+		
+		Flatten[unflattenedTags, 1]]
+
+
+(* ::Section::Closed:: *)
 (*UI Generation Actions*)
 
 
@@ -1922,7 +1988,7 @@ CodeInspector`LinterUI`$confidenceThreshold = .75;
 
 
 (* Currently, there's no UX to deal with lints with coincident sources. refineSources removes such conflicts by picking the lint of highest confidence, and discarding the others. *)
-refineSources[lints_?(MatchQ[{___CodeInspector`InspectionObject}]), cell_CellObject, codeBoxes_] :=
+refineSources[lints_?(MatchQ[{___(* CodeInspector`InspectionObject *)}]), cell_CellObject, codeBoxes_] :=
 	With[
 		(* Exclude lints with a confidence less than CodeInspector`LinterUI`$confidenceThreshold. *)
 		{confidenceThreshold = CodeInspector`LinterUI`$confidenceThreshold},
@@ -1938,7 +2004,7 @@ refineSources[lints_?(MatchQ[{___CodeInspector`InspectionObject}]), cell_CellObj
 						Prepend[
 							Lookup[Last[lint], "AdditionalSources", {}],
 							Last[lint][CodeParser`Source]]],
-				lints]},
+				Replace[lints, Except[_CodeInspector`InspectionObject] -> Nothing, 1]]},
 		
 		(* Only keep sources with sufficiently high confidence. *)
 		{clippedSources1 = Select[sources, #["Confidence"] >= confidenceThreshold &]},
@@ -1965,7 +2031,7 @@ refineSources[lints_?(MatchQ[{___CodeInspector`InspectionObject}]), cell_CellObj
 
 
 markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeBoxes_] :=
-	Block[{raftAttachedQ, mouseOver},
+	Block[{raftAttachedQ, mouseOverToken, mouseOverRaft, mouseOverMenu},
 
 		(* We want to mark up the cell boxes with underlights, highlighting, and lint rafts that appear on mouseover. *)
 		(* The approach here is to recursively apply markups to the cell boxes, where Fold is used to supply the next lint after each markup is applied. So, Fold starts with the raw cell boxes... *)
@@ -1988,7 +2054,7 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 						
 						With[
 							{markup =
-								DynamicModuleBox[{raftAttachedQ = False, mouseOver = False},
+								DynamicModuleBox[{raftAttachedQ = False, mouseOverToken = False, mouseOverRaft = False, mouseOverMenu = False},
 									(* Wrap the linted boxes in a DynamicWrapper that will manage hover effects and attachment of raft cells. *)
 									Evaluate @ DynamicWrapperBox[
 										(* Underlight the linted boxes, and tie their background to the state variable for that lint. *)
@@ -2002,12 +2068,12 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 												(* Failsafe. *)
 												_, None]]],
 										
-										mouseOver = CurrentValue["MouseOver"];
+										mouseOverToken = CurrentValue["MouseOver"];
 										(* Update the lint state variable so that other instances of this lint (other sources, and rafts in
 											the mooring) know whether this lint is being hovered over. "active" takes presedence over "hoverXXXX". *)
-										If[mouseOver && !MatchQ[varValue[cell, lint, "State"], "active" | "hoverMooring"], varSet[{cell, lint, "State"}, "hoverInPlace"]];
+										If[mouseOverToken && !MatchQ[varValue[cell, lint, "State"], "active" | "hoverMooring"], varSet[{cell, lint, "State"}, "hoverInPlace"]];
 										(* Attach the lint raft on mouseover of the linted boxes (given the absence of an existing raft). *)
-										If[mouseOver && !raftAttachedQ,
+										If[mouseOverToken && !raftAttachedQ,
 											raftAttachedQ = True;
 											AttachCell[EvaluationBox[],
 												varValue[cell, lint, "Raft"][
@@ -2031,7 +2097,7 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 														True,
 														{{Center, Bottom}, {0, 0}, {Center, Top}}]],
 												
-												RemovalConditions -> {"MouseExit"}]],
+												RemovalConditions -> {"MouseClickOutside"}]],
 												
 										(* This only needs to update with CurrentValue["MouseOver"]. *)
 										TrackedSymbols :> {}],

@@ -58,109 +58,64 @@ $previewLength = 28;
 
 dockedCellMenuItem[cell_CellObject] :=
 With[{},
-	Button[
+	RuleDelayed[
 		(* Display a preview of the cell contents ($previewLength characters), and the severity count icons from the cell bracket button. *)
-		DynamicModule[{hoverQ = False},
-			DynamicWrapper[
-				Graphics[
-					{
-						{
-							Dynamic[If[TrueQ[hoverQ], CodeInspector`LinterUI`Private`colorData["RaftBackHover"], CodeInspector`LinterUI`Private`colorData["PopupBack"]]],
-							Rectangle[{-1, -1}, {1, 1}]},
-						
-						(* Display $previewStringLength characters of the cell contents on the left of the menu item. *)
-						Inset[
-							With[
-								(* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
-								{expressionString = First[FrontEndExecute[
-									FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[cell, "CellContents"]], "InputText"]]]},
-								(*  *)
-								{noLineBreaks = StringReplace[expressionString, "\n" | "\r" -> " "]},
-								(* Clip expressionString to the preview length. *)
-								{previewString = StringTake[noLineBreaks, {1, UpTo[$previewLength]}]},
-								(* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
-								CodeInspector`LinterUI`Private`styleData["FixedWidth"][
-									If[StringLength[expressionString] > $previewLength,
-										StringDrop[previewString, -1] <> "\[Ellipsis]",
-										previewString]]],
-							
-							Offset[{8, 0}, {-1, 0}], {-1, 0}],
+		Graphics[
+			{
+				(* Display $previewStringLength characters of the cell contents on the left of the menu item. *)
+				Inset[
+					With[
+						(* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
+						{expressionString = First[FrontEndExecute[
+							FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[cell, "CellContents"]], "InputText"]]]},
+						(* Replace linebreaks with spaces. *)
+						{noLineBreaks = StringReplace[expressionString, "\n" | "\r" -> " "]},
+						(* Clip expressionString to the preview length. *)
+						{previewString = StringTake[noLineBreaks, {1, UpTo[$previewLength]}]},
+						(* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
+						CodeInspector`LinterUI`Private`styleData["FixedWidth"][
+							If[StringLength[expressionString] > $previewLength,
+								StringDrop[previewString, -1] <> "\[Ellipsis]",
+								previewString]]],
+					
+					{-1, 0}, {-1, 0}],
 
-						(* On the right of the menu item, display the same issue count icons as used in the cell bracket button. *)
-						Inset[
-							CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[cell],
-							Offset[{-8, 0}, {1, 0}], {1, 0}]
-					},
+				(* On the right of the menu item, display the same issue count icons as used in the cell bracket button. *)
+				Inset[
+					CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[cell],
+					{1, 0}, {1, 0}]
+			},
 
-					ImageSize -> {300, 25}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> None],
-				
-				hoverQ = CurrentValue["MouseOver"]]],
+			ImageSize -> {300, 25}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> None],
 		
-		(* When the menu item is clicked, delete the menu popup cell... *)
-		NotebookDelete[EvaluationCell[]];
 		(* ...select the target cell and open any cell group that it might be in... *)
 		SelectionMove[cell, All, Cell];
 		With[{nb = ParentNotebook[cell]}, FrontEndExecute[FrontEnd`FrontEndToken[nb, "OpenSelectionParents"]]];
 		(*  ...and then scroll the notebook view to the cell *)
-		SelectionMove[cell, After, Cell],
-
-		Appearance -> None]]
-
-
-dockedCellPopupMenuCell[notebook_NotebookObject, Dynamic[popupPresentQ_]] :=
-	With[{paneWidth = Automatic, maxPaneHeight = 200},
-		Cell[BoxData @ ToBoxes @
-			DynamicModule[{},
-				Highlighted[
-					Pane[
-						Column[
-							dockedCellMenuItem /@ CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
-							ItemSize -> {0, 0}, Spacings -> 0],
-						{paneWidth, UpTo[maxPaneHeight]},
-						(* The pane should scroll if its contents exceeds maxPaneHeight. *)
-						ImageSizeAction -> "Scrollable", Scrollbars -> {False, Automatic}, AppearanceElements -> None],
-
-					Background -> CodeInspector`LinterUI`Private`colorData["UIBack"], RoundingRadius -> 3,
-					Frame -> True, FrameStyle -> Directive[AbsoluteThickness[1], CodeInspector`LinterUI`Private`colorData["UIEdge"]],
-					(* Attached cells appear *underneath* docked cells, so align the top of the highlighted pane with the bottom of the docked cell. *)
-					FrameMargins -> {{4, 4}, {4, 7}}],
-
-					Initialization :> (popupPresentQ = True),
-					Deinitialization :> (popupPresentQ = False)],
-			
-			CellFrameMargins -> 0]]
+		SelectionMove[cell, After, Cell]]]
 
 
 dockedCellSeverityCountsButton[notebook_NotebookObject] :=
 	With[{formatIcon = Function[Show[#, ImageSize -> {13, 9}, BaselinePosition -> Scaled[-.2]]]},
-		DynamicModule[{popupPresentQ = False, menuCell},
-			CodeInspector`LinterUI`Private`button[
-
+		ActionMenu[
+			Highlighted[
 				Row[{
 					CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook, "exclamSize" -> 12, FontSize -> 14, FontWeight -> Plain],
 					Spacer[2],
-					PaneSelector[
-						{
-							False -> formatIcon[CodeInspector`LinterUI`Private`iconData["DownChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]],
-							True -> formatIcon[CodeInspector`LinterUI`Private`iconData["UpChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]]
-						},
-						Dynamic[popupPresentQ]
-					]
-				}],
-
-				(* Only open the pop-up menu if there isn't one already present, and if there is a non-zero number of linted cells. *)
-				If[!popupPresentQ && Length[CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"]] =!= 0,
-					menuCell = AttachCell[
-						EvaluationBox[],
-						dockedCellPopupMenuCell[notebook, Dynamic[popupPresentQ]],
-						{Left, Bottom},
-						Offset[{0, 0}, Automatic],
-						{Left, Top},
-						RemovalConditions -> {"MouseExit"}],
-					NotebookDelete[menuCell]],
+					formatIcon[CodeInspector`LinterUI`Private`iconData["DownChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]]}],
+				
 				ImageSize -> {Automatic, 19},
+				BaselinePosition -> Baseline,
+				Background -> White,
+				Frame -> True,
+				FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]],
 				FrameMargins -> {6{1, 1}, {1, 1}},
-				Alignment -> {Center, Baseline}]]]
+				Alignment -> {Center, Baseline}],
+			
+			dockedCellMenuItem /@
+				CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
+			
+			Appearance -> None]]
 
 
 dockedCell =
