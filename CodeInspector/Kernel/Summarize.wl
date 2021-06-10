@@ -58,7 +58,7 @@ $EnvironBuffer = 1
 
 
 
-$DefaultConfidenceLevel = 0.95
+$DefaultConfidenceLevel = 0.75
 
 
 
