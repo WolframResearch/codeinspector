@@ -227,7 +227,7 @@ CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], rhs_ /;
 
 
 
-CallNode[LeafNode[Symbol, "OptionsPattern", _], {}, _] -> scanOptionsPattern,
+CallNode[LeafNode[Symbol, "OptionsPattern", _], _, _] -> scanOptionsPattern,
 
 
 CallNode[LeafNode[Symbol, "MessageName", _], _, _] -> scanMessageName,
