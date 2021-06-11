@@ -87,12 +87,20 @@ If[PacletFind["Lint"] != {},
 ]
 
 
-CodeInspector::versions = "CodeParser version `1` and CodeInspector version `2` are different. There may be unexpected problems."
+CodeInspector::versions1 = "CodeParser version `1` and CodeInspector version `2` are different. There may be unexpected problems."
+
+CodeInspector::versions2 = "CodeFormatter version `1` and CodeInspector version `2` are different. There may be unexpected problems."
 
 codeParserVersion = "Version" /. PacletInformation["CodeParser"]
+codeFormatterVersion = "Version" /. PacletInformation["CodeFormatter"]
 codeInspectorVersion = "Version" /. PacletInformation["CodeInspector"]
+
 If[StringSplit[codeParserVersion, "."][[1;;2]] != StringSplit[codeInspectorVersion, "."][[1;;2]],
-  Message[CodeInspector::versions, codeParserVersion, codeInspectorVersion]
+  Message[CodeInspector::versions1, codeParserVersion, codeInspectorVersion]
+]
+
+If[StringSplit[codeFormatterVersion, "."][[1;;2]] != StringSplit[codeInspectorVersion, "."][[1;;2]],
+  Message[CodeInspector::versions2, codeFormatterVersion, codeInspectorVersion]
 ]
 
 

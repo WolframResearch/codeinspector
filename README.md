@@ -39,11 +39,12 @@ For older versions, you can install from the paclet server.
 
 The minimum version for CodeInspector is Mathematica 11.0.
 
-CodeInspector depends on [CodeParser](https://github.com/WolframResearch/codeparser).
+CodeInspector depends on [CodeParser](https://github.com/WolframResearch/codeparser) and [CodeFormatter](https://github.com/WolframResearch/codeformatter).
 
 Install CodeInspector and dependencies from the paclet server:
 ```
 PacletInstall["CodeParser"]
+PacletInstall["CodeFormatter"]
 PacletInstall["CodeInspector"]
 ```
 
