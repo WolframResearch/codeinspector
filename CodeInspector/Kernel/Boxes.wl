@@ -212,7 +212,7 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
-  CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
+  CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions, "BatchMode" -> False]
 ]]
 
 

@@ -281,6 +281,7 @@ Options[CodeInspectCST] = {
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
   "SuppressedRegions" -> {},
+  "BatchMode" -> True,
   (*
   Properties to pass from cst to lints
   *)
@@ -296,11 +297,11 @@ Options[CodeInspectCST] = {
 
 Attributes[CodeInspectCST] = {HoldFirst}
 
-CodeInspectCST[cstIn_, OptionsPattern[]] :=
+CodeInspectCST[cstIn_, opts:OptionsPattern[]] :=
 Catch[
-Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
+Module[{cst, data, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
-  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, data,
+  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, batchMode,
   tagExclusions, severityExclusions, confidence, lintLimit},
 
   If[$Debug,
@@ -323,6 +324,7 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
   inheritedProperties = OptionValue["InheritedProperties"];
+  batchMode = OptionValue["BatchMode"];
 
   tagExclusions = OptionValue["TagExclusions"];
   severityExclusions = OptionValue["SeverityExclusions"];
@@ -455,7 +457,7 @@ Module[{cst, agg, aggregateRules, abstractRules, ast, poss, lints,
     Throw[lints]
   ];
 
-  ast = Abstract[agg];
+  ast = Abstract[agg, "BatchMode" -> batchMode];
 
   agg =.;
 
@@ -514,6 +516,7 @@ Options[CodeInspectAgg] = {
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
   "SuppressedRegions" -> {},
+  "BatchMode" -> True,
   (*
   Properties to pass from cst to lints
   *)
@@ -531,8 +534,8 @@ Attributes[CodeInspectAgg] = {HoldFirst}
 
 CodeInspectAgg[aggIn_, OptionsPattern[]] :=
 Catch[
-Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
-  prog, start, suppressedRegions, isActive, inheritedProperties, data,
+Module[{agg, data, aggregateRules, abstractRules, ast, poss, lints,
+  prog, start, suppressedRegions, isActive, inheritedProperties, batchMode,
   tagExclusions, severityExclusions, confidence, lintLimit},
 
   If[$Debug,
@@ -548,7 +551,8 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
   abstractRules = OptionValue["AbstractRules"];
   suppressedRegions = OptionValue["SuppressedRegions"];
   inheritedProperties = OptionValue["InheritedProperties"];
-
+  batchMode = OptionValue["BatchMode"];
+  
   tagExclusions = OptionValue["TagExclusions"];
   severityExclusions = OptionValue["SeverityExclusions"];
   confidence = OptionValue[ConfidenceLevel];
@@ -591,7 +595,7 @@ Module[{agg, aggregateRules, abstractRules, ast, poss, lints,
     Throw[lints]
   ];
 
-  ast = Abstract[agg];
+  ast = Abstract[agg, "BatchMode" -> batchMode];
 
   agg =.;
 
