@@ -282,6 +282,7 @@ Options[CodeInspectCST] = {
   "AbstractRules" :> $DefaultAbstractRules,
   "SuppressedRegions" -> {},
   "BatchMode" -> True,
+  "KeepLowlevelScopingLints" -> True,
   (*
   Properties to pass from cst to lints
   *)
@@ -301,7 +302,7 @@ CodeInspectCST[cstIn_, opts:OptionsPattern[]] :=
 Catch[
 Module[{cst, data, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
-  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, batchMode,
+  scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, batchMode, keepLowlevelScopingLints,
   tagExclusions, severityExclusions, confidence, lintLimit},
 
   If[$Debug,
@@ -325,6 +326,7 @@ Module[{cst, data, agg, aggregateRules, abstractRules, ast, poss, lints,
   suppressedRegions = OptionValue["SuppressedRegions"];
   inheritedProperties = OptionValue["InheritedProperties"];
   batchMode = OptionValue["BatchMode"];
+  keepLowlevelScopingLints = OptionValue["KeepLowlevelScopingLints"];
 
   tagExclusions = OptionValue["TagExclusions"];
   severityExclusions = OptionValue["SeverityExclusions"];
@@ -494,6 +496,28 @@ Module[{cst, data, agg, aggregateRules, abstractRules, ast, poss, lints,
   scopingData = ScopingData[ast];
 
   scopingLints = scopingDataObjectToLints /@ scopingData;
+
+  scopingLints = Flatten[scopingLints];
+
+  If[!keepLowlevelScopingLints,
+    (*
+    remove low-level scoping lints such as:
+    unused parameter
+
+    These would be better displayed with syntax highlighting.
+
+    But the FE does not have syntax highlighting for this, so remove for now.
+
+
+    Obviously keep errors
+
+    And also keep "unused variables"
+    *)
+    scopingLints =
+      Cases[scopingLints,
+        InspectionObject[_, _, "Warning" | "Error" | "Fatal", _] |
+          InspectionObject["UnusedVariable", _, "Scoping", _]];
+  ];
 
   lints = lints ~Join~ scopingLints;
 
