@@ -512,7 +512,7 @@ Catch[
                       Function[{column, lints},
                         column -> LintMarkup[
                           If[isFirstError[lints, lineNumber, column], LintErrorIndicatorCharacter, LintErrorContinuationIndicatorCharacter],
-                          FontWeight->Bold, FontSize->Larger, FontColor->severityColor[lints]]
+                          FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->severityColor[lints]]
                       ]
                       ,
                       lintsPerColumn
@@ -534,7 +534,7 @@ Catch[
    Mark hitting EOF with \[FilledSquare]
    *)
     startMarker = If[endOfFile, LintEOFCharacter, LintContinuationCharacter];
-    AssociateTo[markupPerColumn, 0 -> LintMarkup[startMarker, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[startChar]]];
+    AssociateTo[markupPerColumn, 0 -> LintMarkup[startMarker, FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->severityColor[startChar]]];
   ];
 
   (*
@@ -551,7 +551,7 @@ Catch[
       ];
 
       endMarker = LintContinuationCharacter;
-      AssociateTo[markupPerColumn, StringLength[line]+1 -> LintMarkup[endMarker, FontWeight->Bold, FontSize->Larger, FontColor->severityColor[endChar]]];
+      AssociateTo[markupPerColumn, StringLength[line]+1 -> LintMarkup[endMarker, FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->severityColor[endChar]]];
     ,
     True,
       KeyDropFrom[markupPerColumn, StringLength[line]+1]
@@ -701,7 +701,7 @@ Module[{line, lintsPerColumn},
   
   line = Characters[line];
 
-  lintsPerColumn = KeyValueMap[(#1 -> LintMarkup[line[[#1]], FontWeight->Bold, FontColor->severityColor[#2]])&, lintsPerColumn];
+  lintsPerColumn = KeyValueMap[(#1 -> LintMarkup[line[[#1]], FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->severityColor[#2]])&, lintsPerColumn];
 
   line = ReplacePart[line, lintsPerColumn];
 

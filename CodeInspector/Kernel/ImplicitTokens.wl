@@ -341,7 +341,7 @@ Module[{line, cols, inserters, under, rules},
     Print["inserters: ", inserters];
   ];
 
-  rules = Merge[inserters, (LintMarkup[#, FontWeight->Bold, FontSize->Larger, FontColor->$color])& @* mergeCharacters];
+  rules = Merge[inserters, (LintMarkup[#, FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->$color])& @* mergeCharacters];
 
   rules = Normal[rules];
   

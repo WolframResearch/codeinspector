@@ -110,7 +110,9 @@ $LintsPerLineLimit = 5
 In Apr 26 2021 SW CodeTools meeting, SW wanted to have no bold at all.
 The Program style is enough to differentiate it from text
 *)
-$LintBoldFontWeight = "Medium"
+$LintTextFontWeight = "Medium"
+
+$LintGridFontWeight = Bold
 
 
 
@@ -556,7 +558,7 @@ Module[{g, bolded, actions, suggestions},
 
 	g[[1]] = {LintBold[tag],
 					" ",
-					LintMarkup[severity, FontWeight->Bold, FontColor->severityColor[{lint}]],
+					LintMarkup[severity, FontWeight->$LintGridFontWeight, FontColor->severityColor[{lint}]],
 					" " } ~Join~ g[[1]];
 
   Column[Row /@ g]
@@ -705,7 +707,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 	TODO: Combinations of styles could also be considered
 
 	For example, it would be nice for the top row and the bottom row of an error to be a single range -> {Bold, Red}
-	and then the underline could then add in -> {Larger}
+	and then the underline could then add in e.g., -> {Larger}
 
 	*)
 	red = coalesce[red];
@@ -728,9 +730,9 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 						Spacings -> {0, 0},
 						ItemSize -> $LintedLintItemSize,
 						ItemStyle -> {Automatic, Automatic,
-							(# -> {$LintBoldFontWeight, Red}& /@ red) ~Join~
-							(# -> {$LintBoldFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
-							(# -> {$LintBoldFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
+							(# -> {$LintGridBoldFontWeight, Red}& /@ red) ~Join~
+							(# -> {$LintGridBoldFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
+							(# -> {$LintGridBoldFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
 		,
 		Alignment -> {Left, Top}, Spacings -> {0, 0}];
@@ -1146,7 +1148,7 @@ Module[{s, color, weight, setup, opts},
 
 
 
-LintBold[content_] := LintMarkup[content, "Program", FontWeight->$LintBoldFontWeight]
+LintBold[content_] := LintMarkup[content, "Program", FontWeight->$LintTextFontWeight]
 
 LintPreserve[content_] := LintMarkup[content]
 

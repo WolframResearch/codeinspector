@@ -274,8 +274,8 @@ modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_]
   missingOpenerCols = Cases[missingOpenerStarts, {lineNumber, col_} :> col];
   missingCloserCols = Cases[missingCloserStarts, {lineNumber, col_} :> col];
 
-  missingOpenerInserters = AssociationMap[LintMarkup[LintMissingOpenerIndicatorCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, missingOpenerCols];
-  missingCloserInserters = AssociationMap[LintMarkup[LintMissingCloserIndicatorCharacter, FontWeight->Bold, FontSize->Larger, FontColor->$color]&, missingCloserCols];
+  missingOpenerInserters = AssociationMap[LintMarkup[LintMissingOpenerIndicatorCharacter, FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->$color]&, missingOpenerCols];
+  missingCloserInserters = AssociationMap[LintMarkup[LintMissingCloserIndicatorCharacter, FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->$color]&, missingCloserCols];
 
   If[$Debug,
     Print["lineNumber: ", lineNumber];
