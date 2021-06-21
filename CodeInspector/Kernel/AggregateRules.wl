@@ -1061,9 +1061,9 @@ Catch[
   Switch[patternTestArg2,
     LeafNode[Symbol, "Association", _],
       AppendTo[issues,
-        InspectionObject["AssociationCall", "Calling ``Association`` as a function.", "Error", <|
+        InspectionObject["AssociationCall", "``Association`` is not a boolean function.", "Error", <|
           Source -> patternTestArg2[[3, Key[Source]]],
-          CodeActions -> { CodeAction["Replace with AssociationQ", ReplaceNode, <|
+          CodeActions -> { CodeAction["Replace with ``AssociationQ``", ReplaceNode, <|
             "ReplacementNode" -> ToNode[AssociationQ],
             Source -> patternTestArg2[[3, Key[Source]]]
           |>] },
@@ -1073,9 +1073,9 @@ Catch[
     ,
     LeafNode[Symbol, "String", _],
       AppendTo[issues,
-        InspectionObject["StringCall", "Calling ``String`` as a function.", "Error", <|
+        InspectionObject["StringCall", "``String`` is not a boolean function.", "Error", <|
           Source -> patternTestArg2[[3, Key[Source]]],
-          CodeActions -> { CodeAction["Replace with StringQ", ReplaceNode, <|
+          CodeActions -> { CodeAction["Replace with ``StringQ``", ReplaceNode, <|
             "ReplacementNode" -> ToNode[StringQ],
             Source -> patternTestArg2[[3, Key[Source]]]
           |>] },
@@ -1085,9 +1085,9 @@ Catch[
     ,
     LeafNode[Symbol, "Integer", _],
       AppendTo[issues,
-        InspectionObject["IntegerCall", "Calling ``Integer`` as a function.", "Error", <|
+        InspectionObject["IntegerCall", "``Integer`` is not a boolean function.", "Error", <|
           Source -> patternTestArg2[[3, Key[Source]]],
-          CodeActions -> { CodeAction["Replace with IntegerQ", ReplaceNode, <|
+          CodeActions -> { CodeAction["Replace with ``IntegerQ``", ReplaceNode, <|
             "ReplacementNode" -> ToNode[IntegerQ],
             Source -> patternTestArg2[[3, Key[Source]]]
           |>] },
@@ -1097,10 +1097,10 @@ Catch[
     ,
     LeafNode[Symbol, "Real", _],
       AppendTo[issues,
-        InspectionObject["RealCall", "Calling ``Real`` as a function.", "Error", <|
+        InspectionObject["RealCall", "``Real`` is not a boolean function.", "Error", <|
           Source -> patternTestArg2[[3, Key[Source]]],
-          CodeActions -> { CodeAction["Replace with Developer`RealQ", ReplaceNode, <|
-            "ReplacementNode" -> ToNode[ToNode[Developer`RealQ]],
+          CodeActions -> { CodeAction["Replace with ``Developer`RealQ``", ReplaceNode, <|
+            "ReplacementNode" -> ToNode[Developer`RealQ],
             Source -> patternTestArg2[[3, Key[Source]]]
           |>] },
           ConfidenceLevel -> 0.95 |>
@@ -1109,9 +1109,9 @@ Catch[
     ,
     LeafNode[Symbol, "Failure", _],
       AppendTo[issues,
-        InspectionObject["FailureCall", "Calling ``Failure`` as a function.", "Error", <|
+        InspectionObject["FailureCall", "``Failure`` is not a boolean function.", "Error", <|
           Source -> patternTestArg2[[3, Key[Source]]],
-          CodeActions -> { CodeAction["Replace with FailureQ", ReplaceNode, <|
+          CodeActions -> { CodeAction["Replace with ``FailureQ``", ReplaceNode, <|
             "ReplacementNode" -> ToNode[FailureQ],
             Source -> patternTestArg2[[3, Key[Source]]]
           |>] },

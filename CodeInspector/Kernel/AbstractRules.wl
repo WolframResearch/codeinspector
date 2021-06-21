@@ -261,23 +261,40 @@ Nothing
 Attributes[scanBadCalls] = {HoldRest}
 
 scanBadCalls[pos_List, astIn_] :=
-Module[{ast, node, data, head, name, issues},
+Module[{ast, node, data, head, name, issues, isPredicate, text, parentPos, parent},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   head = node[[1]];
   name = head["String"];
   data = head[[3]];
 
+  isPredicate = False;
+
+  parentPos = pos;
+  If[parentPos != {},
+    parentPos = Most[parentPos];
+    parent = Extract[ast, {parentPos}][[1]];
+    If[ListQ[parent],
+      parentPos = Most[parentPos];
+      parent = Extract[ast, {parentPos}][[1]];
+    ];
+
+    If[MatchQ[parent, CallNode[LeafNode[Symbol, "If", _], _, _]],
+      isPredicate = True
+    ]
+  ];
+
   issues = {};
 
-    Switch[name,
+  Switch[name,
     "String",
+      text = If[isPredicate, "``String`` is not a boolean function.", "``String`` is not a function."];
       AppendTo[issues,
-        InspectionObject["BadCall", "``String`` is not a function.", "Error",
+        InspectionObject["BadCall", text, "Error",
           <|
             Source -> data[Source],
             CodeActions -> {
-              CodeAction["Replace ``String`` with ``StringQ``", ReplaceNode, <|
+              CodeAction["Replace with ``StringQ``", ReplaceNode, <|
                 "ReplacementNode" -> ToNode[StringQ], Source -> data[Source] |>]
             },
             ConfidenceLevel -> 0.90,
@@ -287,12 +304,13 @@ Module[{ast, node, data, head, name, issues},
       ]
     ,
     "Integer",
+      text = If[isPredicate, "``Integer`` is not a boolean function.", "``Integer`` is not a function."];
       AppendTo[issues,
-        InspectionObject["BadCall", "``Integer`` is not a function.", "Error",
+        InspectionObject["BadCall", text, "Error",
           <|
             Source -> data[Source],
             CodeActions -> {
-              CodeAction["Replace ``Integer`` with ``IntegerQ``", ReplaceNode, <|
+              CodeAction["Replace with ``IntegerQ``", ReplaceNode, <|
                 "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>]
             },
             ConfidenceLevel -> 0.90,
@@ -302,12 +320,13 @@ Module[{ast, node, data, head, name, issues},
       ]
     ,
     "True",
+      text = If[isPredicate, "``True`` is not a boolean function.", "``True`` is not a function."];
       AppendTo[issues,
-        InspectionObject["BadCall", "``True`` is not a function.", "Error",
+        InspectionObject["BadCall", text, "Error",
           <|
             Source -> data[Source],
             CodeActions -> {
-              CodeAction["Replace ``True`` with ``TrueQ``", ReplaceNode, <|
+              CodeAction["Replace with ``TrueQ``", ReplaceNode, <|
                 "ReplacementNode" -> ToNode[TrueQ], Source -> data[Source] |>]
             },
             ConfidenceLevel -> 0.95,
@@ -317,8 +336,9 @@ Module[{ast, node, data, head, name, issues},
       ]
     ,
     _,
+      text = If[isPredicate, format[name] <> " is not a boolean function.", format[name] <> " is not a function."];
       AppendTo[issues,
-        InspectionObject["BadCall", format[name] <> " is not a function.", "Error",
+        InspectionObject["BadCall", text, "Error",
           <|
             data,
             ConfidenceLevel -> 0.90,
