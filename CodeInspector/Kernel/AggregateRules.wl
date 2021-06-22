@@ -64,18 +64,7 @@ PostfixNode[
 (*
 Tags: ImplicitTimesAcrossLines
 *)
-InfixNode[Times,
-  children_ /;
-    !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-    !FreeQ[children, blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _] -> scanImplicitTimesBlanks,
-
-InfixNode[Times,
-  children_ /;
-    !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-    !FreeQ[children, LeafNode[String, _, _], 1], _] -> scanImplicitTimesStrings,
-
-BinaryNode[Set | SetDelayed | UpSetDelayed, {InfixNode[Times, {_, LeafNode[Token`Fake`ImplicitTimes, _, _], _}, _], _, _}, _] -> scanSetImplicitTimes,
-
+LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
 InfixNode[Dot, _, _] -> scanDots,
 
@@ -347,6 +336,44 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
     )&, lowConfSrcs];
 
   issues
+]]
+
+
+Attributes[scanImplicitTimesDispatch] = {HoldRest}
+
+scanImplicitTimesDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, parentPos, parent},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  If[Length[pos] >= 2,
+    parentPos = Drop[pos, -2];
+    parent = Extract[agg, {parentPos}][[1]];
+
+    Switch[parent,
+      InfixNode[Times,
+        children_ /;
+          !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
+          !FreeQ[children, blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _], Throw[scanImplicitTimesBlanks[parentPos, agg]],
+
+      InfixNode[Times,
+        children_ /;
+          !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
+          !FreeQ[children, LeafNode[String, _, _], 1], _], Throw[scanImplicitTimesStrings[parentPos, agg]]
+    ]
+  ];
+
+  If[Length[pos] >= 4,
+    parentPos = Drop[pos, -4];
+    parent = Extract[agg, {parentPos}][[1]];
+
+    Switch[parent,
+      BinaryNode[Set | SetDelayed | UpSetDelayed, {InfixNode[Times, {_, LeafNode[Token`Fake`ImplicitTimes, _, _], _}, _], _, _}, _], Throw[scanSetImplicitTimes[parentPos, agg]]
+    ]
+  ];
+
+  {}
 ]]
 
 
