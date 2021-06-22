@@ -355,12 +355,14 @@ Module[{agg, node, parentPos, parent},
       InfixNode[Times,
         children_ /;
           !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
-          !FreeQ[children, blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _], Throw[scanImplicitTimesBlanks[parentPos, agg]],
-
+          !FreeQ[children, blankPat | BinaryNode[PatternTest | Condition, {blankPat, ___}, _], 1], _], Throw[scanImplicitTimesBlanks[parentPos, agg]]
+      ,
       InfixNode[Times,
         children_ /;
           !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
           !FreeQ[children, LeafNode[String, _, _], 1], _], Throw[scanImplicitTimesStrings[parentPos, agg]]
+      ,
+      InfixNode[Times, {LeafNode[Symbol, _, _], LeafNode[Token`Fake`ImplicitTimes, _, _], GroupNode[GroupParen, _, _]}, _], Throw[scanImplicitTimesPseudoCall[parentPos, agg]]
     ]
   ];
 
@@ -609,6 +611,43 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, lhs, lhsChi
   issues
 ]
 
+
+
+Attributes[scanImplicitTimesPseudoCall] = {HoldRest}
+
+scanImplicitTimesPseudoCall[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, head, implicitTimes, src, implicitTimesSrc},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  implicitTimes = children[[2]];
+
+  src = node[[3, Key[Source]]];
+  implicitTimesSrc = implicitTimes[[3, Key[Source]]];
+
+  issues = {};
+
+  replacementNode =
+    CallNode[{children[[1]]}, {
+      GroupNode[GroupSquare, {
+        LeafNode[Token`OpenSquare, "[", <||>],
+        children[[3, 2, 2]],
+        LeafNode[Token`CloseSquare, "]", <||>] }, <||>]}, <||>];
+
+  AppendTo[issues, InspectionObject["ImplicitTimesPseudoCall", "Suspicious implicit ``Times`` looks like a traditional function call.", "Error",
+    <|Source -> implicitTimesSrc,
+      ConfidenceLevel -> 0.70,
+      CodeActions -> {
+        CodeAction["Insert ``*``", InsertNode, <|Source -> implicitTimesSrc, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
+        CodeAction["Replace with ``[]``", ReplaceNode, <|Source -> src, "ReplacementNode" -> replacementNode |>] }
+    |>]
+  ];
+
+  issues
+]
 
 
 
