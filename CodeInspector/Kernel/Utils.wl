@@ -479,7 +479,7 @@ Position-spec (or possibly SourceCharacterIndex)
 
 If this is SourceCharacterIndex, then the deepest-first behavior does not matter since sources are always length 2
 *)
-conventionAgnosticSourceOrdering[a:{_Integer...}, b:{_Integer...}] :=
+conventionAgnosticSourceOrdering[a:{(_Integer | _Real)...}, b:{(_Integer | _Real)...}] :=
 	positionSpecOrdering[a, b]
 
 (*
