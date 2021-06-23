@@ -2222,7 +2222,7 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
         InspectionObject["PatternRule", "The same symbol occurs on lhs and rhs of ``Rule``.", "Error", <|
           Source -> lhsPatternName[[3, Key[Source]]],
           "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source]]],
-          ConfidenceLevel -> 0.8,
+          ConfidenceLevel -> 0.70,
           CodeActions -> {
             (* CodeAction["Replace with -> with :>", ReplaceNode, <|
               "ReplacementNode" -> choice1,
