@@ -212,7 +212,12 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
+  (*
+  session tokens such as % and Out are ok here
+  *)
+  Block[{CodeInspector`TokenRules`$ScanSessionTokens = False},
   CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions, "BatchMode" -> False, "KeepLowlevelScopingLints" -> False]
+  ]
 ]]
 
 

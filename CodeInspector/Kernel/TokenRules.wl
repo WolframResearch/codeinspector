@@ -3,6 +3,9 @@ BeginPackage["CodeInspector`TokenRules`"]
 $DefaultTokenRules
 
 
+$ScanSessionTokens
+
+
 Begin["`Private`"]
 
 Needs["CodeParser`"]
@@ -12,6 +15,25 @@ Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
 
 Needs["PacletManager`"] (* for PacletInformation *)
+
+
+
+(*
+A global to control special handling of session tokens:
+
+special tokens such as:
+%
+%%
+%45
+
+and also symbols:
+In
+Out
+etc.
+
+*)
+$ScanSessionTokens = True
+
 
 
 (*
@@ -31,6 +53,8 @@ sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessio
 $DefaultTokenRules = <|
 
 LeafNode[Symbol, _, _] -> scanSymbols,
+
+LeafNode[Token`Percent | Token`PercentPercent, _, _] | CompoundNode[Out, _, _] /; $ScanSessionTokens -> scanSessionTokens,
 
 Nothing
 |>
@@ -248,7 +272,7 @@ Module[{cst, node, data, str, issues, src},
           ]
       ]
     ,
-    StringMatchQ[str, sessionSymbolsStringPat],
+    $ScanSessionTokens && StringMatchQ[str, sessionSymbolsStringPat],
       AppendTo[issues,
         InspectionObject["SuspiciousSessionSymbol", "Suspicious use of session symbol " <> format[str] <> ".", "Warning",
           <|
@@ -265,6 +289,31 @@ Module[{cst, node, data, str, issues, src},
   issues
 ]
 
+
+
+Attributes[scanSessionTokens] = {HoldRest}
+
+scanSessionTokens[pos_List, cstIn_] :=
+Module[{cst, node, data, str, issues, src},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  str = node[[2]];
+  data = node[[3]];
+  src = data[Source];
+
+  issues = {};
+
+  AppendTo[issues,
+    InspectionObject["SuspiciousSessionToken", "Suspicious use of session token.", "Error",
+      <|
+        Source -> src,
+        ConfidenceLevel -> 0.95
+      |>
+    ]
+  ];
+
+  issues
+]
 
 
 End[]
