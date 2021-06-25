@@ -639,7 +639,7 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, implicitTim
 
   AppendTo[issues, InspectionObject["ImplicitTimesPseudoCall", "Suspicious implicit ``Times`` looks like a traditional function call.", "Error",
     <|Source -> implicitTimesSrc,
-      ConfidenceLevel -> 0.70,
+      ConfidenceLevel -> 0.10,
       CodeActions -> {
         CodeAction["Insert ``*``", InsertNode, <|Source -> implicitTimesSrc, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
         CodeAction["Replace with ``[]``", ReplaceNode, <|Source -> src, "ReplacementNode" -> replacementNode |>] }
