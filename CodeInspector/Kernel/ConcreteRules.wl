@@ -53,6 +53,13 @@ UnterminatedGroupNode[_, _, _] -> scanUnterminatedGroupNodes,
 KeyValuePattern[SyntaxIssues -> _] -> scanSyntaxIssues,
 
 
+GroupNode[GroupParen, {
+  LeafNode[Token`OpenParen, "(", _],
+  LeafNode[Token`Boxes`MultiWhitespace, _, _]...,
+  BoxNode[GridBox, _, _],
+  LeafNode[Token`Boxes`MultiWhitespace, _, _]...,
+  LeafNode[Token`CloseParen, ")", _]}, _] -> scanParenGridBox,
+
 
 Nothing
 |>
@@ -487,6 +494,71 @@ Module[{cst, data, issues, syntaxIssues, issuesToReturn, formatIssues, encodingI
 ]
 
 
+
+Attributes[scanParenGridBox] = {HoldRest}
+
+scanParenGridBox[pos_List, cstIn_] :=
+ Module[{cst, node, tag, children, ws1, ws2, issues, data, open, close},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  {open, close, ws1, ws2} =
+    Replace[children, {
+        open:LeafNode[Token`OpenParen, "(", _],
+        ws1Seq:LeafNode[Token`Boxes`MultiWhitespace, _, _]...,
+        BoxNode[GridBox, _, _],
+        ws2Seq:LeafNode[Token`Boxes`MultiWhitespace, _, _]...,
+        close:LeafNode[Token`CloseParen, ")", _]
+      } :> {open, close, {ws1Seq}, {ws2Seq}}
+    ];
+
+  Switch[ws1,
+    (*
+    all good
+    *)
+    {LeafNode[Token`Boxes`MultiWhitespace, "\[NoBreak]", _]},
+      Null
+    ,
+    _,
+      AppendTo[issues, InspectionObject["ParenGridBox", "``\\[NoBreak]`` should be between ( and grid box.", "Error", <|
+        Source -> open[[3, Key[Source]]],
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Insert ``\\[NoBreak]``", InsertNodeAfter, <|
+            Source -> open[[3, Key[Source]]],
+            "InsertionNode" -> LeafNode[Token`Boxes`MultiWhitespace, "\[NoBreak]", <||>]
+          |>]
+        }
+      |>]]
+  ];
+
+  Switch[ws2,
+    (*
+    all good
+    *)
+    {LeafNode[Token`Boxes`MultiWhitespace, "\[NoBreak]", _]},
+      Null
+    ,
+    _,
+      AppendTo[issues, InspectionObject["ParenGridBox", "``\\[NoBreak]`` should be between grid box and ).", "Error", <|
+        Source -> close[[3, Key[Source]]],
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Insert ``\\[NoBreak]``", InsertNode, <|
+            Source -> close[[3, Key[Source]]],
+            "InsertionNode" -> LeafNode[Token`Boxes`MultiWhitespace, "\[NoBreak]", <||>]
+          |>]
+        }
+      |>]]
+  ];
+
+  issues
+]
 
 
 
