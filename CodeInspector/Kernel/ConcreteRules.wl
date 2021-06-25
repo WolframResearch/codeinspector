@@ -38,7 +38,7 @@ TernaryNode[Span, _, _] -> scanTernarySpans,
 (*
 Tags: ImplicitTimesAcrossLines
 *)
-InfixNode[Times, {___, LeafNode[Token`Fake`ImplicitTimes, _, _], LeafNode[Whitespace, _, _]..., LeafNode[Token`Newline, _, _], ___}, _] -> scanImplicitTimesAcrossLines,
+InfixNode[Times, {___, LeafNode[Token`Fake`ImplicitTimes, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]..., LeafNode[Token`Newline, _, _], ___}, _] -> scanImplicitTimesAcrossLines,
 
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
@@ -248,7 +248,7 @@ Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
 
     i++;
 
-    While[i <= Length[children] && MatchQ[children[[i]], LeafNode[Whitespace, _, _]],
+    While[i <= Length[children] && MatchQ[children[[i]], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]],
        i++;
     ];
 
