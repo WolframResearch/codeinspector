@@ -458,16 +458,19 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
   issues = {};
   confidence = 0.95;
 
-  parentPos = pos;
-  If[parentPos != {},
-    parentPos = Most[parentPos];
+  If[Length[pos] >= 2,
+    parentPos = Drop[pos, -2];
     parent = Extract[ast, {parentPos}][[1]];
-    If[ListQ[parent],
-      parentPos = Most[parentPos];
-      parent = Extract[ast, {parentPos}][[1]];
-    ];
 
-    If[MatchQ[parent, CallNode[LeafNode[Symbol, "Graph" | "NetGraph" | "WordCloud", _], _, _]],
+    If[MatchQ[parent,
+        CallNode[LeafNode[Symbol,
+          (*
+          Pattern of various functions that may take a list of rules with duplicated keys
+
+          Usually graphs of some kind
+          *)
+          "Graph" | "NetGraph" | "WordCloud" | "GraphPlot" | "GraphPlot3D" | "FindKPlex" | "EdgeList" |
+          "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot", _], _, _]],
       (*
       Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
       *)
