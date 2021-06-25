@@ -352,7 +352,7 @@ Catch[
 InspectedBoxObject::usage = "InspectedBoxObject[box, lints] represents a formatted object of lints found in box."
 
 Format[o:InspectedBoxObject[processedBoxIn_, lintsIn_], StandardForm] :=
-Module[{lints, processedBox},
+Module[{lints, processedBox, col},
 
   lints = lintsIn;
 
@@ -374,6 +374,18 @@ Module[{lints, processedBox},
   *)
   lints = CodeInspector`Format`insertFormatInspectionObjectsAsPills /@ lints;
 
+  If[MatchQ[processedBox, {___}],
+    (*
+    If the input is a list (meaning Cell[BoxData[{...}]]) then handle specially
+
+    the top-level list is not a fully-general box
+
+    Related bugs: 405218
+    *)
+    col = Column[(Row[{RawBoxes[#]}, ImageMargins -> {{0, 0}, {10, 10}}]& /@ processedBox) ~Join~ lints, Left, 0]
+    ,
+    col = Column[({Row[{RawBoxes[#]}, ImageMargins -> {{0, 0}, {10, 10}}]}&[processedBox]) ~Join~ lints, Left, 0]
+  ];
 
   If[TrueQ[CodeInspector`Format`$Attached],
     (*
@@ -386,7 +398,7 @@ Module[{lints, processedBox},
 
       looks better for duplicating the input and marking up in an AttachedCell underneath
       *)
-      Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0]
+      col
       ,
       o
     ]
@@ -398,7 +410,7 @@ Module[{lints, processedBox},
 
       looks better when calling CodeInspectSummarize directly and you want a formatted object thing
       *)
-      Framed[Column[{Row[{RawBoxes[processedBox]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lints, Left, 0], Background -> GrayLevel[0.97], RoundingRadius -> 5]
+      Framed[col, Background -> GrayLevel[0.97], RoundingRadius -> 5]
       ,
       o
     ]
