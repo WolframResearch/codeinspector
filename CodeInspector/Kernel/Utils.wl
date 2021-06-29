@@ -314,6 +314,11 @@ $invisibleBMPCharacters = {
 	"\.7f",
 
 	(*
+	ZERO WIDTH SPACE
+	*)
+	"\:200b",
+
+	(*
 	ZERO WIDTH NON-JOINER
 	*)
 	"\:200c",
@@ -327,10 +332,7 @@ $invisibleBMPCharacters = {
 	LINE SEPARATOR
 	*)
 	"\:2028",
-
-	(*
-	WORD JOINER
-	*)
+	
 	"\[NoBreak]",
 
 	(*
@@ -338,10 +340,30 @@ $invisibleBMPCharacters = {
 	*)
 	"\:2061",
 
+	"\[InvisibleTimes]",
+
+	(*
+	INVISIBLE SEPARATOR
+	*)
+	"\:2063",
+
+	(*
+	INVISIBLE PLUS
+	*)
+	"\:2064",
+
 	(*
 	Virtual BOM character
 	*)
-	"\:e001"
+	"\:e001",
+
+	"\[InvisibleSpace]",
+	"\[InvisibleApplication]",
+	"\[InvisibleComma]",
+	"\[ImplicitPlus]",
+	"\[InvisiblePrefixScriptBase]",
+	"\[InvisiblePostfixScriptBase]"
+
 } ~Join~
 
 	(*
@@ -353,7 +375,8 @@ $invisibleBMPCharacters = {
 	Unicode non-characters
 	https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
 	*)
-	CharacterRange["\:fdd0", "\:fdef"]
+	CharacterRange["\:fdd0", "\:fdef"] ~Join~
+	{"\:fffe", "\:ffff"}
 
 
 (*
@@ -373,8 +396,6 @@ If[$VersionNumber >= 12.0,
 		Unicode non-characters
 		https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters
 		*)
-		"\:fffe",
-		"\:ffff",
 		"\|01fffe",
 		"\|01ffff",
 		"\|02fffe",
