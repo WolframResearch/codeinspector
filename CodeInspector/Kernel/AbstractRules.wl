@@ -470,7 +470,8 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
           Usually graphs of some kind
           *)
           "Graph" | "NetGraph" | "WordCloud" | "GraphPlot" | "GraphPlot3D" | "FindKPlex" | "EdgeList" |
-          "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot", _], _, _]],
+          "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot" |
+          "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph", _], _, _]],
       (*
       Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
       *)
