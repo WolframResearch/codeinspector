@@ -60,7 +60,9 @@ $LintsPerLineLimit
 
 $FormatInspectionObjectsAsPills
 
-$LintBoldFontWeight
+$LintTextFontWeight
+
+$LintGridFontWeight
 
 
 Begin["`Private`"]
@@ -730,9 +732,9 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 						Spacings -> {0, 0},
 						ItemSize -> $LintedLintItemSize,
 						ItemStyle -> {Automatic, Automatic,
-							(# -> {$LintGridBoldFontWeight, Red}& /@ red) ~Join~
-							(# -> {$LintGridBoldFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
-							(# -> {$LintGridBoldFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
+							(# -> {$LintGridFontWeight, Red}& /@ red) ~Join~
+							(# -> {$LintGridFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
+							(# -> {$LintGridFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
 		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
 		,
 		Alignment -> {Left, Top}, Spacings -> {0, 0}];
