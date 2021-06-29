@@ -435,6 +435,27 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
     <implicit Times> ___a?f
     *)
     Switch[p,
+      (*
+      for something like:
+
+      f[a_b_]
+
+      mark the error at b
+      *)
+      {CompoundNode[
+          PatternBlank |
+          PatternBlankSequence |
+          PatternBlankNullSequence, {
+            _,
+            CompoundNode[
+              Blank |
+              BlankSequence |
+              BlankNullSequence, {_, _}, _]}, _]
+        ,
+        LeafNode[Token`Fake`ImplicitTimes, _, _]}
+        ,
+        AppendTo[errorSrcs, p[[1, 2, 2, 2, 2, 3, Key[Source]]]];
+      ,
       {LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
         CompoundNode[
           (*
