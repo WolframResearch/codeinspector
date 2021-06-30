@@ -76,6 +76,15 @@ colorData = With[
 		"RaftMenuItem" -> GrayLevel[0.2],
 		"RaftDelimiter" -> GrayLevel[0.9],
 		"CodeHighlight" -> RGBColor[1, 0.67, 0.73],
+
+		(* Tag Toggler *)
+		"TogglerEdge" -> GrayLevel[.975],
+		"TogglerEdgeHover" -> Hue[0.55,0.82,0.87],
+		"TogglerBack" -> GrayLevel[.975],
+		"TogglerBackHover" -> White,
+		"TogglerDelim" -> GrayLevel[.8],
+		"TogglerText" -> GrayLevel[.2],
+		"TogglerCross" -> GrayLevel[.8],
 		
 		(* Error types. *)
 		"Formatting" -> errorSev3,
@@ -115,7 +124,16 @@ styleData = <|
 		Style[#1, ##2, FontColor -> colorData["CellBracketButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> "SemiBold", FontSize -> 10]],
 	
 	"FixedWidth" -> Function[
-		Style[#1, ##2, FontColor -> colorData["ButtonText"], FontFamily -> "Source Code Pro", FontWeight -> "SemiBold", FontSize -> 12]]
+		Style[#1, ##2, FontColor -> colorData["ButtonText"], FontFamily -> "Source Code Pro", FontWeight -> "SemiBold", FontSize -> 12]],
+	
+	"TogglerIndicator" -> Function[
+		Style[#1, ##2, FontFamily -> "Source Code Pro", FontWeight -> "SemiBold", FontSize -> 12]],
+	
+	"TogglerTagText" -> Function[
+		Style[#1, ##2, FontColor -> GrayLevel[.2], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]],
+	
+	"TogglerPaletteHeadings" -> Function[
+		Style[#1, ##2, FontColor -> GrayLevel[.4], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]]
 |>;
 
 
@@ -178,46 +196,32 @@ iconData = <|
  AspectRatio -> Automatic, ImageSize -> 10{1., 1.}, PlotRange -> {{0., 9.}, {0., 9.}}, ImagePadding -> .5]
 	],
 	
-	(* Wand *)
-	"Wand" -> Function[color,
-	Graphics[{Dynamic[FaceForm[color]], {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 
-       0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 
-       1, 0}, {1, 3, 3}}}, {{{2., 12.39}, {2.29, 
-       11.5}, {2.4181459999999997, 11.11229}, {2.72229, 
-       10.808146}, {3.11, 10.68}, {4., 10.39}, {3.11, 
-       10.1}, {2.72229, 9.971854}, {2.4181459999999997, 
-       9.66771}, {2.29, 9.280000000000001}, {2., 8.39}, {1.71, 
-       9.280000000000001}, {1.5818539999999999, 9.66771}, {1.27771, 
-       9.971854}, {0.89, 10.1}, {0., 10.39}, {0.89, 10.68}, {1.27771, 
-       10.808146}, {1.5818539999999999, 11.11229}, {1.71, 
-       11.5}}}]}, {FilledCurve[{{{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {0, 
-       1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 
-       0}, {0, 1, 0}, {1, 3, 3}}}, {{{9.78, 15.}, {10.07, 
-       14.11}, {10.198149999999998, 13.722290000000001}, {10.50229, 
-       13.418146}, {10.89, 13.29}, {11.78, 13.}, {10.89, 
-       12.71}, {10.50229, 12.581854}, {10.198149999999998, 
-       12.277709999999999}, {10.07, 11.89}, {9.78, 11.}, {9.49, 
-       11.89}, {9.361854000000001, 12.277709999999999}, {9.05771, 
-       12.581854}, {8.67, 12.71}, {7.78, 13.}, {8.67, 
-       13.29}, {9.05771, 13.418146}, {9.361854000000001, 
-       13.722290000000001}, {9.49, 14.11}}}]}, {FilledCurve[{{{0, 2, 
-       0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 
-       1, 0}, {1, 3, 3}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}}}, {{{11.78, 
-       9.79}, {12.07, 8.91}, {12.19686, 8.519324}, {12.50089, 
-       8.211584}, {12.89, 8.08}, {13.78, 7.79}, {12.89, 
-       7.5}, {12.50055, 7.374698}, {12.1953, 7.069455}, {12.07, 
-       6.68}, {11.78, 5.790000000000001}, {11.49, 
-       6.68}, {11.364700000000001, 7.069455}, {11.059450000000002, 
-       7.374698}, {10.67, 7.5}, {9.78, 7.79}, {10.67, 
-       8.08}, {11.05911, 8.211584}, {11.363140000000001, 
-       8.519324}, {11.49, 8.91}}}]}, {FilledCurve[{{{0, 2, 0}, {0, 1, 
-       0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{6.91, 
-       11.}, {-0.8400000000000001, -1.3300000000000018}, {1.74, -3.}, \
-{9.49, 9.36}}, {{5.67, 7.5}, {7.1499999999999995, 
-       9.83}, {8.370000000000001, 9.059999999999999}, {6.89, 
-       6.73}}}]}}, AspectRatio -> Automatic, 
- ImageSize -> 16 {14./15, 15./15}, 
- PlotRange -> {{0., 13.7}, {0., 15.}}, ImagePadding -> .5, BaselinePosition -> Scaled[.2]],
+	(* Wrench *)
+	"Wrench" -> Function[color,
+	Graphics[{Dynamic[color], AbsoluteThickness[1], 
+  Opacity[1.], 
+  JoinedCurve[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, 
+        {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+      0}, {0, 1, 0}, {0, 1, 
+         0}, {0, 1, 0}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}}}, {{{1.8936, 
+      4.0146}, 
+        {7.429600000000001, 9.5506}, {7.429600000000001, 
+      12.3786}, {9.5506, 
+         14.499600000000001}, {11.671599999999998, 
+      14.499600000000001}, {12.025599999999999, 
+         14.1466}, {10.2576, 12.3786}, {10.611599999999997, 
+      10.6106}, {12.3786, 10.2576}, 
+        {14.1466, 12.0246}, {14.4996, 11.671599999999998}, {14.4996, 
+      9.5506}, {12.3786, 
+         7.428599999999999}, {9.5506, 7.428599999999999}, {4.0146, 
+      1.8935999999999997}, 
+        {3.4295999999999998, 1.3075999999999994}, {2.4796, 
+      1.3075999999999994}, {1.8936, 
+         1.8935999999999997}, {1.3075999999999999, 
+      2.4785999999999997}, {1.3075999999999999, 
+         3.4286}, {1.8936, 4.0146}}}, CurveClosed -> {1}]}, 
+ AspectRatio -> Automatic, 
+  ImageSize -> {16., 16.}, PlotRange -> {{0., 16.}, {0., 16.}}, BaselinePosition -> Scaled[.2], ImagePadding -> .5],
  HoldAll],
 	
 	(* Cell Bracket Icon. *)
@@ -658,6 +662,7 @@ cellManagement[expr_] :=
 				ImageSize -> Automatic],
 
 			If[kernelWasQuitQ,
+				Needs["CodeInspector`"];
 				NotebookDelete[EvaluationCell[]]],
 
 			SynchronousUpdating -> False],
@@ -965,7 +970,7 @@ makeRaftMenuCodeActionItem[
 			constructRaftMenuItemLabel[raftType, 
 			
 				(* The action icon. *)
-				iconData["Wand"][colorData["UIDark"]],
+				iconData["Wrench"][colorData["UIDark"]],
 				
 				(* The code action label. Format pieces of code within the label with "Input" style, and enforce "StandardForm"'s font. *)
 					styleData["RaftMenuItem"][Row[
@@ -1139,6 +1144,14 @@ $operatorForms = {
 };
 
 
+(* Take the operator forms and transform them from (e.g.):
+	"&" -> "Function"
+	to
+	"&" -> "Function(&)"
+	for use in the raft menu item label. This follows the precedent set by rafts elsewhere in the FE. *)
+$operatorFormsMenuItemDisplay = Function[{operator, function}, operator -> StringJoin[function, "(", operator, ")"]] @@@ $operatorForms;
+
+
 makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_CellObject, Dynamic[itemClicked_], raftType_, Dynamic[raftMenu_]] :=
 	With[
 		{
@@ -1158,7 +1171,10 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 		
 		{
 			(* Transform "symbol" into {"symbol", "display"}, so that makeRaftMenuDocsItem knows what to display, and which symbol to link to. *)
-			symbolsAndDisplays = {Replace[#, $operatorForms], #}& /@ symbols,
+			symbolsAndDisplays = {
+				Replace[#, $operatorForms],
+				Replace[#, $operatorFormsMenuItemDisplay]
+			}& /@ symbols,
 			
 			(* Get the list of code actions from the lint, if they exist. *)
 			actionItems = Lookup[lint[[4]], CodeParser`CodeActions, {}],
@@ -1408,7 +1424,7 @@ confirmClosurePopup[cell_CellObject, Dynamic[popupPresentQ_]] :=
 applyChangesButton[cell_CellObject] :=
 	button[
 		Function[col,
-			Style[Row[{"Apply Edits", Spacer[3], iconData["Wand"][col]}, Alignment -> Baseline], 13],
+			Style[Row[{"Apply Edits", Spacer[3], iconData["Wrench"][col]}, Alignment -> Baseline], 13],
 			HoldAll],
 			
 		If[varValue[cell, "EditsMadeQ"], applyChanges[cell]],
@@ -1895,63 +1911,6 @@ noLintsBracketMarker[cell_CellObject] :=
 
 
 (* ::Section::Closed:: *)
-(*Tag Suppression Dialog*)
-
-getDisabledLints[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject])] :=
-	With[
-		{tagsPath = {CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"}},
-		{rawTagsAssoc = CurrentValue[scope, tagsPath]},
-		
-		(* Note on variable names:
-			The "Tags" options are structured as either (e.g.)
-			<|"ImplicitTimesAcrossLines" -> <|Enabled -> False|>|>
-			or (e.g.)
-			<|"DuplicateClauses" -> <|"Subtags" -> <|"If" -> <|Enabled -> False|>|>|>|>
-			if there are sub-tags to the tags.
-			The functions in the following KeyValueMap use variables "tag", "tagOptions", and "value" which correspond to this structure, such that:
-			<|tag -> tagOptions|>
-			and
-			<|tag -> <|[Tag Option] -> value|>|> *)
-		
-		(* From the raw association of tags and options, we want to find all tags for which Enabled is True or False
-			(i.e. explicitly-specced rather than Inherited) and return an list of all such tags, where sub-tags are given by {tag, sub-tag}. *)
-		
-		{unflattenedTags = Catch @ KeyValueMap[
-		
-			Function[{tag, tagOptions},
-				Catch @ Lookup[
-					(* If the tag option value isn't an association, then the tag hasn't been enabled/disabled. So return Nothing. *)
-					Replace[tagOptions, Except[_Association] :> Throw[Nothing]],
-					(* First look to see if the tag has subtags. *)
-					"Subtags",
-					(* If not, then look to see if the tag has an Enabled option. *)
-					
-					(* We're only interested in tags that have been explicitly enabled or disabled, so return Nothing if... *)
-					Catch @ Lookup[
-						(* ...the tag option value isn't an association,... *)
-						Replace[tagOptions, Except[_Association] :> Throw[Nothing]],
-						Enabled,
-						(* ...the tag's Enabled option value isn't specified,... *)
-						Nothing,
-						(* ...or the tag's Enabled value isn't boolean. *)
-						Function[value, Replace[value, {_?BooleanQ -> tag, _ -> Nothing}]]],
-					
-					(* If the tag does have subtags, then find those which are explicitly enabled/disabled. *)
-					Function[subTags,
-						{tag, #}& /@ Keys @ Select[subTags,
-							Function[subTag, Catch @ BooleanQ @ Lookup[
-								Replace[subTag, Except[_Association] :> Throw[Nothing]],
-								Enabled,
-								Nothing,
-								Replace[{Except[_?BooleanQ] -> Nothing}]]]]]]],
-			
-			(* If the "Tags" option value isn't an association, then no tags have been enabled/disabled. So return an empty list. *)
-			Replace[rawTagsAssoc, Except[_Association] :> Throw[{}]]]},
-		
-		Flatten[unflattenedTags, 1]]
-
-
-(* ::Section::Closed:: *)
 (*UI Generation Actions*)
 
 
@@ -1961,7 +1920,7 @@ getDisabledLints[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject])] :=
 
 findToken[codeBoxes_, sourceRaw_] :=
 	With[
-		{source = Replace[sourceRaw, {} -> {0}]},
+		{source = Replace[sourceRaw, {{} -> {0}, {_CodeParser`Intra} -> {0}, {t__, _CodeParser`Intra} :> {t}}]},
 		{
 			maxRecursions = 1000,
 			(* recursivePart:
@@ -2031,7 +1990,7 @@ refineSources[lints_?(MatchQ[{___(* CodeInspector`InspectionObject *)}]), cell_C
 
 
 markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeBoxes_] :=
-	Block[{raftAttachedQ, mouseOverToken, mouseOverRaft, mouseOverMenu},
+	Block[{raftAttachedQ, mouseOver},
 
 		(* We want to mark up the cell boxes with underlights, highlighting, and lint rafts that appear on mouseover. *)
 		(* The approach here is to recursively apply markups to the cell boxes, where Fold is used to supply the next lint after each markup is applied. So, Fold starts with the raw cell boxes... *)
@@ -2054,7 +2013,7 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 						
 						With[
 							{markup =
-								DynamicModuleBox[{raftAttachedQ = False, mouseOverToken = False, mouseOverRaft = False, mouseOverMenu = False},
+								DynamicModuleBox[{raftAttachedQ = False, mouseOver = False},
 									(* Wrap the linted boxes in a DynamicWrapper that will manage hover effects and attachment of raft cells. *)
 									Evaluate @ DynamicWrapperBox[
 										(* Underlight the linted boxes, and tie their background to the state variable for that lint. *)
@@ -2068,12 +2027,12 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 												(* Failsafe. *)
 												_, None]]],
 										
-										mouseOverToken = CurrentValue["MouseOver"];
+										mouseOver = CurrentValue["MouseOver"];
 										(* Update the lint state variable so that other instances of this lint (other sources, and rafts in
 											the mooring) know whether this lint is being hovered over. "active" takes presedence over "hoverXXXX". *)
-										If[mouseOverToken && !MatchQ[varValue[cell, lint, "State"], "active" | "hoverMooring"], varSet[{cell, lint, "State"}, "hoverInPlace"]];
+										If[mouseOver && !MatchQ[varValue[cell, lint, "State"], "active" | "hoverMooring"], varSet[{cell, lint, "State"}, "hoverInPlace"]];
 										(* Attach the lint raft on mouseover of the linted boxes (given the absence of an existing raft). *)
-										If[mouseOverToken && !raftAttachedQ,
+										If[mouseOver && !raftAttachedQ,
 											raftAttachedQ = True;
 											AttachCell[EvaluationBox[],
 												varValue[cell, lint, "Raft"][
@@ -2097,7 +2056,7 @@ markupCode[cell_CellObject, lint_CodeInspector`InspectionObject, sources_, codeB
 														True,
 														{{Center, Bottom}, {0, 0}, {Center, Top}}]],
 												
-												RemovalConditions -> {"MouseClickOutside"}]],
+												RemovalConditions -> {"MouseExit"}]],
 												
 										(* This only needs to update with CurrentValue["MouseOver"]. *)
 										TrackedSymbols :> {}],
