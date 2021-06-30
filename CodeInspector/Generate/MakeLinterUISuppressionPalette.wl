@@ -297,7 +297,7 @@ togglerPalette =
 			}],
 
 		Background -> GrayLevel[.975],
-		WindowTitle -> "Code Analysis Issue Suppressions",
+		WindowTitle -> "Code Analysis Suppressions",
 		Saveable -> False,
 		Evaluator -> "System"];
 
