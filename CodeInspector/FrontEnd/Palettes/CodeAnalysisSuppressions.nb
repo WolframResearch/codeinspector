@@ -1,0 +1,535 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     24853,        525]
+NotebookOptionsPosition[     24327,        504]
+NotebookOutlinePosition[     24840,        525]
+CellTagsIndexPosition[     24797,        522]
+WindowTitle->Code Analysis Suppressions
+WindowFrame->Palette*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ DynamicModuleBox[{}, 
+  DynamicBox[ToBoxes[
+   CodeInspector`LinterUI`Private`togglerTickle; 
+    With[{LinterUISuppressionPalette`Private`nb = InputNotebook[]}, 
+      CurrentValue[
+       LinterUISuppressionPalette`Private`nb, "SelectionHasUpdatedStyles"]; 
+      SelectedCells[LinterUISuppressionPalette`Private`nb]]; Dynamic[
+      LinterUISuppressionPalette`Private`togglerPane[], SingleEvaluation -> 
+      True], StandardForm],
+   ImageSizeCache->{335., {122., 128.}}],
+  DynamicModuleValues:>{},
+  Initialization:>{Condition[
+      LinterUISuppressionPalette`Private`getDisabledTags[
+       PatternTest[
+        Pattern[LinterUISuppressionPalette`Private`scope, 
+         Blank[]], 
+        MatchQ[
+         Alternatives[$FrontEnd, 
+          Blank[NotebookObject], 
+          Blank[CellObject]]]], 
+       Optional[
+        Pattern[LinterUISuppressionPalette`Private`inheritance, 
+         Blank[]], CurrentValue]], 
+      Or[LinterUISuppressionPalette`Private`inheritance === CurrentValue, 
+       LinterUISuppressionPalette`Private`inheritance === 
+       AbsoluteCurrentValue]] := If[
+      Not[
+       MemberQ[
+        Options[LinterUISuppressionPalette`Private`scope], CodeAssistOptions -> 
+        Condition[
+          Pattern[LinterUISuppressionPalette`Private`l1, 
+           Blank[]], 
+          MemberQ[
+          LinterUISuppressionPalette`Private`l1, "CodeToolsOptions" -> 
+           Blank[]]]]], {}, 
+      With[{
+       LinterUISuppressionPalette`Private`tagsPath = {
+         CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"}}, {
+       LinterUISuppressionPalette`Private`rawTagsAssoc = 
+        LinterUISuppressionPalette`Private`inheritance[
+         LinterUISuppressionPalette`Private`scope, 
+          LinterUISuppressionPalette`Private`tagsPath]}, {
+       LinterUISuppressionPalette`Private`unflattenedTags = Catch[
+          KeyValueMap[
+           
+           Function[{
+            LinterUISuppressionPalette`Private`tag, 
+             LinterUISuppressionPalette`Private`tagOptions}, 
+            Catch[
+             Lookup[
+              Replace[LinterUISuppressionPalette`Private`tagOptions, Except[
+                 Blank[Association]] :> Throw[Nothing]], "Subtags", 
+              Catch[
+               Lookup[
+                Replace[
+                LinterUISuppressionPalette`Private`tagOptions, Except[
+                   Blank[Association]] :> Throw[Nothing]], Enabled, Nothing, 
+                Function[LinterUISuppressionPalette`Private`value, 
+                 Replace[
+                 LinterUISuppressionPalette`Private`value, {PatternTest[
+                    Blank[], BooleanQ] -> 
+                   LinterUISuppressionPalette`Private`tag, Blank[] -> 
+                   Nothing}]]]], 
+              Function[LinterUISuppressionPalette`Private`subTags, 
+               Map[{LinterUISuppressionPalette`Private`tag, #}& , 
+                Keys[
+                 Select[LinterUISuppressionPalette`Private`subTags, 
+                  Function[LinterUISuppressionPalette`Private`subTag, 
+                   Catch[
+                    BooleanQ[
+                    Lookup[
+                    Replace[
+                    LinterUISuppressionPalette`Private`subTag, Except[
+                    Blank[Association]] :> Throw[Nothing]], Enabled, Nothing, 
+                    
+                    Replace[{Except[
+                    PatternTest[
+                    Blank[], BooleanQ]] -> Nothing}]]]]]]]]]]]], 
+           Replace[LinterUISuppressionPalette`Private`rawTagsAssoc, Except[
+              Blank[Association]] :> Throw[{}]]]]}, 
+       SortBy[
+        Flatten[LinterUISuppressionPalette`Private`unflattenedTags, 1], 
+        Replace[#, Pattern[LinterUISuppressionPalette`Private`l, {
+            BlankSequence[String]}] :> 
+         StringJoin[LinterUISuppressionPalette`Private`l]]& ]]], 
+    LinterUISuppressionPalette`Private`constructTagEnabledPath[
+      PatternTest[
+       Pattern[LinterUISuppressionPalette`Private`tag, 
+        Blank[]], 
+       MatchQ[
+        Alternatives[
+         Blank[String], {
+          Blank[String], 
+          Blank[String]}]]]] := {
+     CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags", 
+      Switch[
+       Head[LinterUISuppressionPalette`Private`tag], String, 
+       LinterUISuppressionPalette`Private`tag, List, 
+       Splice[
+        Insert[LinterUISuppressionPalette`Private`tag, "Subtags", 2]]], 
+      Enabled}, LinterUISuppressionPalette`Private`disabledTags[
+      Pattern[LinterUISuppressionPalette`Private`notebook, 
+       Blank[NotebookObject]], 
+      Optional[
+       Pattern[LinterUISuppressionPalette`Private`cell, 
+        Blank[]], None]] := Union[
+      Map[
+       Function[
+       LinterUISuppressionPalette`Private`tag, {
+        LinterUISuppressionPalette`Private`tag, $FrontEnd}], 
+       LinterUISuppressionPalette`Private`getDisabledTags[$FrontEnd]], 
+      Map[
+       Function[
+       LinterUISuppressionPalette`Private`tag, {
+        LinterUISuppressionPalette`Private`tag, 
+         LinterUISuppressionPalette`Private`notebook}], 
+       LinterUISuppressionPalette`Private`getDisabledTags[
+       LinterUISuppressionPalette`Private`notebook]], 
+      If[LinterUISuppressionPalette`Private`cell === None, {}, 
+       Map[
+        Function[
+        LinterUISuppressionPalette`Private`tag, {
+         LinterUISuppressionPalette`Private`tag, 
+          LinterUISuppressionPalette`Private`cell}], 
+        Flatten[
+         Map[LinterUISuppressionPalette`Private`getDisabledTags, 
+          Flatten[{LinterUISuppressionPalette`Private`cell}]], 1]]]], 
+    LinterUISuppressionPalette`Private`togglerPane[] := 
+    With[{LinterUISuppressionPalette`Private`notebook = InputNotebook[]}, {
+      LinterUISuppressionPalette`Private`cell = 
+       With[{LinterUISuppressionPalette`Private`cells = 
+          SelectedCells[LinterUISuppressionPalette`Private`notebook]}, 
+         Replace[LinterUISuppressionPalette`Private`cells, Except[{
+             BlankSequence[CellObject]}] -> None]]}, {
+      LinterUISuppressionPalette`Private`tags = 
+       LinterUISuppressionPalette`Private`disabledTags[
+        LinterUISuppressionPalette`Private`notebook, 
+         LinterUISuppressionPalette`Private`cell]}, 
+      Pane[
+       If[LinterUISuppressionPalette`Private`tags === {}, 
+        Column[{
+          Spacer[{1, 100}], 
+          CodeInspector`LinterUI`Private`styleData["TogglerPaletteHeadings"][
+          "No suppressions affecting the selection", FontSlant -> Italic, 
+           FontSize -> 14]}, ItemSize -> {Full, 20}, Spacings -> 0, 
+         BaseStyle -> {FontSize -> 1}], 
+        Column[{
+          Spacer[{1, 10}], 
+          Grid[{{
+             Spacer[33], 
+             Pane[
+              CodeInspector`LinterUI`Private`styleData[
+              "TogglerPaletteHeadings"][
+              "Issue", FontColor -> GrayLevel[0.45]], ImageSize -> {151, 17}], 
+             Pane[
+              CodeInspector`LinterUI`Private`styleData[
+              "TogglerPaletteHeadings"][
+              "Scope", FontColor -> GrayLevel[0.45]], 
+              ImageSize -> {110, 17}]}}, Dividers -> {Center, False}, 
+           FrameStyle -> Directive[
+             AbsoluteThickness[1], 
+             CodeInspector`LinterUI`Private`colorData["TogglerBack"]], 
+           Spacings -> {10, 0}, ItemSize -> Full, Alignment -> Left, 
+           BaseStyle -> {FontSize -> 1}], 
+          Pane[
+           Row[
+            Apply[
+            LinterUISuppressionPalette`Private`clearSuppressionControl, 
+             LinterUISuppressionPalette`Private`tags, {1}]], ImageSizeAction -> 
+           "Scrollable", Scrollbars -> {False, Automatic}, AppearanceElements -> 
+           None, Alignment -> {Center, Top}, ImageSize -> {333, 185}, 
+           FrameMargins -> {{0, 0}, {1, 1}}, BaseStyle -> {LineIndent -> 0}], 
+          
+          Spacer[{1, 4}], 
+          DynamicModule[{LinterUISuppressionPalette`Private`hoverQ}, 
+           DynamicWrapper[
+            Pane[
+             CodeInspector`LinterUI`Private`button[
+              Row[{
+                LinterUISuppressionPalette`Private`togglerClearAllButton[
+                 Dynamic[LinterUISuppressionPalette`Private`hoverQ]], 
+                Spacer[3], 
+                Style["Clear All", FontSize -> 13]}], 
+              CurrentValue[$FrontEnd, {
+                 CodeAssistOptions, "CodeToolsOptions", "CodeInspect", 
+                  "Tags"}] = Inherited; CurrentValue[
+                 InputNotebook[], {
+                 CodeAssistOptions, "CodeToolsOptions", "CodeInspect", 
+                  "Tags"}] = Inherited; CurrentValue[
+                 SelectedCells[
+                  InputNotebook[]], {
+                 CodeAssistOptions, "CodeToolsOptions", "CodeInspect", 
+                  "Tags"}] = Inherited; 
+              CodeInspector`LinterUI`Private`togglerTickle = RandomReal[], 
+              FrameMargins -> {{5.5, 8}, {2, 0}}], 
+             FrameMargins -> {{6, 0}, {3, 3}}], 
+            LinterUISuppressionPalette`Private`hoverQ = 
+            CurrentValue["MouseOver"]]]}, BaseStyle -> {FontSize -> 1}, 
+         Spacings -> {0, {0, 0, 4, {0}}}, ItemSize -> {0, 0}, Spacings -> 0, 
+         Dividers -> {None, {3 -> GrayLevel[0.8]}}]], ImageSize -> {335, 250},
+        Alignment -> {Center, Top}]], 
+    LinterUISuppressionPalette`Private`togglerClearAllButton[
+      Dynamic[
+       Pattern[LinterUISuppressionPalette`Private`hoverQ, 
+        Blank[]]]] := Graphics[{
+       CapForm["Round"], 
+       AbsoluteThickness[1.5], 
+       Dynamic[
+        If[LinterUISuppressionPalette`Private`hoverQ, 
+         CodeInspector`LinterUI`Private`colorData["TogglerEdgeHover"], 
+         CodeInspector`LinterUI`Private`colorData["TogglerCross"]]], 
+       Line[{{{-1, -1}, {1, 1}}, {{-1, 1}, {1, -1}}}]}, ImageSize -> 
+      15 {1, 1}, PlotRangePadding -> 1.75, PlotRange -> 1, BaselinePosition -> 
+      Scaled[0.2]], LinterUISuppressionPalette`Private`clearSuppressionControl[
+      PatternTest[
+       Pattern[LinterUISuppressionPalette`Private`tag, 
+        Blank[]], 
+       MatchQ[
+        Alternatives[
+         Blank[String], {
+          Blank[String], 
+          Blank[String]}]]], 
+      PatternTest[
+       Pattern[LinterUISuppressionPalette`Private`scope, 
+        Blank[]], 
+       MatchQ[
+        Alternatives[
+         Blank[FrontEndObject], 
+         Blank[NotebookObject], 
+         Blank[CellObject], {
+          BlankNullSequence[CellObject]}]]]] := 
+    With[{LinterUISuppressionPalette`Private`tagText = 
+       Replace[LinterUISuppressionPalette`Private`tag, 
+         Pattern[LinterUISuppressionPalette`Private`l, 
+           Blank[List]] :> StringJoin[
+           Insert[
+           LinterUISuppressionPalette`Private`l, 
+            "\[VeryThinSpace]\:25bb\[VeryThinSpace]", 2]]], 
+       LinterUISuppressionPalette`Private`scopeText = 
+       Switch[LinterUISuppressionPalette`Private`scope, 
+         Blank[FrontEndObject], "All Notebooks", 
+         Blank[NotebookObject], 
+         FE`Evaluate[
+          FEPrivate`TruncateStringToWidth[
+           AbsoluteCurrentValue[
+           LinterUISuppressionPalette`Private`scope, WindowTitle], 
+           "DialogStyle", 105]], 
+         Blank[CellObject], "Selected Cell", 
+         Blank[], "Selected Cells"]}, 
+      DynamicModule[{
+       LinterUISuppressionPalette`Private`clearedQ = False, 
+        LinterUISuppressionPalette`Private`hoverQ = False}, 
+       PaneSelector[{False -> Button[
+           DynamicWrapper[
+            Highlighted[
+             Grid[{{
+                LinterUISuppressionPalette`Private`togglerClearAllButton[
+                 Dynamic[LinterUISuppressionPalette`Private`hoverQ]], 
+                Pane[
+                 CodeInspector`LinterUI`Private`styleData["TogglerTagText"][
+                 LinterUISuppressionPalette`Private`tagText], 
+                 ImageSize -> {150, 20}, BaselinePosition -> Baseline, 
+                 Alignment -> {Left, Center}], 
+                Pane[
+                LinterUISuppressionPalette`Private`scopeText, 
+                 ImageSize -> {110, 20}, BaselinePosition -> Baseline, 
+                 Alignment -> {Left, Center}]}}, ItemSize -> Full, 
+              Alignment -> {Left, Baseline}, Dividers -> {Center, False}, 
+              FrameStyle -> Directive[
+                AbsoluteThickness[1], 
+                CodeInspector`LinterUI`Private`colorData["TogglerDelim"]], 
+              BaseStyle -> {
+               FontFamily -> "Source Sans Pro", FontSize -> 13, FontColor -> 
+                CodeInspector`LinterUI`Private`colorData["TogglerText"]}], 
+             Background -> Dynamic[
+               If[LinterUISuppressionPalette`Private`hoverQ, 
+                CodeInspector`LinterUI`Private`colorData["TogglerBackHover"], 
+                
+                CodeInspector`LinterUI`Private`colorData["TogglerBack"]]], 
+             RoundingRadius -> Dynamic[
+               If[LinterUISuppressionPalette`Private`hoverQ, 3, 0]], Frame -> 
+             True, FrameMargins -> {{2, 2}, {0, 0}}, FrameStyle -> Dynamic[
+               If[LinterUISuppressionPalette`Private`hoverQ, 
+                CodeInspector`LinterUI`Private`colorData["TogglerEdgeHover"], 
+                
+                CodeInspector`LinterUI`Private`colorData["TogglerEdge"]]]], 
+            LinterUISuppressionPalette`Private`hoverQ = 
+            CurrentValue["MouseOver"]], 
+           CurrentValue[LinterUISuppressionPalette`Private`scope, 
+              LinterUISuppressionPalette`Private`constructTagEnabledPath[
+              LinterUISuppressionPalette`Private`tag]] = Inherited; 
+           LinterUISuppressionPalette`Private`clearedQ = True; 
+           CodeInspector`LinterUI`Private`togglerTickle = RandomReal[], 
+           Appearance -> None, Tooltip -> "Clear suppression", TooltipDelay -> 
+           0], True -> Pane[
+           Spacer[{0, 0}], ImageSize -> {0, 0}, 
+           ImageMargins -> {{0, 0}, {-1, 0}}]}, 
+        Dynamic[LinterUISuppressionPalette`Private`clearedQ]]]], 
+    CodeInspector`LinterUI`Private`colorData = 
+    Association[
+     "UIBack" -> GrayLevel[0.97], "UIEdge" -> GrayLevel[0.85], "CloseButton" -> 
+      GrayLevel[0.6], "CodeBack" -> RGBColor[0.99, 1, 1], "UIDark" -> 
+      GrayLevel[0.4], "WarningText" -> RGBColor[0.89, 0.14, 0.05], 
+      "PopupEdge" -> GrayLevel[0.75], "PopupBack" -> GrayLevel[0.97], 
+      "Delimiter" -> GrayLevel[0.85], "CellBracketButtonText" -> 
+      GrayLevel[0.25], "CellBracketButtonBack" -> GrayLevel[0.95], 
+      "CellBracketButtonHover" -> GrayLevel[0.98], "CellBracketButtonEdge" -> 
+      GrayLevel[0.9], "ButtonBack" -> GrayLevel[1], "ButtonBackHover" -> 
+      GrayLevel[1], "ButtonBackMouseDown" -> Hue[0.55, 0.33, 1], 
+      "ButtonBackInactive" -> GrayLevel[1], "ButtonEdge" -> GrayLevel[0.8], 
+      "ButtonEdgeHover" -> Hue[0.55, 0.82, 0.87], "ButtonEdgeInactive" -> 
+      GrayLevel[0.85], "ButtonText" -> GrayLevel[0.2], "ButtonTextHover" -> 
+      GrayLevel[0.2], "ButtonTextInactive" -> GrayLevel[0.7], 
+      "ApplyButtonText" -> RGBColor[1, 1, 1], "ApplyButtonBack" -> 
+      RGBColor[0.247059, 0.666667, 0.301961], "ApplyButtonBackHover" -> 
+      RGBColor[0.266667, 0.72549, 0.329412], "ApplyButtonEdge" -> 
+      RGBColor[0.266667, 0.733333, 0.329412], "HashButtonBack" -> 
+      GrayLevel[1], "HashButtonBackHover" -> Hue[0.1, 0.26, 1], 
+      "HashButtonEdge" -> RGBColor[81/85, 0.79, 0.37], "RaftBack" -> 
+      RGBColor[0.96, 0.97, 0.97], "RaftMenuBack" -> GrayLevel[1], 
+      "RaftItemHighlight" -> RGBColor[0.96, 0.97, 0.97], "RaftBackHover" -> 
+      RGBColor[0.99, 1, 1], "RaftBackOpen" -> RGBColor[0.94, 0.95, 0.96], 
+      "RaftFrame" -> 
+      RGBColor[0.7568627450980392, 0.8274509803921568, 0.8823529411764706], 
+      "RaftLabel" -> GrayLevel[0.2], "RaftMenuItem" -> GrayLevel[0.2], 
+      "RaftDelimiter" -> GrayLevel[0.9], "CodeHighlight" -> 
+      RGBColor[1, 0.67, 0.73], "TogglerEdge" -> GrayLevel[0.975], 
+      "TogglerEdgeHover" -> Hue[0.55, 0.82, 0.87], "TogglerBack" -> 
+      GrayLevel[0.975], "TogglerBackHover" -> GrayLevel[1], "TogglerDelim" -> 
+      GrayLevel[0.8], "TogglerText" -> GrayLevel[0.2], "TogglerCross" -> 
+      GrayLevel[0.8], "Formatting" -> RGBColor[0.9400000000000001, 0.64, 0], 
+      "Remark" -> RGBColor[0.9400000000000001, 0.64, 0], "ImplicitTimes" -> 
+      RGBColor[0.9400000000000001, 0.64, 0], "Scoping" -> 
+      RGBColor[0.9400000000000001, 0.64, 0], "Warning" -> 
+      RGBColor[1, 0.45, 0], "Error" -> 
+      RGBColor[0.827451, 0.00392157, 0.00392157], "Fatal" -> 
+      RGBColor[0.827451, 0.00392157, 0.00392157], 3 -> 
+      RGBColor[0.9400000000000001, 0.64, 0], 2 -> RGBColor[1, 0.45, 0], 1 -> 
+      RGBColor[0.827451, 0.00392157, 0.00392157]], 
+    CodeInspector`LinterUI`Private`styleData = 
+    Association["SectionHeader" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["UIDark"], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]& ), 
+      "RaftLabel" -> (Style[
+        Row[
+         CodeInspector`Utils`boldify[#]], 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["RaftLabel"], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]& ), 
+      "RaftMenuItem" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["RaftMenuItem"], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]& ), 
+      "Button" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonText"], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 14]& ), 
+      "ApplyButton" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["ApplyButtonText"], 
+        FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 
+        12]& ), "FooterText" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["UIDark"], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]& ), 
+      "CellBracketButton" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["CellBracketButtonText"], 
+        FontFamily -> "Source Sans Pro", FontWeight -> "SemiBold", FontSize -> 
+        10]& ), "FixedWidth" -> (Style[#, 
+        SlotSequence[2], FontColor -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonText"], FontFamily -> 
+        "Source Code Pro", FontWeight -> "SemiBold", FontSize -> 12]& ), 
+      "TogglerIndicator" -> (Style[#, 
+        SlotSequence[2], FontFamily -> "Source Code Pro", FontWeight -> 
+        "SemiBold", FontSize -> 12]& ), "TogglerTagText" -> (Style[#, 
+        SlotSequence[2], FontColor -> GrayLevel[0.2], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]& ), 
+      "TogglerPaletteHeadings" -> (Style[#, 
+        SlotSequence[2], FontColor -> GrayLevel[0.4], FontFamily -> 
+        "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]& )], 
+    Attributes[CodeInspector`LinterUI`Private`button] = {HoldRest}, Null, 
+    CodeInspector`LinterUI`Private`button[
+      Pattern[CodeInspector`LinterUI`Private`disp, 
+       Blank[]], 
+      Pattern[CodeInspector`LinterUI`Private`action, 
+       Blank[]], 
+      OptionsPattern[{
+       ImageSize -> {Automatic, 19}, FrameMargins -> {9 {1, 1}, 0 {1, 1}}, 
+        BaselinePosition -> Baseline, Alignment -> {Center, Center}, Method -> 
+        "Preemptive", "ActiveQ" -> True, "TextColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonText"], 
+        "TextHoverColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonTextHover"], 
+        "TextInactiveColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonTextInactive"], 
+        "BackColor" -> CodeInspector`LinterUI`Private`colorData["ButtonBack"],
+         "BackHoverColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonBackHover"], 
+        "BackMouseDownColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonBackMouseDown"], 
+        "BackInactiveColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonBackInactive"], 
+        "EdgeColor" -> CodeInspector`LinterUI`Private`colorData["ButtonEdge"],
+         "EdgeHoverColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonEdgeHover"], 
+        "EdgeInactiveColor" -> 
+        CodeInspector`LinterUI`Private`colorData["ButtonEdgeInactive"]}]] := 
+    DynamicModule[{
+      CodeInspector`LinterUI`Private`hoverQ = False, 
+       CodeInspector`LinterUI`Private`mouseDownQ = False, 
+       CodeInspector`LinterUI`Private`fontColor}, 
+      Button[
+       DynamicWrapper[
+        Highlighted[
+         DynamicWrapper[
+          CodeInspector`LinterUI`Private`styleData["Button"][
+           Pane[
+            If[Head[CodeInspector`LinterUI`Private`disp] === Function, 
+             CodeInspector`LinterUI`Private`disp[
+             CodeInspector`LinterUI`Private`fontColor, 
+              CodeInspector`LinterUI`Private`hoverQ, 
+              CodeInspector`LinterUI`Private`mouseDownQ], 
+             CodeInspector`LinterUI`Private`disp], ContentPadding -> True, 
+            FrameMargins -> None, BaselinePosition -> Baseline], FontColor -> 
+           Dynamic[CodeInspector`LinterUI`Private`fontColor]], 
+          CodeInspector`LinterUI`Private`fontColor = Which[
+            TrueQ[
+             Not[
+              OptionValue["ActiveQ"]]], 
+            OptionValue["TextInactiveColor"], 
+            CodeInspector`LinterUI`Private`hoverQ, 
+            OptionValue["TextHoverColor"], True, 
+            OptionValue["TextColor"]]], ContentPadding -> False, FrameMargins -> 
+         OptionValue[FrameMargins], Alignment -> OptionValue[Alignment], 
+         Frame -> True, ImageSize -> OptionValue[ImageSize], RoundingRadius -> 
+         3, FrameStyle -> Dynamic[
+           Directive[
+            AbsoluteThickness[0.5], 
+            Which[
+             TrueQ[
+              Not[
+               OptionValue["ActiveQ"]]], 
+             OptionValue["EdgeInactiveColor"], 
+             CodeInspector`LinterUI`Private`hoverQ, 
+             OptionValue["EdgeHoverColor"], True, 
+             OptionValue["EdgeColor"]]]], Background -> Dynamic[
+           Which[
+            TrueQ[
+             Not[
+              OptionValue["ActiveQ"]]], 
+            OptionValue["BackInactiveColor"], 
+            And[
+            CodeInspector`LinterUI`Private`hoverQ, 
+             CodeInspector`LinterUI`Private`mouseDownQ], 
+            OptionValue["BackMouseDownColor"], 
+            CodeInspector`LinterUI`Private`hoverQ, 
+            OptionValue["BackHoverColor"], True, 
+            OptionValue["BackColor"]]]], 
+        CodeInspector`LinterUI`Private`hoverQ = CurrentValue["MouseOver"]; 
+        CodeInspector`LinterUI`Private`mouseDownQ = 
+         CurrentValue["MouseButtonTest"]], 
+       If[
+       OptionValue["ActiveQ"] =!= False, 
+        CodeInspector`LinterUI`Private`action], Appearance -> None, 
+       ContentPadding -> False, BaselinePosition -> 
+       OptionValue[BaselinePosition], Method -> OptionValue[Method]]]}]],
+ CellMargins->{{0, 0}, {0, 0}},
+ CellBracketOptions->{"Color"->RGBColor[0.269993, 0.308507, 0.6]},
+ CellHorizontalScrolling->True,
+ PageBreakAbove->True,
+ PageBreakWithin->False,
+ ShowAutoStyles->True,
+ LineSpacing->{1.25, 0},
+ AutoItalicWords->{},
+ ScriptMinSize->9,
+ ShowStringCharacters->False,
+ FontFamily:>CurrentValue["PanelFontFamily"],
+ FontSize:>CurrentValue[
+  "PanelFontSize"],ExpressionUUID->"26034615-a7fa-4018-b75b-305dccac8029"]
+},
+Saveable->False,
+Evaluator->"System",
+WindowSize->All,
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+WindowElements->{},
+WindowTitle->"Code Analysis Suppressions",
+Background->GrayLevel[0.975],
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (May 8, 2021)",
+StyleDefinitions->"Palette.nb",
+ExpressionUUID->"fd1c8d63-5021-481e-a4b3-41ea950546d1"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[599, 21, 23724, 481, 252, InheritFromParent,ExpressionUUID->"26034615-a7fa-4018-b75b-305dccac8029",
+ PageBreakAbove->True,
+ PageBreakWithin->False]
+}
+]
+*)
+
+(* End of internal cache information *)
+

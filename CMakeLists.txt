@@ -72,6 +72,7 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 
 set(STATIC_WL_PACLET_FRONTEND_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/FrontEnd/TextResources/CodeInspector.tr
+	${PROJECT_SOURCE_DIR}/CodeInspector/FrontEnd/Palettes/CodeAnalysisSuppressions.nb
 )
 
 set(PROCESSED_SYMBOLS_DATA_FILES

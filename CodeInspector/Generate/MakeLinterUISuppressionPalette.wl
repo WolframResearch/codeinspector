@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* ::Section::Closed:: *)
 (*Package Header*)
 
@@ -11,11 +13,15 @@ Begin["`Private`"]
 Needs["CodeInspector`"]
 Needs["WLUtilities`Resources`"]
 
+
+
 (* ::Section::Closed:: *)
 (*Lou's addDefinitions tools*)
 
+
 (* ::Text:: *)
 (*constructInit[syms] constructs an Initialization setting with the Definition of each of the given symbols. Think of it as an opt-in, non-recursive SaveDefinitions.*)
+
 
 SetAttributes[constructInit, HoldAllComplete]
 constructInit[syms__] := 
@@ -46,6 +52,7 @@ addDefinitions[DynamicModule[args__], {syms__Symbol}] :=
 
 (* ::Section::Closed:: *)
 (*Tag Suppression Dialog*)
+
 
 getDisabledTags[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject]), inheritance_:CurrentValue] /; Or[inheritance === CurrentValue, inheritance === AbsoluteCurrentValue] :=
 	If[
@@ -282,7 +289,7 @@ togglerPalette =
 			DynamicModule[{},
 				Dynamic[
 					CodeInspector`LinterUI`Private`togglerTickle;
-					With[{nb = InputNotebook[]}, CurrentValue[nb, "SelectionHasUpdatedStyles"]];
+					With[{nb = InputNotebook[]}, CurrentValue[nb, "SelectionHasUpdatedStyles"]; SelectedCells[nb]];
 					Dynamic[togglerPane[], SingleEvaluation -> True]]],
 			{
 				getDisabledTags,
@@ -300,6 +307,16 @@ togglerPalette =
 		WindowTitle -> "Code Analysis Suppressions",
 		Saveable -> False,
 		Evaluator -> "System"];
+
+ 
+
+
+(* ::Section::Closed:: *)
+(*Write*)
+
+
+NotebookSave[togglerPalette,
+	FileNameJoin[{ParentDirectory[NotebookDirectory[]], "FrontEnd", "Palettes", "CodeAnalysisSuppressions.nb"}]]
 
 
 (* ::Section::Closed:: *)
