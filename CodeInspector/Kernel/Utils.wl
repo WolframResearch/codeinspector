@@ -514,6 +514,17 @@ conventionAgnosticSourceOrdering[a_, b:After[{most___, last_}]] :=
 
 
 (*
+Replace {1, 3, 2, Intra[4, 4]} with {1, 3, 2, 4} for easier processing
+*)
+conventionAgnosticSourceOrdering[a:{most___, Intra[i_, i_]}, b_] :=
+	conventionAgnosticSourceOrdering[{most, i}, b]
+
+conventionAgnosticSourceOrdering[a_, b:{most___, Intra[i_, i_]}] :=
+	conventionAgnosticSourceOrdering[a, {most, i}]
+
+
+
+(*
 LineColumn
 
 just use natural order
