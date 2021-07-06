@@ -314,6 +314,21 @@ $invisibleBMPCharacters = {
 	"\.7f",
 
 	(*
+	COMBINING GRAPHEME JOINER
+	*)
+	"\:034F",
+
+	(*
+	Ogham Space Mark
+	*)
+	"\:1680",
+
+	(*
+	Mongolian Vowel Separator
+	*)
+	"\:180E",
+
+	(*
 	ZERO WIDTH SPACE
 	*)
 	"\:200b",
@@ -329,9 +344,9 @@ $invisibleBMPCharacters = {
 	"\:200d",
 
 	(*
-	LINE SEPARATOR
+	LEFT-TO-RIGHT-MARK
 	*)
-	"\:2028",
+	"\:200e",
 	
 	"\[NoBreak]",
 
@@ -362,7 +377,31 @@ $invisibleBMPCharacters = {
 	"\[InvisibleComma]",
 	"\[ImplicitPlus]",
 	"\[InvisiblePrefixScriptBase]",
-	"\[InvisiblePostfixScriptBase]"
+	"\[InvisiblePostfixScriptBase]",
+
+	"\[NegativeVeryThinSpace]",
+	"\[NegativeThinSpace]",
+	"\[NegativeMediumSpace]",
+	"\[NegativeThickSpace]",
+
+	(*
+	COMPATIBILITYNoBreak
+	*)
+	16^^f3a2,
+
+	"\[AutoSpace]",
+
+	"\[PageBreakAbove]",
+	"\[PageBreakBelow]",
+	"\[DiscretionaryPageBreakAbove]",
+	"\[DiscretionaryPageBreakBelow]",
+
+	"\[AlignmentMarker]",
+
+	(*
+	ZERO WIDTH NO-BREAK SPACE
+	*)
+	"\:feff"
 
 } ~Join~
 
