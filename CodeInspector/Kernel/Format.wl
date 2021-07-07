@@ -431,7 +431,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 		menuItems = DeleteCases[menuItems, _?FailureQ];
 
 		items = {
-					"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
+					"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"], tag] <> "\"" :> Null,
 					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
 					Delimiter } ~Join~
 					menuItems;
@@ -491,7 +491,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 					];
 
 					items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
-						"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
+						"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"], tag] <> "\"" :> Null,
 						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
 						Delimiter,
 						"Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
@@ -508,7 +508,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 					*)
 
 					items = {
-						"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
+						"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"], tag] <> "\"" :> Null,
 						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
 				]
 				,
@@ -518,7 +518,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 				*)
 
 				items = {
-					"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
+					"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"], tag] <> "\"" :> Null,
 					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
 			]
 			,
@@ -528,7 +528,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 			*)
 
 			items = {
-				"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\:25bb" <> data["Argument"], tag] <> "\"" :> Null,
+				"\"" <> If[KeyExistsQ[data, "Argument"], tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"], tag] <> "\"" :> Null,
 				"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
 		]
 	];
