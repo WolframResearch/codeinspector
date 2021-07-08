@@ -387,7 +387,7 @@ $invisibleBMPCharacters = {
 	(*
 	COMPATIBILITYNoBreak
 	*)
-	16^^f3a2,
+	"\:f3a2",
 
 	"\[AutoSpace]",
 
