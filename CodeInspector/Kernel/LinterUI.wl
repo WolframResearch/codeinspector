@@ -888,7 +888,7 @@ relintAndRemarkup[cell_CellObject, cellContents_] :=
 
 makeTagOptionList[lint_CodeInspector`InspectionObject] :=
 	With[
-		{tagArgument = Lookup[lint[[4]], "Argument", Nothing, Splice[{"Subtags", #}]&]},
+		{tagArgument = Lookup[lint[[4]], "Argument", Nothing]},
 		Join[
 			{CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"},
 			{lint["Tag"], tagArgument},

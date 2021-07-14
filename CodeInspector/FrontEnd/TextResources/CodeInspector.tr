@@ -21,7 +21,9 @@
 @@resource CodeInspectorExpressions
 {
 "DockedCell" -> Cell[BoxData[
- DynamicModuleBox[{LinterUIDockedCell`Private`notebook$$}, 
+ DynamicModuleBox[{LinterUIDockedCell`Private`notebook$$ = NotebookObject[
+   FrontEndObject[
+    LinkObject["6rq9n_shm", 3, 1]], 15]}, 
   GraphicsBox[{InsetBox[
      TemplateBox[{
        PaneBox[
@@ -42,7 +44,9 @@
              BaseStyle -> {"Deploy"}], BaselinePosition -> Scaled[0.05]], {
            False, True} -> 
           DynamicModuleBox[{
-            CodeInspector`LinterUI`Private`tracker$$ = 0.24573051415433}, 
+            CodeInspector`LinterUI`Private`tracker$$ = 
+             CodeInspector`LinterUI`Private`DynamicTriggers`\
+dockedCellLintCounts}, 
             DynamicWrapperBox[
              DynamicBox[
               ToBoxes[
@@ -605,7 +609,7 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
             LinterUIDockedCell`Private`noLineBreaks = 
              StringReplace[
               LinterUIDockedCell`Private`expressionString, 
-               Alternatives["\n", "\n"] -> " "]}, {
+               Alternatives["\n\n", "\n", "\n"] -> " "]}, {
             LinterUIDockedCell`Private`previewString = 
              StringTake[LinterUIDockedCell`Private`noLineBreaks, {1, 
                 UpTo[LinterUIDockedCell`Private`$previewLength]}]}, 

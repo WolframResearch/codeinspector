@@ -3,17 +3,17 @@
 (*** Wolfram Notebook File ***)
 (* http://www.wolfram.com/nb *)
 
-(* CreatedBy='Mathematica 12.3' *)
+(* CreatedBy='Mathematica 12.2' *)
 
 (*CacheID: 234*)
 (* Internal cache information:
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     24853,        525]
-NotebookOptionsPosition[     24327,        504]
-NotebookOutlinePosition[     24840,        525]
-CellTagsIndexPosition[     24797,        522]
+NotebookDataLength[     24065,        510]
+NotebookOptionsPosition[     23533,        489]
+NotebookOutlinePosition[     24052,        510]
+CellTagsIndexPosition[     24009,        507]
 WindowTitle->Code Analysis Suppressions
 WindowFrame->Palette*)
 
@@ -24,9 +24,9 @@ Cell[BoxData[
   DynamicBox[ToBoxes[
    CodeInspector`LinterUI`Private`togglerTickle; 
     With[{LinterUISuppressionPalette`Private`nb = InputNotebook[]}, 
-      CurrentValue[
-       LinterUISuppressionPalette`Private`nb, "SelectionHasUpdatedStyles"]; 
-      SelectedCells[LinterUISuppressionPalette`Private`nb]]; Dynamic[
+      AbsoluteCurrentValue[
+      LinterUISuppressionPalette`Private`nb, "SelectionHasUpdatedStyles"]]; 
+    Dynamic[
       LinterUISuppressionPalette`Private`togglerPane[], SingleEvaluation -> 
       True], StandardForm],
    ImageSizeCache->{335., {122., 128.}}],
@@ -71,33 +71,19 @@ Cell[BoxData[
             Catch[
              Lookup[
               Replace[LinterUISuppressionPalette`Private`tagOptions, Except[
-                 Blank[Association]] :> Throw[Nothing]], "Subtags", 
-              Catch[
-               Lookup[
-                Replace[
-                LinterUISuppressionPalette`Private`tagOptions, Except[
-                   Blank[Association]] :> Throw[Nothing]], Enabled, Nothing, 
-                Function[LinterUISuppressionPalette`Private`value, 
-                 Replace[
-                 LinterUISuppressionPalette`Private`value, {PatternTest[
-                    Blank[], BooleanQ] -> 
-                   LinterUISuppressionPalette`Private`tag, Blank[] -> 
-                   Nothing}]]]], 
-              Function[LinterUISuppressionPalette`Private`subTags, 
-               Map[{LinterUISuppressionPalette`Private`tag, #}& , 
+                 Blank[Association]] :> Throw[{}]], Enabled, 
+              Map[{LinterUISuppressionPalette`Private`tag, #}& , 
+               Catch[
                 Keys[
-                 Select[LinterUISuppressionPalette`Private`subTags, 
-                  Function[LinterUISuppressionPalette`Private`subTag, 
-                   Catch[
-                    BooleanQ[
+                 Select[LinterUISuppressionPalette`Private`tagOptions, Catch[
+                   BooleanQ[
                     Lookup[
-                    Replace[
-                    LinterUISuppressionPalette`Private`subTag, Except[
-                    Blank[Association]] :> Throw[Nothing]], Enabled, Nothing, 
-                    
-                    Replace[{Except[
-                    PatternTest[
-                    Blank[], BooleanQ]] -> Nothing}]]]]]]]]]]]], 
+                    Replace[#, Except[
+                    Blank[Association]] :> Throw[{}]], Enabled, None]]]& ]]]],
+               Replace[#, {PatternTest[
+                  Blank[], BooleanQ] -> 
+                LinterUISuppressionPalette`Private`tag, Blank[] -> 
+                Nothing}]& ]]], 
            Replace[LinterUISuppressionPalette`Private`rawTagsAssoc, Except[
               Blank[Association]] :> Throw[{}]]]]}, 
        SortBy[
@@ -118,9 +104,8 @@ Cell[BoxData[
       Switch[
        Head[LinterUISuppressionPalette`Private`tag], String, 
        LinterUISuppressionPalette`Private`tag, List, 
-       Splice[
-        Insert[LinterUISuppressionPalette`Private`tag, "Subtags", 2]]], 
-      Enabled}, LinterUISuppressionPalette`Private`disabledTags[
+       Splice[LinterUISuppressionPalette`Private`tag]], Enabled}, 
+    LinterUISuppressionPalette`Private`disabledTags[
       Pattern[LinterUISuppressionPalette`Private`notebook, 
        Blank[NotebookObject]], 
       Optional[
@@ -500,7 +485,7 @@ Cell[BoxData[
  ShowStringCharacters->False,
  FontFamily:>CurrentValue["PanelFontFamily"],
  FontSize:>CurrentValue[
-  "PanelFontSize"],ExpressionUUID->"26034615-a7fa-4018-b75b-305dccac8029"]
+  "PanelFontSize"],ExpressionUUID->"225852bf-0b2e-4975-aa78-89061c33e5c3"]
 },
 Saveable->False,
 Evaluator->"System",
@@ -509,9 +494,9 @@ WindowMargins->{{Automatic, 0}, {Automatic, 0}},
 WindowElements->{},
 WindowTitle->"Code Analysis Suppressions",
 Background->GrayLevel[0.975],
-FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (May 8, 2021)",
+FrontEndVersion->"12.2 for Mac OS X x86 (64-bit) (December 12, 2020)",
 StyleDefinitions->"Palette.nb",
-ExpressionUUID->"fd1c8d63-5021-481e-a4b3-41ea950546d1"
+ExpressionUUID->"d1bf4805-2d1b-4237-9ad9-888a9e328a45"
 ]
 (* End of Notebook Content *)
 
@@ -524,7 +509,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[599, 21, 23724, 481, 252, InheritFromParent,ExpressionUUID->"26034615-a7fa-4018-b75b-305dccac8029",
+Cell[599, 21, 22930, 466, 252, InheritFromParent,ExpressionUUID->"225852bf-0b2e-4975-aa78-89061c33e5c3",
  PageBreakAbove->True,
  PageBreakWithin->False]
 }

@@ -70,12 +70,12 @@ getDisabledTags[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject]), inhe
 				The "Tags" options are structured as either (e.g.)
 				<|"ImplicitTimesAcrossLines" -> <|Enabled -> False|>|>
 				or (e.g.)
-				<|"DuplicateClauses" -> <|"Subtags" -> <|"If" -> <|Enabled -> False|>|>|>|>
+				<|"DuplicateClauses" -> <|"If" -> <|Enabled -> False|>|>|>
 				if there are sub-tags to the tags.
-				The functions in the following KeyValueMap use variables "tag", "tagOptions", and "value" which correspond to this structure, such that:
+				The functions in the following KeyValueMap use variables "tag", "tagOptions", "tagOption" and "value" which correspond to this structure, such that:
 				<|tag -> tagOptions|>
 				and
-				<|tag -> <|[Tag Option] -> value|>|> *)
+				<|tag -> <|tagOption -> value|>|> *)
 			
 			(* From the raw association of tags and options, we want to find all tags for which Enabled is True or False
 				(i.e. explicitly-specced rather than Inherited) and return an list of all such tags, where sub-tags are given by {tag, sub-tag}. *)
@@ -84,30 +84,21 @@ getDisabledTags[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject]), inhe
 			
 				Function[{tag, tagOptions},
 					Catch @ Lookup[
-						(* If the tag option value isn't an association, then the tag hasn't been enabled/disabled. So return Nothing. *)
-						Replace[tagOptions, Except[_Association] :> Throw[Nothing]],
-						(* First look to see if the tag has subtags. *)
-						"Subtags",
-						(* If not, then look to see if the tag has an Enabled option. *)
+						(* If tagOptions isn't an Association, then Enabled hasn't been specced, so we can throw an empty list. *)
+						Replace[tagOptions, Except[_Association] :> Throw[{}]],
 						
-						(* We're only interested in tags that have been explicitly enabled or disabled, so return Nothing if... *)
-						Catch @ Lookup[
-							(* ...the tag option value isn't an association,... *)
-							Replace[tagOptions, Except[_Association] :> Throw[Nothing]],
-							Enabled,
-							(* ...the tag's Enabled option value isn't specified,... *)
-							Nothing,
-							(* ...or the tag's Enabled value isn't boolean. *)
-							Function[value, Replace[value, {_?BooleanQ -> tag, _ -> Nothing}]]],
+						(* Look for Enabled in the tag options. *)
+						Enabled,
 						
-						(* If the tag does have subtags, then find those which are explicitly enabled/disabled. *)
-						Function[subTags,
-							{tag, #}& /@ Keys @ Select[subTags,
-								Function[subTag, Catch @ BooleanQ @ Lookup[
-									Replace[subTag, Except[_Association] :> Throw[Nothing]],
-									Enabled,
-									Nothing,
-									Replace[{Except[_?BooleanQ] -> Nothing}]]]]]]],
+						(* If Enabled isn't present, then we can look for option values of the form "SubTag" -> <|___, Enabled -> True/False, ___|> *)
+						(* Return {tag, subtag} for subtags. *)
+						{tag, #}& /@ Catch @ Keys @ Select[
+							tagOptions,
+							(* Select options for which Enabled -> True/False (and are therefore subtags). *)
+							Catch @ BooleanQ[Lookup[Replace[#, Except[_Association] :> Throw[{}]], Enabled, None]]&],
+						
+						(* If Enabled is present and if its value is boolean, return the tag. Otherwise discard the tag. *)
+						Replace[#, {_?BooleanQ -> tag, _ -> Nothing}]&]],
 				
 				(* If the "Tags" option value isn't an association, then no tags have been enabled/disabled. So return an empty list. *)
 				Replace[rawTagsAssoc, Except[_Association] :> Throw[{}]]]},
@@ -119,7 +110,7 @@ getDisabledTags[scope_?(MatchQ[$FrontEnd | _NotebookObject | _CellObject]), inhe
 (* Construct the Enabled option path for a tag or subtag. *)
 constructTagEnabledPath[tag_?(MatchQ[_String | {_String, _String}])] := {
 	CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags",
-	Switch[Head[tag], String, tag, List, Splice[Insert[tag, "Subtags", 2]]],
+	Switch[Head[tag], String, tag, List, Splice[tag]],
 	Enabled}
 
 
@@ -289,7 +280,7 @@ togglerPalette =
 			DynamicModule[{},
 				Dynamic[
 					CodeInspector`LinterUI`Private`togglerTickle;
-					With[{nb = InputNotebook[]}, CurrentValue[nb, "SelectionHasUpdatedStyles"]; SelectedCells[nb]];
+					With[{nb = InputNotebook[]}, AbsoluteCurrentValue[nb, "SelectionHasUpdatedStyles"]];
 					Dynamic[togglerPane[], SingleEvaluation -> True]]],
 			{
 				getDisabledTags,
