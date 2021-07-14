@@ -1280,7 +1280,7 @@ Catch[
 
       Map and MapAt can have multiple arguments
      *)
-     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Map" | "MapAt", _], {
+     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Map" | "MapAt" | "MapIndexed", _], {
                           GroupNode[GroupSquare, { _,
                             InfixNode[Comma, {node, ___}, _ ], _ }, _]}, _]],
       Throw[{}]
