@@ -2056,6 +2056,17 @@ scanPatternTest[pos_List, aggIn_] :=
           Throw[issues]
         ];
 
+        (*
+        Something like:
+
+        LetterCharacter?UpperCaseQ
+
+        is fine because LetterCharacter is a pattern
+        *)
+        If[MatchQ[aName, "LetterCharacter" | "Whitespace"],
+          Throw[issues]
+        ];
+
         AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
           <| Source->qSrc,
              (*
@@ -2072,13 +2083,17 @@ scanPatternTest[pos_List, aggIn_] :=
         CompoundNode[
           Blank | BlankSequence | BlankNullSequence |
           PatternBlank | PatternBlankSequence | PatternBlankNullSequence, _, _] |
-        PostfixNode[Repeated | RepeatedNull, _, _]],
+        PostfixNode[Repeated | RepeatedNull, _, _] |
+        CallNode[LeafNode[Symbol, "Blank" | "Pattern" | "Except", _], _, _]],
         (*
         looks like a normal pattern on LHS of PatternTest
         *)
         Null
       ,
       True,
+        (*
+        looks like NOT a normal pattern on LHS of PatternTest
+        *)
         AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
           <| Source->qSrc,
              (*
