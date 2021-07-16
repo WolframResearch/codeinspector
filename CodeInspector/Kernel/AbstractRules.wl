@@ -480,6 +480,36 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
     ]
   ];
 
+  If[Length[pos] >= 6,
+    parentPos = Drop[pos, -6];
+    parent = Extract[ast, {parentPos}][[1]];
+    
+    If[MatchQ[parent,
+        CallNode[LeafNode[Symbol, "HTTPRequest", _], {
+          _
+          ,
+          CallNode[LeafNode[Symbol, "Association", _], {
+            CallNode[LeafNode[Symbol, "Rule", _], {
+              LeafNode[String, "\"Query\"", _]
+              ,
+              node}
+              ,
+              _
+            ]}
+            ,
+            _
+          ]}
+          ,
+          _
+        ]
+      ],
+      (*
+      HTTPRequest["http://example.com", <|"Query" -> {"a" -> "1", "a" -> "2"}|>] is ok for list of rules, so give low confidence of copy/paste error
+      *)
+      confidence = 0.1;
+    ]
+  ];
+
   keys = children[[All, 2, 1]];
 
   (*
