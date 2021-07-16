@@ -472,7 +472,7 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
           "Graph" | "NetGraph" | "WordCloud" | "GraphPlot" | "GraphPlot3D" | "FindKPlex" | "EdgeList" |
           "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot" |
           "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph" | "VertexConnectivity" |
-          "TreeGraph", _], _, _]],
+          "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList", _], _, _]],
       (*
       Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
       *)
