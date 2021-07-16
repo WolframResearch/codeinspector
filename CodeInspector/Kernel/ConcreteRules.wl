@@ -50,6 +50,8 @@ GroupMissingCloserNode[_, _, _] -> scanGroupMissingCloserNodes,
 
 UnterminatedGroupNode[_, _, _] -> scanUnterminatedGroupNodes,
 
+GroupMissingOpenerNode[_, _, _] -> scanGroupMissingOpenerNodes,
+
 KeyValuePattern[SyntaxIssues -> _] -> scanSyntaxIssues,
 
 
@@ -462,6 +464,26 @@ scanUnterminatedGroupNodes[pos_List, cstIn_] :=
   openerData = opener[[3]];
 
   {InspectionObject["UnterminatedGroup", "Missing closer.", "Fatal", <| openerData, ConfidenceLevel -> 1.0 |>]}
+]
+
+
+Attributes[scanGroupMissingOpenerNodes] = {HoldRest}
+
+scanGroupMissingOpenerNodes[pos_List, cstIn_] :=
+ Module[{cst, node, data, closer, closerData},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  data = node[[3]];
+
+  (*
+  Only report the closer
+
+  The contents can be arbitrarily complex
+  *)
+  closer = node[[2, -1]];
+  closerData = closer[[3]];
+
+  {InspectionObject["GroupMissingOpener", "Missing opener.", "Fatal", <| closerData, ConfidenceLevel -> 1.0 |>]}
 ]
 
 
