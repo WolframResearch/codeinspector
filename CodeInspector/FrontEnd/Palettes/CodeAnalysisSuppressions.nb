@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     24065,        510]
-NotebookOptionsPosition[     23533,        489]
-NotebookOutlinePosition[     24052,        510]
-CellTagsIndexPosition[     24009,        507]
+NotebookDataLength[     24012,        508]
+NotebookOptionsPosition[     23480,        487]
+NotebookOutlinePosition[     23999,        508]
+CellTagsIndexPosition[     23956,        505]
 WindowTitle->Code Analysis Suppressions
 WindowFrame->Palette*)
 
@@ -349,9 +349,7 @@ Cell[BoxData[
         SlotSequence[2], FontColor -> 
         CodeInspector`LinterUI`Private`colorData["UIDark"], FontFamily -> 
         "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]& ), 
-      "RaftLabel" -> (Style[
-        Row[
-         CodeInspector`Utils`boldify[#]], 
+      "RaftLabel" -> (Style[#, 
         SlotSequence[2], FontColor -> 
         CodeInspector`LinterUI`Private`colorData["RaftLabel"], FontFamily -> 
         "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]& ), 
@@ -485,7 +483,7 @@ Cell[BoxData[
  ShowStringCharacters->False,
  FontFamily:>CurrentValue["PanelFontFamily"],
  FontSize:>CurrentValue[
-  "PanelFontSize"],ExpressionUUID->"225852bf-0b2e-4975-aa78-89061c33e5c3"]
+  "PanelFontSize"],ExpressionUUID->"2b90c844-0509-4a90-9c5c-c51e294fc405"]
 },
 Saveable->False,
 Evaluator->"System",
@@ -496,7 +494,7 @@ WindowTitle->"Code Analysis Suppressions",
 Background->GrayLevel[0.975],
 FrontEndVersion->"12.2 for Mac OS X x86 (64-bit) (December 12, 2020)",
 StyleDefinitions->"Palette.nb",
-ExpressionUUID->"d1bf4805-2d1b-4237-9ad9-888a9e328a45"
+ExpressionUUID->"6caa57d3-80b6-4ccb-931a-8e200f856437"
 ]
 (* End of Notebook Content *)
 
@@ -509,7 +507,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[599, 21, 22930, 466, 252, InheritFromParent,ExpressionUUID->"225852bf-0b2e-4975-aa78-89061c33e5c3",
+Cell[599, 21, 22877, 464, 252, InheritFromParent,ExpressionUUID->"2b90c844-0509-4a90-9c5c-c51e294fc405",
  PageBreakAbove->True,
  PageBreakWithin->False]
 }

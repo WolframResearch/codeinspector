@@ -69,7 +69,7 @@ With[{},
 						{expressionString = First[FrontEndExecute[
 							FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[cell, "CellContents"]], "InputText"]]]},
 						(* Replace linebreaks with spaces. *)
-						{noLineBreaks = StringReplace[expressionString, "\r\n" | "\n" | "\r" -> " "]},
+						{noLineBreaks = StringReplace[expressionString, "\n" -> " "]},
 						(* Clip expressionString to the preview length. *)
 						{previewString = StringTake[noLineBreaks, {1, UpTo[$previewLength]}]},
 						(* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
@@ -236,7 +236,9 @@ dockedCell =
 				Initialization :> (
 					notebook = EvaluationNotebook[]),
 
-				Deinitialization :> CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False]
+				Deinitialization :> CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False],
+
+				UnsavedVariables :> {notebook}
 			],
 			
 			(* Save the following definitions in the DynamicModule's Initialization option. *)

@@ -21,9 +21,7 @@
 @@resource CodeInspectorExpressions
 {
 "DockedCell" -> Cell[BoxData[
- DynamicModuleBox[{LinterUIDockedCell`Private`notebook$$ = NotebookObject[
-   FrontEndObject[
-    LinkObject["6rq9n_shm", 3, 1]], 15]}, 
+ DynamicModuleBox[{LinterUIDockedCell`Private`notebook$$}, 
   GraphicsBox[{InsetBox[
      TemplateBox[{
        PaneBox[
@@ -608,8 +606,7 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
                  "InputText"]]]}, {
             LinterUIDockedCell`Private`noLineBreaks = 
              StringReplace[
-              LinterUIDockedCell`Private`expressionString, 
-               Alternatives["\n\n", "\n", "\n"] -> " "]}, {
+              LinterUIDockedCell`Private`expressionString, "\n" -> " "]}, {
             LinterUIDockedCell`Private`previewString = 
              StringTake[LinterUIDockedCell`Private`noLineBreaks, {1, 
                 UpTo[LinterUIDockedCell`Private`$previewLength]}]}, 
@@ -829,7 +826,8 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
        Pattern[CodeInspector`LinterUI`Private`expr, 
         Blank[]]] := FirstCase[CodeInspector`LinterUI`Private`expr, 
        Blank[List], {}, {0, Infinity}]}; 
-   LinterUIDockedCell`Private`notebook$$ = EvaluationNotebook[])]],
+   LinterUIDockedCell`Private`notebook$$ = EvaluationNotebook[]),
+  UnsavedVariables:>{LinterUIDockedCell`Private`notebook$$}]],
  CellFrame->{{0, 0}, {1, 1}},
  CellFrameMargins->{{0, 0}, {0, 0}},
  CellFrameColor->GrayLevel[0.85],

@@ -106,7 +106,7 @@ styleData = <|
 		Style[#1, ##2, FontColor -> colorData["UIDark"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
 		
 	"RaftLabel" -> Function[
-		Style[Row[CodeInspector`Utils`boldify[#1]], ##2, FontColor -> colorData["RaftLabel"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
+		Style[#1, ##2, FontColor -> colorData["RaftLabel"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
 	
 	"RaftMenuItem" -> Function[
 		Style[#1, ##2, FontColor -> colorData["RaftMenuItem"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
@@ -1295,10 +1295,7 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 														Style[
 															Row[
 																{
-																	(* Incase the lint description contains any newlines, or it has line-wrapped, we need to add its words
-																		individually to the Row, otherwise the "TakeAction" icon will appear floating to the right. Rather, we
-																		want it to appear directly after the last word, as if it were itself a character. *)
-																	Splice[styleData["RaftLabel"] /@ StringSplit[lintDescription]],
+																	Splice[styleData["RaftLabel"] /@ CodeInspector`Utils`boldify[lintDescription]],
 																	iconData["TakeAction"][colorData["RaftLabel"]]},
 																" ",
 																BaselinePosition -> Baseline],
