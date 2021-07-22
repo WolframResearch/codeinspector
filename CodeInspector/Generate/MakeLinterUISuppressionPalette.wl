@@ -115,12 +115,14 @@ constructTagEnabledPath[tag_?(MatchQ[_String | {_String, _String}])] := {
 
 
 disabledTags[notebook_NotebookObject, cell_:None] :=
-	Union[
-		Function[tag, {tag, $FrontEnd}] /@ getDisabledTags[$FrontEnd],
-		Function[tag, {tag, notebook}] /@ getDisabledTags[notebook],
-		If[cell === None,
-			{},
-			Function[tag, {tag, cell}] /@ Flatten[getDisabledTags /@ Flatten[{cell}], 1]]]
+	Replace[
+		Union[
+			Function[tag, {tag, $FrontEnd}] /@ getDisabledTags[$FrontEnd],
+			Function[tag, {tag, notebook}] /@ getDisabledTags[notebook],
+			If[cell === None,
+				{},
+				Function[tag, {tag, cell}] /@ Flatten[getDisabledTags /@ Flatten[{cell}], 1]]],
+		Except[_List] -> {}]
 
 
 togglerPane[] :=
@@ -129,6 +131,7 @@ togglerPane[] :=
 		{cell = With[{cells = SelectedCells[notebook]}, Replace[cells, Except[{__CellObject}] -> None]]},
 		{tags = disabledTags[notebook, cell]},
 
+		Highlighted[
 		Pane[
 			If[tags === {},
 
@@ -136,7 +139,7 @@ togglerPane[] :=
 					{
 						Spacer[{1, 100}],
 						CodeInspector`LinterUI`Private`styleData["TogglerPaletteHeadings"][
-							"No suppressions affecting the selection",
+							"No ignored issues affecting the selection",
 							FontSlant -> Italic, FontSize -> 14]},
 						ItemSize -> {Full, 20},
 						Spacings -> 0,
@@ -144,7 +147,7 @@ togglerPane[] :=
 
 				Column[
 					{
-						Spacer[{1, 10}],
+						Spacer[{1, 5}],
 						(* Column headings. *)
 						Grid[
 							{{
@@ -176,7 +179,7 @@ togglerPane[] :=
 							DynamicWrapper[
 								Pane[
 									CodeInspector`LinterUI`Private`button[
-										Row[{togglerClearAllButton[Dynamic[hoverQ]], Spacer[3], Style["Clear All", FontSize -> 13]}],
+										Row[{togglerClearAllButton[Dynamic[hoverQ]], Spacer[3], Style["Stop Ignoring All Issues", FontSize -> 13]}],
 
 										CurrentValue[$FrontEnd, {CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"}] = Inherited;
 										CurrentValue[InputNotebook[], {CodeAssistOptions, "CodeToolsOptions", "CodeInspect", "Tags"}] = Inherited;
@@ -188,13 +191,19 @@ togglerPane[] :=
 								
 								hoverQ = CurrentValue["MouseOver"]]]},
 
-					BaseStyle -> {FontSize -> 1},
+					BaseStyle -> {FontSize -> 1, FontColor -> RGBColor[0,0,0,0]},
 					Spacings -> {0, {0, 0, 4, {0}}},
 					ItemSize -> {0, 0}, Spacings -> 0,
 					Dividers -> {None, {3 -> GrayLevel[.8]}}]],
 
-			ImageSize -> {335, 250},
-			Alignment -> {Center, Top}]]
+			ImageSize -> {335, 243},
+			Alignment -> {Center, Top}],
+			
+			Background -> CodeInspector`LinterUI`Private`colorData["TogglerBack"],
+			Frame -> True,
+			FrameStyle -> Directive[AbsoluteThickness[1], CodeInspector`LinterUI`Private`colorData["TogglerPodEdge"]],
+			FrameMargins -> None,
+			RoundingRadius -> 3]]
 
 
 togglerClearAllButton[Dynamic[hoverQ_]] :=
@@ -265,7 +274,7 @@ clearSuppressionControl[tag_?(MatchQ[_String | {_String, _String}]), scope_?(Mat
 						CodeInspector`LinterUI`Private`togglerTickle = RandomReal[],
 						
 						Appearance -> None,
-						Tooltip -> "Clear suppression",
+						Tooltip -> "Stop ignoring issue",
 						TooltipDelay -> 0],
 
 
@@ -278,10 +287,21 @@ togglerPalette =
 	CreatePalette[
 		addDefinitions[
 			DynamicModule[{},
-				Dynamic[
-					CodeInspector`LinterUI`Private`togglerTickle;
-					With[{nb = InputNotebook[]}, AbsoluteCurrentValue[nb, "SelectionHasUpdatedStyles"]];
-					Dynamic[togglerPane[], SingleEvaluation -> True]]],
+				Column[{
+					Spacer[{1, 10}],
+					Row[{Spacer[8], CodeInspector`LinterUI`Private`styleData["TogglerPaletteSectionHeadings"]["Ignored Issues"]}],
+					Spacer[{1, 4}],
+					Pane[
+						Dynamic[
+							CodeInspector`LinterUI`Private`togglerTickle;
+							With[{nb = InputNotebook[]}, AbsoluteCurrentValue[nb, "SelectionHasUpdatedStyles"]];
+							Dynamic[togglerPane[], SingleEvaluation -> True, Background -> Hue[RandomReal[], 0, 0, 0]]],
+						FrameMargins -> {{8, 8}, {0, 0}},
+						Alignment -> Center],
+					Spacer[{1, 3}]},
+					
+					BaseStyle -> {FontSize -> 1},
+					Spacings -> 1]],
 			{
 				getDisabledTags,
 				constructTagEnabledPath,
@@ -294,8 +314,8 @@ togglerPalette =
 				CodeInspector`LinterUI`Private`button
 			}],
 
-		Background -> GrayLevel[.975],
-		WindowTitle -> "Code Analysis Suppressions",
+		Background -> GrayLevel[1],
+		WindowTitle -> "Code Analysis Options",
 		Saveable -> False,
 		Evaluator -> "System"];
 

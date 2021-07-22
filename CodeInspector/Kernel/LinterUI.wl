@@ -74,6 +74,8 @@ colorData = With[
 		"RaftFrame" -> RGBColor["#C1D3E1"],
 		"RaftLabel" -> GrayLevel[0.2],
 		"RaftMenuItem" -> GrayLevel[0.2],
+		"Tag" -> GrayLevel[.3],
+		"RaftMenuSectionHeader" -> GrayLevel[.4],
 		"RaftDelimiter" -> GrayLevel[0.9],
 		"CodeHighlight" -> RGBColor[1, 0.67, 0.73],
 
@@ -82,6 +84,7 @@ colorData = With[
 		"TogglerEdgeHover" -> Hue[0.55,0.82,0.87],
 		"TogglerBack" -> GrayLevel[.975],
 		"TogglerBackHover" -> White,
+		"TogglerPodEdge" -> GrayLevel[.9],
 		"TogglerDelim" -> GrayLevel[.8],
 		"TogglerText" -> GrayLevel[.2],
 		"TogglerCross" -> GrayLevel[.8],
@@ -111,6 +114,9 @@ styleData = <|
 	"RaftMenuItem" -> Function[
 		Style[#1, ##2, FontColor -> colorData["RaftMenuItem"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
 	
+	"RaftMenuSectionHeading" -> Function[
+		Style[#1, ##2, FontColor -> colorData["RaftMenuSectionHeader"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
+	
 	"Button" -> Function[
 		Style[#1, ##2, FontColor -> colorData["ButtonText"], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 14]],
 	
@@ -133,7 +139,10 @@ styleData = <|
 		Style[#1, ##2, FontColor -> GrayLevel[.2], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 12]],
 	
 	"TogglerPaletteHeadings" -> Function[
-		Style[#1, ##2, FontColor -> GrayLevel[.4], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]]
+		Style[#1, ##2, FontColor -> GrayLevel[.4], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 13]],
+
+	"TogglerPaletteSectionHeadings" -> Function[
+		Style[#1, ##2, FontColor -> GrayLevel[.5], FontFamily -> "Source Sans Pro", FontWeight -> "SemiBold", FontSize -> 12]]
 |>;
 
 
@@ -902,52 +911,48 @@ makeRaftMenuIgnoreItem[
 	cell_CellObject,
 	(* The menu item icon. *)
 	icon_,
-	(* The menu item label, of the form {"Text", #, "more text."}&, where # is the lint tag that gets filled in from... *)
-	label_Function,
-	(* ...the lint, which is also used to set the suppression option value. *)
+	(* The menu item label. *)
+	label_,
+	(* The lint, which is used to set the suppression option value. *)
 	lint_CodeInspector`InspectionObject,
 	(* itemClicked is a state variable. *)
 	Dynamic[itemClicked_],
 	(* These raftXXXX vars are used to delete raft components when a menu item is clicked. *)
 	raftType_, Dynamic[raftCell_], Dynamic[raftMenu_]
 ] := 
-	With[{argument = Last[lint]["Argument"]},
-		Button[
+	Button[
+	
+		(* ----- The menu item label ----- *)
 		
-			(* ----- The menu item label ----- *)
-			
-			constructRaftMenuItemLabel[raftType, icon,
-				(* The lint tag is drawn in a different color to the rest of the item.
-					If it has an "Argument", then display LintTag\:25bbArgument. *)
-				styleData["RaftMenuItem"][Row[label[
-					Style[If[argument === Missing["KeyAbsent", "Argument"],
-						lint["Tag"],
-						Row[{lint["Tag"], "\:25bb", argument}, "\[VeryThinSpace]"]], FontColor -> colorData["UIDark"]]]]]],
-			
-			
-			(* ----- The menu item action ----- *)
-			
-			(* Set the Enabled option for tag to False. *)
-			(* CurrentValue is used to set the option, but AbsoluteCurrentValue is used to query the option to ensure correct
-				scope inheritance. See https://stash.wolfram.com/projects/FE/repos/frontend/pull-requests/5783/overview *)
-			(* However, if an option has not been set for a given cell, then the inheritance of CurrentValue works as that of AbsoluteCurrentValue would.
-				For example, if an option is set at the notebook level, and the same option has not been set at the cell level, then CurrentValue[cell, opt] returns the notebook option value, rather than Inherited.
-				Therefore, before setting an option at the notebook level, we check to see if it's been set at the cell level, and if not, set it to Inherited. *)
-			If[
-				MatchQ[scope, _NotebookObject] &&
-				!BooleanQ[CurrentValue[cell, makeTagOptionList[lint]]],
+		constructRaftMenuItemLabel[raftType, icon,
+			(* The lint tag is drawn in a different color to the rest of the item.
+				If it has an "Argument", then display LintTag\:25bbArgument. *)
+			styleData["RaftMenuItem"][label]],
+		
+		
+		(* ----- The menu item action ----- *)
+		
+		(* Set the Enabled option for tag to False. *)
+		(* CurrentValue is used to set the option, but AbsoluteCurrentValue is used to query the option to ensure correct
+			scope inheritance. See https://stash.wolfram.com/projects/FE/repos/frontend/pull-requests/5783/overview *)
+		(* However, if an option has not been set for a given cell, then the inheritance of CurrentValue works as that of AbsoluteCurrentValue would.
+			For example, if an option is set at the notebook level, and the same option has not been set at the cell level, then CurrentValue[cell, opt] returns the notebook option value, rather than Inherited.
+			Therefore, before setting an option at the notebook level, we check to see if it's been set at the cell level, and if not, set it to Inherited. *)
+		If[
+			MatchQ[scope, _NotebookObject] &&
+			!BooleanQ[CurrentValue[cell, makeTagOptionList[lint]]],
 
-				CurrentValue[cell, makeTagOptionList[lint]] = Inherited];
+			CurrentValue[cell, makeTagOptionList[lint]] = Inherited];
 
-			CurrentValue[scope, makeTagOptionList[lint]] = False;
+		CurrentValue[scope, makeTagOptionList[lint]] = False;
+		
+		(* Now re-lint, and re-markup the code. *)
+		relintAndRemarkup[cell, varValue[cell, "CellContents"]];
+		
+		(* Set state variables and delete raft components. *)
+		raftMenuItemClickAction[Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 			
-			(* Now re-lint, and re-markup the code. *)
-			relintAndRemarkup[cell, varValue[cell, "CellContents"]];
-			
-			(* Set state variables and delete raft components. *)
-			raftMenuItemClickAction[Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
-				
-			Appearance -> None]]
+		Appearance -> None]
 
 
 (* ::Subsection::Closed:: *)
@@ -1156,7 +1161,9 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 	With[
 		{
 			(* Don't provide documentation links for these symbols. *)
-			excludedDocsSymbols = {"List"}
+			excludedDocsSymbols = {"List"},
+			(* Spacer for indenting the ignore menu items. *)
+			ignoreItemIndent = Spacer[10]
 		},
 
 		{
@@ -1181,20 +1188,39 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 			
 			(* Define the "Ignore" item buttons. *)
 			ignoreItems = {
+				(* Section heading *)
+				Pane[
+					styleData["RaftMenuSectionHeading"][
+						Row[{
+							Spacer[9],
+							"Ignore ",
+							(* The stylised lint tag. *)
+							With[{argument = Last[lint]["Argument"]},
+								Style[
+									If[
+										argument === Missing["KeyAbsent", "Argument"],
+										lint["Tag"],
+										Row[{lint["Tag"], "\:25bb", argument}, "\[VeryThinSpace]"]],
+									FontColor -> colorData["Tag"]]],
+							" issues:"}]],
+					FrameMargins -> {{0, 0}, {2, 5}}],
 			
 				(* Cell *)
-				makeRaftMenuIgnoreItem[cell, cell, iconData["IgnoreInCell"][colorData["UIDark"]],
-					{"Ignore ", #, " errors in this cell"}&,
+				makeRaftMenuIgnoreItem[cell, cell,
+					Row[{ignoreItemIndent, iconData["IgnoreInCell"][colorData["UIDark"]]}],
+					"In this cell",
 					lint, Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 					
 				(* Notebook *)
-				makeRaftMenuIgnoreItem[ParentNotebook[cell], cell, iconData["IgnoreInNotebook"][colorData["UIDark"]],
-					{"Ignore ", #, " errors in this notebook"}&,
+				makeRaftMenuIgnoreItem[ParentNotebook[cell], cell,
+					Row[{ignoreItemIndent, iconData["IgnoreInNotebook"][colorData["UIDark"]]}],
+					"In this notebook",
 					lint, Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 					
 				(* init.m *)
-				makeRaftMenuIgnoreItem[$FrontEnd, cell, iconData["IgnoreAlways"][colorData["UIDark"]],
-					{"Ignore ", #, " errors always"}&,
+				makeRaftMenuIgnoreItem[$FrontEnd, cell,
+					Row[{ignoreItemIndent, iconData["IgnoreAlways"][colorData["UIDark"]]}],
+					"Always",
 					lint, Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]]
 			},
 			
@@ -1973,6 +1999,9 @@ refineSources[lints_?(MatchQ[{___(* CodeInspector`InspectionObject *)}]), cell_C
 		(* Group the sources, then reverse-sort the groups by confidence and take the last (highest confidence) in each. *)
 		{filteredSources =
 			First /@ ReverseSortBy[#["Confidence"] &] /@ GatherBy[clippedSources2, #["Source"] &]},
+		
+		(* Flag if there were suppressed lints. *)
+		varSet[{cell, "SuppressionsPresentQ"}, clippedSources2 =!= clippedSources1];
 		
 		(* Tidy up by grouping the sources by lint, and then extracting the sources and reverse-sorting them (so that the deepest
 			tokens are marked up first, thus avoiding invalidating the part specs for other lints).
