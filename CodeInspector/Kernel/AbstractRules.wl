@@ -472,9 +472,37 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
           "Graph" | "NetGraph" | "WordCloud" | "GraphPlot" | "GraphPlot3D" | "FindKPlex" | "EdgeList" |
           "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot" |
           "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph" | "VertexConnectivity" |
-          "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList", _], _, _]],
+          "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList" | "FindVertexCover" | "KatzCentrality" |
+          "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
+          "FindKClan" | "FindEdgeCut", _], _, _]],
       (*
       Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
+      *)
+      confidence = 0.1;
+    ]
+  ];
+
+  If[Length[pos] >= 4,
+    parentPos = Drop[pos, -4];
+    parent = Extract[ast, {parentPos}][[1]];
+    
+    If[MatchQ[parent,
+        CallNode[LeafNode[Symbol, "ArrayPlot" | "ArrayPlot3D", _], {
+          _
+          ,
+          CallNode[LeafNode[Symbol, "Rule", _], {
+            LeafNode[Symbol, "ColorRules", _]
+            ,
+            node}
+            ,
+            _
+          ]}
+          ,
+          _
+        ]
+      ],
+      (*
+      ArrayPlot[{{1, 0, 1}, {1, 1, 0}}, ColorRules -> {1 -> Red, 0 -> Blue, 1 -> Black}] is ok for list of rules, so give low confidence of copy/paste error
       *)
       confidence = 0.1;
     ]
