@@ -4,7 +4,7 @@
 (*Package Header*)
 
 
-BeginPackage["LinterUISuppressionPalette`"]
+BeginPackage["CodeAnalysisOptionsPalette`"]
 
 
 Begin["`Private`"]
@@ -327,7 +327,7 @@ togglerPalette =
 
 
 NotebookSave[togglerPalette,
-	FileNameJoin[{ParentDirectory[NotebookDirectory[]], "FrontEnd", "Palettes", "CodeAnalysisSuppressions.nb"}]]
+	FileNameJoin[{ParentDirectory[NotebookDirectory[]], "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]]
 
 
 (* ::Section::Closed:: *)
