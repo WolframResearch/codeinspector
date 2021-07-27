@@ -270,17 +270,25 @@ Module[{ast, node, data, head, name, issues, isPredicate, text, parentPos, paren
 
   isPredicate = False;
 
-  parentPos = pos;
-  If[parentPos != {},
-    parentPos = Most[parentPos];
-    parent = Extract[ast, {parentPos}][[1]];
-    If[ListQ[parent],
-      parentPos = Most[parentPos];
+  If[!isPredicate,
+    If[Length[pos] >= 4,
+      parentPos = Drop[pos, -4];
       parent = Extract[ast, {parentPos}][[1]];
-    ];
 
-    If[MatchQ[parent, CallNode[LeafNode[Symbol, "If", _], _, _]],
-      isPredicate = True
+      If[MatchQ[parent, CallNode[LeafNode[Symbol, "If", _], {CallNode[LeafNode[Symbol, "Not", _], {node}, _], ___}, _]],
+        isPredicate = True
+      ]
+    ]
+  ];
+
+  If[!isPredicate,
+    If[Length[pos] >= 2,
+      parentPos = Drop[pos, -2];
+      parent = Extract[ast, {parentPos}][[1]];
+
+      If[MatchQ[parent, CallNode[LeafNode[Symbol, "If", _], {node, ___}, _]],
+        isPredicate = True
+      ]
     ]
   ];
 
