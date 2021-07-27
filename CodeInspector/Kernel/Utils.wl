@@ -407,6 +407,8 @@ $invisibleBMPCharacters = {
 
 	(*
 	C1
+
+	Actually, some C1 code points DO have glyphs (on Mac), but that's a bug
 	*)
 	CharacterRange["\.80", "\.9f"] ~Join~
 
