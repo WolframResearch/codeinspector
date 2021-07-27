@@ -2024,7 +2024,7 @@ Attributes[scanPatternTest] = {HoldRest}
 
 scanPatternTest[pos_List, aggIn_] :=
   Catch[
-  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues},
+  Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unexpected, expected, parentPos, parent},
     agg = aggIn;
     node = Extract[agg, {pos}][[1]];
     tag = node[[1]];
@@ -2040,67 +2040,95 @@ scanPatternTest[pos_List, aggIn_] :=
 
     issues = {};
 
-    Which[
-      MatchQ[a, LeafNode[Symbol, _, _]],
-        aName = a["String"];
-        (*
-        Heuristic here:
+    unexpected = False;
+    expected = False;
 
-        In something like:
+    If[!unexpected && !expected,
+      Which[
+        MatchQ[a, LeafNode[Symbol, _, _]],
 
-        pat?test
+          aName = a["String"];
 
-        pat is being used as a pattern, so ok
-        *)
-        If[StringContainsQ[aName, "pat", IgnoreCase -> True],
-          Throw[issues]
-        ];
+          Which[
+            StringContainsQ[aName, "pat", IgnoreCase -> True],
+              (*
+              Heuristic here:
 
-        (*
-        Something like:
+              In something like:
 
-        LetterCharacter?UpperCaseQ
+              pat?test
 
-        is fine because LetterCharacter is a pattern
-        *)
-        If[MatchQ[aName, "LetterCharacter" | "Whitespace"],
-          Throw[issues]
-        ];
+              pat is being used as a pattern, so ok
+              *)
+              expected = True
+            ,
+            MatchQ[aName, "LetterCharacter" | "Whitespace"],
+              (*
+              Something like:
 
-        AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
-          <| Source->qSrc,
-             (*
-             Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
-             *)
-             ConfidenceLevel->0.85,
-             CodeActions -> {
-              CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
-              CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]
-        ];
-      ,
-      !FreeQ[a,
-        LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder, _, _] |
-        CompoundNode[
-          Blank | BlankSequence | BlankNullSequence |
-          PatternBlank | PatternBlankSequence | PatternBlankNullSequence, _, _] |
-        PostfixNode[Repeated | RepeatedNull, _, _] |
-        CallNode[LeafNode[Symbol, "Blank" | "Pattern" | "Except", _], _, _]],
-        (*
-        looks like a normal pattern on LHS of PatternTest
-        *)
-        Null
-      ,
-      True,
-        (*
-        looks like NOT a normal pattern on LHS of PatternTest
-        *)
-        AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
-          <| Source->qSrc,
-             (*
-             Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
-             *)
-             ConfidenceLevel->0.85 |>]
-        ];
+              LetterCharacter?UpperCaseQ
+
+              is fine because LetterCharacter is a pattern
+              *)
+              expected = True
+            ,
+            True,
+              Null
+          ]
+        ,
+        !FreeQ[a,
+          LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder, _, _] |
+          CompoundNode[
+            Blank | BlankSequence | BlankNullSequence |
+            PatternBlank | PatternBlankSequence | PatternBlankNullSequence, _, _] |
+          PostfixNode[Repeated | RepeatedNull, _, _] |
+          CallNode[LeafNode[Symbol, "Blank" | "Pattern" | "Except", _], _, _]],
+          (*
+          looks like a normal pattern on LHS of PatternTest
+          *)
+          expected = True;
+        ,
+        True,
+          Null
+      ]
+    ];
+
+    If[!unexpected && !expected,
+      If[Length[pos] >= 2,
+        parentPos = Drop[pos, -2];
+        parent = Extract[agg, {parentPos}][[1]];
+
+        Switch[parent,
+          BinaryNode[Pattern, {LeafNode[Symbol, _, _], LeafNode[Token`Colon, _, _], node}, _],
+            (*
+            contained within a Pattern, so this is fine
+            *)
+            expected = True;
+          ,
+          _,
+            Null
+        ]
+      ];
+    ];
+
+    If[!unexpected && !expected,
+
+      (*
+      Don't know any better, so give an error
+      *)
+
+      unexpected = True;
+
+      AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
+        <| Source->qSrc,
+          (*
+          Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
+          *)
+          ConfidenceLevel->0.85,
+          CodeActions -> {
+            CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
+            CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]
+      ];
     ];
 
     issues
