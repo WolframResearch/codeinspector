@@ -466,67 +466,49 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
   issues = {};
   confidence = 0.95;
 
-  If[Length[pos] >= 2,
-    parentPos = Drop[pos, -2];
-    parent = Extract[ast, {parentPos}][[1]];
-
-    If[MatchQ[parent,
-        CallNode[LeafNode[Symbol,
-          (*
-          Pattern of various functions that may take a list of rules with duplicated keys
-
-          Usually graphs of some kind
-          *)
-          "Graph" | "NetGraph" | "WordCloud" | "GraphPlot" | "GraphPlot3D" | "FindKPlex" | "EdgeList" |
-          "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot" |
-          "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph" | "VertexConnectivity" |
-          "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList" | "FindVertexCover" | "KatzCentrality" |
-          "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
-          "FindKClan" | "FindEdgeCut", _], _, _]],
-      (*
-      Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
-      *)
-      confidence = 0.1;
-    ]
-  ];
-
-  If[Length[pos] >= 4,
-    parentPos = Drop[pos, -4];
-    parent = Extract[ast, {parentPos}][[1]];
-    
-    If[MatchQ[parent,
-        CallNode[LeafNode[Symbol, "ArrayPlot" | "ArrayPlot3D", _], {
-          _
-          ,
-          CallNode[LeafNode[Symbol, "Rule", _], {
-            LeafNode[Symbol, "ColorRules", _]
+  If[confidence != 0.1,
+    If[Length[pos] >= 6,
+      parentPos = Drop[pos, -6];
+      parent = Extract[ast, {parentPos}][[1]];
+      
+      If[MatchQ[parent,
+          CallNode[LeafNode[Symbol, "HTTPRequest", _], {
+            _
             ,
-            node}
+            CallNode[LeafNode[Symbol, "Association", _], {
+              CallNode[LeafNode[Symbol, "Rule", _], {
+                LeafNode[String, "\"Query\"", _]
+                ,
+                node}
+                ,
+                _
+              ]}
+              ,
+              _
+            ]}
             ,
             _
-          ]}
-          ,
-          _
-        ]
-      ],
-      (*
-      ArrayPlot[{{1, 0, 1}, {1, 1, 0}}, ColorRules -> {1 -> Red, 0 -> Blue, 1 -> Black}] is ok for list of rules, so give low confidence of copy/paste error
-      *)
-      confidence = 0.1;
+          ]
+        ],
+        (*
+        HTTPRequest["http://example.com", <|"Query" -> {"a" -> "1", "a" -> "2"}|>] is ok for list of rules, so give low confidence of copy/paste error
+        *)
+        confidence = 0.1;
+      ]
     ]
   ];
 
-  If[Length[pos] >= 6,
-    parentPos = Drop[pos, -6];
-    parent = Extract[ast, {parentPos}][[1]];
-    
-    If[MatchQ[parent,
-        CallNode[LeafNode[Symbol, "HTTPRequest", _], {
-          _
-          ,
-          CallNode[LeafNode[Symbol, "Association", _], {
+  If[confidence != 0.1,
+    If[Length[pos] >= 4,
+      parentPos = Drop[pos, -4];
+      parent = Extract[ast, {parentPos}][[1]];
+      
+      If[MatchQ[parent,
+          CallNode[LeafNode[Symbol, "ArrayPlot" | "ArrayPlot3D", _], {
+            _
+            ,
             CallNode[LeafNode[Symbol, "Rule", _], {
-              LeafNode[String, "\"Query\"", _]
+              LeafNode[Symbol, "ColorRules", _]
               ,
               node}
               ,
@@ -534,15 +516,39 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
             ]}
             ,
             _
-          ]}
-          ,
-          _
-        ]
-      ],
-      (*
-      HTTPRequest["http://example.com", <|"Query" -> {"a" -> "1", "a" -> "2"}|>] is ok for list of rules, so give low confidence of copy/paste error
-      *)
-      confidence = 0.1;
+          ]
+        ],
+        (*
+        ArrayPlot[{{1, 0, 1}, {1, 1, 0}}, ColorRules -> {1 -> Red, 0 -> Blue, 1 -> Black}] is ok for list of rules, so give low confidence of copy/paste error
+        *)
+        confidence = 0.1;
+      ]
+    ]
+  ];
+
+  If[confidence != 0.1,
+    If[Length[pos] >= 2,
+      parentPos = Drop[pos, -2];
+      parent = Extract[ast, {parentPos}][[1]];
+
+      If[MatchQ[parent,
+          CallNode[LeafNode[Symbol,
+            (*
+            Pattern of various functions that may take a list of rules with duplicated keys
+
+            Usually graphs of some kind
+            *)
+            "Graph" | "NetGraph" | "WordCloud" | "GraphPlot" | "GraphPlot3D" | "FindKPlex" | "EdgeList" |
+            "IndexGraph" | "LocalClusteringCoefficient" | "MeanGraphDistance" | "CommunityGraphPlot" |
+            "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph" | "VertexConnectivity" |
+            "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList" | "FindVertexCover" | "KatzCentrality" |
+            "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
+            "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd", _], _, _]],
+        (*
+        Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
+        *)
+        confidence = 0.1;
+      ]
     ]
   ];
 
