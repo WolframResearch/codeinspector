@@ -1189,11 +1189,18 @@ Catch[
     Throw[issues]
   ];
 
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["NoVariables", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
-      children[[1, 3]],
-      ConfidenceLevel -> 0.90,
-      "Argument" -> "Module"|>]];
+  Which[
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
+      AppendTo[issues, InspectionObject["NoVariables", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
+        children[[1, 3]],
+        ConfidenceLevel -> 0.90,
+        "Argument" -> "Module"|>]]
+    ,
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
+      (*
+      Used as a pattern or GroupMissingCloserNode, so no issues
+      *)
+      Throw[issues]
   ];
 
 
@@ -1333,7 +1340,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
   Being used as a pattern or GroupMissingCloserNode, so no issues
   *)
   If[MatchQ[children[[1]],
-    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _] |
       GroupMissingCloserNode[_, _, _]]
     ,
     Throw[issues]
@@ -1373,11 +1380,18 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
     Throw[issues]
   ];
 
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["NoVariables", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
-      children[[1, 3]],
-      ConfidenceLevel -> 0.90,
-      "Argument" -> "DynamicModule"|>]];
+  Which[
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
+      AppendTo[issues, InspectionObject["NoVariables", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
+        children[[1, 3]],
+        ConfidenceLevel -> 0.90,
+        "Argument" -> "DynamicModule"|>]]
+    ,
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
+      (*
+      Used as a pattern or GroupMissingCloserNode, so no issues
+      *)
+      Throw[issues]
   ];
 
   params = children[[1, 2]];
@@ -1484,7 +1498,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
   Being used as a pattern or GroupMissingCloserNode, so no issues
   *)
   If[MatchQ[children[[1]],
-    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _] |
       GroupMissingCloserNode[_, _, _]]
     ,
     Throw[issues]
@@ -1528,10 +1542,18 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
 
 
   (*
-      With[Evaluate[]] denotes meta-programming
+  With[Evaluate[]] denotes meta-programming
   *)
   If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "Evaluate", _], _, _]],
     Throw[issues]
+  ];
+
+  Which[
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
+      (*
+      Used as a pattern or GroupMissingCloserNode, so no issues
+      *)
+      Throw[issues]
   ];
 
   (*
@@ -1676,7 +1698,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   Being used as a pattern or GroupMissingCloserNode, so no issues
   *)
   If[MatchQ[children[[1]],
-    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence", _], _, _] |
+    CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _] |
       GroupMissingCloserNode[_, _, _]]
     ,
     Throw[issues]
@@ -1705,11 +1727,18 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     Throw[issues]
   ];
 
-  If[MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
-    AppendTo[issues, InspectionObject["NoVariables", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
-      children[[1, 3]],
-      ConfidenceLevel -> 0.90,
-      "Argument" -> "Block"|>]];
+  Which[
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {}, _]],
+      AppendTo[issues, InspectionObject["NoVariables", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
+        children[[1, 3]],
+        ConfidenceLevel -> 0.90,
+        "Argument" -> "Block"|>]]
+    ,
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
+      (*
+      Used as a pattern or GroupMissingCloserNode, so no issues
+      *)
+      Throw[issues]
   ];
 
   params = children[[1, 2]];
