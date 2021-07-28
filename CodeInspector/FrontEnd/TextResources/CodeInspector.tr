@@ -818,7 +818,9 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
        CodeInspector`LinterUI`Private`cell], 
        Apply[Sequence, 
         Riffle[
-         Map[ToString, 
+         Map[StringDelete[
+           ToString[#], 
+           Alternatives["[", "]", "{", "}", ",", " "]]& , 
           CodeInspector`LinterUI`Private`extractFirstList[
            Last[CodeInspector`LinterUI`Private`lint][CodeParser`Source]]], 
          "$"]], "$$", CodeInspector`LinterUI`Private`name], 

@@ -741,8 +741,15 @@ extractFirstList[expr_] := FirstCase[expr, _List, {}, {0, Infinity}]
 varNameString[cell_CellObject, lint_CodeInspector`InspectionObject, name_String] :=
 	StringJoin[
 		varNameString[cell],
+
 		(* Use the (first) lint source as the lint ID, such that e.g. {3, 11, 6} -> "3$11$6" *)
-		Sequence @@ Riffle[ToString /@ extractFirstList[Last[lint][CodeParser`Source]], "$"],
+		Sequence @@ Riffle[
+			(* An element of the source could contain characters that can't appear in a symbol name (such as "Intra[1,1]"),
+				so remove any such characters. *)
+			StringDelete[ToString[#], Alternatives["[", "]", "{", "}", ",", " "]]& /@
+				extractFirstList[Last[lint][CodeParser`Source]],
+			"$"],
+
 		"$$",
 		name]
 

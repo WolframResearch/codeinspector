@@ -532,7 +532,7 @@ Cell[BoxData[
  ShowStringCharacters->False,
  FontFamily:>CurrentValue["PanelFontFamily"],
  FontSize:>CurrentValue[
-  "PanelFontSize"],ExpressionUUID->"dff1d9dd-47d5-4d77-9a26-be30a339d143"]
+  "PanelFontSize"],ExpressionUUID->"93eb3ce1-f600-40cb-9ea1-39b493872102"]
 },
 Saveable->False,
 Evaluator->"System",
@@ -543,7 +543,7 @@ WindowTitle->"Code Analysis Options",
 Background->GrayLevel[1],
 FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (May 8, 2021)",
 StyleDefinitions->"Palette.nb",
-ExpressionUUID->"986bfe6e-620d-429b-acb5-9aaa7e01c0f8"
+ExpressionUUID->"c5f8a559-5497-4770-a031-3cd6e15dcd9a"
 ]
 (* End of Notebook Content *)
 
@@ -556,7 +556,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[594, 21, 24887, 513, 283, InheritFromParent,ExpressionUUID->"dff1d9dd-47d5-4d77-9a26-be30a339d143",
+Cell[594, 21, 24887, 513, 283, InheritFromParent,ExpressionUUID->"93eb3ce1-f600-40cb-9ea1-39b493872102",
  PageBreakAbove->True,
  PageBreakWithin->False]
 }
