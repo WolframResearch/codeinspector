@@ -242,7 +242,7 @@ dockedCell =
 			],
 			
 			(* Save the following definitions in the DynamicModule's Initialization option. *)
-			{dockedCellSeverityCountsButton, dockedCellPopupMenuCell, dockedCellMenuItem, $previewLength,
+			{dockedCellSeverityCountsButton, dockedCellMenuItem, $previewLength,
 				CodeInspector`LinterUI`Private`applyToVar,
 				CodeInspector`LinterUI`Private`varValue,
 				CodeInspector`LinterUI`Private`varSet,
