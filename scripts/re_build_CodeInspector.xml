@@ -33,6 +33,7 @@
 		<re-cmake-exec dir="${build.dir}">
 			<arg line='-G &quot;${env.CMAKE_GENERATOR}&quot;' />
 			<arg line='-DWOLFRAMKERNEL=${mathExe}' />  
+			<arg line='-DBUILDNUMBER=${env.BUILD_NUMBER}' />
 			<arg value='${checkout_directory}/${component}' /> 
 		</re-cmake-exec> 
 
