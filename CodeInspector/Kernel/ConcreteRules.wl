@@ -329,8 +329,8 @@ scanErrorNodes[pos_List, cstIn_] :=
     Token`Error`ExpectedEqual,
       AppendTo[issues, InspectionObject["ExpectedEqual", "Expected ``=``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
-    Token`Error`UnhandledDot,
-      AppendTo[issues, InspectionObject["UnhandledDot", "Unhandled ``.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    Token`Error`Number,
+      AppendTo[issues, InspectionObject["Number", "Number parsing error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnhandledCharacter,
       AppendTo[issues, InspectionObject["UnhandledCharacter", "Unhandled character.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
@@ -338,29 +338,20 @@ scanErrorNodes[pos_List, cstIn_] :=
     Token`Error`ExpectedLetterlike,
       AppendTo[issues, InspectionObject["ExpectedLetterlike", "Expected letterlike.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
-    Token`Error`ExpectedAccuracy,
-      AppendTo[issues, InspectionObject["ExpectedAccuracy", "Expected accuracy.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
-    ,
-    Token`Error`ExpectedExponent,
-      AppendTo[issues, InspectionObject["ExpectedExponent", "Expected exponent.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
-    ,
     Token`Error`Aborted,
       AppendTo[issues, InspectionObject["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedOperand,
       AppendTo[issues, InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
-    Token`Error`UnrecognizedDigit,
-      AppendTo[issues, InspectionObject["UnrecognizedDigit", "Unrecognized digit.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    Token`Error`ExpectedTag,
+      AppendTo[issues, InspectionObject["ExpectedTag", "Expected a tag.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
-    Token`Error`ExpectedDigit,
-      AppendTo[issues, InspectionObject["ExpectedDigit", "Expected digit.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+    Token`Error`ExpectedFile,
+      AppendTo[issues, InspectionObject["ExpectedFile", "Expected a file.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnsupportedCharacter,
       AppendTo[issues, InspectionObject["UnsupportedCharacter", "Unsupported character.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
-    ,
-    Token`Error`InvalidBase,
-      AppendTo[issues, InspectionObject["InvalidBase", "Invalid base.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnsupportedToken,
       AppendTo[issues, InspectionObject["UnsupportedToken", "Unsupported token.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]

@@ -554,6 +554,14 @@ conventionAgnosticSourceOrdering[a_, b:After[{most___, last_}]] :=
 	conventionAgnosticSourceOrdering[a, {most, last + 0.5}]
 
 
+conventionAgnosticSourceOrdering[a:Before[{most___, last_}], b_] :=
+	conventionAgnosticSourceOrdering[{most, last - 0.5}, b]
+
+conventionAgnosticSourceOrdering[a_, b:Before[{most___, last_}]] :=
+	conventionAgnosticSourceOrdering[a, {most, last - 0.5}]
+
+
+
 (*
 Replace {1, 3, 2, Intra[4, 4]} with {1, 3, 2, 4} for easier processing
 *)
