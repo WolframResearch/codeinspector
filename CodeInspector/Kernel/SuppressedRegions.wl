@@ -7,6 +7,7 @@ suppressedRegion
 Begin["`Private`"]
 
 Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
 
 
 (*
@@ -81,7 +82,7 @@ codeInspectPackagePat =
 
 codeInspectCellPat =
   (* in-the-blind parsed from text *)
-  LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Code:Initialization::\"Tags\"" ~~ ___ ~~ ":: *)"], _] |
+  LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Code::Initialization::\"Tags\"" ~~ ___ ~~ ":: *)"], _] |
   (* in-the-blind parsed from boxes *)
   CellNode[Cell, {
       GroupNode[Comment, {LeafNode[Token`Boxes`OpenParenStar, "(*", _], 
@@ -151,9 +152,48 @@ codeInspectSuppressPat =
 
 SuppressedRegions[cstIn_] :=
 Catch[
-Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblings, endFound, candidate, endPos, suppresseds},
+Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblings, endFound, candidate, endPos, suppresseds, beginPos},
 
   cst = cstIn;
+
+  suppressedRegions = {};
+
+  If[empty[cst[[2]]],
+    Throw[suppressedRegions]
+  ];
+
+  (*
+  ::Package:: affecting the entire file
+    
+  (* ::Package::"Tags"-><|"DuplicateClauses" -> <|"If" -> <|Enabled -> False|>|>|>:: *)
+
+  If[a,b,b]
+
+  *)
+  candidate = cst[[2, 1]];
+  If[MatchQ[candidate, codeInspectPackagePat],
+    beginPos = {2, 1};
+    endPos = {2, Length[cst[[2]]]};
+    suppresseds = suppressedsFromCandidate[candidate];
+    AppendTo[suppressedRegions,
+      suppressedRegion[rangeStart[Extract[cst, beginPos][[3]]], rangeEnd[Extract[cst, endPos][[3]]], suppresseds, <|"Toplevel" -> True|>]
+    ]
+  ];
+
+  (*
+  ::Code::Initialization:: affecting the next child
+  *)
+  Do[
+    candidate = cst[[2, i]];
+    If[MatchQ[candidate, codeInspectCellPat] && MatchQ[cst[[2, i + 1]], LeafNode[Token`Newline, _, _]],
+      suppresseds = suppressedsFromCandidate[candidate];
+      AppendTo[suppressedRegions,
+        suppressedRegion[rangeStart[Extract[cst, {2, i + 2}][[3]]], rangeEnd[Extract[cst, {2, i + 2}][[3]]], suppresseds, <|"Toplevel" -> True|>]
+      ]
+    ]
+    ,
+    {i, 1, Length[cst[[2]]] - 2}
+  ];
 
   codeInspectBeginPatNodePoss = Position[cst, codeInspectBeginPat];
 
@@ -161,7 +201,6 @@ Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblin
     Print["codeInspectBeginPatNodePoss: ", codeInspectBeginPatNodePoss]
   ];
 
-  suppressedRegions = {};
   Do[
     siblingsPos = Most[beginPos];
     siblings = Extract[cst, {siblingsPos}][[1]];
@@ -277,6 +316,108 @@ suppressedsFromCandidate[
   }, _]
 ] := {d, a}
 
+(* in-the-blind parsed from text *)
+suppressedsFromCandidate[
+  LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Package::\"Tags\"->" ~~ ___ ~~ ":: *)"], _]
+] :=
+Module[{assocStr},
+  assocStr = StringCases[str, "(* ::Package::\"Tags\"->" ~~ a___ ~~ ":: *)" :> a][[1]];
+  suppressedsFromCandidateAssocStr[assocStr]
+]
+
+(* in-the-blind parsed from text *)
+suppressedsFromCandidate[
+  LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Code::Initialization::\"Tags\"->" ~~ ___ ~~ ":: *)"], _]
+] :=
+Module[{assocStr},
+  assocStr = StringCases[str, "(* ::Code::Initialization::\"Tags\"->" ~~ a___ ~~ ":: *)" :> a][[1]];
+  suppressedsFromCandidateAssocStr[assocStr]
+]
+
+
+(* in-the-blind parsed from text *)
+suppressedsFromCandidateAssocStr[assocStr_String] :=
+Catch[
+Reap[
+Module[{assocNode, rules1, tag, body1, rules2, body2, rules3, argument},
+  assocNode = CodeParse[assocStr];
+  If[!MatchQ[assocNode, ContainerNode[String, {CallNode[LeafNode[Symbol, "Association", _], _, _]}, _]],
+    (*
+    invalid
+    *)
+    Throw[{}]
+  ];
+  rules1 = assocNode[[2, 1, 2]];
+  Do[
+    If[!MatchQ[rule1, CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[String, _, _], _}, _]],
+      (*
+      invalid
+      *)
+      Throw[{}]
+    ];
+    tag = FromNode[rule1[[2, 1]]];
+    body1 = rule1[[2, 2]];
+    (*
+        no argument:
+        
+        <|"UnscopedObjectError" -> <|Enabled -> False|>|>
+
+        with an argument:
+
+        <|"DuplicateClauses" -> <|"If" -> <|Enabled -> False|>|>|>
+        *)
+    If[!MatchQ[body1, CallNode[LeafNode[Symbol, "Association", _], _, _]],
+      (*
+      invalid
+      *)
+      Throw[{}]
+    ];
+    rules2 = body1[[2]];
+    Do[
+      Switch[rule2,
+        CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "Enabled", _], LeafNode[Symbol, "False", _]}, _],
+          Sow[{tag}]
+        ,
+        CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[String, _, _], _}, _],
+          argument = FromNode[rule2[[2, 1]]];
+          body2 = rule2[[2, 2]];
+          If[!MatchQ[body2, CallNode[LeafNode[Symbol, "Association", _], _, _]],
+            (*
+            invalid
+            *)
+            Throw[{}]
+          ];
+          rules3 = body2[[2]];
+          Do[
+            Switch[rule3,
+              CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "Enabled", _], LeafNode[Symbol, "False", _]}, _],
+                Sow[{tag, argument}]
+              ,
+              _,
+                (*
+                invalid
+                *)
+                Throw[{}]
+            ]
+            ,
+            {rule3, rules3}
+          ]
+        ,
+        _,
+          (*
+          invalid
+          *)
+          Throw[{}]
+      ]
+      ,
+      {rule2, rules2}
+    ]
+    ,
+    {rule1, rules1}
+  ]
+] (* Module *)
+][[2, 1]] (* Reap *)
+] (* Catch *)
 
 
 
