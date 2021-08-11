@@ -30,72 +30,78 @@ codeInspectBeginPat =
   LeafNode[Token`Comment, "(* :!CodeAnalysis::BeginBlock:: *)", _] |
   (* in-the-clear parsed from boxes *)
   CellNode[Cell, {
-      GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
+    GroupNode[Comment, {
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
+      LeafNode[String, " ", _],
+      BoxNode[RowBox, {{
+        LeafNode[String, ":", _],
         BoxNode[RowBox, {{
-          LeafNode[String, ":", _],
-          BoxNode[RowBox, {{
-              LeafNode[String, "!", _],
-              BoxNode[RowBox, {{
-                LeafNode[String, "CodeAnalysis", _],
-                LeafNode[String, "::", _],
-                LeafNode[String, "BeginBlock", _],
-                LeafNode[String, "::", _]}}, _]}}, _]}}, _],
-        LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+            LeafNode[String, "!", _],
+            BoxNode[RowBox, {{
+              LeafNode[String, "CodeAnalysis", _],
+              LeafNode[String, "::", _],
+              LeafNode[String, "BeginBlock", _],
+              LeafNode[String, "::", _]}}, _]}}, _]}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
 
 codeInspectEndPat =
   (* in-the-clear parsed from text *)
   LeafNode[Token`Comment, "(* :!CodeAnalysis::EndBlock:: *)", _] |
   (* in-the-clear parsed from boxes *)
   CellNode[Cell, {
-      GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
+    GroupNode[Comment, {
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
+      LeafNode[String, " ", _],
+      BoxNode[RowBox, {{
+        LeafNode[String, ":", _],
         BoxNode[RowBox, {{
-          LeafNode[String, ":", _],
-          BoxNode[RowBox, {{
-              LeafNode[String, "!", _],
-              BoxNode[RowBox, {{
-                LeafNode[String, "CodeAnalysis", _],
-                LeafNode[String, "::", _],
-                LeafNode[String, "EndBlock", _],
-                LeafNode[String, "::", _]}}, _]}}, _]}}, _],
-        LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+            LeafNode[String, "!", _],
+            BoxNode[RowBox, {{
+              LeafNode[String, "CodeAnalysis", _],
+              LeafNode[String, "::", _],
+              LeafNode[String, "EndBlock", _],
+              LeafNode[String, "::", _]}}, _]}}, _]}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
 
 codeInspectPackagePat =
   (* in-the-blind parsed from text *)
   LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Package::\"Tags\"" ~~ ___ ~~ ":: *)"], _] |
   (* in-the-blind parsed from boxes *)
   CellNode[Cell, {
-      GroupNode[Comment, {LeafNode[Token`Boxes`OpenParenStar, "(*", _], 
-  LeafNode[String, " ", _], 
-  BoxNode[
-   RowBox, {{BoxNode[
-      RowBox, {{LeafNode[String, "::", _], 
-        LeafNode[String, "Package", _], LeafNode[String, "::", _], 
-        LeafNode[String, "\"Tags\"", _]}}, _], 
-     LeafNode[String, "->", _], _}}, _], LeafNode[String, " ", _], 
-  LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+    GroupNode[Comment, {
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
+      LeafNode[String, " ", _],
+      BoxNode[RowBox, {{
+        BoxNode[RowBox, {{
+          LeafNode[String, "::", _],
+          LeafNode[String, "Package", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, "\"Tags\"", _]}}, _],
+      LeafNode[String, "->", _], _}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
 
 codeInspectCellPat =
   (* in-the-blind parsed from text *)
   LeafNode[Token`Comment, str_String /; StringMatchQ[str, "(* ::Code::Initialization::\"Tags\"" ~~ ___ ~~ ":: *)"], _] |
   (* in-the-blind parsed from boxes *)
   CellNode[Cell, {
-      GroupNode[Comment, {LeafNode[Token`Boxes`OpenParenStar, "(*", _], 
-  LeafNode[String, " ", _], 
-  BoxNode[
-   RowBox, {{BoxNode[
-      RowBox, {{LeafNode[String, "::", _], 
-        LeafNode[String, "Code", _], LeafNode[String, "::", _], 
-        LeafNode[String, "Initialization", _], 
-        LeafNode[String, "::", _], 
-        LeafNode[String, "\"Tags\"", _]}}, _], 
-     LeafNode[String, "->", _], _}}, _], LeafNode[String, " ", _], 
-  LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]}, _]
+    GroupNode[Comment, {
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
+      LeafNode[String, " ", _],
+      BoxNode[RowBox, {{
+        BoxNode[RowBox, {{
+          LeafNode[String, "::", _],
+          LeafNode[String, "Code", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, "Initialization", _],
+          LeafNode[String, "::", _],
+          LeafNode[String, "\"Tags\"", _]}}, _],
+        LeafNode[String, "->", _], _}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
 
 codeInspectSuppressPat =
   (* in-the-clear with no arg parsed from text *)
@@ -118,35 +124,44 @@ codeInspectSuppressPat =
   ] |
   (* in-the-clear with no arg parsed from boxes *)
   CellNode[Cell, {
-      GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
+    GroupNode[Comment, {
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
+      LeafNode[String, " ", _],
+      BoxNode[RowBox, {{
+        LeafNode[String, ":", _],
         BoxNode[RowBox, {{
-          LeafNode[String, "CodeAnalysis", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Disable", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, _, _]}}, _],
-          LeafNode[String, " ", _],
-          LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]
-    }, _] |
+          LeafNode[String, "!", _],
+          BoxNode[RowBox, {{
+            LeafNode[String, "CodeAnalysis", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, "Disable", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, _, _],
+            LeafNode[String, "::", _]}}, _]}}, _]}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _] |
   (* in-the-clear with 1 arg parsed from boxes *)
   CellNode[Cell, {
       GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+        LeafNode[Token`Boxes`OpenParenStar, _, _],
         LeafNode[String, " ", _],
         BoxNode[RowBox, {{
-          LeafNode[String, "CodeAnalysis", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Disable", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, _, _],
-          LeafNode[String, "::", _],
-          LeafNode[String, _, _]}}, _],
+          LeafNode[String, ":", _],
+          BoxNode[RowBox, {{
+            LeafNode[String, "!", _],
+              BoxNode[RowBox, {{
+                LeafNode[String, "CodeAnalysis", _],
+                LeafNode[String, "::", _],
+                LeafNode[String, "Disable", _],
+                LeafNode[String, "::", _],
+                LeafNode[String, _, _],
+                LeafNode[String, "::", _],
+                LeafNode[String, _, _],
+                LeafNode[String, "::", _]}}, _]}}, _]}}, _],
         LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]}, _]
-    }, _]
-  
+        LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
+
+
 
 
 
@@ -276,21 +291,22 @@ in-the-clear with no arg parsed from boxes
 suppressedsFromCandidate[
   CellNode[Cell, {
     GroupNode[Comment, {
-      LeafNode[Token`Boxes`OpenParenStar, "(*", _],
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
       LeafNode[String, " ", _],
       BoxNode[RowBox, {{
-        LeafNode[String, "CodeInspect", _],
-        LeafNode[String, "::", _],
-        LeafNode[String, "Disable", _],
-        LeafNode[String, "::", _],
-        LeafNode[String, d_, _]}}, _],
-        LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]
-    }
-    ,
-    _]
-  }, _]
-] := {d}
+        LeafNode[String, ":", _],
+        BoxNode[RowBox, {{
+          LeafNode[String, "!", _],
+          BoxNode[RowBox, {{
+            LeafNode[String, "CodeAnalysis", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, "Disable", _],
+            LeafNode[String, "::", _],
+            LeafNode[String, d_, _],
+            LeafNode[String, "::", _]}}, _]}}, _]}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
+] := {{d}}
 
 (*
 in-the-clear with 1 arg parsed from boxes
@@ -298,23 +314,24 @@ in-the-clear with 1 arg parsed from boxes
 suppressedsFromCandidate[
   CellNode[Cell, {
     GroupNode[Comment, {
-        LeafNode[Token`Boxes`OpenParenStar, "(*", _],
-        LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`OpenParenStar, _, _],
+      LeafNode[String, " ", _],
+      BoxNode[RowBox, {{
+        LeafNode[String, ":", _],
         BoxNode[RowBox, {{
-          LeafNode[String, "CodeInspect", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, "Disable", _],
-          LeafNode[String, "::", _],
-          LeafNode[String, d_, _],
-          LeafNode[String, "::", _],
-          LeafNode[String, a_, _]}}, _],
-        LeafNode[String, " ", _],
-        LeafNode[Token`Boxes`StarCloseParen, "*)", _]
-      }
-      ,
-      _]
-  }, _]
-] := {d, a}
+          LeafNode[String, "!", _],
+            BoxNode[RowBox, {{
+              LeafNode[String, "CodeAnalysis", _],
+              LeafNode[String, "::", _],
+              LeafNode[String, "Disable", _],
+              LeafNode[String, "::", _],
+              LeafNode[String, d_, _],
+              LeafNode[String, "::", _],
+              LeafNode[String, a_, _],
+              LeafNode[String, "::", _]}}, _]}}, _]}}, _],
+      LeafNode[String, " ", _],
+      LeafNode[Token`Boxes`StarCloseParen, _, _]}, _]}, _]
+] := {{d, a}}
 
 (* in-the-blind parsed from text *)
 suppressedsFromCandidate[
@@ -357,15 +374,6 @@ Module[{assocNode, rules1, tag, body1, rules2, body2, rules3, argument},
     ];
     tag = FromNode[rule1[[2, 1]]];
     body1 = rule1[[2, 2]];
-    (*
-        no argument:
-        
-        <|"UnscopedObjectError" -> <|Enabled -> False|>|>
-
-        with an argument:
-
-        <|"DuplicateClauses" -> <|"If" -> <|Enabled -> False|>|>|>
-        *)
     If[!MatchQ[body1, CallNode[LeafNode[Symbol, "Association", _], _, _]],
       (*
       invalid
