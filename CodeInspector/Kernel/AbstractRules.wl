@@ -543,7 +543,11 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
             "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph" | "VertexConnectivity" |
             "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList" | "FindVertexCover" | "KatzCentrality" |
             "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
-            "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd", _], _, _]],
+            "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd" |
+
+            "ReplaceList" |
+            
+            "StringReplaceList", _], _, _]],
         (*
         Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
         *)
