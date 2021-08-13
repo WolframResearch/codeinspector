@@ -34,7 +34,7 @@ Needs["CodeInspector`Utils`"]
 
 $DefaultTagExclusions = {}
 
-$DefaultSeverityExclusions = {"Formatting", "Remark"}
+$DefaultSeverityExclusions = {"Formatting", "Remark", "Scoping"}
 
 (*
 How many linted lines to keep?
