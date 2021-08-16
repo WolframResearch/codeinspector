@@ -430,7 +430,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["With[{}, {}, 34]"]
 	,
-	{InspectionObject["Arguments", _, _, _], InspectionObject["Arguments", _, _, _]}
+	{InspectionObject["NoParameters", _, _, _], InspectionObject["NoParameters", _, _, _]}
 	,
 	TestID -> "AbstractRules-20191120-N6B9B5"
 ]

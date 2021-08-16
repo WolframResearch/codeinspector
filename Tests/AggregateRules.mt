@@ -99,7 +99,7 @@ AssociationCall
 TestMatch[
 	CodeInspect["a?Association"]
 	,
-	{InspectionObject["AssociationCall", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["AssociationCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-Y0P7H3"
 ]
@@ -110,7 +110,7 @@ StringCall
 TestMatch[
 	CodeInspect["a?String"]
 	,
-	{InspectionObject["StringCall", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["StringCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-N1P9K9"
 ]
@@ -121,7 +121,7 @@ IntegerCall
 TestMatch[
 	CodeInspect["a?Integer"]
 	,
-	{InspectionObject["IntegerCall", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["IntegerCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-I2E9A2"
 ]
@@ -132,7 +132,7 @@ RealCall
 TestMatch[
 	CodeInspect["a?Real"]
 	,
-	{InspectionObject["RealCall", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["RealCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-S0H6K7"
 ]
@@ -143,7 +143,7 @@ FailureCall
 TestMatch[
 	CodeInspect["a?Failure"]
 	,
-	{InspectionObject["FailureCall", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["FailureCall", _, _, _]}
 	,
 	TestID->"AggregateRules-20190522-C8C7F4"
 ]
@@ -210,7 +210,7 @@ SuspiciousPatternTestFunction
 TestMatch[
 	CodeInspect[" a?b& "]
 	,
-	{InspectionObject["SuspiciousPatternTestFunction", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["SuspiciousPatternTestFunction", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-U6J6X9"
 ]
@@ -224,7 +224,7 @@ SuspiciousPatternTestCallFunction
 TestMatch[
 	CodeInspect[" a?b[#]& "]
 	,
-	{InspectionObject["SuspiciousPatternTestCallFunction", _, _, _], InspectionObject["SymbolPatternTest", _, _, _]}
+	{InspectionObject["PatternTest", _, _, _], InspectionObject["SuspiciousPatternTestCallFunction", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-W2H4Z1"
 ]
@@ -307,7 +307,7 @@ SyntaxError NonAssociative:
 TestMatch[
 	CodeInspect["a ? b ? c"]
 	,
-	{InspectionObject["SymbolPatternTest", _, _, _], InspectionObject["NonAssociativePatternTest", _, _, _]}
+	{InspectionObject["NonAssociativePatternTest", _, _, _], InspectionObject["PatternTest", _, _, _], InspectionObject["PatternTest", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-W9O8V3"
 ]
