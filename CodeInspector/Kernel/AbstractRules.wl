@@ -30,8 +30,8 @@ $DefaultAbstractRules = <|
 
 (*
 Do not include symbols such as:
-Real
-Symbol
+RealQ
+SymbolQ
 
 because these are handled as BadSymbol lints
 
@@ -39,7 +39,7 @@ and BadSymbol casts shadow over BadCall
 
 Only include symbols here that are in System`
 *)
-CallNode[LeafNode[Symbol, "String" | "Integer" | "True", _], _, _] -> scanBadCalls,
+CallNode[LeafNode[Symbol, "String" | "Integer" | "Real" | "True", _], _, _] -> scanBadCalls,
 
 (*
 
@@ -320,6 +320,22 @@ Module[{ast, node, data, head, name, issues, isPredicate, text, parentPos, paren
             CodeActions -> {
               CodeAction["Replace with ``IntegerQ``", ReplaceNode, <|
                 "ReplacementNode" -> ToNode[IntegerQ], Source -> data[Source] |>]
+            },
+            ConfidenceLevel -> 0.90,
+            "Argument" -> name
+          |>
+        ]
+      ]
+    ,
+    "Real",
+      text = If[isPredicate, "``Real`` is not a boolean function.", "``Real`` is not a function."];
+      AppendTo[issues,
+        InspectionObject["BadCall", text, "Error",
+          <|
+            Source -> data[Source],
+            CodeActions -> {
+              CodeAction["Replace with ``Developer`RealQ``", ReplaceNode, <|
+                "ReplacementNode" -> ToNode[Developer`RealQ], Source -> data[Source] |>]
             },
             ConfidenceLevel -> 0.90,
             "Argument" -> name
