@@ -825,7 +825,7 @@ So values must be provided explicitly
 *)
 filterLints[lintsIn:{___InspectionObject}, tagExclusionsIn_, severityExclusionsIn_, confidence_, lintLimit_] :=
 Catch[
-Module[{lints, tagExclusions, severityExclusions, shadowing, confidenceTest, badLints},
+Module[{lints, tagExclusions, severityExclusions, shadowing, confidenceTest, badLints, tagExclusionsNoArgument, tagExclusionsWithArgument, missed},
 
 	lints = lintsIn;
 	tagExclusions = tagExclusionsIn;
@@ -843,9 +843,41 @@ Module[{lints, tagExclusions, severityExclusions, shadowing, confidenceTest, bad
 	];
 
 	If[!empty[tagExclusions],
-		lints = DeleteCases[lints, InspectionObject[Alternatives @@ tagExclusions, _, _, _]];
+
+		(*
+		tag exclusions may have 2 forms:
+		"tag"
+		{"tag", "argument"}
+		*)
+
+		(*
+		first, filter out "tag" lints that have no "Argument"
+		*)
+		tagExclusionsNoArgument = Cases[tagExclusions, _String];
+		lints = DeleteCases[lints, Alternatives @@ (InspectionObject[#, _, _, Except[KeyValuePattern["Argument" -> _]]]& /@ tagExclusionsNoArgument)];
 		If[$Debug,
-			Print["lints: ", lints];
+			Print["lints (after filtering out tagExclusionsNoArgument): ", lints];
+		];
+		If[$Debug2,
+			missed = Cases[lints, Alternatives @@ (InspectionObject[#, _, _, KeyValuePattern["Argument" -> _]]& /@ tagExclusionsNoArgument)];
+			If[!empty[missed],
+				Print["tag exclusion was specified with NO argument, but lints HAD an argument: ", missed];
+			]
+		];
+
+		(*
+		next, filter out {"tag", "argument"} lints that have an "Argument"
+		*)
+		tagExclusionsWithArgument = Cases[tagExclusions, {_String, _String}];
+		lints = DeleteCases[lints, Alternatives @@ (InspectionObject[#[[1]], _, _, KeyValuePattern["Argument" -> #[[2]]]]& /@ tagExclusionsWithArgument)];
+		If[$Debug,
+			Print["lints (after filtering out tagExclusionsWithArgument): ", lints];
+		];
+		If[$Debug2,
+			missed = Cases[lints, Alternatives @@ (InspectionObject[#, _, _, Except[KeyValuePattern["Argument" -> _]]]& /@ tagExclusionsWithArgument)];
+			If[!empty[missed],
+				Print["tag exclusion was specified WITH argument, but lints had NO argument: ", missed];
+			]
 		];
 	];
 
