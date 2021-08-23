@@ -559,7 +559,8 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
             "EdgeDelete" | "LayeredGraphPlot" | "LayeredGraphPlot3D" | "CanonicalGraph" | "VertexConnectivity" |
             "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList" | "FindVertexCover" | "KatzCentrality" |
             "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
-            "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd" |
+            "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd" | "GraphDisjointUnion" |
+            "VertexCosineSimilarity" |
 
             "ReplaceList" |
             
