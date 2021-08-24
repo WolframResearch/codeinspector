@@ -560,7 +560,8 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
             "TreeGraph" | "AdjacencyMatrix" | "AdjacencyList" | "FindVertexCover" | "KatzCentrality" |
             "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
             "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd" | "GraphDisjointUnion" |
-            "VertexCosineSimilarity" |
+            "VertexCosineSimilarity" | "UndirectedGraph" | "FindIndependentVertexSet" | "LambdaComponents" |
+            "DegreeCentrality" | "TopologicalSort" |
 
             "ReplaceList" |
             
