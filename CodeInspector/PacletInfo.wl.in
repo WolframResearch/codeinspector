@@ -11,7 +11,7 @@ Paclet[
   Extensions -> {
     {"Kernel", Root -> "Kernel", Context -> "CodeInspector`"},
     {"FrontEnd", Root -> "FrontEnd", Prepend -> True},
-    {"Documentation", Language -> "English", MainPage -> "Guides/CodeInspector"},
+    {"Documentation", Language -> All, MainPage -> "Guides/CodeInspector"},
     {"Resource", Root->"Resources",
       Resources -> {
         {"Collatz","Examples/Collatz.m"},
