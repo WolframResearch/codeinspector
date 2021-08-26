@@ -216,6 +216,14 @@ TestMatch[
 ]
 
 
+TestMatch[
+	CodeInspect["a_?b[x]"]
+	,
+	{InspectionObject["SuspiciousPatternTestCall", _, _, _]}
+	,
+	TestID->"AggregateRules-20210830-B4E6L0"
+	
+]
 
 
 (*
@@ -230,8 +238,22 @@ TestMatch[
 ]
 
 
+TestMatch[
+	CodeInspect["a_?b[x]&"]
+	,
+	{InspectionObject["SuspiciousPatternTestCallFunction", _, _, _]}
+	,
+	TestID->"AggregateRules-20210830-G1O8L9"
+]
 
 
+TestMatch[
+	CodeInspect["a_?Association"]
+	,
+	{InspectionObject["AssociationCall", _, _, _]}
+	,
+	TestID->"AggregateRules-20210830-M3N7M8"
+]
 
 
 
