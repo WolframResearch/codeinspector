@@ -1345,8 +1345,8 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
   (*
   Check RHS
   *)
-  Which[
-    MatchQ[b, LeafNode[Symbol, _, _]],
+  Switch[b,
+    LeafNode[Symbol, _, _],
 
       bName = b["String"];
 
@@ -1417,6 +1417,47 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
         _,
           Null
       ];
+    ,
+    BinaryNode[Pattern, _, _],
+      Switch[a,
+        CompoundNode[PatternBlank, _, _],
+          (*
+          input was  a_?b:c
+
+          but intended was  a:_?b:c
+          *)
+
+          replacementNode =
+            BinaryNode[Optional, {
+              BinaryNode[Pattern, {
+                a[[2, 1]],
+                LeafNode[Token`Colon, ":", <||>],
+                BinaryNode[PatternTest, {
+                  a[[2, 2]],
+                  q,
+                  b[[2, 1]]}, <||>]}, <||>],
+              b[[2, 2]],
+              b[[2, 3]]}, <||>];
+
+          AppendTo[issues,
+            InspectionObject["PatternTestPattern", "``PatternTest`` has ``Pattern`` on RHS.", "Error", <|
+              Source -> node[[3, Key[Source]]],
+              CodeActions -> { CodeAction["Insert ``:``", ReplaceNode, <|
+                "ReplacementNode" -> replacementNode,
+                Source -> node[[3, Key[Source]]]
+              |>] },
+              ConfidenceLevel -> 0.95 |>
+            ]
+          ]
+        ,
+        _,
+          (*
+          Not sure what to do here
+          *)
+          Null
+      ]
+
+      
   ];
 
   If[!unexpected && !expected,

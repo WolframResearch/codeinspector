@@ -256,6 +256,16 @@ TestMatch[
 ]
 
 
+TestMatch[
+	CodeInspect["a_?b:c"]
+	,
+	{InspectionObject["PatternTestPattern", _, _, _]}
+	,
+	TestID->"AggregateRules-20210830-G1S6J6"
+]
+
+
+
 
 
 (*
