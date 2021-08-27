@@ -1,7 +1,7 @@
 # CodeInspector
 
 CodeInspector is a package for finding and reporting problems in Wolfram Language code.
-CodeInspector has a large collection of rules that can be used to inspect Wolfram Language source code files and can be customized to your preferences. 
+CodeInspector has a large collection of rules that can be used to inspect Wolfram Language source code files and can be customized to your preferences.
 
 In a stand-alone kernel:
 ```
@@ -12,12 +12,12 @@ CodeInspectSummarize["If[a,b,b]"]
 ```
 Out[2]= If[a,b,b]
 
-        line 1:  If[a,b,b] 
+        line 1:  If[a,b,b]
                       ^ ^  
                 DuplicateClauses Error Both branches are the same.
 ```
 
-In a front end:
+In a front end:\
 ![CodeInspectSummarize](docs/summarize.png)
 
 [Static Analysis Tools in the Wolfram Language](https://blog.wolfram.com/2021/04/06/static-analysis-tools-in-the-wolfram-language/)
@@ -33,25 +33,18 @@ In a front end:
 
 ## Setup
 
-CodeInspector and its dependencies are included in Mathematica 12.2 and above.
-
-For older versions, you can install from the paclet server.
-
-The minimum version for CodeInspector is Mathematica 11.0.
-
 CodeInspector depends on [CodeParser](https://github.com/WolframResearch/codeparser) and [CodeFormatter](https://github.com/WolframResearch/codeformatter).
 
-Install CodeInspector and dependencies from the paclet server:
+CodeInspector and its dependencies are included in Mathematica 12.2 and above.
+
+For older versions, install CodeInspector paclet and dependencies from the public paclet server:
 ```
 PacletInstall["CodeParser"]
 PacletInstall["CodeFormatter"]
 PacletInstall["CodeInspector"]
 ```
 
-Make sure that the paclets can be found on your system:
-```
-Needs["CodeInspector`"]
-```
+[Build and install the CodeInspector paclet locally](HowToBuild.md)
 
 
 ## Using CodeInspector
@@ -73,3 +66,11 @@ Summarize the problems found in a source code file:
 ![Collatz](docs/collatz.png)
 
 The input to `CodeInspect` and `CodeInspectSummarize` may be a string, a `File`, or a list of bytes.
+
+
+## Troubleshooting
+
+Make sure that the paclets can be found on your system:
+```
+Needs["CodeInspector`"]
+```
