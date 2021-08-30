@@ -561,11 +561,14 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
             "HITSCentrality" | "GraphAssortativity" | "FindShortestTour" | "GraphDiameter" | "GraphLinkEfficiency" |
             "FindKClan" | "FindEdgeCut" | "GraphCenter" | "GraphPeriphery" | "VertexAdd" | "GraphDisjointUnion" |
             "VertexCosineSimilarity" | "UndirectedGraph" | "FindIndependentVertexSet" | "LambdaComponents" |
-            "DegreeCentrality" | "TopologicalSort" |
+            "DegreeCentrality" | "TopologicalSort" | "FindClusters" | "GraphDifference" | "MeanDegreeConnectivity" |
+            "VertexReplace" | "GraphHub" | "KEdgeConnectedComponents" |
 
             "ReplaceList" |
             
-            "StringReplaceList", _], _, _]],
+            "StringReplaceList" |
+
+            "Merge", _], _, _]],
         (*
         Graph[{1->2, 1->3}] is ok for list of rules, so give low confidence of copy/paste error
         *)
