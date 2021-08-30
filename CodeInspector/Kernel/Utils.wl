@@ -869,6 +869,12 @@ Module[{lints, tagExclusions, severityExclusions, shadowing, confidenceTest, bad
 		next, filter out {"tag", "argument"} lints that have an "Argument"
 		*)
 		tagExclusionsWithArgument = Cases[tagExclusions, {_String, _String}];
+
+		(*
+		allow {tag, "*"} as a wildcard
+		*)
+		tagExclusionsWithArgument = tagExclusionsWithArgument /. {tag_String, "*"} :> {tag, _};
+
 		lints = DeleteCases[lints, Alternatives @@ (InspectionObject[#[[1]], _, _, KeyValuePattern["Argument" -> #[[2]]]]& /@ tagExclusionsWithArgument)];
 		If[$Debug,
 			Print["lints (after filtering out tagExclusionsWithArgument): ", lints];
