@@ -250,7 +250,7 @@ Catch[
 
 
 
-CodeInspect[bytes_List, opts:OptionsPattern[]] :=
+CodeInspect[bytes:{_Integer, _Integer...}, opts:OptionsPattern[]] :=
 Catch[
  Module[{cst, suppressedRegions},
 
