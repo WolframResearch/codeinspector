@@ -274,6 +274,14 @@ Catch[
 
 
 
+(*
+regardless of whether CodeInspect will ever have listability in the future,
+today we know that empty byte list will return no lints
+*)
+CodeInspect[{}, opts:OptionsPattern[]] := {}
+
+
+
 Options[CodeInspectCST] = {
   PerformanceGoal -> "Speed",
   "TokenRules" :> $DefaultTokenRules,
