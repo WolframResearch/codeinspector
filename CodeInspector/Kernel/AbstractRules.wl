@@ -1924,9 +1924,18 @@ Module[{ast, node, var, data, parentPos, parent, withChildren},
       ,
       CallNode[LeafNode[Symbol, "Block", _], _, _],
         (*
-        It is a (somewhat) common idiom to do Block[{$ContextPath = $ContextPath}, foo], so do not warn about that
+        It is a somewhat common idiom to do Block[{$ContextPath = $ContextPath}, foo], so do not warn about that
         *)
         (* and make sure to only skip  Block[{$ContextPath = $ContextPath}, foo]  and still report  Block[{}, $ContextPath = $ContextPath] *)
+        If[pos[[-3]] == 1,
+          Throw[{}]
+        ]
+      ,
+      CallNode[LeafNode[Symbol, "Module", _], _, _],
+        (*
+        It is a somewhat rare idiom to do Module[{x = x}, x], but it does happen, so do not warn about that
+        *)
+        (* and make sure to only skip  Module[{x = x}, x]  and still report  Module[{}, x = x] *)
         If[pos[[-3]] == 1,
           Throw[{}]
         ]
