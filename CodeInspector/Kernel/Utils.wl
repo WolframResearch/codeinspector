@@ -567,11 +567,19 @@ conventionAgnosticSourceOrdering[a_, b:Before[{most___, last_}]] :=
 (*
 Replace {1, 3, 2, Intra[4, 4]} with {1, 3, 2, 4} for easier processing
 *)
-conventionAgnosticSourceOrdering[a:{most___, Intra[i_, i_]}, b_] :=
+conventionAgnosticSourceOrdering[a:{most___, Intra[i_, _]}, b_] :=
 	conventionAgnosticSourceOrdering[{most, i}, b]
 
-conventionAgnosticSourceOrdering[a_, b:{most___, Intra[i_, i_]}] :=
+conventionAgnosticSourceOrdering[a_, b:{most___, Intra[i_, _]}] :=
 	conventionAgnosticSourceOrdering[a, {most, i}]
+
+(*
+There may be e.g., 2 internal failures in the same input and both are missing Source
+
+Not much to do here
+*)
+conventionAgnosticSourceOrdering[Missing["KeyAbsent", Key[Source]], Missing["KeyAbsent", Key[Source]]] :=
+	0
 
 
 
