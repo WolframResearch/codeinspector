@@ -247,6 +247,8 @@ Tags: SyntaxError NotContiguous
 KeyValuePattern[AbstractSyntaxIssues -> _] -> scanAbstractSyntaxIssues,
 
 
+Failure[___] -> scanActualFailures,
+
 
 Nothing
 |>
@@ -2689,6 +2691,42 @@ Module[{ast, data, issues, syntaxIssues, issuesToReturn, formatIssues, encodingI
   issuesToReturn
 ]
 
+
+Attributes[scanActualFailures] = {HoldRest}
+
+(*
+Just directly convert Failure[] to Lints
+*)
+scanActualFailures[pos_List, astIn_] :=
+Catch[
+Module[{ast, failure, issues, parentPos, parent},
+  ast = astIn;
+  failure = Extract[ast, {pos}][[1]];
+
+  issues = {};
+
+  If[Length[pos] >= 1,
+    parentPos = Drop[pos, -1];
+    parent = Extract[ast, {parentPos}][[1]];
+
+    (*
+    If inside CodeNode, then came from something like  InterpretationBox[..., failure]
+
+    and this is NOT an actual failure
+
+    Don't do  MatchQ[parent, CodeNode[Null, failure, _]]  or anything similar.
+    CodeNode is HoldAllComplete, so do not even try to look inside it.
+    If parent of failure is CodeNode, then that is enough
+    *)
+    If[MatchQ[parent, CodeNode[___]],
+      Throw[issues]
+    ]
+  ];
+
+  AppendTo[issues, InspectionObject["InternalError", "An internal error has occurred.", "Fatal", <| "Failure" -> failure, ConfidenceLevel -> 1.0 |>]];
+
+  issues
+]]
 
 
 (*
