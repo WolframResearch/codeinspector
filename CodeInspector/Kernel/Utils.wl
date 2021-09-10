@@ -731,7 +731,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"shadowed" -> InspectionObject["ShadowedSlot", "Shadowed ``Slot`` caused by nested ``Function``s.", "Warning", <|
+			"shadowed" -> InspectionObject["ShadowedSlot", "Shadowed ``Slot`` caused by nested ``Function``s.", "Scoping", <|
 				Source -> src,
 				ConfidenceLevel -> 0.95,
 				"AdditionalDescriptions" -> {"Consider using named ``Function`` parameters instead."}
