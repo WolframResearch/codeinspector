@@ -538,7 +538,10 @@ scanParenGridBox[pos_List, cstIn_] :=
       Null
     ,
     _,
-      AppendTo[issues, InspectionObject["ParenGridBox", "``\\[NoBreak]`` should be between ( and grid box.", "Error", <|
+      (*
+      This is "stylistic" so make a Remark
+      *)
+      AppendTo[issues, InspectionObject["ParenGridBox", "``\\[NoBreak]`` should be between ( and grid box.", "Remark", <|
         Source -> open[[3, Key[Source]]],
         ConfidenceLevel -> 0.95,
         "AdditionalDescriptions" -> {"This helps prevent linebreaking from separating the ( and the grid box."},
@@ -559,7 +562,10 @@ scanParenGridBox[pos_List, cstIn_] :=
       Null
     ,
     _,
-      AppendTo[issues, InspectionObject["ParenGridBox", "``\\[NoBreak]`` should be between grid box and ).", "Error", <|
+      (*
+      This is "stylistic" so make a Remark
+      *)
+      AppendTo[issues, InspectionObject["ParenGridBox", "``\\[NoBreak]`` should be between grid box and ).", "Remark", <|
         Source -> close[[3, Key[Source]]],
         ConfidenceLevel -> 0.95,
         "AdditionalDescriptions" -> {"This helps prevent linebreaking from separating the grid box and the )."},

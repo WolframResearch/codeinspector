@@ -2124,6 +2124,9 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 
     src = sym[[3, Key[Source]]];
 
+    (*
+    This is "stylistic" so make a Remark
+    *)
     AppendTo[issues, InspectionObject["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
                       <|  Source->src,
                           ConfidenceLevel->0.80|>]];
