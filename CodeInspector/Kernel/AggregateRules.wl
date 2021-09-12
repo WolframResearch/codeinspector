@@ -63,6 +63,8 @@ LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
 InfixNode[Dot, _, _] -> scanDots,
 
+InfixNode[Plus, _, _] -> scanPluss,
+
 PostfixNode[Repeated, _, _] -> scanRepeateds,
 
 TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
@@ -726,6 +728,51 @@ Module[{agg, node, children, data, issues, srcs, pairs, underPoss, dot},
 
   issues
 ]]
+
+
+
+Attributes[scanPluss] = {HoldRest}
+
+scanPluss[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  (*
+  scan rands for any Strings, then add issues for each rator
+  *)
+  If[AnyTrue[children[[;;;;2]], MatchQ[#, LeafNode[String, _, _]]&],
+    Scan[
+      (*
+      only warn if  "a" + "b", do not warn if  "a" - "b"
+      *)
+      If[MatchQ[#, LeafNode[Token`Plus, _, _]],
+        AppendTo[issues, InspectionObject["PlusString", "Calling ``Plus`` with ``String`` arguments.", "Warning", <|
+            Source -> #[[3, Key[Source]]],
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace ``+`` with ``<>``", ReplaceNode,
+                <|  Source -> #[[3, Key[Source]]],
+                    "ReplacementNode" -> LeafNode[Token`LessGreater, "<>", <||>]
+                |>
+              ]
+            }
+          |>]
+        ]
+      ]&
+      ,
+      children[[2;;-2;;2]]
+    ];
+  ];
+
+  issues
+]]
+
 
 
 (*
