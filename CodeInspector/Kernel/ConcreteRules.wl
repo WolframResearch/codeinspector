@@ -404,6 +404,13 @@ scanErrorNodes[pos_List, cstIn_] :=
         }
       |>]]
     ,
+    Token`Error`OldFESyntax,
+      AppendTo[issues, InspectionObject["OldFESyntax", "Old FE syntax.", "Fatal", <|
+        data,
+        ConfidenceLevel -> 1.0,
+        "AdditionalDescriptions" -> {"Try resaving the notebook with a newer FE."}
+      |>]]
+    ,
     _,
       tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
       AppendTo[issues, InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
@@ -445,6 +452,13 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
     ,
     SyntaxError`ExpectedSet,
       {InspectionObject["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    SyntaxError`OldFESyntax,
+      {InspectionObject["OldFESyntax", "Old FE syntax.", "Fatal", <|
+        data,
+        ConfidenceLevel -> 1.0,
+        "AdditionalDescriptions" -> {"Try resaving the notebook with a newer FE."}
+      |>]}
     ,
     _,
       tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
