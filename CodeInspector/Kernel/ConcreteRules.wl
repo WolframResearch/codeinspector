@@ -63,6 +63,9 @@ GroupNode[GroupParen, {
   LeafNode[Token`CloseParen, ")", _]}, _] -> scanParenGridBox,
 
 
+BoxNode[StyleBox | AdjustmentBox | FormBox, _, _] -> scanSuspiciousBoxes,
+
+
 Nothing
 |>
 
@@ -613,6 +616,20 @@ scanParenGridBox[pos_List, cstIn_] :=
   ];
 
   issues
+]
+
+
+
+Attributes[scanSuspiciousBoxes] = {HoldRest}
+
+scanSuspiciousBoxes[pos_List, cstIn_] :=
+ Module[{cst, node, data, tag},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  tag = node[[1]];
+  data = node[[3]];
+
+  {InspectionObject["SuspiciousBox", "Suspicious box: ``" <> ToString[tag] <> "``.", "Warning", <| data, ConfidenceLevel -> 1.0 |>]}
 ]
 
 
