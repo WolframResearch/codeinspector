@@ -316,7 +316,7 @@ scanCalls[pos_List, cstIn_] :=
 Attributes[scanErrorNodes] = {HoldRest}
 
 scanErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, tag, data, tagString, children, issues, multilineStrings},
+ Module[{cst, node, tag, data, tagString, children, issues, multilineStrings, commaSrc},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
@@ -381,6 +381,26 @@ scanErrorNodes[pos_List, cstIn_] :=
     Token`Error`UnterminatedFileString,
       AppendTo[issues, InspectionObject["UnterminatedFileString", "Unterminated file string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
+    Token`Error`PrefixImplicitNull,
+      commaSrc = nextSrc[src];
+      AppendTo[issues, InspectionObject["Comma", "Extra ``,``.", "Error", <|
+        data,
+        ConfidenceLevel -> 1.0,
+        CodeActions -> {
+          CodeAction["Delete ``,``", DeleteText, <|Source -> commaSrc|>]
+        }
+      |>]]
+    ,
+    Token`Error`InfixImplicitNull,
+      commaSrc = prevSrc[src];
+      AppendTo[issues, InspectionObject["Comma", "Extra ``,``.", "Error", <|
+        data,
+        ConfidenceLevel -> 1.0,
+        CodeActions -> {
+          CodeAction["Delete ``,``", DeleteText, <|Source -> commaSrc|>]
+        }
+      |>]]
+    ,
     _,
       tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
       AppendTo[issues, InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
@@ -388,6 +408,20 @@ scanErrorNodes[pos_List, cstIn_] :=
 
   issues
 ]
+
+
+nextSrc[{{line_, col_}, {line_, col_}}] :=
+  {{line, col}, {line, col + 1}}
+
+nextSrc[Before[src_]] :=
+  src
+
+prevSrc[{{line_, col_}, {line_, col_}}] :=
+  {{line, col - 1}, {line, col}}
+
+prevSrc[After[src_]] :=
+  src
+
 
 
 
