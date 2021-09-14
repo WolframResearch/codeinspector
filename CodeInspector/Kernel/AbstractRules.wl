@@ -450,6 +450,11 @@ Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dup
 
     srcs = #[[2, 1, 3, Key[Source]]]& /@ selected;
 
+    (*
+    Limit actions to max of 3
+    *)
+    srcs = Take[srcs, UpTo[3]];
+
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "``Association`` has duplicated keys.", "Error", <|
@@ -616,6 +621,11 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
 
     srcs = #[[2, 1, 3, Key[Source]]]& /@ selected;
 
+    (*
+    Limit actions to max of 3
+    *)
+    srcs = Take[srcs, UpTo[3]];
+    
     actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "Duplicate keys in list of rules.", "Warning", <|
