@@ -330,43 +330,46 @@ scanErrorNodes[pos_List, cstIn_] :=
 
   Switch[tag,
     Token`Error`ExpectedEqual,
-      AppendTo[issues, InspectionObject["ExpectedEqual", "Expected ``=``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["ExpectedEqual", "Expected ``=``.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`Number,
-      AppendTo[issues, InspectionObject["Number", "Number parsing error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["Number", "Number parsing error.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnhandledCharacter,
-      AppendTo[issues, InspectionObject["UnhandledCharacter", "Unhandled character: \"" <> children <> "\"", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnhandledCharacter", "Unhandled character: \"" <> children <> "\"", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedLetterlike,
-      AppendTo[issues, InspectionObject["ExpectedLetterlike", "Expected letterlike.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["ExpectedLetterlike", "Expected letterlike.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`Aborted,
-      AppendTo[issues, InspectionObject["Aborted", "Aborted.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["Aborted", "Aborted.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedOperand,
-      AppendTo[issues, InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["ExpectedOperand", "Expected an operand.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedTag,
-      AppendTo[issues, InspectionObject["ExpectedTag", "Expected a tag.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      (*
+      Related bugs: 413005
+      *)
+      AppendTo[issues, InspectionObject["ExpectedTag", "Expected a tag.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0, "AdditionalDescriptions" -> {"Tags can contain any characters that can appear in symbol names."} |>]]
     ,
     Token`Error`ExpectedFile,
-      AppendTo[issues, InspectionObject["ExpectedFile", "Expected a file.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["ExpectedFile", "Expected a file.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnsupportedCharacter,
-      AppendTo[issues, InspectionObject["UnsupportedCharacter", "Unsupported character.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnsupportedCharacter", "Unsupported character.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnsupportedToken,
-      AppendTo[issues, InspectionObject["UnsupportedToken", "Unsupported token.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnsupportedToken", "Unsupported token.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnexpectedCloser,
-      AppendTo[issues, InspectionObject["UnexpectedCloser", "Unexpected closer.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnexpectedCloser", "Unexpected closer.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnterminatedComment,
-      AppendTo[issues, InspectionObject["UnterminatedComment", "Unterminated comment.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnterminatedComment", "Unterminated comment.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnterminatedString,
-      AppendTo[issues, InspectionObject["UnterminatedString", "Unterminated string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]];
+      AppendTo[issues, InspectionObject["UnterminatedString", "Unterminated string.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]];
       (*
       Finding the correct string with the missing quote is difficult.
       So also flag any multiline strings as a Warning
@@ -385,35 +388,35 @@ scanErrorNodes[pos_List, cstIn_] :=
       AppendTo[issues, InspectionObject["UnterminatedFileString", "Unterminated file string.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`PrefixImplicitNull,
-      commaSrc = nextSrc[src];
+      commaSrc = nextSrc[data[Source]];
       AppendTo[issues, InspectionObject["Comma", "Extra ``,``.", "Error", <|
-        data,
+        Source -> data[Source],
         ConfidenceLevel -> 1.0,
         CodeActions -> {
-          CodeAction["Delete ``,``", DeleteText, <|Source -> commaSrc|>]
+          CodeAction["Delete ``,``", DeleteText, <| Source -> commaSrc |>]
         }
       |>]]
     ,
     Token`Error`InfixImplicitNull,
-      commaSrc = prevSrc[src];
+      commaSrc = prevSrc[data[Source]];
       AppendTo[issues, InspectionObject["Comma", "Extra ``,``.", "Error", <|
-        data,
+        Source -> data[Source],
         ConfidenceLevel -> 1.0,
         CodeActions -> {
-          CodeAction["Delete ``,``", DeleteText, <|Source -> commaSrc|>]
+          CodeAction["Delete ``,``", DeleteText, <| Source -> commaSrc |>]
         }
       |>]]
     ,
     Token`Error`OldFESyntax,
       AppendTo[issues, InspectionObject["OldFESyntax", "Old FE syntax.", "Fatal", <|
-        data,
+        Source -> data[Source],
         ConfidenceLevel -> 1.0,
         "AdditionalDescriptions" -> {"Try resaving the notebook with a newer FE."}
       |>]]
     ,
     _,
       tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
-      AppendTo[issues, InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject[tagString, "Syntax error.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
   ];
 
   issues
