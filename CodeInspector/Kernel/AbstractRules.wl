@@ -220,10 +220,7 @@ CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assu
 
 
 
-CallNode[LeafNode[Symbol, "Rule", _], {lhs_ /; !FreeQ[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]], _}, _] -> scanPatternRules,
-
-
-CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "ImageDimensions", _], _, _]]}, _] -> scanImageSizes,
+CallNode[LeafNode[Symbol, "Rule", _], {_, _}, _] -> scanRuleDispatch,
 
 
 
@@ -2327,9 +2324,31 @@ Module[{ast, node, children, data, issues, cases},
 
 
 
+Attributes[scanRuleDispatch] = {HoldRest}
 
+scanRuleDispatch[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, reaped, issues},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
 
+  reaped =
+  Reap[
 
+  If[MatchQ[node, CallNode[LeafNode[Symbol, "Rule", _], {lhs_ /; !FreeQ[lhs, CallNode[LeafNode[Symbol, "Pattern", _], _, _]], _}, _]],
+    Sow[scanPatternRules[pos, ast]]
+  ];
+
+  If[MatchQ[node, CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "ImageSize", _], _}, _]],
+    Sow[scanImageSizeRules[pos, ast]]
+  ];
+
+  ][[2]];
+
+  issues = Flatten[reaped];
+  
+  issues
+]]
 
 
 Attributes[scanPatternRules] = {HoldRest}
@@ -2371,7 +2390,7 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
         }, <||>]; *)
 
       AppendTo[issues,
-        InspectionObject["PatternRule", "The same symbol occurs on lhs and rhs of ``Rule``.", "Error", <|
+        InspectionObject["PatternRule", "The same symbol occurs on LHS and RHS of ``Rule``.", "Error", <|
           Source -> lhsPatternName[[3, Key[Source]]],
           "AdditionalSources" -> rhsOccurringSymbols[[All, 3, Key[Source]]],
           ConfidenceLevel -> 0.70,
@@ -2393,33 +2412,45 @@ Module[{ast, node, children, data, lhsPatterns, lhs, rhs, lhsPatternNames,
 
 
 
+Attributes[scanImageSizeRules] = {HoldRest}
 
-
-
-
-Attributes[scanImageSizes] = {HoldRest}
-
-scanImageSizes[pos_List, astIn_] :=
+scanImageSizeRules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues},
+Module[{ast, node, issues, data},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
-  children = node[[2]];
   data = node[[3]];
 
   issues = {};
 
-  AppendTo[issues, InspectionObject["ImageSize", "The option ``ImageSize`` is in points, but ``ImageDimensions`` is in pixels.", "Error", <|
-    Source -> data[Source],
-    ConfidenceLevel -> 0.8 |>]];
+  If[MatchQ[node,
+    CallNode[LeafNode[Symbol, "Rule", _], {
+      LeafNode[Symbol, "ImageSize", _],
+      rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "ImageDimensions", _], _, _]]}, _]],
+    AppendTo[issues, InspectionObject["PointsPixelsConfusion", "The option ``ImageSize`` is in points, but ``ImageDimensions`` is in pixels.", "Error", <|
+        Source -> data[Source],
+        ConfidenceLevel -> 0.8
+      |>]
+    ]
+  ];
+
+  If[MatchQ[node,
+    (*
+    Related issues: CLOUD-20289
+    *)
+    CallNode[LeafNode[Symbol, "Rule", _], {
+      LeafNode[Symbol, "ImageSize", _],
+      rhs_ /; !FreeQ[rhs, CallNode[LeafNode[Symbol, "Dynamic", _], _, _]] && !MatchQ[rhs, CallNode[LeafNode[Symbol, "Dynamic", _], _, _]]}, _]],
+    AppendTo[issues, InspectionObject["DynamicImageSize", "``Dynamic``s that appear on the RHS of the option ``ImageSize`` should wrap the entire RHS.", "Error", <|
+        Source -> data[Source],
+        ConfidenceLevel -> 0.8
+      |>]
+    ]
+  ];
 
   issues
 ]]
-
-
-
-
 
 
 
