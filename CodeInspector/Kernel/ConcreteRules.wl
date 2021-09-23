@@ -336,7 +336,7 @@ scanErrorNodes[pos_List, cstIn_] :=
       AppendTo[issues, InspectionObject["Number", "Number parsing error.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`UnhandledCharacter,
-      AppendTo[issues, InspectionObject["UnhandledCharacter", "Unhandled character: \"" <> children <> "\"", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
+      AppendTo[issues, InspectionObject["UnhandledCharacter", "Unhandled character: ``" <> children <> "``.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
     ,
     Token`Error`ExpectedLetterlike,
       AppendTo[issues, InspectionObject["ExpectedLetterlike", "Expected letterlike.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
