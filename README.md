@@ -33,7 +33,7 @@ In a front end:\
 
 ## Setup
 
-CodeInspector depends on [CodeParser](https://github.com/WolframResearch/codeparser) and [CodeFormatter](https://github.com/WolframResearch/codeformatter).
+CodeInspector depends on [CodeParser paclet](https://github.com/WolframResearch/codeparser) and [CodeFormatter paclet](https://github.com/WolframResearch/codeformatter).
 
 CodeInspector and its dependencies are included in Mathematica 12.2 and above.
 
