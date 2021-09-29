@@ -145,7 +145,7 @@ CompoundNode[Blank | BlankSequence | BlankNullSequence, {_,
   scanBlankPredicate,
 
 
-InfixNode[MessageName, children_ /; Length[children] >= 5, _] -> scanMessageName,
+InfixNode[MessageName, children_, _] -> scanMessageName,
 
 
 (*
@@ -2231,46 +2231,64 @@ scanBlankPredicate[pos_List, aggIn_] :=
 
 
 
-(*
-Scan for 3rd arg of MessageName being an unrecognized language
-
-Related GitHub issues: https://github.com/WolframResearch/codeinspector/issues/7
-
-Related threads: https://mail-archive.wolfram.com/archive/t-codetools/2020/Aug00/0004.html
-
-Related PRs: https://stash.wolfram.com/projects/KERN/repos/kernel/pull-requests/13769/overview
-*)
 Attributes[scanMessageName] = {HoldRest}
 
 scanMessageName[pos_List, aggIn_] :=
-Module[{agg, node, data, issues, children, rand},
+Module[{agg, node, issues, children, rand},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
 
   children = node[[2]];
-
-  rand = children[[5]];
-
-  data = rand[[3]];
-
+  
   issues = {};
 
-  If[!MemberQ[{
-      (*
-      I believe this is the complete list of common languages for translations
-      *)
-      "ChineseSimplified",
-      "ChineseTraditional",
-      "English",
-      "French",
-      "German",
-      "Japanese",
-      "Korean",
-      "Portugese",
-      "Russian",
-      "Spanish"
-    }, children[[5, 2]]],
-      AppendTo[issues, InspectionObject["MessageNameLanguage", "Unrecognized language argument to ``MessageName``.", "Error", <|Source->children[[5, 3, Key[Source]]], ConfidenceLevel->0.9|>]];
+  (*
+  if there is already ErrorNode, then do not generate more warnings
+  *)
+  If[!MatchQ[children[[1]], LeafNode[Symbol, _, _] | ErrorNode[_, _, _]],
+    AppendTo[issues,
+      InspectionObject["MessageNameSymbol", "Expected a symbol as first operand to ``MessageName``.", "Error", <|
+        Source -> children[[1, 3, Key[Source]]],
+        ConfidenceLevel -> 0.95
+      |>]
+    ]
+  ];
+
+  If[Length[children] >= 5,
+
+    rand = children[[5]];
+
+    (*
+    Scan for 3rd arg of MessageName being an unrecognized language
+
+    Related GitHub issues: https://github.com/WolframResearch/codeinspector/issues/7
+
+    Related threads: https://mail-archive.wolfram.com/archive/t-codetools/2020/Aug00/0004.html
+
+    Related PRs: https://stash.wolfram.com/projects/KERN/repos/kernel/pull-requests/13769/overview
+    *)
+    If[!MemberQ[{
+        (*
+        I believe this is the complete list of common languages for translations
+        *)
+        "ChineseSimplified",
+        "ChineseTraditional",
+        "English",
+        "French",
+        "German",
+        "Japanese",
+        "Korean",
+        "Portugese",
+        "Russian",
+        "Spanish"
+      }, children[[5, 2]]],
+        AppendTo[issues,
+          InspectionObject["MessageNameLanguage", "Unrecognized language argument to ``MessageName``.", "Error", <|
+            Source -> children[[5, 3, Key[Source]]],
+            ConfidenceLevel -> 0.9
+          |>]
+        ]
+    ]
   ];
 
   issues
