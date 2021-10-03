@@ -589,7 +589,8 @@ button[
 				hoverQ = CurrentValue["MouseOver"];
 				mouseDownQ = CurrentValue["MouseButtonTest"]],
 
-			If[OptionValue["ActiveQ"] =!= False, action],
+			If[OptionValue["ActiveQ"] =!= False, action];
+			mouseDownQ = False,
 			
 			Appearance -> None, ContentPadding -> False,
 			BaselinePosition -> OptionValue[BaselinePosition],
