@@ -87,9 +87,9 @@ If[PacletFind["Lint"] != {},
 ]
 
 
-CodeInspector::versions1 = "CodeParser version `1` and CodeInspector version `2` are different. There may be unexpected problems."
+CodeInspector::versions1 = "CodeParser version `1` and CodeInspector version `2` are different. There may be unexpected problems. Evaluate PacletInstall /@ {\"CodeParser\", \"CodeInspector\"} to get the latest versions."
 
-CodeInspector::versions2 = "CodeFormatter version `1` and CodeInspector version `2` are different. There may be unexpected problems."
+CodeInspector::versions2 = "CodeFormatter version `1` and CodeInspector version `2` are different. There may be unexpected problems. Evaluate PacletInstall /@ {\"CodeFormatter\", \"CodeInspector\"} to get the latest versions."
 
 codeParserVersion = "Version" /. PacletInformation["CodeParser"]
 codeFormatterVersion = "Version" /. PacletInformation["CodeFormatter"]
