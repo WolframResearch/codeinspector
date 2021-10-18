@@ -290,7 +290,7 @@ implicitCommaNulls[agg_] :=
 Catch[
 Module[{nulls},
 
-  nulls = Cases[agg, InfixNode[Comma, nodes_ /; !FreeQ[nodes, LeafNode[Token`Fake`ImplicitNull, _, _], 1], _], {0, Infinity}];
+  nulls = Cases[agg, InfixNode[Comma, nodes_ /; !FreeQ[nodes, ErrorNode[Token`Error`PrefixImplicitNull | Token`Error`InfixImplicitNull, _, _], 1], _], {0, Infinity}];
 
   nulls
 ]]
@@ -474,7 +474,7 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
 
   ones = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitOne, _, _], {0, Infinity}]];
   alls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitAll, _, _], {0, Infinity}]];
-  nulls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitNull, _, _], {0, Infinity}]];
+  nulls = Union[Cases[implicitTokens, LeafNode[Token`Fake`ImplicitNull, _, _] | ErrorNode[Token`Error`PrefixImplicitNull | Token`Error`InfixImplicitNull, _, _], {0, Infinity}]];
   ops = Union[Cases[implicitTokens, ErrorNode[Token`Error`ExpectedOperand, _, _], {0, Infinity}]];
 
   times = processChildren /@ times[[All, 2]];
