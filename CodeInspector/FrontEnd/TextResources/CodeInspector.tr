@@ -558,7 +558,7 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
            EvaluationNotebook[], All}]; 
         CodeInspector`LinterUI`Private`varSet[{
           LinterUIDockedCell`Private`notebook$$, "DockedCellPresentQ"}, 
-          True]), Method -> "Preemptive", PassEventsDown -> Automatic, 
+          False]), Method -> "Preemptive", PassEventsDown -> Automatic, 
        PassEventsUp -> True}]]},
    AspectRatio->Full,
    ImageSize->{Full, 23},
@@ -593,7 +593,7 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
         Map[LinterUIDockedCell`Private`dockedCellMenuItem, 
          CodeInspector`LinterUI`Private`varValue[
          LinterUIDockedCell`Private`notebook, All, "Cell"]], Appearance -> 
-        None]], Null, LinterUIDockedCell`Private`dockedCellMenuItem[
+        None]], LinterUIDockedCell`Private`dockedCellMenuItem[
        Pattern[LinterUIDockedCell`Private`cell, 
         Blank[CellObject]]] := With[{}, Graphics[{
           Inset[
