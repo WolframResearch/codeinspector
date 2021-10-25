@@ -764,7 +764,7 @@ AttachAnalysis[
 
     CodeInspector`LinterUI`Private`attachAnalysisAction[notebookOrCells],
 
-    (* If $Notebooks isn't True, then a suitable front end isn't availabe. Throw a message saying this and return $Failed. *)
+    (* If $Notebooks isn't True, then a suitable front end isn't available. Throw a message saying this and return $Failed. *)
     Message[AttachAnalysis::nofe]; $Failed
   ]
 

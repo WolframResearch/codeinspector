@@ -1026,7 +1026,7 @@ makeRaftMenuDocsItem[
 	{
 		(* Link to the symbol doc page... *)
 		symbol_String,
-		(* ...but show display (symbol and display have been separated becuase you may want to display "&" but link to Function) *)
+		(* ...but show display (symbol and display have been separated because you may want to display "&" but link to Function) *)
 		display_String
 	},
 	(* itemClicked is a state variable. *)
@@ -1266,7 +1266,7 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 							makeRaftMenuDocsItem[symbolAndDisplay, Dynamic[itemClicked],
 								raftType, Dynamic[raftCell], Dynamic[raftMenu]]] /@ symbolsAndDisplays,
 						
-						(* Ingore-lint actions. *)
+						(* Ignore-lint actions. *)
 						ignoreItems
 					
 					(* Replace {} with Nothing so that you don't get delimiters between empty sections. *)
@@ -1388,7 +1388,7 @@ makeRaftCell[cell_CellObject, lint_CodeInspector`InspectionObject] :=
 														(* Upon closure of the menu, set the lint state to "inactive". This is correct if the mouse has moved out of the menu/raft.
 															However, if the menu has been closed by clicking the raft itself, then the state *should* be set to "hoverXXXX" - but this
 															happens by the raft's button action after the menu's Deinitialization fires. (In other words, it's fine to potentially
-															incorrectly set the lint state to "inactive" here, becuase it will immediately corrected by the raft's button action.) *)
+															incorrectly set the lint state to "inactive" here, because it will immediately be corrected by the raft's button action.) *)
 														Deinitialization :> (raftOpenQ = False; varSet[{cell, lint, "State"}, "inactive"])]],
 												
 												{Left, Bottom}, Offset[{0, 2}, 0], {Left, Top},
@@ -1984,7 +1984,7 @@ refineSources[lints_?(MatchQ[{___(* CodeInspector`InspectionObject *)}]), cell_C
 		{confidenceThreshold = CodeInspector`LinterUI`$confidenceThreshold},
 		(* First, generate a list of all sources from all lints in the cell, so that we can test the sources for coincidence and then remove the corresponding lints if need be.
 			(Note that each list element is actually <|"Source"->source, "Confidence"->confidence, "Lint"->lint|> so we know to which lint a source belongs and we can compare confidence levels).
-			Note that lints can have additional sources, so just becuase *one* source coincides with another source, doesn't mean we discard that lint straight away.
+			Note that lints can have additional sources, so just because *one* source coincides with another source, doesn't mean we discard that lint straight away.
 			Instead, remove that source, and then Remove the lint vars if no sources remain. *)
 		{sources =
 			Flatten @ Map[
@@ -2263,7 +2263,7 @@ attachAnalysisAction[
 		(* Create boxes for the clean cells bracket markers. *)
 		cleanCellsAssoc = Association[Function[cell, cell -> noLintsBracketMarker[cell]] /@ cleanCells];
 
-		(* We made the cell expressions for the UI cells before attaching them so that the attachemnt process can happen quickly. *)
+		(* We made the cell expressions for the UI cells before attaching them so that the attachment process can happen quickly. *)
 
 		(* Delete any existing bracket marker. *)
 		Function[cell, NotebookDelete[varValue[cell, "CleanCellBracketMarker"]]] /@ cleanCells;
