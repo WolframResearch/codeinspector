@@ -75,7 +75,6 @@ set(STATIC_WL_PACLET_KERNEL_SOURCES
 )
 
 set(STATIC_WL_PACLET_FRONTEND_SOURCES
-	${PROJECT_SOURCE_DIR}/CodeInspector/FrontEnd/Palettes/CodeAnalysisOptions.nb
 	${PROJECT_SOURCE_DIR}/CodeInspector/FrontEnd/TextResources/CodeInspector.tr
 )
 
@@ -105,6 +104,10 @@ set(STATIC_WL_PACLET_RESOURCES_SOURCES
 
 set(PACLETINFO_IN_SOURCE
 	${PROJECT_SOURCE_DIR}/${PACLET}/PacletInfo.wl.in
+)
+
+set(GENERATED_WL_PACLET_FRONTEND_SOURCES
+	${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/CodeAnalysisOptions.nb
 )
 
 
@@ -137,6 +140,7 @@ endif()
 
 file(MAKE_DIRECTORY
 	${PROJECT_BINARY_DIR}/paclet/${PACLET}
+	${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/
 )
 
 
@@ -231,6 +235,47 @@ foreach(SRC ${STATIC_WL_PACLET_RESOURCES_SOURCES})
 	)
 	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/${REL})
 endforeach()
+
+#
+# generated FrontEnd sources
+#
+foreach(SRC ${GENERATED_WL_PACLET_FRONTEND_SOURCES})
+	file(RELATIVE_PATH REL ${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/ ${SRC})
+	add_custom_command(
+		OUTPUT
+			${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL}
+		COMMAND
+			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL}
+		DEPENDS
+			${SRC}
+	)
+	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL})
+endforeach()
+
+
+
+#
+# generated srcs
+#
+
+
+#
+# CodeAnalysisOptions.nb
+#
+
+add_custom_command(
+	OUTPUT
+		${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/CodeAnalysisOptions.nb
+	COMMAND
+		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/CodeInspector/Generate/MakeCodeAnalysisOptionsPalette.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -DBUG349779_TIMEOUT=${BUG349779_TIMEOUT} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
+	DEPENDS
+		${PROJECT_SOURCE_DIR}/CodeInspector/Generate/MakeCodeAnalysisOptionsPalette.wl
+		${PROJECT_SOURCE_DIR}/CodeTools/Generate/GenerateSources.wl
+		${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
+	VERBATIM
+	WORKING_DIRECTORY
+		${PROJECT_SOURCE_DIR}
+)
 
 
 

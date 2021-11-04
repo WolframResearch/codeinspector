@@ -3,15 +3,23 @@
 (* ::Section::Closed:: *)
 (*Package Header*)
 
+If[!MemberQ[$Path, #], PrependTo[$Path, #]]&[DirectoryName[$InputFileName, 3]]
 
-BeginPackage["CodeAnalysisOptionsPalette`"]
+BeginPackage["CodeInspector`Generate`MakeCodeAnalysisOptionsPalette`"]
 
 
 Begin["`Private`"]
 
+(*
+Do not allow PacletManager to participate in finding `Generate` files
 
-Needs["CodeInspector`"]
-Needs["WLUtilities`Resources`"]
+PacletManager will find e.g. CodeParser/Kernel/TokenEnum.wl when asked to find CodeParser`Generate`TokenEnum`
+
+related issues: PACMAN-54
+*)
+Block[{Internal`PacletFindFile = Null&},
+Needs["CodeTools`Generate`GenerateSources`"]
+]
 
 
 
@@ -282,8 +290,17 @@ clearSuppressionControl[tag_?(MatchQ[_String | {_String, _String}]), scope_?(Mat
 
 				Dynamic[clearedQ]]]]
 
+(* ::Section::Closed:: *)
+(*Write*)
 
-togglerPalette =
+generatePalette[] := 
+Module[{togglerPalette, res},
+	
+	Print["UsingFrontEnd... \[WatchIcon]"];
+
+	UsingFrontEnd[
+	
+	togglerPalette =
 	CreatePalette[
 		addDefinitions[
 			DynamicModule[{},
@@ -320,20 +337,44 @@ togglerPalette =
 		Saveable -> False,
 		Evaluator -> "System"];
 
- 
+	If[!MatchQ[togglerPalette, _NotebookObject],
+		Print["CreatePalette failed: ", togglerPalette];
+		Quit[1]
+	];
 
+	Print["saving CodeAnalysisOptions.nb"];
+	res = NotebookSave[togglerPalette, FileNameJoin[{generatedWLDir, "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]];
 
-(* ::Section::Closed:: *)
-(*Write*)
+	Print[res];
 
+	If[res =!= Null,
+		Quit[1]
+	];
+	];
 
-NotebookSave[togglerPalette,
-	FileNameJoin[{ParentDirectory[NotebookDirectory[]], "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]]
+	Print["Done UsingFrontEnd"];
+]
 
+generate[] := (
+
+Print["Generating Palette..."];
+
+generatePalette[];
+
+Print["Done Palette"]
+)
+
+If[!StringQ[script],
+  Quit[1]
+]
+If[AbsoluteFileName[script] === AbsoluteFileName[$InputFileName],
+generate[]
+]
 
 (* ::Section::Closed:: *)
 (*Package Footer*)
 
 
 End[]
+
 EndPackage[]
