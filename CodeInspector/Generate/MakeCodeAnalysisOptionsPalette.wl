@@ -316,6 +316,7 @@ togglerPalette =
 
 		Background -> GrayLevel[1],
 		WindowTitle -> "Code Analysis Options",
+		MenuSortingValue -> 1150, (* Group the Code palettes together -- 416653 *)
 		Saveable -> False,
 		Evaluator -> "System"];
 
