@@ -68,6 +68,7 @@ CodeInspectSummarize::usage = "CodeInspectSummarize[code] returns an inspection 
 code can be a string, a file, or a list of bytes."
 
 Options[CodeInspectSummarize] = {
+  "Editor" -> Automatic,
   PerformanceGoal -> "Speed",
   "TokenRules" :> $DefaultTokenRules,
   "ConcreteRules" :> $DefaultConcreteRules,
