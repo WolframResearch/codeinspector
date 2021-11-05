@@ -54,22 +54,32 @@ Module[{editor, res},
 
 	Switch[{$InterfaceEnvironment, editor},
 		{"Macintosh", "Sublime Text"},
-			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file]
+			(*
+			Run needs spaces escaped
+			*)
+			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl " <> file]]
 		,
 		{"Macintosh", "Visual Studio Code"},
-			Run["/usr/local/bin/code -g " <> file]
-		,
-		{"Macintosh", "Eclipse"},
-			Run["open -a /Applications/Eclipse.app " <> file]
+			(*
+			Run needs spaces escaped
+			*)
+			Run[escapeSpaces["/usr/local/bin/code -g " <> file]]
 		,
 		{_, "SystemOpen"},
+			(*
+			SystemOpen does NOT need spaces escaped
+			*)
 			res = SystemOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "SystemOpen"]
 			];
 		,
 		_,
-			(* Editor "FrontEnd" is supported in all environments. *)
+			(*
+			Editor "FrontEnd" is supported in all environments.
+
+			NotebookOpen does NOT need spaces escaped
+			*)
 			res = NotebookOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "FrontEnd"]
@@ -88,22 +98,32 @@ Module[{editor, res},
 
 	Switch[{$InterfaceEnvironment, editor},
 		{"Macintosh", "Sublime Text"},
-			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line]]
+			(*
+			Run needs spaces escaped
+			*)
+			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line]]]
 		,
 		{"Macintosh", "Visual Studio Code"},
-			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line]]
-		,
-		{"Macintosh", "Eclipse"},
-			Run["open -a /Applications/Eclipse.app " <> file]
+			(*
+			Run needs spaces escaped
+			*)
+			Run[escapeSpaces["/usr/local/bin/code -g " <> file <> ":" <> ToString[line]]]
 		,
 		{_, "SystemOpen"},
+			(*
+			SystemOpen does NOT need spaces escaped
+			*)
 			res = SystemOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "SystemOpen"]
 			];
 		,
 		_,
-			(* Editor "FrontEnd" is supported in all environments. *)
+			(*
+			Editor "FrontEnd" is supported in all environments.
+
+			NotebookOpen does NOT need spaces escaped
+			*)
 			res = NotebookOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "FrontEnd"]
@@ -122,28 +142,44 @@ Module[{editor, res},
 
 	Switch[{$InterfaceEnvironment, editor},
 		{"Macintosh", "Sublime Text"},
-			Run["/Applications/Sublime\\ Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
+			(*
+			Run needs spaces escaped
+			*)
+			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]]
 		,
 		{"Macintosh", "Visual Studio Code"},
-			Run["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-		,
-		{"Macintosh", "Eclipse"},
-			Run["open -a /Applications/Eclipse.app " <> file]
+			(*
+			Run needs spaces escaped
+			*)
+			Run[escapeSpaces["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]]
 		,
 		{_, "SystemOpen"},
+			(*
+			SystemOpen does NOT need spaces escaped
+			*)
 			res = SystemOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "SystemOpen"]
 			];
 		,
 		_,
-			(* Editor "FrontEnd" is supported in all environments. *)
+			(*
+			Editor "FrontEnd" is supported in all environments.
+
+			NotebookOpen does NOT need spaces escaped
+			*)
 			res = NotebookOpen[file];
 			If[FailureQ[res],
 				Message[OpenInEditor::fail, file, "FrontEnd"]
 			];
 	]
 ]
+
+
+(*
+assume that path does not already have escaped spaces
+*)
+escapeSpaces[path_] := StringReplace[path, " " -> "\\ "]
 
 
 End[]
