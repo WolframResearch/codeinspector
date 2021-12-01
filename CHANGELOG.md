@@ -29,7 +29,7 @@ Add symbol Failed to BadSymbols.
 
 Separate SyntaxIssues and AbstractSyntaxIssues.
 
-Allow File[] wrappers to work.
+Allow `File[]` wrappers to work.
 
 Add Interpretation to Lint objects.
 
@@ -41,18 +41,18 @@ Various bug fixes.
 ## 0.10 - 6 May, 2019
 
 Added new rules:
-"ImplicitTimesBlanks" for detecting occurrenes of ____ (that is, 4 _ characters)
-"AssociationCall" etc. for detecting occurrences a?Association (when AssociationQ was meant)
-"SuspiciousPrivateContext" for detecting Begin["Private\`"]
+* "ImplicitTimesBlanks" for detecting occurrenes of `____` (that is, 4 `_` characters)
+* "AssociationCall" etc. for detecting occurrences of `a?Association` (when AssociationQ was meant)
+* "SuspiciousPrivateContext" for detecting ``Begin["Private`"]``
 
 Add DynamicModule scoping rules.
 
 Handling nested With syntax:
-With[{a = 1}, {b = a}, b]
+* `With[{a = 1}, {b = a}, b]`
 
 "UnusedBlockVariables" has a separate tag, can be enabled separately.
 
-"SelfAssignment" for detecting a = a or a := a.
+"SelfAssignment" for detecting `a = a` or `a := a`.
 
 Provide some selectors for Lint and LintedLine objects.
 
@@ -69,13 +69,13 @@ Various bug fixes.
 ## 0.12 - 5 Aug, 2019
 
 Added new rules:
-ContiguousImplicitTimesBlanks
-ImplicitTimesStrings
-AssociationArguments
-SessionSymbol
-WhichSet
-IfSet
-TrueCall
+* ContiguousImplicitTimesBlanks
+* ImplicitTimesStrings
+* AssociationArguments
+* SessionSymbol
+* WhichSet
+* IfSet
+* TrueCall
 
 Add BadSymbol for Boolean, RealQ, and FalseQ
 
@@ -94,7 +94,7 @@ Add scan for List of Rules
 
 Add scan for Fail, RationalQ, ComplexQ, SymbolQ
 
-Add scan for a?Function[args]
+Add scan for `a?Function[args]`
 
 Add scans for undocumented symbols.
 
@@ -105,9 +105,9 @@ Add scans for obsolete symbols.
 
 ## 0.14 - 28 Oct, 2019
 
-Remove scan for %, it is redundant
+Remove scan for `%`, it is redundant
 
-Add scan for a ~f[x]~ b
+Add scan for `a ~f[x]~ b`
 
 Allow shadowing lints to be dropped
 
@@ -125,7 +125,7 @@ Retrofit a lot of CodeActions
 
 Experiment with new style for lints
 
-Scan # for not containing Function
+Scan `#` for not containing Function
 
 Add all undocumented symbols.
 
@@ -175,7 +175,7 @@ Add Creator field
 
 Add scan for \*Q functions inside of symbolic solvers.
 
-Add scan for Rule___
+Add scan for `Rule___`
 
 Add LintBytes and LintBytesReport
 
@@ -183,13 +183,13 @@ Add empty list rule to Module, DynamicModule and Block.
 
 Report leaking Module variables that appear on RHS of RuleDelayed in String functions
 
-Require using File[] wrapper
+Require using `File[]` wrapper
 
-Don't include a_b syntax with reporting suspicous implicit Times between blanks
+Don't include `a_b` syntax with reporting suspicous implicit Times between blanks
 
 Make the scanning for undocumented, obsolete, or experimental System symbols optional
 
-Add LintedLine::truncation message for lines that are too long
+Add `LintedLine::truncation` message for lines that are too long
 
 Add LintBoxReport
 
@@ -207,7 +207,7 @@ Fix OutputForm of LintedLine.
 
 Fix the problem of not reporting GroupMissingCloserNode warnings.
 
-Prior to version 12, handling of \|xxxxxx notation was not correct.
+Prior to version 12, handling of `\|xxxxxx` notation was not correct.
 
 Allow lint Report functions to work with default arguments in earlier versions.
 
@@ -216,23 +216,24 @@ Allow lint Report functions to work with default arguments in earlier versions.
 
 Add more cases for warning about implicit Times
 
-handle BeginStaticAnalysisIgnore[] / EndStaticAnalysisIgnore[] ending with ;
+handle `BeginStaticAnalysisIgnore[]` / `EndStaticAnalysisIgnore[]` ending with `;`
 
 It might be possible for 2 lints to have ConfidenceLevel and Severity so that neither shadows the other
 
 Rename Lint -> CodeInspector
 
-Add scan for using Rule here a_ -> a+1 instead of RuleDelayed
+Add scan for using Rule here `a_ -> a+1` instead of RuleDelayed
 
-Show a ^ for the first character of each AdditionalSource
+Show a `^` for the first character of each AdditionalSource
 
-Add rule scanning for ImageSize -> ImageDimensions[]
+Add rule scanning for `ImageSize -> ImageDimensions[]`
 
-Add a basic scan for arg_ :> arg_
+Add a basic scan for `arg_ :> arg_`
 
 Add a check suggested by Szabolcs:
-warn about optional argument here: foo[a_, b_:Automatic, OptionsPattern[]]
-calling foo[1, "Bar" -> 2] makes "Bar" -> 2 get bound to b, and not to OptionsPattern[]
+warn about optional argument here: `foo[a_, b_:Automatic, OptionsPattern[]]`
+
+calling `foo[1, "Bar" -> 2]` makes `"Bar" -> 2` get bound to b, and not to `OptionsPattern[]`
 
 Put a limit on number of implicit Times x returned
 
@@ -243,14 +244,17 @@ Put a limit on number of implicit Times x returned
 
 Scan for UnSameQ, which is very similar to System\`UnsameQ
 
-Catch the case of x_List binding arguments that are intended for OptionsPattern[]
-
+Catch the case of `x_List` binding arguments that are intended for `OptionsPattern[]`
+```
 CodeInspectSummarize[
 "f[x_List : {}, OptionsPattern[]] := x"
 ]
+```
 
 Allow code like this to pass:
+```
 SyntaxInformation[f] = {"ArgumentsPattern" -> {\_., OptionsPattern[]}}
+```
 
 scan for StringMatch
 
@@ -260,20 +264,20 @@ Add BackwardsCompaibility issues and tests for bug 390755 changes
 
 Duplicate keys in list of rules in Graph is ok
 
-Suggest inserting * with implicit Times across lines
+Suggest inserting `*` with implicit Times across lines
 
 
 ### API changes
 
 Display other implicit tokens, such as implicit 1, implicit All, and implicit Null
 
-Add "TabWidth" option to CodeInspectSummarize.
+Add `"TabWidth"` option to CodeInspectSummarize.
 
 This will format tabs in the display correctly. The previous behavior simply formatted tabs as a single space.
 
-Add "TabWidth" option to CodeInspect to be passed through to CodeConcreteParse.
+Add `"TabWidth"` option to CodeInspect to be passed through to CodeConcreteParse.
 
-Also remove "LineNumberExclusions" and "LineHashExclusions" options form CodeInspectSummarize. These were not used very much and were interefering with tab work.
+Also remove `"LineNumberExclusions"` and `"LineHashExclusions"` options form CodeInspectSummarize. These were not used very much and were interefering with tab work.
 
 Add a definition for ScriptForm format
 
@@ -283,7 +287,7 @@ This is similar to the Implicit Tokens functionality. These functions will ident
 
 Allow lints themselves to be summarized
 
-Since we have an explicit lint that we want to summarize, then make sure that "TagExclusions" and ConfidenceLevel do not interfere with summarizing
+Since we have an explicit lint that we want to summarize, then make sure that `"TagExclusions"` and ConfidenceLevel do not interfere with summarizing
 
 Add environ lines, which are lines above and below lints that provide more context
 
@@ -324,9 +328,9 @@ Tighten up error reporting when given bad input
 
 ### Fixes
 
-Fix implicit tokens in a\ [ThinSpace]b
+Fix implicit tokens in `a\[ThinSpace]b`
 
-Fix errors when linting code such as. Module[{a@}, b]
+Fix errors when linting code such as `Module[{a@}, b]`
 
 Fix spaces in messages
 
@@ -351,9 +355,9 @@ Go through and replace all "Did you mean...?" with CodeActions
 
 Add support for Eclipse as an editor
 
-Give much lower confidence to {a -> 1, a-> 2} when it appears in Graph, NetGraph, WordCloud
+Give much lower confidence to `{a -> 1, a -> 2}` when it appears in Graph, NetGraph, WordCloud
 
-Add option "AllowedImplicitTokens" to CodeInspectImplicitTokens
+Add option `"AllowedImplicitTokens"` to CodeInspectImplicitTokens
 
 This can be a list of special character strings representing the various implicit tokens to allow.
 
@@ -364,29 +368,31 @@ Handle FormatIssues that may come from abstracting
 Update BlankPredicate scan with whitelisted symbols
 
 Add rule catching implicit Times in Set:
-
+```
 a = 1; b = 2 c = 3;
+```
 
-forgotten ; leads to parsing as (2 c) = 3
+forgotten `;` leads to parsing as `(2 c) = 3`
 
-Add "Editor" option to CodeInspect
+Add `"Editor"` option to CodeInspect
 
 Add a note about handling Q-functions that take more than 1 arg
 
-It is unclear what to do with them. If \_FreeQ appears, it may still be incorrect code, but the correct code is not \_?FreeQ
+It is unclear what to do with them. If `_FreeQ` appears, it may still be incorrect code, but the correct code is not `_?FreeQ`
 
 Update default lint limit to 100 and wire it in as an option
 
 Add experimental support for disabled regions comment syntax
 
 Example:
-
+```
 (* ::CodeInspect::Push:: \*)
 (* ::CodeInspect::Disable::DuplicateClausesIf:: \*)
 
 If[a, b, b]
 
 (* ::CodeInspect::Pop:: \*)
+```
 
 Add a higher confidence to Times appearing in variable declarations (probably a missing comma)
 
@@ -394,17 +400,17 @@ If MessageName has a 3rd argument, then check against recognized languages
 
 Bring in heuristic for PatternBlankOptional
 
-If the pattern name contains "pat", then assume it is used as a pattern
+If the pattern name contains `"pat"`, then assume it is used as a pattern
 
-Allow a?(b|c) to be flagged
+Allow `a?(b|c)` to be flagged
 
-Parameterize some lints with an "Argument" and allow the disabled regions syntax to take an additional argument that specifies this
+Parameterize some lints with an `"Argument"` and allow the disabled regions syntax to take an additional argument that specifies this
 
 Allow inspecting and summarizing of Cells, Notebooks, CellObjects, and NotebookObjects
 
 Add support for suppressed regions to Notebooks
 
-add "InheritedProperties" option to allow CellIndex to be passed down
+add `"InheritedProperties"` option to allow CellIndex to be passed down
 
 Use InheritedProperties to allow suppressed regions to work at top-level in notebooks
 
@@ -418,33 +424,33 @@ increase $ImplicitTokensLimit to 100
 Notes on compatibility have been added to docs/compatibility.md
 
 Fix text for scoping errors
-Previously, was saying e.g. "Module variable: foo error"
-Now says "Module variable error: foo"
+Previously, was saying e.g. `"Module variable: foo error"`
+Now says `"Module variable error: foo"`
 
 Options are now correctly passed between various inspector and parser functions
 
 Technically, CodeInspector does depend on CodeFormatter, so provide versions checks and update instructions
 
-Add scan for implicit Times pseudo-calls, e.g. Sin(x)
+Add scan for implicit Times pseudo-calls, e.g. `Sin(x)`
 
 Add the first box-specific rule for having  between GridBox and surrounding parens
 
-Allow MapIndexed[a -> b &, c] to work
+Allow `MapIndexed[a -> b &, c]` to work
 
-Allow Module[{pat}] to not give warning
+Allow `Module[{pat}]` to not give warning
 
-Add MapThread to recognize a -> b &
+Add MapThread to recognize `a -> b &`
 
 Add ReplaceList and StringReplaceList to list of functions for lower confidence of DuplicateKeys
 
 Add Scoping to $DefaultSeverityExclusions
 
-Allow TargetExclusions of "tag" and {"tag", "argument"} syntax
+Allow TargetExclusions of `"tag"` and `{"tag", "argument"}` syntax
 
 
 ### New CodeInspector UI
 
-CodeInspector UI functionality that powers the new menu item Evaluation > Analyze Notebook
+CodeInspector UI functionality that powers the new menu item `Evaluation > Analyze Notebook`
 
 attached cell
 
@@ -463,18 +469,18 @@ A new comment syntax for selectively disabling linter issues
 
 ### Fixes
 
-410408: Code linter treats OptionsPattern[] inconsistently with OptionsPattern[Name]
+410408: Code linter treats `OptionsPattern[]` inconsistently with `OptionsPattern[Name]`
 
 
 ### Known Issues
 
-12.3 does not have the Evaluation > Code Analysis Options... menu item; this will be addressed in a later paclet update.
+12.3 does not have the `Evaluation > Code Analysis Options...` menu item; this will be addressed in a later paclet update.
 
 413279: Stray Print statement messes up CodeInspector UI
 
 412967: Quote characters appear in analysis pod when using Documentation stylesheet
 
-412965: First::normal messages when closing nb after Analysis
+412965: `First::normal` messages when closing nb after Analysis
 
 412932: symbol leak and slow down in CodeInspectorUI
 
@@ -483,13 +489,13 @@ A new comment syntax for selectively disabling linter issues
 
 ## 1.4 - 25 Oct, 2021
 
-Allow {tag, "\*"} as a wildcard for tag exclusions
+Allow `{tag, "*"}` as a wildcard for tag exclusions
 
 Collect various PatternTest patterns into a single dispatch function and treat the cases in dispatch functions as non-mutually-exclusive
 
-Add rule for  a\_?b:c  but intended was  a:\_?b:c
+Add rule for  `a_?b:c`  but intended was  `a:_?b:c`
 
-Allow Module[{x = x}, x]
+Allow `Module[{x = x}, x]`
 
 Do not allow PacletManager to participate in finding \`Generate\` files
 
@@ -509,7 +515,7 @@ Implicit Null from stray commas are now errors. New error tokens Token\`Error\`P
 "Comma" issues are no longer generated by the parser, they are now created by the linter.
 
 
-Scan for "a" + "b"
+Scan for `"a" + "b"`
 
 Scan suspicious boxes
 
@@ -533,7 +539,7 @@ Fix 413985: CodeInspect does not handle empty list of bytes
 Return unevaluated for now
 
 
-Explicitly handle CodeInspect[{}]
+Explicitly handle `CodeInspect[{}]`
 
 
 Fix edge cases with conventionAgnosticSourceOrdering
@@ -543,8 +549,9 @@ Fix 414303: limit number of actions to max of 3
 Fix invalid src being passed in
 
 
-`mouseDownQ` was not updating after `button` had been pressed. The update is now forced.
+mouseDownQ was not updating after button had been pressed. The update is now forced.
 
 
 Fix 415749: Closing Code Analysis docked cell prevents it from coming back a second time
 
+Add a menu position for the CodeInspector palette so that the Code related palettes appear in their own section of the Palettes menu.

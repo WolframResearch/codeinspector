@@ -19,4 +19,12 @@ WolframVersion in PacletInfo is 12.1+ to maintain the same minimum required vers
 
 ## Earlier Versions
 
-Manually modify WolframVersion in PacletInfo.wl to allow paclet installation.
+Manually modify WolframVersion in PacletInfo.wl to allow the paclet to be used.
+
+The message that you get when you install the paclet:
+```
+The paclet CodeParser was successfully installed.
+```
+does not necessarily mean that the paclet can be used.
+
+Make sure that the correct WolframVersion is specified.
