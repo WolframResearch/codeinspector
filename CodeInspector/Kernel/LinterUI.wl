@@ -569,7 +569,9 @@ button[
 						fontColor = Which[
 							TrueQ[!OptionValue["ActiveQ"]], OptionValue["TextInactiveColor"],
 							hoverQ, OptionValue["TextHoverColor"],
-							True, OptionValue["TextColor"]]],
+							True, OptionValue["TextColor"]
+						]
+					],
 					
 					ContentPadding -> False,
 					FrameMargins -> OptionValue[FrameMargins], Alignment -> OptionValue[Alignment],
@@ -578,13 +580,16 @@ button[
 					FrameStyle -> Dynamic @ Directive[AbsoluteThickness[.5], Which[
 						TrueQ[!OptionValue["ActiveQ"]], OptionValue["EdgeInactiveColor"],
 						hoverQ, OptionValue["EdgeHoverColor"],
-						True, OptionValue["EdgeColor"]]],
+						True, OptionValue["EdgeColor"]
+					]],
 					
 					Background -> Dynamic @ Which[
 						TrueQ[!OptionValue["ActiveQ"]], OptionValue["BackInactiveColor"],
 						hoverQ && mouseDownQ, OptionValue["BackMouseDownColor"],
 						hoverQ, OptionValue["BackHoverColor"],
-						True, OptionValue["BackColor"]]],
+						True, OptionValue["BackColor"]
+					]
+				],
 				
 				hoverQ = CurrentValue["MouseOver"];
 				mouseDownQ = CurrentValue["MouseButtonTest"]],

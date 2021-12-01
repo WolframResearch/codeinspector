@@ -214,7 +214,7 @@ precondition:
 Source convention for implicitTokens is "LineColumn"
 
 *)
-CodeInspectBracketMismatchesCSTSummarize[cst_, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|ErrorNode)[_, _, _]...}:Automatic, OptionsPattern[]] :=
+CodeInspectBracketMismatchesCSTSummarize[cst_, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|ErrorNode)[_, _, _]...}:Automatic, opts:OptionsPattern[]] :=
 Catch[
 Module[{mismatches, lines, lintedLines, string, tabWidth},
 

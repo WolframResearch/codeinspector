@@ -58,15 +58,15 @@ Module[{full, performanceGoal, cst},
 
   full = FindFile[file];
   If[FailureQ[full],
-    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+    Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
   If[performanceGoal == "Speed",
     If[FileByteCount[full] > $fileByteCountMaxLimit,
-      Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+      Throw[Failure["FileTooLarge", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
     ];
     If[FileByteCount[full] < $fileByteCountMinLimit,
-      Throw[Failure["FileTooSmall", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+      Throw[Failure["FileTooSmall", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
     ];
   ];
 
@@ -170,11 +170,11 @@ Module[{implicitTokens, full, lines, lintedLines, bytes, str, tabWidth},
 
   full = FindFile[file];
   If[FailureQ[full],
-    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+    Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
   If[FileByteCount[full] == 0,
-    Throw[Failure["EmptyFile", <|"FileName"->full|>]]
+    Throw[Failure["EmptyFile", <| "FileName" -> full |>]]
   ];
 
   If[implicitTokens === Automatic,
@@ -239,7 +239,7 @@ precondition:
 Source convention for implicitTokens is "LineColumn"
 
 *)
-CodeInspectImplicitTokensCSTSummarize[cst_, implicitTokensIn:_List:Automatic, OptionsPattern[]] :=
+CodeInspectImplicitTokensCSTSummarize[cst_, implicitTokensIn:_List:Automatic, opts:OptionsPattern[]] :=
 Catch[
 Module[{implicitTokens, lines, lintedLines, string, tabWidth},
 
@@ -341,7 +341,7 @@ Module[{line, cols, inserters, under, rules},
     Print["inserters: ", inserters];
   ];
 
-  rules = Merge[inserters, (LintMarkup[#, FontWeight->CodeInspector`Format`$LintGridFontWeight, FontColor->$color])& @* mergeCharacters];
+  rules = Merge[inserters, (LintMarkup[#, FontWeight -> CodeInspector`Format`$LintGridFontWeight, FontColor -> $color])& @* mergeCharacters];
 
   rules = Normal[rules];
   

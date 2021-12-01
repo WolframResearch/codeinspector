@@ -124,7 +124,8 @@ Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLine
 	Interpretation[
 		Framed[Column[{Row[{File[file]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
 		,
-		lintedFile]
+		lintedFile
+	]
 
 Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], OutputForm] :=
 	Column[{Row[{file}], ""} ~Join~ lintedLines, Left]
@@ -424,7 +425,7 @@ Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
 
 		boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
 
-		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>] };
+		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <| Source -> data[Source] |>] };
 
 		menuItems = createActionMenuItem[#, lint]& /@ actions;
 
@@ -748,7 +749,7 @@ Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLints
 
 
 insertFormatInspectionObjectsAsPills[InspectionObject[tag_, desc_, sev_, data_]] :=
-	InspectionObject[tag, desc, sev, <|data, "FormatInspectionObjectsAsPills" -> True|>]
+	InspectionObject[tag, desc, sev, <| data, "FormatInspectionObjectsAsPills" -> True |>]
 
 insertFormatInspectionObjectsAsPills[line_InspectedLineObject] := line
 
