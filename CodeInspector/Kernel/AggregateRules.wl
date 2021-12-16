@@ -235,7 +235,7 @@ Module[{agg, node, children, data, issues, srcs, pairs},
 
   Scan[(
     AppendTo[issues, InspectionObject["PrefixDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, srcs];
@@ -291,14 +291,14 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
 
   Scan[(
     AppendTo[issues, InspectionObject["PostfixDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, highConfSrcs];
 
   Scan[(
     AppendTo[issues, InspectionObject["PostfixDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.85
       |>]];
     )&, lowConfSrcs];
@@ -505,21 +505,21 @@ Module[{agg, node, data, children, issues, pairs, warningSrcs, errorSrcs},
 
   Scan[(
     AppendTo[issues, InspectionObject["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Warning",
-      <|Source->#,
+      <| Source -> #,
         ConfidenceLevel -> 0.85,
         CodeActions -> {
-          CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>],
-          CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+          CodeAction["Insert ``,``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>],
+          CodeAction["Insert ``*``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>]}
       |>]];
     )&, warningSrcs];
 
   Scan[(
     AppendTo[issues, InspectionObject["ImplicitTimesBlanks", "Suspicious implicit ``Times`` with blanks.", "Error",
-      <|Source->#,
+      <| Source -> #,
         ConfidenceLevel -> 0.85,
         CodeActions -> {
-          CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>],
-          CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+          CodeAction["Insert ``,``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>],
+          CodeAction["Insert ``*``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>]}
       |>]];
     )&, errorSrcs];
 
@@ -568,10 +568,10 @@ Module[{agg, node, data, issues, children, pairs, srcs},
 
   Scan[(
     AppendTo[issues, InspectionObject["ImplicitTimesStrings", "Suspicious implicit ``Times`` with strings.", "Warning",
-      <|Source->#,
+      <| Source -> #,
         ConfidenceLevel -> 0.75,
         CodeActions -> {
-          CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>]|>]}
+          CodeAction["Insert ``*``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>]}
       |>]];
     )&, srcs];
 
@@ -599,12 +599,12 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, lhs, lhsChi
   issues = {};
 
   AppendTo[issues, InspectionObject["ImplicitTimesInSet", "Suspicious implicit ``Times`` in ``" <> SymbolName[head] <> "``.", "Error",
-    <|Source -> src,
+    <| Source -> src,
       ConfidenceLevel -> 0.95,
       CodeActions -> {
-                CodeAction["Insert ``*``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Star, "*", <||>] |>],
-                CodeAction["Insert ``;``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
-                CodeAction["Insert ``,``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+                CodeAction["Insert ``*``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
+                CodeAction["Insert ``;``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Semi, ";", <||>] |>],
+                CodeAction["Insert ``,``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>] }
     |>]
   ];
 
@@ -637,11 +637,11 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, implicitTim
         LeafNode[Token`CloseSquare, "]", <||>] }, <||>]}, <||>];
 
   AppendTo[issues, InspectionObject["ImplicitTimesPseudoCall", "Suspicious implicit ``Times`` looks like a traditional function call.", "Error",
-    <|Source -> implicitTimesSrc,
+    <| Source -> implicitTimesSrc,
       ConfidenceLevel -> 0.10,
       CodeActions -> {
-        CodeAction["Insert ``*``", InsertNode, <|Source -> implicitTimesSrc, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
-        CodeAction["Replace with ``[]``", ReplaceNode, <|Source -> src, "ReplacementNode" -> replacementNode |>] }
+        CodeAction["Insert ``*``", InsertNode, <| Source -> implicitTimesSrc, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
+        CodeAction["Replace with ``[]``", ReplaceNode, <| Source -> src, "ReplacementNode" -> replacementNode |>] }
     |>]
   ];
 
@@ -692,7 +692,7 @@ Module[{agg, node, children, data, issues, srcs, pairs, underPoss, dot},
 
     Scan[(
       AppendTo[issues, InspectionObject["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
-        <|Source -> #,
+        <| Source -> #,
           ConfidenceLevel -> 0.85
         |>]];
       )&, srcs];
@@ -757,8 +757,8 @@ Module[{agg, node, children, data, issues},
             ConfidenceLevel -> 0.95,
             CodeActions -> {
               CodeAction["Replace ``+`` with ``<>``", ReplaceNode,
-                <|  Source -> #[[3, Key[Source]]],
-                    "ReplacementNode" -> LeafNode[Token`LessGreater, "<>", <||>]
+                <| Source -> #[[3, Key[Source]]],
+                  "ReplacementNode" -> LeafNode[Token`LessGreater, "<>", <||>]
                 |>
               ]
             }
@@ -864,7 +864,7 @@ Module[{agg, node, children, data, issues, srcs, filtered, pairs},
 
   Scan[(
     AppendTo[issues, InspectionObject["TernaryTildeDifferentLine", "Operands are on different lines.", "Warning",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, srcs];
@@ -903,13 +903,13 @@ Catch[
         src = node[[2, 2, 3, Key[Source]]];
 
         AppendTo[issues, InspectionObject["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
-          <|  Source -> src,
-              ConfidenceLevel -> 0.95,
-              CodeActions -> {
-                CodeAction["Replace ``;;`` with ``;``", ReplaceNode,
-                  <|  Source -> src,
-                      "ReplacementNode"->LeafNode[Token`Semi, ";", <||>]
-                  |>] }
+          <| Source -> src,
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace ``;;`` with ``;``", ReplaceNode,
+                <| Source -> src,
+                  "ReplacementNode" -> LeafNode[Token`Semi, ";", <||>]
+                |>] }
           |>]];
       ,
       TernaryNode[Span, _, _],
@@ -920,13 +920,13 @@ Catch[
         src = node[[2, 4, 3, Key[Source]]];
 
         AppendTo[issues, InspectionObject["SuspiciousSpan", "Suspicious ``;;`` at top-level.", "Warning",
-          <|  Source -> src,
-              ConfidenceLevel -> 0.95,
-              CodeActions -> {
-                CodeAction["Replace ``;;`` with ``;``", ReplaceNode,
-                  <|  Source -> src,
-                      "ReplacementNode"->LeafNode[Token`Semi, ";", <||>]
-                  |>] }
+          <| Source -> src,
+            ConfidenceLevel -> 0.95,
+            CodeActions -> {
+              CodeAction["Replace ``;;`` with ``;``", ReplaceNode,
+                <| Source -> src,
+                  "ReplacementNode" -> LeafNode[Token`Semi, ";", <||>]
+                |>] }
           |>]];
 
     ]
@@ -967,7 +967,7 @@ Catch[
 
   Scan[(
     AppendTo[issues, InspectionObject["SpanDifferentLine", "Operands for ``;;`` are on different lines.", "Warning",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, srcs];
@@ -1032,7 +1032,7 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis},
 
   Scan[(
     AppendTo[issues, InspectionObject["DifferentLine", "Operand for ``;`` is on different line.", "Warning",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, srcs];
@@ -1040,7 +1040,7 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis},
 
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
-  Scan[(AppendTo[issues, InspectionObject["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <|#[[3]], ConfidenceLevel -> 0.95|>]])&, straySemis];
+  Scan[(AppendTo[issues, InspectionObject["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <| #[[3]], ConfidenceLevel -> 0.95 |>]])&, straySemis];
 
 
   issues
@@ -1153,7 +1153,7 @@ Module[{agg, node, data, children, patternTest, args, patternTestChildren, patte
       src = data[Source];
       AppendTo[issues, InspectionObject["SuspiciousPatternTestCallFunction", "Suspicious use of ``?``.", "Error",
         <|
-          Source->src,
+          Source -> src,
           ConfidenceLevel -> 0.95,
           CodeActions -> { CodeAction["Wrap parens around RHS", ReplaceNode, <| Source -> src, "ReplacementNode" -> replacementNode |>] }
         |>]];
@@ -1180,9 +1180,9 @@ Module[{agg, node, data, children, patternTest, args, patternTestChildren, patte
                                                     patternTest,
                                                     LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>];
 
-  AppendTo[issues, InspectionObject["SuspiciousPatternTestCall", "Suspicious use of ``?``.", "Remark", <| Source->src, ConfidenceLevel -> 0.55, CodeActions -> {
-          CodeAction["Wrap parens around RHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode1|>],
-          CodeAction["Wrap parens around LHS", ReplaceNode, <| Source-> src, "ReplacementNode" -> replacementNode2|>] } |>]];
+  AppendTo[issues, InspectionObject["SuspiciousPatternTestCall", "Suspicious use of ``?``.", "Remark", <| Source -> src, ConfidenceLevel -> 0.55, CodeActions -> {
+          CodeAction["Wrap parens around RHS", ReplaceNode, <| Source -> src, "ReplacementNode" -> replacementNode1 |>],
+          CodeAction["Wrap parens around LHS", ReplaceNode, <| Source -> src, "ReplacementNode" -> replacementNode2 |>] } |>]];
 
   issues
 ]]
@@ -1534,14 +1534,14 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
     unexpected = True;
 
     AppendTo[issues, InspectionObject["PatternTest", "Unexpected ``PatternTest``.", "Error",
-      <| Source->qSrc,
+      <| Source -> qSrc,
         (*
         Lower from .95 to .85 because it is somewhat common to use the 1-arg operator forms of predicates as objects
         *)
         ConfidenceLevel->0.85,
         CodeActions -> {
-          CodeAction["Insert ``_`` behind", InsertNode, <|Source->qSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>],
-          CodeAction["Insert ``_`` in front", InsertNode, <|Source->aSrc, "InsertionNode"->LeafNode[Token`Under, "_", <||>] |>] } |>]
+          CodeAction["Insert ``_`` behind", InsertNode, <| Source -> qSrc, "InsertionNode" -> LeafNode[Token`Under, "_", <||>] |>],
+          CodeAction["Insert ``_`` in front", InsertNode, <| Source -> aSrc, "InsertionNode" -> LeafNode[Token`Under, "_", <||>] |>] } |>]
     ];
   ];
 
@@ -2064,7 +2064,7 @@ Module[{agg, node, data, issues, op},
 
   issues = {};
 
-  AppendTo[issues, InspectionObject["PrefixPlus", "Unexpected prefix ``+``.", "Remark", <|Source->data[Source], ConfidenceLevel->0.9|>]];
+  AppendTo[issues, InspectionObject["PrefixPlus", "Unexpected prefix ``+``.", "Remark", <| Source -> data[Source], ConfidenceLevel -> 0.9 |>]];
 
   issues
 ]
@@ -2164,8 +2164,8 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
     src = sym[[3, Key[Source]]];
 
     AppendTo[issues, InspectionObject["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
-                      <|  Source->src,
-                          ConfidenceLevel->0.95|>]];
+                      <| Source -> src,
+                        ConfidenceLevel -> 0.95 |>]];
     ,
     (* not in System`*)
 
@@ -2175,8 +2175,8 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
     This is "stylistic" so make a Remark
     *)
     AppendTo[issues, InspectionObject["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
-                      <|  Source->src,
-                          ConfidenceLevel->0.80|>]];
+                      <| Source -> src,
+                        ConfidenceLevel -> 0.80 |>]];
   ];
 
   issues
@@ -2221,10 +2221,10 @@ scanBlankPredicate[pos_List, aggIn_] :=
     src = pred[[3, Key[Source]]];
 
     AppendTo[issues, InspectionObject["BlankPredicate", "Unexpected predicate after blank.", "Error",
-      <| Source->src,
-         ConfidenceLevel->0.95,
-         CodeActions -> {
-          CodeAction["Insert ``?``", InsertNode, <|Source->src, "InsertionNode"->LeafNode[Token`Question, "?", <||>] |>] } |>]];
+      <| Source -> src,
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Insert ``?``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Question, "?", <||>] |>] } |>]];
 
     issues
   ]]

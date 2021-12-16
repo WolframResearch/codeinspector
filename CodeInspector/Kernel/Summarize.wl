@@ -120,11 +120,11 @@ Module[{lints, full, lines,
 
   full = FindFile[file];
   If[FailureQ[full],
-    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+    Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
    If[FileByteCount[full] == 0,
-   Throw[Failure["EmptyFile", <|"FileName"->full|>]]
+   Throw[Failure["EmptyFile", <| "FileName" -> full |>]]
    ];
 
   If[lints === Automatic,

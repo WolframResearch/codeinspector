@@ -191,7 +191,7 @@ Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblin
     endPos = {2, Length[cst[[2]]]};
     suppresseds = suppressedsFromCandidate[candidate];
     AppendTo[suppressedRegions,
-      suppressedRegion[rangeStart[Extract[cst, beginPos][[3]]], rangeEnd[Extract[cst, endPos][[3]]], suppresseds, <|"Toplevel" -> True|>]
+      suppressedRegion[rangeStart[Extract[cst, beginPos][[3]]], rangeEnd[Extract[cst, endPos][[3]]], suppresseds, <| "Toplevel" -> True |>]
     ]
   ];
 
@@ -203,7 +203,7 @@ Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblin
     If[MatchQ[candidate, codeInspectCellPat] && MatchQ[cst[[2, i + 1]], LeafNode[Token`Newline, _, _]],
       suppresseds = suppressedsFromCandidate[candidate];
       AppendTo[suppressedRegions,
-        suppressedRegion[rangeStart[Extract[cst, {2, i + 2}][[3]]], rangeEnd[Extract[cst, {2, i + 2}][[3]]], suppresseds, <|"Toplevel" -> True|>]
+        suppressedRegion[rangeStart[Extract[cst, {2, i + 2}][[3]]], rangeEnd[Extract[cst, {2, i + 2}][[3]]], suppresseds, <| "Toplevel" -> True |>]
       ]
     ]
     ,
@@ -237,7 +237,7 @@ Module[{cst, codeInspectBeginPatNodePoss, suppressedRegions, siblingsPos, siblin
     ];
     If[endFound,
       AppendTo[suppressedRegions,
-        suppressedRegion[rangeStart[Extract[cst, beginPos][[3]]], rangeEnd[Extract[cst, endPos][[3]]], suppresseds, <|"Toplevel" -> MatchQ[beginPos, {_, _}]|>]
+        suppressedRegion[rangeStart[Extract[cst, beginPos][[3]]], rangeEnd[Extract[cst, endPos][[3]]], suppresseds, <| "Toplevel" -> MatchQ[beginPos, {_, _}] |>]
       ]
       ,
       Message[SuppressedRegions::missingpop];
@@ -434,30 +434,30 @@ Module[{assocNode, rules1, tag, body1, rules2, body2, rules3, argument},
 Check for CellIndex before checking for Source
 *)
 rangeStart[KeyValuePattern[CellIndex -> index_]] :=
-  <|CellIndex -> index|>
+  <| CellIndex -> index |>
 
 rangeEnd[KeyValuePattern[CellIndex -> index_]] :=
-  <|CellIndex -> index|>
+  <| CellIndex -> index |>
 
 
 (*
 For LineColumn convention, return the start or end span
 *)
 rangeStart[KeyValuePattern[Source -> {s:{_Integer, _Integer}, {_Integer, _Integer}}]] :=
-  <|Source -> s|>
+  <| Source -> s |>
 
 rangeEnd[KeyValuePattern[Source -> {{_Integer, _Integer}, e:{_Integer, _Integer}}]] :=
-  <|Source -> e|>
+  <| Source -> e |>
 
 
 (*
 For SourceCharacterIndex convention, return the start or end span
 *)
 rangeStart[KeyValuePattern[Source -> {s:_Integer, _Integer}]] :=
-  <|Source -> s|>
+  <| Source -> s |>
 
 rangeEnd[KeyValuePattern[Source -> {_Integer, e:_Integer}]] :=
-  <|Source -> e|>
+  <| Source -> e |>
 
 
 (*
@@ -466,10 +466,10 @@ For other conventions, just return the src
 We do not know what to do
 *)
 rangeStart[KeyValuePattern[Source -> src_]] :=
-  <|Source -> src|>
+  <| Source -> src |>
 
 rangeEnd[KeyValuePattern[Source -> src_]] :=
-  <|Source -> src|>
+  <| Source -> src |>
 
 
 End[]

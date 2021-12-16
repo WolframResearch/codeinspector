@@ -59,15 +59,15 @@ Catch[
 
    full = FindFile[file];
   If[FailureQ[full],
-    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+    Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
    If[performanceGoal == "Speed",
     If[FileByteCount[full] > $fileByteCountMaxLimit,
-     Throw[Failure["FileTooLarge", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+     Throw[Failure["FileTooLarge", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
      ];
     If[FileByteCount[full] < $fileByteCountMinLimit,
-     Throw[Failure["FileTooSmall", <|"FileName"->full, "FileSize"->FileSize[full]|>]]
+     Throw[Failure["FileTooSmall", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
      ];
     ];
 
@@ -145,11 +145,11 @@ Module[{mismatches, full, lines, lintedLines, bytes, str, tabWidth},
 
   full = FindFile[file];
   If[FailureQ[full],
-    Throw[Failure["FindFileFailed", <|"FileName"->file|>]]
+    Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
   If[FileByteCount[full] == 0,
-    Throw[Failure["EmptyFile", <|"FileName"->full|>]]
+    Throw[Failure["EmptyFile", <| "FileName" -> full |>]]
   ];
 
   If[mismatches === Automatic,

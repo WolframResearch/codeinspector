@@ -634,7 +634,7 @@ popupPane[
 									shifted down by the caret height for the top two corners: + {0, -caretH}. *)
 							FilledCurve[BezierCurve[Join[
 								(* Top right corner. *)
-								Offset[roundingRad(#) + (caretW/2){1, 1} + {0, -caretH}, {1, 1}]& /@ bezierCirclePts["Q1"][[2;;]],
+								Offset[roundingRad * (#) + (caretW/2) * {1, 1} + {0, -caretH}, {1, 1}]& /@ bezierCirclePts["Q1"][[2;;]],
 								(* Caret. *)
 								(* Seeing as the frame lies a distance (roundingRad + caretW/2) from the region {{-1, 1}, {-1, 1}}, so does the caret itself. *)
 								Splice[Table[Offset[#, {caretPos, 1}], 3(* Verticies of an order 3 Bezier curve are three coincident points. *)]]& /@{
@@ -642,11 +642,11 @@ popupPane[
 									{0, caretW/2 + roundingRad},
 									{-caretW/2, -caretH + caretW/2 + roundingRad}},
 								(* Top left corner. *)
-								Offset[roundingRad(#) + (caretW/2){-1, 1} + {0, -caretH}, {-1, 1}]& /@ bezierCirclePts["Q2"],
+								Offset[roundingRad * (#) + (caretW/2) * {-1, 1} + {0, -caretH}, {-1, 1}]& /@ bezierCirclePts["Q2"],
 								(* Bottom left corner. *)
-								Offset[roundingRad(#) + (caretW/2){-1, -1}, {-1, -1}]& /@ bezierCirclePts["Q3"],
+								Offset[roundingRad * (#) + (caretW/2) * {-1, -1}, {-1, -1}]& /@ bezierCirclePts["Q3"],
 								(* Bottom right corner *)
-								Offset[roundingRad(#) + (caretW/2){1, -1}, {1, -1}]& /@ bezierCirclePts["Q4"][[;;-2]]
+								Offset[roundingRad * (#) + (caretW/2) * {1, -1}, {1, -1}]& /@ bezierCirclePts["Q4"][[;;-2]]
 							]]]
 						}, PlotRange -> 1, ImagePadding -> (roundingRad + caretW/2 + safetyPadding), AspectRatio -> Full],
 					{width, height}],
@@ -1499,9 +1499,9 @@ titleBar[cell_CellObject] :=
 						colorData["UIBack"],
 						FilledCurve[BezierCurve[Join[
 							(* Top right corner. *)
-							Offset[roundingRad(# + {-1, -1}), {1, 1}]& /@ bezierCirclePts["Q1"][[2;;]],
+							Offset[roundingRad * (# + {-1, -1}), {1, 1}]& /@ bezierCirclePts["Q1"][[2;;]],
 							(* Top left corner. *)
-							Offset[roundingRad(# + {1, -1}), {-1, 1}]& /@ bezierCirclePts["Q2"],
+							Offset[roundingRad * (# + {1, -1}), {-1, 1}]& /@ bezierCirclePts["Q2"],
 							(* Bottom left corner. *)
 							Table[{-1, -1}, 3],
 							(* Bottom right corner *)
@@ -1662,9 +1662,9 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 							(* Top left corner. *)
 							Table[{-1, 1}, 2],
 							(* Bottom left corner. *)
-							Offset[roundingRad(# + {1, 1}), {-1, -1}]& /@ bezierCirclePts["Q3"],
+							Offset[roundingRad * (# + {1, 1}), {-1, -1}]& /@ bezierCirclePts["Q3"],
 							(* Bottom right corner. *)
-							Offset[roundingRad(# + {-1, 1}), {1, -1}]& /@ bezierCirclePts["Q4"],
+							Offset[roundingRad * (# + {-1, 1}), {1, -1}]& /@ bezierCirclePts["Q4"],
 							(* Top right corner *)
 							Table[{1, 1}, 2]]]],
 						
@@ -1891,7 +1891,7 @@ lintSeverityCountsIconRow[
 					KeyValueMap[
 						lintSeverityCountsIcon[#1, #2, opts]&,
 						Merge[
-							Replace[varValue[cellOrNotebook, All, "SeverityCounts"], Except[<|___Rule|>] -> <||>, 1],
+							Replace[varValue[cellOrNotebook, All, "SeverityCounts"], Except[<| ___Rule |>] -> <||>, 1],
 							Total]],
 					{Spacer[0]}]]},
 		Row[
@@ -2005,7 +2005,7 @@ refineSources[lints_?(MatchQ[{___(* CodeInspector`InspectionObject *)}]), cell_C
 			Flatten @ Map[
 				Function[lint,
 					(* Generate a list of all sources and additional sources for the lint. Turn each of those sources into an association so that its confidence level and corresponding lint can be queried. *)
-					<|"Source" -> findToken[codeBoxes, #], "Confidence" -> lint[[4]][ConfidenceLevel], "Lint" -> lint|>& /@
+					<| "Source" -> findToken[codeBoxes, #], "Confidence" -> lint[[4]][ConfidenceLevel], "Lint" -> lint |>& /@
 						Prepend[
 							Lookup[Last[lint], "AdditionalSources", {}],
 							Last[lint][CodeParser`Source]]],
@@ -2034,7 +2034,7 @@ refineSources[lints_?(MatchQ[{___(* CodeInspector`InspectionObject *)}]), cell_C
 			{<|"Lint" -> lint1, "Sources" -> {source11, source12, ...}|>, <|"Lint" -> lint2, "Sources" -> {source21, source22, ...}|>, ...}
 			(this is a friendlier data-structure for the Fold that this gets fed into in getCellInfo). *)
 		KeyValueMap[
-			<|"Lint" -> #1, "Sources" -> #2|> &,
+			<| "Lint" -> #1, "Sources" -> #2 |> &,
 			GroupBy[filteredSources, #["Lint"]&, ReverseSort[Through[#["Source"]]]&]]]
 
 

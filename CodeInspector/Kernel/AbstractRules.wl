@@ -452,7 +452,7 @@ Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dup
     *)
     srcs = Take[srcs, UpTo[3]];
 
-    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <| Source -> # |>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "``Association`` has duplicated keys.", "Error", <|
         Source -> First[srcs],
@@ -630,15 +630,14 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
     *)
     srcs = Take[srcs, UpTo[3]];
     
-    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <|Source->#|>]&, srcs];
+    actions = MapIndexed[CodeAction["Delete key " <> ToString[#2[[1]]], DeleteNode, <| Source -> # |>]&, srcs];
 
     AppendTo[issues, InspectionObject["DuplicateKeys", "Duplicate keys in list of rules.", "Warning", <|
-          Source -> First[srcs],
-          "AdditionalSources" -> Rest[srcs],
-          CodeActions -> actions, ConfidenceLevel -> confidence,
-          "Argument" -> "ListOfRules"
-        |> ]
-    ];
+      Source -> First[srcs],
+      "AdditionalSources" -> Rest[srcs],
+      CodeActions -> actions, ConfidenceLevel -> confidence,
+      "Argument" -> "ListOfRules"
+    |>]];
     ,
     {selected, selecteds}
   ];
@@ -680,7 +679,7 @@ Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
      InspectionObject["Arguments", "``Which`` does not have any arguments.", "Error", <|
        data,
        ConfidenceLevel -> 0.55,
-       "Argument" -> "Which"|>]];
+       "Argument" -> "Which" |>]];
     Throw[issues]
   ];
 
@@ -689,7 +688,7 @@ Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
       InspectionObject["Arguments", "``Which`` does not have even number of arguments.", "Error", <|
         data,
         ConfidenceLevel -> 0.55,
-        "Argument" -> "Which"|>]];
+        "Argument" -> "Which" |>]];
     Throw[issues]
   ];
 
@@ -702,7 +701,7 @@ Module[{ast, node, head, children, data, issues, srcs, counts, selecteds,
         "AdditionalSources" -> {first[[3, Key[Source]]]},
         CodeActions -> {
           CodeAction["Replace ``Which`` with ``Switch``", ReplaceNode, <|
-            "ReplacementNode" -> ToNode[Switch], Source -> head[[3, Key[Source]]] |>]}, ConfidenceLevel -> 0.75|>
+            "ReplacementNode" -> ToNode[Switch], Source -> head[[3, Key[Source]]] |>]}, ConfidenceLevel -> 0.75 |>
       ]
     ]
   ];
@@ -837,7 +836,7 @@ Module[{ast, node, children, data, src, cases, issues, selecteds, srcs, counts,
       AppendTo[issues, InspectionObject["OperatingSystemLinux", "``\"Linux\"`` is not a value of ``$OperatingSystem``.", "Error", <|
         Source -> src,
         ConfidenceLevel -> 0.95, CodeActions -> {
-          CodeAction["Replace Linux with Unix", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode["Unix"]|>]}|>]];
+          CodeAction["Replace Linux with Unix", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode["Unix"] |>]}|>]];
     ]
   ];
 
@@ -973,14 +972,14 @@ Catch[
       AppendTo[issues, InspectionObject["Arguments", "``If`` has zero arguments.", "Error", <|
         data,
         ConfidenceLevel -> 0.55,
-        "Argument" -> "If"|>]];
+        "Argument" -> "If" |>]];
       Throw[issues];
       ,
     Length[children] == 1,
       AppendTo[issues, InspectionObject["Arguments", "``If`` only has one argument.", "Error", <|
         data,
         ConfidenceLevel -> 0.55,
-        "Argument" -> "If"|>]];
+        "Argument" -> "If" |>]];
       Throw[issues];
   ];
 
@@ -1180,7 +1179,7 @@ Catch[
         Source -> node[[3, Key[Source]]],
         (* node is a Symbol, so it is ok to insert here *)
         "ReplacementNode" -> CallNode[{node}, {LeafNode[Token`OpenSquare, "[", <||>], LeafNode[Token`CloseSquare, "]", <||>]}, <||>] |>] },
-    ConfidenceLevel -> 0.85|>]}
+    ConfidenceLevel -> 0.85 |>]}
 ]]
 
 
@@ -1203,7 +1202,7 @@ Catch[
     AppendTo[issues, InspectionObject["Arguments", "``Module`` does not have 2 arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "Module"|>]];
+      "Argument" -> "Module" |>]];
     Throw[issues]
   ];
 
@@ -1221,7 +1220,7 @@ Catch[
     AppendTo[issues, InspectionObject["Arguments", "``Module`` does not have 2 arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "Module"|>]];
+      "Argument" -> "Module" |>]];
     Throw[issues]
   ];
 
@@ -1236,7 +1235,7 @@ Catch[
     AppendTo[issues, InspectionObject["Arguments", "``Module`` does not have a ``List`` for argument 1.", "Error", <|
       children[[1, 3]],
       ConfidenceLevel -> 0.55,
-      "Argument" -> "Module"|>]];
+      "Argument" -> "Module" |>]];
     Throw[issues]
   ];
 
@@ -1245,7 +1244,7 @@ Catch[
       AppendTo[issues, InspectionObject["NoVariables", "``Module`` has an empty ``List`` for argument 1.", "Remark", <|
         children[[1, 3]],
         ConfidenceLevel -> 0.90,
-        "Argument" -> "Module"|>]]
+        "Argument" -> "Module" |>]]
     ,
     MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
       (*
@@ -1293,14 +1292,14 @@ Catch[
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.95,
-              "Argument" -> "Module"|>]]
+              "Argument" -> "Module" |>]]
         ,
         _,
           AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.85,
-              "Argument" -> "Module"|>]]
+              "Argument" -> "Module" |>]]
       ]
     ]
     ,
@@ -1322,7 +1321,7 @@ Catch[
     srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateVariables", "Duplicate variables in ``Module``.", "Error",
-      <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
+      <| Source -> First[srcs], "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
   ];
 
 
@@ -1383,7 +1382,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
     AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "DynamicModule"|>]];
+      "Argument" -> "DynamicModule" |>]];
     Throw[issues]
   ];
 
@@ -1401,7 +1400,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
     AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` does not have 2 arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "DynamicModule"|>]];
+      "Argument" -> "DynamicModule" |>]];
     Throw[issues]
   ];
 
@@ -1427,7 +1426,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
     AppendTo[issues, InspectionObject["Arguments", "``DynamicModule`` does not have a ``List`` for argument 1.", "Error", <|
       children[[1, 3]],
       ConfidenceLevel -> 0.55,
-      "Argument" -> "DynamicModule"|>]];
+      "Argument" -> "DynamicModule" |>]];
     Throw[issues]
   ];
 
@@ -1436,7 +1435,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
       AppendTo[issues, InspectionObject["NoVariables", "``DynamicModule`` has an empty ``List`` for argument 1.", "Remark", <|
         children[[1, 3]],
         ConfidenceLevel -> 0.90,
-        "Argument" -> "DynamicModule"|>]]
+        "Argument" -> "DynamicModule" |>]]
     ,
     MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
       (*
@@ -1474,14 +1473,14 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.95,
-              "Argument" -> "DynamicModule"|>]]
+              "Argument" -> "DynamicModule" |>]]
         ,
         _,
           AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.85,
-              "Argument" -> "DynamicModule"|>]]
+              "Argument" -> "DynamicModule" |>]]
       ]
     ]
     ,
@@ -1540,7 +1539,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
     AppendTo[issues, InspectionObject["Arguments", "``With`` does not have 2 or more arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "With"|>]];
+      "Argument" -> "With" |>]];
 
     Throw[issues];
   ];
@@ -1559,7 +1558,7 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
     AppendTo[issues, InspectionObject["Arguments", "``With`` does not have 2 or more arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "With"|>]];
+      "Argument" -> "With" |>]];
 
     Throw[issues];
   ];
@@ -1669,14 +1668,14 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.95,
-              "Argument" -> "With"|>]]
+              "Argument" -> "With" |>]]
         ,
         _,
           AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.85,
-              "Argument" -> "With"|>]]
+              "Argument" -> "With" |>]]
       ]
     ]
     ,
@@ -1741,7 +1740,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     AppendTo[issues, InspectionObject["Arguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "Block"|>]];
+      "Argument" -> "Block" |>]];
     Throw[issues]
   ];
 
@@ -1759,7 +1758,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     AppendTo[issues, InspectionObject["Arguments", format[head["String"]] <> " does not have 2 arguments.", "Error", <|
       data,
       ConfidenceLevel -> 0.55,
-      "Argument" -> "Block"|>]];
+      "Argument" -> "Block" |>]];
     Throw[issues]
   ];
 
@@ -1774,7 +1773,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     AppendTo[issues, InspectionObject["Arguments", format[head["String"]] <> " does not have a ``List`` for argument 1.", "Error", <|
       children[[1, 3]],
       ConfidenceLevel -> 0.55,
-      "Argument" -> "Block"|>]];
+      "Argument" -> "Block" |>]];
     Throw[issues]
   ];
 
@@ -1783,7 +1782,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
       AppendTo[issues, InspectionObject["NoVariables", "``Block`` has an empty ``List`` for argument 1.", "Remark", <|
         children[[1, 3]],
         ConfidenceLevel -> 0.90,
-        "Argument" -> "Block"|>]]
+        "Argument" -> "Block" |>]]
     ,
     MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "Pattern" | "Blank" | "BlankSequence" | "BlankNullSequence" | "PatternTest", _], _, _]}, _]],
       (*
@@ -1824,14 +1823,14 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.95,
-              "Argument" -> "Block"|>]]
+              "Argument" -> "Block" |>]]
         ,
         _,
           AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.85,
-              "Argument" -> "Block"|>]]
+              "Argument" -> "Block" |>]]
       ]
     ]
     ,
@@ -1855,7 +1854,7 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
     srcs = #[[3, Key[Source]]]& /@ selected;
 
     AppendTo[issues, InspectionObject["DuplicateVariables", "Duplicate variables in ``Block``.", "Error",
-      <| Source->First[srcs], "AdditionalSources"->Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
+      <| Source -> First[srcs], "AdditionalSources" -> Rest[srcs], ConfidenceLevel -> 1.0 |> ]];
   ];
 
   issues
@@ -1882,7 +1881,7 @@ Module[{ast, node, children, data, issues, opt, pats},
   Scan[(
     AppendTo[issues, InspectionObject["NamedPatternInOptional", "Named pattern " <> format[ToFullFormString[#[[2, 1]]]] <> " in ``Optional``.", "Error", <|
       #[[3]],
-      ConfidenceLevel -> 0.95|>]]
+      ConfidenceLevel -> 0.95 |>]]
   )&, pats];
 
   issues
@@ -1970,7 +1969,7 @@ Module[{ast, node, var, data, parentPos, parent, withChildren},
 
   {InspectionObject["SelfAssignment", "Self assignment: " <> format[ToFullFormString[var]] <> ".", "Warning", <|
     data,
-    ConfidenceLevel -> 0.95|>]}
+    ConfidenceLevel -> 0.95 |>]}
 ]]
 
 
@@ -2008,7 +2007,7 @@ Module[{ast, node, var, data},
                 LeafNode[Token`CloseSquare, "]", <||>]}, <||>]}, <||>],
         Source -> data[[Key[Source]]]
       |>]
-    }|>]}
+    } |>]}
 ]]
 
 
@@ -2172,7 +2171,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
   consts = Cases[children, LeafNode[Symbol, "True"|"False", _]];
   Scan[(AppendTo[issues, InspectionObject["LogicalConstant", "Logical constant in ``And``.", "Warning", <|
     #[[3]],
-    ConfidenceLevel -> 0.95|>]])&
+    ConfidenceLevel -> 0.95 |>]])&
     ,
     consts
   ];
@@ -2198,7 +2197,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95,
-      "Argument" -> "And"|> ]];
+      "Argument" -> "And" |> ]];
   ];
 
   issues
@@ -2240,10 +2239,10 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
-      <| Source->First[srcs],
-      "AdditionalSources"->Rest[srcs],
-      ConfidenceLevel -> 0.95,
-      "Argument" -> "Or"
+      <| Source -> First[srcs],
+        "AdditionalSources" -> Rest[srcs],
+        ConfidenceLevel -> 0.95,
+        "Argument" -> "Or"
       |> ]];
   ];
 
@@ -2281,7 +2280,7 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, src
 
   Scan[(AppendTo[issues, InspectionObject["Blank", "Blank in ``Alternatives``.", "Error", <|
     #[[3]],
-    ConfidenceLevel -> 0.95|>]])&, blanks];
+    ConfidenceLevel -> 0.95 |>]])&, blanks];
 
   counts = CountsBy[children, ToFullFormString];
 
@@ -2302,8 +2301,8 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, src
 
     AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error",
       <|
-        Source->First[srcs],
-        "AdditionalSources"->Rest[srcs],
+        Source -> First[srcs],
+        "AdditionalSources" -> Rest[srcs],
         ConfidenceLevel -> 0.95,
         "Argument" -> "Alternatives"
       |> ]];
@@ -2330,7 +2329,7 @@ Module[{ast, node, children, data, issues, cases},
 
   Scan[(AppendTo[issues, InspectionObject["BadSolverCall", "*Q function in symbolic solver.", "Error", <|
     Source -> #[[3, Key[Source]]],
-    ConfidenceLevel -> 0.90|>]])&
+    ConfidenceLevel -> 0.90 |>]])&
     ,
     cases
   ];
@@ -2527,7 +2526,7 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
       ];
   ];
 
-  previousPos = parentPos~Join~{2}~Join~{Last[actualPos] - 1};
+  previousPos = parentPos ~Join~ {2} ~Join~ {Last[actualPos] - 1};
 
   previous = Extract[ast, {previousPos}][[1]];
 
@@ -2625,15 +2624,15 @@ Module[{ast, node, data, issues, src},
           ConfidenceLevel -> 0.95,
           CodeActions -> {
             CodeAction["Replace with ``CreateFile::eexist``", ReplaceNode,
-              <|  Source -> src,
-                  "ReplacementNode" ->
-                    InfixNode[MessageName, {
-                      LeafNode[Symbol, "CreateFile", <||>],
-                      LeafNode[Token`ColonColon, "::", <||>],
-                      LeafNode[String, "eexist", <||>]}
-                      ,
-                      <||>
-                    ]
+              <| Source -> src,
+                "ReplacementNode" ->
+                  InfixNode[MessageName, {
+                    LeafNode[Symbol, "CreateFile", <||>],
+                    LeafNode[Token`ColonColon, "::", <||>],
+                    LeafNode[String, "eexist", <||>]}
+                    ,
+                    <||>
+                  ]
               |>
             ]
           }
@@ -2646,15 +2645,15 @@ Module[{ast, node, data, issues, src},
           ConfidenceLevel -> 0.95,
           CodeActions -> {
             CodeAction["Replace with ``CreateDirectory::eexist``", ReplaceNode,
-              <|  Source -> src,
-                  "ReplacementNode" ->
-                    InfixNode[MessageName, {
-                      LeafNode[Symbol, "CreateDirectory", <||>],
-                      LeafNode[Token`ColonColon, "::", <||>],
-                      LeafNode[String, "eexist", <||>]}
-                      ,
-                      <||>
-                    ]
+              <| Source -> src,
+                "ReplacementNode" ->
+                  InfixNode[MessageName, {
+                    LeafNode[Symbol, "CreateDirectory", <||>],
+                    LeafNode[Token`ColonColon, "::", <||>],
+                    LeafNode[String, "eexist", <||>]}
+                    ,
+                    <||>
+                  ]
               |>
             ]
           }

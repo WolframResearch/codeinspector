@@ -272,12 +272,12 @@ Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
 
   Scan[(
     AppendTo[issues, InspectionObject["ImplicitTimesAcrossLines", "Implicit ``Times`` across lines.", "Error",
-      <|Source -> #,
+      <| Source -> #,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
-                  CodeAction["Insert ``*``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Star, "*", <||>] |>],
-                  CodeAction["Insert ``;``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Semi, ";", <||>] |>],
-                  CodeAction["Insert ``,``", InsertNode, <|Source->#, "InsertionNode"->LeafNode[Token`Comma, ",", <||>]|>] }
+                  CodeAction["Insert ``*``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
+                  CodeAction["Insert ``;``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Semi, ";", <||>] |>],
+                  CodeAction["Insert ``,``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>] }
       |>]];
     )&, srcs];
 

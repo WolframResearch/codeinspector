@@ -369,11 +369,6 @@ $invisibleBMPCharacters = {
 	*)
 	"\:2064",
 
-	(*
-	Virtual BOM character
-	*)
-	"\:e001",
-
 	"\[InvisibleSpace]",
 	"\[InvisibleApplication]",
 	"\[InvisibleComma]",
@@ -398,12 +393,7 @@ $invisibleBMPCharacters = {
 	"\[DiscretionaryPageBreakAbove]",
 	"\[DiscretionaryPageBreakBelow]",
 
-	"\[AlignmentMarker]",
-
-	(*
-	ZERO WIDTH NO-BREAK SPACE
-	*)
-	"\:feff"
+	"\[AlignmentMarker]"
 
 } ~Join~
 
@@ -638,11 +628,11 @@ Module[{},
 				ConfidenceLevel -> 0.95,
 				"Argument" -> "Module",
 				CodeActions -> {
-					CodeAction["Remove variable ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+					CodeAction["Remove variable ``" <> name <> "``", DeleteNode, <| Source -> src |>]
 				}
 			|>],
-			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
-			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module"|>],
+			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <| Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module" |>],
+			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``.", "Error", <| Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Module" |>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -668,8 +658,8 @@ Module[{},
 					CodeAction["Remove variable ``" <> name <> "``", DeleteNode, <|Source -> src|>]
 				}
 			|>],
-			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
-			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block"|>],
+			"shadowed" -> InspectionObject["ShadowedVariable", "Shadowed " <> "``" <> lastScope <> "`` " <> "variable: ``" <> name <> "``.", "Scoping", <| Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block" |>],
+			"error" -> InspectionObject["VariableError", "``" <> lastScope <> "`` " <> "variable error: ``" <> name <> "``.", "Error", <| Source -> src, ConfidenceLevel -> 0.95, "Argument" -> "Block" |>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -691,7 +681,7 @@ Module[{},
 			(*
 			lower confidence because this is somewhat common
 			*)
-			"error" -> InspectionObject["UnscopedObjectError", "Unscoped ``Slot`` error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.80|>],
+			"error" -> InspectionObject["UnscopedObjectError", "Unscoped ``Slot`` error: ``" <> name <> "``.", "Error", <| Source -> src, ConfidenceLevel -> 0.80 |>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -707,7 +697,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"error" -> InspectionObject["ParameterError", "Pattern error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", "Pattern error: ``" <> name <> "``.", "Error", <| Source -> src, ConfidenceLevel -> 0.95 |>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -723,7 +713,7 @@ Module[{},
 
 	Replace[modifiers,
 		{
-			"error" -> InspectionObject["ParameterError", "Parameter error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"error" -> InspectionObject["ParameterError", "Parameter error: ``" <> name <> "``.", "Error", <| Source -> src, ConfidenceLevel -> 0.95 |>],
 			(*
 			The only modifier should be "error"
 			*)
@@ -769,11 +759,11 @@ Module[{},
 				Source -> src,
 				ConfidenceLevel -> 0.95,
 				CodeActions -> {
-					CodeAction["Remove parameter ``" <> name <> "``", DeleteNode, <|Source -> src|>]
+					CodeAction["Remove parameter ``" <> name <> "``", DeleteNode, <| Source -> src |>]
 				}
 			|>],
-			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``.", "Scoping", <|Source -> src, ConfidenceLevel -> 0.95|>],
-			"error" -> InspectionObject["ParameterError", "``" <> lastScope <> "`` " <> "parameter error: ``" <> name <> "``.", "Error", <|Source -> src, ConfidenceLevel -> 0.95|>],
+			"shadowed" -> InspectionObject["ShadowedParameter", "Shadowed " <> "``" <> lastScope <> "`` " <> "parameter: ``" <> name <> "``.", "Scoping", <| Source -> src, ConfidenceLevel -> 0.95 |>],
+			"error" -> InspectionObject["ParameterError", "``" <> lastScope <> "`` " <> "parameter error: ``" <> name <> "``.", "Error", <| Source -> src, ConfidenceLevel -> 0.95 |>],
 			_ :> Sequence @@ {}
 		}
 		,
@@ -803,11 +793,11 @@ betterRiffle[a_, b_] := Riffle[a, b]
 (*
 Overload SourceMemberQ for InspectionObject and CellIndex
 *)
-SourceMemberQ[suppressedRegion[<|CellIndex -> start_|>, <|CellIndex -> end_|>], InspectionObject[_, _, _, KeyValuePattern[CellIndex -> {index_}]]] := (
+SourceMemberQ[suppressedRegion[<| CellIndex -> start_ |>, <| CellIndex -> end_ |>], InspectionObject[_, _, _, KeyValuePattern[CellIndex -> {index_}]]] := (
 	start <= index <= end
 )
 
-SourceMemberQ[suppressedRegion[<|Source -> start_|>, <|Source -> end_|>], InspectionObject[_, _, _, KeyValuePattern[Source -> src_]]] := (
+SourceMemberQ[suppressedRegion[<| Source -> start_ |>, <| Source -> end_ |>], InspectionObject[_, _, _, KeyValuePattern[Source -> src_]]] := (
 	SourceMemberQ[{start, end}, src]
 )
 

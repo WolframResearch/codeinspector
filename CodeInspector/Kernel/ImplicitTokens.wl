@@ -200,6 +200,7 @@ Module[{implicitTokens, full, lines, lintedLines, bytes, str, tabWidth},
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = implicitTokensLinesReport[lines, implicitTokens];
+
   InspectedFileObject[full, lintedLines]
 ]]
 
@@ -228,6 +229,7 @@ Module[{implicitTokens, lines, lintedLines, tabWidth},
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = implicitTokensLinesReport[lines, implicitTokens];
+
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -266,6 +268,7 @@ Module[{implicitTokens, lines, lintedLines, string, tabWidth},
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = implicitTokensLinesReport[lines, implicitTokens];
+
   InspectedStringObject[string, lintedLines]
 ]]
 
@@ -692,6 +695,7 @@ Module[{lineNumber, columnNumber, line},
   lineNumber = data[[Key[Source], 1, 1]];
   columnNumber = data[[Key[Source], 1, 2]];
   line = lines[[lineNumber]];
+  
   While[True,
     If[columnNumber-1 == 0 || columnNumber-1 == 1,
       Break[]

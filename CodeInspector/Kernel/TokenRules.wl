@@ -83,7 +83,7 @@ Module[{cst, node, data, str, issues, src},
                 Source -> src,
                 ConfidenceLevel -> 0.75,
                 CodeActions -> {
-                  CodeAction["Replace with ``$Failed``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[$Failed]|>]
+                  CodeAction["Replace with ``$Failed``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[$Failed] |>]
                 },
                 "Argument" -> str
               |>
@@ -100,7 +100,7 @@ Module[{cst, node, data, str, issues, src},
                 *)
                 ConfidenceLevel -> 0.5,
                 CodeActions -> {
-                  CodeAction["Replace with ``True|False``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[True|False]|>]
+                  CodeAction["Replace with ``True|False``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[True|False] |>]
                 },
                 "Argument" -> str
               |>
@@ -117,7 +117,7 @@ Module[{cst, node, data, str, issues, src},
                 *)
                 ConfidenceLevel -> 0.5,
                 CodeActions -> {
-                  CodeAction["Replace with ``MatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[MatchQ]|>]
+                  CodeAction["Replace with ``MatchQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[MatchQ] |>]
                 },
                 "Argument" -> str
               |>
@@ -131,7 +131,7 @@ Module[{cst, node, data, str, issues, src},
                 Source -> src,
                 ConfidenceLevel -> 0.95,
                 CodeActions -> {
-                  CodeAction["Replace with ``UnsameQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[UnsameQ]|>]
+                  CodeAction["Replace with ``UnsameQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[UnsameQ] |>]
                 },
                 "Argument" -> str
               |>
@@ -148,7 +148,7 @@ Module[{cst, node, data, str, issues, src},
                 *)
                 ConfidenceLevel -> 0.5,
                 CodeActions -> {
-                  CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[StringMatchQ]|>]
+                  CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[StringMatchQ] |>]
                 },
                 "Argument" -> str
               |>
@@ -162,7 +162,7 @@ Module[{cst, node, data, str, issues, src},
                 Source -> src,
                 ConfidenceLevel -> 0.95,
                 CodeActions -> {
-                  CodeAction["Replace with ``OptionQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionQ]|>]
+                  CodeAction["Replace with ``OptionQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[OptionQ] |>]
                 },
                 "Argument" -> str
               |>
@@ -176,7 +176,7 @@ Module[{cst, node, data, str, issues, src},
                 Source -> src,
                 ConfidenceLevel -> 0.95,
                 CodeActions -> {
-                  CodeAction["Replace with ``OptionsPattern``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[OptionsPattern]|>]
+                  CodeAction["Replace with ``OptionsPattern``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[OptionsPattern] |>]
                 },
                 "Argument" -> str
               |>
@@ -190,7 +190,7 @@ Module[{cst, node, data, str, issues, src},
                 Source -> src,
                 ConfidenceLevel -> 0.95,
                 CodeActions -> {
-                  CodeAction["Replace with ``InterpolatingFunction``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[InterpolatingFunction]|>]
+                  CodeAction["Replace with ``InterpolatingFunction``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[InterpolatingFunction] |>]
                 },
                 "Argument" -> str
               |>
@@ -204,7 +204,7 @@ Module[{cst, node, data, str, issues, src},
                 Source -> src,
                 ConfidenceLevel -> 0.95,
                 CodeActions -> {
-                  CodeAction["Replace with ``InterpolatingPolynomial``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[InterpolatingPolynomial]|>]
+                  CodeAction["Replace with ``InterpolatingPolynomial``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[InterpolatingPolynomial] |>]
                 },
                 "Argument" -> str
               |>
@@ -221,7 +221,7 @@ Module[{cst, node, data, str, issues, src},
                 *)
                 ConfidenceLevel -> 0.5,
                 CodeActions -> {
-                  CodeAction["Replace with ``Developer`RealQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[Developer`RealQ]|>]
+                  CodeAction["Replace with ``Developer`RealQ``", ReplaceNode, <| Source -> src, "ReplacementNode"->ToNode[Developer`RealQ] |>]
                 },
                 "Argument" -> str
               |>
@@ -238,7 +238,7 @@ Module[{cst, node, data, str, issues, src},
                 *)
                 ConfidenceLevel -> 0.5,
                 CodeActions -> {
-                  CodeAction["Replace with ``Developer`SymbolQ``", ReplaceNode, <|Source->src, "ReplacementNode"->ToNode[Developer`SymbolQ]|>]
+                  CodeAction["Replace with ``Developer`SymbolQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[Developer`SymbolQ] |>]
                 },
                 "Argument" -> str
               |>
