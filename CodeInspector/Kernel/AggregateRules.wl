@@ -1378,7 +1378,7 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
           Blank | BlankSequence | BlankNullSequence |
           PatternBlank | PatternBlankSequence | PatternBlankNullSequence, _, _] |
         PostfixNode[Repeated | RepeatedNull, _, _] |
-        CallNode[LeafNode[Symbol, "Blank" | "Pattern" | "Except", _], _, _]],
+        CallNode[LeafNode[Symbol, "Blank" | "Pattern" | "Except" | "KeyValuePattern", _], _, _]],
         (*
         looks like a normal pattern on LHS of PatternTest
         *)
