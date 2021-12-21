@@ -9,10 +9,14 @@ BeginPackage["CodeInspector`LinterUI`"]
 
 Begin["`Private`"]
 
-
+(*
+DO NOT LOAD CodeParser!!
 Needs["CodeParser`"]
 Needs["CodeInspector`"]
 
+LinterUI is also used during build process, where paclets may not yet be available
+So LinterUI is "stand-alone"
+*)
 
 (* ::Section::Closed:: *)
 (*Appearance Elements*)
