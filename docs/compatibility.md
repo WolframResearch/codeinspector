@@ -28,3 +28,8 @@ The paclet CodeParser was successfully installed.
 does not necessarily mean that the paclet can be used.
 
 Make sure that the correct WolframVersion is specified.
+
+
+## WolframLanguageSyntax Compatibility
+
+Only the latest released version of Wolfram System is supported.
