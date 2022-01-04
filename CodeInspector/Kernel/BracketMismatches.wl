@@ -166,6 +166,10 @@ Module[{mismatches, full, lines, lintedLines, bytes, str, tabWidth},
 
   str = SafeString[bytes];
 
+  If[MissingQ[str],
+    Throw[str]
+  ];
+
   lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;

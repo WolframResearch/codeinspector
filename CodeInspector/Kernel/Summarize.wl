@@ -141,6 +141,10 @@ Module[{lints, full, lines,
 
    str = SafeString[bytes];
 
+   If[MissingQ[str],
+    Throw[str]
+   ];
+
    lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
    lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
@@ -281,6 +285,10 @@ Catch[
   ];
 
   string = SafeString[bytes];
+
+  If[MissingQ[string],
+    Throw[string]
+  ];
 
   lines = StringSplit[string, {"\r\n", "\n", "\r"}, All];
 
