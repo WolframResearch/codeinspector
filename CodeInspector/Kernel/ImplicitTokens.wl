@@ -491,13 +491,21 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
   ];
 
   (*
+  Fix 418799: push implicit 1 and All past any leading or trailing whitespace for better appearance
+  *)
+  ones = Map[pushOutBefore[#, lines]&, ones];
+  alls = Map[pushOutAfter[#, lines]&, alls];
+
+  (*
   Source convention for implicitTokens is "LineColumn"
   *)
-  ones = {LintOneCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ones;
-  alls = {LintAllCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ alls;
   nulls = {LintNullCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ nulls;
   ops = {LintExpectedOperandCharacter, #[[3, Key[Source], 1, 1]], #[[3, Key[Source], 1, 2]]}& /@ ops;
 
+  (*
+  each element of infixs is:
+  {LineCharacter, line, col}
+  *)
   infixs = times ~Join~ ones ~Join~ alls ~Join~ nulls ~Join~ ops;
 
   charInfos = starts ~Join~ ends ~Join~ infixs;
@@ -673,6 +681,46 @@ Module[{lineNumber, line, tokens, goalLine, goalCol, spaces, spaceRanges, candid
 resolveInfix[infix_, lines:{___String}] :=
   {LintTimesCharacter} ~Join~ infix
 
+
+pushOutBefore[one:LeafNode[Token`Fake`ImplicitOne, _, data_], lines:{___String}] :=
+Module[{lineNumber, columnNumber, line},
+
+  lineNumber = data[[Key[Source], 1, 1]];
+  columnNumber = data[[Key[Source], 1, 2]];
+  line = lines[[lineNumber]];
+  While[True,
+    If[columnNumber-1 == 0 || columnNumber-1 == 1,
+      Break[]
+    ];
+    If[StringTake[line, {columnNumber-1}] != " ",
+      Break[]
+    ];
+    columnNumber--;
+  ];
+
+  {LintOneCharacter, lineNumber, columnNumber}
+]
+
+
+pushOutAfter[all:LeafNode[Token`Fake`ImplicitAll, _, data_], lines:{___String}] :=
+Module[{lineNumber, columnNumber, line},
+
+  lineNumber = data[[Key[Source], 1, 1]];
+  columnNumber = data[[Key[Source], 1, 2]];
+  line = lines[[lineNumber]];
+
+  While[True,
+    If[columnNumber == StringLength[line],
+      Break[]
+    ];
+    If[StringTake[line, {columnNumber}] != " ",
+      Break[]
+    ];
+    columnNumber++;
+  ];
+
+  {LintAllCharacter, lineNumber, columnNumber}
+]
 
 
 End[]
