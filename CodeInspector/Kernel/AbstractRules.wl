@@ -592,7 +592,14 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
     Throw[issues]
   ];
 
-  expensiveChildren = ToFullFormString[#[[2, 1]]]& /@ children;
+  (*
+  Now consider { a -> b /; c, a -> b /; d }
+
+  conceptually, the Conditions should be considered part of the LHS and considered when testing for duplication
+
+  e.g., in above example: nothing is duplicated
+  *)
+  expensiveChildren = keyAndConditionToString /@ children;
 
   (*
   bail out if there are errors and ToFullFormString has failed
@@ -601,7 +608,7 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
     Throw[issues]
   ];
 
-  counts = CountsBy[children, ToFullFormString[#[[2, 1]]]&];
+  counts = CountsBy[children, keyAndConditionToString];
 
   dupKeys = Keys[Select[counts, (# > 1)&]];
 
@@ -638,6 +645,16 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
 
   issues
 ]]
+
+
+keyAndConditionToString[n_] :=
+Switch[n,
+  CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], {_, CallNode[LeafNode[Symbol, "Condition", _], _, _]}, _],
+    ToFullFormString[CallNode[LeafNode[Symbol, "List", <||>], {n[[2, 1]], n[[2, 2]]}, <||>]]
+  ,
+  CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], {_, _}, _],
+    ToFullFormString[n[[2, 1]]]
+]
 
 
 
