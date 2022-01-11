@@ -65,7 +65,7 @@ $DefaultConfidenceLevel = 0.75
 
 
 CodeInspectSummarize::usage = "CodeInspectSummarize[code] returns an inspection summary object. \
-code can be a string, a file, or a list of bytes."
+code can be a string, a File, or a list of bytes."
 
 Options[CodeInspectSummarize] = {
   "Editor" -> Automatic,

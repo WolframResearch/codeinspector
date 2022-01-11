@@ -128,7 +128,7 @@ InspectedLineObject[_,           _, _, lints_, ___]["Lints"] := lints
 
 
 CodeInspect::usage = "CodeInspect[code] returns a list of problems found in code. \
-code can be a string, a file, or a list of bytes."
+code can be a string, a File, or a list of bytes."
 
 Options[CodeInspect] = {
   "Editor" -> Automatic,
