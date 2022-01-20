@@ -709,12 +709,12 @@ Module[{lineNumber, columnNumber, line},
 pushOutAfter[all:LeafNode[Token`Fake`ImplicitAll, _, data_], lines:{___String}] :=
 Module[{lineNumber, columnNumber, line},
 
-  lineNumber = data[[Key[Source], 1, 1]];
-  columnNumber = data[[Key[Source], 1, 2]];
+  lineNumber = data[[Key[Source], 2, 1]];
+  columnNumber = data[[Key[Source], 2, 2]];
   line = lines[[lineNumber]];
 
   While[True,
-    If[columnNumber == StringLength[line],
+    If[columnNumber-1 == StringLength[line],
       Break[]
     ];
     If[StringTake[line, {columnNumber}] != " ",
