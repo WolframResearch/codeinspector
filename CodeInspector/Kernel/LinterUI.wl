@@ -840,6 +840,12 @@ isolatedDynamic[Dynamic[var_], expr_] :=
 constrainWidth[expr_, width_:354] := Pane[Style[expr, LineIndent -> 0], width, FrameMargins -> 0, ImageMargins -> 0, BaselinePosition -> Baseline]
 
 
+getCryptoHash[cell_CellObject] :=
+	Module[{attempt},
+		attempt = FrontEndExecute[FrontEnd`CryptoHash[cell]];
+		If[ListQ[attempt], Lookup[attempt, "ShiftEnterHash", $Failed], $Failed]]
+
+
 (* ::Section::Closed:: *)
 (*Lint Rafts*)
 
@@ -1799,7 +1805,7 @@ lintPod[cell_CellObject, cellType_] :=
 					
 					With[
 						(* Check if the original input/output cell has been modified. *)
-						{changedQ = FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= varValue[cell, "Hash"]},
+						{changedQ = StringQ[varValue[cell, "Hash"]] && getCryptoHash[cell] =!= varValue[cell, "Hash"]},
 						If[cellHashChangedQ =!= changedQ,
 							cellHashChangedQ = changedQ;
 							varSet[{cell, "hashChangedQ"}, changedQ];
@@ -1919,7 +1925,7 @@ cellBracketButton[cell_CellObject] :=
 
 (* noLintsBracketMarker gets attached to cells that were analyzed but didn't produce lints. *)
 noLintsBracketMarker[cell_CellObject] :=
-	With[{originalHash = FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]]},
+	With[{originalHash = getCryptoHash[cell]},
 
 		Cell[BoxData @ ToBoxes @ cellManagement @
 			DynamicWrapper[
@@ -1945,7 +1951,7 @@ noLintsBracketMarker[cell_CellObject] :=
 					"Code Analysis found no issues"],
 				
 				(* If the cell is edited, then remove the bracket marker. *)
-				If[FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]] =!= originalHash,
+				If[StringQ[originalHash] && getCryptoHash[cell] =!= originalHash,
 					With[{evalCell = EvaluationCell[]},
 						SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]]]]]]
 
@@ -2171,7 +2177,7 @@ getCellInfo[cell_] :=
 			varSet[{cell, "SeverityCounts"}, <||>];
 			(* "Hash" is the cell's "ShiftEnterHash" and will be used to check if a cell has been modified after
 				analysis, and thus if the analysis needs to be refreshed. *)
-			varSet[{cell, "Hash"}, FrontEndExecute[FrontEnd`CryptoHash[cell]][[2, -1]]];
+			varSet[{cell, "Hash"}, getCryptoHash[cell]];
 			(* "EditsMadeQ" switches to True if a CodeAction has been applied to the code copy. *)
 			varSet[{cell, "EditsMadeQ"}, False];
 			(* The linting pods for Code cells and Input cells will be rendered
