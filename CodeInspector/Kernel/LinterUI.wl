@@ -25,6 +25,16 @@ So LinterUI is "stand-alone"
 $UIRoundingRadius = 4;
 
 
+suppressMouseDown9patch =
+	Image[
+		NumericArray[{
+			{{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}},
+			{{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0, 0, 255}},
+			{{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}}}, "UnsignedInteger8"],
+		"Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72}, Interleaving -> True];
+suppressMouseDownEffect = {"Default" -> suppressMouseDown9patch, "Hover" -> suppressMouseDown9patch, "Pressed" -> suppressMouseDown9patch}
+
+
 colorData = With[
 	{
 		errorSev3 = RGBColor[0.9400000000000001, 0.64, 0],
@@ -601,7 +611,7 @@ button[
 			If[OptionValue["ActiveQ"] =!= False, action];
 			mouseDownQ = False,
 			
-			Appearance -> None, ContentPadding -> False,
+			Appearance -> suppressMouseDownEffect, ContentPadding -> False,
 			BaselinePosition -> OptionValue[BaselinePosition],
 			Method -> OptionValue[Method]]]
 
@@ -979,7 +989,7 @@ makeRaftMenuIgnoreItem[
 		(* Set state variables and delete raft components. *)
 		raftMenuItemClickAction[Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 			
-		Appearance -> None]
+		Appearance -> suppressMouseDownEffect]
 
 
 (* ::Subsection::Closed:: *)
@@ -1038,7 +1048,7 @@ makeRaftMenuCodeActionItem[
 			(* Set state variables and delete raft components. *)
 			raftMenuItemClickAction[Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 				
-			Appearance -> None]]
+			Appearance -> suppressMouseDownEffect]]
 
 
 (* ::Subsection::Closed:: *)
@@ -1075,7 +1085,7 @@ makeRaftMenuDocsItem[
 			(* Set state variables and delete raft components. *)
 			raftMenuItemClickAction[Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
 				
-			Appearance -> None]]
+			Appearance -> suppressMouseDownEffect]]
 
 
 (* ::Subsection::Closed:: *)
@@ -1423,7 +1433,7 @@ makeRaftCell[notebook_NotebookObject, cell_CellObject, lint_CodeInspector`Inspec
 											NotebookDelete[raftMenu]; varSet[{notebook, cell, lint, "State"}, hoverValue],
 											varSet[{notebook, cell, lint, "State"}, "active"]; raftOpenQ = True],
 												
-										Appearance -> None],
+										Appearance -> suppressMouseDownEffect],
 									
 									
 									(* ----- DynamicWrapper action ----- *)
