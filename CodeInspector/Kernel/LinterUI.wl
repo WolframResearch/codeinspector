@@ -1716,7 +1716,7 @@ footerBar[cell_CellObject, Dynamic[showAllQ_], minRafts_] :=
 
 hashChangedOverlayReanalyzeButton[cell_CellObject] :=
 	button["Reanalyze",
-		With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]];
+		With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], {.1, 2}]]];
 		attachAnalysisAction[{cell}],
 		ImageSize -> {98, 19},
 		Method -> "Queued"]
@@ -1743,7 +1743,7 @@ hashChangedOverlay[cell_, Dynamic[overlayAttachedQ_]] :=
 
 				(* If the changes to the input/code cell have been reversed, delete this overlay. *)
 				If[varValue[cell, "hashChangedQ"] === False,
-					With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]]]],
+					With[{evalCell = EvaluationCell[]}, SessionSubmit[ScheduledTask[NotebookDelete[evalCell], {.1, 2}]]]]],
 
 			Initialization :> (overlayAttachedQ = True),
 			Deinitialization :> (overlayAttachedQ = False)],
@@ -1941,7 +1941,7 @@ noLintsBracketMarker[cell_CellObject] :=
 
 						(* Delete the marker on click. *)
 						With[{evalCell = EvaluationCell[]},
-							SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]],
+							SessionSubmit[ScheduledTask[NotebookDelete[evalCell], {.1, 2}]]],
 
 						"BackColor" -> colorData["CellBracketButtonBack"],
 						"BackHoverColor" -> colorData["CellBracketButtonHover"],
@@ -1956,7 +1956,7 @@ noLintsBracketMarker[cell_CellObject] :=
 				(* If the cell is edited, then remove the bracket marker. *)
 				If[StringQ[originalHash] && getCryptoHash[cell] =!= originalHash,
 					With[{evalCell = EvaluationCell[]},
-						SessionSubmit[ScheduledTask[NotebookDelete[evalCell], .1]]]]]]]
+						SessionSubmit[ScheduledTask[NotebookDelete[evalCell], {.1, 2}]]]]]]]
 
 
 (* ::Section::Closed:: *)
