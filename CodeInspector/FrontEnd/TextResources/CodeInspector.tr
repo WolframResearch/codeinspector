@@ -460,7 +460,23 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
          CodeInspector`LinterUI`Private`hoverQ$$ = CurrentValue["MouseOver"]; 
          CodeInspector`LinterUI`Private`mouseDownQ$$ = 
           CurrentValue["MouseButtonTest"]],
-        Appearance->None,
+        Appearance->{
+         "Default" -> 
+          Image[RawArray["UnsignedInteger8",{{{255, 255, 255, 255}, {0, 0, 0, 
+             255}, {255, 255, 255, 255}}, {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 
+             0, 0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 
+             255, 255}}}], "Byte", ColorSpace -> "RGB", 
+            ImageResolution -> {72, 72}, Interleaving -> True], "Hover" -> 
+          Image[RawArray["UnsignedInteger8",{{{255, 255, 255, 255}, {0, 0, 0, 
+             255}, {255, 255, 255, 255}}, {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 
+             0, 0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 
+             255, 255}}}], "Byte", ColorSpace -> "RGB", 
+            ImageResolution -> {72, 72}, Interleaving -> True], "Pressed" -> 
+          Image[RawArray["UnsignedInteger8",{{{255, 255, 255, 255}, {0, 0, 0, 
+             255}, {255, 255, 255, 255}}, {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 
+             0, 0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 
+             255, 255}}}], "Byte", ColorSpace -> "RGB", 
+            ImageResolution -> {72, 72}, Interleaving -> True]},
         BaselinePosition->Baseline,
         ButtonFunction:>(
          If[OptionValue[{
@@ -510,7 +526,23 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
             Hue[0.55, 0.82, 0.87], 
             GrayLevel[0.8]]]},
         "Highlighted"],
-       Appearance->False,
+       Appearance->{
+        "Default" -> 
+         Image[RawArray["UnsignedInteger8",{{{255, 255, 255, 255}, {0, 0, 0, 
+            255}, {255, 255, 255, 255}}, {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0,
+             0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 
+            255}}}], "Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72},
+            Interleaving -> True], "Hover" -> 
+         Image[RawArray["UnsignedInteger8",{{{255, 255, 255, 255}, {0, 0, 0, 
+            255}, {255, 255, 255, 255}}, {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0,
+             0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 
+            255}}}], "Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72},
+            Interleaving -> True], "Pressed" -> 
+         Image[RawArray["UnsignedInteger8",{{{255, 255, 255, 255}, {0, 0, 0, 
+            255}, {255, 255, 255, 255}}, {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0,
+             0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 
+            255}}}], "Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72},
+            Interleaving -> True]},
        ButtonFunction:>(CurrentValue[
            EvaluationNotebook[], DockedCells] = 
          With[{LinterUIDockedCell`Private`dockedCells = CurrentValue[

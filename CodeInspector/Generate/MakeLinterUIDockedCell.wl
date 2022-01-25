@@ -168,7 +168,7 @@ dockedCell =
 										"Reanalyze Notebook",
 										CodeInspector`LinterUI`Private`attachAnalysisAction[EvaluationNotebook[]],
 										Method -> "Queued"],
-
+									(* When the kernel is quit we must have no dependency on CodeInspector`LinterUI, hence the verbatim Button used here *)
 									False -> Button[
 
 										Highlighted[
@@ -191,7 +191,15 @@ dockedCell =
 														dockedCells]]];
 										Needs["CodeInspector`"];
 										CodeInspector`AttachAnalysis[notebook],
-										Appearance -> False,
+										Appearance ->
+											With[{suppressMouseDown9patch =
+												Image[
+													NumericArray[{
+														{{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}},
+														{{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0, 0, 255}},
+														{{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}}}, "UnsignedInteger8"],
+													"Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72}, Interleaving -> True]},
+											{"Default" -> suppressMouseDown9patch, "Hover" -> suppressMouseDown9patch, "Pressed" -> suppressMouseDown9patch}],
 										Method -> "Queued"]},
 
 									Dynamic[
@@ -204,6 +212,9 @@ dockedCell =
 							Offset[{-26, 0}, {1, 0}], {1, 0}],
 						
 						(* Draw a "Close" button that clears the entire linter interface from a notebook. *)
+						(*
+							This Button does not need its Appearance suppressed because it is within Graphics.
+							The typesetting step converts Button to EventHandler and EventHandler does not suffer from mouse-down OS appearance effects. *)
 						Button[
 							Tooltip[
 								(* This is the resolved expression from evaluating CodeInspector`LinterUI`Private`closeIcon[{-11, 0}, {1, 0}] *)
