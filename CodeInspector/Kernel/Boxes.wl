@@ -28,10 +28,37 @@ CodeInspectSummarize[cell_CellObject, opts:OptionsPattern[]] :=
   CodeInspectSummarize[NotebookRead[cell], opts]
 
 
-CodeInspect[nb_Notebook, opts:OptionsPattern[]] :=
+CodeInspect[nbIn_Notebook, opts:OptionsPattern[]] :=
 Catch[
-Module[{cst, suppressedRegions},
+Module[{nb, fileFormat, styleDefs, scanSessionTokens, cst, suppressedRegions},
 
+  nb = nbIn;
+
+  fileFormat = OptionValue["FileFormat"];
+
+  If[fileFormat === Automatic,
+    styleDefs = Options[nb, StyleDefinitions];
+
+    Switch[styleDefs,
+      {StyleDefinitions -> "Package.nb"},
+        fileFormat = "Package"
+      ,
+      {StyleDefinitions -> "Script.nb"},
+        fileFormat = "Script"
+      ,
+      _,
+        fileFormat = "Notebook"
+    ]
+  ];
+
+  Switch[fileFormat,
+    "Script",
+      scanSessionTokens = False
+    ,
+    _,
+      scanSessionTokens = True
+  ];
+  
   cst = CodeConcreteParse[nb, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
   If[FailureQ[cst],
@@ -40,6 +67,7 @@ Module[{cst, suppressedRegions},
 
   suppressedRegions = SuppressedRegions[cst];
 
+  Block[{$ScanSessionTokens = scanSessionTokens},
   (*
   IMPLEMENTATION DETAIL:
   it is important that CodeInspectCST is called on the CellNodes, so that
@@ -47,6 +75,7 @@ Module[{cst, suppressedRegions},
   into the InspectionObjects
   *)
   Flatten[If[FailureQ[#], {}, CodeInspectCST[#, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions, "InheritedProperties" -> {CellIndex}]]& /@ cst[[2]]]
+  ]
 ]]
 
 
@@ -114,7 +143,12 @@ Module[{cst, suppressedRegions},
 
   suppressedRegions = SuppressedRegions[cst];
 
+  (*
+  session tokens such as % and Out are ok here
+  *)
+  Block[{$ScanSessionTokens = False},
   CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
+  ]
 ]]
 
 CodeInspect[Cell[___], opts:OptionsPattern[]] :=
@@ -211,7 +245,7 @@ Catch[
   (*
   session tokens such as % and Out are ok here
   *)
-  Block[{CodeInspector`TokenRules`$ScanSessionTokens = False},
+  Block[{$ScanSessionTokens = False},
   CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions, "BatchMode" -> False, "KeepLowlevelScopingLints" -> False]
   ]
 ]]

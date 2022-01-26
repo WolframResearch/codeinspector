@@ -137,6 +137,7 @@ Options[CodeInspect] = {
   "ConcreteRules" :> $DefaultConcreteRules,
   "AggregateRules" :> $DefaultAggregateRules,
   "AbstractRules" :> $DefaultAbstractRules,
+  "FileFormat" -> Automatic,
   (*
   filtering
   *)
@@ -154,8 +155,7 @@ Options[CodeInspect] = {
   *)
   CharacterEncoding -> "UTF-8",
   SourceConvention -> "LineColumn",
-  "TabWidth" -> 1,
-  "FileFormat" -> Automatic
+  "TabWidth" -> 1
 }
 
 
@@ -167,11 +167,26 @@ $fileByteCountMaxLimit = 3*^6
 CodeInspect[File[file_String], opts:OptionsPattern[]] :=
 Catch[
 Module[{performanceGoal, full, lints, cst, data,
-  editor, suppressedRegions},
+  editor, suppressedRegions, fileFormat, ext, scanSessionTokens},
 
   performanceGoal = OptionValue[PerformanceGoal];
 
   editor = OptionValue["Editor"];
+  fileFormat = OptionValue["FileFormat"];
+
+  If[fileFormat === Automatic,
+    ext = FileExtension[file];
+    Switch[ext,
+      "wl" | "m",
+        fileFormat = "Package"
+      ,
+      "wls",
+        fileFormat = "Script"
+      ,
+      _,
+        fileFormat = "Unknown"
+    ]
+  ];
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -183,6 +198,14 @@ Module[{performanceGoal, full, lints, cst, data,
   full = FindFile[file];
   If[FailureQ[full],
     Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
+  ];
+
+  Switch[fileFormat,
+    "Script",
+      scanSessionTokens = False
+    ,
+    _,
+      scanSessionTokens = True
   ];
 
   If[performanceGoal == "Speed",
@@ -202,7 +225,9 @@ Module[{performanceGoal, full, lints, cst, data,
 
   suppressedRegions = SuppressedRegions[cst];
 
+  Block[{$ScanSessionTokens = scanSessionTokens},
   lints = CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions];
+  ];
 
   If[FailureQ[lints],
     Throw[lints]
@@ -230,7 +255,13 @@ Module[{performanceGoal, full, lints, cst, data,
 
 CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
- Module[{suppressedRegions, cst},
+ Module[{suppressedRegions, cst, fileFormat, scanSessionTokens},
+
+  fileFormat = OptionValue["FileFormat"];
+
+  If[fileFormat === Automatic,
+    fileFormat = "Unknown"
+  ];
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -238,6 +269,14 @@ Catch[
   $ConcreteLintTime = Quantity[0, "Seconds"];
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
+
+  Switch[fileFormat,
+    "Script",
+      scanSessionTokens = False
+    ,
+    _,
+      scanSessionTokens = True
+  ];
 
   cst = CodeConcreteParse[string, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
@@ -247,15 +286,23 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
+  Block[{$ScanSessionTokens = scanSessionTokens},
   CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
+  ]
 ]]
 
 
 
 CodeInspect[bytes:{_Integer, _Integer...}, opts:OptionsPattern[]] :=
 Catch[
- Module[{cst, suppressedRegions},
+ Module[{cst, suppressedRegions, fileFormat},
 
+  fileFormat = OptionValue["FileFormat"];
+
+  If[fileFormat === Automatic,
+    fileFormat = "Unknown"
+  ];
+  
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
   $AbstractLintProgress = 0;
@@ -263,6 +310,14 @@ Catch[
   $AggregateLintTime = Quantity[0, "Seconds"];
   $AbstractLintTime = Quantity[0, "Seconds"];
 
+  Switch[fileFormat,
+    "Script",
+      scanSessionTokens = False
+    ,
+    _,
+      scanSessionTokens = True
+  ];
+    
   cst = CodeConcreteParse[bytes, FilterRules[{opts}, Options[CodeConcreteParse]]];
 
   If[FailureQ[cst],
@@ -271,7 +326,9 @@ Catch[
 
   suppressedRegions = SuppressedRegions[cst];
 
+  Block[{$ScanSessionTokens = scanSessionTokens},
   CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
+  ]
 ]]
 
 
