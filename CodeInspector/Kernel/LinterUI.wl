@@ -1820,8 +1820,11 @@ lintPod[cell_CellObject, cellType_] :=
 			
 			Initialization :> (1),
 			Deinitialization :> (
+				(* 412965:
+					There's a weird corner case if the kernel is Quit. Any issued messages in this Deinitialization sneak past Quiet wrappers.
+					The workaround is to make the code robust enough to avoid issuing any messages, e.g. First[..., fallback value]. *)
 				(* Delete the cell bracket button. *)
-				Quiet[NotebookDelete[First[varValue[cell, "UIAttachedCells"]]]];
+				NotebookDelete[First[varValue[cell, "UIAttachedCells"], {}]];
 				
 				(* Clear the severity counts when the lint pod is removed. *)
 				(* This line is very important. Seeing as varValue is using Names["XXXX*"] to find groups of symbols, the
