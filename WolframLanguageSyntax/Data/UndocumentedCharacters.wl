@@ -4,7 +4,7 @@
 {"\\[Akuz]", "\\[Andy]", "\\[ContinuedFractionK]", "\\[Curl]", 
  "\\[Divergence]", "\\[DivisionSlash]", "\\[ExpectationE]", 
  "\\[FreeformPrompt]", "\\[Gradient]", "\\[Laplacian]", "\\[Minus]", 
- "\\[Moon]", "\\[PageBreakAbove]", "\\[PageBreakBelow]", "\\[ProbabilityPr]", 
- "\\[Spooky]", "\\[StepperDown]", "\\[StepperLeft]", "\\[StepperRight]", 
- "\\[StepperUp]", "\\[Sun]", "\\[UnknownGlyph]", "\\[Villa]", 
- "\\[WolframAlphaPrompt]"}
+ "\\[Moon]", "\\[NumberComma]", "\\[PageBreakAbove]", "\\[PageBreakBelow]", 
+ "\\[ProbabilityPr]", "\\[Spooky]", "\\[StepperDown]", "\\[StepperLeft]", 
+ "\\[StepperRight]", "\\[StepperUp]", "\\[Sun]", "\\[UnknownGlyph]", 
+ "\\[Villa]", "\\[WolframAlphaPrompt]"}
