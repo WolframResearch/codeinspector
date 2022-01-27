@@ -49,7 +49,8 @@ CallNode[LeafNode[Symbol,
   "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming" |
   "Rule" |
   "OptionsPattern" |
-  "MessageName"
+  "MessageName" |
+  "For"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -275,6 +276,9 @@ Module[{ast, node, sym, name},
     ,
     "MessageName",
       scanMessageName[pos, ast]
+    ,
+    "For",
+      scanFors[pos, ast]
   ]
 ]]
 
@@ -2694,6 +2698,73 @@ Module[{ast, node, data, issues, src},
               |>
             ]
           }
+        |>]
+      ]
+  ];
+
+  issues
+]]
+
+
+(*
+discussed SW CodeTools Tues Jan 18 2022
+
+just bad code
+
+suggest to rewrite as Table, per sw
+
+tag with a piece of it
+
+"This would normally be..."
+*)
+Attributes[scanFors] = {HoldRest}
+
+scanFors[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, varName, start, end, startStr, endStr,
+  head, headSrc},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+
+  head = node[[1]];
+  headSrc = head[[3, Key[Source]]];
+
+  issues = {};
+
+  Switch[node,
+    CallNode[LeafNode[Symbol, "For", _], {
+      CallNode[LeafNode[Symbol, "Set", _], {
+        LeafNode[Symbol, varName_, _], start_}, _],
+      CallNode[LeafNode[Symbol, "LessEqual", _], {
+        LeafNode[Symbol, varName_, _],
+        end_}, _],
+      CallNode[LeafNode[Symbol, "Increment", _], {
+        LeafNode[Symbol, varName_, _]}, _],
+      body_}, _],
+
+      varName = node[[2, 1, 2, 1, 2]];
+      start = node[[2, 1, 2, 2]];
+      end = node[[2, 2, 2, 2]];
+      startStr = ToFullFormString[start];
+      endStr = ToFullFormString[end];
+      
+      AppendTo[issues,
+        InspectionObject["For", "``For`` loops are discouraged.", "Remark", <|
+          Source -> headSrc,
+          ConfidenceLevel -> 0.90,
+          "AdditionalDescriptions" -> {
+            "This would normally be written as ``Table[body, {" <> varName <> ", " <> startStr <> ", " <> endStr <> "}]``." }
+        |>]
+      ];
+    ,
+    _,
+      AppendTo[issues,
+        InspectionObject["For", "``For`` loops are discouraged.", "Remark", <|
+          Source -> headSrc,
+          ConfidenceLevel -> 0.90,
+          "AdditionalDescriptions" -> {
+            "This would normally be written using ``Table``." }
         |>]
       ]
   ];
