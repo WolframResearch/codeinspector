@@ -111,9 +111,11 @@ InspectionObject::usage = "InspectionObject[tag, description, severity, data] is
 provide some selectors for Lint and LintedLine objects
 *)
 
-InspectionObject[tag_,     _,         _, _]["Tag"] := tag
-InspectionObject[   _, desc_,         _, _]["Description"] := desc
-InspectionObject[   _,     _, severity_, _]["Severity"] := severity
+InspectionObject[tag_,     _,         _,     _]["Tag"] := tag
+InspectionObject[   _, desc_,         _,     _]["Description"] := desc
+InspectionObject[   _,     _, severity_,     _]["Severity"] := severity
+
+InspectionObject[   _,     _,         _, data_]["AdditionalDescriptions"] := Lookup[data, "AdditionalDescriptions", {}]
 
 
 
