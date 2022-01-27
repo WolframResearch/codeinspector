@@ -404,7 +404,10 @@ Attributes[scanAssocs] = {HoldRest}
 
 scanAssocs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dupKeys, expensiveChildren, filtered},
+Module[{ast, node, children, data, issues, actions, counts,
+  selecteds, srcs, dupKeys, expensiveChildren, filtered,
+  ruleChildren},
+  
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -412,17 +415,12 @@ Module[{ast, node, children, data, issues, actions, counts, selecteds, srcs, dup
 
   issues = {};
 
-  If[!MatchQ[children, { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }],
-    (*
-    Association does not have all Rule arguments.
-    *)
-    Throw[{}]
-  ];
+  ruleChildren = Cases[children, CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]];
 
   (*
   Skip  <| _ -> a, _ -> b |>
   *)
-  filtered = DeleteCases[children, CallNode[_, { CallNode[LeafNode[Symbol, "Blank", _], _, _], _ }, _]];
+  filtered = DeleteCases[ruleChildren, CallNode[_, { CallNode[LeafNode[Symbol, "Blank", _], _, _], _ }, _]];
 
   expensiveChildren = ToFullFormString[#[[2, 1]]]& /@ filtered;
 
