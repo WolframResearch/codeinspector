@@ -28,18 +28,29 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 $DefaultAbstractRules = <|
 
 
-(*
-Do not include symbols such as:
-RealQ
-SymbolQ
-
-because these are handled as BadSymbol lints
-
-and BadSymbol casts shadow over BadCall
-
-Only include symbols here that are in System`
-*)
-CallNode[LeafNode[Symbol, "String" | "Integer" | "Real" | "True", _], _, _] -> scanBadCalls,
+CallNode[LeafNode[Symbol,
+  "String" | "Integer" | "Real" | "True" |
+  "Pattern" |
+  "Which" |
+  "Switch" |
+  "If" |
+  "Association" |
+  "List" |
+  "Module" |
+  "DynamicModule" |
+  "With" |
+  "Block" | "Internal`InheritedBlock" |
+  "Optional" |
+  "LoadJavaClass" | "JLink`LoadJavaClass"|
+  "Set" | "SetDelayed" |
+  "And" |
+  "Or" |
+  "Alternatives" |
+  "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming" |
+  "Rule" |
+  "OptionsPattern" |
+  "MessageName"
+  , _], _, _] -> scanCallDispatch,
 
 (*
 
@@ -53,63 +64,6 @@ Tags: Control
 *)
 LeafNode[Symbol, "Return" | "Break" | "Continue", _] -> scanControls,
 
-
-CallNode[LeafNode[Symbol, "Pattern", _], _, _] -> scanPatterns,
-
-(*
-Tags: WhichArguments SwitchWhichConfusion
-*)
-CallNode[LeafNode[Symbol, "Which", _], _, _] -> scanWhichs,
-
-(*
-Tags: SwitchArguments SwitchWhichConfusion OperatingSystemLinux
-*)
-CallNode[LeafNode[Symbol, "Switch", _], _, _] -> scanSwitchs,
-
-(*
-Tags: IfArguments
-*)
-CallNode[LeafNode[Symbol, "If", _], _, _] -> scanIfs,
-
-(*
-Tags: DuplicateKeys
-*)
-CallNode[LeafNode[Symbol, "Association", _], _, _] -> scanAssocs,
-
-CallNode[LeafNode[Symbol, "List", _], { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }, _] -> scanListsOfRules,
-
-(*
-Tags: 
-*)
-CallNode[LeafNode[Symbol, "Module", _], _, _] -> scanModules,
-
-(*
-Tags: 
-*)
-CallNode[LeafNode[Symbol, "DynamicModule", _], _, _] -> scanDynamicModules,
-
-(*
-Tags: 
-*)
-CallNode[LeafNode[Symbol, "With", _], _, _] -> scanWiths,
-
-(*
-Tags: 
-*)
-CallNode[LeafNode[Symbol, "Block" | "Internal`InheritedBlock", _], _, _] -> scanBlocks,
-
-(*
-Tags: 
-*)
-(*
-1-arg Optional[] is ok to have named patterns
-Only scan 2-arg Optionals
-*)
-CallNode[LeafNode[Symbol, "Optional", _], {_, _}, _] -> scanOptionals,
-
-(*
-Tags: 
-*)
 (*
 
 experimental
@@ -139,20 +93,6 @@ SymbolNode[Symbol, "arraycopy" | "clearProperty" | "console" | "currentTimeMilli
                       "nanoTime" | "out" | "runFinalization" | "runFinalizersOnExit" | "setErr" | "setIn" |
                       "setOut" | "setProperties" | "setProperty" | "setSecurityManager", _] -> scanJavaSystemSymbols,
 *)
-
-CallNode[LeafNode[Symbol, "LoadJavaClass" | "JLink`LoadJavaClass", _], {
-  LeafNode[String, "\"java.lang.System\"", _] }, _] -> scanLoadJavaClassSystem,
-
-
-
-
-
-(*
-scan for a := a  and  a = a
-possible results from batch renaming symbols
-*)
-CallNode[LeafNode[Symbol, "Set" | "SetDelayed", _], {
-  LeafNode[Symbol, token_, _], LeafNode[Symbol, token_, _] }, _] -> scanSelfAssignments,
 
 
 ContextNode[{LeafNode[String, "\"Private`\"", _]}, _, _] -> scanPrivateContextNode,
@@ -207,29 +147,6 @@ CallNode[SymbolNode[Symbol, "Set" | "SetDelayed", _], { lhs_, rhs_ } /;
 *)
 
 
-
-CallNode[LeafNode[Symbol, "And", _], _, _] -> scanAnds,
-
-CallNode[LeafNode[Symbol, "Or", _], _, _] -> scanOrs,
-
-CallNode[LeafNode[Symbol, "Alternatives", _], _, _] -> scanAlternatives,
-
-
-
-CallNode[LeafNode[Symbol, "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming", _], _, _] -> scanSolverCalls,
-
-
-
-CallNode[LeafNode[Symbol, "Rule", _], {_, _}, _] -> scanRuleDispatch,
-
-
-
-CallNode[LeafNode[Symbol, "OptionsPattern", _], _, _] -> scanOptionsPattern,
-
-
-CallNode[LeafNode[Symbol, "MessageName", _], _, _] -> scanMessageName,
-
-
 (*
 cst of [x] is fine
 ast of [x] is an error
@@ -254,9 +171,127 @@ Nothing
 
 
 
+Attributes[scanCallDispatch] = {HoldRest}
+
+scanCallDispatch[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, sym, name},
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+
+  sym = node[[1]];
+  name = sym[[2]];
+
+  Switch[name,
+    "String" | "Integer" | "Real" | "True",
+      scanBadCalls[pos, ast]
+    ,
+    "Pattern",
+      scanPatterns[pos, ast]
+    ,
+    "Which",
+      scanWhichs[pos, ast]
+    ,
+    "Switch",
+      scanSwitchs[pos, ast]
+    ,
+    "If",
+      scanIfs[pos, ast]
+    ,
+    "Association",
+      scanAssocs[pos, ast]
+    ,
+    "List",
+      Switch[node,
+        CallNode[LeafNode[Symbol, "List", _], { CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], _, _]... }, _],
+          scanListsOfRules[pos, ast]
+        ,
+        _,
+          {}
+      ]
+    ,
+    "Module",
+      scanModules[pos, ast]
+    ,
+    "DynamicModule",
+      scanDynamicModules[pos, ast]
+    ,
+    "With",
+      scanWiths[pos, ast]
+    ,
+    "Block" | "Internal`InheritedBlock",
+      scanBlocks[pos, ast]
+    ,
+    "Optional",
+      Switch[node,
+        (*
+        1-arg Optional[] is ok to have named patterns
+        Only scan 2-arg Optionals
+        *)
+        CallNode[LeafNode[Symbol, "Optional", _], {_, _}, _],
+          scanOptionals[pos, ast]
+        ,
+        _,
+          {}
+      ]
+    ,
+    "LoadJavaClass" | "JLink`LoadJavaClass",
+      Switch[node,
+        CallNode[LeafNode[Symbol, "LoadJavaClass" | "JLink`LoadJavaClass", _], {
+          LeafNode[String, "\"java.lang.System\"", _] }, _],
+          scanLoadJavaClassSystem[pos, ast]
+        ,
+        _,
+          {}
+      ]
+    ,
+    "Set" | "SetDelayed",
+      Switch[node,
+        CallNode[LeafNode[Symbol, "Set" | "SetDelayed", _], {
+          LeafNode[Symbol, token_, _], LeafNode[Symbol, token_, _] }, _],
+          scanSelfAssignments[pos, ast]
+        ,
+        _,
+          {}
+      ]
+    ,
+    "And",
+      scanAnds[pos, ast]
+    ,
+    "Or",
+      scanOrs[pos, ast]
+    ,
+    "Alternatives",
+      scanAlternatives[pos, ast]
+    ,
+    "Refine" | "Reduce" | "Solve" | "FindInstance" | "Assuming",
+      scanSolverCalls[pos, ast]
+    ,
+    "Rule",
+      scanRuleDispatch[pos, ast]
+    ,
+    "OptionsPattern",
+      scanOptionsPattern[pos, ast]
+    ,
+    "MessageName",
+      scanMessageName[pos, ast]
+  ]
+]]
 
 
 
+
+(*
+Do not include symbols such as:
+RealQ
+SymbolQ
+
+because these are handled as BadSymbol lints
+
+and BadSymbol casts shadow over BadCall
+
+Only include symbols here that are in System`
+*)
 Attributes[scanBadCalls] = {HoldRest}
 
 scanBadCalls[pos_List, astIn_] :=
@@ -1920,6 +1955,10 @@ It is possible that JLink can create this symbol in System` and interfere with t
 
 
 
+(*
+scan for a := a  and  a = a
+possible results from batch renaming symbols
+*)
 Attributes[scanSelfAssignments] = {HoldRest}
 
 scanSelfAssignments[pos_List, astIn_] :=
