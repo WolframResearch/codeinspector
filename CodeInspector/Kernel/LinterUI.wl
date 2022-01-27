@@ -867,7 +867,7 @@ getCryptoHash[cell_CellObject] :=
 constructRaftMenuItemLabel[raftType_, icon_, label_] :=
 	Highlighted[
 		Grid[
-			{{icon, Spacer[7], constrainWidth[label, Full]}},
+			{{If[icon =!= None, Sequence @@ {icon, Spacer[7]}, Sequence @@ {}], constrainWidth[label, Full]}},
 			ItemSize -> Automatic, Spacings -> 0, Alignment -> {Left, Top}],
 		
 		Frame -> None, RoundingRadius -> 0, FrameMargins -> {{5, 2}, {2, 2}},
@@ -926,6 +926,23 @@ relintAndRemarkup[notebook_NotebookObject, cell_CellObject, cellContents_] :=
 		
 		(* Update the list of InspectionObjects so that the Cell bracket button can update its lint counts. *)
 		varSet[{notebook, cell, "Lints"}, lints]]
+
+(* ::Subsection::Closed:: *)
+(*Additional Descriptions Menu Item*)
+
+makeRaftMenuAdditionalDescriptionItem[
+	additionalDescription_,
+	raftType_
+] :=
+	Button[
+		constructRaftMenuItemLabel[raftType,
+			None,
+			styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify[additionalDescription]]]],
+
+		Null,
+			
+		Appearance -> None
+	]
 
 
 (* ::Subsection::Closed:: *)
@@ -1210,10 +1227,10 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 		{
 			(* Get any system symbols that have been marked up as "``XXXX``" in the description. We'll provide docs refs for these. *)
 			symbols = DeleteDuplicates @ DeleteCases[
-				StringCases[lint["Description"],
+				Flatten[StringCases[{lint["Description"]} ~Join~ lint["AdditionalDescriptions"],
 					"``" ~~ s__ ~~ "``" /; Or[
 						MatchQ[s, Alternatives @@ $operatorForms[[All, 1]]],
-						StringFreeQ[s, " "] && Quiet[Context[s]] === "System`"] :> s],
+						StringFreeQ[s, " "] && Quiet[Context[s]] === "System`"] :> s]],
 				Alternatives @@ excludedDocsSymbols]
 		},
 		
@@ -1226,6 +1243,8 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 			
 			(* Get the list of code actions from the lint, if they exist. *)
 			actionItems = Lookup[lint[[4]], CodeParser`CodeActions, {}],
+
+			additionalDescriptions = lint["AdditionalDescriptions"],
 			
 			(* Define the "Ignore" item buttons. *)
 			ignoreItems = {
@@ -1286,6 +1305,11 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 			Column[
 				Flatten @ Riffle[
 					Replace[{
+						(* Additional Descriptions *)
+						Function[additionalDescription,
+							makeRaftMenuAdditionalDescriptionItem[additionalDescription, raftType]
+						] /@ additionalDescriptions,
+
 						(* Code actions. *)
 						Function[codeAction,
 							makeRaftMenuCodeActionItem[
