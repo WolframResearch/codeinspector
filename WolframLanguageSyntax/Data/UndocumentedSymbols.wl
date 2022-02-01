@@ -1,6 +1,6 @@
 (* AUTO GENERATED FILE *)
 (* DO NOT MODIFY *)
-(* GENERATED WITH: 13.0.0 for Mac OS X x86 (64-bit) (December 3, 2021) *)
+(* GENERATED WITH: 13.0.1 for Mac OS X x86 (64-bit) (January 28, 2022) *)
 {"ActionDelay", "ActionMenuBox", "ActionMenuBoxOptions", "ActiveItem", 
  "AlgebraicRulesData", "AlignmentMarker", "AllowAdultContent", 
  "AllowIncomplete", "Analytic", "AnimatorBox", "AnimatorBoxOptions", 
@@ -84,7 +84,7 @@
  "GetFileName", "GetFrontEndOptionsDataPacket", 
  "GetLinebreakInformationPacket", "GetMenusPacket", 
  "GetPageBreakInformationPacket", "GlobalPreferences", "GlobalSession", 
- "GraphElementData", "Graphics3DBox", "Graphics3DBoxOptions", 
+ "GraphData", "GraphElementData", "Graphics3DBox", "Graphics3DBoxOptions", 
  "GraphicsBaseline", "GraphicsBox", "GraphicsBoxOptions", 
  "GraphicsComplex3DBox", "GraphicsComplex3DBoxOptions", "GraphicsComplexBox", 
  "GraphicsComplexBoxOptions", "GraphicsContents", "GraphicsData", 
