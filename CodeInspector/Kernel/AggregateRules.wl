@@ -1079,7 +1079,7 @@ Module[{agg, node, parentPos, parent, reaped, issues},
 
     Switch[parent,
       PostfixNode[Function, {BinaryNode[PatternTest, _, _], _}, _],
-      Sow[scanPatternTestFunctions[parentPos, agg]]
+        Sow[scanPatternTestFunctions[parentPos, agg]]
     ]
   ];
   ][[2]];
@@ -1198,11 +1198,14 @@ probably meant to have a?(b&)
 scanPatternTestFunctions[pos_List, aggIn_] :=
 Catch[
 Module[{agg, node, data, children, patternTest, patternTestChildren, patternTestArg1, patternTestArg2,
-  choice1, choice2},
+  choice1, choice2, amp, ampData, ampSrc},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
+  amp = children[[2]];
+  ampData = amp[[3]];
+  ampSrc = ampData[Source];
 
   patternTest = children[[1]];
   patternTestChildren = patternTest[[2]];
@@ -1227,7 +1230,7 @@ Module[{agg, node, data, children, patternTest, patternTestChildren, patternTest
     LeafNode[Token`Amp, "&", <||>]}, <||>];
 
   {InspectionObject["SuspiciousPatternTestFunction", "Suspicious use of ``&``.", "Warning", <|
-    Source -> data[[Key[Source]]],
+    Source -> ampSrc,
     ConfidenceLevel -> 0.75,
     "AdditionalDescriptions" -> {
       "The precedence of ``&`` is surprisingly low and the precedence of ``?`` is surprisingly high.",
