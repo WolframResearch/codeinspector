@@ -1,4 +1,78 @@
 
+## 1.5 - 7 Mar, 2022
+
+Add "Editor" option for CodeInspectSummarize
+
+Conceptually, Conditions should be considered part of the LHS and considered when testing for duplication
+
+Related issues: https://github.com/WolframResearch/codeinspector/issues/13
+
+Copy the correct syntax for TagExclusions to the clipboard
+
+Scan Associations that may not only contains Rules
+
+e.g. `<| a -> 1, a -> 2, Nothing |>`
+
+Add "AdditionalDescriptions" property
+
+Implement 419700: scan session symbols based on file format
+
+scan For loops
+
+Using source of head instead of whole expression prevents crazy paren spanning in CA
+
+Exprs may be arbitrarily large, so try not to use source of whole expressions
+
+Warn about Confirm with no surrounding Enclose
+
+Warn about `a ~~ b c`
+
+Warn about `MatchQ["a", "a" ~~ _]`
+
+13.0.1 syntax updates
+
+Some lints have AdditionalDescriptions and they should be displayed
+
+
+### Fixes
+
+Fix 418552: KeyValuePattern[] should be considered a pattern
+
+Fix 418799: push implicit 1 and All past any leading or trailing whitespace for better appearance
+
+Fix LintSpaceTimesCharacter not formatting correctly
+
+Fix unreported bug with summarizing implicit tokens of `;;`
+```
+In[2]:= << CodeParser`
+<< CodeInspector`ImplicitTokens`
+
+In[4]:= cst = CodeConcreteParse[";;"];
+
+In[5]:= CodeInspectImplicitTokensCSTSummarize[cst]
+
+During evaluation of In[5]:= StringTake::take: Cannot take positions 3 through 3 in ";;".
+
+During evaluation of In[5]:= StringTake::take: Cannot take positions 4 through 4 in ";;".
+
+During evaluation of In[5]:= StringTake::take: Cannot take positions 5 through 5 in ";;".
+
+During evaluation of In[5]:= General::stop: Further output of StringTake::take will be suppressed during this calculation.
+
+Out[5]= $Aborted
+```
+
+Fix 412559: closing a running-analysis should not produce messages
+
+Fix 412965: avoids issuing of unnecessary error message
+
+Fix LinterUI: ScheduledTasks should only run a finite number of times
+
+Cleanup LinterUI: reduce frequency of ParentNotebook
+
+Fix LinterUI: suppress mouse-down effect for button instances
+
+
 ## 1.4 - 25 Oct, 2021
 
 Allow `{tag, "*"}` as a wildcard for tag exclusions
