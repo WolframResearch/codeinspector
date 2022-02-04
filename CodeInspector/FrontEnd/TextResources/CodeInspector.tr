@@ -462,35 +462,36 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
           CurrentValue["MouseButtonTest"]],
         Appearance->None,
         BaselinePosition->Baseline,
-        ButtonFunction:>If[
-         OptionValue[{
-            ImageSize -> {Automatic, 19}, 
-             FrameMargins -> {9 {1, 1}, 0 {1, 1}}, BaselinePosition -> 
-             Baseline, Alignment -> {Center, Center}, Method -> "Preemptive", 
-             "ActiveQ" -> True, "TextColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonText"], 
-             "TextHoverColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonTextHover"], 
-             "TextInactiveColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonTextInactive"], 
-             "BackColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonBack"], 
-             "BackHoverColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonBackHover"], 
-             "BackMouseDownColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonBackMouseDown"], 
-             "BackInactiveColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonBackInactive"], 
-             "EdgeColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonEdge"], 
-             "EdgeHoverColor" -> 
-             CodeInspector`LinterUI`Private`colorData["ButtonEdgeHover"], 
-             "EdgeInactiveColor" -> 
-             CodeInspector`LinterUI`Private`colorData[
-              "ButtonEdgeInactive"]}, {Method -> "Queued"}, "ActiveQ"] =!= 
-          False, 
-          CodeInspector`LinterUI`Private`attachAnalysisAction[
-           EvaluationNotebook[]]],
+        ButtonFunction:>(
+         If[OptionValue[{
+             ImageSize -> {Automatic, 19}, 
+              FrameMargins -> {9 {1, 1}, 0 {1, 1}}, BaselinePosition -> 
+              Baseline, Alignment -> {Center, Center}, Method -> "Preemptive",
+               "ActiveQ" -> True, "TextColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonText"], 
+              "TextHoverColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonTextHover"], 
+              "TextInactiveColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonTextInactive"], 
+              "BackColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonBack"], 
+              "BackHoverColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonBackHover"], 
+              "BackMouseDownColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonBackMouseDown"],
+               "BackInactiveColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonBackInactive"], 
+              "EdgeColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonEdge"], 
+              "EdgeHoverColor" -> 
+              CodeInspector`LinterUI`Private`colorData["ButtonEdgeHover"], 
+              "EdgeInactiveColor" -> 
+              CodeInspector`LinterUI`Private`colorData[
+               "ButtonEdgeInactive"]}, {Method -> "Queued"}, "ActiveQ"] =!= 
+           False, 
+           CodeInspector`LinterUI`Private`attachAnalysisAction[
+            EvaluationNotebook[]]]; 
+         CodeInspector`LinterUI`Private`mouseDownQ$$ = False),
         ContentPadding->False,
         Evaluator->Automatic,
         Method->"Queued"],
@@ -590,10 +591,14 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
             Hue[0.55, 0.82, 0.87], 
             GrayLevel[0.8]]], FrameMargins -> {6 {1, 1}, {1, 1}}, 
          Alignment -> {Center, Baseline}], 
-        Map[LinterUIDockedCell`Private`dockedCellMenuItem, 
+        Map[
+        LinterUIDockedCell`Private`dockedCellMenuItem[
+         LinterUIDockedCell`Private`notebook, #]& , 
          CodeInspector`LinterUI`Private`varValue[
          LinterUIDockedCell`Private`notebook, All, "Cell"]], Appearance -> 
         None]], LinterUIDockedCell`Private`dockedCellMenuItem[
+       Pattern[LinterUIDockedCell`Private`notebook, 
+        Blank[NotebookObject]], 
        Pattern[LinterUIDockedCell`Private`cell, 
         Blank[CellObject]]] := With[{}, Graphics[{
           Inset[
@@ -602,7 +607,8 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
                 FrontEnd`ExportPacket[
                  First[
                   CodeInspector`LinterUI`Private`varValue[
-                  LinterUIDockedCell`Private`cell, "CellContents"]], 
+                  LinterUIDockedCell`Private`notebook, 
+                   LinterUIDockedCell`Private`cell, "CellContents"]], 
                  "InputText"]]]}, {
             LinterUIDockedCell`Private`noLineBreaks = 
              StringReplace[
@@ -614,11 +620,9 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
              If[
              StringLength[LinterUIDockedCell`Private`expressionString] > 
               LinterUIDockedCell`Private`$previewLength, 
-              StringJoin[
-               StringDrop[LinterUIDockedCell`Private`previewString, -1], 
-               "\[Ellipsis]"], 
-              LinterUIDockedCell`Private`previewString]]], {-1, 0}, {-1, 0}], 
-          
+              StringDrop[LinterUIDockedCell`Private`previewString, -1] <> 
+              "\[Ellipsis]", LinterUIDockedCell`Private`previewString]]], {-1,
+            0}, {-1, 0}], 
           Inset[
            CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[
            LinterUIDockedCell`Private`cell], {1, 0}, {1, 0}]}, 
@@ -635,42 +639,6 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
      CodeInspector`LinterUI`Private`applyToVar[
        Pattern[CodeInspector`LinterUI`Private`function, 
         Blank[]], {
-        Pattern[CodeInspector`LinterUI`Private`cell, 
-         Blank[CellObject]], 
-        Pattern[CodeInspector`LinterUI`Private`name, 
-         Blank[String]]}, 
-       Pattern[CodeInspector`LinterUI`Private`args, 
-        BlankNullSequence[]]] := 
-     Apply[CodeInspector`LinterUI`Private`function, 
-       Join[
-        ToHeldExpression[
-         CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`cell, 
-          CodeInspector`LinterUI`Private`name]], 
-        Hold[CodeInspector`LinterUI`Private`args]]], Null, 
-     CodeInspector`LinterUI`Private`applyToVar[
-       Pattern[CodeInspector`LinterUI`Private`function, 
-        Blank[]], {
-        Condition[
-         Pattern[CodeInspector`LinterUI`Private`cellOrNB, 
-          Blank[]], 
-         MatchQ[CodeInspector`LinterUI`Private`cellOrNB, 
-          Alternatives[
-           Blank[CellObject], 
-           Blank[NotebookObject]]]], All}, 
-       Pattern[CodeInspector`LinterUI`Private`args, 
-        BlankNullSequence[]]] := 
-     Map[Apply[CodeInspector`LinterUI`Private`function, 
-        Join[
-         ToHeldExpression[#], 
-         Hold[CodeInspector`LinterUI`Private`args]]]& , 
-       Names[
-        StringJoin[
-         CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`cellOrNB], "*"]]], Null, 
-     CodeInspector`LinterUI`Private`applyToVar[
-       Pattern[CodeInspector`LinterUI`Private`function, 
-        Blank[]], {
         Pattern[CodeInspector`LinterUI`Private`notebook, 
          Blank[NotebookObject]], All, 
         Pattern[CodeInspector`LinterUI`Private`name, 
@@ -682,148 +650,149 @@ dockedCellLintCounts]], DynamicModuleValues :> {}]},
          ToHeldExpression[#], 
          Hold[CodeInspector`LinterUI`Private`args]]]& , 
        Names[
-        StringJoin[
+       CodeInspector`LinterUI`Private`varNameString[
+         CodeInspector`LinterUI`Private`notebook] <> "*" <> 
+        CodeInspector`LinterUI`Private`name]], Null, 
+     CodeInspector`LinterUI`Private`applyToVar[
+       Pattern[CodeInspector`LinterUI`Private`function, 
+        Blank[]], {
+        Pattern[CodeInspector`LinterUI`Private`nameArguments, 
+         BlankSequence[]], 
+        Pattern[CodeInspector`LinterUI`Private`name, 
+         Blank[String]]}, 
+       Pattern[CodeInspector`LinterUI`Private`args, 
+        BlankNullSequence[]]] := 
+     Apply[CodeInspector`LinterUI`Private`function, 
+       Join[
+        ToHeldExpression[
          CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`notebook], "*", 
-         CodeInspector`LinterUI`Private`name]]], 
-     CodeInspector`LinterUI`Private`varValue[
-       Condition[
-        Pattern[CodeInspector`LinterUI`Private`cellOrNB, 
-         Blank[]], 
-        MatchQ[CodeInspector`LinterUI`Private`cellOrNB, 
-         Alternatives[
-          Blank[CellObject], 
-          Blank[NotebookObject]]]], 
-       Pattern[CodeInspector`LinterUI`Private`name, 
-        Blank[String]]] := Symbol[
-       CodeInspector`LinterUI`Private`varNameString[
-       CodeInspector`LinterUI`Private`cellOrNB, 
-        CodeInspector`LinterUI`Private`name]], Null, 
-     CodeInspector`LinterUI`Private`varValue[
-       Pattern[CodeInspector`LinterUI`Private`cell, 
-        Blank[CellObject]], 
-       Pattern[CodeInspector`LinterUI`Private`lint, 
-        Blank[CodeInspector`InspectionObject]], 
-       Pattern[CodeInspector`LinterUI`Private`name, 
-        Blank[String]]] := Symbol[
-       CodeInspector`LinterUI`Private`varNameString[
-       CodeInspector`LinterUI`Private`cell, 
-        CodeInspector`LinterUI`Private`lint, 
-        CodeInspector`LinterUI`Private`name]], Null, 
-     CodeInspector`LinterUI`Private`varValue[
-       Condition[
-        Pattern[CodeInspector`LinterUI`Private`cellOrNB, 
-         Blank[]], 
-        MatchQ[CodeInspector`LinterUI`Private`cellOrNB, 
-         Alternatives[
-          Blank[CellObject], 
-          Blank[NotebookObject]]]], All] := Map[Symbol, 
+         CodeInspector`LinterUI`Private`nameArguments]], 
+        Hold[CodeInspector`LinterUI`Private`args]]], Null, 
+     CodeInspector`LinterUI`Private`applyToVar[
+       Pattern[CodeInspector`LinterUI`Private`function, 
+        Blank[]], {
+        Pattern[CodeInspector`LinterUI`Private`nameArguments, 
+         BlankSequence[]], All}, 
+       Pattern[CodeInspector`LinterUI`Private`args, 
+        BlankNullSequence[]]] := 
+     Map[Apply[CodeInspector`LinterUI`Private`function, 
+        Join[
+         ToHeldExpression[#], 
+         Hold[CodeInspector`LinterUI`Private`args]]]& , 
        Names[
-        StringJoin[
-         CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`cellOrNB], "*"]]], Null, 
+       CodeInspector`LinterUI`Private`varNameString[
+         CodeInspector`LinterUI`Private`nameArguments] <> "*"]], 
      CodeInspector`LinterUI`Private`varValue[
        Pattern[CodeInspector`LinterUI`Private`notebook, 
         Blank[NotebookObject]], All, 
        Pattern[CodeInspector`LinterUI`Private`name, 
         Blank[String]]] := Map[Symbol, 
        Names[
-        StringJoin[
-         CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`notebook], "*", 
-         CodeInspector`LinterUI`Private`name]]], 
+       CodeInspector`LinterUI`Private`varNameString[
+         CodeInspector`LinterUI`Private`notebook] <> "*" <> 
+        CodeInspector`LinterUI`Private`name]], Null, 
+     CodeInspector`LinterUI`Private`varValue[
+       Pattern[CodeInspector`LinterUI`Private`nameArguments, 
+        BlankSequence[]], 
+       Pattern[CodeInspector`LinterUI`Private`name, 
+        Blank[String]]] := Symbol[
+       CodeInspector`LinterUI`Private`varNameString[
+       CodeInspector`LinterUI`Private`nameArguments, 
+        CodeInspector`LinterUI`Private`name]], Null, 
+     CodeInspector`LinterUI`Private`varValue[
+       Pattern[CodeInspector`LinterUI`Private`nameArguments, 
+        BlankSequence[]], All] := Map[Symbol, 
+       Names[
+       CodeInspector`LinterUI`Private`varNameString[
+         CodeInspector`LinterUI`Private`nameArguments] <> "*"]], 
      CodeInspector`LinterUI`Private`varSet[{
-        Condition[
-         Pattern[CodeInspector`LinterUI`Private`cellOrNB, 
-          Blank[]], 
-         MatchQ[CodeInspector`LinterUI`Private`cellOrNB, 
-          Alternatives[
-           Blank[CellObject], 
-           Blank[NotebookObject]]]], 
-        Pattern[CodeInspector`LinterUI`Private`name, 
-         Blank[String]]}, 
+        Pattern[CodeInspector`LinterUI`Private`nameArguments, 
+         BlankSequence[]]}, 
        Pattern[CodeInspector`LinterUI`Private`value, 
         Blank[]]] := Apply[Set, 
        Append[
         ToHeldExpression[
          CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`cellOrNB, 
-          CodeInspector`LinterUI`Private`name]], 
-        CodeInspector`LinterUI`Private`value]], Null, 
-     CodeInspector`LinterUI`Private`varSet[{
-        Pattern[CodeInspector`LinterUI`Private`cell, 
-         Blank[CellObject]], 
-        Pattern[CodeInspector`LinterUI`Private`lint, 
-         Blank[CodeInspector`InspectionObject]], 
-        Pattern[CodeInspector`LinterUI`Private`name, 
-         Blank[String]]}, 
-       Pattern[CodeInspector`LinterUI`Private`value, 
-        Blank[]]] := Apply[Set, 
-       Append[
-        ToHeldExpression[
-         CodeInspector`LinterUI`Private`varNameString[
-         CodeInspector`LinterUI`Private`cell, 
-          CodeInspector`LinterUI`Private`lint, 
-          CodeInspector`LinterUI`Private`name]], 
+         CodeInspector`LinterUI`Private`nameArguments]], 
         CodeInspector`LinterUI`Private`value]], 
      CodeInspector`LinterUI`Private`varNameString[
        Pattern[CodeInspector`LinterUI`Private`notebook, 
         Blank[NotebookObject]]] := 
-     StringJoin["CodeInspector`LinterUI`Private`Vars`", "$$", 
-       With[{
-        CodeInspector`LinterUI`Private`nbID = 
+     "CodeInspector`LinterUI`Private`Vars`" <> "$$" <> 
+      With[{CodeInspector`LinterUI`Private`nbID = 
          Last[CodeInspector`LinterUI`Private`notebook]}, 
         If[
          StringQ[CodeInspector`LinterUI`Private`nbID], 
          StringReplace[CodeInspector`LinterUI`Private`nbID, "-" -> "$"], 
-         ToString[CodeInspector`LinterUI`Private`nbID]]], "$$"], Null, 
+         ToString[CodeInspector`LinterUI`Private`nbID]]] <> "$$", Null, 
      CodeInspector`LinterUI`Private`varNameString[
        Pattern[CodeInspector`LinterUI`Private`cell, 
-        Blank[CellObject]]] := StringJoin[
-       CodeInspector`LinterUI`Private`varNameString[
+        Blank[CellObject]]] := CodeInspector`LinterUI`Private`varNameString[
         Replace[
          ParentNotebook[CodeInspector`LinterUI`Private`cell], $Failed -> 
-         EvaluationNotebook[]]], 
-       With[{
-        CodeInspector`LinterUI`Private`cellID = 
+         EvaluationNotebook[]]] <> 
+      With[{CodeInspector`LinterUI`Private`cellID = 
          First[CodeInspector`LinterUI`Private`cell]}, 
         If[
          StringQ[CodeInspector`LinterUI`Private`cellID], 
          StringReplace[CodeInspector`LinterUI`Private`cellID, "-" -> "$"], 
-         ToString[CodeInspector`LinterUI`Private`cellID]]], "$$"], Null, 
+         ToString[CodeInspector`LinterUI`Private`cellID]]] <> "$$", Null, 
+     CodeInspector`LinterUI`Private`varNameString[
+       Pattern[CodeInspector`LinterUI`Private`notebook, 
+        Blank[NotebookObject]], 
+       Pattern[CodeInspector`LinterUI`Private`cell, 
+        Blank[CellObject]]] := 
+     CodeInspector`LinterUI`Private`varNameString[
+       CodeInspector`LinterUI`Private`notebook] <> 
+      With[{CodeInspector`LinterUI`Private`cellID = 
+         First[CodeInspector`LinterUI`Private`cell]}, 
+        If[
+         StringQ[CodeInspector`LinterUI`Private`cellID], 
+         StringReplace[CodeInspector`LinterUI`Private`cellID, "-" -> "$"], 
+         ToString[CodeInspector`LinterUI`Private`cellID]]] <> "$$", Null, 
      CodeInspector`LinterUI`Private`varNameString[
        Pattern[CodeInspector`LinterUI`Private`notebook, 
         Blank[NotebookObject]], 
        Pattern[CodeInspector`LinterUI`Private`name, 
-        Blank[String]]] := StringJoin[
-       CodeInspector`LinterUI`Private`varNameString[
-       CodeInspector`LinterUI`Private`notebook], 
-       CodeInspector`LinterUI`Private`name], Null, 
+        Blank[String]]] := 
+     CodeInspector`LinterUI`Private`varNameString[
+       CodeInspector`LinterUI`Private`notebook] <> 
+      CodeInspector`LinterUI`Private`name, Null, 
      CodeInspector`LinterUI`Private`varNameString[
        Pattern[CodeInspector`LinterUI`Private`cell, 
         Blank[CellObject]], 
        Pattern[CodeInspector`LinterUI`Private`name, 
-        Blank[String]]] := StringJoin[
-       CodeInspector`LinterUI`Private`varNameString[
-       CodeInspector`LinterUI`Private`cell], 
-       CodeInspector`LinterUI`Private`name], Null, 
+        Blank[String]]] := 
      CodeInspector`LinterUI`Private`varNameString[
+       CodeInspector`LinterUI`Private`cell] <> 
+      CodeInspector`LinterUI`Private`name, Null, 
+     CodeInspector`LinterUI`Private`varNameString[
+       Pattern[CodeInspector`LinterUI`Private`notebook, 
+        Blank[NotebookObject]], 
        Pattern[CodeInspector`LinterUI`Private`cell, 
         Blank[CellObject]], 
+       Pattern[CodeInspector`LinterUI`Private`name, 
+        Blank[String]]] := 
+     CodeInspector`LinterUI`Private`varNameString[
+       CodeInspector`LinterUI`Private`notebook, 
+        CodeInspector`LinterUI`Private`cell] <> 
+      CodeInspector`LinterUI`Private`name, Null, 
+     CodeInspector`LinterUI`Private`varNameString[
+       Pattern[CodeInspector`LinterUI`Private`nameArguments, 
+        BlankSequence[]], 
        Pattern[CodeInspector`LinterUI`Private`lint, 
         Blank[CodeInspector`InspectionObject]], 
        Pattern[CodeInspector`LinterUI`Private`name, 
-        Blank[String]]] := StringJoin[
-       CodeInspector`LinterUI`Private`varNameString[
-       CodeInspector`LinterUI`Private`cell], 
-       Apply[Sequence, 
+        Blank[String]]] := 
+     CodeInspector`LinterUI`Private`varNameString[
+       CodeInspector`LinterUI`Private`nameArguments] <> Apply[Sequence, 
         Riffle[
          Map[StringDelete[
            ToString[#], 
            Alternatives["[", "]", "{", "}", ",", " "]]& , 
           CodeInspector`LinterUI`Private`extractFirstList[
            Last[CodeInspector`LinterUI`Private`lint][CodeParser`Source]]], 
-         "$"]], "$$", CodeInspector`LinterUI`Private`name], 
+         "$"]] <> "$$" <> CodeInspector`LinterUI`Private`name, 
      CodeInspector`LinterUI`Private`extractFirstList[
        Pattern[CodeInspector`LinterUI`Private`expr, 
         Blank[]]] := FirstCase[CodeInspector`LinterUI`Private`expr, 

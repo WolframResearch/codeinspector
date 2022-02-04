@@ -59,7 +59,7 @@ addDefinitions[DynamicModule[args__], {syms__Symbol}] :=
 $previewLength = 28;
 
 
-dockedCellMenuItem[cell_CellObject] :=
+dockedCellMenuItem[notebook_NotebookObject, cell_CellObject] :=
 With[{},
 	RuleDelayed[
 		(* Display a preview of the cell contents ($previewLength characters), and the severity count icons from the cell bracket button. *)
@@ -70,7 +70,7 @@ With[{},
 					With[
 						(* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
 						{expressionString = First[FrontEndExecute[
-							FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[cell, "CellContents"]], "InputText"]]]},
+							FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[notebook, cell, "CellContents"]], "InputText"]]]},
 						(* Replace linebreaks with spaces. *)
 						{noLineBreaks = StringReplace[expressionString, "\n" -> " "]},
 						(* Clip expressionString to the preview length. *)
@@ -115,7 +115,7 @@ dockedCellSeverityCountsButton[notebook_NotebookObject] :=
 				FrameMargins -> {6{1, 1}, {1, 1}},
 				Alignment -> {Center, Baseline}],
 			
-			dockedCellMenuItem /@
+			dockedCellMenuItem[notebook, #]& /@
 				CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
 			
 			Appearance -> None]]
