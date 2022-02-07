@@ -74,3 +74,8 @@ Make sure that the paclets can be found on your system:
 ```
 Needs["CodeInspector`"]
 ```
+
+and try a basic example:
+```
+CodeInspect["If[a, b, b]"]
+```

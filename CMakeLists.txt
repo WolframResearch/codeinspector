@@ -262,7 +262,6 @@ endforeach()
 #
 # CodeAnalysisOptions.nb
 #
-
 add_custom_command(
 	OUTPUT
 		${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/CodeAnalysisOptions.nb
@@ -276,7 +275,6 @@ add_custom_command(
 	WORKING_DIRECTORY
 		${PROJECT_SOURCE_DIR}
 )
-
 
 
 #
