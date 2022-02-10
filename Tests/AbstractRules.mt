@@ -646,3 +646,21 @@ TestMatch[
 
 
 
+
+
+Test[
+	CodeInspect["a ~~ b c"]
+	,
+	{InspectionObject[
+		"ImplicitTimesInStringExpression",
+		"Suspicious implicit ``Times`` in ``StringExpression``.",
+		"Error",
+		<|Source -> {{1, 6}, {1, 9}}, ConfidenceLevel -> 0.95|>]}
+	,
+	TestID->"AbstractRules-20220211-P3T9Q1"
+]
+
+
+
+
+

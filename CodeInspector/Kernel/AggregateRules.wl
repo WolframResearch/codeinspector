@@ -350,6 +350,11 @@ Module[{agg, node, parentPos, parent, reaped, issues},
     If[MatchQ[parent,
       BinaryNode[Set | SetDelayed | UpSetDelayed, {InfixNode[Times, {_, LeafNode[Token`Fake`ImplicitTimes, _, _], _}, _], _, _}, _]],
       Sow[scanSetImplicitTimes[parentPos, agg]]
+    ];
+
+    If[MatchQ[parent,
+      InfixNode[StringExpression, {___, InfixNode[Times, {_, LeafNode[Token`Fake`ImplicitTimes, _, _], _}, _], ___}, _]],
+      Sow[scanStringExpressionImplicitTimes[parentPos, agg]]
     ]
   ];
   ][[2]];
@@ -606,6 +611,35 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, lhs, lhsChi
                 CodeAction["Insert ``;``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Semi, ";", <||>] |>],
                 CodeAction["Insert ``,``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>] }
     |>]
+  ];
+
+  issues
+]
+
+
+Attributes[scanStringExpressionImplicitTimes] = {HoldRest}
+
+scanStringExpressionImplicitTimes[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, head, src, implicitTimess},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  implicitTimess = Cases[children, InfixNode[Times, {___, LeafNode[Token`Fake`ImplicitTimes, _, _], ___}, _]];
+
+  issues = {};
+
+  Do[
+    src = implicitTimes[[3, Key[Source]]];
+    AppendTo[issues, InspectionObject["ImplicitTimesInStringExpression", "Suspicious implicit ``Times`` in ``StringExpression``.", "Error",
+      <| Source -> src,
+        ConfidenceLevel -> 0.95
+      |>]
+    ];
+    ,
+    {implicitTimes, implicitTimess}
   ];
 
   issues
