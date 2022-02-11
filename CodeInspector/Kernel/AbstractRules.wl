@@ -50,7 +50,8 @@ CallNode[LeafNode[Symbol,
   "Rule" |
   "OptionsPattern" |
   "MessageName" |
-  "For"
+  "For" |
+  "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -279,6 +280,9 @@ Module[{ast, node, sym, name},
     ,
     "For",
       scanFors[pos, ast]
+    ,
+    "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert",
+      scanConfirm[pos, ast]
   ]
 ]]
 
@@ -2771,6 +2775,96 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
 
   issues
 ]]
+
+
+(*
+Confirm is lexically enclosed by Enclose
+
+discussed Lint Rule Solicitation Meeting 1
+
+Feb 7 2022
+*)
+Attributes[scanConfirm] = {HoldRest}
+
+scanConfirm[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, varName, start, end, startStr, endStr,
+  head, headName, headSrc, parentPos, parent, enclosingEnclose},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+
+  head = node[[1]];
+  headName = head[[2]];
+  headSrc = head[[3, Key[Source]]];
+
+  issues = {};
+  
+  enclosingEnclose = False;
+
+  If[pos != {},
+    parentPos = Most[pos];
+    parent = Extract[ast, {parentPos}][[1]];
+    While[True,
+      If[parentPos == {},
+        Break[]
+      ];
+      If[MatchQ[parent, CallNode[LeafNode[Symbol, "Enclose", _], _, _]],
+        enclosingEnclose = True;
+        Break[]
+      ];
+      parentPos = Most[parentPos];
+      parent = Extract[ast, {parentPos}][[1]];
+    ]
+  ];
+
+  If[!enclosingEnclose,
+    Switch[node,
+      (*
+      Confirm[expr]
+      Confirm[expr, info]
+      ConfirmBy[expr, f]
+      ConfirmBy[expr, f, info]
+      ConfirmMatch[expr, form]
+      ConfirmMatch[expr, form, info]
+      ConfirmAssert[test]
+      ConfirmAssert[test, info]
+
+      no tags, so required to be lexically enclosed, so Error
+      *)
+      CallNode[LeafNode[Symbol, "Confirm", _], {_, _ | PatternSequence[]}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmBy", _], {_, _, _ | PatternSequence[]}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmMatch", _], {_, _, _ | PatternSequence[]}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmAssert", _], {_, _ | PatternSequence[]}, _],
+        AppendTo[issues, InspectionObject[
+          "NoSurroundingEnclose", "``" <> headName <> "`` has no tag or surrounding ``Enclose``.",
+          "Error", <|
+            Source -> headSrc,
+            ConfidenceLevel -> 0.90 |>]];
+      ,
+      (*
+      Confirm[expr, info, tag]
+      ConfirmBy[expr, f, info, tag]
+      ConfirmMatch[expr, form, info, tag]
+      ConfirmAssert[test, info, tag]
+
+      tags, do dynamically scoped, so only give Remark here
+      *)
+      CallNode[LeafNode[Symbol, "Confirm", _], {_, _, _}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmBy", _], {_, _, _, _}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmMatch", _], {_, _, _, _}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmAssert", _], {_, _, _}, _],
+        AppendTo[issues, InspectionObject[
+          "NoSurroundingEnclose", "``" <> headName <> "`` has no surrounding ``Enclose``.",
+          "Remark", <|
+            Source -> headSrc,
+            ConfidenceLevel -> 0.90 |>]];
+    ]
+  ];
+
+  issues
+]]
+
 
 
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}

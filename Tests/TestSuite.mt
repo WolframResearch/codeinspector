@@ -4,5 +4,6 @@ TestSuite[{
 	"AggregateRules.mt",
 	"CodeInspector.mt",
 	"ConcreteRules.mt",
+	"Confirm.mt",
 	"TokenRules.mt"
 }]
