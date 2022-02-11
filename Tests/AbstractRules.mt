@@ -661,6 +661,66 @@ Test[
 ]
 
 
+Test[
+	CodeInspect["MatchQ[a, \"b\" ~~ c]"]
+	,
+	{InspectionObject[
+		"StringPatternInMatchQ",
+		"String pattern inside of ``MatchQ``.",
+		"Error", <|
+			Source -> {{1, 1}, {1, 7}},
+			ConfidenceLevel -> 0.8,
+			CodeActions -> {
+				CodeAction[
+					"Replace with ``StringMatchQ``",
+					ReplaceNode,
+					<|Source -> {{1, 1}, {1, 7}},
+					"ReplacementNode" -> LeafNode[Symbol, "StringMatchQ", <||>]|>]}|>]}
+	,
+	TestID->"AbstractRules-20220211-N3Y5N7"
+]
+
+Test[
+	CodeInspect["MatchQ[a, RegularExpression[\"b\"]]"]
+	,
+	{InspectionObject[
+		"StringPatternInMatchQ",
+		"String pattern inside of ``MatchQ``.",
+		"Error", <|
+			Source -> {{1, 1}, {1, 7}},
+			ConfidenceLevel -> 0.8,
+			CodeActions -> {
+				CodeAction[
+					"Replace with ``StringMatchQ``",
+					ReplaceNode,
+					<|Source -> {{1, 1}, {1, 7}},
+					"ReplacementNode" -> LeafNode[Symbol, "StringMatchQ", <||>]|>]}|>]}
+	,
+	TestID->"AbstractRules-20220211-W4S8Q8"
+]
+
+Test[
+	CodeInspect["MatchQ[a, LetterCharacter]"]
+	,
+	{InspectionObject[
+		"StringPatternInMatchQ",
+		"String pattern inside of ``MatchQ``.",
+		"Error", <|
+			Source -> {{1, 1}, {1, 7}},
+			ConfidenceLevel -> 0.8,
+			CodeActions -> {
+				CodeAction[
+					"Replace with ``StringMatchQ``",
+					ReplaceNode,
+					<|Source -> {{1, 1}, {1, 7}},
+					"ReplacementNode" -> LeafNode[Symbol, "StringMatchQ", <||>]|>]}|>]}
+	,
+	TestID->"AbstractRules-20220211-E4D6M4"
+]
+
+
+
+
 
 
 

@@ -51,7 +51,8 @@ CallNode[LeafNode[Symbol,
   "OptionsPattern" |
   "MessageName" |
   "For" |
-  "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert"
+  "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert" |
+  "MatchQ"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -283,6 +284,9 @@ Module[{ast, node, sym, name},
     ,
     "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert",
       scanConfirm[pos, ast]
+    ,
+    "MatchQ",
+      scanMatchQ[pos, ast]
   ]
 ]]
 
@@ -2865,6 +2869,56 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
   issues
 ]]
 
+(*
+MatchQ["a", "a" ~~ _]
+
+discussed Lint Rule Solicitation Meeting 1
+
+Feb 7 2022
+*)
+Attributes[scanMatchQ] = {HoldRest}
+
+scanMatchQ[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, head, headSrc, children, pat},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  head = node[[1]];
+  headSrc = head[[3, Key[Source]]];
+
+  issues = {};
+
+  If[Length[children] != 2,
+    Throw[issues]
+  ];
+
+  pat = children[[2]];
+
+  If[MatchQ[pat,
+    CallNode[LeafNode[Symbol, "StringExpression" | "RegularExpression", _], _, _] |
+    LeafNode[Symbol, "LetterCharacter", _]]
+    ,
+    AppendTo[issues,
+      InspectionObject["StringPatternInMatchQ", "String pattern inside of ``MatchQ``.", "Error", <|
+        Source -> headSrc,
+        ConfidenceLevel -> 0.80,
+        CodeActions -> {
+            CodeAction["Replace with ``StringMatchQ``", ReplaceNode,
+              <| Source -> headSrc,
+                "ReplacementNode" ->
+                  LeafNode[Symbol, "StringMatchQ", <||>]
+              |>
+            ]
+          }
+      |>]
+    ]
+  ];
+
+  issues
+]]
 
 
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
