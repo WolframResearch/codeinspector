@@ -57,7 +57,7 @@ Related issues: https://github.com/WolframResearch/codeinspector/issues/13
 
 Copy the correct syntax for TagExclusions to the clipboard
 
-Scan Associations that may not only contains Rules
+Scan Associations that may not only contain Rules
 
 e.g. `<| a -> 1, a -> 2, Nothing |>`
 

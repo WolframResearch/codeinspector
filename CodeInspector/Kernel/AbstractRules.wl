@@ -2843,6 +2843,13 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
       ConfirmAssert[test, info]
 
       no tags, so required to be lexically enclosed, so Error
+
+
+      Confirm lints are only 90% because e.g.,
+
+      lexicalConfirmGlobal[lexTag_, err___] := Confirm[err]
+
+      in ErrorHandling.wl
       *)
       CallNode[LeafNode[Symbol, "Confirm" | "System`Confirm", _], {_, _ | PatternSequence[]}, _] |
       CallNode[LeafNode[Symbol, "ConfirmBy" | "System`ConfirmBy", _], {_, _, _ | PatternSequence[]}, _] |
