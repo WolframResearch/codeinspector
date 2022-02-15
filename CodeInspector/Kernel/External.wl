@@ -57,13 +57,13 @@ Module[{editor, res},
 			(*
 			Run needs spaces escaped
 			*)
-			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl " <> file]]
+			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file]
 		,
 		{"Macintosh", "Visual Studio Code"},
 			(*
 			Run needs spaces escaped
 			*)
-			Run[escapeSpaces["/usr/local/bin/code -g " <> file]]
+			Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file]
 		,
 		{_, "SystemOpen"},
 			(*
@@ -101,13 +101,13 @@ Module[{editor, res},
 			(*
 			Run needs spaces escaped
 			*)
-			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line]]]
+			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file <> ":" <> ToString[line]]
 		,
 		{"Macintosh", "Visual Studio Code"},
 			(*
 			Run needs spaces escaped
 			*)
-			Run[escapeSpaces["/usr/local/bin/code -g " <> file <> ":" <> ToString[line]]]
+			Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file <> ":" <> ToString[line]]
 		,
 		{_, "SystemOpen"},
 			(*
@@ -145,13 +145,13 @@ Module[{editor, res},
 			(*
 			Run needs spaces escaped
 			*)
-			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]]
+			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
 		,
 		{"Macintosh", "Visual Studio Code"},
 			(*
 			Run needs spaces escaped
 			*)
-			Run[escapeSpaces["/usr/local/bin/code -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]]
+			Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
 		,
 		{_, "SystemOpen"},
 			(*
