@@ -1226,12 +1226,33 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 
 		{
 			(* Get any system symbols that have been marked up as "``XXXX``" in the description. We'll provide docs refs for these. *)
-			symbols = DeleteDuplicates @ DeleteCases[
-				Flatten[StringCases[{lint["Description"]} ~Join~ lint["AdditionalDescriptions"],
-					"``" ~~ s__ ~~ "``" /; Or[
-						MatchQ[s, Alternatives @@ $operatorForms[[All, 1]]],
-						StringFreeQ[s, " "] && Quiet[Context[s]] === "System`"] :> s]],
-				Alternatives @@ excludedDocsSymbols]
+			symbols =
+				DeleteDuplicatesBy[
+					(*
+					return a list like {{"?", "PatternTest"}, {"PatternTest", "PatternTest"}} to DeleteDuplicatesBy
+
+					prefer to keep link to "?" over "PatternTest", so sort by StringLength before doing DeleteDuplicatesBy
+					(operators are shorter than their symbols)
+					*)
+					SortBy[
+						Flatten[
+							StringCases[{lint["Description"]} ~Join~ lint["AdditionalDescriptions"], {
+								"``" ~~ s:Alternatives @@ $operatorForms[[All, 1]] ~~ "``" :> {s, Replace[s, $operatorForms]}
+								,
+								"``" ~~ s:Shortest[__] ~~ "``" /;
+									MatchQ[CodeParser`CodeTokenize[s], {CodeParser`LeafNode[Symbol, _, _]}] &&
+										(Quiet[Context[s], {Context::notfound}] === "System`") &&
+										!MemberQ[s, excludedDocsSymbols] :> {s, s}
+							}]
+							,
+							1
+						]
+						,
+						StringLength[#[[1]]]&
+					]
+					,
+					#[[2]]&
+				][[All, 1]]
 		},
 		
 		{
