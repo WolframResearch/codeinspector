@@ -2758,7 +2758,7 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
       endStr = ToFullFormString[end];
       
       AppendTo[issues,
-        InspectionObject["For", "``For`` loops are discouraged.", "Remark", <|
+        InspectionObject["For", "Use ``Table`` instead of ``For`` for cleaner code.", "Remark", <|
           Source -> headSrc,
           ConfidenceLevel -> 0.90,
           "AdditionalDescriptions" -> {
@@ -2768,7 +2768,7 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
     ,
     _,
       AppendTo[issues,
-        InspectionObject["For", "``For`` loops are discouraged.", "Remark", <|
+        InspectionObject["For", "Use ``Table`` instead of ``For`` for cleaner code.", "Remark", <|
           Source -> headSrc,
           ConfidenceLevel -> 0.90,
           "AdditionalDescriptions" -> {
