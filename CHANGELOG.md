@@ -1,6 +1,8 @@
 
 ## 1.6 - XX May, 2022
 
+Warn about `opts_:OptionsPattern[]`
+
 
 ## 1.5 - 7 Mar, 2022
 

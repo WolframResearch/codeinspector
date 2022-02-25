@@ -1791,8 +1791,8 @@ warn about a_:b  which is Optional[Pattern[a, _], b]  and not the same as  a:b
 *)
 scanPatternBlankOptionals[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, opt, issues,
-  choice},
+Module[{agg, node, data, children, patternBlank,
+  patternBlankChildren, pattern, opt, issues, choice, blank},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1803,6 +1803,7 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
   patternBlank = children[[1]];
   patternBlankChildren = patternBlank[[2]];
   pattern = patternBlankChildren[[1]];
+  blank = patternBlankChildren[[2]];
   opt = children[[3]];
 
   If[MatchQ[opt, InfixNode[Alternatives, _, _]],
@@ -1839,7 +1840,8 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
       blankPat |
       BinaryNode[Pattern, _, _] |
       (* also check for Alternatives *)
-      InfixNode[Alternatives, _, _]],
+      InfixNode[Alternatives, _, _] |
+      CallNode[LeafNode[Symbol, "OptionsPattern", _], _, _]],
 
       choice = BinaryNode[Pattern, {
         pattern,
@@ -1847,7 +1849,7 @@ Module[{agg, node, data, children, patternBlank, patternBlankChildren, pattern, 
         opt}, <||>];
 
       AppendTo[issues,
-        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``:``.", "Warning", <|
+        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``" <> blank[[2]] <> "``.", "Warning", <|
           Source -> data[[Key[Source]]],
           ConfidenceLevel -> 0.85,
           "AdditionalDescriptions" -> {

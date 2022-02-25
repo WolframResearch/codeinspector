@@ -407,6 +407,18 @@ TestMatch[
 ]
 
 
+TestMatch[
+	CodeInspect["\
+DocLinter`DocNotebookLint[dir_String?DirectoryQ, opts_:OptionsPattern[]] := Module[{nbs},
+	nbs = FileNames[\"*.nb\", dir, Infinity];
+	DocLinter`DocNotebookLint[nbs, opts]
+]"]
+	,
+	{InspectionObject["SuspiciousPatternBlankOptional", _, _, _]}
+	,
+	TestID->"AggregateRules-20220302-Z0S4S7"
+]
+	
 
 
 
