@@ -882,6 +882,24 @@ constructRaftMenuItemLabel[raftType_, icon_, label_] :=
 		Background -> Dynamic[If[CurrentValue["MouseOver"], colorData["RaftItemHighlight"], colorData["RaftMenuBack"]]]
 	]
 
+constructRaftMenuItemLabelNoMouseover[raftType_, icon_, label_] :=
+	Highlighted[
+		Grid[
+			{{If[icon =!= None, Sequence @@ {icon, Spacer[7]}, Sequence @@ {}], constrainWidth[label, Full]}},
+			ItemSize -> Automatic, Spacings -> 0, Alignment -> {Left, Top}],
+		
+		Frame -> None, RoundingRadius -> 0, FrameMargins -> {{5, 2}, {2, 2}},
+		
+		ImageSize -> Switch[raftType,
+			"inPlace", 384,
+			"mooring", Full],
+			
+		ImageMargins -> {{0, 0}, {0, 0}},
+
+		(* No menu item highlight on mouseover. *)
+		Background -> colorData["RaftMenuBack"]
+	]
+
 
 raftMenuItemClickAction[
 	Dynamic[itemClicked_],
@@ -934,15 +952,9 @@ makeRaftMenuAdditionalDescriptionItem[
 	additionalDescription_,
 	raftType_
 ] :=
-	Button[
-		constructRaftMenuItemLabel[raftType,
-			None,
-			styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify[additionalDescription]]]],
-
-		Null,
-			
-		Appearance -> None
-	]
+	constructRaftMenuItemLabelNoMouseover[raftType,
+		None,
+		styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify[additionalDescription]]]]
 
 
 (* ::Subsection::Closed:: *)
