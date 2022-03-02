@@ -61,9 +61,9 @@ PostfixNode[
 
 LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
-InfixNode[Dot, _, _] -> scanDots,
-
-InfixNode[Plus, _, _] -> scanPluss,
+InfixNode[
+  CompoundExpression | Dot | MessageName | Plus | StringExpression
+  , _, _] -> scanInfixDispatch,
 
 PostfixNode[Repeated, _, _] -> scanRepeateds,
 
@@ -75,12 +75,6 @@ Tags: SuspiciousSpan
 *)
 BinaryNode[Span, _, _] -> scanSpans,
 TernaryNode[Span, _, _] -> scanSpans,
-
-
-(*
-Tags: StraySemicolon
-*)
-InfixNode[CompoundExpression, _, _] -> scanCompoundExpressions,
 
 BinaryNode[PatternTest, _, _] -> scanPatternTestDispatch,
 
@@ -103,16 +97,6 @@ BinaryNode[Optional, {CompoundNode[PatternBlank | PatternBlankSequence | Pattern
 (*
 StartOfLineNode[Information, _, _] -> scanInformation,
 *)
-
-
-(*
-TODO: maybe should be experimental?
-*)
-
-InfixNode[StringExpression, {___, InfixNode[Alternatives, _, _], ___}, _] -> scanAlternativesStringExpression,
-
-
-
 
 TernaryNode[TernaryTilde, {_, _, Except[LeafNode[Symbol, _, _]], _, _}, _] -> scanTernaryTildeExpectedSymbol,
 
@@ -143,10 +127,6 @@ CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | Pa
 CompoundNode[Blank | BlankSequence | BlankNullSequence, {_,
   LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]}, _] ->
   scanBlankPredicate,
-
-
-InfixNode[MessageName, children_, _] -> scanMessageName,
-
 
 (*
 Tags: SyntaxError MaxExpressionDepth etc.
@@ -194,7 +174,39 @@ Nothing
 |>
 
 
+Attributes[scanInfixDispatch] = {HoldRest}
 
+scanInfixDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, tag},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  tag = node[[1]];
+
+  Switch[tag,
+    CompoundExpression,
+      scanCompoundExpressions[pos, agg]
+    ,
+    Dot,
+      scanDots[pos, agg]
+    ,
+    MessageName,
+      scanMessageName[pos, agg]
+    ,
+    Plus,
+      scanPluss[pos, agg]
+    ,
+    StringExpression,
+      Switch[node,
+        InfixNode[StringExpression, {___, InfixNode[Alternatives, _, _], ___}, _],
+          scanAlternativesStringExpression[pos, agg]
+        ,
+        _,
+          {}
+      ]
+  ]
+]]
 
 
 Attributes[scanPrefixs] = {HoldRest}
