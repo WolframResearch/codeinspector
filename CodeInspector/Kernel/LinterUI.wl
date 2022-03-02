@@ -511,11 +511,11 @@ iconData = <|
 	"DownChevron" -> Function[color, Graphics[
 		{color, AbsoluteThickness[2], CapForm["Round"],
 			Line[{{-1, 0}, {0, -1}, {1, 0}}]},
-		ImagePadding -> {3{1, 1}, 3{1, 1}}, ImageSize -> {18, 11}, AspectRatio -> Full, BaselinePosition -> Bottom]],
+		ImagePadding -> {3 * {1, 1}, 3 * {1, 1}}, ImageSize -> {18, 11}, AspectRatio -> Full, BaselinePosition -> Bottom]],
 	"UpChevron" -> Function[color, Graphics[
 		{color, AbsoluteThickness[2], CapForm["Round"],
 			Line[{{-1, 0}, {0, 1}, {1, 0}}]},
-		ImagePadding -> {3{1, 1}, 3{1, 1}}, ImageSize -> {18, 11}, AspectRatio -> Full, BaselinePosition -> Bottom]]
+		ImagePadding -> {3 * {1, 1}, 3 * {1, 1}}, ImageSize -> {18, 11}, AspectRatio -> Full, BaselinePosition -> Bottom]]
 |>;
 
 
@@ -524,8 +524,8 @@ closeIcon[offset_, pos_] := With[{crossSize = 2, diskRad = 6},
 		colorData["CloseButton"],
 		Disk[Offset[offset, pos], Offset[diskRad]],
 		colorData["UIBack"], AbsoluteThickness[1.5], CapForm["Round"],
-		Line[{{Offset[offset + crossSize {-1, 1}, pos], Offset[offset + crossSize {1, -1}, pos]},
-			{Offset[offset + crossSize {-1, -1}, pos], Offset[offset + crossSize {1, 1}, pos]}}]}]
+		Line[{{Offset[offset + crossSize * {-1, 1}, pos], Offset[offset + crossSize {1, -1}, pos]},
+			{Offset[offset + crossSize * {-1, -1}, pos], Offset[offset + crossSize {1, 1}, pos]}}]}]
 
 
 (* ::Text:: *)
@@ -549,7 +549,7 @@ button[
 	disp_, action_,
 	OptionsPattern[{
 		ImageSize -> {Automatic, 19},
-		FrameMargins -> {9{1, 1}, 0{1, 1}},
+		FrameMargins -> {9 * {1, 1}, 0 * {1, 1}},
 		BaselinePosition -> Baseline,
 		Alignment -> {Center, Center},
 		Method -> "Preemptive",
@@ -665,7 +665,7 @@ popupPane[
 					(* Keep the contents within the area set by the frame's rounding radius and caret height. *)
 					Pane[
 						Style[contents, LineIndent -> 0],
-						{width - 2contentsPadding, height - (2contentsPadding + caretH)},
+						{width - 2 * contentsPadding, height - (2 * contentsPadding + caretH)},
 						ImageMargins -> {
 							{contentsPadding, contentsPadding},
 							{contentsPadding, contentsPadding + caretH}},
@@ -1356,8 +1356,8 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 			delimiter = Graphics[
 				{CapForm["Round"], colorData["RaftDelimiter"], AbsoluteThickness[1],
 					Line[{{-1, 0}, {1, 0}}]},
-				AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImageMargins -> {{0, 0}, 2{1, 1}},
-				ImagePadding -> {5{1, 1}, {0, 0}}, ImageSize -> {Full, 2}],
+				AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImageMargins -> {{0, 0}, 2 * {1, 1}},
+				ImagePadding -> {5 * {1, 1}, {0, 0}}, ImageSize -> {Full, 2}],
 			
 			(* For a mooring lint pod:
 				The drop down menu's size is affected by the input/code cell's margins. The menu's ImageSize is Full so that it resizes
@@ -1985,7 +1985,7 @@ lintSeverityCountsIcon[severity_, count_, OptionsPattern[lintIconDisplayOpts]] :
 	With[
 		{icon = Row[
 			{
-				Show[iconData["Exclam"][colorData[severity]], ImageSize -> OptionValue["exclamSize"]{1, 1}, BaselinePosition -> OptionValue[BaselinePosition]],
+				Show[iconData["Exclam"][colorData[severity]], ImageSize -> OptionValue["exclamSize"] * {1, 1}, BaselinePosition -> OptionValue[BaselinePosition]],
 				Spacer[1],
 				styleData["CellBracketButton"][count, FontSize -> OptionValue[FontSize], FontWeight -> OptionValue[FontWeight]]}]},
 
@@ -2019,7 +2019,7 @@ lintSeverityCountsIconRow[
 				(* If there are zero lints, then display a tick. *)
 				{} -> {Show[
 					iconData["TickDisk"][colorData["ApplyButtonBack"], colorData["ApplyButtonText"]],
-					ImageSize -> OptionValue["exclamSize"]{1, 1}, BaselinePosition -> OptionValue[BaselinePosition]]}]]]
+					ImageSize -> OptionValue["exclamSize"] * {1, 1}, BaselinePosition -> OptionValue[BaselinePosition]]}]]]
 
 
 cellBracketButton[cell_CellObject] :=
@@ -2036,7 +2036,7 @@ cellBracketButton[cell_CellObject] :=
 				"EdgeColor" -> colorData["CellBracketButtonEdge"],
 				"EdgeHoverColor" -> colorData["CellBracketButtonEdge"],
 				ImageSize -> {Automatic, 14},
-				FrameMargins -> {3{1, 1}, {1, 1}},
+				FrameMargins -> {3 * {1, 1}, {1, 1}},
 				Alignment -> {Center, Baseline}],
 
 			"Go to code analysis"]]
@@ -2053,7 +2053,7 @@ noLintsBracketMarker[cell_CellObject] :=
 						(* Just show the green tick. *)
 						Show[
 							iconData["TickDisk"][colorData["ApplyButtonBack"], colorData["ApplyButtonText"]],
-							ImageSize -> 9{1, 1}, BaselinePosition -> Scaled[.02]],
+							ImageSize -> 9 * {1, 1}, BaselinePosition -> Scaled[.02]],
 
 						(* Delete the marker on click. *)
 						With[{evalCell = EvaluationCell[]},
@@ -2064,7 +2064,7 @@ noLintsBracketMarker[cell_CellObject] :=
 						"EdgeColor" -> colorData["CellBracketButtonEdge"],
 						"EdgeHoverColor" -> colorData["CellBracketButtonEdge"],
 						ImageSize -> {Automatic, 14},
-						FrameMargins -> {3{1, 1}, {1, 1}},
+						FrameMargins -> {3 * {1, 1}, {1, 1}},
 						Alignment -> {Center, Baseline}],
 					
 					"Code Analysis found no issues"],

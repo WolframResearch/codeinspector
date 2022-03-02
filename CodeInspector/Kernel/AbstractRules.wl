@@ -1503,7 +1503,7 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts, errs,
   errs = {};
 
   vars = # /. {
-    CallNode[LeafNode[Symbol, "Set"|"SetDelayed", _], {
+    CallNode[LeafNode[Symbol, "Set" | "SetDelayed", _], {
       sym:LeafNode[Symbol, _, _], _}, _] :> sym,
     sym:LeafNode[Symbol, _, _] :> sym,
     err_ :> (AppendTo[errs, err]; Nothing)

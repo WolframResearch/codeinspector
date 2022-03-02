@@ -27,13 +27,7 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 
 $DefaultConcreteRules = <|
 
-(*
-BinaryNode[Span, _, _] -> scanBinarySpans,
-*)
 
-(*
-TernaryNode[Span, _, _] -> scanTernarySpans,
-*)
 
 BinaryNode[Unset, {
   ___,
@@ -82,160 +76,25 @@ Nothing
 |>
 
 
-(*
-Attributes[scanBinarySpans] = {HoldRest}
-
-scanBinarySpans[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, poss, i, siblingsPos, siblings},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
 
 
-  (*
-  Already checked for LineCol style
-  *)
-
-  poss = Position[children, LeafNode[Token`SemiSemi, _, _]];
-
-  If[!MatchQ[Last[children], LeafNode[Token`Fake`ImplicitAll, _, _]],
-    (* something real *)
-    i = poss[[1, 1]];
-
-    i++;
-    While[i < Length[children],
-      Switch[children[[i]],
-        LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _],
-          AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
-            <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
-               ConfidenceLevel -> 0.95 |>]
-          ];
-          Break[]
-        ,
-        LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _],
-          i++
-        ,
-        _,
-          (*
-          Some non-trivia
-          *)
-          Break[]
-      ]
-    ];
-    ,
-    (*
-    Last[children] is ImplicitAll
-
-    implicit All
-    check sibling nodes
-    *)
-    siblingsPos = Most[pos];
-    siblings = Extract[cst, {siblingsPos}][[1]];
-    siblingsAfter = siblings[[ (Last[pos] + 1);; ]];
-
-    Switch[siblingsAfter,
-      {LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _]..., LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _], ___},
-        (*
-        There is a newline after some other trivia
-        *)
-        AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
-          <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
-             ConfidenceLevel -> 0.95 |>]
-        ];
-      ,
-      {LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _]...},
-        (*
-        There is only trivia.
-        This could be inside of a group (and maybe not end of line) or EOF (which should be warned, but currently too hard)
-        FIXME: Allow LintString["a;;"] to return a warning
-        *)
-        (*
-        AppendTo[issues, Lint["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
-          <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
-             ConfidenceLevel -> 0.95 |>]
-        ];*)
-        Null
-    ];
-  ];
-
-  issues
-]]
-*)
 
 
-(*
-Attributes[scanTernarySpans] = {HoldRest}
-
-scanTernarySpans[pos_List, cstIn_] :=
-Catch[
-Module[{cst, node, children, data, issues, poss, i, j},
-  cst = cstIn;
-  node = Extract[cst, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  issues = {};
 
 
-  (*
-  Already checked for LineCol style
-  *)
 
 
-  poss = Position[children, LeafNode[Token`SemiSemi, _, _]];
 
-  i = poss[[1, 1]];
-  j = poss[[2, 1]];
 
-  i++;
-  While[i < j,
-    Switch[children[[i]],
-      LeafNode[Token`ToplevelNewline | Token`InternalNewline, _, _],
-        AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
-          <| Source -> children[[ poss[[1, 1]], 3, Key[Source] ]],
-             ConfidenceLevel -> 0.95 |>]
-        ];
-        Break[]
-      ,
-      LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _],
-        i++
-      ,
-      _,
-        (*
-        Some non-trivia
-        *)
-        Break[]
-    ]
-  ];
 
-  j++;
-  While[j < Length[children],
-    Switch[children[[j]],
-      LeafNode[Token`ToplevelNewline, | Token`InternalNewline, _, _],
-        AppendTo[issues, InspectionObject["EndOfLine", "Suspicious ``Span`` is at end of line.", "Warning",
-          <| Source -> children[[ poss[[2, 1]], 3, Key[Source] ]],
-             ConfidenceLevel -> 0.95 |>]
-        ];
-        Break[]
-      ,
-      LeafNode[Whitespace | Token`Comment | Token`LineContinuation, _, _],
-        j++
-      ,
-      _,
-        (*
-        Some non-trivia
-        *)
-        Break[]
-    ]
-  ];
 
-  issues
-]]
-*)
+
+
+
+
+
+
+
 
 
 
