@@ -65,7 +65,9 @@ InfixNode[
   CompoundExpression | Dot | MessageName | Plus | StringExpression
   , _, _] -> scanInfixDispatch,
 
-PostfixNode[Repeated, _, _] -> scanRepeateds,
+PostfixNode[
+  Function | Repeated
+  , _, _] -> scanPostfixDispatch,
 
 TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
 
@@ -77,12 +79,6 @@ BinaryNode[Span, _, _] -> scanSpans,
 TernaryNode[Span, _, _] -> scanSpans,
 
 BinaryNode[PatternTest, _, _] -> scanPatternTestDispatch,
-
-(*
-a->b&
-probably meant to have a->(b&)
-*)
-PostfixNode[Function, {BinaryNode[Rule|RuleDelayed, _, _], _}, _] -> scanRuleFunctions,
 
 (*
 
@@ -205,6 +201,32 @@ Module[{agg, node, tag},
         _,
           {}
       ]
+  ]
+]]
+
+
+Attributes[scanPostfixDispatch] = {HoldRest}
+
+scanPostfixDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, tag},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  tag = node[[1]];
+
+  Switch[tag,
+    Function,
+      Switch[node,
+        PostfixNode[Function, {BinaryNode[Rule | RuleDelayed, _, _], _}, _],
+          scanRuleFunctions[pos, agg]
+        ,
+        _,
+          {}
+      ]
+    ,
+    Repeated,
+      scanRepeateds[pos, agg]
   ]
 ]]
 
