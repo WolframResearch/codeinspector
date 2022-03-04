@@ -1059,12 +1059,32 @@ makeRaftMenuCodeActionItem[
 			
 			(* Perform the codeAction transformation on the cell contents. This involves converting into, and back out of, Brenton's concrete syntax tree. *)
 			varSet[{notebook, cell, "CellContents"},
-				ReplacePart[
-					varValue[notebook, cell, "CellContents"],
-					(* cellContents is of the form Cell[BoxData[_], ___], so we want to apply the code actions on the contents of BoxData. *)
-					{1, 1} -> CodeParser`ToStandardFormBoxes @ CodeParser`CodeAction`ApplyCodeAction[
-						codeAction,
-						CodeParser`CodeConcreteParseBox[First[First[varValue[notebook, cell, "CellContents"]]]]]]];
+				(*
+				ReparseBoxStructurePacket is needed because let's say we have:
+				RowBox[{"a", "<>", "_", "<>", "_"}]
+
+				and want to replace <> with ~~
+
+				Replace the first <>:
+				RowBox[{"a", "~~", "_", "<>", "_"}]
+
+				This is the wrong box structure!
+
+				The correct box structure is:
+				RowBox[{"a", "~~", RowBox[{"_", "<>", "_"}]}]
+
+				The act of applying code action may change the box structure,
+				and ReparseBoxStructurePacket will take care of that for us
+				*)
+				FrontEndExecute[FrontEnd`ReparseBoxStructurePacket[
+					ReplacePart[
+						varValue[notebook, cell, "CellContents"],
+						(* cellContents is of the form Cell[BoxData[_], ___], so we want to apply the code actions on the contents of BoxData. *)
+						{1, 1} -> CodeParser`ToStandardFormBoxes @ CodeParser`CodeAction`ApplyCodeAction[
+							codeAction,
+							CodeParser`CodeConcreteParseBox[First[First[varValue[notebook, cell, "CellContents"]]]]]]
+				]]
+			];
 			
 			(* Now re-lint, and re-markup the code. *)
 			relintAndRemarkup[notebook, cell, varValue[notebook, cell, "CellContents"]];
