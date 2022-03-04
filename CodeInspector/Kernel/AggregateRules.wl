@@ -221,6 +221,9 @@ Module[{agg, node, tag},
         PostfixNode[Function, {BinaryNode[Rule | RuleDelayed, _, _], _}, _],
           scanRuleFunctions[pos, agg]
         ,
+        PostfixNode[Function, {CallNode[LeafNode[Symbol, "Function", _], _, _], _}, _],
+          scanFunctionAmp[pos, agg]
+        ,
         _,
           {}
       ]
@@ -2368,9 +2371,30 @@ Module[{agg, node, issues, children, rand},
 ]
 
 
+Attributes[scanFunctionAmp] = {HoldRest}
 
+scanFunctionAmp[pos_List, aggIn_] :=
+Module[{agg, node, issues, children, head, amp, ampSrc},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
 
+  amp = children[[2]];
+  ampSrc = amp[[3, Key[Source]]];
 
+  issues = {};
+
+  AppendTo[issues, InspectionObject["FunctionAmp", "Suspicious ``&`` after ``Function``.", "Error",
+    <| Source -> ampSrc,
+      ConfidenceLevel -> 0.85,
+      CodeActions -> {
+        CodeAction["Remove ``&``", DeleteNode, <| Source -> ampSrc |>] }
+    |>]
+  ];
+
+  issues
+]
 
 
 

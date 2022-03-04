@@ -3,6 +3,8 @@
 
 Warn about `opts_:OptionsPattern[]`
 
+Warn about `Function[{x,y},x+y]&[1,2]`
+
 
 ## 1.5 - 7 Mar, 2022
 

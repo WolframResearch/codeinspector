@@ -425,3 +425,32 @@ DocLinter`DocNotebookLint[dir_String?DirectoryQ, opts_:OptionsPattern[]] := Modu
 
 
 
+
+TestMatch[
+	CodeInspect["Function[{x, y}, x + y]&[1,2]"]
+	,
+	{InspectionObject["FunctionAmp", _, _, _]}
+	,
+	TestID->"AggregateRules-20220307-V3U4J1"
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
