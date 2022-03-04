@@ -75,7 +75,7 @@ PostfixNode[
 LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
 InfixNode[
-  CompoundExpression | Dot | MessageName | Plus | StringExpression
+  CompoundExpression | Dot | MessageName | Plus | StringExpression | StringJoin
   , _, _] -> scanInfixDispatch,
 
 PostfixNode[
@@ -210,6 +210,15 @@ Module[{agg, node, tag},
       Switch[node,
         InfixNode[StringExpression, {___, InfixNode[Alternatives, _, _], ___}, _],
           scanAlternativesStringExpression[pos, agg]
+        ,
+        _,
+          {}
+      ]
+    ,
+    StringJoin,
+      Switch[node,
+        InfixNode[StringJoin, {___, patPat, ___}, _],
+          scanPatStringJoin[pos, agg]
         ,
         _,
           {}
@@ -2397,6 +2406,43 @@ Module[{agg, node, issues, children, head, amp, ampSrc},
 
   issues
 ]
+
+
+Attributes[scanPatStringJoin] = {HoldRest}
+
+scanPatStringJoin[pos_List, aggIn_] :=
+Module[{agg, node, children, tok, rators, issues},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+
+  tok = children[[1]];
+
+  issues = {};
+
+  rators = children[[2;;-2;;2]];
+
+  Do[
+    AppendTo[issues,
+      InspectionObject["PatternStringJoin", "``<>`` used with a pattern.", "Error", <|
+        Source -> rator[[3, Key[Source]]],
+        ConfidenceLevel -> 0.90,
+        CodeActions -> {
+          CodeAction["Replace with ``~~``", ReplaceNode, <|
+            "ReplacementNode" -> LeafNode[Token`TildeTilde, "~~", <||>],
+            Source -> rator[[3, Key[Source]]]
+          |>]
+        }
+      |>]
+    ]
+    ,
+    {rator, rators}
+  ];
+
+  issues
+]
+
+
 
 
 

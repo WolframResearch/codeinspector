@@ -5,6 +5,8 @@ Warn about `opts_:OptionsPattern[]`
 
 Warn about `Function[{x,y},x+y]&[1,2]`
 
+Warn about `"a" <> _`
+
 
 ## 1.5 - 7 Mar, 2022
 

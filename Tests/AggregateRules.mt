@@ -436,7 +436,13 @@ TestMatch[
 
 
 
-
+TestMatch[
+	CodeInspect["\"a\" <> _"]
+	,
+	{InspectionObject["PatternStringJoin", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220310-Q4H6M5"
+]
 
 
 
