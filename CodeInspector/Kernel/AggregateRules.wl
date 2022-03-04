@@ -27,7 +27,20 @@ blankPat =
   LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder | Token`UnderDot, _, _] |
   CompoundNode[
     Blank | BlankSequence | BlankNullSequence |
-    PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, _, _]
+      PatternBlank | PatternBlankSequence |
+      PatternBlankNullSequence | PatternOptionalDefault, _, _]
+
+patPat =
+  blankPat |
+  BinaryNode[Pattern, _, _] |
+  InfixNode[Alternatives, _, _] |
+  PostfixNode[Repeated | RepeatedNull, _, _] |
+  CallNode[
+    LeafNode[Symbol,
+      "Alternatives" | "Blank" | "BlankSequence" |
+      "BlankNullSequence" | "Except" | "KeyValuePattern" |
+      "OptionsPattern" | "Pattern" | "Repeated" |
+      "RepeatedNull", _], _, _]
 
 
 
@@ -1446,13 +1459,7 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
             Null
         ]
       ,
-      !FreeQ[a,
-        LeafNode[Token`Under | Token`UnderUnder | Token`UnderUnderUnder, _, _] |
-        CompoundNode[
-          Blank | BlankSequence | BlankNullSequence |
-          PatternBlank | PatternBlankSequence | PatternBlankNullSequence, _, _] |
-        PostfixNode[Repeated | RepeatedNull, _, _] |
-        CallNode[LeafNode[Symbol, "Blank" | "Pattern" | "Except" | "KeyValuePattern", _], _, _]],
+      !FreeQ[a, patPat],
         (*
         looks like a normal pattern on LHS of PatternTest
         *)
@@ -1873,12 +1880,7 @@ Module[{agg, node, data, children, patternBlank,
     bring in heuristics for when a_:b is valid
     If b has Patterns or Blanks, then b is NOT a valid optional and warn
     *)
-    !FreeQ[opt,
-      blankPat |
-      BinaryNode[Pattern, _, _] |
-      (* also check for Alternatives *)
-      InfixNode[Alternatives, _, _] |
-      CallNode[LeafNode[Symbol, "OptionsPattern", _], _, _]],
+    !FreeQ[opt, patPat],
 
       choice = BinaryNode[Pattern, {
         pattern,
