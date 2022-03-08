@@ -35,6 +35,18 @@ BinaryNode[Span, _, _] -> scanBinarySpans,
 TernaryNode[Span, _, _] -> scanTernarySpans,
 *)
 
+BinaryNode[Unset, {
+  ___,
+  LeafNode[Token`Equal, _, _],
+  LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _], (LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _])...,
+  LeafNode[Token`Dot, _, _]}, _] -> scanUnsets,
+
+TernaryNode[TagUnset, {
+  ___,
+  LeafNode[Token`Equal, _, _],
+  LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _], (LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _])...,
+  LeafNode[Token`Dot, _, _]}, _] -> scanTagUnsets,
+
 (*
 Tags: ImplicitTimesAcrossLines
 *)
@@ -224,6 +236,91 @@ Module[{cst, node, children, data, issues, poss, i, j},
   issues
 ]]
 *)
+
+
+
+Attributes[scanUnsets] = {HoldRest}
+
+(*
+Related bugs: 281967
+*)
+scanUnsets[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, children, data, issues, equalPos, dotPos,
+  trivias},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  equalPos = Position[children, LeafNode[Token`Equal, _, _], {1}][[1]];
+  dotPos = Position[children, LeafNode[Token`Dot, _, _], {1}][[1]];
+
+  (*
+  Span is only documented to work with Part
+  *)
+  trivias = Part[children, (equalPos[[1]])+1 ;; (dotPos[[1]])-1];
+
+  Do[
+    (*
+    was "Trivia between = and ." but changed to "Whitespace between = and ." after 3/16/22 CodeTools meeting
+    *)
+    AppendTo[issues, InspectionObject["TriviaBetweenEqualDot", "Whitespace between ``=`` and ``.``.", "Warning",
+      <| Source -> trivia[[3, Key[Source]]],
+        "AdditionalDocumentationLinks" -> {{"paclet:tutorial/OperatorInputForms#16182", "Spaces to Avoid"}},
+        "AdditionalDescriptions" -> {"You should avoid inserting any spaces between the different characters in composite operators such as ``=.``."},
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Remove whitespace", DeleteTriviaNode, <| Source -> trivia[[3, Key[Source]]] |>]}
+      |>]
+    ];
+    ,
+    {trivia, trivias}
+  ];
+
+  issues
+]]
+
+
+Attributes[scanTagUnsets] = {HoldRest}
+
+scanTagUnsets[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, children, data, issues, equalPos, dotPos,
+  trivias},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  issues = {};
+
+  equalPos = Position[children, LeafNode[Token`Equal, _, _], {1}][[1]];
+  dotPos = Position[children, LeafNode[Token`Dot, _, _], {1}][[1]];
+
+  (*
+  Span is only documented to work with Part
+  *)
+  trivias = Part[children, (equalPos[[1]])+1 ;; (dotPos[[1]])-1];
+
+  Do[
+    AppendTo[issues, InspectionObject["TriviaBetweenEqualDot", "Whitespace between ``=`` and ``.``.", "Warning",
+      <| Source -> trivia[[3, Key[Source]]],
+        "AdditionalDocumentationLinks" -> {{"paclet:tutorial/OperatorInputForms#16182", "Spaces to Avoid"}},
+        "AdditionalDescriptions" -> {"You should avoid inserting any spaces between the different characters in composite operators such as ``=.``."},
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Remove whitespace", DeleteTriviaNode, <| Source -> trivia[[3, Key[Source]]] |>]}
+      |>]
+    ];
+    ,
+    {trivia, trivias}
+  ];
+
+  issues
+]]
 
 
 
