@@ -1106,9 +1106,9 @@ makeRaftMenuCodeActionItem[
 
 makeRaftMenuDocsItem[
 	{
-		(* Link to the symbol doc page... *)
-		symbol_String,
-		(* ...but show display (symbol and display have been separated because you may want to display "&" but link to Function) *)
+		(* URL to the doc page... *)
+		url_String,
+		(* ...but show display (url and display have been separated because you may want to display "&" but link to Function) *)
 		display_String
 	},
 	(* itemClicked is a state variable. *)
@@ -1120,16 +1120,30 @@ makeRaftMenuDocsItem[
 		Button[
 			(* ----- The menu item label ----- *)
 			
-			(* The label is the docs info icon, followed by the name of the symbol, and an open-link arrow icon. *)
+			(* The label is the docs info icon, followed by the display, and an open-link arrow icon. *)
 			constructRaftMenuItemLabel[raftType,
 				iconData["Info"][colorData["UIDark"]],
-				styleData["RaftMenuItem"][Row[CodeInspector`Utils`boldify["``" <> display <> "``"]]]],
+				styleData["RaftMenuItem"][
+					If[StringStartsQ[url, "paclet:ref"],
+						(*
+						link to ref item
+						so display as code
+						*)
+						Row[CodeInspector`Utils`boldify["``" <> display <> "``"]]
+						,
+						(*
+						link to something else, e.g. a tutorial
+						so display as text
+						*)
+						display
+					]
+				]],
 			
 			
 			(* ----- The menu item action ----- *)
 			
-			(* Open the documentation page for the symbol. *)
-			SystemOpen[URLBuild[{"paclet:ref", symbol}]];
+			(* Open the documentation page. *)
+			SystemOpen[url];
 			
 			(* Set state variables and delete raft components. *)
 			raftMenuItemClickAction[Dynamic[itemClicked], raftType, Dynamic[raftCell], Dynamic[raftMenu]],
@@ -1288,9 +1302,11 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 		},
 		
 		{
+			additionalDocumentationLinks = lint["AdditionalDocumentationLinks"],
+
 			(* Transform "symbol" into {"symbol", "display"}, so that makeRaftMenuDocsItem knows what to display, and which symbol to link to. *)
-			symbolsAndDisplays = {
-				Replace[#, $operatorForms],
+			symbolLinksAndDisplays = {
+				URLBuild[{"paclet:ref", Replace[#, $operatorForms]}],
 				Replace[#, $operatorFormsMenuItemDisplay]
 			}& /@ symbols,
 			
@@ -1372,9 +1388,13 @@ makeRaftMenu[cell_CellObject, lint_CodeInspector`InspectionObject, raftCell_Cell
 								raftType, Dynamic[raftCell], Dynamic[raftMenu]]] /@ actionItems,
 						
 						(* Documentation links. *)
-						Function[symbolAndDisplay,
-							makeRaftMenuDocsItem[symbolAndDisplay, Dynamic[itemClicked],
-								raftType, Dynamic[raftCell], Dynamic[raftMenu]]] /@ symbolsAndDisplays,
+						Function[urlAndDisplay,
+							makeRaftMenuDocsItem[urlAndDisplay, Dynamic[itemClicked],
+								raftType, Dynamic[raftCell], Dynamic[raftMenu]]] /@
+									(*
+									display Additional Documentation Links before symbol links
+									*)
+									(additionalDocumentationLinks ~Join~ symbolLinksAndDisplays),
 						
 						(* Ignore-lint actions. *)
 						ignoreItems

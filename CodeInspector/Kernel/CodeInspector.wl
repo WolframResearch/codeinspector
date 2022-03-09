@@ -117,6 +117,15 @@ InspectionObject[   _,     _, severity_,     _]["Severity"] := severity
 
 InspectionObject[   _,     _,         _, data_]["AdditionalDescriptions"] := Lookup[data, "AdditionalDescriptions", {}]
 
+(*
+AdditionalDocumentationLinks is a list of:
+{url, display}
+
+where url is the link to be passed to SystemOpen or some such, and display is what will be displayed
+
+*)
+InspectionObject[   _,     _,         _, data_]["AdditionalDocumentationLinks"] := Lookup[data, "AdditionalDocumentationLinks", {}]
+
 
 
 InspectedLineObject[_, lineNumber_, _,      _, ___]["LineNumber"] := lineNumber
