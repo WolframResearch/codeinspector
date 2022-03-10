@@ -708,44 +708,72 @@ resolveInfix[infix_, lines:{___String}] :=
 
 
 pushOutBefore[one:LeafNode[Token`Fake`ImplicitOne, _, data_], lines:{___String}] :=
-Module[{lineNumber, columnNumber, line},
+Module[{origLineNumber, origColumnNumber, lineNumber, columnNumber,
+  line, hitSomething},
 
-  lineNumber = data[[Key[Source], 1, 1]];
-  columnNumber = data[[Key[Source], 1, 2]];
+  origLineNumber = data[[Key[Source], 1, 1]];
+  origColumnNumber = data[[Key[Source], 1, 2]];
+
+  lineNumber = origLineNumber;
+  columnNumber = origColumnNumber;
   line = lines[[lineNumber]];
-  
+
+  hitSomething = False;
+
   While[True,
-    If[columnNumber-1 == 0 || columnNumber-1 == 1,
+    If[columnNumber-1 == 0,
       Break[]
     ];
     If[StringTake[line, {columnNumber-1}] != " ",
+      hitSomething = True;
       Break[]
     ];
     columnNumber--;
   ];
 
-  {LintOneCharacter, lineNumber, columnNumber}
+  If[hitSomething,
+    {LintOneCharacter, lineNumber, columnNumber}
+    ,
+    (*
+    did not hit anything, so just use original position
+    *)
+    {LintOneCharacter, origLineNumber, origColumnNumber}
+  ]
 ]
 
 
 pushOutAfter[all:LeafNode[Token`Fake`ImplicitAll, _, data_], lines:{___String}] :=
-Module[{lineNumber, columnNumber, line},
+Module[{origLineNumber, origColumnNumber, lineNumber, columnNumber,
+  line, hitSomething},
 
-  lineNumber = data[[Key[Source], 2, 1]];
-  columnNumber = data[[Key[Source], 2, 2]];
+  origLineNumber = data[[Key[Source], 1, 1]];
+  origColumnNumber = data[[Key[Source], 1, 2]];
+
+  lineNumber = origLineNumber;
+  columnNumber = origColumnNumber;
   line = lines[[lineNumber]];
+
+  hitSomething = False;
 
   While[True,
     If[columnNumber-1 == StringLength[line],
       Break[]
     ];
     If[StringTake[line, {columnNumber}] != " ",
+      hitSomething = True;
       Break[]
     ];
     columnNumber++;
   ];
 
-  {LintAllCharacter, lineNumber, columnNumber}
+  If[hitSomething,
+    {LintAllCharacter, lineNumber, columnNumber}
+    ,
+    (*
+    did not hit anything, so just use original position
+    *)
+    {LintAllCharacter, origLineNumber, origColumnNumber}
+  ]
 ]
 
 
