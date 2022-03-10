@@ -33,6 +33,11 @@ How many implicit tokens to keep?
 *)
 $ImplicitTokensLimit = 100
 
+(*
+How many lines to include above and below each lint
+*)
+$EnvironBuffer = 0
+
 
 
 CodeInspectImplicitTokens::usage = "CodeInspectImplicitTokens[code] returns a list of implicit tokens in code."
@@ -459,8 +464,9 @@ Source convention for implicitTokens is "LineColumn"
 *)
 implicitTokensLinesReport[linesIn:{___String}, implicitTokensIn:_List] :=
 Catch[
-Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss, ops,
-  maxLineNumberLength},
+Module[{implicitTokens, sources, starts, ends, infixs, lines,
+  linesToModify, times, ones, alls, nulls, charInfos, charInfoPoss,
+  ops, maxLineNumberLength, environLinesTentative, environLines},
 
   If[implicitTokensIn === {},
     Throw[{}]
@@ -537,13 +543,25 @@ Module[{implicitTokens, sources, starts, ends, infixs, lines, linesToModify, tim
 
   linesToModify = Union[charInfos[[All, 2]]];
 
+  environLinesTentative = Clip[(# + {-$EnvironBuffer, $EnvironBuffer}), {1, Length[lines]}]& /@ linesToModify;
+  environLinesTentative = Range @@@ environLinesTentative;
+
+  environLines = MapThread[Complement, {environLinesTentative, List /@ linesToModify}];
+
+  linesToModify = MapThread[Union, {List /@ linesToModify, environLines}];
+
+  linesToModify = Union[Flatten[linesToModify]];
+  environLines = Union[Flatten[environLines]];
+
   maxLineNumberLength = Max[IntegerLength /@ linesToModify];
 
   Table[
+    With[{environ = MemberQ[environLines, i]},
 
-     InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
-                                  modify[lines[[i]], charInfos, i]},
-                                  {}, "MaxLineNumberLength" -> maxLineNumberLength]
+      InspectedLineObject[lines[[i]], i, {ListifyLine[lines[[i]], <||>, "EndOfFile" -> (i == Length[lines])],
+        modify[lines[[i]], charInfos, i]},
+        {}, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
+    ]
     ,
     {i, linesToModify}
   ]
