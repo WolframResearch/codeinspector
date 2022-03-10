@@ -1057,8 +1057,17 @@ Format[LintContinuationCharacter, OutputForm] := "\\"
 Format[LintTimesCharacter, StandardForm] := "\[Times]"
 Format[LintTimesCharacter, OutputForm] := "x"
 
-Format[LintSpaceTimesCharacter, StandardForm] := " \[Times]"
-Format[LintSpaceTimesCharacter, OutputForm] := " x"
+(*
+LintSpaceTimesCharacter is used in LSP clients to display a space before the \[Times]
+
+But when using CodeInspectImplicitTokensSummarize, it is actually more coherent to simply use "\[Times]"
+
+So format LintSpaceTimesCharacter the same as LintTimesCharacter
+
+This also keeps all items in grids to a single character size so that $LintedLintItemSize is more predictable
+*)
+Format[LintSpaceTimesCharacter, StandardForm] := "\[Times]"
+Format[LintSpaceTimesCharacter, OutputForm] := "x"
 
 Format[LintOneCharacter, StandardForm] := "1"
 Format[LintOneCharacter, OutputForm] := "1"
