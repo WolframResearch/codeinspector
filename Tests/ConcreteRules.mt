@@ -155,3 +155,33 @@ TestMatch[
 	TestID->"ConcreteRules-20200821-R7H2A4"
 ]
 
+
+
+
+
+
+TestMatch[
+	CodeInspect["1.2`-3"]
+	,
+	{ InspectionObject["UnexpectedSign", _, _, _]}
+	,
+	TestID->"ConcreteRules-20220316-Z1O7X6"
+]
+
+TestMatch[
+	CodeInspect["1.2`-.3"]
+	,
+	{ InspectionObject["UnexpectedSign", _, _, _]}
+	,
+	TestID->"ConcreteRules-20220316-T6F9N5"
+]
+
+
+
+
+
+
+
+
+
+
