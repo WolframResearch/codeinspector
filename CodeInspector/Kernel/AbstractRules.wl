@@ -52,6 +52,8 @@ CallNode[LeafNode[Symbol,
   "MessageName" |
   "For" |
   "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert" |
+  "System`Confirm" | "System`ConfirmBy" | "System`ConfirmMatch" |
+  "System`ConfirmAssert" |
   "MatchQ"
   , _], _, _] -> scanCallDispatch,
 
@@ -282,7 +284,9 @@ Module[{ast, node, sym, name},
     "For",
       scanFors[pos, ast]
     ,
-    "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert",
+    "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert" |
+    "System`Confirm" | "System`ConfirmBy" | "System`ConfirmMatch" |
+    "System`ConfirmAssert",
       scanConfirm[pos, ast]
     ,
     "MatchQ",
@@ -2813,7 +2817,7 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
       If[parentPos == {},
         Break[]
       ];
-      If[MatchQ[parent, CallNode[LeafNode[Symbol, "Enclose", _], _, _]],
+      If[MatchQ[parent, CallNode[LeafNode[Symbol, "Enclose" | "System`Enclose", _], _, _]],
         enclosingEnclose = True;
         Break[]
       ];
@@ -2836,10 +2840,10 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
 
       no tags, so required to be lexically enclosed, so Error
       *)
-      CallNode[LeafNode[Symbol, "Confirm", _], {_, _ | PatternSequence[]}, _] |
-      CallNode[LeafNode[Symbol, "ConfirmBy", _], {_, _, _ | PatternSequence[]}, _] |
-      CallNode[LeafNode[Symbol, "ConfirmMatch", _], {_, _, _ | PatternSequence[]}, _] |
-      CallNode[LeafNode[Symbol, "ConfirmAssert", _], {_, _ | PatternSequence[]}, _],
+      CallNode[LeafNode[Symbol, "Confirm" | "System`Confirm", _], {_, _ | PatternSequence[]}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmBy" | "System`ConfirmBy", _], {_, _, _ | PatternSequence[]}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmMatch" | "System`ConfirmMatch", _], {_, _, _ | PatternSequence[]}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmAssert" | "System`ConfirmAssert", _], {_, _ | PatternSequence[]}, _],
         AppendTo[issues, InspectionObject[
           "NoSurroundingEnclose", "``" <> headName <> "`` has no tag or surrounding ``Enclose``.",
           "Error", <|
@@ -2854,10 +2858,10 @@ Module[{ast, node, issues, varName, start, end, startStr, endStr,
 
       tags, do dynamically scoped, so only give Remark here
       *)
-      CallNode[LeafNode[Symbol, "Confirm", _], {_, _, _}, _] |
-      CallNode[LeafNode[Symbol, "ConfirmBy", _], {_, _, _, _}, _] |
-      CallNode[LeafNode[Symbol, "ConfirmMatch", _], {_, _, _, _}, _] |
-      CallNode[LeafNode[Symbol, "ConfirmAssert", _], {_, _, _}, _],
+      CallNode[LeafNode[Symbol, "Confirm" | "System`Confirm", _], {_, _, _}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmBy" | "System`ConfirmBy", _], {_, _, _, _}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmMatch" | "System`ConfirmMatch", _], {_, _, _, _}, _] |
+      CallNode[LeafNode[Symbol, "ConfirmAssert" | "System`ConfirmAssert", _], {_, _, _}, _],
         AppendTo[issues, InspectionObject[
           "NoSurroundingEnclose", "``" <> headName <> "`` has no surrounding ``Enclose``.",
           "Remark", <|
