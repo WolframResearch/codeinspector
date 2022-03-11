@@ -1,6 +1,9 @@
 
 Needs["CodeInspector`"]
 
+Needs["CodeParser`"]
+
+
 (*
 ImplicitTimesAcrossLines
 *)
@@ -446,7 +449,26 @@ TestMatch[
 
 
 
-
+Test[
+	CodeInspect["replaceheads_Alternatives : Alternatives[]"]
+	,
+	{InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``_Alternatives``.", "Warning", <|
+		Source -> {{1, 1}, {1, 43}},
+		ConfidenceLevel -> 0.85,
+		"AdditionalDescriptions" -> {"This may be ok if ``replaceheads`` is used as a pattern."},
+		CodeActions -> {
+			CodeAction["Replace with ``replaceheads : Alternatives[]``", ReplaceNode, <|
+				"ReplacementNode" ->
+					BinaryNode[Pattern, {
+						LeafNode[Symbol, "replaceheads", <|Source -> {{1, 1}, {1, 13}}|>],
+						LeafNode[Token`Colon, ":", <||>],
+						CallNode[LeafNode[Symbol, "Alternatives", <|Source -> {{1, 29}, {1, 41}}|>], {
+							GroupNode[GroupSquare, {
+								LeafNode[Token`OpenSquare, "[", <|Source -> {{1, 41}, {1, 42}}|>],
+								LeafNode[Token`CloseSquare, "]", <|Source -> {{1, 42}, {1, 43}}|>]}, <|Source -> {{1, 41}, {1, 43}}|>]}, <|Source -> {{1, 29}, {1, 43}}|>]}, <||>], Source -> {{1, 1}, {1, 43}}|>]}|>]}
+	,
+	TestID->"AggregateRules-20220311-K6D5T9"
+]
 
 
 

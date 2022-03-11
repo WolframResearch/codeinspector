@@ -1897,7 +1897,7 @@ Module[{agg, node, data, children, patternBlank,
         opt}, <||>];
 
       AppendTo[issues,
-        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of ``" <> blank[[2]] <> "``.", "Warning", <|
+        InspectionObject["SuspiciousPatternBlankOptional", "Suspicious use of " <> format[StringTrim[CodeFormatCST[ContainerNode[File, {concretify[blank]}, <||>]]]] <> ".", "Warning", <|
           Source -> data[[Key[Source]]],
           ConfidenceLevel -> 0.85,
           "AdditionalDescriptions" -> {
