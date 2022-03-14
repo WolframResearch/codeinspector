@@ -724,6 +724,18 @@ Module[{origLineNumber, origColumnNumber, lineNumber, columnNumber,
     If[columnNumber-1 == 0,
       Break[]
     ];
+    (*
+    this test is just to ensure that StringTake will succeed
+
+    this test should never be true, but there are cases in the parser
+    where the lines in the reported Source do not match the lines of the
+    actual source, so that line is not actually a line with a ;;
+
+    it is VERY BAD if this gets stuck in an infinite loop, so just do extra check
+    *)
+    If[StringLength[line] < columnNumber-1,
+      Break[]
+    ];
     If[StringTake[line, {columnNumber-1}] != " ",
       hitSomething = True;
       Break[]
@@ -757,6 +769,12 @@ Module[{origLineNumber, origColumnNumber, lineNumber, columnNumber,
 
   While[True,
     If[columnNumber-1 == StringLength[line],
+      Break[]
+    ];
+    (*
+    see similar comment above
+    *)
+    If[StringLength[line] < columnNumber,
       Break[]
     ];
     If[StringTake[line, {columnNumber}] != " ",
