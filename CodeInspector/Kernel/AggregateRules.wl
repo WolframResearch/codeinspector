@@ -62,6 +62,14 @@ $DefaultAggregateRules = <|
 Aggregate lints
 *)
 
+BinaryNode[
+  Optional | PatternTest | Span
+  , _, _] -> scanBinaryDispatch,
+
+TernaryNode[
+  Span | TernaryTilde
+  , _, _] -> scanTernaryDispatch,
+
 PrefixNode[
   _,
   _,
@@ -81,34 +89,6 @@ InfixNode[
 PostfixNode[
   Function | Repeated
   , _, _] -> scanPostfixDispatch,
-
-TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanTernaryTildes,
-
-
-(*
-Tags: SuspiciousSpan
-*)
-BinaryNode[Span, _, _] -> scanSpans,
-TernaryNode[Span, _, _] -> scanSpans,
-
-BinaryNode[PatternTest, _, _] -> scanPatternTestDispatch,
-
-(*
-
-experimental
-
-BinaryNode[Pattern, {_, InfixNode[Alternatives, _, _]}, _] -> scanAlternativesPatterns,
-*)
-
-BinaryNode[Optional, {CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence, {_, _}, _], _, _}, _] -> scanPatternBlankOptionals,
-
-
-(*
-StartOfLineNode[Information, _, _] -> scanInformation,
-*)
-
-TernaryNode[TernaryTilde, {_, _, Except[LeafNode[Symbol, _, _]], _, _}, _] -> scanTernaryTildeExpectedSymbol,
-
 
 PrefixNode[Plus, _, _] -> scanPrefixPlus,
 
@@ -181,6 +161,61 @@ InfixNode[ImplicitTimes, {
 
 Nothing
 |>
+
+
+Attributes[scanBinaryDispatch] = {HoldRest}
+
+scanBinaryDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, tag},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  tag = node[[1]];
+
+  Switch[tag,
+    Optional,
+      scanOptionalDispatch[pos, agg]
+    ,
+    PatternTest,
+      scanPatternTestDispatch[pos, agg]
+    ,
+    Span,
+      scanSpans[pos, agg]
+  ]
+]]
+
+
+
+Attributes[scanTernaryDispatch] = {HoldRest}
+
+scanTernaryDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, tag},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  tag = node[[1]];
+
+  Switch[tag,
+    Span,
+      scanSpans[pos, agg]
+    ,
+    TernaryTilde,
+      Switch[node,
+        TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]],
+          scanTernaryTildes[pos, agg]
+        ,
+        TernaryNode[TernaryTilde, {_, _, Except[LeafNode[Symbol, _, _]], _, _}, _],
+          scanTernaryTildeExpectedSymbol[pos, agg]
+        ,
+        _,
+          {}
+      ]
+
+  ]
+]]
+
 
 
 Attributes[scanInfixDispatch] = {HoldRest}
@@ -364,6 +399,30 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
 
   issues
 ]]
+
+
+
+Attributes[scanOptionalDispatch] = {HoldRest}
+
+scanOptionalDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, parentPos, parent, reaped, issues},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  reaped =
+  Reap[
+
+  If[MatchQ[node, BinaryNode[Optional, {CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence, {_, _}, _], _, _}, _]],
+    Sow[scanPatternBlankOptionals[pos, agg]];
+  ];
+  ][[2]];
+
+  issues = Flatten[reaped];
+  
+  issues
+]]
+
 
 
 Attributes[scanImplicitTimesDispatch] = {HoldRest}
