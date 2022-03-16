@@ -560,6 +560,12 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
         "AdditionalDescriptions" -> {"Try resaving the notebook with a newer FE."}
       |>]}
     ,
+    SyntaxError`BuggyFESyntax,
+      {InspectionObject["BuggyFESyntax", "Buggy FE syntax.", "Fatal", <|
+        data,
+        ConfidenceLevel -> 1.0
+      |>]}
+    ,
     _,
       tagString = Block[{$ContextPath = {"SyntaxError`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
       {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
