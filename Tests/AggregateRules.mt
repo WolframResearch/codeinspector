@@ -472,7 +472,20 @@ Test[
 
 
 
+(*
+inspired by bug 421310
+*)
 
+TestMatch[
+	CodeInspect["audioData = Round[audioData**(2.^15-1)]"]
+	,
+	{InspectionObject["NonCommutativeMultiply", _, "Error", KeyValuePattern[ {
+		CodeActions -> {
+			CodeAction["Replace with ``*``", ReplaceNode, _],
+			CodeAction["Replace with ``^``", ReplaceNode, _]} } ]]}
+	,
+	TestID->"AggregateRules-20220316-K3D9D9"
+]
 
 
 

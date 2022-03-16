@@ -83,7 +83,7 @@ PostfixNode[
 LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
 InfixNode[
-  CompoundExpression | Dot | MessageName | Plus | StringExpression | StringJoin
+  CompoundExpression | Dot | MessageName | NonCommutativeMultiply | Plus | StringExpression | StringJoin
   , _, _] -> scanInfixDispatch,
 
 PostfixNode[
@@ -237,6 +237,9 @@ Module[{agg, node, tag},
     ,
     MessageName,
       scanMessageName[pos, agg]
+    ,
+    NonCommutativeMultiply,
+      scanNonCommutativeMultiplys[pos, agg]
     ,
     Plus,
       scanPluss[pos, agg]
@@ -2546,6 +2549,44 @@ Module[{agg, node, children, tok, rators, issues},
 
 
 
+(*
+inspired by bug 421310
+*)
+
+Attributes[scanNonCommutativeMultiplys] = {HoldRest}
+
+scanNonCommutativeMultiplys[pos_List, cstIn_] :=
+ Module[{cst, node, children, issues, rators},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+  rators = children[[2;;-2;;2]];
+
+  issues = {};
+
+  Do[
+    AppendTo[issues,
+      InspectionObject["NonCommutativeMultiply", "Suspicious ``**``.", "Error", <|
+        Source -> rator[[3, Key[Source]]],
+        ConfidenceLevel -> 0.90,
+        CodeActions -> {
+          CodeAction["Replace with ``*``", ReplaceNode, <|
+            "ReplacementNode" -> LeafNode[Token`Star, "*", <||>],
+            Source -> rator[[3, Key[Source]]]
+          |>],
+          CodeAction["Replace with ``^``", ReplaceNode, <|
+            "ReplacementNode" -> LeafNode[Token`Caret, "^", <||>],
+            Source -> rator[[3, Key[Source]]]
+          |>]
+        }
+      |>]
+    ]
+    ,
+    {rator, rators}
+  ];
+
+  issues
+]
 
 
 concretify[node:CallNode[_List, _, _]] :=
