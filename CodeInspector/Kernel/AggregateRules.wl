@@ -2348,6 +2348,8 @@ Module[{agg, node, issues, children, rand},
     (*
     Scan for 3rd arg of MessageName being an unrecognized language
 
+    If your language is missing, then please let me know!
+
     Related GitHub issues: https://github.com/WolframResearch/codeinspector/issues/7
 
     Related threads: https://mail-archive.wolfram.com/archive/t-codetools/2020/Aug00/0004.html
@@ -2363,11 +2365,16 @@ Module[{agg, node, issues, children, rand},
         "English",
         "French",
         "German",
+        "Greek",
         "Japanese",
+        "Lithuanian",
         "Korean",
+        "Polish",
         "Portugese",
         "Russian",
-        "Spanish"
+        "Spanish",
+        "Ukrainian",
+        "Vietnamese"
       }, children[[5, 2]]],
         AppendTo[issues,
           InspectionObject["MessageNameLanguage", "Unrecognized language argument to ``MessageName``.", "Error", <|
