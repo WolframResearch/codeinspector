@@ -2374,9 +2374,10 @@ Attributes[scanSolverCalls] = {HoldRest}
 
 scanSolverCalls[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues, cases},
+Module[{ast, node, children, data, issues, cases, head, vars},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
+  head = node[[1]];
   children = node[[2]];
   data = node[[3]];
 
@@ -2389,6 +2390,20 @@ Module[{ast, node, children, data, issues, cases},
     ConfidenceLevel -> 0.90 |>]])&
     ,
     cases
+  ];
+
+  (*
+  inspired by 419765
+  *)
+  If[MatchQ[head, LeafNode[Symbol, "Solve" | "Reduce" | "FindInstance", _]],
+    If[Length[children] >= 2,
+      vars = children[[2]];
+      If[MatchQ[vars, LeafNode[Symbol, "Reals", _]],
+        AppendTo[issues, InspectionObject["BadArgument", "``Reals`` is the ``vars`` argument to ``" <> head[[2]] <> "`` but appears to be intended as the ``domain`` argument.", "Error", <|
+          Source -> vars[[3, Key[Source]]],
+          ConfidenceLevel -> 0.90 |>]]
+      ]
+    ];
   ];
 
   issues
