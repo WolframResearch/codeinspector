@@ -52,7 +52,7 @@ sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessio
 
 $DefaultTokenRules = <|
 
-LeafNode[Symbol, _, _] -> scanSymbols,
+LeafNode[Symbol, badSymbolsStringPat | sessionSymbolsStringPat, _] -> scanSymbols,
 
 LeafNode[Token`Percent | Token`PercentPercent, _, _] | CompoundNode[Out, _, _] /; $ScanSessionTokens -> scanSessionTokens,
 
