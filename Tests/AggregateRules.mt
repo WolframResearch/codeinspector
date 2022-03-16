@@ -477,6 +477,17 @@ Test[
 
 
 
+(*
+inspired by bug 421311
+*)
+TestMatch[
+	CodeInspect["masking:_Image | All:_:All"]
+	,
+	{InspectionObject["NestedOptionals", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220316-I9J0H0"
+]
+
 
 
 

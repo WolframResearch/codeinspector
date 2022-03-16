@@ -416,6 +416,10 @@ Module[{agg, node, parentPos, parent, reaped, issues},
   If[MatchQ[node, BinaryNode[Optional, {CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence, {_, _}, _], _, _}, _]],
     Sow[scanPatternBlankOptionals[pos, agg]];
   ];
+
+  If[MatchQ[node, BinaryNode[Optional, {_, _, BinaryNode[Optional, _, _]}, _]],
+    Sow[scanNestedOptionals[pos, agg]];
+  ];
   ][[2]];
 
   issues = Flatten[reaped];
@@ -1976,6 +1980,38 @@ Module[{agg, node, data, children, patternBlank,
 ]]
 
 
+
+(*
+inspired by bug 421311
+*)
+
+Attributes[scanNestedOptionals] = {HoldRest}
+
+scanNestedOptionals[pos_List, aggIn_] :=
+Module[{agg, node, issues, children, head, nested, nestedRator,
+  nestedChildren, rator, ratorSrc, nestedRatorSrc},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  rator = children[[2]];
+  nested = children[[3]];
+  nestedChildren = nested[[2]];
+  nestedRator = nestedChildren[[2]];
+  nestedRatorSrc = nestedRator[[3, Key[Source]]];
+  ratorSrc = rator[[3, Key[Source]]];
+
+  issues = {};
+
+  AppendTo[issues, InspectionObject["NestedOptionals", "``Optional`` is inside another ``Optional``.", "Error",
+    <| Source -> nestedRatorSrc,
+      "AdditionalSources" -> {ratorSrc},
+      ConfidenceLevel -> 0.95
+    |>]
+  ];
+
+  issues
+]
 
 
 
