@@ -503,6 +503,24 @@ TestMatch[
 
 
 
+(*
+inspired by bug 421309
+*)
+TestMatch[
+	CodeInspect["r_?cQ:1"]
+	,
+	{InspectionObject["PatternTestPattern", _, "Error", KeyValuePattern[ {
+		CodeActions -> {
+			CodeAction["Insert ``:``", ReplaceNode, _],
+			CodeAction["Replace with ``Optional``", ReplaceNode, _]} } ]]}
+	,
+	TestID->"AggregateRules-20220316-H3X3G7"
+]
+
+
+
+
+
 
 
 

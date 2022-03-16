@@ -1479,7 +1479,9 @@ Attributes[scanPatternTests] = {HoldRest}
 
 scanPatternTests[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unexpected, expected, parentPos, parent, bName},
+Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName,
+  issues, unexpected, expected, parentPos, parent, bName,
+  replacementNode1, replacementNode2},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   tag = node[[1]];
@@ -1630,7 +1632,7 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
           but intended was  a:_?b:c
           *)
 
-          replacementNode =
+          replacementNode1 =
             BinaryNode[Optional, {
               BinaryNode[Pattern, {
                 a[[2, 1]],
@@ -1641,14 +1643,36 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName, issues, unex
                   b[[2, 1]]}, <||>]}, <||>],
               b[[2, 2]],
               b[[2, 3]]}, <||>];
+          
+          (*
+          input was  a_?b:c
+
+          but intended was  Optional[a_?b, c]
+
+          inspired by bug 421309
+          *)
+
+          replacementNode2 =
+            CallNode[LeafNode[Symbol, "Optional", <||>], {
+              GroupNode[GroupSquare, {
+                LeafNode[Token`OpenSquare, "[", <||>],
+                InfixNode[Comma, {
+                  BinaryNode[PatternTest, {
+                    a,
+                    q,
+                    b[[2, 1]]}, <||>],
+                  LeafNode[Token`Comma, ",", <||>],
+                  LeafNode[Token`Whitespace, " ", <||>],
+                  b[[2, 3]]}, <||>],
+                LeafNode[Token`CloseSquare, "]", <||>]}, <||>]}, <||>];
 
           AppendTo[issues,
             InspectionObject["PatternTestPattern", "``PatternTest`` has ``Pattern`` on RHS.", "Error", <|
-              Source -> node[[3, Key[Source]]],
-              CodeActions -> { CodeAction["Insert ``:``", ReplaceNode, <|
-                "ReplacementNode" -> replacementNode,
-                Source -> node[[3, Key[Source]]]
-              |>] },
+              Source -> q[[3, Key[Source]]],
+              "AdditionalSources" -> {b[[2, 2, 3, Key[Source]]]},
+              CodeActions -> {
+                CodeAction["Insert ``:``", ReplaceNode, <| "ReplacementNode" -> replacementNode1, Source -> node[[3, Key[Source]]] |>],
+                CodeAction["Replace with ``Optional``", ReplaceNode, <| "ReplacementNode" -> replacementNode2, Source -> node[[3, Key[Source]]] |>] },
               ConfidenceLevel -> 0.95 |>
             ]
           ]
