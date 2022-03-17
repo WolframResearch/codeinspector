@@ -54,7 +54,8 @@ CallNode[LeafNode[Symbol,
   "Confirm" | "ConfirmBy" | "ConfirmMatch" | "ConfirmAssert" |
   "System`Confirm" | "System`ConfirmBy" | "System`ConfirmMatch" |
   "System`ConfirmAssert" |
-  "MatchQ"
+  "MatchQ" |
+  "KeyValuePattern"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -291,6 +292,9 @@ Module[{ast, node, sym, name},
     ,
     "MatchQ",
       scanMatchQ[pos, ast]
+    ,
+    "KeyValuePattern",
+      scanKeyValuePattern[pos, ast]
   ]
 ]]
 
@@ -2923,6 +2927,57 @@ Module[{ast, node, issues, head, headSrc, children, pat},
 
   issues
 ]]
+
+
+
+(*
+We are looking for both KeyValuePattern[] and BlankNullSequence[] in a pattern
+
+So first scan for KeyValuePattern which is more rare
+
+Then scan for BlankNullSequence in any parents
+*)
+Attributes[scanKeyValuePattern] = {HoldRest}
+
+scanKeyValuePattern[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, head, headSrc, children, parentPos,
+  parent},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  head = node[[1]];
+  headSrc = head[[3, Key[Source]]];
+
+  issues = {};
+
+  If[Length[pos] >= 2,
+    parentPos = Drop[pos, -2];
+    parent = Extract[ast, {parentPos}][[1]];
+    If[!FreeQ[parent, CallNode[LeafNode[Symbol, "BlankNullSequence", _], _, _]],
+      (*
+      parent contains both KeyValuePattern[] and BlankNullSequence[]
+
+      most likely being used as a pattern
+
+      a lot of false positives can be caught by this, so low confidence
+
+      Related bugs: 419646
+      *)
+      AppendTo[issues,
+        InspectionObject["KernelBug", "Using ``KeyValuePattern`` and ``BlankNullSequence`` in patterns is currently buggy.", "Error", <|
+          Source -> parent[[3, Key[Source]]],
+          ConfidenceLevel -> 0.5
+        |>]
+      ]
+    ]
+  ];
+
+  issues
+]]
+
 
 
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
