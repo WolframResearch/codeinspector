@@ -1619,6 +1619,7 @@ titleBar[notebook_NotebookObject, cell_CellObject] :=
 									AttachCell[
 										EvaluationBox[],
 										confirmClosurePopup[
+											notebook,
 											cell,
 											Dynamic[popupPresentQ]],
 										{Right, Bottom}, Offset[{6, 2}, Automatic], {Right, Top},
