@@ -1,6 +1,13 @@
 
 ## 1.5.1 - 28 Mar, 2022
 
+Add sanity check for when reported Source and actual source disagree, do not go into infinite loop
+
+
+### Fixes
+
+Fix 421308: correct call signature for confirmClosurePopup
+
 
 ## 1.5 - 7 Mar, 2022
 
