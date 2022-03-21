@@ -7,6 +7,35 @@ Warn about `Function[{x,y},x+y]&[1,2]`
 
 Warn about `"a" <> _`
 
+Add sanity check for when reported Source and actual source disagree, do not go into infinite loop
+
+scan for spaces between `=.`
+
+Add more known languages
+
+Handle buggy FE syntax of `a:b:c:d`
+
+scan for `a:b:c:d`
+
+warn about `**`
+
+input was `a_?b:c`, give suggestion of `Optional[a_?b, c]`
+
+scan for patterns that have buggy behavior in the kernel
+
+Add AdditionalDocumentationLinks property for lints and display them in the linter UI
+
+
+### Fixes
+
+Fix bugs with displaying implicit 1 and All
+
+Newer symbols like Confirm and Enclose may be prepended with System\`
+
+Fix problem with SuspiciousPatternBlankOptional where blank may be a_b
+
+Fix 421308: correct call signature for confirmClosurePopup
+
 
 ## 1.5 - 7 Mar, 2022
 
