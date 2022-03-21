@@ -1,4 +1,7 @@
 
+## 1.5.1 - 28 Mar, 2022
+
+
 ## 1.5 - 7 Mar, 2022
 
 Add "Editor" option for CodeInspectSummarize
