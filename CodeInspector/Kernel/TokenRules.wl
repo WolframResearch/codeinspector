@@ -43,16 +43,61 @@ location = "Location" /. PacletInformation["CodeInspector"];
 
 WolframLanguageSyntax`Generate`$badSymbols = Get[FileNameJoin[{location, "Resources", "Data", "BadSymbols.wl"}]]
 WolframLanguageSyntax`Generate`$sessionSymbols = Get[FileNameJoin[{location, "Resources", "Data", "SessionSymbols.wl"}]]
+WolframLanguageSyntax`Generate`$undocumentedSymbols = Get[FileNameJoin[{location, "Resources", "Data", "UndocumentedSymbols.wl"}]]
 
 badSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$badSymbols
 sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessionSymbols
+undocumentedSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$undocumentedSymbols
 
+allSymbolsPat = Alternatives @@ Join[
+    WolframLanguageSyntax`Generate`$badSymbols,
+    WolframLanguageSyntax`Generate`$sessionSymbols,
+    WolframLanguageSyntax`Generate`$undocumentedSymbols
+  ]
+
+
+$badSymbolsWithSuggestions = <|
+  "Failed" -> {0.75, "$Failed"},
+  (* low confidence because people do define their own Match *)
+  "Match" -> {0.5, "MatchQ"},
+  "UnSameQ" -> {0.95, "UnsameQ"},
+  (* low confidence because people do define their own StringMatch *)
+  "StringMatch" -> {0.5, "StringMatchQ"},
+  "OptionsQ" -> {0.95, "OptionQ"},
+  "OptionPattern" -> {0.95, "OptionsPattern"},
+  "InterpolationFunction" -> {0.95, "InterpolatingFunction"},
+  "InterpolationPolynomial" -> {0.95, "InterpolatingPolynomial"},
+  (* low confidence because people do define their own RealQ *)
+  "RealQ" -> {0.5, "Developer`RealQ"},
+  (* low confidence because people do define their own SymbolQ *)
+  "SymbolQ" -> {0.5, "Developer`SymbolQ"},
+  "DataSet" -> {0.95, "Dataset"},
+  "UrlExecute" -> {0.95, "URLExecute"},
+  "Cloudbase" -> {0.95, "CloudBase"},
+  "ExpandFilename" -> {0.95, "ExpandFileName"},
+  "$PathNameSeparator" -> {0.95, "$PathnameSeparator"},
+  "$RegisteredUsername" -> {0.95, "$RegisteredUserName"}
+|>
+
+$badSymbolsNoSuggestions = <|
+  (*
+  low confidence because people do define their own Boolean
+  could suggest True|False
+  *)
+  "Boolean" -> {0.5},
+  (* low confidence because people do define their own FalseQ *)
+  "FalseQ" -> {0.5}
+|>
+
+$undocumentedSymbolsWithSuggestions = <|
+  "$UserName" -> {0.95, "$Username"}
+|>
 
 
 
 $DefaultTokenRules = <|
 
-LeafNode[Symbol, badSymbolsStringPat | sessionSymbolsStringPat, _] -> scanSymbols,
+LeafNode[Symbol, allSymbolsPat, _] -> scanSymbols,
 
 LeafNode[Token`Percent | Token`PercentPercent, _, _] | CompoundNode[Out, _, _] /; $ScanSessionTokens -> scanSessionTokens,
 
@@ -64,7 +109,8 @@ Nothing
 Attributes[scanSymbols] = {HoldRest}
 
 scanSymbols[pos_List, cstIn_] :=
-Module[{cst, node, data, str, issues, src},
+Module[{cst, node, data, str, issues, src, withSuggestion,
+  noSuggestion},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   str = node[[2]];
@@ -75,192 +121,37 @@ Module[{cst, node, data, str, issues, src},
 
   Which[
     StringMatchQ[str, badSymbolsStringPat],
-      Switch[str,
-        "Failed",
+      Which[
+        !MissingQ[(withSuggestion = $badSymbolsWithSuggestions[str])],
           AppendTo[issues,
-            InspectionObject["BadSymbol", "``Failed`` does not exist in **System`** context.", "Error",
+            InspectionObject["BadSymbol", "``" <> str <> "`` does not exist in **System`** context.", "Error",
               <|
                 Source -> src,
-                ConfidenceLevel -> 0.75,
+                ConfidenceLevel -> withSuggestion[[1]],
                 CodeActions -> {
-                  CodeAction["Replace with ``$Failed``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[$Failed] |>]
+                  CodeAction["Replace with ``" <> withSuggestion[[2]] <> "``", ReplaceNode, <|
+                    Source -> src,
+                    "ReplacementNode" -> LeafNode[Symbol, withSuggestion[[2]], <||>]
+                  |>]
                 },
                 "Argument" -> str
               |>
             ]
           ]
         ,
-        "Boolean",
+        !MissingQ[(noSuggestion = $badSymbolsNoSuggestions[str])],
           AppendTo[issues,
-            InspectionObject["BadSymbol", "``Boolean`` does not exist in **System`** context.", "Error",
+            InspectionObject["BadSymbol", "``" <> str <> "`` does not exist in **System`** context.", "Error",
               <|
                 Source -> src,
-                (*
-                low confidence because people do define their own Boolean
-                *)
-                ConfidenceLevel -> 0.5,
-                CodeActions -> {
-                  CodeAction["Replace with ``True|False``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[True|False] |>]
-                },
+                ConfidenceLevel -> withSuggestion[[1]],
                 "Argument" -> str
               |>
             ]
           ]
         ,
-        "Match",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``Match`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                (*
-                low confidence because people do define their own Match
-                *)
-                ConfidenceLevel -> 0.5,
-                CodeActions -> {
-                  CodeAction["Replace with ``MatchQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[MatchQ] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "UnSameQ",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``UnSameQ`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                ConfidenceLevel -> 0.95,
-                CodeActions -> {
-                  CodeAction["Replace with ``UnsameQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[UnsameQ] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "StringMatch",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``StringMatch`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                (*
-                low confidence because people do define their own StringMatch
-                *)
-                ConfidenceLevel -> 0.5,
-                CodeActions -> {
-                  CodeAction["Replace with ``StringMatchQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[StringMatchQ] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "OptionsQ",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``OptionsQ`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                ConfidenceLevel -> 0.95,
-                CodeActions -> {
-                  CodeAction["Replace with ``OptionQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[OptionQ] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "OptionPattern",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``OptionPattern`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                ConfidenceLevel -> 0.95,
-                CodeActions -> {
-                  CodeAction["Replace with ``OptionsPattern``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[OptionsPattern] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "InterpolationFunction",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``InterpolationFunction`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                ConfidenceLevel -> 0.95,
-                CodeActions -> {
-                  CodeAction["Replace with ``InterpolatingFunction``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[InterpolatingFunction] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "InterpolationPolynomial",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``InterpolationPolynomial`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                ConfidenceLevel -> 0.95,
-                CodeActions -> {
-                  CodeAction["Replace with ``InterpolatingPolynomial``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[InterpolatingPolynomial] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "RealQ",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``RealQ`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                (*
-                low confidence because people do define their own RealQ
-                *)
-                ConfidenceLevel -> 0.5,
-                CodeActions -> {
-                  CodeAction["Replace with ``Developer`RealQ``", ReplaceNode, <| Source -> src, "ReplacementNode"->ToNode[Developer`RealQ] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "SymbolQ",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``SymbolQ`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                (*
-                low confidence because people do define their own SymbolQ
-                *)
-                ConfidenceLevel -> 0.5,
-                CodeActions -> {
-                  CodeAction["Replace with ``Developer`SymbolQ``", ReplaceNode, <| Source -> src, "ReplacementNode" -> ToNode[Developer`SymbolQ] |>]
-                },
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        "FalseQ",
-          AppendTo[issues,
-            InspectionObject["BadSymbol", "``FalseQ`` does not exist in **System`** context.", "Error",
-              <|
-                Source -> src,
-                (*
-                low confidence because people do define their own FalseQ
-                *)
-                ConfidenceLevel -> 0.5,
-                "Argument" -> str
-              |>
-            ]
-          ]
-        ,
-        _,
-          (* everything else without suggestions *)
+        True,
+          (* everything else without suggestions or custom ConfidenceLevel*)
           AppendTo[issues,
             InspectionObject["BadSymbol", "``" <> str <> "`` does not exist in **System`** context.", "Error",
               <|
@@ -280,6 +171,36 @@ Module[{cst, node, data, str, issues, src},
             ConfidenceLevel -> 0.55
           |>
         ]
+      ]
+    ,
+    StringMatchQ[str, undocumentedSymbolsStringPat],
+      Which[
+        !MissingQ[(withSuggestion = $undocumentedSymbolsWithSuggestions[str])],
+          AppendTo[issues,
+            InspectionObject["UndocumentedSymbol", "``" <> str <> "`` is undocumented.", "Remark",
+              <|
+                Source -> src,
+                ConfidenceLevel -> withSuggestion[[1]],
+                CodeActions -> {
+                  CodeAction["Replace with ``" <> withSuggestion[[2]] <> "``", ReplaceNode, <|
+                    Source -> src,
+                    "ReplacementNode" -> LeafNode[Symbol, withSuggestion[[2]], <||>]
+                  |>]
+                },
+                "Argument" -> str
+              |>
+            ]
+          ]
+        ,
+        True,
+          (*
+          everything else without suggestions or custom ConfidenceLevel
+          
+          do not give any lints here
+
+          undocumented symbols are generally ok
+          *)
+          Null
       ]
     ,
     True,
