@@ -2936,13 +2936,17 @@ We are looking for both KeyValuePattern[] and BlankNullSequence[] in a pattern
 So first scan for KeyValuePattern which is more rare
 
 Then scan for BlankNullSequence in any parents
+
+Inspired by bug 419646
+
+Not completely sure how to characterize the buggy pattern
 *)
 Attributes[scanKeyValuePattern] = {HoldRest}
 
 scanKeyValuePattern[pos_List, astIn_] :=
 Catch[
 Module[{ast, node, issues, head, headSrc, children, parentPos,
-  parent},
+  parent, blankNullSequenceNodes, blankNullSequenceNodesInKeyValuePattern},
 
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -2957,20 +2961,37 @@ Module[{ast, node, issues, head, headSrc, children, parentPos,
     parentPos = Drop[pos, -2];
     parent = Extract[ast, {parentPos}][[1]];
     If[!FreeQ[parent, CallNode[LeafNode[Symbol, "BlankNullSequence", _], _, _]],
+
       (*
-      parent contains both KeyValuePattern[] and BlankNullSequence[]
+      now remove any BlankNullSequence that are INSIDE KeyValuePattern
 
-      most likely being used as a pattern
-
-      a lot of false positives can be caught by this, so low confidence
-
-      Related bugs: 419646
+      we want to remove e.g.:
+      KeyValuePattern["Definitions" -> {___, LeafNode[Symbol, tokenSymbol, _Association], ___}]
       *)
-      AppendTo[issues,
-        InspectionObject["KernelBug", "Using ``KeyValuePattern`` and ``BlankNullSequence`` in patterns is currently buggy.", "Error", <|
-          Source -> parent[[3, Key[Source]]],
-          ConfidenceLevel -> 0.5
-        |>]
+
+      blankNullSequenceNodes = Cases[parent, CallNode[LeafNode[Symbol, "BlankNullSequence", _], _, _], Infinity];
+      
+      blankNullSequenceNodesInKeyValuePattern = Cases[node, CallNode[LeafNode[Symbol, "BlankNullSequence", _], _, _], Infinity];
+
+      blankNullSequenceNodes = Complement[blankNullSequenceNodes, blankNullSequenceNodesInKeyValuePattern];
+      
+      If[Length[blankNullSequenceNodes] >= 2,
+        (*
+        parent contains both KeyValuePatterns and at least 2 BlankNullSequences (and the BlankNullSequences are not inside the KeyValuePatterns)
+
+        most likely being used as a pattern
+
+        a lot of false positives can be caught by this, so low confidence
+
+        Related bugs: 419646
+        *)
+        AppendTo[issues,
+          InspectionObject["KernelBug", "Using ``KeyValuePattern`` and ``BlankNullSequence`` in patterns is currently buggy.", "Error", <|
+            Source -> node[[3, Key[Source]]],
+            "AdditionalSources" -> blankNullSequenceNodes[[All, 3, Key[Source]]],
+            ConfidenceLevel -> 0.5
+          |>]
+        ]
       ]
     ]
   ];

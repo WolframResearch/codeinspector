@@ -720,7 +720,27 @@ Test[
 
 
 
+(*
+from bug 419646
+*)
+TestMatch[
+	CodeInspect["MatchQ[f[{g}, <|a -> b|>], f[{___, g, ___}, KeyValuePattern[_ -> _]]]"]
+	,
+	{InspectionObject["KernelBug", _, "Error", _]}
+	,
+	TestID->"AbstractRules-20220323-C4Q6P2"	
+]
 
+(*
+try to not get false positives
+*)
+TestMatch[
+	CodeInspect["KeyValuePattern[\"Definitions\" -> {___, LeafNode[Symbol, tokenSymbol, _Association], ___}]"]
+	,
+	{}
+	,
+	TestID->"AbstractRules-20220323-I9E9I8"	
+]
 
 
 
