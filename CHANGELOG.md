@@ -7,8 +7,6 @@ Warn about `Function[{x,y},x+y]&[1,2]`
 
 Warn about `"a" <> _`
 
-Add sanity check for when reported Source and actual source disagree, do not go into infinite loop
-
 scan for spaces between `=.`
 
 Add more known languages
@@ -33,6 +31,14 @@ Fix bugs with displaying implicit 1 and All
 Newer symbols like Confirm and Enclose may be prepended with System\`
 
 Fix problem with SuspiciousPatternBlankOptional where blank may be a_b
+
+
+## 1.5.1 - 28 Mar, 2022
+
+Add sanity check for when reported Source and actual source disagree, do not go into infinite loop
+
+
+### Fixes
 
 Fix 421308: correct call signature for confirmClosurePopup
 
