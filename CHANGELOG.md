@@ -32,6 +32,8 @@ Newer symbols like Confirm and Enclose may be prepended with System\`
 
 Fix problem with SuspiciousPatternBlankOptional where blank may be a_b
 
+Fix 421966: LinterUI collapses special characters in suggestions
+
 
 ## 1.5.1 - 28 Mar, 2022
 

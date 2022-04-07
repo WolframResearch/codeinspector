@@ -160,7 +160,7 @@ styleData = <|
 |>;
 
 
-inputStyle[boxes_, opts___] := StyleBox[boxes, "Input", opts, ShowStringCharacters -> True]
+inputStyle[boxes_, opts___] := StyleBox[boxes, "Input", opts, ShowStringCharacters -> True, ShowSpecialCharacters -> Automatic, ShowSyntaxStyles -> False]
 
 
 iconData = <|
