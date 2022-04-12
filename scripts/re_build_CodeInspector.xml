@@ -72,7 +72,7 @@
 			Needs["PacletManager`"];
 
 			src = FileNameJoin[{AntProperty["files_directory"], "CodeInspector"}];
-			dest = FileNameJoin[AntProperty["files_directory"]];
+			dest = FileNameJoin[AntProperty["output_directory"]];
 			PackPaclet[src, dest];
 
 			SetDirectory[dest]
