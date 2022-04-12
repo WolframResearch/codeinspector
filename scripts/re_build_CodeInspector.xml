@@ -1,60 +1,56 @@
-<project name='CodeInspector' basedir='..'>
+<project name='CodeInspector' basedir='..' xmlns:if='ant:if' xmlns:unless='ant:unless'>
 
 	<property name='component' value='CodeInspector' />
-	<property name='system_id' value='### Must be set by Jenkins ###' />
-
 	<property name='app.name' value='${component}' />
 	<property name='inputDir' value='${basedir}/${app.name}/Documentation' />
-	<property name='language' value='### Must be set by Jenkins ###' />
 
 	<property environment='env' />
 	<import file='${env.RE_ANTLIBRARY_HOME}/ant-lib.xml' />
 
-
 	<target name='Component.CodeInspector.init.custom' extensionOf='Component.init.custom'>
 
+		<!-- Report to the build monitor, publish artifacts to images-frontend, etc. -->
+		<property name='has-buildmonitor' value='true' />
+
 		<!-- - CMake generates makefiles here -->
-		<property name='build.dir' value='${checkout_directory}${file.separator}${component}${file.separator}build' />
+		<property name='build.dir' location='${checkout_directory}/${component}/build' />
 
 	</target>
 
-	<target name='Component.CodeInspector.prebuild' extensionOf='Component.prebuild'>
+	<target name='Component.CodeInspector.clean' extensionOf='Component.clean'>
 
 		<delete dir='${build.dir}' />
 		<mkdir dir='${build.dir}' />
-	</target>
 
-	<!--
-		Component (platform-independent)
-	-->
+	</target>
 
 	<target name='Component.CodeInspector.execute' extensionOf='Component.execute'>
 
-		<re-cmake-exec dir="${build.dir}">
+		<re-cmake-exec dir='${build.dir}'>
 			<arg line='-G &quot;${env.CMAKE_GENERATOR}&quot;' />
-			<arg line='-DWOLFRAMKERNEL=${mathExe}' />  
+			<arg line='-DWOLFRAMKERNEL=${mathExe}' />
 			<arg line='-DBUILDNUMBER=${env.BUILD_NUMBER}' />
-			<arg value='${checkout_directory}/${component}' /> 
-		</re-cmake-exec> 
+			<arg value='${checkout_directory}/${component}' />
+		</re-cmake-exec>
 
-		<re-cmake-exec dir="${build.dir}">
-			<arg line='--build .' /> 
-			<arg line='--target paclet' /> 
-		</re-cmake-exec> 
-		
+		<re-cmake-exec dir='${build.dir}'>
+			<arg line='--build .' />
+			<arg line='--target paclet' />
+		</re-cmake-exec>
+
 		<mkdir dir='${files_directory}/${component}' />
 		<copy todir='${files_directory}/${component}'>
-			<fileset dir='${build.dir}${file.separator}paclet${file.separator}${component}' />
+			<fileset dir='${build.dir}/paclet/${component}' />
 		</copy>
 
 	</target>
-	
-	<!--
-			Paclet generation
-	-->
-	
+
 	<target name='Paclet.CodeInspector.init.custom' extensionOf='Paclet.init.custom'>
-	
+
+		<!-- Report to the build monitor, publish artifacts to images-frontend, etc. -->
+		<property name='has-buildmonitor' value='true' />
+		<property name='unarchive-artifacts-options' value='--source ${files_directory}' />
+
 		<!--
 			Prevent Paclet.clean from deleting files_directory,
 			since CopyAndUnarchiveArtifact just put all the paclet
@@ -62,10 +58,11 @@
 		-->
 
 		<property name='keep.files_directory' value='true' />
-	
+
 	</target>
-	
+
 	<target name='Paclet.CodeInspector.execute' extensionOf='Paclet.execute'>
+
 		<mathematica exe="${mathExe}" fresh="true" quit="true"><![CDATA[
 
 			Print["$Version: ", $Version];
@@ -86,36 +83,40 @@
 		]]></mathematica>
 
 	</target>
-	
-    <!--
-            Paclet deployment
-    -->
-	
+
+	<target name='Deploy.CodeInspector.init.custom' extensionOf='Deploy.init.custom'>
+
+		<!-- Report to the build monitor, publish artifacts to images-frontend, etc. -->
+		<property name='has-buildmonitor' value='true' />
+
+	</target>
+
 	<target name='Deploy.CodeInspector.execute' extensionOf='Deploy.execute'>
-	
-		<path id='file.id'> 
+
+		<path id='file.id'>
 			<fileset dir='${checkout_directory}'>
-				<include name="CodeInspector*.paclet"/>
+				<include name='CodeInspector-*.paclet' />
 			</fileset>
 		</path>
 
-		<property name='paclet_file' refid='file.id'/> 
+		<property name='paclet_file' refid='file.id'/>
 		<property name='src' value='${paclet_file}' />
 		<property name='host' value='buildmgr@paclet-int.wolfram.com' />
 		<property name='dest' value='/mnt/paclets/to-deploy/internal' />
-		
+
 		<condition property='scp.cmd' value='pscp' else='scp'>
 			<os family='windows'/>
 		</condition>
-		
+
 		<condition property='args' value='-batch -q -r' else='-Br'>
 			<os family='windows'/>
 		</condition>
-		
+
 		<echo message="copy ${src} to ${host}:${dest}" />
 		<exec executable='${scp.cmd}' failonerror='true' searchpath='true'>
 			<arg line='${args} ${src} ${host}:${dest}' />
 		</exec>
+
 	</target>
 
 </project>
