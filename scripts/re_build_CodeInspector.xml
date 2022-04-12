@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project name='CodeInspector' basedir='..' xmlns:if='ant:if' xmlns:unless='ant:unless'>
 
 	<property name='component' value='CodeInspector' />
