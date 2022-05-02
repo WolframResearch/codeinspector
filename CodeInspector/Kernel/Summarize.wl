@@ -191,12 +191,12 @@ Since we have an explicit lint that we want to summarize, then make sure that fi
 do not interfere with summarizing
 *)
 CodeInspectSummarize[lint:InspectionObject[_, _, _, KeyValuePattern["File" -> _]], opts:OptionsPattern[]] :=
-  Module[{file},
+Module[{file},
 
-    file = lint[[4, Key["File"]]];
+  file = lint[[4, Key["File"]]];
 
-    CodeInspectSummarize[File[file], {lint}, opts, "SeverityExclusions" -> {}, "TagExclusions" -> {}, ConfidenceLevel -> 0.0, "LintLimit" -> Infinity]
-  ]
+  CodeInspectSummarize[File[file], {lint}, opts, "SeverityExclusions" -> {}, "TagExclusions" -> {}, ConfidenceLevel -> 0.0, "LintLimit" -> Infinity]
+]
 
 
 
@@ -267,20 +267,20 @@ Catch[
 
 CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, lines,
+Module[{lints, lines,
   tagExclusions, severityExclusions, confidence, lintLimit,
   lintedLines, string, tabWidth},
+  
+  lints = lintsIn;
+  
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
- lints = lintsIn;
+  tabWidth = OptionValue["TabWidth"];
 
- tagExclusions = OptionValue["TagExclusions"];
- severityExclusions = OptionValue["SeverityExclusions"];
- confidence = OptionValue[ConfidenceLevel];
- lintLimit = OptionValue["LintLimit"];
-
- tabWidth = OptionValue["TabWidth"];
-
- If[lints === Automatic,
+  If[lints === Automatic,
     lints = CodeInspect[bytes, FilterRules[{opts}, Options[CodeInspect]]];
   ];
 
@@ -497,7 +497,7 @@ Options[createUnderlineList] = {
 
 createUnderlineList[lineIn_String, lineNumber_Integer, lintsPerColumnIn_Association, opts:OptionsPattern[]] :=
 Catch[
- Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn, line},
+Module[{under, lintsPerColumn, endOfFile, lineIsEmpty, startChar, endChar, startMarker, endMarker, markupPerColumn, line},
 
   line = lineIn;
 
@@ -575,8 +575,7 @@ Catch[
   under = ReplacePart[under, markupPerColumn];
 
   under
-  ]
-]
+]]
 
 
 Options[createLintsPerColumn] = {

@@ -225,7 +225,7 @@ Options[CodeInspectBox] = {
 
 CodeInspectBox[box_, opts:OptionsPattern[]] :=
 Catch[
- Module[{cst, suppressedRegions},
+Module[{cst, suppressedRegions},
 
   $ConcreteLintProgress = 0;
   $AggregateLintProgress = 0;
@@ -286,18 +286,18 @@ lintsInPat = If[$VersionNumber >= 11.2, {___InspectionObject}, _]
 
 CodeInspectBoxSummarize[box_, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, processedBox, cst, expandedLints,
+Module[{lints, processedBox, cst, expandedLints,
   tagExclusions, severityExclusions, confidence, lintLimit,
   suppressedRegions},
 
- lints = lintsIn;
+  lints = lintsIn;
 
- tagExclusions = OptionValue["TagExclusions"];
- severityExclusions = OptionValue["SeverityExclusions"];
- confidence = OptionValue[ConfidenceLevel];
- lintLimit = OptionValue["LintLimit"];
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
- If[lints === Automatic,
+  If[lints === Automatic,
 
     cst = CodeConcreteParseBox[box, FilterRules[{opts}, Options[CodeConcreteParseBox]]];
 

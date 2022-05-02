@@ -264,7 +264,7 @@ Module[{performanceGoal, full, lints, cst, data,
 
 CodeInspect[string_String, opts:OptionsPattern[]] :=
 Catch[
- Module[{suppressedRegions, cst, fileFormat, scanSessionTokens},
+Module[{suppressedRegions, cst, fileFormat, scanSessionTokens},
 
   fileFormat = OptionValue["FileFormat"];
 
@@ -304,7 +304,7 @@ Catch[
 
 CodeInspect[bytes:{_Integer, _Integer...}, opts:OptionsPattern[]] :=
 Catch[
- Module[{cst, suppressedRegions, fileFormat},
+Module[{cst, suppressedRegions, fileFormat},
 
   fileFormat = OptionValue["FileFormat"];
 
@@ -826,7 +826,7 @@ AttachAnalysis::nofe = "No front end available.";
 
 
 AttachAnalysis[
-	HoldPattern[notebookOrCells_:EvaluationNotebook[]]
+  HoldPattern[notebookOrCells_:EvaluationNotebook[]]
 ] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] := 
   If[TrueQ[$Notebooks],
 

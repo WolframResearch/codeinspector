@@ -40,139 +40,139 @@ needed
 
 
 Options[OpenInEditor] = {
-	"Editor" -> Automatic
+  "Editor" -> Automatic
 }
 
 
 OpenInEditor[file_String, OptionsPattern[]] :=
 Module[{editor, res},
 
-	editor = OptionValue["Editor"];
-	If[editor === Automatic,
-		editor = $Editor
-	];
+  editor = OptionValue["Editor"];
+  If[editor === Automatic,
+    editor = $Editor
+  ];
 
-	Switch[{$InterfaceEnvironment, editor},
-		{"Macintosh", "Sublime Text"},
-			(*
-			Run needs spaces escaped
-			*)
-			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file]
-		,
-		{"Macintosh", "Visual Studio Code"},
-			(*
-			Run needs spaces escaped
-			*)
-			Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file]
-		,
-		{_, "SystemOpen"},
-			(*
-			SystemOpen does NOT need spaces escaped
-			*)
-			res = SystemOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "SystemOpen"]
-			];
-		,
-		_,
-			(*
-			Editor "FrontEnd" is supported in all environments.
+  Switch[{$InterfaceEnvironment, editor},
+    {"Macintosh", "Sublime Text"},
+      (*
+      Run needs spaces escaped
+      *)
+      Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file]
+    ,
+    {"Macintosh", "Visual Studio Code"},
+      (*
+      Run needs spaces escaped
+      *)
+      Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file]
+    ,
+    {_, "SystemOpen"},
+      (*
+      SystemOpen does NOT need spaces escaped
+      *)
+      res = SystemOpen[file];
+      If[FailureQ[res],
+        Message[OpenInEditor::fail, file, "SystemOpen"]
+      ];
+    ,
+    _,
+      (*
+      Editor "FrontEnd" is supported in all environments.
 
-			NotebookOpen does NOT need spaces escaped
-			*)
-			res = NotebookOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "FrontEnd"]
-			];
-	]
+      NotebookOpen does NOT need spaces escaped
+      *)
+      res = NotebookOpen[file];
+      If[FailureQ[res],
+        Message[OpenInEditor::fail, file, "FrontEnd"]
+      ];
+  ]
 ]
 
 
 OpenInEditor[file_String, line_Integer, OptionsPattern[]] :=
 Module[{editor, res},
 
-	editor = OptionValue["Editor"];
-	If[editor === Automatic,
-		editor = $Editor
-	];
+  editor = OptionValue["Editor"];
+  If[editor === Automatic,
+    editor = $Editor
+  ];
 
-	Switch[{$InterfaceEnvironment, editor},
-		{"Macintosh", "Sublime Text"},
-			(*
-			Run needs spaces escaped
-			*)
-			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file <> ":" <> ToString[line]]
-		,
-		{"Macintosh", "Visual Studio Code"},
-			(*
-			Run needs spaces escaped
-			*)
-			Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file <> ":" <> ToString[line]]
-		,
-		{_, "SystemOpen"},
-			(*
-			SystemOpen does NOT need spaces escaped
-			*)
-			res = SystemOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "SystemOpen"]
-			];
-		,
-		_,
-			(*
-			Editor "FrontEnd" is supported in all environments.
+  Switch[{$InterfaceEnvironment, editor},
+    {"Macintosh", "Sublime Text"},
+      (*
+      Run needs spaces escaped
+      *)
+      Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file <> ":" <> ToString[line]]
+    ,
+    {"Macintosh", "Visual Studio Code"},
+      (*
+      Run needs spaces escaped
+      *)
+      Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file <> ":" <> ToString[line]]
+    ,
+    {_, "SystemOpen"},
+      (*
+      SystemOpen does NOT need spaces escaped
+      *)
+      res = SystemOpen[file];
+      If[FailureQ[res],
+        Message[OpenInEditor::fail, file, "SystemOpen"]
+      ];
+    ,
+    _,
+      (*
+      Editor "FrontEnd" is supported in all environments.
 
-			NotebookOpen does NOT need spaces escaped
-			*)
-			res = NotebookOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "FrontEnd"]
-			];
-	]
+      NotebookOpen does NOT need spaces escaped
+      *)
+      res = NotebookOpen[file];
+      If[FailureQ[res],
+        Message[OpenInEditor::fail, file, "FrontEnd"]
+      ];
+  ]
 ]
 
 
 OpenInEditor[file_String, line_Integer, col_Integer, OptionsPattern[]] :=
 Module[{editor, res},
 
-	editor = OptionValue["Editor"];
-	If[editor === Automatic,
-		editor = $Editor
-	];
+  editor = OptionValue["Editor"];
+  If[editor === Automatic,
+    editor = $Editor
+  ];
 
-	Switch[{$InterfaceEnvironment, editor},
-		{"Macintosh", "Sublime Text"},
-			(*
-			Run needs spaces escaped
-			*)
-			Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-		,
-		{"Macintosh", "Visual Studio Code"},
-			(*
-			Run needs spaces escaped
-			*)
-			Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
-		,
-		{_, "SystemOpen"},
-			(*
-			SystemOpen does NOT need spaces escaped
-			*)
-			res = SystemOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "SystemOpen"]
-			];
-		,
-		_,
-			(*
-			Editor "FrontEnd" is supported in all environments.
+  Switch[{$InterfaceEnvironment, editor},
+    {"Macintosh", "Sublime Text"},
+      (*
+      Run needs spaces escaped
+      *)
+      Run[escapeSpaces["/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"] <> " " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
+    ,
+    {"Macintosh", "Visual Studio Code"},
+      (*
+      Run needs spaces escaped
+      *)
+      Run[escapeSpaces["/usr/local/bin/code"] <> " -g " <> file <> ":" <> ToString[line] <> ":" <> ToString[col] <> ""]
+    ,
+    {_, "SystemOpen"},
+      (*
+      SystemOpen does NOT need spaces escaped
+      *)
+      res = SystemOpen[file];
+      If[FailureQ[res],
+        Message[OpenInEditor::fail, file, "SystemOpen"]
+      ];
+    ,
+    _,
+      (*
+      Editor "FrontEnd" is supported in all environments.
 
-			NotebookOpen does NOT need spaces escaped
-			*)
-			res = NotebookOpen[file];
-			If[FailureQ[res],
-				Message[OpenInEditor::fail, file, "FrontEnd"]
-			];
-	]
+      NotebookOpen does NOT need spaces escaped
+      *)
+      res = NotebookOpen[file];
+      If[FailureQ[res],
+        Message[OpenInEditor::fail, file, "FrontEnd"]
+      ];
+  ]
 ]
 
 

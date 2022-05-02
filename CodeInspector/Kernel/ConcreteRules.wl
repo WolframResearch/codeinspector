@@ -245,7 +245,7 @@ Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
 Attributes[scanCalls] = {HoldRest}
 
 scanCalls[pos_List, cstIn_] :=
- Module[{cst, node, tag, children, groupSquare, groupSquareChildren, openSquare, openSquareData},
+Module[{cst, node, tag, children, groupSquare, groupSquareChildren, openSquare, openSquareData},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
@@ -275,7 +275,7 @@ scanCalls[pos_List, cstIn_] :=
 Attributes[scanErrorNodes] = {HoldRest}
 
 scanErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, tag, data, tagString, children, issues, multilineStrings, commaSrc},
+Module[{cst, node, tag, data, tagString, children, issues, multilineStrings, commaSrc},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
@@ -398,7 +398,7 @@ prevSrc[After[src_]] :=
 Attributes[scanSyntaxErrorNodes] = {HoldRest}
 
 scanSyntaxErrorNodes[pos_List, cstIn_] :=
- Module[{cst, node, tag, data, tagString, children},
+Module[{cst, node, tag, data, tagString, children},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
@@ -437,7 +437,7 @@ scanSyntaxErrorNodes[pos_List, cstIn_] :=
 Attributes[scanGroupMissingCloserNodes] = {HoldRest}
 
 scanGroupMissingCloserNodes[pos_List, cstIn_] :=
- Module[{cst, node, data, opener, openerData},
+Module[{cst, node, data, opener, openerData},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   data = node[[3]];
@@ -457,7 +457,7 @@ scanGroupMissingCloserNodes[pos_List, cstIn_] :=
 Attributes[scanUnterminatedGroupNodes] = {HoldRest}
 
 scanUnterminatedGroupNodes[pos_List, cstIn_] :=
- Module[{cst, node, data, opener, openerData},
+Module[{cst, node, data, opener, openerData},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   data = node[[3]];
@@ -477,7 +477,7 @@ scanUnterminatedGroupNodes[pos_List, cstIn_] :=
 Attributes[scanGroupMissingOpenerNodes] = {HoldRest}
 
 scanGroupMissingOpenerNodes[pos_List, cstIn_] :=
- Module[{cst, node, data, closer, closerData},
+Module[{cst, node, data, closer, closerData},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   data = node[[3]];
@@ -527,7 +527,7 @@ Module[{cst, data, issues, syntaxIssues, issuesToReturn, formatIssues, encodingI
 Attributes[scanParenGridBox] = {HoldRest}
 
 scanParenGridBox[pos_List, cstIn_] :=
- Module[{cst, node, tag, children, ws1, ws2, issues, data, open, close},
+Module[{cst, node, tag, children, ws1, ws2, issues, data, open, close},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
@@ -602,7 +602,7 @@ scanParenGridBox[pos_List, cstIn_] :=
 Attributes[scanSuspiciousBoxes] = {HoldRest}
 
 scanSuspiciousBoxes[pos_List, cstIn_] :=
- Module[{cst, node, data, tag},
+Module[{cst, node, data, tag},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];

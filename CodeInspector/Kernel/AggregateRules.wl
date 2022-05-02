@@ -952,7 +952,7 @@ No need to also compatibility check for _.... because this was invalid prior to 
 Attributes[scanRepeateds] = {HoldRest}
 
 scanRepeateds[pos_List, cstIn_] :=
- Module[{cst, node, children, rand, issues, rator},
+Module[{cst, node, children, rand, issues, rator},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
@@ -1042,7 +1042,7 @@ Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, children, data, issues, src, pairs, srcs},
+Module[{agg, node, children, data, issues, src, pairs, srcs},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -1737,7 +1737,7 @@ warn about a->b& which parses as (a->b)& and not a->(b&)
 *)
 scanRuleFunctions[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, parentPos, parent,
+Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, parentPos, parent,
   choice1, choice2, amp},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
@@ -1817,7 +1817,7 @@ Catch[
      If[MatchQ[parent, CallNode[node, _, _]],
       Throw[{}]
      ];
-    ];
+  ];
 
   ruleHead = rule[[1]];
   ruleChild2 = rule[[2, 3]];
@@ -2080,7 +2080,7 @@ a | b ~~ c
 *)
 scanAlternativesStringExpression[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, alternativesChildren, alternativesMost, alternativesLast,
+Module[{agg, node, data, children, alternativesChildren, alternativesMost, alternativesLast,
   issues, alternativess, actions, alternativesPos, choice, action, alternativesFirst, alternativesRest,
   stringExpArgsBefore, stringExpArgsAfter, rands},
   agg = aggIn;
@@ -2241,7 +2241,7 @@ Attributes[scanTernaryTildeExpectedSymbol] = {HoldRest}
 
 scanTernaryTildeExpectedSymbol[pos_List, aggIn_] :=
 Catch[
- Module[{agg, node, data, children, middle},
+Module[{agg, node, data, children, middle},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -2337,7 +2337,7 @@ Catch[
 Attributes[scanUppercasePatternBlank] = {HoldRest}
 
 scanUppercasePatternBlank[pos_List, aggIn_] :=
- Module[{agg, node, tag, data, children, src, sym, context, name, issues},
+Module[{agg, node, tag, data, children, src, sym, context, name, issues},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   tag = node[[1]];
@@ -2395,48 +2395,48 @@ scanUppercasePatternBlank[pos_List, aggIn_] :=
 Attributes[scanBlankPredicate] = {HoldRest}
 
 scanBlankPredicate[pos_List, aggIn_] :=
-  Catch[
-  Module[{agg, node, tag, data, children, src, predName, pred, issues},
-    agg = aggIn;
-    node = Extract[agg, {pos}][[1]];
-    tag = node[[1]];
-    children = node[[2]];
-    data = node[[3]];
+Catch[
+Module[{agg, node, tag, data, children, src, predName, pred, issues},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
 
-    pred = children[[2]];
+  pred = children[[2]];
 
-    predName = pred["String"];
+  predName = pred["String"];
 
-    issues = {};
+  issues = {};
 
-    (*
-    white-list
-    *)
-    If[MemberQ[{
-        (*
-        the special functions that end in Q, but are not functions that return Booleans
-        *)
-        "EllipticNomeQ", "HypergeometricPFQ", "InverseEllipticNomeQ", "LegendreQ", "MarcumQ", "PartitionsQ", "QHypergeometricPFQ"
-        (*
-        2-arg functions
+  (*
+  white-list
+  *)
+  If[MemberQ[{
+      (*
+      the special functions that end in Q, but are not functions that return Booleans
+      *)
+      "EllipticNomeQ", "HypergeometricPFQ", "InverseEllipticNomeQ", "LegendreQ", "MarcumQ", "PartitionsQ", "QHypergeometricPFQ"
+      (*
+      2-arg functions
 
-        TODO: what to do with these?
-        *)
-        (* "MemberQ", "StringContainsQ", "FreeQ", "StringFreeQ", "MatchQ", "StringMatchQ" *)
-        }, predName],
-      Throw[issues]
-    ];
+      TODO: what to do with these?
+      *)
+      (* "MemberQ", "StringContainsQ", "FreeQ", "StringFreeQ", "MatchQ", "StringMatchQ" *)
+      }, predName],
+    Throw[issues]
+  ];
 
-    src = pred[[3, Key[Source]]];
+  src = pred[[3, Key[Source]]];
 
-    AppendTo[issues, InspectionObject["BlankPredicate", "Unexpected predicate after blank.", "Error",
-      <| Source -> src,
-        ConfidenceLevel -> 0.95,
-        CodeActions -> {
-          CodeAction["Insert ``?``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Question, "?", <||>] |>] } |>]];
+  AppendTo[issues, InspectionObject["BlankPredicate", "Unexpected predicate after blank.", "Error",
+    <| Source -> src,
+      ConfidenceLevel -> 0.95,
+      CodeActions -> {
+        CodeAction["Insert ``?``", InsertNode, <| Source -> src, "InsertionNode" -> LeafNode[Token`Question, "?", <||>] |>] } |>]];
 
-    issues
-  ]]
+  issues
+]]
 
 
 
@@ -2580,7 +2580,7 @@ inspired by bug 421310
 Attributes[scanNonCommutativeMultiplys] = {HoldRest}
 
 scanNonCommutativeMultiplys[pos_List, cstIn_] :=
- Module[{cst, node, children, issues, rators},
+Module[{cst, node, children, issues, rators},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];

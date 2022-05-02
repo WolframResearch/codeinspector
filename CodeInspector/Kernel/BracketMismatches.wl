@@ -53,27 +53,27 @@ $fileByteCountMaxLimit = 3*^6
 
 CodeInspectBracketMismatches[File[file_String], opts:OptionsPattern[]] :=
 Catch[
- Module[{full, performanceGoal, cst},
+Module[{full, performanceGoal, cst},
 
- performanceGoal = OptionValue[PerformanceGoal];
+  performanceGoal = OptionValue[PerformanceGoal];
 
-   full = FindFile[file];
+  full = FindFile[file];
   If[FailureQ[full],
     Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
-   If[performanceGoal == "Speed",
+  If[performanceGoal == "Speed",
     If[FileByteCount[full] > $fileByteCountMaxLimit,
-     Throw[Failure["FileTooLarge", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
-     ];
-    If[FileByteCount[full] < $fileByteCountMinLimit,
-     Throw[Failure["FileTooSmall", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
-     ];
+      Throw[Failure["FileTooLarge", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
     ];
+    If[FileByteCount[full] < $fileByteCountMinLimit,
+      Throw[Failure["FileTooSmall", <| "FileName" -> full, "FileSize" -> FileSize[full] |>]]
+    ];
+  ];
 
-    cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
+  cst = CodeConcreteParse[File[full], FilterRules[{opts}, Options[CodeConcreteParse]]];
 
-    CodeInspectBracketMismatchesCST[cst, FilterRules[{opts}, Options[CodeInspectBracketMismatchesCST]]]
+  CodeInspectBracketMismatchesCST[cst, FilterRules[{opts}, Options[CodeInspectBracketMismatchesCST]]]
 ]]
 
 
@@ -270,7 +270,7 @@ $color = severityColor[{
 Return list of characters representing the under line
 *)
 modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_] :=
- Module[{line, infixCols, infixInserters, under,
+Module[{line, infixCols, infixInserters, under,
   rules, missingOpenerCols, missingCloserCols, missingOpenerInserters, missingCloserInserters},
 
   line = lineIn;
@@ -304,7 +304,7 @@ modify[lineIn_String, {missingOpenerStarts_, missingCloserStarts_}, lineNumber_]
   under = Join[{" "}, under];
 
   under
-  ]
+]
 
 
 (*
@@ -314,7 +314,7 @@ Source convention for implicitTokens is "LineColumn"
 *)
 bracketMismatchesLinesReport[linesIn:{___String}, bracketMismatchesIn:{(GroupMissingCloserNode|UnterminatedGroupNode|ErrorNode)[_, _, _]...}] :=
 Catch[
- Module[{mismatches, infixs, lines, linesToModify, missingOpeners, missingClosers, missingOpenerStarts,
+Module[{mismatches, infixs, lines, linesToModify, missingOpeners, missingClosers, missingOpenerStarts,
    missingCloserStarts, maxLineNumberLength},
 
     If[bracketMismatchesIn === {},

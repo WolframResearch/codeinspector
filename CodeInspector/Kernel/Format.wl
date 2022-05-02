@@ -121,17 +121,17 @@ $LintGridFontWeight = Bold
 InspectedFileObject::usage = "InspectedFileObject[file, lintedLines] represents a formatted object of linted lines found in file."
 
 Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], StandardForm] :=
-	Interpretation[
-		Framed[Column[{Row[{File[file]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
-		,
-		lintedFile
-	]
+  Interpretation[
+    Framed[Column[{Row[{File[file]}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
+    ,
+    lintedFile
+  ]
 
 Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], OutputForm] :=
-	Column[{Row[{file}], ""} ~Join~ lintedLines, Left]
+  Column[{Row[{file}], ""} ~Join~ lintedLines, Left]
 
 Format[lintedFile:InspectedFileObject[file_String, lintedLines:{___InspectedLineObject}], ScriptForm] :=
-	Format[lintedFile, OutputForm]
+  Format[lintedFile, OutputForm]
 
 
 
@@ -140,28 +140,28 @@ InspectedStringObject::usage = "InspectedStringObject[string, lintedLines] repre
 Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___InspectedLineObject}], StandardForm] :=
 Module[{string},
 
-	string = StringReplace[stringIn, $characterReplacementRules];
+  string = StringReplace[stringIn, $characterReplacementRules];
 
-	string = displayAsSingleLine[string];
+  string = displayAsSingleLine[string];
 
-	Interpretation[
-		Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
-		,
-		lintedString]
+  Interpretation[
+    Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
+    ,
+    lintedString]
 ]
 
 Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___InspectedLineObject}], OutputForm] :=
 Module[{string},
 
-	string = StringReplace[stringIn, $characterReplacementRules];
+  string = StringReplace[stringIn, $characterReplacementRules];
 
-	string = displayAsSingleLine[string];
+  string = displayAsSingleLine[string];
 
-	Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
+  Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
 ]
 
 Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___InspectedLineObject}], ScriptForm] :=
-	Format[lintedString, OutputForm]
+  Format[lintedString, OutputForm]
 
 
 
@@ -171,56 +171,56 @@ Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedL
 Catch[
 Module[{string},
 
-	string = SafeString[bytesIn];
+  string = SafeString[bytesIn];
 
-	If[MissingQ[string],
-		Throw[string]
-	];
+  If[MissingQ[string],
+    Throw[string]
+  ];
 
-	string = StringReplace[string, $characterReplacementRules];
+  string = StringReplace[string, $characterReplacementRules];
 
-	string = displayAsSingleLine[string];
+  string = displayAsSingleLine[string];
 
-	Interpretation[
-		Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
-		,
-		lintedBytes]
+  Interpretation[
+    Framed[Column[{Row[{string}, ImageMargins -> {{0, 0}, {10, 10}}]} ~Join~ lintedLines, Left, 0], Background -> GrayLevel[0.985], RoundingRadius -> 5]
+    ,
+    lintedBytes]
 ]]
 
 Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], OutputForm] :=
 Catch[
 Module[{string},
 
-	string = SafeString[bytesIn];
+  string = SafeString[bytesIn];
 
-	If[MissingQ[string],
-		Throw[string]
-	];
+  If[MissingQ[string],
+    Throw[string]
+  ];
 
-	string = displayAsSingleLine[string];
+  string = displayAsSingleLine[string];
 
-	string = StringReplace[string, $characterReplacementRules];
+  string = StringReplace[string, $characterReplacementRules];
 
-	Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
+  Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
 ]]
 
 Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], ScriptForm] :=
-	Format[lintedBytes, OutputForm]
+  Format[lintedBytes, OutputForm]
 
 
 
 displayAsSingleLine[s_String] :=
 Module[{lines},
-	lines = StringSplit[StringTrim[s], "\r\n" | "\n" | "\r", All];
-	If[Length[lines] == 1 && StringLength[lines[[1]]] <= $LintedLineWidth,
-		lines[[1]]
-		,
-		Grid[
-			{{StringTake[lines[[1]], UpTo[$LintedLineWidth]], "\[SpanFromLeft]"}, {"\[SpanFromAbove]", "\[SpanFromBoth]"}}
-			,
-			Alignment -> Left
-		]
-	]
+  lines = StringSplit[StringTrim[s], "\r\n" | "\n" | "\r", All];
+  If[Length[lines] == 1 && StringLength[lines[[1]]] <= $LintedLineWidth,
+    lines[[1]]
+    ,
+    Grid[
+      {{StringTake[lines[[1]], UpTo[$LintedLineWidth]], "\[SpanFromLeft]"}, {"\[SpanFromAbove]", "\[SpanFromBoth]"}}
+      ,
+      Alignment -> Left
+    ]
+  ]
 ]
 
 
@@ -238,113 +238,113 @@ createActionMenuItem[___] := Failure["Unimplemented", <||>]
 newLintStyle[lint:InspectionObject[tag_, description_, severity_, data_]] :=
 Module[{bolded, boldedBoxes, actions, items, menuItems, file, line, col, suggestions, rows, resolvedEditor},
 
-	actions = Lookup[data, CodeActions, {}];
+  actions = Lookup[data, CodeActions, {}];
 
-	If[TrueQ[$Interactive],
-		
-		bolded = boldify[description];
+  If[TrueQ[$Interactive],
+    
+    bolded = boldify[description];
 
-		boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
+    boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
 
-		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>] };
+    actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <|Source->data[Source]|>] };
 
-		menuItems = createActionMenuItem[#, lint]& /@ actions;
+    menuItems = createActionMenuItem[#, lint]& /@ actions;
 
-		menuItems = DeleteCases[menuItems, _?FailureQ];
+    menuItems = DeleteCases[menuItems, _?FailureQ];
 
-		items = {
-					"\"" <> ToString[tag] <> "\"" :> Null,
-					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
-					Delimiter } ~Join~
-					menuItems;
-		,
-		(* non-Interactive *)
+    items = {
+          "\"" <> ToString[tag] <> "\"" :> Null,
+          "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
+          Delimiter } ~Join~
+          menuItems;
+    ,
+    (* non-Interactive *)
 
-		bolded = boldify[description];
-		
-		If[actions != {},
-		
-			suggestions = #[[1]]& /@ actions;
-			
-			suggestions = boldify /@ suggestions;
+    bolded = boldify[description];
+    
+    If[actions != {},
+    
+      suggestions = #[[1]]& /@ actions;
+      
+      suggestions = boldify /@ suggestions;
 
-			rows = {Row[bolded]} ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ (Row /@ suggestions);
+      rows = {Row[bolded]} ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ (Row /@ suggestions);
 
-			boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
-			,
-			(* no CodeActions *)
-			boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
-		];
+      boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
+      ,
+      (* no CodeActions *)
+      boldedBoxes = With[{bolded = bolded}, MakeBoxes[Row[bolded]]];
+    ];
 
-		If[KeyExistsQ[data, "File"],
+    If[KeyExistsQ[data, "File"],
 
-			If[KeyExistsQ[data, Source],
+      If[KeyExistsQ[data, Source],
 
-				file = data["File"];
+        file = data["File"];
 
-				If[FileExistsQ[file],
+        If[FileExistsQ[file],
 
-					line = data[[Key[Source], 1, 1]];
-					col = data[[Key[Source], 1, 2]];
+          line = data[[Key[Source], 1, 1]];
+          col = data[[Key[Source], 1, 2]];
 
-					resolvedEditor = Lookup[data, "Editor", Automatic];
-					If[resolvedEditor === Automatic,
-						resolvedEditor = $Editor
-					];
-					If[!StringQ[resolvedEditor],
-						resolvedEditor = "FrontEnd"
-					];
+          resolvedEditor = Lookup[data, "Editor", Automatic];
+          If[resolvedEditor === Automatic,
+            resolvedEditor = $Editor
+          ];
+          If[!StringQ[resolvedEditor],
+            resolvedEditor = "FrontEnd"
+          ];
 
-					items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
-						"\"" <> ToString[tag] <> "\"" :> Null,
-						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
-						Delimiter,
-						"Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
+          items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
+            "\"" <> ToString[tag] <> "\"" :> Null,
+            "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
+            Delimiter,
+            "Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
 
-					,
+          ,
 
-					(*
-					May be doing something like:
-					ImportString["If[a, b, b]", {"WL", "CodeInspections"}]
+          (*
+          May be doing something like:
+          ImportString["If[a, b, b]", {"WL", "CodeInspections"}]
 
-					Technically, CodeInspect was called with File[file], but that was a temp file and it is now deleted
+          Technically, CodeInspect was called with File[file], but that was a temp file and it is now deleted
 
-					So do not show "Open in editor"
-					*)
+          So do not show "Open in editor"
+          *)
 
-					items = {
-						"\"" <> ToString[tag] <> "\"" :> Null,
-						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-				]
-				,
+          items = {
+            "\"" <> ToString[tag] <> "\"" :> Null,
+            "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+        ]
+        ,
 
-				(*
-				Source may not exist in generated nodes
-				*)
+        (*
+        Source may not exist in generated nodes
+        *)
 
-				items = {
-					"\"" <> ToString[tag] <> "\"" :> Null,
-					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-			]
-			,
+        items = {
+          "\"" <> ToString[tag] <> "\"" :> Null,
+          "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+      ]
+      ,
 
-			(*
-			May not have been called with a file
-			*)
+      (*
+      May not have been called with a file
+      *)
 
-			items = {
-				"\"" <> ToString[tag] <> "\"" :> Null,
-				"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-		]
-	];
+      items = {
+        "\"" <> ToString[tag] <> "\"" :> Null,
+        "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+    ]
+  ];
 
-	If[$Debug,
-		Print["items: ", items];
-	];
+  If[$Debug,
+    Print["items: ", items];
+  ];
 
-	With[{boxes = TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]},
-		RawBoxes[InterpretationBox[boxes, lint]]
-	]
+  With[{boxes = TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]},
+    RawBoxes[InterpretationBox[boxes, lint]]
+  ]
 ]
 *)
 
@@ -359,255 +359,255 @@ niceToString[e_] := ToString[e]
 Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], StandardForm] :=
 Catch[
 Module[{g, bolded, actions, actionButtonsOrFailures, format, menu,
-	boldedBoxes, items, menuItems, file, line, col, suggestions, rows, resolvedEditor, icon},
+  boldedBoxes, items, menuItems, file, line, col, suggestions, rows, resolvedEditor, icon},
 
-	If[!TrueQ[data["FormatInspectionObjectsAsPills"]],
+  If[!TrueQ[data["FormatInspectionObjectsAsPills"]],
 
-		(*
-		Format as SummaryBox
-		*)
+    (*
+    Format as SummaryBox
+    *)
 
-		(*
-		Just hard-code with Warning gray until design review
-		*)
-		icon = RawBoxes[iconBoxesFromSeverity["Warning"]];
+    (*
+    Just hard-code with Warning gray until design review
+    *)
+    icon = RawBoxes[iconBoxesFromSeverity["Warning"]];
 
-		Throw[
-			RawBoxes@BoxForm`ArrangeSummaryBox[
-				InspectionObject
-				,
-				lint
-				,
-				icon
-				,
-				{
-					Row[boldify[description]],
-					If[KeyExistsQ[data, "AdditionalDescriptions"], Sequence @@ (Row[boldify[#]]& /@ data["AdditionalDescriptions"]), Nothing],
-					If[KeyExistsQ[data, CodeActions], BoxForm`SummaryItem[{"Suggestions: ", Row[boldify[#["Label"]]]& /@ data[CodeActions]}], Nothing],
-					If[KeyExistsQ[data, CellIndex], BoxForm`SummaryItem[{"CellIndex: ", data[CellIndex]}], Nothing],
-					BoxForm`SummaryItem[{"Source: ", data[Source]}]
-				}
-				,
-				{
-					BoxForm`SummaryItem[{"Severity: ", severity}],
-					BoxForm`SummaryItem[{"Confidence: ", data[ConfidenceLevel]}],
-					BoxForm`SummaryItem[{"Tag: ", tag}]
-				} ~Join~
-				
-				KeyValueMap[Function[{k, v}, BoxForm`SummaryItem[{niceToString[k] <> ": ", v}]],
-					KeyDrop[data, {
-						(*
-						Already displayed
-						*)
-						Source, ConfidenceLevel, "AdditionalDescriptions",
-						(*
-						Already handled
-						*)
-						CodeActions,
-						(*
-						Deliberately hide
-						*)
-						"FormatInspectionObjectsAsPills"
-					}]
-				]
-				,
-				StandardForm
-			]
-		]
-	];
+    Throw[
+      RawBoxes@BoxForm`ArrangeSummaryBox[
+        InspectionObject
+        ,
+        lint
+        ,
+        icon
+        ,
+        {
+          Row[boldify[description]],
+          If[KeyExistsQ[data, "AdditionalDescriptions"], Sequence @@ (Row[boldify[#]]& /@ data["AdditionalDescriptions"]), Nothing],
+          If[KeyExistsQ[data, CodeActions], BoxForm`SummaryItem[{"Suggestions: ", Row[boldify[#["Label"]]]& /@ data[CodeActions]}], Nothing],
+          If[KeyExistsQ[data, CellIndex], BoxForm`SummaryItem[{"CellIndex: ", data[CellIndex]}], Nothing],
+          BoxForm`SummaryItem[{"Source: ", data[Source]}]
+        }
+        ,
+        {
+          BoxForm`SummaryItem[{"Severity: ", severity}],
+          BoxForm`SummaryItem[{"Confidence: ", data[ConfidenceLevel]}],
+          BoxForm`SummaryItem[{"Tag: ", tag}]
+        } ~Join~
+        
+        KeyValueMap[Function[{k, v}, BoxForm`SummaryItem[{niceToString[k] <> ": ", v}]],
+          KeyDrop[data, {
+            (*
+            Already displayed
+            *)
+            Source, ConfidenceLevel, "AdditionalDescriptions",
+            (*
+            Already handled
+            *)
+            CodeActions,
+            (*
+            Deliberately hide
+            *)
+            "FormatInspectionObjectsAsPills"
+          }]
+        ]
+        ,
+        StandardForm
+      ]
+    ]
+  ];
 
 
-	(*
-	Format as pill
-	*)
+  (*
+  Format as pill
+  *)
 
-	actions = Lookup[data, CodeActions, {}];
+  actions = Lookup[data, CodeActions, {}];
 
-	If[TrueQ[$Interactive],
-		
-		bolded = boldify[description];
+  If[TrueQ[$Interactive],
+    
+    bolded = boldify[description];
 
-		rows = {Row[bolded]};
+    rows = {Row[bolded]};
 
-		If[KeyExistsQ[data, "AdditionalDescriptions"],
-			rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
-		];
+    If[KeyExistsQ[data, "AdditionalDescriptions"],
+      rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
+    ];
 
-		boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
+    boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
 
-		actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <| Source -> data[Source] |>] };
+    actions = actions ~Join~ { CodeAction["Dismiss this issue", Identity, <| Source -> data[Source] |>] };
 
-		menuItems = createActionMenuItem[#, lint]& /@ actions;
+    menuItems = createActionMenuItem[#, lint]& /@ actions;
 
-		menuItems = DeleteCases[menuItems, _?FailureQ];
+    menuItems = DeleteCases[menuItems, _?FailureQ];
 
-		items = {
-					(*
-					copy the correct syntax for TagExclusions to the clipboard
-					*)
-					If[KeyExistsQ[data, "Argument"],
-						"\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
-						,
-						"\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
-					],
-					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
-					Delimiter } ~Join~
-					menuItems;
-		,
-		(* non-Interactive *)
-		
-		If[actions != {},
+    items = {
+          (*
+          copy the correct syntax for TagExclusions to the clipboard
+          *)
+          If[KeyExistsQ[data, "Argument"],
+            "\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
+            ,
+            "\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
+          ],
+          "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
+          Delimiter } ~Join~
+          menuItems;
+    ,
+    (* non-Interactive *)
+    
+    If[actions != {},
 
-			bolded = boldify[description];
+      bolded = boldify[description];
 
-			rows = {Row[bolded]};
+      rows = {Row[bolded]};
 
-			If[KeyExistsQ[data, "AdditionalDescriptions"],
-				rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
-			];
+      If[KeyExistsQ[data, "AdditionalDescriptions"],
+        rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
+      ];
 
-			(*
-			TODO: it would be good to have CodeAction objects format themselves
-			Would need to figure out how to share formatting code such as boldify[]
-			*)
-			suggestions = Row[boldify[#["Label"]]]& /@ actions;
+      (*
+      TODO: it would be good to have CodeAction objects format themselves
+      Would need to figure out how to share formatting code such as boldify[]
+      *)
+      suggestions = Row[boldify[#["Label"]]]& /@ actions;
 
-			rows = rows ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ suggestions;
+      rows = rows ~Join~ {Row[{}], Row[{Style["Suggestions:", Smaller]}]} ~Join~ suggestions;
 
-			boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
-			,
-			(* no CodeActions *)
+      boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
+      ,
+      (* no CodeActions *)
 
-			bolded = boldify[description];
+      bolded = boldify[description];
 
-			rows = {Row[bolded]};
+      rows = {Row[bolded]};
 
-			If[KeyExistsQ[data, "AdditionalDescriptions"],
-				rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
-			];
+      If[KeyExistsQ[data, "AdditionalDescriptions"],
+        rows = rows ~Join~ (Row[boldify[#]]& /@ data["AdditionalDescriptions"])
+      ];
 
-			boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
-		];
+      boldedBoxes = With[{rows = rows}, MakeBoxes[Column[rows]]];
+    ];
 
-		If[KeyExistsQ[data, "File"],
+    If[KeyExistsQ[data, "File"],
 
-			If[KeyExistsQ[data, Source],
+      If[KeyExistsQ[data, Source],
 
-				file = data["File"];
+        file = data["File"];
 
-				If[FileExistsQ[file],
+        If[FileExistsQ[file],
 
-					line = data[[Key[Source], 1, 1]];
-					col = data[[Key[Source], 1, 2]];
+          line = data[[Key[Source], 1, 1]];
+          col = data[[Key[Source], 1, 2]];
 
-					resolvedEditor = Lookup[data, "Editor", Automatic];
-					If[resolvedEditor === Automatic,
-						resolvedEditor = $Editor
-					];
-					If[!StringQ[resolvedEditor],
-						resolvedEditor = "FrontEnd"
-					];
+          resolvedEditor = Lookup[data, "Editor", Automatic];
+          If[resolvedEditor === Automatic,
+            resolvedEditor = $Editor
+          ];
+          If[!StringQ[resolvedEditor],
+            resolvedEditor = "FrontEnd"
+          ];
 
-					items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
-						(*
-						copy the correct syntax for TagExclusions to the clipboard
-						*)
-						If[KeyExistsQ[data, "Argument"],
-							"\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
-							,
-							"\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
-						],
-						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
-						Delimiter,
-						"Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
+          items = With[{file = file, line = line, col = col, resolvedEditor = resolvedEditor}, {
+            (*
+            copy the correct syntax for TagExclusions to the clipboard
+            *)
+            If[KeyExistsQ[data, "Argument"],
+              "\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
+              ,
+              "\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
+            ],
+            "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null,
+            Delimiter,
+            "Open in editor (" <> resolvedEditor <> ")" :> OpenInEditor[file, line, col, "Editor" -> Lookup[data, "Editor", Automatic]] }]
 
-					,
+          ,
 
-					(*
-					May be doing something like:
-					ImportString["If[a, b, b]", {"WL", "CodeInspections"}]
+          (*
+          May be doing something like:
+          ImportString["If[a, b, b]", {"WL", "CodeInspections"}]
 
-					Technically, CodeInspect was called with File[file], but that was a temp file and it is now deleted
+          Technically, CodeInspect was called with File[file], but that was a temp file and it is now deleted
 
-					So do not show "Open in editor"
-					*)
+          So do not show "Open in editor"
+          *)
 
-					items = {
-						(*
-						copy the correct syntax for TagExclusions to the clipboard
-						*)
-						If[KeyExistsQ[data, "Argument"],
-							"\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
-							,
-							"\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
-						],
-						"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-				]
-				,
+          items = {
+            (*
+            copy the correct syntax for TagExclusions to the clipboard
+            *)
+            If[KeyExistsQ[data, "Argument"],
+              "\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
+              ,
+              "\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
+            ],
+            "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+        ]
+        ,
 
-				(*
-				Source may not exist in generated nodes
-				*)
+        (*
+        Source may not exist in generated nodes
+        *)
 
-				items = {
-					(*
-					copy the correct syntax for TagExclusions to the clipboard
-					*)
-					If[KeyExistsQ[data, "Argument"],
-						"\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
-						,
-						"\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
-					],
-					"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-			]
-			,
+        items = {
+          (*
+          copy the correct syntax for TagExclusions to the clipboard
+          *)
+          If[KeyExistsQ[data, "Argument"],
+            "\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
+            ,
+            "\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
+          ],
+          "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+      ]
+      ,
 
-			(*
-			May not have been called with a file
-			*)
+      (*
+      May not have been called with a file
+      *)
 
-			items = {
-				(*
-				copy the correct syntax for TagExclusions to the clipboard
-				*)
-				If[KeyExistsQ[data, "Argument"],
-					"\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
-					,
-					"\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
-				],
-				"\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
-		]
-	];
+      items = {
+        (*
+        copy the correct syntax for TagExclusions to the clipboard
+        *)
+        If[KeyExistsQ[data, "Argument"],
+          "\"" <> tag <> "\[VeryThinSpace]\:25bb\[VeryThinSpace]" <> data["Argument"] <> "\"" :> CopyToClipboard[ToString[{tag, data["Argument"]}, InputForm]]
+          ,
+          "\"" <> tag <> "\"" :> CopyToClipboard[ToString[tag, InputForm]]
+        ],
+        "\"" <> "confidence: " <> ToString[PercentForm[data[ConfidenceLevel]]] <> "\"" :> Null }
+    ]
+  ];
 
-	If[$Debug,
-		Print["items: ", items];
-	];
+  If[$Debug,
+    Print["items: ", items];
+  ];
 
-	With[{boxes = TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]},
-		RawBoxes[InterpretationBox[boxes, lint]]
-	]
+  With[{boxes = TemplateBox[{StyleBox[boldedBoxes, "Text"], Sequence @@ severityColorNewStyle[{lint}], items}, "SuggestionGridTemplateXXX", DisplayFunction -> $suggestionGridTemplateDisplayFunction[$Interactive]]},
+    RawBoxes[InterpretationBox[boxes, lint]]
+  ]
 ]]
 
 Format[lint:InspectionObject[tag_String, description_String, severity_String, data_Association], OutputForm] :=
 Module[{g, bolded, actions, suggestions},
 
-	bolded = boldify[description];
+  bolded = boldify[description];
 
-	actions = Lookup[data, CodeActions, {}];
+  actions = Lookup[data, CodeActions, {}];
 
-	g = gridify[bolded];
+  g = gridify[bolded];
 
-	If[actions != {},
-		
-		suggestions = boldify[#["Label"]]& /@ actions;
+  If[actions != {},
+    
+    suggestions = boldify[#["Label"]]& /@ actions;
 
-		g = g ~Join~ {{}} ~Join~ {{"Suggestions:"}} ~Join~ suggestions ~Join~ {{}};
-	];
+    g = g ~Join~ {{}} ~Join~ {{"Suggestions:"}} ~Join~ suggestions ~Join~ {{}};
+  ];
 
-	g[[1]] = {LintBold[tag],
-					" ",
-					LintMarkup[severity, FontWeight->$LintGridFontWeight, FontColor->severityColor[{lint}]],
-					" " } ~Join~ g[[1]];
+  g[[1]] = {LintBold[tag],
+          " ",
+          LintMarkup[severity, FontWeight->$LintGridFontWeight, FontColor->severityColor[{lint}]],
+          " " } ~Join~ g[[1]];
 
   Column[Row /@ g]
 ]
@@ -615,16 +615,16 @@ Module[{g, bolded, actions, suggestions},
 
 
 iconBoxesFromSeverity[sev_] :=
-	With[
-		{color = severityColorNewStyle[sev]}
-		,
-		{func = $suggestionIconTemplateDisplayFunction, c1 = color[[1]], c2 = color[[2]]}
-		,
-  		TemplateBox[{c1, c2, Dynamic[{Automatic, 3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[Magnification])}]}, 
-   			"SuggestionIconTemplateXXX", 
-   			DisplayFunction -> func
-		]
-  	]
+With[
+  {color = severityColorNewStyle[sev]}
+  ,
+  {func = $suggestionIconTemplateDisplayFunction, c1 = color[[1]], c2 = color[[2]]}
+  ,
+    TemplateBox[{c1, c2, Dynamic[{Automatic, 3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[Magnification])}]}, 
+        "SuggestionIconTemplateXXX", 
+        DisplayFunction -> func
+  ]
+]
 
 
 
@@ -635,9 +635,9 @@ iconBoxesFromSeverity[sev_] :=
 InspectedLineObject::usage = "InspectedLineObject[lineSource, lineNumber, content, lints] represents a formatted line of output."
 
 Options[InspectedLineObject] = {
-	"MaxLineNumberLength" -> 5,
-	"Elided" -> False,
-	"Environ" -> False
+  "MaxLineNumberLength" -> 5,
+  "Elided" -> False,
+  "Environ" -> False
 }
 
 (*
@@ -652,149 +652,149 @@ So brute-force it with Grid so that it looks good
 Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, endingAdditionalLintsAny, endingAdditionalLintsThisLine, elided, startingLints,
-	grid, red, darkerOrange, blue, environ},
+  grid, red, darkerOrange, blue, environ},
 
-	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
+  lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
-	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
-	environ = OptionValue[InspectedLineObject, {opts}, "Environ"];
+  elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
+  environ = OptionValue[InspectedLineObject, {opts}, "Environ"];
 
-	If[elided,
-		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
-	];
+  If[elided,
+    Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
+  ];
 
-	If[$Debug,
-		Print["lineNumber: ", lineNumber];
-	];
+  If[$Debug,
+    Print["lineNumber: ", lineNumber];
+  ];
 
-	startingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
-	(*
-	lints that are ending on this line
-	format them
-	*)
-	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
-	If[$Debug,
-		Print["endingLints: ", endingLints];
-	];
+  startingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
+  (*
+  lints that are ending on this line
+  format them
+  *)
+  endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+  If[$Debug,
+    Print["endingLints: ", endingLints];
+  ];
 
-	endingAdditionalLintsAny = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
-	If[$Debug,
-		Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
-	];
+  endingAdditionalLintsAny = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
+  If[$Debug,
+    Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
+  ];
 
-	endingAdditionalLintsThisLine = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
-	If[$Debug,
-		Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
-	];
+  endingAdditionalLintsThisLine = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
+  If[$Debug,
+    Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
+  ];
 
-	(*
-	Don't double-count Lints that have AdditionalSources
-	*)
-	endingLints = Complement[endingLints, endingAdditionalLintsAny];
-	If[$Debug,
-		Print["endingLints: ", endingLints];
-	];
+  (*
+  Don't double-count Lints that have AdditionalSources
+  *)
+  endingLints = Complement[endingLints, endingAdditionalLintsAny];
+  If[$Debug,
+    Print["endingLints: ", endingLints];
+  ];
 
-	endingLints = endingLints ~Join~ endingAdditionalLintsThisLine;
-	If[$Debug,
-		Print["endingLints: ", endingLints];
-	];
+  endingLints = endingLints ~Join~ endingAdditionalLintsThisLine;
+  If[$Debug,
+    Print["endingLints: ", endingLints];
+  ];
 
-	(*
-	Make sure to sort lints
-	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&, conventionAgnosticSourceOrdering];
+  (*
+  Make sure to sort lints
+  *)
+  endingLints = SortBy[endingLints, #[[4, Key[Source]]]&, conventionAgnosticSourceOrdering];
 
-	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
+  endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
 
-	(*
-	add formatting instructions
-	*)
-	endingLints = insertFormatInspectionObjectsAsPills /@ endingLints;
+  (*
+  add formatting instructions
+  *)
+  endingLints = insertFormatInspectionObjectsAsPills /@ endingLints;
 
 
-	If[$Debug,
-		Print["endingLints: ", endingLints];
-	];
+  If[$Debug,
+    Print["endingLints: ", endingLints];
+  ];
 
-	grid = Transpose /@
-		Partition[
-			Transpose[{lineList, underlineList}]
-			,
-			UpTo[$LintedLineWidth]
-		];
+  grid = Transpose /@
+    Partition[
+      Transpose[{lineList, underlineList}]
+      ,
+      UpTo[$LintedLineWidth]
+    ];
 
-	(*
-	make sure to remove any partitions that do not have errors in them
-	This helps to have the formatting look good
-	As a test: Create a HUGE single line lint, so that there are hundreds of partitions
-	Make sure that only the partitions with errors are displayed.
-	*)
-	If[!environ,
-		grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
-	];
-	
-	grid = Flatten[grid, 1];
+  (*
+  make sure to remove any partitions that do not have errors in them
+  This helps to have the formatting look good
+  As a test: Create a HUGE single line lint, so that there are hundreds of partitions
+  Make sure that only the partitions with errors are displayed.
+  *)
+  If[!environ,
+    grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
+  ];
+  
+  grid = Flatten[grid, 1];
 
-	(*
-	All possible styling options
+  (*
+  All possible styling options
 
-	Bold is implied by any other markup
-	*)
-	red = Position[grid, LintMarkup[_, ___, FontColor -> Red, ___]];
-	darkerOrange = Position[grid, LintMarkup[_, ___, FontColor -> Darker[Orange], ___]];
-	blue = Position[grid, LintMarkup[_, ___, FontColor -> Blue, ___]];
+  Bold is implied by any other markup
+  *)
+  red = Position[grid, LintMarkup[_, ___, FontColor -> Red, ___]];
+  darkerOrange = Position[grid, LintMarkup[_, ___, FontColor -> Darker[Orange], ___]];
+  blue = Position[grid, LintMarkup[_, ___, FontColor -> Blue, ___]];
 
-	(*
-	Collect all of the adjacent positions of a style into a single range
+  (*
+  Collect all of the adjacent positions of a style into a single range
 
-	This is then fed into the Grid ItemStyle machinery for efficient rendering and space
+  This is then fed into the Grid ItemStyle machinery for efficient rendering and space
 
-	TODO: Ranges across rows could also be coalesced
+  TODO: Ranges across rows could also be coalesced
 
-	TODO: Combinations of styles could also be considered
+  TODO: Combinations of styles could also be considered
 
-	For example, it would be nice for the top row and the bottom row of an error to be a single range -> {Bold, Red}
-	and then the underline could then add in e.g., -> {Larger}
+  For example, it would be nice for the top row and the bottom row of an error to be a single range -> {Bold, Red}
+  and then the underline could then add in e.g., -> {Larger}
 
-	*)
-	red = coalesce[red];
-	darkerOrange = coalesce[darkerOrange];
-	blue = coalesce[blue];
+  *)
+  red = coalesce[red];
+  darkerOrange = coalesce[darkerOrange];
+  blue = coalesce[blue];
 
-	(*
-	now remove markup from the grid itself
-	*)
-	grid = grid /. LintMarkup[content_, ___] :> content;
+  (*
+  now remove markup from the grid itself
+  *)
+  grid = grid /. LintMarkup[content_, ___] :> content;
 
-	(*
-	Alignment option of Row has no effect: bug 93267
-	So must use Grid in order to have formatLeftColumn[] aligned on top
-	*)
-	grid = Grid[
-		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
-		{{formatLeftColumn[lineSource, lineNumber, FilterRules[{opts}, Options[formatLeftColumn]]], Spacer[10],
-			Column[{Grid[grid,
-						Spacings -> {0, 0},
-						ItemSize -> $LintedLintItemSize,
-						ItemStyle -> {Automatic, Automatic,
-							(# -> {$LintGridFontWeight, Red}& /@ red) ~Join~
-							(# -> {$LintGridFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
-							(# -> {$LintGridFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
-		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
-		,
-		Alignment -> {Left, Top}, Spacings -> {0, 0}];
+  (*
+  Alignment option of Row has no effect: bug 93267
+  So must use Grid in order to have formatLeftColumn[] aligned on top
+  *)
+  grid = Grid[
+    If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
+    {{formatLeftColumn[lineSource, lineNumber, FilterRules[{opts}, Options[formatLeftColumn]]], Spacer[10],
+      Column[{Grid[grid,
+            Spacings -> {0, 0},
+            ItemSize -> $LintedLintItemSize,
+            ItemStyle -> {Automatic, Automatic,
+              (# -> {$LintGridFontWeight, Red}& /@ red) ~Join~
+              (# -> {$LintGridFontWeight, Darker[Orange]}& /@ darkerOrange) ~Join~
+              (# -> {$LintGridFontWeight, Blue}& /@ blue) } ] } ~Join~ endingLints]}} ~Join~
+    If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}]
+    ,
+    Alignment -> {Left, Top}, Spacings -> {0, 0}];
 
-	If[$Debug,
-		Print["grid: ", grid//InputForm];
-	];
+  If[$Debug,
+    Print["grid: ", grid//InputForm];
+  ];
 
-	Style[grid, ShowStringCharacters->False]
+  Style[grid, ShowStringCharacters->False]
 ]]
 
 
 insertFormatInspectionObjectsAsPills[InspectionObject[tag_, desc_, sev_, data_]] :=
-	InspectionObject[tag, desc, sev, <| data, "FormatInspectionObjectsAsPills" -> True |>]
+  InspectionObject[tag, desc, sev, <| data, "FormatInspectionObjectsAsPills" -> True |>]
 
 insertFormatInspectionObjectsAsPills[line_InspectedLineObject] := line
 
@@ -818,192 +818,192 @@ underlineList is not used in OutputForm
 Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, {lineList_List, underlineList_List}, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid, endingAdditionalLintsAny,
-	endingAdditionalLintsThisLine, lineSource},
+  endingAdditionalLintsThisLine, lineSource},
 
-	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
+  lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
-	maxLineNumberLength = OptionValue[InspectedLineObject, {opts}, "MaxLineNumberLength"];
-	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
+  maxLineNumberLength = OptionValue[InspectedLineObject, {opts}, "MaxLineNumberLength"];
+  elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
-	If[elided,
-		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
-	];
+  If[elided,
+    Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
+  ];
 
-	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
+  paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
-	(*
-	lints that are ending on this line
-	format them
-	*)
-	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+  (*
+  lints that are ending on this line
+  format them
+  *)
+  endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	endingAdditionalLintsAny = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
-	If[$Debug,
-		Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
-	];
+  endingAdditionalLintsAny = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> _]]];
+  If[$Debug,
+    Print["endingAdditionalLintsAny: ", endingAdditionalLintsAny];
+  ];
 
-	endingAdditionalLintsThisLine = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
-	If[$Debug,
-		Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
-	];
+  endingAdditionalLintsThisLine = Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_ /; MemberQ[srcs, {_, {lineNumber, _}}]]]];
+  If[$Debug,
+    Print["endingAdditionalLintsThisLine: ", endingAdditionalLintsThisLine];
+  ];
 
-	(*
-	Don't double-count Lints that have AdditionalSources
-	*)
-	endingLints = Complement[endingLints, endingAdditionalLintsAny];
-	If[$Debug,
-		Print["endingLints: ", endingLints];
-	];
+  (*
+  Don't double-count Lints that have AdditionalSources
+  *)
+  endingLints = Complement[endingLints, endingAdditionalLintsAny];
+  If[$Debug,
+    Print["endingLints: ", endingLints];
+  ];
 
-	endingLints = endingLints ~Join~ endingAdditionalLintsThisLine;
-	If[$Debug,
-		Print["endingLints: ", endingLints];
-	];
+  endingLints = endingLints ~Join~ endingAdditionalLintsThisLine;
+  If[$Debug,
+    Print["endingLints: ", endingLints];
+  ];
 
-	(*
-	Make sure to sort lints
-	*)
-	endingLints = SortBy[endingLints, #[[4, Key[Source]]]&, conventionAgnosticSourceOrdering];
+  (*
+  Make sure to sort lints
+  *)
+  endingLints = SortBy[endingLints, #[[4, Key[Source]]]&, conventionAgnosticSourceOrdering];
 
-	endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
-	
-	If[$Debug,
-	 Print["endingLints: ", endingLints];
-	];
+  endingLints = Take[endingLints, UpTo[$LintsPerLineLimit]];
+  
+  If[$Debug,
+   Print["endingLints: ", endingLints];
+  ];
 
-	grid = Transpose /@
-		Partition[
-			Transpose[{lineList, underlineList}]
-			,
-			UpTo[$LintedLineWidth]
-		];
+  grid = Transpose /@
+    Partition[
+      Transpose[{lineList, underlineList}]
+      ,
+      UpTo[$LintedLineWidth]
+    ];
 
-	grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
+  grid = If[MatchQ[#[[2]], {(" " | LintSpaceIndicatorCharacter)...}], Nothing, #]& /@ grid;
 
-	grid = Flatten[grid, 1];
+  grid = Flatten[grid, 1];
 
-	Row[{Row[{paddedLineNumber, " "}],
-			Column[{Column[Row /@ grid]} ~Join~
-			endingLints] }]
+  Row[{Row[{paddedLineNumber, " "}],
+      Column[{Column[Row /@ grid]} ~Join~
+      endingLints] }]
 ]]
 
 
 Format[InspectedLineObject[lineSourceIn_String, lineNumber_Integer, lineList_List, lints:{___InspectionObject}, opts___], StandardForm] :=
 Catch[
 Module[{lineSource, endingLints, elided, startingLints, grid},
-	
-	lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
+  
+  lineSource = StringReplace[lineSourceIn, $characterReplacementRules];
 
-	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
+  elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
-	If[elided,
-		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
-	];
+  If[elided,
+    Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
+  ];
 
-	startingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
-	(*
-	lints that are ending on this line
-	format them
-	*)
-	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+  startingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {{lineNumber, _}, _}]]];
+  (*
+  lints that are ending on this line
+  format them
+  *)
+  endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	(*
-	add formatting instructions
-	*)
-	endingLints = insertFormatInspectionObjectsAsPills /@ endingLints;
+  (*
+  add formatting instructions
+  *)
+  endingLints = insertFormatInspectionObjectsAsPills /@ endingLints;
 
 
-	grid =
-		Partition[
-			lineList
-			,
-			UpTo[$LintedLineWidth]
-		];
+  grid =
+    Partition[
+      lineList
+      ,
+      UpTo[$LintedLineWidth]
+    ];
 
-	(*
-	TODO: properly remove partitions that do not have errors in them
-	*)
+  (*
+  TODO: properly remove partitions that do not have errors in them
+  *)
 
-	Grid[
-		If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
-		{{formatLeftColumn[lineSource, lineNumber, FilterRules[{opts}, Options[formatLeftColumn]]], Spacer[20],
-			Column[{Grid[grid,
-						Spacings -> {0, 0}, ItemSize -> $LintedLintItemSize] } ~Join~ endingLints ]}} ~Join~
-		If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}],
-			Alignment -> Top, Spacings -> {0, 0}]
+  Grid[
+    If[startingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}] ~Join~
+    {{formatLeftColumn[lineSource, lineNumber, FilterRules[{opts}, Options[formatLeftColumn]]], Spacer[20],
+      Column[{Grid[grid,
+            Spacings -> {0, 0}, ItemSize -> $LintedLintItemSize] } ~Join~ endingLints ]}} ~Join~
+    If[endingLints == {}, Sequence@@{}, {{Row[{Spacer[10]}]}}],
+      Alignment -> Top, Spacings -> {0, 0}]
 ]]
 
 Format[InspectedLineObject[lineSource_String, lineNumber_Integer, lineList_List, lints:{___InspectionObject}, opts___], OutputForm] :=
 Catch[
 Module[{maxLineNumberLength, paddedLineNumber, endingLints, elided, grid},
 
-	maxLineNumberLength = OptionValue[InspectedLineObject, {opts}, "MaxLineNumberLength"];
-	elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
+  maxLineNumberLength = OptionValue[InspectedLineObject, {opts}, "MaxLineNumberLength"];
+  elided = OptionValue[InspectedLineObject, {opts}, "Elided"];
 
-	If[elided,
-		Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
-	];
+  If[elided,
+    Throw[Grid[{{"\[SpanFromAbove]"}}, Alignment -> Center]]
+  ];
 
-	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
+  paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
-	(*
-	lints that are ending on this line
-	format them
-	*)
-	endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
+  (*
+  lints that are ending on this line
+  format them
+  *)
+  endingLints = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> {_, {lineNumber, _}}]]];
 
-	grid =
-		Partition[
-			lineList
-			,
-			UpTo[$LintedLineWidth]
-		];
+  grid =
+    Partition[
+      lineList
+      ,
+      UpTo[$LintedLineWidth]
+    ];
 
-	(*
-	TODO: properly remove partitions that do not have errors in them
-	*)
-	
-	Row[{Row[{paddedLineNumber, " "}], Column[{Column[Row /@ grid]} ~Join~ endingLints] }]
+  (*
+  TODO: properly remove partitions that do not have errors in them
+  *)
+  
+  Row[{Row[{paddedLineNumber, " "}], Column[{Column[Row /@ grid]} ~Join~ endingLints] }]
 ]]
 
 
 Format[InspectedLineObject[row_List], StandardForm] :=
-	Row[row]
+  Row[row]
 
 Format[InspectedLineObject[row_List], OutputForm] :=
-	Row[row]
+  Row[row]
 
 
 
 
 Options[formatLeftColumn] = {
-	"MaxLineNumberLength" -> 5
+  "MaxLineNumberLength" -> 5
 }
 
 formatLeftColumn[lineSource_String, lineNumber_Integer, opts___] :=
 Catch[
 Module[{label, maxLineNumberLength, paddedLineNumber},
-	
-	maxLineNumberLength = OptionValue[formatLeftColumn, {opts}, "MaxLineNumberLength"];
-	
-	paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
+  
+  maxLineNumberLength = OptionValue[formatLeftColumn, {opts}, "MaxLineNumberLength"];
+  
+  paddedLineNumber = StringPadLeft[ToString[lineNumber], maxLineNumberLength, " "];
 
-	label = Style[Row[{paddedLineNumber, " "}], ShowStringCharacters->False];
+  label = Style[Row[{paddedLineNumber, " "}], ShowStringCharacters->False];
 
-	(*
-	Copying in cloud:
-	CLOUD-14729
+  (*
+  Copying in cloud:
+  CLOUD-14729
 
-	ActionMenu CopyToClipboard with Evaluator->None:
-	bug 374583
-	*)
-	ActionMenu[
-		Tooltip[
-			label,
-			"Click to open menu...", TooltipDelay -> Automatic], {
-		"Copy line source" :> CopyToClipboard[lineSource],
-		"Copy line number" :> CopyToClipboard[lineNumber]}, Appearance -> None, DefaultBaseStyle -> {}
-	]
+  ActionMenu CopyToClipboard with Evaluator->None:
+  bug 374583
+  *)
+  ActionMenu[
+    Tooltip[
+      label,
+      "Click to open menu...", TooltipDelay -> Automatic], {
+    "Copy line source" :> CopyToClipboard[lineSource],
+    "Copy line number" :> CopyToClipboard[lineNumber]}, Appearance -> None, DefaultBaseStyle -> {}
+  ]
 ]]
 
 
@@ -1137,10 +1137,10 @@ Format[LintUnhandledCharacter, OutputForm] := " "
 
 
 Options[LintMarkup] = {
-	FontColor -> Automatic,
-	FontWeight -> Automatic,
-	FontVariations -> Automatic,
-	FontSize -> Automatic
+  FontColor -> Automatic,
+  FontWeight -> Automatic,
+  FontVariations -> Automatic,
+  FontSize -> Automatic
 }
 
 
@@ -1148,58 +1148,61 @@ Options[LintMarkup] = {
 Windows console doesn't support ANSI escape sequences by default
 But MacOSX and Unix should be fine
 *)
-$UseANSI = Catch[Switch[$OperatingSystem,
-				"Windows",
-				Module[{vals, level, ret},
-					(*
-					https://blogs.msdn.microsoft.com/commandline/2017/06/20/understanding-windows-console-host-settings/
-					*)
-					vals = Developer`ReadRegistryKeyValues["HKEY_CURRENT_USER\\Console"];
-					If[FailureQ[vals],
-						Throw[False]
-					];
-					level = "VirtualTerminalLevel" /. vals /. {"VirtualTerminalLevel" -> 0};
-					ret = (level != 0);
-					ret
-				]
-				,
-				_,
-				True
-			]]
+$UseANSI =
+Catch[
+  Switch[$OperatingSystem,
+    "Windows",
+      Module[{vals, level, ret},
+        (*
+        https://blogs.msdn.microsoft.com/commandline/2017/06/20/understanding-windows-console-host-settings/
+        *)
+        vals = Developer`ReadRegistryKeyValues["HKEY_CURRENT_USER\\Console"];
+        If[FailureQ[vals],
+          Throw[False]
+        ];
+        level = "VirtualTerminalLevel" /. vals /. {"VirtualTerminalLevel" -> 0};
+        ret = (level != 0);
+        ret
+      ]
+    ,
+    _,
+      True
+  ]
+]
 
 Format[LintMarkup[content_, specs___], StandardForm] := Style[content, specs]
 
 Format[LintMarkup[content_, specs___], OutputForm] :=
 Catch[
 Module[{s, color, weight, setup, opts},
-	
-	s = ToString[content, OutputForm];
+  
+  s = ToString[content, OutputForm];
 
-	(*
-	Notebook front end does not support ANSI escape sequences
-	*)
-	If[$Notebooks || !$UseANSI,
-		Throw[s]
-	];
+  (*
+  Notebook front end does not support ANSI escape sequences
+  *)
+  If[$Notebooks || !$UseANSI,
+    Throw[s]
+  ];
 
-	opts = Cases[{specs}, (Rule | RuleDelayed)[_, _]];
+  opts = Cases[{specs}, (Rule | RuleDelayed)[_, _]];
 
-	color = OptionValue[LintMarkup, opts, FontColor];
-	weight = OptionValue[LintMarkup, opts, FontWeight];
-	(* FontVariations is ignored for now *)
-	(* FontSize is ignored for now *)
+  color = OptionValue[LintMarkup, opts, FontColor];
+  weight = OptionValue[LintMarkup, opts, FontWeight];
+  (* FontVariations is ignored for now *)
+  (* FontSize is ignored for now *)
 
-	(*
-	The possibility of 38;5; sequences affecting the bold bit on Windows means that 
-	weight should be set first.
-	FIXME: Still would like to completely understand the differences between platforms.
-	*)
-	setup = StringJoin[{weightANSICode[weight], colorANSICode[color]}];
-	If[setup != "",
-		(* only print reset if there is anything to reset *)
-		s = StringJoin[{setup, s, resetANSICode[]}];
-	];
-	s
+  (*
+  The possibility of 38;5; sequences affecting the bold bit on Windows means that 
+  weight should be set first.
+  FIXME: Still would like to completely understand the differences between platforms.
+  *)
+  setup = StringJoin[{weightANSICode[weight], colorANSICode[color]}];
+  If[setup != "",
+    (* only print reset if there is anything to reset *)
+    s = StringJoin[{setup, s, resetANSICode[]}];
+  ];
+  s
 ]]
 
 
@@ -1215,13 +1218,14 @@ LintPreserve[content_] := LintMarkup[content]
 
 
 colorANSICode[GrayLevel[gray_]] :=
-	With[{code = ToString[232 + Round[23 * gray]]},
-		"\[RawEscape][38;5;"<>code<>"m"
-	]
+With[{code = ToString[232 + Round[23 * gray]]},
+  "\[RawEscape][38;5;"<>code<>"m"
+]
+
 colorANSICode[RGBColor[r_, g_, b_]] :=
-	With[{code = ToString[16 + {36, 6, 1} . Round[5 * {r, g, b}]]},
-		"\[RawEscape][38;5;"<>code<>"m"
-	]
+With[{code = ToString[16 + {36, 6, 1} . Round[5 * {r, g, b}]]},
+  "\[RawEscape][38;5;"<>code<>"m"
+]
 
 (*
 Use simpler sequences for common cases
@@ -1260,46 +1264,48 @@ resetANSICode[] = "\[RawEscape][0m"
 
 
 
-$prettyTooltipTemplateDisplayFunction = Function[
-     TagBox[
+$prettyTooltipTemplateDisplayFunction =
+  Function[
+    TagBox[
+    #1,
+    Function[
+      Annotation[
       #1,
-      Function[
-       Annotation[
-        #1,
-        Framed[
-         Style[
-          FunctionResourceTools`BuildDefinitionNotebook`Private`$$tooltip,
-          "Text",
-          FontColor -> RGBColor[
-           0.537255,
-           0.537255,
-           0.537255
-          ],
-          FontSize -> 12,
-          FontWeight -> "Plain",
-          FontTracking -> "Plain"
-         ],
-         Background -> RGBColor[
-          0.960784,
-          0.960784,
-          0.960784
-         ],
-         FrameStyle -> RGBColor[
-          0.898039,
-          0.898039,
-          0.898039
-         ],
-         FrameMargins -> 8
+      Framed[
+        Style[
+        FunctionResourceTools`BuildDefinitionNotebook`Private`$$tooltip,
+        "Text",
+        FontColor -> RGBColor[
+          0.537255,
+          0.537255,
+          0.537255
         ],
-        "Tooltip"
-       ]
+        FontSize -> 12,
+        FontWeight -> "Plain",
+        FontTracking -> "Plain"
+        ],
+        Background -> RGBColor[
+        0.960784,
+        0.960784,
+        0.960784
+        ],
+        FrameStyle -> RGBColor[
+        0.898039,
+        0.898039,
+        0.898039
+        ],
+        FrameMargins -> 8
+      ],
+      "Tooltip"
       ]
-     ]
     ]
+    ]
+  ]
 
 
 
-$suggestionIconTemplateDisplayFunction = Function[
+$suggestionIconTemplateDisplayFunction =
+  Function[
      GraphicsBox[
       {
        Thickness[0.05555555555555555],
@@ -1371,13 +1377,13 @@ $suggestionIconTemplateDisplayFunction = Function[
       AspectRatio -> Automatic,
       BaselinePosition -> Scaled[0.1]
      ]
-    ]
+  ]
 
 
 
 $prettyTooltipBox[interactive_] :=
 With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunction},
-	If[TrueQ[interactive] || True,
+  If[TrueQ[interactive] || True,
          AdjustmentBox[
           TemplateBox[
            {
@@ -1437,9 +1443,9 @@ With[{$prettyTooltipTemplateDisplayFunction = $prettyTooltipTemplateDisplayFunct
 
 $suggestionGridTemplateDisplayFunction[interactive_] :=
 With[{$suggestionIconTemplateDisplayFunction = $suggestionIconTemplateDisplayFunction,
-	$prettyTooltipBox = $prettyTooltipBox[interactive],
-	paneBoxImageSize = If[TrueQ[interactive], (*Full*)Automatic, Automatic],
-	prettyTooltipBoxColumnItemSize = If[TrueQ[interactive], (*Fit*)4, (*Sequence @@ {}*)4]},
+  $prettyTooltipBox = $prettyTooltipBox[interactive],
+  paneBoxImageSize = If[TrueQ[interactive], (*Full*)Automatic, Automatic],
+  prettyTooltipBoxColumnItemSize = If[TrueQ[interactive], (*Fit*)4, (*Sequence @@ {}*)4]},
  Function[
   StyleBox[
    FrameBox[

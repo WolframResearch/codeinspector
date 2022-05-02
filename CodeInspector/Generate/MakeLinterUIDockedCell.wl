@@ -27,13 +27,13 @@ Needs["CodeInspector`"]
 
 SetAttributes[constructInit, HoldAllComplete]
 constructInit[syms__] := 
-	Module[{init},
-		init = HoldComplete /@ Unevaluated[{syms}];
-		init = Replace[init, HoldComplete[sym_] :>
-			ToExpression[ToString[Definition[sym], InputForm], InputForm, HoldComplete], {1}];
-		init = Flatten[HoldComplete @@ init, Infinity, HoldComplete];
-		Replace[init, HoldComplete[exprs__] :> (Initialization :> {exprs})]
-	]
+  Module[{init},
+    init = HoldComplete /@ Unevaluated[{syms}];
+    init = Replace[init, HoldComplete[sym_] :>
+      ToExpression[ToString[Definition[sym], InputForm], InputForm, HoldComplete], {1}];
+    init = Flatten[HoldComplete @@ init, Infinity, HoldComplete];
+    Replace[init, HoldComplete[exprs__] :> (Initialization :> {exprs})]
+  ]
 
 
 SetAttributes[addDefinitions, HoldAllComplete]
@@ -41,15 +41,15 @@ SetAttributes[addDefinitions, HoldAllComplete]
 
 (*  just in case you want to prepend to an existing Initialization *)
 addDefinitions[DynamicModule[args__, Initialization :> init_, opts___], {syms__}(*, firstAction:Hold[_]:Hold[Null]*)] :=
-	Replace[constructInit[syms], {
-		(Initialization :> newinit_) :> DynamicModule[args, Initialization :> ((*First[firstAction]; *)newinit; init), opts],
-		else_ :> DynamicModule[args, Initialization :> init, opts]
-	}]
+  Replace[constructInit[syms], {
+    (Initialization :> newinit_) :> DynamicModule[args, Initialization :> ((*First[firstAction]; *)newinit; init), opts],
+    else_ :> DynamicModule[args, Initialization :> init, opts]
+  }]
 
 
 (* it's easier if there's not another init setting already *)
 addDefinitions[DynamicModule[args__], {syms__Symbol}] :=
-	With[{newinit = constructInit[syms]}, DynamicModule[args, newinit]]
+  With[{newinit = constructInit[syms]}, DynamicModule[args, newinit]]
 
 
 (* ::Section::Closed:: *)
@@ -61,213 +61,213 @@ $previewLength = 28;
 
 dockedCellMenuItem[notebook_NotebookObject, cell_CellObject] :=
 With[{},
-	RuleDelayed[
-		(* Display a preview of the cell contents ($previewLength characters), and the severity count icons from the cell bracket button. *)
-		Graphics[
-			{
-				(* Display $previewStringLength characters of the cell contents on the left of the menu item. *)
-				Inset[
-					With[
-						(* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
-						{expressionString = First[FrontEndExecute[
-							FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[notebook, cell, "CellContents"]], "InputText"]]]},
-						(* Replace linebreaks with spaces. *)
-						{noLineBreaks = StringReplace[expressionString, "\n" -> " "]},
-						(* Clip expressionString to the preview length. *)
-						{previewString = StringTake[noLineBreaks, {1, UpTo[$previewLength]}]},
-						(* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
-						CodeInspector`LinterUI`Private`styleData["FixedWidth"][
-							If[StringLength[expressionString] > $previewLength,
-								StringDrop[previewString, -1] <> "\[Ellipsis]",
-								previewString]]],
-					
-					{-1, 0}, {-1, 0}],
+  RuleDelayed[
+    (* Display a preview of the cell contents ($previewLength characters), and the severity count icons from the cell bracket button. *)
+    Graphics[
+      {
+        (* Display $previewStringLength characters of the cell contents on the left of the menu item. *)
+        Inset[
+          With[
+            (* Use FrontEnd`ExportPacket to get a string of the cell contents. *)
+            {expressionString = First[FrontEndExecute[
+              FrontEnd`ExportPacket[First[CodeInspector`LinterUI`Private`varValue[notebook, cell, "CellContents"]], "InputText"]]]},
+            (* Replace linebreaks with spaces. *)
+            {noLineBreaks = StringReplace[expressionString, "\n" -> " "]},
+            (* Clip expressionString to the preview length. *)
+            {previewString = StringTake[noLineBreaks, {1, UpTo[$previewLength]}]},
+            (* Add an elipsis to the end of the string if it was clipped, and make sure it fits within $previewLength. *)
+            CodeInspector`LinterUI`Private`styleData["FixedWidth"][
+              If[StringLength[expressionString] > $previewLength,
+                StringDrop[previewString, -1] <> "\[Ellipsis]",
+                previewString]]],
+          
+          {-1, 0}, {-1, 0}],
 
-				(* On the right of the menu item, display the same issue count icons as used in the cell bracket button. *)
-				Inset[
-					CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[cell],
-					{1, 0}, {1, 0}]
-			},
+        (* On the right of the menu item, display the same issue count icons as used in the cell bracket button. *)
+        Inset[
+          CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[cell],
+          {1, 0}, {1, 0}]
+      },
 
-			ImageSize -> {300, 25}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> None],
-		
-		(* ...select the target cell and open any cell group that it might be in... *)
-		SelectionMove[cell, All, Cell];
-		With[{nb = ParentNotebook[cell]}, FrontEndExecute[FrontEnd`FrontEndToken[nb, "OpenSelectionParents"]]];
-		(*  ...and then scroll the notebook view to the cell *)
-		SelectionMove[cell, After, Cell]]]
+      ImageSize -> {300, 25}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}, ImagePadding -> None],
+    
+    (* ...select the target cell and open any cell group that it might be in... *)
+    SelectionMove[cell, All, Cell];
+    With[{nb = ParentNotebook[cell]}, FrontEndExecute[FrontEnd`FrontEndToken[nb, "OpenSelectionParents"]]];
+    (*  ...and then scroll the notebook view to the cell *)
+    SelectionMove[cell, After, Cell]]]
 
 
 dockedCellSeverityCountsButton[notebook_NotebookObject] :=
-	With[{formatIcon = Function[Show[#, ImageSize -> {13, 9}, BaselinePosition -> Scaled[-.2]]]},
-		ActionMenu[
-			Highlighted[
-				Row[{
-					CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook, "exclamSize" -> 12, FontSize -> 14, FontWeight -> Plain],
-					Spacer[2],
-					formatIcon[CodeInspector`LinterUI`Private`iconData["DownChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]]}],
-				
-				ImageSize -> {Automatic, 19},
-				BaselinePosition -> Baseline,
-				Background -> White,
-				Frame -> True,
-				FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]],
-				FrameMargins -> {6{1, 1}, {1, 1}},
-				Alignment -> {Center, Baseline}],
-			
-			dockedCellMenuItem[notebook, #]& /@
-				CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
-			
-			Appearance -> None]]
+  With[{formatIcon = Function[Show[#, ImageSize -> {13, 9}, BaselinePosition -> Scaled[-.2]]]},
+    ActionMenu[
+      Highlighted[
+        Row[{
+          CodeInspector`LinterUI`Private`lintSeverityCountsIconRow[notebook, "exclamSize" -> 12, FontSize -> 14, FontWeight -> Plain],
+          Spacer[2],
+          formatIcon[CodeInspector`LinterUI`Private`iconData["DownChevron"][CodeInspector`LinterUI`Private`colorData["UIDark"]]]}],
+        
+        ImageSize -> {Automatic, 19},
+        BaselinePosition -> Baseline,
+        Background -> White,
+        Frame -> True,
+        FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]],
+        FrameMargins -> {6{1, 1}, {1, 1}},
+        Alignment -> {Center, Baseline}],
+      
+      dockedCellMenuItem[notebook, #]& /@
+        CodeInspector`LinterUI`Private`varValue[notebook, All, "Cell"],
+      
+      Appearance -> None]]
 
 
 dockedCell =
-	Cell[BoxData @ ToBoxes @
-		addDefinitions[
-			DynamicModule[{notebook},
-				Graphics[
-					{
-						(* The left-aligned pod title and analysis-in-progress indicator. *)
-						Inset[
-							Row[
-								{
-									Pane[CodeInspector`LinterUI`Private`styleData["SectionHeader"]["Code Analysis"], BaselinePosition -> (Baseline -> Scaled[.65])],
-									Spacer[8],
-									Pane[
-										PaneSelector[
-											{
-												(* If dockedCellPresentQ isn't True (meaning the docked cell is left over from a previous session) or kernelWasQuitQ is True, then display neither a loading indicator nor lint counts. *)
-												{False, False} -> Spacer[0],
-												{True, False} -> Spacer[0],
-												(* Display an activity indicator while analysis is in progress. *)
-												{True, True} -> Pane[ProgressIndicator[Appearance -> "Percolate"], BaselinePosition -> Scaled[.05]],
-												(* Display the agregate severity counts for all cells in the notebook. *)
-												{False, True} -> CodeInspector`LinterUI`Private`isolatedDynamic[
-													Dynamic[CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts],
-													dockedCellSeverityCountsButton[notebook]]},
+  Cell[BoxData @ ToBoxes @
+    addDefinitions[
+      DynamicModule[{notebook},
+        Graphics[
+          {
+            (* The left-aligned pod title and analysis-in-progress indicator. *)
+            Inset[
+              Row[
+                {
+                  Pane[CodeInspector`LinterUI`Private`styleData["SectionHeader"]["Code Analysis"], BaselinePosition -> (Baseline -> Scaled[.65])],
+                  Spacer[8],
+                  Pane[
+                    PaneSelector[
+                      {
+                        (* If dockedCellPresentQ isn't True (meaning the docked cell is left over from a previous session) or kernelWasQuitQ is True, then display neither a loading indicator nor lint counts. *)
+                        {False, False} -> Spacer[0],
+                        {True, False} -> Spacer[0],
+                        (* Display an activity indicator while analysis is in progress. *)
+                        {True, True} -> Pane[ProgressIndicator[Appearance -> "Percolate"], BaselinePosition -> Scaled[.05]],
+                        (* Display the agregate severity counts for all cells in the notebook. *)
+                        {False, True} -> CodeInspector`LinterUI`Private`isolatedDynamic[
+                          Dynamic[CodeInspector`LinterUI`Private`DynamicTriggers`dockedCellLintCounts],
+                          dockedCellSeverityCountsButton[notebook]]},
 
-											Dynamic[
-												(* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
-												FEPrivate`EvaluatorStatus["Local"];
-												{
-													CodeInspector`LinterUI`Private`varValue[notebook, "AnalysisInProgressQ"],
-													TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]}],
+                      Dynamic[
+                        (* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
+                        FEPrivate`EvaluatorStatus["Local"];
+                        {
+                          CodeInspector`LinterUI`Private`varValue[notebook, "AnalysisInProgressQ"],
+                          TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]}],
 
-											ImageSize -> Automatic],
+                      ImageSize -> Automatic],
 
-										BaselinePosition -> Scaled[.15]]},
-								Alignment -> Baseline],
+                    BaselinePosition -> Scaled[.15]]},
+                Alignment -> Baseline],
 
-							Offset[{8, 0}, {-1, 0}], {-1, 0}],
-						
-						(* Draw an "Analyze Notebook" or "Reanalyze Notebook" button depending on whether the CodeInspector` context is loaded. *)
-						Inset[
-							PaneSelector[
-								{
-									True -> CodeInspector`LinterUI`Private`button[
-										"Reanalyze Notebook",
-										CodeInspector`LinterUI`Private`attachAnalysisAction[EvaluationNotebook[]],
-										Method -> "Queued"],
-									(* When the kernel is quit we must have no dependency on CodeInspector`LinterUI, hence the verbatim Button used here *)
-									False -> Button[
+              Offset[{8, 0}, {-1, 0}], {-1, 0}],
+            
+            (* Draw an "Analyze Notebook" or "Reanalyze Notebook" button depending on whether the CodeInspector` context is loaded. *)
+            Inset[
+              PaneSelector[
+                {
+                  True -> CodeInspector`LinterUI`Private`button[
+                    "Reanalyze Notebook",
+                    CodeInspector`LinterUI`Private`attachAnalysisAction[EvaluationNotebook[]],
+                    Method -> "Queued"],
+                  (* When the kernel is quit we must have no dependency on CodeInspector`LinterUI, hence the verbatim Button used here *)
+                  False -> Button[
 
-										Highlighted[
-											Style["Analyze Notebook", FontColor -> GrayLevel[0.2], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 14],
-											ImageSize -> {Automatic, 19},
-											FrameMargins -> {9{1, 1}, 0{1, 1}},
-											BaselinePosition -> Baseline,
-											Alignment -> {Center, Center},
-											Background -> White,
-											Frame -> True,
-											FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]]],
+                    Highlighted[
+                      Style["Analyze Notebook", FontColor -> GrayLevel[0.2], FontFamily -> "Source Sans Pro", FontWeight -> Plain, FontSize -> 14],
+                      ImageSize -> {Automatic, 19},
+                      FrameMargins -> {9{1, 1}, 0{1, 1}},
+                      BaselinePosition -> Baseline,
+                      Alignment -> {Center, Center},
+                      Background -> White,
+                      Frame -> True,
+                      FrameStyle -> Dynamic[If[CurrentValue["MouseOver"], Hue[0.55,0.82,0.87], GrayLevel[.8]]]],
 
-										(* Delete docked cells with CellTags -> "AttachedAnalysisDockedCell" *)
-										CurrentValue[EvaluationNotebook[], DockedCells] = 
-											With[{dockedCells = CurrentValue[EvaluationNotebook[], DockedCells]},
-												Pick[
-													dockedCells,
-													Map[
-														Quiet[Options[#, CellTags]] =!= {CellTags -> "CodeAnalysisDockedCell"}&,
-														dockedCells]]];
-										Needs["CodeInspector`"];
-										CodeInspector`AttachAnalysis[notebook],
-										Appearance ->
-											With[{suppressMouseDown9patch =
-												Image[
-													NumericArray[{
-														{{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}},
-														{{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0, 0, 255}},
-														{{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}}}, "UnsignedInteger8"],
-													"Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72}, Interleaving -> True]},
-											{"Default" -> suppressMouseDown9patch, "Hover" -> suppressMouseDown9patch, "Pressed" -> suppressMouseDown9patch}],
-										Method -> "Queued"]},
+                    (* Delete docked cells with CellTags -> "AttachedAnalysisDockedCell" *)
+                    CurrentValue[EvaluationNotebook[], DockedCells] = 
+                      With[{dockedCells = CurrentValue[EvaluationNotebook[], DockedCells]},
+                        Pick[
+                          dockedCells,
+                          Map[
+                            Quiet[Options[#, CellTags]] =!= {CellTags -> "CodeAnalysisDockedCell"}&,
+                            dockedCells]]];
+                    Needs["CodeInspector`"];
+                    CodeInspector`AttachAnalysis[notebook],
+                    Appearance ->
+                      With[{suppressMouseDown9patch =
+                        Image[
+                          NumericArray[{
+                            {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}},
+                            {{0, 0, 0, 255}, {0, 0, 0, 0}, {0, 0, 0, 255}},
+                            {{255, 255, 255, 255}, {0, 0, 0, 255}, {255, 255, 255, 255}}}, "UnsignedInteger8"],
+                          "Byte", ColorSpace -> "RGB", ImageResolution -> {72, 72}, Interleaving -> True]},
+                      {"Default" -> suppressMouseDown9patch, "Hover" -> suppressMouseDown9patch, "Pressed" -> suppressMouseDown9patch}],
+                    Method -> "Queued"]},
 
-									Dynamic[
-										(* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
-										FEPrivate`EvaluatorStatus["Local"];
-										TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]],
+                  Dynamic[
+                    (* Tracking FEPrivate`EvaluatorStatus["Local"] ensures that the PaneSelector updates if the kernel is quit. *)
+                    FEPrivate`EvaluatorStatus["Local"];
+                    TrueQ[CodeInspector`LinterUI`Private`varValue[notebook, "DockedCellPresentQ"]]],
 
-									ImageSize -> Automatic],
+                  ImageSize -> Automatic],
 
-							Offset[{-26, 0}, {1, 0}], {1, 0}],
-						
-						(* Draw a "Close" button that clears the entire linter interface from a notebook. *)
-						(*
-							This Button does not need its Appearance suppressed because it is within Graphics.
-							The typesetting step converts Button to EventHandler and EventHandler does not suffer from mouse-down OS appearance effects. *)
-						Button[
-							Tooltip[
-								(* This is the resolved expression from evaluating CodeInspector`LinterUI`Private`closeIcon[{-11, 0}, {1, 0}] *)
-								{
-									GrayLevel[0.6],
-									Disk[Offset[{-11, 0}, {1, 0}], Offset[6]],
-									GrayLevel[0.97], AbsoluteThickness[1.5], CapForm["Round"],
-									Line[{{Offset[{-13, 2}, {1, 0}], Offset[{-9, -2}, {1, 0}]}, {Offset[{-13, -2}, {1, 0}], Offset[{-9, 2}, {1, 0}]}}]},
-								"Close analysis", TooltipDelay -> 0],
+              Offset[{-26, 0}, {1, 0}], {1, 0}],
+            
+            (* Draw a "Close" button that clears the entire linter interface from a notebook. *)
+            (*
+              This Button does not need its Appearance suppressed because it is within Graphics.
+              The typesetting step converts Button to EventHandler and EventHandler does not suffer from mouse-down OS appearance effects. *)
+            Button[
+              Tooltip[
+                (* This is the resolved expression from evaluating CodeInspector`LinterUI`Private`closeIcon[{-11, 0}, {1, 0}] *)
+                {
+                  GrayLevel[0.6],
+                  Disk[Offset[{-11, 0}, {1, 0}], Offset[6]],
+                  GrayLevel[0.97], AbsoluteThickness[1.5], CapForm["Round"],
+                  Line[{{Offset[{-13, 2}, {1, 0}], Offset[{-9, -2}, {1, 0}]}, {Offset[{-13, -2}, {1, 0}], Offset[{-9, 2}, {1, 0}]}}]},
+                "Close analysis", TooltipDelay -> 0],
 
-							(* Delete the lint pods. *)
-							NotebookDelete /@ Flatten[CodeInspector`LinterUI`Private`varValue[notebook, All, "UIAttachedCells"]];
+              (* Delete the lint pods. *)
+              NotebookDelete /@ Flatten[CodeInspector`LinterUI`Private`varValue[notebook, All, "UIAttachedCells"]];
 
-							(* Delete the clean cell bracket markers. *)
-							NotebookDelete /@ Flatten[CodeInspector`LinterUI`Private`varValue[notebook, All, "CleanCellBracketMarker"]];
+              (* Delete the clean cell bracket markers. *)
+              NotebookDelete /@ Flatten[CodeInspector`LinterUI`Private`varValue[notebook, All, "CleanCellBracketMarker"]];
 
-							(* Delete docked cells with CellTags -> "AttachedAnalysisDockedCell" *)
-							CurrentValue[EvaluationNotebook[], DockedCells] = 
-								With[{dockedCells = CurrentValue[EvaluationNotebook[], DockedCells]},
-									Pick[
-										dockedCells,
-										Map[
-											Quiet[Options[#, CellTags]] =!= {CellTags -> "CodeAnalysisDockedCell"}&,
-											dockedCells]]];
+              (* Delete docked cells with CellTags -> "AttachedAnalysisDockedCell" *)
+              CurrentValue[EvaluationNotebook[], DockedCells] = 
+                With[{dockedCells = CurrentValue[EvaluationNotebook[], DockedCells]},
+                  Pick[
+                    dockedCells,
+                    Map[
+                      Quiet[Options[#, CellTags]] =!= {CellTags -> "CodeAnalysisDockedCell"}&,
+                      dockedCells]]];
 
-							CodeInspector`LinterUI`Private`applyToVar[Remove, {EvaluationNotebook[], All}];
-							CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False]]
-						
-					},
+              CodeInspector`LinterUI`Private`applyToVar[Remove, {EvaluationNotebook[], All}];
+              CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False]]
+            
+          },
 
-					ImageSize -> {Full, 23}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}],
+          ImageSize -> {Full, 23}, AspectRatio -> Full, PlotRange -> {{-1, 1}, {-1, 1}}],
 
-				Initialization :> (
-					notebook = EvaluationNotebook[]),
+        Initialization :> (
+          notebook = EvaluationNotebook[]),
 
-				Deinitialization :> CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False],
+        Deinitialization :> CodeInspector`LinterUI`Private`varSet[{notebook, "DockedCellPresentQ"}, False],
 
-				UnsavedVariables :> {notebook}
-			],
-			
-			(* Save the following definitions in the DynamicModule's Initialization option. *)
-			{dockedCellSeverityCountsButton, dockedCellMenuItem, $previewLength,
-				CodeInspector`LinterUI`Private`applyToVar,
-				CodeInspector`LinterUI`Private`varValue,
-				CodeInspector`LinterUI`Private`varSet,
-				CodeInspector`LinterUI`Private`varNameString,
-				CodeInspector`LinterUI`Private`extractFirstList}],
+        UnsavedVariables :> {notebook}
+      ],
+      
+      (* Save the following definitions in the DynamicModule's Initialization option. *)
+      {dockedCellSeverityCountsButton, dockedCellMenuItem, $previewLength,
+        CodeInspector`LinterUI`Private`applyToVar,
+        CodeInspector`LinterUI`Private`varValue,
+        CodeInspector`LinterUI`Private`varSet,
+        CodeInspector`LinterUI`Private`varNameString,
+        CodeInspector`LinterUI`Private`extractFirstList}],
 
-		Background -> GrayLevel[.97],
-		(* Draw frame lines at the top and bottom of the cell. *)
-		CellFrame -> {{0, 0}, {1, 1}}, CellFrameColor -> GrayLevel[.85],
-		CellFrameMargins -> {{0, 0}, {0, 0}},
-		CellTags -> "CodeAnalysisDockedCell"];
+    Background -> GrayLevel[.97],
+    (* Draw frame lines at the top and bottom of the cell. *)
+    CellFrame -> {{0, 0}, {1, 1}}, CellFrameColor -> GrayLevel[.85],
+    CellFrameMargins -> {{0, 0}, {0, 0}},
+    CellTags -> "CodeAnalysisDockedCell"];
 
 
 (* ::Section::Closed:: *)
@@ -279,7 +279,7 @@ trPath = FileNameJoin[{ParentDirectory[NotebookDirectory[]], "FrontEnd", "TextRe
 
 (* Ensure WIReS resources are visible *)
 ResourceFunction["AddResourceSystem",
-	ResourceSystemBase -> "https://www.internalcloud.wolfram.com/obj/resourcesystem/api/1.0"]["WIReS"];
+  ResourceSystemBase -> "https://www.internalcloud.wolfram.com/obj/resourcesystem/api/1.0"]["WIReS"];
 
 
 ResourceFunction["WriteTextResource"][trPath, "@@resource CodeInspectorExpressions", "DockedCell" -> dockedCell]

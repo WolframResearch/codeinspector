@@ -700,13 +700,13 @@ Module[{ast, node, children, data, selecteds, issues, srcs, counts, keys, dupKey
 
 
 keyAndConditionToString[n_] :=
-Switch[n,
-  CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], {_, CallNode[LeafNode[Symbol, "Condition", _], _, _]}, _],
-    ToFullFormString[CallNode[LeafNode[Symbol, "List", <||>], {n[[2, 1]], n[[2, 2]]}, <||>]]
-  ,
-  CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], {_, _}, _],
-    ToFullFormString[n[[2, 1]]]
-]
+  Switch[n,
+    CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], {_, CallNode[LeafNode[Symbol, "Condition", _], _, _]}, _],
+      ToFullFormString[CallNode[LeafNode[Symbol, "List", <||>], {n[[2, 1]], n[[2, 2]]}, <||>]]
+    ,
+    CallNode[LeafNode[Symbol, "Rule" | "RuleDelayed", _], {_, _}, _],
+      ToFullFormString[n[[2, 1]]]
+  ]
 
 
 
@@ -1011,7 +1011,7 @@ Attributes[scanIfs] = {HoldRest}
 
 scanIfs[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, issues, selected, srcs, counts, firsts,
+Module[{ast, node, children, data, issues, selected, srcs, counts, firsts,
   child, choice1, choice2},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
@@ -1205,7 +1205,7 @@ Attributes[scanControls] = {HoldRest}
 
 scanControls[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, parentPos, parent, s},
+Module[{ast, node, parentPos, parent, s},
   If[pos == {},
     (* top node, no parent *)
     Throw[{}]
@@ -1242,7 +1242,7 @@ Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
- Module[{ast, node, children, data, selected, params, issues, vars, counts,
+Module[{ast, node, children, data, selected, params, issues, vars, counts,
   ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString, errs, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
