@@ -23,6 +23,8 @@ scan for patterns that have buggy behavior in the kernel
 
 Add AdditionalDocumentationLinks property for lints and display them in the linter UI
 
+update list of bad symbols (Cloudbase, DataSet, ExpandFilename, UrlExecute, $PathNameSeparator, $RegisteredUsername)
+
 
 ### Fixes
 
