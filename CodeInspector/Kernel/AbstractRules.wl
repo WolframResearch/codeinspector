@@ -3026,6 +3026,9 @@ Module[{ast, node, tag, data, tagString, children},
     "OpenSquare",
       {InspectionObject["OpenSquare", "Invalid syntax for ``[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
+    "ColonColonOpenSquare",
+      {InspectionObject["ColonColonOpenSquare", "Invalid syntax for ``::[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
     "PatternColonError",
       {InspectionObject["PatternColonError", "Invalid syntax for ``:``.", "Fatal", <|
         Source -> data[Source],
