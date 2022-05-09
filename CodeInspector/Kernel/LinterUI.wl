@@ -160,7 +160,20 @@ styleData = <|
 |>;
 
 
-inputStyle[boxes_, opts___] := StyleBox[boxes, "Input", opts, ShowStringCharacters -> True, ShowSpecialCharacters -> Automatic, ShowSyntaxStyles -> False]
+inputStyle[boxes_, opts___] :=
+  StyleBox[boxes, "Input", opts,
+    ShowStringCharacters -> True,
+    ShowSpecialCharacters -> Automatic,
+    ShowSyntaxStyles -> False,
+    (*
+    turn on GridBox dividers in order to try to help diagnose invisible GridBox creeping in
+
+    See bug 422300
+    *)
+    GridBoxOptions -> {
+      FrameStyle -> Directive[Dashing[2]],
+      GridBoxFrame -> { "Columns" -> {{True}}, "Rows" -> {{True}} } }
+  ]
 
 
 iconData = <|
