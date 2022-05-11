@@ -25,6 +25,8 @@ Add AdditionalDocumentationLinks property for lints and display them in the lint
 
 update list of bad symbols (Cloudbase, DataSet, ExpandFilename, UrlExecute, $PathNameSeparator, $RegisteredUsername)
 
+warn when calling Solve with 2nd argument Reals
+
 
 ### Fixes
 
@@ -35,6 +37,8 @@ Newer symbols like Confirm and Enclose may be prepended with System\`
 Fix problem with SuspiciousPatternBlankOptional where blank may be a_b
 
 Fix 421966: LinterUI collapses special characters in suggestions
+
+Fix 421987: Menu item Evaluation/Analyze Notebook generates errors on empty notebook
 
 
 ## 1.5.1 - 28 Mar, 2022
