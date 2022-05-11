@@ -2346,7 +2346,7 @@ Module[
 
 
 (* analyzeAction filters the given cells so that only "Input" and "Code" cells remain, and then applies getCellInfo to them. *)
-analyzeAction[notebook_NotebookObject, cells:{__CellObject}] :=
+analyzeAction[notebook_NotebookObject, cells:{___CellObject}] :=
 Module[{refinement1, refinement2},
   (* We only want to analyze "Input" and "Code" cells, so generate a list of all those cells in the given list of cells. *)
   refinement1 = Select[cells, MatchQ[CurrentValue[#, CellStyle], {"Code"} | {"Input"}]&];
@@ -2362,7 +2362,7 @@ Module[{refinement1, refinement2},
 
 attachAnalysisAction[
   HoldPattern[notebookOrCells_:EvaluationNotebook[]]
-] /; MatchQ[notebookOrCells, _NotebookObject | {__CellObject}] :=
+] /; MatchQ[notebookOrCells, _NotebookObject | {___CellObject}] :=
 Module[
   {cells, cellAssoc, notebookObj, cleanCells, cleanCellsAssoc},
 
