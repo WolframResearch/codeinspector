@@ -302,7 +302,7 @@ Module[{suppressedRegions, cst, fileFormat, scanSessionTokens},
 
 
 
-CodeInspect[bytes:{_Integer, _Integer...}, opts:OptionsPattern[]] :=
+CodeInspect[bytes:{_Integer...}, opts:OptionsPattern[]] :=
 Catch[
 Module[{cst, suppressedRegions, fileFormat},
 
@@ -339,14 +339,6 @@ Module[{cst, suppressedRegions, fileFormat},
   CodeInspectCST[cst, FilterRules[{opts}, Options[CodeInspectCST]], "SuppressedRegions" -> suppressedRegions]
   ]
 ]]
-
-
-
-(*
-regardless of whether CodeInspect will ever have listability in the future,
-today we know that empty byte list will return no lints
-*)
-CodeInspect[{}, opts:OptionsPattern[]] := {}
 
 
 

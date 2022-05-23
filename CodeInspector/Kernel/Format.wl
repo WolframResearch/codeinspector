@@ -167,11 +167,15 @@ Format[lintedString:InspectedStringObject[stringIn_String, lintedLines:{___Inspe
 
 InspectedBytesObject::usage = "InspectedBytesObject[bytes, lintedLines] represents a formatted object of linted lines found in bytes."
 
-Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], StandardForm] :=
+Format[lintedBytes:InspectedBytesObject[bytesIn:{_Integer...}, lintedLines:{___InspectedLineObject}], StandardForm] :=
 Catch[
 Module[{string},
 
   string = SafeString[bytesIn];
+
+  If[FailureQ[string],
+    Throw[string]
+  ];
 
   If[MissingQ[string],
     Throw[string]
@@ -187,12 +191,16 @@ Module[{string},
     lintedBytes]
 ]]
 
-Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], OutputForm] :=
+Format[lintedBytes:InspectedBytesObject[bytesIn:{_Integer...}, lintedLines:{___InspectedLineObject}], OutputForm] :=
 Catch[
 Module[{string},
 
   string = SafeString[bytesIn];
 
+  If[FailureQ[string],
+    Throw[string]
+  ];
+  
   If[MissingQ[string],
     Throw[string]
   ];
@@ -204,7 +212,7 @@ Module[{string},
   Column[{Row[{string}], ""} ~Join~ lintedLines, Left]
 ]]
 
-Format[lintedBytes:InspectedBytesObject[bytesIn_List, lintedLines:{___InspectedLineObject}], ScriptForm] :=
+Format[lintedBytes:InspectedBytesObject[bytesIn:{_Integer...}, lintedLines:{___InspectedLineObject}], ScriptForm] :=
   Format[lintedBytes, OutputForm]
 
 

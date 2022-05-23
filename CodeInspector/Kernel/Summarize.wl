@@ -137,9 +137,13 @@ Module[{lints, full, lines,
 
   but this is slow
   *)
-  bytes = Normal[ReadByteArray[full]] /. EndOfFile -> {};
+  bytes = ReadByteArray[full];
 
   str = SafeString[bytes];
+
+  If[FailureQ[string],
+    Throw[string]
+  ];
 
   If[MissingQ[str],
     Throw[str]
@@ -197,7 +201,6 @@ Module[{file},
 
   CodeInspectSummarize[File[file], {lint}, opts, "SeverityExclusions" -> {}, "TagExclusions" -> {}, ConfidenceLevel -> 0.0, "LintLimit" -> Infinity]
 ]
-
 
 
 CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
@@ -262,10 +265,7 @@ Module[{lints, lines,
 ]]
 
 
-
-
-
-CodeInspectSummarize[bytes_List, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
+CodeInspectSummarize[bytes:{_Integer...}, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
 Module[{lints, lines,
   tagExclusions, severityExclusions, confidence, lintLimit,
@@ -285,6 +285,10 @@ Module[{lints, lines,
   ];
 
   string = SafeString[bytes];
+
+  If[FailureQ[string],
+    Throw[string]
+  ];
 
   If[MissingQ[string],
     Throw[string]

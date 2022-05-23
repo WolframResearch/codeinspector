@@ -162,10 +162,14 @@ Module[{mismatches, full, lines, lintedLines, bytes, str, tabWidth},
 
   but this is slow
   *)
-  bytes = Normal[ReadByteArray[full]] /. EndOfFile -> {};
+  bytes = ReadByteArray[full];
 
   str = SafeString[bytes];
 
+  If[FailureQ[str],
+    Throw[str]
+  ];
+  
   If[MissingQ[str],
     Throw[str]
   ];
