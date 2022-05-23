@@ -1,5 +1,8 @@
 
-## 1.6 - XX May, 2022
+## 1.7 - XX June, 2022
+
+
+## 1.6 - 12 May, 2022
 
 Warn about `opts_:OptionsPattern[]`
 
