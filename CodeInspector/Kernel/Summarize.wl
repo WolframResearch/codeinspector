@@ -123,9 +123,9 @@ Module[{lints, full, lines,
     Throw[Failure["FindFileFailed", <| "FileName" -> file |>]]
   ];
 
-   If[FileByteCount[full] == 0,
-   Throw[Failure["EmptyFile", <| "FileName" -> full |>]]
-   ];
+  If[FileByteCount[full] == 0,
+    Throw[Failure["EmptyFile", <| "FileName" -> full |>]]
+  ];
 
   If[lints === Automatic,
     lints = CodeInspect[File[full], FilterRules[{opts}, Options[CodeInspect]]];
@@ -139,15 +139,15 @@ Module[{lints, full, lines,
   *)
   bytes = Normal[ReadByteArray[full]] /. EndOfFile -> {};
 
-   str = SafeString[bytes];
+  str = SafeString[bytes];
 
-   If[MissingQ[str],
+  If[MissingQ[str],
     Throw[str]
-   ];
+  ];
 
-   lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
+  lines = StringSplit[str, {"\r\n", "\n", "\r"}, All];
 
-   lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
+  lines = replaceTabs[#, 1, "!", tabWidth]& /@ lines;
 
   lintedLines = lintLinesReport[lines, lints, tagExclusions, severityExclusions, confidence, lintLimit];
 
@@ -202,24 +202,24 @@ Module[{file},
 
 CodeInspectSummarize[string_String, lintsIn:lintsInPat:Automatic, opts:OptionsPattern[]] :=
 Catch[
- Module[{lints, lines,
+Module[{lints, lines,
   tagExclusions, severityExclusions, confidence, lintLimit,
   lintedLines, tabWidth},
 
- lints = lintsIn;
+  lints = lintsIn;
 
- tagExclusions = OptionValue["TagExclusions"];
- severityExclusions = OptionValue["SeverityExclusions"];
- confidence = OptionValue[ConfidenceLevel];
- lintLimit = OptionValue["LintLimit"];
+  tagExclusions = OptionValue["TagExclusions"];
+  severityExclusions = OptionValue["SeverityExclusions"];
+  confidence = OptionValue[ConfidenceLevel];
+  lintLimit = OptionValue["LintLimit"];
 
- tabWidth = OptionValue["TabWidth"];
+  tabWidth = OptionValue["TabWidth"];
 
- If[StringLength[string] == 0,
-  Throw[Failure["EmptyString", <||>]]
- ];
+  If[StringLength[string] == 0,
+    Throw[Failure["EmptyString", <||>]]
+  ];
 
- If[lints === Automatic,
+  If[lints === Automatic,
     lints = CodeInspect[string, FilterRules[{opts}, Options[CodeInspect]]]
   ];
 
@@ -395,93 +395,93 @@ Module[{lints, lines, sources, warningsLines,
     Message[InspectedLineObject::truncation]
   ];
 
-   sources = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> src_]] :> src];
+  sources = Cases[lints, InspectionObject[_, _, _, KeyValuePattern[Source -> src_]] :> src];
 
-   additionalSources = Join @@ Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_]] :> srcs];
+  additionalSources = Join @@ Cases[lints, InspectionObject[_, _, _, KeyValuePattern["AdditionalSources" -> srcs_]] :> srcs];
 
-   sources = sources ~Join~ additionalSources;
+  sources = sources ~Join~ additionalSources;
 
-    (*
-    sources = DeleteCases[sources, {{line1_, _}, {_, _}} /; MemberQ[Keys[lineNumberExclusions], line1]];
-    *)
+  (*
+  sources = DeleteCases[sources, {{line1_, _}, {_, _}} /; MemberQ[Keys[lineNumberExclusions], line1]];
+  *)
 
-    If[empty[sources],
-      Throw[{}]
-    ];
+  If[empty[sources],
+    Throw[{}]
+  ];
 
-   warningsLines = sources[[All, All, 1]];
+  warningsLines = sources[[All, All, 1]];
 
-   If[$Debug,
+  If[$Debug,
     Print["warningsLines: ", warningsLines];
-   ];
+  ];
 
-   environLinesTentative = Clip[(# + {-$EnvironBuffer, $EnvironBuffer}), {1, Length[lines]}]& /@ warningsLines;
-   environLinesTentative = Range @@@ environLinesTentative;
+  environLinesTentative = Clip[(# + {-$EnvironBuffer, $EnvironBuffer}), {1, Length[lines]}]& /@ warningsLines;
+  environLinesTentative = Range @@@ environLinesTentative;
 
-   elidedLines = {};
+  elidedLines = {};
+  
+  linesToModify = Range @@@ warningsLines;
 
-   linesToModify = Range @@@ warningsLines;
+  environLines = MapThread[Complement, {environLinesTentative, linesToModify}];
 
-   environLines = MapThread[Complement, {environLinesTentative, linesToModify}];
+  linesToModify = MapThread[Union, {linesToModify, environLines}];
 
-   linesToModify = MapThread[Union, {linesToModify, environLines}];
-
-   If[$Debug,
+  If[$Debug,
     Print["linesToModify before: ", linesToModify];
-   ];
+  ];
 
-   linesToModify = (
-      If[Length[#] > $LintedLineLimit,
-        toRemove = Length[#] - $LintedLineLimit;
-        startingPointIndex = Floor[Length[#]/2] - Floor[toRemove/2] + 1;
-        startingPoint = #[[startingPointIndex]];
-        AppendTo[elidedLines, startingPoint];
-        If[toRemove == 1,
-          (* if only removing 1 line, then that single line will be changed to display as "...", so do not need to remove anything *)
-          #
-          ,
-          Drop[#, (startingPointIndex+1);;(startingPointIndex+toRemove-1)]]
-        ,
+  linesToModify = (
+    If[Length[#] > $LintedLineLimit,
+      toRemove = Length[#] - $LintedLineLimit;
+      startingPointIndex = Floor[Length[#]/2] - Floor[toRemove/2] + 1;
+      startingPoint = #[[startingPointIndex]];
+      AppendTo[elidedLines, startingPoint];
+      If[toRemove == 1,
+        (* if only removing 1 line, then that single line will be changed to display as "...", so do not need to remove anything *)
         #
-      ])& /@ linesToModify;
+        ,
+        Drop[#, (startingPointIndex+1);;(startingPointIndex+toRemove-1)]]
+      ,
+      #
+    ])& /@ linesToModify;
 
-   linesToModify = Union[Flatten[linesToModify]];
-   environLines = Union[Flatten[environLines]];
+  linesToModify = Union[Flatten[linesToModify]];
+  environLines = Union[Flatten[environLines]];
 
-   If[$Debug,
+  If[$Debug,
     Print["linesToModify after: ", linesToModify];
     Print["elidedLines: ", elidedLines];
     Print["environLines: ", environLines];
-   ];
+  ];
 
-   maxLineNumberLength = Max[IntegerLength /@ linesToModify];
+  maxLineNumberLength = Max[IntegerLength /@ linesToModify];
 
-   Table[
+  Table[
 
-      If[!MemberQ[elidedLines, i],
-        With[
-          {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
-          ,
-          {lineSource = lines[[i]],
-            lineNumber = i,
-            lineList = ListifyLine[lines[[i]],
-              lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-            underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
-            lints = Union[Flatten[Values[lintsPerColumn]]],
-            environ = MemberQ[environLines, i]
-          }
-          ,
-          InspectedLineObject[lineSource, lineNumber, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
-        ]
+    If[!MemberQ[elidedLines, i],
+      With[
+        {lintsPerColumn = createLintsPerColumn[lines[[i]], lints, i, "EndOfFile" -> (i == Length[lines])]}
         ,
-        (* elided *)
-        With[{environ = MemberQ[environLines, i]},
-          InspectedLineObject["", i, {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True, "Environ" -> environ]
-        ]
+        {lineSource = lines[[i]],
+          lineNumber = i,
+          lineList = ListifyLine[lines[[i]],
+            lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+          underlineList = createUnderlineList[lines[[i]], i, lintsPerColumn, "EndOfFile" -> (i == Length[lines])],
+          lints = Union[Flatten[Values[lintsPerColumn]]],
+          environ = MemberQ[environLines, i]
+        }
+        ,
+        InspectedLineObject[lineSource, lineNumber, { lineList, underlineList }, lints, "MaxLineNumberLength" -> maxLineNumberLength, "Environ" -> environ]
       ]
+      ,
+      (* elided *)
+      With[{environ = MemberQ[environLines, i]},
+        InspectedLineObject["", i, {}, {}, "MaxLineNumberLength" -> maxLineNumberLength, "Elided" -> True, "Environ" -> environ]
+      ]
+    ]
     ,
     {i, linesToModify}
-    ]
+  ]
 ]]
 
 
