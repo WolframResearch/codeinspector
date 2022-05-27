@@ -55,7 +55,8 @@ CallNode[LeafNode[Symbol,
   "System`Confirm" | "System`ConfirmBy" | "System`ConfirmMatch" |
   "System`ConfirmAssert" |
   "MatchQ" |
-  "KeyValuePattern"
+  "KeyValuePattern" |
+  "StringMatchQ"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -295,6 +296,9 @@ Module[{ast, node, sym, name},
     ,
     "KeyValuePattern",
       scanKeyValuePattern[pos, ast]
+    ,
+    "StringMatchQ",
+      scanStringMatchQ[pos, ast]
   ]
 ]]
 
@@ -3016,6 +3020,65 @@ Module[{ast, node, issues, head, headSrc, children, parentPos,
         ]
       ]
     ]
+  ];
+
+  issues
+]]
+
+
+
+(*
+https://mail-archive.wolfram.com/archive/l-kernel/2022/May00/0067.html
+*)
+Attributes[scanStringMatchQ] = {HoldRest}
+
+scanStringMatchQ[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, head, children, pat, patStr, unescaped,
+  metaChars},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  head = node[[1]];
+
+  issues = {};
+
+  If[Length[children] != 2,
+    Throw[issues]
+  ];
+
+  pat = children[[2]];
+
+  If[MatchQ[pat, LeafNode[String, _, _]],
+
+    patStr = pat[[2]];
+
+    If[StringContainsQ[patStr, "*" | "@"],
+
+      (*
+      contains * or @ but may be escaped
+      *)
+
+      unescaped = Select[StringCases[patStr, RegularExpression["\\\\*(\\*|@)"]], OddQ[StringLength[#]]&];
+
+      If[unescaped != {},
+
+        metaChars = Union[StringTake[#, -1] & /@ unescaped];
+
+        (*
+        contains unescaped * or @
+        *)
+        AppendTo[issues,
+          InspectionObject["AbbreviatedStringPatterns", "Abbreviated string patterns: ``" <> ToString[metaChars] <> "``.", "Remark", <|
+            Source -> pat[[3, Key[Source]]],
+            ConfidenceLevel -> 0.95,
+            "AdditionalDescriptions" -> {"Prefer to use symbolic string patterns or regular expressions instead."}
+          |>]
+        ]
+      ]
+    ];
   ];
 
   issues
