@@ -44,7 +44,7 @@ TernaryNode[TagUnset, {
 (*
 Tags: ImplicitTimesAcrossLines
 *)
-InfixNode[Times, {___, LeafNode[Token`Fake`ImplicitTimes, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]..., LeafNode[Token`Newline, _, _], ___}, _] -> scanImplicitTimesAcrossLines,
+InfixNode[Times, {___, LeafNode[Token`Newline, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]..., LeafNode[Token`Fake`ImplicitTimes, _, _], ___}, _] -> scanImplicitTimesAcrossLines,
 
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
@@ -190,7 +190,7 @@ This works for all Source conventions
 *)
 scanImplicitTimesAcrossLines[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
+Module[{agg, node, children, data, issues, srcs, i},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   children = node[[2]];
@@ -200,29 +200,27 @@ Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
 
   issues = {};
 
-  i = 1;
+  i = Length[children];
 
-  While[i <= Length[children],
+  While[1 <= i,
 
-    While[i <= Length[children] && !MatchQ[children[[i]], LeafNode[Token`Fake`ImplicitTimes, _, _]],
-       i++;
+    While[1 <= i && !MatchQ[children[[i]], LeafNode[Token`Fake`ImplicitTimes, _, _]],
+       i--;
     ];
 
-    If[i > Length[children],
+    If[1 > i,
       Break[]
     ];
 
-    implicitTimes = children[[i]];
+    i--;
 
-    i++;
-
-    While[i <= Length[children] && MatchQ[children[[i]], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]],
-       i++;
+    While[1 <= i && MatchQ[children[[i]], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]],
+       i--;
     ];
 
-    If[i <= Length[children] && MatchQ[children[[i]], LeafNode[Token`Newline, _, _]],
-      AppendTo[srcs, implicitTimes[[3, Key[Source]]]];
-      i++;
+    If[1 <= i && MatchQ[children[[i]], LeafNode[Token`Newline, _, _]],
+      AppendTo[srcs, children[[i, 3, Key[Source]]]];
+      i--;
     ];
   ];
 
@@ -231,9 +229,9 @@ Module[{agg, node, children, data, issues, srcs, i, implicitTimes},
       <| Source -> #,
         ConfidenceLevel -> 0.95,
         CodeActions -> {
-                  CodeAction["Insert ``*``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
-                  CodeAction["Insert ``;``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Semi, ";", <||>] |>],
-                  CodeAction["Insert ``,``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>] }
+          CodeAction["Insert ``*``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Star, "*", <||>] |>],
+          CodeAction["Insert ``;``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Semi, ";", <||>] |>],
+          CodeAction["Insert ``,``", InsertNode, <| Source -> #, "InsertionNode" -> LeafNode[Token`Comma, ",", <||>] |>] }
       |>]];
     )&, srcs];
 
