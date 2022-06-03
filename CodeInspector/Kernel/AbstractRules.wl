@@ -13,6 +13,22 @@ Needs["CodeInspector`Utils`"]
 
 
 
+patPat =
+  CallNode[
+    LeafNode[Symbol,
+      "Alternatives" | "Blank" | "BlankSequence" |
+      "BlankNullSequence" | "Except" | "KeyValuePattern" |
+      "OptionsPattern" | "Pattern" | "Repeated" |
+      "RepeatedNull", _], _, _]
+
+predSymbolPat =
+  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+
+predPat =
+  predSymbolPat |
+  CallNode[LeafNode[Symbol, "Function", _], _, _]
+
+
 (*
 
 Rules are of the form: pat -> func where pat is the node pattern to match on and func is the processing function for the node.
@@ -56,7 +72,9 @@ CallNode[LeafNode[Symbol,
   "System`ConfirmAssert" |
   "MatchQ" |
   "KeyValuePattern" |
-  "StringMatchQ"
+  "StringMatchQ" |
+  "Select" |
+  "Cases"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -299,6 +317,12 @@ Module[{ast, node, sym, name},
     ,
     "StringMatchQ",
       scanStringMatchQ[pos, ast]
+    ,
+    "Select",
+      scanSelect[pos, ast]
+    ,
+    "Cases",
+      scanCases[pos, ast]
   ]
 ]]
 
@@ -3079,6 +3103,120 @@ Module[{ast, node, issues, head, children, pat, patStr, unescaped,
         ]
       ]
     ];
+  ];
+
+  issues
+]]
+
+
+
+Attributes[scanSelect] = {HoldRest}
+
+scanSelect[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, children, crit},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  issues = {};
+
+  Which[
+    Length[children] == 1,
+      (*
+      Select[crit]
+      *)
+      crit = children[[1]];
+    ,
+    Length[children] >= 2,
+      (*
+      Select[list, crit]
+      Select[list, crit, n]
+      *)
+      crit = children[[2]];
+    ,
+    True,
+      Throw[issues]
+  ];
+
+  Which[
+    MatchQ[crit, patPat],
+      AppendTo[issues,
+        InspectionObject["SelectCasesConfusion", "Expected a predicate.", "Error", <|
+          Source -> crit[[3, Key[Source]]],
+          ConfidenceLevel -> 0.75
+        |>]
+      ]
+    ,
+    MatchQ[crit, predPat],
+      Null
+    ,
+    True,
+      (* AppendTo[issues,
+        InspectionObject["SelectCasesConfusion", "Unrecognized.", "Error", <|
+          Source -> crit[[3, Key[Source]]],
+          ConfidenceLevel -> 0.5
+        |>]
+      ] *)
+      Null
+  ];
+
+  issues
+]]
+
+
+Attributes[scanCases] = {HoldRest}
+
+scanCases[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, children, pattern},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  issues = {};
+
+  Which[
+    Length[children] == 1,
+      (*
+      Cases[pattern]
+      *)
+      pattern = children[[1]];
+    ,
+    Length[children] >= 2,
+      (*
+      Cases[expr, pattern]
+      Cases[expr, pattern, levelspec]
+      Cases[expr, pattern, levelspec, n]
+      *)
+      pattern = children[[2]];
+    ,
+    True,
+      Throw[issues]
+  ];
+
+  Which[
+    MatchQ[pattern, predPat],
+      AppendTo[issues,
+        InspectionObject["SelectCasesConfusion", "Expected a pattern.", "Error", <|
+          Source -> pattern[[3, Key[Source]]],
+          ConfidenceLevel -> 0.75
+        |>]
+      ]
+    ,
+    MatchQ[pattern, patPat],
+      Null
+    ,
+    True,
+      (* AppendTo[issues,
+        InspectionObject["SelectCasesConfusion", "Unrecognized.", "Error", <|
+          Source -> pattern[[3, Key[Source]]],
+          ConfidenceLevel -> 0.5
+        |>]
+      ] *)
+      Null
   ];
 
   issues

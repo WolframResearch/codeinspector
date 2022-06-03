@@ -43,6 +43,14 @@ patPat =
       "RepeatedNull", _], _, _]
 
 
+predSymbolPat =
+  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+
+predPat =
+  predSymbolPat |
+  PostfixNode[Function, _, _] |
+  CallNode[LeafNode[Symbol, "Function", _], _, _]
+
 
 (*
 
@@ -113,8 +121,7 @@ CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | Pa
   ___}, _] -> scanUppercasePatternBlank,
 
 
-CompoundNode[Blank | BlankSequence | BlankNullSequence, {_,
-  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]}, _] ->
+CompoundNode[Blank | BlankSequence | BlankNullSequence, {_, predSymbolPat}, _] ->
   scanBlankPredicate,
 
 (*
