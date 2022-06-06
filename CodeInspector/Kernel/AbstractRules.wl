@@ -22,7 +22,7 @@ patPat =
       "RepeatedNull", _], _, _]
 
 predSymbolPat =
-  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | (s_ /; StringStartsQ[s, "is"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
 
 predPat =
   predSymbolPat |
@@ -3141,7 +3141,7 @@ Module[{ast, node, issues, children, crit},
   ];
 
   Which[
-    MatchQ[crit, patPat],
+    !FreeQ[crit, patPat],
       AppendTo[issues,
         InspectionObject["SelectCasesConfusion", "Expected a predicate.", "Error", <|
           Source -> crit[[3, Key[Source]]],
@@ -3152,14 +3152,13 @@ Module[{ast, node, issues, children, crit},
     MatchQ[crit, predPat],
       Null
     ,
-    True,
-      (* AppendTo[issues,
+    TrueQ[$Debug],
+      AppendTo[issues,
         InspectionObject["SelectCasesConfusion", "Unrecognized.", "Error", <|
           Source -> crit[[3, Key[Source]]],
           ConfidenceLevel -> 0.5
         |>]
-      ] *)
-      Null
+      ]
   ];
 
   issues
@@ -3206,17 +3205,16 @@ Module[{ast, node, issues, children, pattern},
         |>]
       ]
     ,
-    MatchQ[pattern, patPat],
+    !FreeQ[pattern, patPat],
       Null
     ,
-    True,
-      (* AppendTo[issues,
+    TrueQ[$Debug],
+      AppendTo[issues,
         InspectionObject["SelectCasesConfusion", "Unrecognized.", "Error", <|
           Source -> pattern[[3, Key[Source]]],
           ConfidenceLevel -> 0.5
         |>]
-      ] *)
-      Null
+      ]
   ];
 
   issues
