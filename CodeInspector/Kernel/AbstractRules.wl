@@ -3250,13 +3250,6 @@ Module[{ast, node, tag, data, tagString, children},
     "ColonColonOpenSquare",
       {InspectionObject["ColonColonOpenSquare", "Invalid syntax for ``::[]``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
-    "PatternColonError",
-      {InspectionObject["PatternColonError", "Invalid syntax for ``:``.", "Fatal", <|
-        Source -> data[Source],
-        ConfidenceLevel -> 1.0,
-        "AdditionalDescriptions" -> {"LHS must be a symbol."}
-      |>]}
-    ,
     "TagSetError",
       {InspectionObject["TagSetError", "Invalid syntax for ``/: =``.", "Error", <|
         Source -> data[Source],

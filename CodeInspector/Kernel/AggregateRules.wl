@@ -796,11 +796,11 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, implicitTim
   issues = {};
 
   replacementNode =
-    CallNode[{children[[1]]}, {
+    CallNode[{children[[1]]},
       GroupNode[GroupSquare, {
         LeafNode[Token`OpenSquare, "[", <||>],
         children[[3, 2, 2]],
-        LeafNode[Token`CloseSquare, "]", <||>] }, <||>]}, <||>];
+        LeafNode[Token`CloseSquare, "]", <||>] }, <||>], <||>];
 
   AppendTo[issues, InspectionObject["ImplicitTimesPseudoCall", "Suspicious implicit ``Times`` looks like a traditional function call.", "Error",
     <| Source -> implicitTimesSrc,
@@ -1234,7 +1234,7 @@ Module[{agg, node, parentPos, parent, reaped, issues},
     parent = Extract[agg, {parentPos}][[1]];
 
     Switch[parent,
-      CallNode[node, {_}, _],
+      CallNode[node, _, _],
         Sow[scanPatternTestCalls[parentPos, agg]]
     ]
   ];
@@ -1313,7 +1313,7 @@ Module[{agg, node, data, children, patternTest, args, patternTestChildren, patte
                                           LeafNode[Token`Question, "?", <||>],
                                           GroupNode[GroupParen, {
                                             LeafNode[Token`OpenParen, "(", <||>],
-                                            CallNode[patternTestArg2, {args}, <||>],
+                                            CallNode[patternTestArg2, args, <||>],
                                             LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
 
       src = data[Source];
@@ -1338,7 +1338,7 @@ Module[{agg, node, data, children, patternTest, args, patternTestChildren, patte
                                         LeafNode[Token`Question, "?", <||>],
                                         GroupNode[GroupParen, {
                                           LeafNode[Token`OpenParen, "(", <||>],
-                                          CallNode[patternTestArg2, {args}, <||>],
+                                          CallNode[patternTestArg2, args, <||>],
                                           LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
 
   replacementNode2 = CallNode[GroupNode[GroupParen, {
@@ -1660,7 +1660,7 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName,
           *)
 
           replacementNode2 =
-            CallNode[LeafNode[Symbol, "Optional", <||>], {
+            CallNode[LeafNode[Symbol, "Optional", <||>],
               GroupNode[GroupSquare, {
                 LeafNode[Token`OpenSquare, "[", <||>],
                 InfixNode[Comma, {
@@ -1671,7 +1671,7 @@ Module[{agg, node, tag, data, children, qSrc, a, q, b, aSrc, aName,
                   LeafNode[Token`Comma, ",", <||>],
                   LeafNode[Token`Whitespace, " ", <||>],
                   b[[2, 3]]}, <||>],
-                LeafNode[Token`CloseSquare, "]", <||>]}, <||>]}, <||>];
+                LeafNode[Token`CloseSquare, "]", <||>]}, <||>], <||>];
 
           AppendTo[issues,
             InspectionObject["PatternTestPattern", "``PatternTest`` has ``Pattern`` on RHS.", "Error", <|
@@ -1801,9 +1801,9 @@ Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, paren
 
       Map and MapAt can have multiple arguments
      *)
-     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Map" | "MapAt" | "MapIndexed" | "MapThread", _], {
+     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Map" | "MapAt" | "MapIndexed" | "MapThread", _],
                           GroupNode[GroupSquare, { _,
-                            InfixNode[Comma, {node, ___}, _ ], _ }, _]}, _]],
+                            InfixNode[Comma, {node, ___}, _ ], _ }, _], _]],
       Throw[{}]
      ];
 
@@ -1811,9 +1811,9 @@ Module[{agg, node, data, children, rule, ruleHead, ruleChild1, ruleChild2, paren
      heuristic
       if inside Reap[], then assume it is intentional, i.e., Reap[xxx, xxx, a->b&] is intentional
      *)
-     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Reap", _], {
+     If[MatchQ[parent, CallNode[LeafNode[Symbol, "Reap", _],
                           GroupNode[GroupSquare, { _,
-                            InfixNode[Comma, {_, _, _, _, node}, _ ], _ }, _]}, _]],
+                            InfixNode[Comma, {_, _, _, _, node}, _ ], _ }, _], _]],
       Throw[{}]
      ];
 
@@ -2631,8 +2631,8 @@ concretify[node:CallNode[_List, _, _]] :=
 (*
 Introduce list around head
 *)
-concretify[node:CallNode[head_, children_, data_]] :=
-  CallNode[{concretify[head]}, concretify /@ children, data]
+concretify[CallNode[head_, child_, data_]] :=
+  CallNode[{concretify[head]}, concretify[child], data]
 
 concretify[type_[tag_, children_, data_]] :=
   type[tag, concretify /@ children, data]

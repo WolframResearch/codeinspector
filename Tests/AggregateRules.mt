@@ -369,7 +369,7 @@ SyntaxError ExpectedSymbol:
 TestMatch[
 	CodeInspect["1:2"]
 	,
-	{InspectionObject["PatternColonError", _, _, _]}
+	{InspectionObject["ExpectedSymbol", _, _, _]}
 	,
 	TestID->"AggregateRules-20190523-F9Z1T6"
 ]
@@ -462,10 +462,10 @@ Test[
 					BinaryNode[Pattern, {
 						LeafNode[Symbol, "replaceheads", <|Source -> {{1, 1}, {1, 13}}|>],
 						LeafNode[Token`Colon, ":", <||>],
-						CallNode[LeafNode[Symbol, "Alternatives", <|Source -> {{1, 29}, {1, 41}}|>], {
+						CallNode[LeafNode[Symbol, "Alternatives", <|Source -> {{1, 29}, {1, 41}}|>],
 							GroupNode[GroupSquare, {
 								LeafNode[Token`OpenSquare, "[", <|Source -> {{1, 41}, {1, 42}}|>],
-								LeafNode[Token`CloseSquare, "]", <|Source -> {{1, 42}, {1, 43}}|>]}, <|Source -> {{1, 41}, {1, 43}}|>]}, <|Source -> {{1, 29}, {1, 43}}|>]}, <||>], Source -> {{1, 1}, {1, 43}}|>]}|>]}
+								LeafNode[Token`CloseSquare, "]", <|Source -> {{1, 42}, {1, 43}}|>]}, <|Source -> {{1, 41}, {1, 43}}|>], <|Source -> {{1, 29}, {1, 43}}|>]}, <||>], Source -> {{1, 1}, {1, 43}}|>]}|>]}
 	,
 	TestID->"AggregateRules-20220311-K6D5T9"
 ]
