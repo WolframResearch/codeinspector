@@ -71,7 +71,7 @@ Aggregate lints
 *)
 
 BinaryNode[
-  Optional | PatternTest | Span
+  BinarySlashSlash | Optional | PatternTest | Span
   , _, _] -> scanBinaryDispatch,
 
 TernaryNode[
@@ -181,6 +181,15 @@ Module[{agg, node, tag},
   tag = node[[1]];
 
   Switch[tag,
+    BinarySlashSlash,
+      Switch[node,
+        BinaryNode[BinarySlashSlash, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]],
+          scanBinarySlashSlash[pos, agg]
+        ,
+        _,
+          {}
+      ]
+    ,
     Optional,
       scanOptionalDispatch[pos, agg]
     ,
@@ -2618,6 +2627,63 @@ Module[{cst, node, children, issues, rators},
 
   issues
 ]
+
+
+
+
+
+
+Attributes[scanBinarySlashSlash] = {HoldRest}
+
+scanBinarySlashSlash[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs, pairs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  (*
+  with a // b, only test the pair {a, //}
+  *)
+  pairs = {{children[[1]], children[[2]]}};
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
 
 
 concretify[node:CallNode[_List, _, _]] :=
