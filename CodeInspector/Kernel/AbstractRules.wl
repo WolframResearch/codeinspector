@@ -74,7 +74,8 @@ CallNode[LeafNode[Symbol,
   "KeyValuePattern" |
   "StringMatchQ" |
   "Select" |
-  "Cases"
+  "Cases" |
+  "Replace"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -323,6 +324,9 @@ Module[{ast, node, sym, name},
     ,
     "Cases",
       scanCases[pos, ast]
+    ,
+    "Replace",
+      scanReplace[pos, ast]
   ]
 ]]
 
@@ -3213,6 +3217,47 @@ Module[{ast, node, issues, children, pattern},
         InspectionObject["SelectCasesConfusion", "Unrecognized.", "Error", <|
           Source -> pattern[[3, Key[Source]]],
           ConfidenceLevel -> 0.5
+        |>]
+      ]
+  ];
+
+  issues
+]]
+
+
+
+Attributes[scanReplace] = {HoldRest}
+
+scanReplace[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, children, rule},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  issues = {};
+
+  If[Length[children] < 2,
+    Throw[issues]
+  ];
+
+  rule = children[[2]];
+
+  Which[
+    MatchQ[rule, CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "SetDelayed", _], _, _]}, _]],
+      AppendTo[issues,
+        InspectionObject["RuleSetConfusion", "``Replace`` has ``SetDelayed`` in the rules position, but ``RuleDelayed`` was most likely intended.", "Error", <|
+          Source -> rule[[2, 1, 3, Key[Source]]],
+          ConfidenceLevel -> 0.90
+        |>]
+      ]
+    ,
+    MatchQ[rule, CallNode[LeafNode[Symbol, "SetDelayed", _], _]],
+      AppendTo[issues,
+        InspectionObject["RuleSetConfusion", "``Replace`` has ``SetDelayed`` in the rules position, but ``RuleDelayed`` was most likely intended.", "Error", <|
+          Source -> rule[[3, Key[Source]]],
+          ConfidenceLevel -> 0.90
         |>]
       ]
   ];
