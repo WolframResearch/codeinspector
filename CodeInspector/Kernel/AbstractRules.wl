@@ -26,7 +26,7 @@ predSymbolPat =
 
 predPat =
   predSymbolPat |
-  CallNode[LeafNode[Symbol, "Function", _], _, _]
+  CallNode[LeafNode[Symbol, "Composition" | "Function", _], _, _]
 
 
 (*
@@ -3145,7 +3145,7 @@ Module[{ast, node, issues, children, crit},
   ];
 
   Which[
-    !FreeQ[crit, patPat],
+    !MatchQ[crit, predPat] && !FreeQ[crit, patPat],
       AppendTo[issues,
         InspectionObject["SelectCasesConfusion", "Expected a predicate.", "Error", <|
           Source -> crit[[3, Key[Source]]],
@@ -3153,7 +3153,7 @@ Module[{ast, node, issues, children, crit},
         |>]
       ]
     ,
-    MatchQ[crit, predPat],
+    MatchQ[crit, predPat] && FreeQ[crit, patPat],
       Null
     ,
     TrueQ[$Debug],

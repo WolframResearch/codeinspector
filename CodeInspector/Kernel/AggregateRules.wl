@@ -48,6 +48,7 @@ predSymbolPat =
 
 predPat =
   predSymbolPat |
+  InfixNode[Composition, _, _] |
   PostfixNode[Function, _, _] |
   CallNode[LeafNode[Symbol, "Function", _], _, _]
 
