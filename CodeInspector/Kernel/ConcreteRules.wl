@@ -6,6 +6,7 @@ $DefaultConcreteRules
 Begin["`Private`"]
 
 Needs["CodeParser`"]
+Needs["CodeParser`Folds`"]
 Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
@@ -27,19 +28,13 @@ A rule of thumb is to make patterns as specific as possible, to offload work of 
 
 $DefaultConcreteRules = <|
 
+PrefixNode[_, _, _] -> scanPrefixDispatch,
 
+PostfixNode[_, _, _] -> scanPostfixDispatch,
 
-BinaryNode[Unset, {
-  ___,
-  LeafNode[Token`Equal, _, _],
-  LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _], (LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _])...,
-  LeafNode[Token`Dot, _, _]}, _] -> scanUnsets,
+BinaryNode[_, _, _] -> scanBinaryDispatch,
 
-TernaryNode[TagUnset, {
-  ___,
-  LeafNode[Token`Equal, _, _],
-  LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _], (LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _])...,
-  LeafNode[Token`Dot, _, _]}, _] -> scanTagUnsets,
+TernaryNode[_, _, _] -> scanTernaryDispatch,
 
 (*
 Tags: ImplicitTimesAcrossLines
@@ -77,24 +72,137 @@ Nothing
 
 
 
+Attributes[scanPrefixDispatch] = {HoldRest}
+
+scanPrefixDispatch[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, tag, issues, reaped},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+
+  tag = node[[1]];
+
+  issues = {};
+
+  reaped =
+  Reap[
+  Switch[node,
+    PrefixNode[_, {___, LeafNode[Token`Newline, _, _], ___}, _],
+      Sow[scanPrefixMultiline[pos, cst]]
+  ]
+  ][[2]];
+
+  issues = issues ~Join~ Flatten[reaped];
+
+  issues
+]]
 
 
 
+Attributes[scanPostfixDispatch] = {HoldRest}
+
+scanPostfixDispatch[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, tag, issues, reaped},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+
+  tag = node[[1]];
+
+  issues = {};
+
+  reaped =
+  Reap[
+  Switch[node,
+    PostfixNode[_, {___, LeafNode[Token`Newline, _, _], ___}, _],
+      Sow[scanPostfixMultiline[pos, cst]]
+  ]
+  ][[2]];
+
+  issues = issues ~Join~ Flatten[reaped];
+
+  issues
+]]
 
 
 
+Attributes[scanBinaryDispatch] = {HoldRest}
+
+scanBinaryDispatch[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, tag, issues, reaped},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+
+  tag = node[[1]];
+
+  issues = {};
+
+  reaped =
+  Reap[
+  Switch[tag,
+    Unset,
+      Switch[node,
+        BinaryNode[Unset, {___, LeafNode[Token`Equal, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _], (LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _])..., LeafNode[Token`Dot, _, _]}, _],
+          Sow[scanUnsets[pos, cst]]
+      ]
+  ]
+  ][[2]];
+
+  issues = issues ~Join~ Flatten[reaped];
+
+  reaped =
+  Reap[
+  Switch[node,
+    BinaryNode[_, {___, LeafNode[Token`Newline, _, _], ___}, _],
+      Sow[scanBinaryMultiline[pos, cst]]
+  ]
+  ][[2]];
+
+  issues = issues ~Join~ Flatten[reaped];
+
+  issues
+]]
 
 
 
+Attributes[scanTernaryDispatch] = {HoldRest}
 
+scanTernaryDispatch[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, tag, issues, reaped},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
 
+  tag = node[[1]];
 
+  issues = {};
 
+  reaped =
+  Reap[
+  Switch[tag,
+    TagUnset,
+      Switch[node,
+        TernaryNode[TagUnset, {___, LeafNode[Token`Equal, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _], (LeafNode[Whitespace | Token`Boxes`MultiWhitespace | Token`Comment, _, _] | GroupNode[Comment, _, _])..., LeafNode[Token`Dot, _, _]}, _],
+          Sow[scanTagUnsets[pos, cst]]
+      ]
+  ]
+  ][[2]];
 
+  issues = issues ~Join~ Flatten[reaped];
 
+  reaped =
+  Reap[
+  Switch[node,
+    TernaryNode[_, {___, LeafNode[Token`Newline, _, _], ___}, _],
+      Sow[scanTernaryMultiline[pos, cst]]
+  ]
+  ][[2]];
 
+  issues = issues ~Join~ Flatten[reaped];
 
-
+  issues
+]]
 
 
 
@@ -243,13 +351,11 @@ Module[{agg, node, children, data, issues, srcs, i},
 Attributes[scanCalls] = {HoldRest}
 
 scanCalls[pos_List, cstIn_] :=
-Module[{cst, node, tag, children, groupSquare, groupSquareChildren, openSquare, openSquareData},
+Module[{cst, node, tag, groupSquare, groupSquareChildren, openSquare, openSquareData},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   tag = node[[1]];
-  children = node[[2]];
-
-  groupSquare = children[[1]];
+  groupSquare = node[[2]];
 
   groupSquareChildren = groupSquare[[2]];
 
@@ -263,10 +369,6 @@ Module[{cst, node, tag, children, groupSquare, groupSquareChildren, openSquare, 
 
   {InspectionObject["CallDifferentLine", "Call is on different lines.", "Warning", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
 ]
-
-
-
-
 
 
 
@@ -391,8 +493,6 @@ prevSrc[After[src_]] :=
 
 
 
-
-
 Attributes[scanSyntaxErrorNodes] = {HoldRest}
 
 scanSyntaxErrorNodes[pos_List, cstIn_] :=
@@ -409,6 +509,9 @@ Module[{cst, node, tag, data, tagString, children},
     ,
     SyntaxError`ExpectedSet,
       {InspectionObject["ExpectedSet", "Expected ``=`` or ``:=`` or ``=.``.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
+    SyntaxError`ExpectedSymbol,
+      {InspectionObject["ExpectedSymbol", "Expected a symbol.", "Error", <| data, ConfidenceLevel -> 1.0 |>]}
     ,
     SyntaxError`OldFESyntax,
       {InspectionObject["OldFESyntax", "Old FE syntax.", "Fatal", <|
@@ -428,7 +531,6 @@ Module[{cst, node, tag, data, tagString, children},
       {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
 ]
-
 
 
 
@@ -452,6 +554,7 @@ Module[{cst, node, data, opener, openerData},
 ]
 
 
+
 Attributes[scanUnterminatedGroupNodes] = {HoldRest}
 
 scanUnterminatedGroupNodes[pos_List, cstIn_] :=
@@ -472,6 +575,7 @@ Module[{cst, node, data, opener, openerData},
 ]
 
 
+
 Attributes[scanGroupMissingOpenerNodes] = {HoldRest}
 
 scanGroupMissingOpenerNodes[pos_List, cstIn_] :=
@@ -490,6 +594,7 @@ Module[{cst, node, data, closer, closerData},
 
   {InspectionObject["GroupMissingOpener", "Missing opener.", "Fatal", <| closerData, ConfidenceLevel -> 1.0 |>]}
 ]
+
 
 
 Attributes[scanSyntaxIssues] = {HoldRest}
@@ -608,6 +713,229 @@ Module[{cst, node, data, tag},
 
   {InspectionObject["SuspiciousBox", "Suspicious box: ``" <> ToString[tag] <> "``.", "Warning", <| data, ConfidenceLevel -> 1.0 |>]}
 ]
+
+
+
+Attributes[scanPrefixMultiline] = {HoldRest}
+
+scanPrefixMultiline[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs, pairs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  children = aggregate /@ children;
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+Attributes[scanPostfixMultiline] = {HoldRest}
+
+scanPostfixMultiline[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  highConfSrcs = {};
+  lowConfSrcs = {};
+
+  issues = {};
+
+  children = aggregate /@ children;
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 1];
+
+  Do[
+
+    Switch[p,
+      (*
+      People like putting & on another line for some reason
+      *)
+      {a_, b:LeafNode[Token`Amp, _, _]} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[lowConfSrcs, p[[2, 3, Key[Source]]]]
+      ,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[highConfSrcs, p[[2, 3, Key[Source]]]];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  highConfSrcs = DeleteDuplicates[highConfSrcs];
+  lowConfSrcs = DeleteDuplicates[lowConfSrcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, highConfSrcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.85
+      |>]];
+    )&, lowConfSrcs];
+
+  issues
+]]
+
+
+
+Attributes[scanBinaryMultiline] = {HoldRest}
+
+scanBinaryMultiline[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs, pairs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  children = aggregate /@ children;
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  (*
+  with a // b, only test the pair {a, //}
+  *)
+  pairs = {{children[[1]], children[[2]]}};
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+Attributes[scanTernaryMultiline] = {HoldRest}
+
+scanTernaryMultiline[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, children, data, issues, srcs, filtered, pairs},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  children = aggregate /@ children;
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  (*
+  With a ~f~ b, we only want to look at {~, f} and {f, ~}
+  *)
+  filtered = children[[2;;-2]];
+
+  pairs = Partition[filtered, 2, 1];
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[1, 3, Key[Source]]]];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
 
 
 

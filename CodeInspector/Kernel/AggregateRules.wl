@@ -72,22 +72,12 @@ Aggregate lints
 *)
 
 BinaryNode[
-  BinarySlashSlash | Optional | PatternTest | Span
+  Optional | PatternTest | Span
   , _, _] -> scanBinaryDispatch,
 
 TernaryNode[
   Span | TernaryTilde
   , _, _] -> scanTernaryDispatch,
-
-PrefixNode[
-  _,
-  _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPrefixs,
-
-PostfixNode[
-  _,
-  _,
-  KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]] -> scanPostfixs,
 
 LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
@@ -182,15 +172,6 @@ Module[{agg, node, tag},
   tag = node[[1]];
 
   Switch[tag,
-    BinarySlashSlash,
-      Switch[node,
-        BinaryNode[BinarySlashSlash, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]],
-          scanBinarySlashSlash[pos, agg]
-        ,
-        _,
-          {}
-      ]
-    ,
     Optional,
       scanOptionalDispatch[pos, agg]
     ,
@@ -220,9 +201,6 @@ Module[{agg, node, tag},
     ,
     TernaryTilde,
       Switch[node,
-        TernaryNode[TernaryTilde, _, KeyValuePattern[Source -> {{line1_, _}, {line2_, _}} /; line1 != line2]],
-          scanTernaryTildes[pos, agg]
-        ,
         TernaryNode[TernaryTilde, {_, _, Except[LeafNode[Symbol, _, _]], _, _}, _],
           scanTernaryTildeExpectedSymbol[pos, agg]
         ,
@@ -311,114 +289,7 @@ Module[{agg, node, tag},
 ]]
 
 
-Attributes[scanPrefixs] = {HoldRest}
 
-scanPrefixs[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, srcs, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  pairs = Partition[children, 2, 1];
-
-  Do[
-
-    Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[1, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["PrefixDifferentLine", "Operands are on different lines.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
-Attributes[scanPostfixs] = {HoldRest}
-
-scanPostfixs[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  highConfSrcs = {};
-  lowConfSrcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  pairs = Partition[children, 2, 1];
-
-  Do[
-
-    Switch[p,
-      (*
-      People like putting & on another line for some reason
-      *)
-      {a_, b:LeafNode[Token`Amp, _, _]} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
-        AppendTo[lowConfSrcs, p[[2, 3, Key[Source]]]]
-      ,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
-        AppendTo[highConfSrcs, p[[2, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  highConfSrcs = DeleteDuplicates[highConfSrcs];
-  lowConfSrcs = DeleteDuplicates[lowConfSrcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["PostfixDifferentLine", "Operands are on different lines.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, highConfSrcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["PostfixDifferentLine", "Operands are on different lines.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.85
-      |>]];
-    )&, lowConfSrcs];
-
-  issues
-]]
 
 
 
@@ -482,6 +353,11 @@ Module[{agg, node, parentPos, parent, reaped, issues},
     If[MatchQ[parent,
       InfixNode[Times, {LeafNode[Symbol, _, _], LeafNode[Token`Fake`ImplicitTimes, _, _], GroupNode[GroupParen, _, _]}, _]],
       Sow[scanImplicitTimesPseudoCall[parentPos, agg]]
+    ];
+
+    If[MatchQ[parent,
+      InfixNode[Times, {___, BinaryNode[Span, _, _] | TernaryNode[Span, _, _], ___}, _]],
+      Sow[scanImplicitTimesSpan[parentPos, agg]]
     ];
   ];
 
@@ -825,6 +701,36 @@ Module[{agg, node, data, issues, children, head, implicitTimes, src, implicitTim
 ]
 
 
+Attributes[scanImplicitTimesSpan] = {HoldRest}
+
+scanImplicitTimesSpan[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, head, implicitTimess,
+  src},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  implicitTimess = Cases[children, LeafNode[Token`Fake`ImplicitTimes, _, _]];
+
+  issues = {};
+
+  Do[
+    src = implicitTimes[[3, Key[Source]]];
+    AppendTo[issues, InspectionObject["ImplicitTimesSpan", "Unexpected implicit ``Times`` between ``Spans``.", "Error",
+      <| Source -> src,
+        ConfidenceLevel -> 0.95
+      |>
+    ]
+  ];
+    ,
+    {implicitTimes, implicitTimess}
+  ];
+
+  issues
+]
+
 
 Attributes[scanDots] = {HoldRest}
 
@@ -837,44 +743,6 @@ Module[{agg, node, children, data, issues, srcs, pairs, underPoss, dot},
   data = node[[3]];
 
   issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-
-    srcs = {};
-
-    pairs = Partition[children, 2, 1];
-
-    Do[
-      If[!MatchQ[p, {_, LeafNode[Token`Dot, _, _]} |
-                      {LeafNode[Token`Dot, _, _], _}],
-        Continue[]
-      ];
-      Switch[p,
-        {n_, i:LeafNode[Token`Dot, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
-          AppendTo[srcs, p[[2, 3, Key[Source]]]];
-        ,
-        {i:LeafNode[Token`Dot, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
-          AppendTo[srcs, p[[1, 3, Key[Source]]]];
-      ];
-
-      ,
-      {p, pairs}
-    ];
-
-    srcs = DeleteDuplicates[srcs];
-
-    Scan[(
-      AppendTo[issues, InspectionObject["DotDifferentLine", "Operands for ``.`` are on different lines.", "Warning",
-        <| Source -> #,
-          ConfidenceLevel -> 0.85
-        |>]];
-      )&, srcs];
-
-  ];
-
 
   (*
   Check for  a_..b
@@ -992,69 +860,6 @@ Module[{cst, node, children, rand, issues, rator},
 
 
 
-
-
-
-
-
-Attributes[scanTernaryTildes] = {HoldRest}
-
-scanTernaryTildes[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, srcs, filtered, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  With a ~f~ b, we only want to look at {~, f} and {f, ~}
-  *)
-  filtered = children[[2;;-2]];
-
-  pairs = Partition[filtered, 2, 1];
-
-  Do[
-
-    Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[1, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["TernaryTildeDifferentLine", "Operands are on different lines.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
-
-
-
-
-
 Attributes[scanSpans] = {HoldRest}
 
 scanSpans[pos_List, aggIn_] :=
@@ -1108,46 +913,6 @@ Module[{agg, node, children, data, issues, src, pairs, srcs},
     ]
   ];
 
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  
-  pairs = Partition[children, 2, 1];
-
-  srcs = {};
-  Do[
-
-    If[!MatchQ[p, {_, LeafNode[Token`SemiSemi, _, _]} |
-                    {LeafNode[Token`SemiSemi, _, _], _}],
-      Continue[]
-    ];
-
-    Switch[p,
-      {n_, i:LeafNode[Token`SemiSemi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
-      ,
-      {i:LeafNode[Token`SemiSemi, _, _], n_} /; i[[3, Key[Source], 2, 1]] != n[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[1, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["SpanDifferentLine", "Operands for ``;;`` are on different lines.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
   issues
 ]]
 
@@ -1180,44 +945,9 @@ Module[{agg, node, children, data, issues, pairs, srcs, straySemis},
 
   issues = {};
 
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  pairs = Partition[children, 2, 1];
-
-  Do[
-
-    If[!MatchQ[p, {_, LeafNode[Token`Semi, _, _]}],
-      Continue[]
-    ];
-
-    Switch[p,
-      {n_, i:LeafNode[Token`Semi, _, _]} /; n[[3, Key[Source], 2, 1]] != i[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operand for ``;`` is on different line.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-
   straySemis = SequenceCases[children, {LeafNode[Token`Fake`ImplicitNull, "", _], semi:LeafNode[Token`Semi, ";", _]} :> semi];
 
   Scan[(AppendTo[issues, InspectionObject["UnexpectedSemicolon", "``;`` may not be needed.", "Warning", <| #[[3]], ConfidenceLevel -> 0.95 |>]])&, straySemis];
-
 
   issues
 ]]
@@ -2628,63 +2358,6 @@ Module[{cst, node, children, issues, rators},
 
   issues
 ]
-
-
-
-
-
-
-Attributes[scanBinarySlashSlash] = {HoldRest}
-
-scanBinarySlashSlash[pos_List, aggIn_] :=
-Catch[
-Module[{agg, node, children, data, issues, srcs, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  srcs = {};
-
-  issues = {};
-
-  (*
-  Only check if LineCol-style
-  *)
-  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
-    Throw[issues]
-  ];
-
-  (*
-  with a // b, only test the pair {a, //}
-  *)
-  pairs = {{children[[1]], children[[2]]}};
-
-  Do[
-
-    Switch[p,
-      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
-        AppendTo[srcs, p[[2, 3, Key[Source]]]];
-    ];
-
-    ,
-    {p, pairs}
-  ];
-
-  srcs = DeleteDuplicates[srcs];
-
-  Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
-      <| Source -> #,
-        ConfidenceLevel -> 0.95
-      |>]];
-    )&, srcs];
-
-  issues
-]]
-
-
-
 
 
 concretify[node:CallNode[_List, _, _]] :=
