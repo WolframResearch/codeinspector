@@ -296,11 +296,11 @@ Attributes[scanImplicitTimesAcrossLines] = {HoldRest}
 (*
 This works for all Source conventions
 *)
-scanImplicitTimesAcrossLines[pos_List, aggIn_] :=
+scanImplicitTimesAcrossLines[pos_List, cstIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs, i},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
+Module[{cst, node, children, data, issues, srcs, i},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
@@ -718,11 +718,11 @@ Module[{cst, node, data, tag},
 
 Attributes[scanPrefixMultiline] = {HoldRest}
 
-scanPrefixMultiline[pos_List, aggIn_] :=
+scanPrefixMultiline[pos_List, cstIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
+Module[{cst, node, children, data, issues, srcs, pairs},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
@@ -768,11 +768,11 @@ Module[{agg, node, children, data, issues, srcs, pairs},
 
 Attributes[scanPostfixMultiline] = {HoldRest}
 
-scanPostfixMultiline[pos_List, aggIn_] :=
+scanPostfixMultiline[pos_List, cstIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
+Module[{cst, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
@@ -833,11 +833,11 @@ Module[{agg, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
 
 Attributes[scanBinaryMultiline] = {HoldRest}
 
-scanBinaryMultiline[pos_List, aggIn_] :=
+scanBinaryMultiline[pos_List, cstIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
+Module[{cst, node, children, data, issues, srcs, pairs},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
@@ -886,11 +886,11 @@ Module[{agg, node, children, data, issues, srcs, pairs},
 
 Attributes[scanTernaryMultiline] = {HoldRest}
 
-scanTernaryMultiline[pos_List, aggIn_] :=
+scanTernaryMultiline[pos_List, cstIn_] :=
 Catch[
-Module[{agg, node, children, data, issues, srcs, filtered, pairs},
-  agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
+Module[{cst, node, children, data, issues, srcs, filtered, pairs},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
   children = node[[2]];
   data = node[[3]];
 
