@@ -20,9 +20,9 @@ TestMatch[
 DotDifferentLine
 *)
 TestMatch[
-	CodeInspect["{ a.\nb }"]
+	CodeInspect["{ a \n . b }"]
 	,
-	{ InspectionObject["DotDifferentLine", _, _, _] }
+	{ InspectionObject["DifferentLine", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190522-U4K0M9"
 ]
@@ -53,7 +53,7 @@ DifferentLine:
 TestMatch[
 	CodeInspect["-\na"]
 	,
-	{InspectionObject["PrefixDifferentLine", _, _, _]}
+	{InspectionObject["DifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-Y8O9L2"
 ]
@@ -61,7 +61,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["{ a\n! }"]
 	,
-	{InspectionObject["PostfixDifferentLine", _, _, _]}
+	{InspectionObject["DifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-R2X2T0"
 ]
@@ -83,7 +83,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["{ a\n;; }"]
 	,
-	{InspectionObject["SpanDifferentLine", _, _, _]}
+	{InspectionObject["DifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-E0L3O1"
 ]
@@ -91,7 +91,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["{ a~\nf~b } "]
 	,
-	{InspectionObject["TernaryTildeDifferentLine", _, _, _]}
+	{InspectionObject["DifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20190521-S5U4W8"
 ]
@@ -109,7 +109,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["<<\na"]
 	,
-	{InspectionObject["PrefixDifferentLine", _, _, _]}
+	{InspectionObject["DifferentLine", _, _, _]}
 	,
 	TestID->"ConcreteRules-20191212-S0K7T1"
 ]
@@ -123,7 +123,7 @@ ImplicitTimesSpan
 TestMatch[
 	CodeInspect[";;b;;"]
 	,
-	{ InspectionObject["UnexpectedImplicitTimes", _, _, _] }
+	{ InspectionObject["ImplicitTimesSpan", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190523-I1D9N0"
 ]
@@ -132,7 +132,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["a;;b;;"]
 	,
-	{ InspectionObject["UnexpectedImplicitTimes", _, _, _] }
+	{ InspectionObject["ImplicitTimesSpan", _, _, _] }
 	,
 	TestID->"ConcreteRules-20190523-L7M6K3"
 ]

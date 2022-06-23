@@ -34,12 +34,9 @@ PostfixNode[_, _, _] -> scanPostfixDispatch,
 
 BinaryNode[_, _, _] -> scanBinaryDispatch,
 
-TernaryNode[_, _, _] -> scanTernaryDispatch,
+InfixNode[_, _, _] -> scanInfixDispatch,
 
-(*
-Tags: ImplicitTimesAcrossLines
-*)
-InfixNode[Times, {___, LeafNode[Token`Newline, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]..., LeafNode[Token`Fake`ImplicitTimes, _, _], ___}, _] -> scanImplicitTimesAcrossLines,
+TernaryNode[_, _, _] -> scanTernaryDispatch,
 
 CallNode[{_, ___, LeafNode[Token`Newline, _, _], ___}, _, _] -> scanCalls,
 
@@ -164,6 +161,31 @@ Module[{cst, node, tag, issues, reaped},
   issues
 ]]
 
+
+Attributes[scanInfixDispatch] = {HoldRest}
+
+scanInfixDispatch[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, tag, issues, reaped},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+
+  tag = node[[1]];
+
+  issues = {};
+
+  reaped =
+  Reap[
+  Switch[node,
+    InfixNode[_, {___, LeafNode[Token`Newline, _, _], ___}, _],
+      Sow[scanInfixMultiline[pos, cst]]
+  ]
+  ][[2]];
+
+  issues = issues ~Join~ Flatten[reaped];
+
+  issues
+]]
 
 
 Attributes[scanTernaryDispatch] = {HoldRest}
@@ -858,6 +880,72 @@ Module[{cst, node, children, data, issues, srcs, pairs},
   with a // b, only test the pair {a, //}
   *)
   pairs = {{children[[1]], children[[2]]}};
+
+  Do[
+
+    Switch[p,
+      {a_, b_} /; a[[3, Key[Source], 2, 1]] != b[[3, Key[Source], 1, 1]],
+        AppendTo[srcs, p[[2, 3, Key[Source]]]];
+    ];
+
+    ,
+    {p, pairs}
+  ];
+
+  srcs = DeleteDuplicates[srcs];
+
+  Scan[(
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+      <| Source -> #,
+        ConfidenceLevel -> 0.95
+      |>]];
+    )&, srcs];
+
+  issues
+]]
+
+
+
+Attributes[scanInfixMultiline] = {HoldRest}
+
+scanInfixMultiline[pos_List, cstIn_] :=
+Catch[
+Module[{cst, node, children, data, issues, srcs, pairs, tag},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+
+  tag = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  srcs = {};
+
+  issues = {};
+
+  (*
+  skip warning about comma
+  *)
+  If[MatchQ[tag, CodeParser`Comma],
+    Throw[issues]
+  ];
+
+  (*
+  dispatch to special function for implicit Times
+  *)
+  If[MatchQ[node, InfixNode[Times, {___, LeafNode[Token`Newline, _, _], LeafNode[Whitespace | Token`Boxes`MultiWhitespace, _, _]..., LeafNode[Token`Fake`ImplicitTimes, _, _], ___}, _]],
+    Throw[scanImplicitTimesAcrossLines[pos, cst]];
+  ];
+
+  children = aggregate /@ children;
+
+  (*
+  Only check if LineCol-style
+  *)
+  If[!MatchQ[children[[1, 3, Key[Source]]], {{_Integer, _Integer}, {_Integer, _Integer}}],
+    Throw[issues]
+  ];
+
+  pairs = Partition[children, 2, 2];
 
   Do[
 

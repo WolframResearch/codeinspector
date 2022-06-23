@@ -33,9 +33,17 @@ DotDifferentLine
 TestMatch[
 	CodeInspect["{ a.\nb }"]
 	,
-	{InspectionObject["DotDifferentLine", _, _, _]}
+	{}
 	,
 	TestID->"AggregateRules-20190522-U4K0M9"
+]
+
+TestMatch[
+	CodeInspect["{ a \n . b }"]
+	,
+	{InspectionObject["DifferentLine", _, _, _]}
+	,
+	TestID->"AggregateRules-20220622-Y3A4L1"
 ]
 
 
