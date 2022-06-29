@@ -567,3 +567,28 @@ TestMatch[
 
 
 
+TestMatch[
+	CodeInspect["If[ a & b, then, else ]"]
+	,
+	{InspectionObject["ImplicitTimesFunction", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220629-Q1L0S1"
+]
+
+
+
+TestMatch[
+	CodeInspect["a & b"]
+	,
+	{InspectionObject["ImplicitTimesFunction", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220629-S0J1G1"
+]
+
+
+
+
+
+
+
+

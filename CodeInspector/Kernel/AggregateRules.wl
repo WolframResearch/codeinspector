@@ -367,8 +367,19 @@ Module[{agg, node, parentPos, parent, reaped, issues},
     ];
 
     If[MatchQ[parent,
-      InfixNode[Times, {___, BinaryNode[Span, _, _] | TernaryNode[Span, _, _], ___}, _]],
+      InfixNode[Times,
+        children_ /;
+          !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
+          !FreeQ[children, BinaryNode[Span, _, _] | TernaryNode[Span, _, _], 1], _]],
       Sow[scanImplicitTimesSpan[parentPos, agg]]
+    ];
+
+    If[MatchQ[parent,
+      InfixNode[Times,
+        children_ /;
+          !FreeQ[children, LeafNode[Token`Fake`ImplicitTimes, _, _], 1] &&
+          !FreeQ[children, PostfixNode[Function, _, _], 1], _]],
+      Sow[scanImplicitTimesFunction[parentPos, agg]]
     ];
   ];
 
@@ -729,7 +740,7 @@ Module[{agg, node, data, issues, children, head, implicitTimess,
 
   Do[
     src = implicitTimes[[3, Key[Source]]];
-    AppendTo[issues, InspectionObject["ImplicitTimesSpan", "Unexpected implicit ``Times`` between ``Spans``.", "Error",
+    AppendTo[issues, InspectionObject["ImplicitTimesSpan", "Unexpected implicit ``Times`` between ``Span``s.", "Error",
       <| Source -> src,
         ConfidenceLevel -> 0.95
       |>
@@ -741,6 +752,39 @@ Module[{agg, node, data, issues, children, head, implicitTimess,
 
   issues
 ]
+
+
+Attributes[scanImplicitTimesFunction] = {HoldRest}
+
+scanImplicitTimesFunction[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, head, implicitTimess,
+  src},
+
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  implicitTimess = Cases[children, LeafNode[Token`Fake`ImplicitTimes, _, _]];
+
+  issues = {};
+
+  Do[
+    src = implicitTimes[[3, Key[Source]]];
+    AppendTo[issues, InspectionObject["ImplicitTimesFunction", "Unexpected implicit ``Times`` after ``Function``.", "Error",
+      <| Source -> src,
+        ConfidenceLevel -> 0.95
+      |>
+    ]
+  ];
+    ,
+    {implicitTimes, implicitTimess}
+  ];
+
+  issues
+]
+
 
 
 Attributes[scanDots] = {HoldRest}
