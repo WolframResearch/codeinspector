@@ -532,3 +532,38 @@ TestMatch[
 
 
 
+
+TestMatch[
+	CodeInspect["\
+Replace[arg, {
+    LHS := RHS
+}]"]
+	,
+	{InspectionObject["RuleSetConfusion", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220629-I8Q2E9"
+]
+
+
+TestMatch[
+	CodeInspect["Replace[expr, lhs := rhs]"]
+	,
+	{InspectionObject["RuleSetConfusion", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220629-O6C4K5"
+]
+
+TestMatch[
+	CodeInspect["ReplaceAll[expr, lhs := rhs]"]
+	,
+	{InspectionObject["RuleSetConfusion", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220629-J2Z3H0"
+]
+
+
+
+
+
+
+

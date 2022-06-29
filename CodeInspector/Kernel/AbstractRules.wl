@@ -82,7 +82,7 @@ CallNode[LeafNode[Symbol,
   "StringMatchQ" |
   "Select" |
   "Cases" |
-  "Replace"
+  "Replace" | "ReplaceAll"
   , _], _, _] -> scanCallDispatch,
 
 (*
@@ -337,6 +337,9 @@ Module[{ast, node, sym, name},
     ,
     "Replace",
       scanReplace[pos, ast]
+    ,
+    "ReplaceAll",
+      scanReplaceAll[pos, ast]
   ]
 ]]
 
@@ -3340,6 +3343,45 @@ Module[{ast, node, issues, children, rule},
   issues
 ]]
 
+
+Attributes[scanReplaceAll] = {HoldRest}
+
+scanReplaceAll[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, issues, children, rule},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  children = node[[2]];
+
+  issues = {};
+
+  If[Length[children] < 2,
+    Throw[issues]
+  ];
+
+  rule = children[[2]];
+
+  Which[
+    MatchQ[rule, CallNode[LeafNode[Symbol, "List", _], {CallNode[LeafNode[Symbol, "SetDelayed", _], _, _]}, _]],
+      AppendTo[issues,
+        InspectionObject["RuleSetConfusion", "``ReplaceAll`` has ``SetDelayed`` in the rules position, but ``RuleDelayed`` was most likely intended.", "Error", <|
+          Source -> rule[[2, 1, 3, Key[Source]]],
+          ConfidenceLevel -> 0.90
+        |>]
+      ]
+    ,
+    MatchQ[rule, CallNode[LeafNode[Symbol, "SetDelayed", _], _, _]],
+      AppendTo[issues,
+        InspectionObject["RuleSetConfusion", "``ReplaceAll`` has ``SetDelayed`` in the rules position, but ``RuleDelayed`` was most likely intended.", "Error", <|
+          Source -> rule[[3, Key[Source]]],
+          ConfidenceLevel -> 0.90
+        |>]
+      ]
+  ];
+
+  issues
+]]
 
 
 Attributes[scanAbstractSyntaxErrorNodes] = {HoldRest}
