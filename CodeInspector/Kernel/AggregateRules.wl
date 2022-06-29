@@ -100,17 +100,7 @@ BinaryNode[Optional, {BlankSequenceNode[BlankSequence, _, _], _}, _] -> scanBlan
 BinaryNode[Optional, {BlankNullSequenceNode[BlankNullSequence, _, _], _}, _] -> scanBlankOptionals,
 *)
 
-
-
-(*
-scan for something like Rule___
-
-Last[StringSplit[sym, "`"]] will return the symbol name, e.g. A`Bar => Bar
-*)
-CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, {
-  LeafNode[Symbol, sym_?uppercaseSymbolNameQ, _],
-  ___}, _] -> scanUppercasePatternBlank,
-
+CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, _, _] -> scanCompoundDispatch,
 
 CompoundNode[Blank | BlankSequence | BlankNullSequence, {_, predSymbolPat}, _] ->
   scanBlankPredicate,
@@ -212,7 +202,6 @@ Module[{agg, node, tag},
 ]]
 
 
-
 Attributes[scanInfixDispatch] = {HoldRest}
 
 scanInfixDispatch[pos_List, aggIn_] :=
@@ -290,6 +279,28 @@ Module[{agg, node, tag},
 
 
 
+Attributes[scanCompoundDispatch] = {HoldRest}
+
+scanCompoundDispatch[pos_List, aggIn_] :=
+Catch[
+Module[{agg, node, tag},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+
+  tag = node[[1]];
+
+  Switch[tag,
+    PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault,
+      Switch[node,
+        CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, {
+          LeafNode[Symbol, _?uppercaseSymbolNameQ, _], ___}, _],
+          scanUppercaseParameter[pos ~Join~ {2, 1}, agg]
+        ,
+        _,
+          {}
+      ]
+  ]
+]]
 
 
 
@@ -2081,17 +2092,12 @@ Catch[
 
 
 
-Attributes[scanUppercasePatternBlank] = {HoldRest}
+Attributes[scanUppercaseParameter] = {HoldRest}
 
-scanUppercasePatternBlank[pos_List, aggIn_] :=
-Module[{agg, node, tag, data, children, src, sym, context, name, issues},
+scanUppercaseParameter[pos_List, aggIn_] :=
+Module[{agg, src, sym, context, name, issues},
   agg = aggIn;
-  node = Extract[agg, {pos}][[1]];
-  tag = node[[1]];
-  children = node[[2]];
-  data = node[[3]];
-
-  sym = children[[1]];
+  sym = Extract[agg, {pos}][[1]];
 
   name = sym["String"];
 
@@ -2119,7 +2125,7 @@ Module[{agg, node, tag, data, children, src, sym, context, name, issues},
 
     src = sym[[3, Key[Source]]];
 
-    AppendTo[issues, InspectionObject["SystemPatternBlank", "Unexpected **System`** symbol as pattern name.", "Error",
+    AppendTo[issues, InspectionObject["SystemParameter", "Unexpected **System`** symbol as parameter: " <> name, "Error",
                       <| Source -> src,
                         ConfidenceLevel -> 0.95 |>]];
     ,
@@ -2130,7 +2136,7 @@ Module[{agg, node, tag, data, children, src, sym, context, name, issues},
     (*
     This is "stylistic" so make a Remark
     *)
-    AppendTo[issues, InspectionObject["UppercasePatternBlank", "Suspicious uppercase symbol as pattern name.", "Remark",
+    AppendTo[issues, InspectionObject["UppercaseParameter", "Suspicious uppercase symbol as parameter: " <> name, "Remark",
                       <| Source -> src,
                         ConfidenceLevel -> 0.80 |>]];
   ];
