@@ -22,12 +22,18 @@ patPat =
       "RepeatedNull", _], _, _]
 
 predSymbolPat =
-  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | (s_ /; StringStartsQ[s, "is"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+  LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _]
 
 predPat =
   predSymbolPat |
   CallNode[LeafNode[Symbol, "Composition" | "Function", _], _, _]
 
+pseudoPredSymbolPat = 
+  LeafNode[Symbol, "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+
+pseudoPredPat =
+  pseudoPredSymbolPat |
+  CallNode[LeafNode[Symbol, "Equal", _], _, _]
 
 (*
 
@@ -3145,9 +3151,17 @@ Module[{ast, node, issues, children, crit},
   ];
 
   Which[
-    !MatchQ[crit, predPat] && !FreeQ[crit, patPat],
+    !MatchQ[crit, predPat | pseudoPredPat] && !FreeQ[crit, patPat],
       AppendTo[issues,
-        InspectionObject["SelectCasesConfusion", "Expected a predicate.", "Error", <|
+        InspectionObject["SelectCasesConfusion", "There appears to be a pattern, but a predicate was expected.", "Error", <|
+          Source -> crit[[3, Key[Source]]],
+          ConfidenceLevel -> 0.75
+        |>]
+      ]
+    ,
+    MatchQ[crit, pseudoPredPat],
+      AppendTo[issues,
+        InspectionObject["PseudoPredicate", "This predicate may return unevaluated.", "Warning", <|
           Source -> crit[[3, Key[Source]]],
           ConfidenceLevel -> 0.75
         |>]
@@ -3253,7 +3267,7 @@ Module[{ast, node, issues, children, rule},
         |>]
       ]
     ,
-    MatchQ[rule, CallNode[LeafNode[Symbol, "SetDelayed", _], _]],
+    MatchQ[rule, CallNode[LeafNode[Symbol, "SetDelayed", _], _, _]],
       AppendTo[issues,
         InspectionObject["RuleSetConfusion", "``Replace`` has ``SetDelayed`` in the rules position, but ``RuleDelayed`` was most likely intended.", "Error", <|
           Source -> rule[[3, Key[Source]]],

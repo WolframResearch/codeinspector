@@ -744,3 +744,28 @@ TestMatch[
 
 
 
+TestMatch[
+	CodeInspect["Select[a, b == c]"]
+	,
+	{InspectionObject["PseudoPredicate", _, "Warning", _]}
+	,
+	TestID->"AbstractRules-20220629-X1H4P3"
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
