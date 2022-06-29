@@ -2324,7 +2324,7 @@ Module[{agg, node, issues, children, head, amp, ampSrc},
 
   AppendTo[issues, InspectionObject["FunctionAmp", "Suspicious ``&`` after ``Function``.", "Error",
     <| Source -> ampSrc,
-      ConfidenceLevel -> 0.85,
+      ConfidenceLevel -> 0.65,
       CodeActions -> {
         CodeAction["Remove ``&``", DeleteNode, <| Source -> ampSrc |>] }
     |>]
