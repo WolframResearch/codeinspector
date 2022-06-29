@@ -567,6 +567,52 @@ TestMatch[
 
 
 
+cst = CodeConcreteParse["f / a"]
+
+cst[[1]] = File
+
+TestMatch[
+	CodeInspectCST[cst]
+	,
+	{InspectionObject["TopLevelExpression", _, "Warning", KeyValuePattern[CodeActions -> {
+		CodeAction["Replace ``/`` with ``/@``", ReplaceNode, _]}]]}
+	,
+	TestID->"AggregateRules-20220629-C3Z9W6"
+]
+
+
+cst = CodeConcreteParse["f -> a"]
+
+cst[[1]] = File
+
+TestMatch[
+	CodeInspectCST[cst]
+	,
+	{InspectionObject["TopLevelExpression", _, "Warning", KeyValuePattern[CodeActions -> {
+		CodeAction["Replace ``->`` with ``=``", ReplaceNode, _]}]]}
+	,
+	TestID->"AggregateRules-20220629-S7M1M8"
+]
+
+
+cst = CodeConcreteParse["f :> a"]
+
+cst[[1]] = File
+
+TestMatch[
+	CodeInspectCST[cst]
+	,
+	{InspectionObject["TopLevelExpression", _, "Warning", KeyValuePattern[CodeActions -> {
+		CodeAction["Replace ``:>`` with ``:=``", ReplaceNode, _]}]]}
+	,
+	TestID->"AggregateRules-20220629-U5R0R2"
+]
+
+
+
+
+
+
 TestMatch[
 	CodeInspect["If[ a & b, then, else ]"]
 	,
