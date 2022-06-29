@@ -1,5 +1,23 @@
 
-## 1.7 - XX June, 2022
+## 1.7 - 4 July, 2022
+
+Scan for abbreviated string patterns (i.e., `*` and `@`) in StringMatchQ
+
+Update various places based on changes in CodeParser
+
+scan for `Select[e, pat]` and `Cases[e, predicate]`
+
+scan for `//` on different lines
+
+scan for `a := b` in Replace and ReplaceAll
+
+13.1 syntax updates
+
+scan for `Select[a, b == c]`
+
+warn about System\` symbols used in Function, Module, and With
+
+scan for implicit Times with `&`
 
 
 ## 1.6 - 12 May, 2022
