@@ -107,6 +107,11 @@ If[StringSplit[codeFormatterVersion, "."][[1;;2]] != StringSplit[codeInspectorVe
 
 InspectionObject::usage = "InspectionObject[tag, description, severity, data] is a problem found in WL source code."
 
+InspectionObject::warn = "\"Warn\" is being used as a severity, but it should be \"Warning\"."
+
+InspectionObject[_, _, "Warn", _] /; (Message[InspectionObject::warn]; False) :=
+  Null
+
 (*
 provide some selectors for Lint and LintedLine objects
 *)

@@ -441,7 +441,7 @@ DuplicateVariables
 TestMatch[
 	CodeInspect[" With[{a=1, a=2}, a+1] "]
 	,
-	{InspectionObject["DuplicateVariables", _, _, _]}
+	{InspectionObject["DuplicateParameters", _, _, _]}
 	,
 	TestID->"AbstractRules-20190523-I2P7L0"
 ]
@@ -741,6 +741,57 @@ TestMatch[
 	,
 	TestID->"AbstractRules-20220323-I9E9I8"	
 ]
+
+
+
+
+
+
+
+
+
+
+(*
+bug 425484
+*)
+
+TestMatch[
+	CodeInspect["Function[{C}, C+1]"]
+	,
+	{InspectionObject["SystemParameter", _, "Error", _]}
+	,
+	TestID->"AbstractRules-20220629-C4X0Q0"
+]
+
+TestMatch[
+	CodeInspect["Function[Null, #+1]"]
+	,
+	{}
+	,
+	TestID->"AbstractRules-20220629-D5O4G0"
+]
+
+
+TestMatch[
+	CodeInspect["Module[{C}, C+1]"]
+	,
+	{InspectionObject["SystemVariable", _, "Error", _]}
+	,
+	TestID->"AbstractRules-20220629-P3F1V0"
+]
+
+
+TestMatch[
+	CodeInspect["With[{C = 1}, C+1]"]
+	,
+	{InspectionObject["SystemParameter", _, "Error", _]}
+	,
+	TestID->"AbstractRules-20220629-Q9M1H7"
+]
+
+
+
+
 
 
 

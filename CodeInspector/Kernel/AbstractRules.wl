@@ -62,6 +62,7 @@ CallNode[LeafNode[Symbol,
   "DynamicModule" |
   "With" |
   "Block" | "Internal`InheritedBlock" |
+  "Function" |
   "Optional" |
   "LoadJavaClass" | "JLink`LoadJavaClass"|
   "Set" | "SetDelayed" |
@@ -253,6 +254,9 @@ Module[{ast, node, sym, name},
     ,
     "Block" | "Internal`InheritedBlock",
       scanBlocks[pos, ast]
+    ,
+    "Function",
+      scanFunction[pos, ast]
     ,
     "Optional",
       Switch[node,
@@ -1280,8 +1284,10 @@ Attributes[scanModules] = {HoldRest}
 
 scanModules[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, selected, params, issues, vars, counts,
-  ruleDelayedRHSs, ruleDelayedRHSSymbols, ruleDelayedRHSParams, stringFunctions, paramUses, paramString, errs, srcs},
+Module[{ast, node, children, data, selected, params, issues, vars,
+  counts, ruleDelayedRHSs, ruleDelayedRHSSymbols,
+  ruleDelayedRHSParams, stringFunctions, paramUses, paramString,
+  errs, srcs},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1451,6 +1457,14 @@ Module[{ast, node, children, data, selected, params, issues, vars, counts,
     ]
     ,
     ruleDelayedRHSParams
+  ];
+
+  Do[
+    If[MatchQ[var, LeafNode[Symbol, _?uppercaseSymbolNameQ, _]],
+      issues = issues ~Join~ scanUppercaseVariable[var];
+    ]
+    ,
+    {var, vars}
   ];
 
   issues
@@ -1755,14 +1769,14 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
         Likely missing comma
         *)
         CallNode[LeafNode[Symbol, "Times", _], _, _],
-          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+          AppendTo[issues, InspectionObject["Arguments", "Parameter " <> format[ToFullFormString[err]] <>
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.95,
               "Argument" -> "With" |>]]
         ,
         _,
-          AppendTo[issues, InspectionObject["Arguments", "Variable " <> format[ToFullFormString[err]] <>
+          AppendTo[issues, InspectionObject["Arguments", "Parameter " <> format[ToFullFormString[err]] <>
             " does not have proper form.", "Error", <|
               Source -> err[[3, Key[Source]]],
               ConfidenceLevel -> 0.85,
@@ -1798,11 +1812,19 @@ Module[{ast, node, children, data, selected, paramLists, issues, varsAndVals, va
       If[!empty[selected],
         srcs = #[[3, Key[Source]]]& /@ selected;
 
-        AppendTo[issues, InspectionObject["DuplicateVariables", "Duplicate variables in ``With``.", "Error", <|
+        AppendTo[issues, InspectionObject["DuplicateParameters", "Duplicate parameters in ``With``.", "Error", <|
           Source -> First[srcs],
           "AdditionalSources" -> Rest[srcs],
           ConfidenceLevel -> 1.0 |> ]];
       ];
+
+      Do[
+        If[MatchQ[var, LeafNode[Symbol, _?uppercaseSymbolNameQ, _]],
+          issues = issues ~Join~ scanUppercaseParameter[var];
+        ]
+        ,
+        {var, varsList}
+      ]
     ]
     ,
     vars
@@ -1951,6 +1973,45 @@ Module[{ast, node, head, children, data, selected, params, issues, varsWithSet, 
   issues
 ]]
 
+
+Attributes[scanFunction] = {HoldRest}
+
+scanFunction[pos_List, astIn_] :=
+Catch[
+Module[{ast, node, head, children, data, issues, params, param},
+
+  ast = astIn;
+  node = Extract[ast, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+  issues = {};
+
+  If[Length[children] < 2,
+    Throw[issues]
+  ];
+
+  Which[
+    MatchQ[children[[1]], CallNode[LeafNode[Symbol, "List", _], _, _]],
+      params = children[[1, 2]];
+      Do[
+        If[MatchQ[param, LeafNode[Symbol, _?uppercaseSymbolNameQ, _]],
+          issues = issues ~Join~ scanUppercaseParameter[param];
+        ]
+        ,
+        {param, params}
+      ]
+    ,
+    MatchQ[children[[1]], LeafNode[Symbol, "Null", _]],
+      Null
+    ,
+    MatchQ[children[[1]], LeafNode[Symbol, _?uppercaseSymbolNameQ, _]],
+      param = children[[1]];
+      issues = issues ~Join~ scanUppercaseParameter[param];
+  ];
+
+  issues
+]]
 
 
 Attributes[scanOptionals] = {HoldRest}
@@ -3485,6 +3546,106 @@ scanSetDelayeds[args___] := (
   $Failed
 )
 *)
+
+
+
+
+scanUppercaseVariable[sym_] :=
+Module[{src, context, name, issues},
+
+  name = sym["String"];
+
+  (*
+  Determine context of symbol
+  *)
+  With[{name = name},
+  context =
+    Quiet[
+      Check[
+        Context[name]
+        ,
+        StringJoin[Most[StringSplit[name, "`"]]]
+        ,
+        {Context::notfound}
+      ]
+      ,
+      {Context::notfound}
+    ];
+  ];
+
+  issues = {};
+
+  If[context == "System`",
+
+    src = sym[[3, Key[Source]]];
+
+    AppendTo[issues, InspectionObject["SystemVariable", "Unexpected **System`** symbol as variable: " <> name, "Error",
+                      <| Source -> src,
+                        ConfidenceLevel -> 0.95 |>]];
+    ,
+    (* not in System`*)
+
+    src = sym[[3, Key[Source]]];
+
+    (*
+    This is "stylistic" so make a Remark
+    *)
+    AppendTo[issues, InspectionObject["UppercaseVariable", "Suspicious uppercase symbol as variable: " <> name, "Remark",
+                      <| Source -> src,
+                        ConfidenceLevel -> 0.80 |>]];
+  ];
+
+  issues
+]
+
+
+scanUppercaseParameter[sym_] :=
+Module[{src, context, name, issues},
+
+  name = sym["String"];
+
+  (*
+  Determine context of symbol
+  *)
+  With[{name = name},
+  context =
+    Quiet[
+      Check[
+        Context[name]
+        ,
+        StringJoin[Most[StringSplit[name, "`"]]]
+        ,
+        {Context::notfound}
+      ]
+      ,
+      {Context::notfound}
+    ];
+  ];
+
+  issues = {};
+
+  If[context == "System`",
+
+    src = sym[[3, Key[Source]]];
+
+    AppendTo[issues, InspectionObject["SystemParameter", "Unexpected **System`** symbol as parameter: " <> name, "Error",
+                      <| Source -> src,
+                        ConfidenceLevel -> 0.95 |>]];
+    ,
+    (* not in System`*)
+
+    src = sym[[3, Key[Source]]];
+
+    (*
+    This is "stylistic" so make a Remark
+    *)
+    AppendTo[issues, InspectionObject["UppercaseParameter", "Suspicious uppercase symbol as parameter: " <> name, "Remark",
+                      <| Source -> src,
+                        ConfidenceLevel -> 0.80 |>]];
+  ];
+
+  issues
+]
 
 
 

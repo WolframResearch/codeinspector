@@ -479,7 +479,8 @@ $characterReplacementRules = {
 (* :!CodeAnalysis::EndBlock:: *)
 
 
-uppercaseSymbolNameQ[name_] := UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
+uppercaseSymbolNameQ[name_] :=
+  UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
 
 
 
