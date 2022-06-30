@@ -644,7 +644,13 @@ TestMatch[
 ]
 
 
-
+TestMatch[
+	CodeInspect["a || b || c | d"]
+	,
+	{InspectionObject["AlternativesOr", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220630-A6H9G7"
+]
 
 
 

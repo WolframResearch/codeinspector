@@ -100,7 +100,7 @@ TernaryNode[
 LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
 InfixNode[
-  CompoundExpression | Dot | MessageName | NonCommutativeMultiply | Plus | StringExpression | StringJoin
+  Alternatives | CompoundExpression | Dot | MessageName | NonCommutativeMultiply | Plus | StringExpression | StringJoin
   , _, _] -> scanInfixDispatch,
 
 PostfixNode[
@@ -231,6 +231,15 @@ Module[{agg, node, tag},
   tag = node[[1]];
 
   Switch[tag,
+    Alternatives,
+      Switch[node,
+        InfixNode[Alternatives, {___, InfixNode[Or, _, _], ___}, _],
+          scanAlternativesOr[pos, agg]
+        ,
+        _,
+          {}
+      ]
+    ,
     CompoundExpression,
       scanCompoundExpressions[pos, agg]
     ,
@@ -2419,6 +2428,33 @@ Module[{cst, node, children, issues, rators},
     ]
     ,
     {rator, rators}
+  ];
+
+  issues
+]
+
+
+Attributes[scanAlternativesOr] = {HoldRest}
+
+scanAlternativesOr[pos_List, cstIn_] :=
+Module[{cst, node, children, issues, cases},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+
+  issues = {};
+
+  cases = Cases[children, InfixNode[Or, _, _]];
+
+  Do[
+    AppendTo[issues,
+      InspectionObject["AlternativesOr", "Suspicious ``||`` inside ``Alternatives``.", "Error", <|
+        Source -> case[[3, Key[Source]]],
+        ConfidenceLevel -> 0.95
+      |>]
+    ]
+    ,
+    {case, cases}
   ];
 
   issues
