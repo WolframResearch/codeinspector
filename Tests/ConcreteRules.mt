@@ -40,7 +40,7 @@ DifferentLine
 TestMatch[
 	CodeInspect["(f[]\n; Throw[$Failed, $tag])"]
 	,
-	{ InspectionObject["DifferentLine", _, "Warning", _] }
+	{ InspectionObject["DifferentLine", _, "Remark", _] }
 	,
 	TestID->"ConcreteRules-20190522-I8L1E6"
 ]

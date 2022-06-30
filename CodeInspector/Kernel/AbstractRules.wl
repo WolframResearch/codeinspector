@@ -1162,7 +1162,7 @@ Module[{ast, node, children, data, issues, selected, srcs, counts,
     If[!empty[selected],
       firsts = firstTokenWithSource /@ selected;
       srcs = #[[3, Key[Source]]]& /@ firsts;
-      AppendTo[issues, InspectionObject["DuplicateClauses", "Both branches of ``If`` are the same.", "Error", <|
+      AppendTo[issues, InspectionObject["DuplicateClauses", "Both branches of ``If`` are the same.", "Warning", <|
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs],
         ConfidenceLevel -> 0.95,
@@ -2372,7 +2372,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``And``.", "Error", <|
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``And``.", "Warning", <|
       Source -> First[srcs],
       "AdditionalSources" -> Rest[srcs],
       ConfidenceLevel -> 0.95,
@@ -2417,7 +2417,7 @@ Module[{ast, node, children, data, selected, issues, consts, counts, firsts, src
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Error",
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Or``.", "Warning",
       <| Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs],
         ConfidenceLevel -> 0.95,
@@ -2478,7 +2478,7 @@ Module[{ast, node, children, data, selected, issues, blanks, counts, firsts, src
 
     srcs = #[[3, Key[Source]]]& /@ firsts;
 
-    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Error",
+    AppendTo[issues, InspectionObject["DuplicateClauses", "Duplicate clauses in ``Alternatives``.", "Warning",
       <|
         Source -> First[srcs],
         "AdditionalSources" -> Rest[srcs],
@@ -2788,7 +2788,7 @@ Module[{ast, node, data, parent, parentPos, previousPos, previous, optional, opt
       CallNode[LeafNode[Symbol, "Blank", _], {LeafNode[Symbol, "List", _]}, _]
     ]
     ,
-    AppendTo[issues, InspectionObject["OptionsPattern", "``Optional`` occurs before ``OptionsPattern`` and may bind arguments intended for ``OptionsPattern``.", "Error", <|
+    AppendTo[issues, InspectionObject["OptionsPattern", "``Optional`` occurs before ``OptionsPattern`` and may bind arguments intended for ``OptionsPattern``.", "Warning", <|
       Source -> optionalPattern[[3, Key[Source]]],
       "AdditionalSources" -> { data[Source] },
       ConfidenceLevel -> 0.95 |>]];

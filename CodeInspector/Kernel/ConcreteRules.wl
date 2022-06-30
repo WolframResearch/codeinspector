@@ -389,7 +389,7 @@ Module[{cst, node, tag, groupSquare, groupSquareChildren, openSquare, openSquare
   Use source of [
   *)
 
-  {InspectionObject["CallDifferentLine", "Call is on different lines.", "Warning", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
+  {InspectionObject["CallDifferentLine", "Call is on different lines.", "Remark", <| openSquareData, ConfidenceLevel -> 0.95 |>]}
 ]
 
 
@@ -777,7 +777,7 @@ Module[{cst, node, children, data, issues, srcs, pairs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Remark",
       <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -835,14 +835,14 @@ Module[{cst, node, children, data, issues, highConfSrcs, lowConfSrcs, pairs},
   lowConfSrcs = DeleteDuplicates[lowConfSrcs];
 
   Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Remark",
       <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
     )&, highConfSrcs];
 
   Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Remark",
       <| Source -> #,
         ConfidenceLevel -> 0.85
       |>]];
@@ -895,7 +895,7 @@ Module[{cst, node, children, data, issues, srcs, pairs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Remark",
       <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -961,7 +961,7 @@ Module[{cst, node, children, data, issues, srcs, pairs, tag},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Remark",
       <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];
@@ -1016,7 +1016,7 @@ Module[{cst, node, children, data, issues, srcs, filtered, pairs},
   srcs = DeleteDuplicates[srcs];
 
   Scan[(
-    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Warning",
+    AppendTo[issues, InspectionObject["DifferentLine", "Operands are on different lines.", "Remark",
       <| Source -> #,
         ConfidenceLevel -> 0.95
       |>]];

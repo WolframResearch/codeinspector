@@ -78,7 +78,7 @@ TestMatch[
 	CodeInspect["(f[]
 ; Throw[$Failed, $tag])"]
 	,
-	{ InspectionObject["DifferentLine", _, "Warning", _] }
+	{ InspectionObject["DifferentLine", _, "Remark", _] }
 	,
 	TestID->"AggregateRules-20190522-I8L1E6"
 ]
