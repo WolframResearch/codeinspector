@@ -86,7 +86,11 @@ $badSymbolsNoSuggestions = <|
   *)
   "Boolean" -> {0.5},
   (* low confidence because people do define their own FalseQ *)
-  "FalseQ" -> {0.5}
+  "FalseQ" -> {0.5},
+  (* low confidence because people do define their own RationalQ *)
+  "RationalQ" -> {0.5},
+  (* low confidence because people do define their own ComplexQ *)
+  "ComplexQ" -> {0.5}
 |>
 
 $undocumentedSymbolsWithSuggestions = <|
