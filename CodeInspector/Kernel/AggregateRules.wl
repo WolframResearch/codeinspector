@@ -315,7 +315,7 @@ Module[{agg, node, tag},
       Switch[node,
         CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, {
           LeafNode[Symbol, _?uppercaseSymbolNameQ, _], ___}, _],
-          scanUppercaseParameter[pos ~Join~ {2, 1}, agg]
+          scanUppercasePattern[node[[2, 1]]]
         ,
         _,
           {}
@@ -2155,14 +2155,8 @@ Catch[
 
 
 
-
-
-Attributes[scanUppercaseParameter] = {HoldRest}
-
-scanUppercaseParameter[pos_List, aggIn_] :=
-Module[{agg, src, sym, context, name, issues},
-  agg = aggIn;
-  sym = Extract[agg, {pos}][[1]];
+scanUppercasePattern[sym_] :=
+Module[{src, context, name, issues},
 
   name = sym["String"];
 
@@ -2190,7 +2184,7 @@ Module[{agg, src, sym, context, name, issues},
 
     src = sym[[3, Key[Source]]];
 
-    AppendTo[issues, InspectionObject["SystemParameter", "Unexpected **System`** symbol as parameter: " <> name, "Error",
+    AppendTo[issues, InspectionObject["SystemPattern", "Unexpected **System`** symbol as pattern: " <> name, "Error",
                       <| Source -> src,
                         ConfidenceLevel -> 0.95 |>]];
     ,
@@ -2201,7 +2195,7 @@ Module[{agg, src, sym, context, name, issues},
     (*
     This is "stylistic" so make a Remark
     *)
-    AppendTo[issues, InspectionObject["UppercaseParameter", "Suspicious uppercase symbol as parameter: " <> name, "Remark",
+    AppendTo[issues, InspectionObject["UppercasePattern", "Suspicious uppercase symbol as pattern: " <> name, "Remark",
                       <| Source -> src,
                         ConfidenceLevel -> 0.80 |>]];
   ];

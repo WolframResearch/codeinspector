@@ -635,6 +635,18 @@ TestMatch[
 
 
 
+TestMatch[
+	CodeInspect["a:N_[]"]
+	,
+	{InspectionObject["SystemPattern", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20220629-J3J0F3"
+]
+
+
+
+
+
 
 
 
