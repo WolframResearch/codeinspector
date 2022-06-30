@@ -3452,6 +3452,9 @@ Module[{ast, node, tag, data, tagString, children},
         "AdditionalDescriptions" -> {"LHS must be a symbol."}
       |>]}
     ,
+    "CommaTopLevel",
+      {InspectionObject["CommaTopLevel", "Comma at top-level.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
+    ,
     _,
       {InspectionObject[tagString, "Syntax error.", "Fatal", <| data, ConfidenceLevel -> 1.0 |>]}
   ]
