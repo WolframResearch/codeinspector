@@ -26,14 +26,23 @@ predSymbolPat =
 
 predPat =
   predSymbolPat |
-  CallNode[LeafNode[Symbol, "Composition" | "Function", _], _, _]
+  (*
+  remember about operator forms of Q functions
+  *)
+  CallNode[LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _], _, _] |
+  CallNode[LeafNode[Symbol, "Not", _], {CallNode[LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _], _, _]}, _]
 
-pseudoPredSymbolPat = 
+pseudoPredSymbolPat =
   LeafNode[Symbol, "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
 
 pseudoPredPat =
   pseudoPredSymbolPat |
   CallNode[LeafNode[Symbol, "Equal", _], _, _]
+
+opaquePat =
+  CallNode[
+    LeafNode[Symbol,
+      "Composition" | "If" | "Function" | "ReplaceAll" | "Switch" | "With", _], _, _]
 
 (*
 
@@ -3215,6 +3224,9 @@ Module[{ast, node, issues, children, crit},
   ];
 
   Which[
+    MatchQ[crit, opaquePat],
+      Null
+    ,
     !MatchQ[crit, predPat | pseudoPredPat] && !FreeQ[crit, patPat],
       AppendTo[issues,
         InspectionObject["SelectCasesConfusion", "There appears to be a pattern, but a predicate was expected.", "Error", <|
@@ -3279,15 +3291,18 @@ Module[{ast, node, issues, children, pattern},
   ];
 
   Which[
-    MatchQ[pattern, predPat],
+    MatchQ[pattern, opaquePat],
+      Null
+    ,
+    MatchQ[pattern, predPat | pseudoPredPat] && FreeQ[pattern, patPat],
       AppendTo[issues,
-        InspectionObject["SelectCasesConfusion", "Expected a pattern.", "Error", <|
+        InspectionObject["SelectCasesConfusion", "There appears to be a predicate, but a pattern was expected.", "Error", <|
           Source -> pattern[[3, Key[Source]]],
           ConfidenceLevel -> 0.75
         |>]
       ]
     ,
-    !FreeQ[pattern, patPat],
+    !MatchQ[pattern, predPat] && !FreeQ[pattern, patPat],
       Null
     ,
     TrueQ[$Debug],

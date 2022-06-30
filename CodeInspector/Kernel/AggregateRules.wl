@@ -44,13 +44,31 @@ patPat =
 
 
 predSymbolPat =
-  LeafNode[Symbol, (s_ /; StringEndsQ[s, "Q"]) | "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+  LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _]
 
 predPat =
   predSymbolPat |
   InfixNode[Composition, _, _] |
   PostfixNode[Function, _, _] |
-  CallNode[LeafNode[Symbol, "Function", _], _, _]
+  (*
+  remember about operator forms of Q functions
+  *)
+  CallNode[LeafNode[Symbol,  s_ /; StringEndsQ[s, "Q"], _], _, _] |
+  CallNode[LeafNode[Symbol, "Not", _], CallNode[LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _], _, _], _] |
+  PrefixNode[Not, {CallNode[LeafNode[Symbol, s_ /; StringEndsQ[s, "Q"], _], _, _]}, _]
+
+pseudoPredSymbolPat =
+  LeafNode[Symbol, "Positive" | "Negative" | "NonPositive" | "NonNegative", _]
+
+pseudoPredPat =
+  pseudoPredSymbolPat |
+  CallNode[LeafNode[Symbol, "Equal", _], _, _]
+
+opaquePat =
+  PostfixNode[Function, _, _] |
+  CallNode[
+    LeafNode[Symbol,
+      "Composition" | "If" | "Function" | "ReplaceAll" | "Switch" | "With", _], _, _]
 
 
 (*
@@ -239,6 +257,9 @@ Module[{agg, node, tag},
     ,
     StringJoin,
       Switch[node,
+        InfixNode[StringJoin, {___, opaquePat, ___}, _],
+          {}
+        ,
         InfixNode[StringJoin, {___, patPat, ___}, _],
           scanPatStringJoin[pos, agg]
         ,
