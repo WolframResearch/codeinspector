@@ -1065,8 +1065,8 @@ Attributes[scanIfs] = {HoldRest}
 
 scanIfs[pos_List, astIn_] :=
 Catch[
-Module[{ast, node, children, data, issues, selected, srcs, counts, firsts,
-  child, choice1, choice2},
+Module[{ast, node, children, data, issues, selected, srcs, counts,
+  firsts, test, choice1, choice2},
   ast = astIn;
   node = Extract[ast, {pos}][[1]];
   children = node[[2]];
@@ -1090,43 +1090,54 @@ Module[{ast, node, children, data, issues, selected, srcs, counts, firsts,
       Throw[issues];
   ];
 
-  child = children[[1]];
+  test = children[[1]];
 
-  If[MatchQ[child, CallNode[LeafNode[Symbol, "Set", _], {_, _}, _]],
+  Switch[test,
+    CallNode[LeafNode[Symbol, "Set", _], {_, _}, _],
+      (*
+      TODO: need to convert from abstract Set[a, b] to concrete a == b
+      also need to convert from abstract Set[a, b] to concrete (a = b)
+      *)
+      (* choice1 = BinaryNode[Equal, {
+        test[[2, 1]],
+        LeafNode[Token`Whitespace, " ", <||>],
+        LeafNode[Token`EqualEqual, "==", <||>],
+        LeafNode[Token`Whitespace, " ", <||>],
+        test[[2, 2]]}, <||>]; *)
 
-    (*
-    TODO: need to convert from abstract Set[a, b] to concrete a == b
-    also need to convert from abstract Set[a, b] to concrete (a = b)
-    *)
-    (* choice1 = BinaryNode[Equal, {
-      child[[2, 1]],
-      LeafNode[Token`Whitespace, " ", <||>],
-      LeafNode[Token`EqualEqual, "==", <||>],
-      LeafNode[Token`Whitespace, " ", <||>],
-      child[[2, 2]]}, <||>]; *)
+      (* choice2 = GroupNode[GroupParen, {
+        LeafNode[Token`OpenParen, "(", <||>],
+        test,
+        LeafNode[Token`CloseParen, ")", <||>]
+        }, <||>]; *)
 
-    (* choice2 = GroupNode[GroupParen, {
-      LeafNode[Token`OpenParen, "(", <||>],
-      child,
-      LeafNode[Token`CloseParen, ")", <||>]
-      }, <||>]; *)
-
-    AppendTo[issues,
-      InspectionObject["IfSet", "``If`` has ``=`` as first argument.", "Warning", <|
-        Source -> child[[3, Key[Source]]],
-        ConfidenceLevel -> 0.85,
-        CodeActions -> {
-          (* CodeAction["Replace = with ==", ReplaceNode, <|
-            "ReplacementNode" -> choice1,
-            Source -> child[[3, Key[Source]]]
-          |>], *)
-          (* CodeAction["Wrap with ()", ReplaceNode, <|
-            "ReplacementNode" -> choice2,
-            Source -> child[[3, Key[Source]]]
-          |>] *)
-        }
-      |>]
-    ];
+      AppendTo[issues,
+        InspectionObject["IfSet", "``If`` has ``Set`` as first argument.", "Warning", <|
+          Source -> test[[3, Key[Source]]],
+          ConfidenceLevel -> 0.85
+          (*CodeActions -> {
+            (* CodeAction["Replace = with ==", ReplaceNode, <|
+              "ReplacementNode" -> choice1,
+              Source -> test[[3, Key[Source]]]
+            |>], *)
+            (* CodeAction["Wrap with ()", ReplaceNode, <|
+              "ReplacementNode" -> choice2,
+              Source -> test[[3, Key[Source]]]
+            |>] *)
+          }*)
+        |>]
+      ]
+    ,
+    CallNode[LeafNode[Symbol, "Alternatives", _], _, _],
+      (*
+      TODO: need to convert from abstract Alternatives[a, b] to concrete a | b
+      *)
+      AppendTo[issues,
+        InspectionObject["IfAlternatives", "``If`` has ``Alternatives`` as first argument.", "Error", <|
+          Source -> test[[3, Key[Source]]],
+          ConfidenceLevel -> 0.85
+        |>]
+      ]
   ];
 
   srcs = {};

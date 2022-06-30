@@ -19,6 +19,8 @@ warn about System\` symbols used in Function, Module, and With
 
 scan for implicit Times with `&`
 
+scan for If[a | b, c, d]
+
 
 ## 1.6 - 12 May, 2022
 
