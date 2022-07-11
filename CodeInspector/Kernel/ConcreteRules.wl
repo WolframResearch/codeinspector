@@ -492,6 +492,9 @@ Module[{cst, node, tag, data, tagString, children, issues, multilineStrings, com
         "AdditionalDescriptions" -> {"Try resaving the notebook with a newer FE."}
       |>]]
     ,
+    Token`Error`UnexpectedCommentCloser,
+      AppendTo[issues, InspectionObject["UnexpectedCommentCloser", "Unexpected comment closer.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
+    ,
     _,
       tagString = Block[{$ContextPath = {"Token`Error`", "System`"}, $Context = "CodeInspector`Scratch`"}, ToString[tag]];
       AppendTo[issues, InspectionObject[tagString, "Syntax error.", "Fatal", <| Source -> data[Source], ConfidenceLevel -> 1.0 |>]]
