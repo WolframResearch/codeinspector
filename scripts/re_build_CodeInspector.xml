@@ -36,7 +36,7 @@
 
 		<re-cmake-exec dir='${build.dir}'>
 			<arg line='--build .' />
-			<arg line='--target paclet' />
+			<arg line='--target create-paclet-archive' />
 		</re-cmake-exec>
 
 		<mkdir dir='${files_directory}/${component}' />

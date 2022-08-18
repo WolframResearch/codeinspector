@@ -299,7 +299,7 @@ add_custom_command(
 
 
 #
-# paclet target
+# paclet layout
 #
 
 set(PACLET_SOURCES
@@ -307,20 +307,32 @@ set(PACLET_SOURCES
 	${COPIED_WL_PACLET_SOURCES}
 )
 
+add_custom_target(paclet-layout
+	ALL
+	DEPENDS
+		${PACLET_SOURCES}
+)
+
+
+
+#
+# paclet archive
+#
+
 if(LOCAL_BUILD)
 set(PACLET_OUTPUT ${PROJECT_BINARY_DIR}/paclet/${PACLET}-${LOCAL_BUILD_VERSION}.paclet)
 else(LOCAL_BUILD)
 set(PACLET_OUTPUT ${PROJECT_BINARY_DIR}/paclet/${PACLET}-${PACLET_VERSION}.paclet)
 endif(LOCAL_BUILD)
 
-add_custom_target(paclet
+add_custom_target(create-paclet-archive
 	ALL
 	DEPENDS
 		${PACLET_OUTPUT}
 )
 
 #
-# Create the paclet archive
+# CreatePacletArchive
 #
 add_custom_command(
 	OUTPUT
@@ -333,7 +345,7 @@ add_custom_command(
 		#
 		${CMAKE_COMMAND} -DRETRY_ON_FAILURE=ON -DSCRIPT=${PROJECT_SOURCE_DIR}/CodeTools/Generate/CreatePacletArchive.wl -DBUILDDIR=${PROJECT_BINARY_DIR} -DPACLET_LAYOUT_DIR=${PACLET_LAYOUT_DIR} -DPACLET=${PACLET} -DKERNEL_TIMEOUT=${KERNEL_TIMEOUT} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	DEPENDS
-		${PACLET_SOURCES}
+		paclet-layout
 		${PROJECT_SOURCE_DIR}/CodeTools/Generate/CreatePacletArchive.wl
 		${PROJECT_SOURCE_DIR}/CodeTools/Generate/GenerateSources.wl
 		${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
