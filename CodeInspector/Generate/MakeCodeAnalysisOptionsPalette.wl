@@ -28,6 +28,8 @@ Get["CodeInspector`Kernel`LinterUI`"];
 ]
 
 
+checkBuildDir[]
+
 
 (* ::Section::Closed:: *)
 (*Lou's addDefinitions tools*)
