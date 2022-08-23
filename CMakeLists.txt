@@ -145,7 +145,7 @@ set_property(
 )
 
 
-if(NOT ${VERSION_NUMBER} GREATER_EQUAL 1210)
+if(NOT VERSION_NUMBER GREATER_EQUAL 1210)
 message(WARNING "VERSION_NUMBER is below 1210; ForceVersionInstall was added in 12.1. Installing paclets via CMake may not work. (VERSION_NUMBER is ${VERSION_NUMBER})")
 endif()
 
