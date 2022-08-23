@@ -141,8 +141,8 @@ Module[{lints, full, lines,
 
   str = SafeString[bytes];
 
-  If[FailureQ[string],
-    Throw[string]
+  If[FailureQ[str],
+    Throw[str]
   ];
 
   If[MissingQ[str],
