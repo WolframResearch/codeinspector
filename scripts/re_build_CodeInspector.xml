@@ -31,6 +31,7 @@
 			<arg line='-G &quot;${env.CMAKE_GENERATOR}&quot;' />
 			<arg line='-DWOLFRAMKERNEL=${mathExe}' />
 			<arg line='-DBUILDNUMBER=${env.BUILD_NUMBER}' />
+			<arg line='-DCMAKE_BUILD_TYPE=Release' />
 			<arg value='${checkout_directory}/${component}' />
 		</re-cmake-exec>
 
@@ -38,6 +39,7 @@
 			<arg line='--build .' />
 			<arg line='--target create-paclet-archive' />
 			<arg line='--verbose' />
+			<arg line='--config Release' />
 		</re-cmake-exec>
 
 		<mkdir dir='${files_directory}/${component}' />
