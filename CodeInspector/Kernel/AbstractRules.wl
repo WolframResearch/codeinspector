@@ -3083,6 +3083,8 @@ Then scan for BlankNullSequence in any parents
 
 Inspired by bug 419646
 
+This was fixed in 13.2
+
 Not completely sure how to characterize the buggy pattern
 *)
 Attributes[scanKeyValuePattern] = {HoldRest}
@@ -3130,10 +3132,11 @@ Module[{ast, node, issues, head, headSrc, children, parentPos,
         Related bugs: 419646
         *)
         AppendTo[issues,
-          InspectionObject["KernelBug", "Using ``KeyValuePattern`` and ``BlankNullSequence`` in patterns is currently buggy.", "Error", <|
+          InspectionObject["KernelBug", "The kernel treated ``KeyValuePattern`` and ``BlankNullSequence`` in patterns incorrectly.", "Error", <|
             Source -> node[[3, Key[Source]]],
             "AdditionalSources" -> blankNullSequenceNodes[[All, 3, Key[Source]]],
-            ConfidenceLevel -> 0.5
+            ConfidenceLevel -> 0.5,
+            "AdditionalDescriptions" -> {"This was fixed in 13.2."}
           |>]
         ]
       ]
