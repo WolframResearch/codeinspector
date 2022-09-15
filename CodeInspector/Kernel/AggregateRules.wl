@@ -326,6 +326,10 @@ Module[{agg, node, tag},
           LeafNode[Symbol, _?uppercaseSymbolNameQ, _], ___}, _],
           scanUppercasePattern[node[[2, 1]]]
         ,
+        CompoundNode[PatternBlank | PatternBlankSequence | PatternBlankNullSequence | PatternOptionalDefault, {
+          LeafNode[Symbol, _?specialSymbolNameQ, _], ___}, _],
+          scanSpecialPattern[node[[2, 1]]]
+        ,
         _,
           {}
       ]
@@ -2163,6 +2167,7 @@ Catch[
 
 
 
+Attributes[scanUppercasePattern] = {HoldRest}
 
 scanUppercasePattern[sym_] :=
 Module[{src, context, name, issues},
@@ -2208,6 +2213,30 @@ Module[{src, context, name, issues},
                       <| Source -> src,
                         ConfidenceLevel -> 0.80 |>]];
   ];
+
+  issues
+]
+
+
+(*
+bug 427828
+*)
+Attributes[scanSpecialPattern] = {HoldRest}
+
+scanSpecialPattern[sym_] :=
+Module[{src, name, issues},
+
+  name = sym["String"];
+
+  issues = {};
+
+  src = sym[[3, Key[Source]]];
+
+  AppendTo[issues, InspectionObject["SpecialPattern", "Special character symbol as pattern: " <> name, "Error", <|
+    Source -> src,
+    ConfidenceLevel -> 0.95,
+    "AdditionalDescriptions" -> {"The kernel treats this syntax incorrectly."}
+  |>]];
 
   issues
 ]

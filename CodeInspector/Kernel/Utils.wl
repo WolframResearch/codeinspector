@@ -27,6 +27,7 @@ $characterReplacementRules
 
 uppercaseSymbolNameQ
 
+specialSymbolNameQ
 
 isFirstError
 
@@ -482,6 +483,15 @@ $characterReplacementRules = {
 uppercaseSymbolNameQ[name_] :=
   UpperCaseQ[StringPart[Last[StringSplit[name, "`"]], 1]]
 
+
+specialSymbolNameQ["\[Pi]" | "\\[Pi]" | "\\:03c0" | "\\|0003c0"] = True
+specialSymbolNameQ["\[Degree]" | "\\[Degree]" | "\\:00b0" | "\\.b0" | "\\260" | "\\|0000b0"] = True
+specialSymbolNameQ["\[Infinity]" | "\\[Infinity]" | "\\:221e" | "\\|00221e"] = True
+specialSymbolNameQ["\[ExponentialE]" | "\\[ExponentialE]" | "\\:f74d" | "\\|00f74d"] = True
+specialSymbolNameQ["\[ImaginaryI]" | "\\[ImaginaryI]" | "\\:f74e" | "\\|00f74e"] = True
+specialSymbolNameQ["\[ImaginaryJ]" | "\\[ImaginaryJ]" | "\\:f74f" | "\\|00f74f"] = True
+
+specialSymbolNameQ[_] = False
 
 
 isFirstError[lints:{_InspectionObject..}, lineNumber_Integer, column_Integer] :=
