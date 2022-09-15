@@ -95,6 +95,7 @@ set(STATIC_WL_PACLET_FRONTEND_SOURCES
 )
 
 set(PROCESSED_DATA_FILES
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/AnalyzableMessagePositions.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/AnalyzableMessages.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BadSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BuiltinFunctions.wl

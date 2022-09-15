@@ -35,16 +35,6 @@ etc.
 $ScanSessionTokens = True
 
 
-
-(*
-TODO: when targeting 12.1 as a minimum, then use paclet["AssetLocation", "BadSymbols"]
-*)
-location = "Location" /. PacletInformation["CodeInspector"];
-
-WolframLanguageSyntax`Generate`$badSymbols = Get[FileNameJoin[{location, "Resources", "Data", "BadSymbols.wl"}]]
-WolframLanguageSyntax`Generate`$sessionSymbols = Get[FileNameJoin[{location, "Resources", "Data", "SessionSymbols.wl"}]]
-WolframLanguageSyntax`Generate`$undocumentedSymbols = Get[FileNameJoin[{location, "Resources", "Data", "UndocumentedSymbols.wl"}]]
-
 badSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$badSymbols
 sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessionSymbols
 undocumentedSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$undocumentedSymbols

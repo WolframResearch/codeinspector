@@ -82,6 +82,18 @@ Needs["CodeParser`Utils`"]
 Needs["PacletManager`"] (* for PacletInformation *)
 
 
+(*
+TODO: when targeting 12.1 as a minimum, then use paclet["AssetLocation", "BuiltInFunctions"]
+*)
+location = "Location" /. PacletInformation["CodeInspector"]
+
+WolframLanguageSyntax`Generate`$analyzableMessagePositions = Get[FileNameJoin[{location, "Resources", "Data", "AnalyzableMessagePositions.wl"}]]
+WolframLanguageSyntax`Generate`$analyzableMessages = Get[FileNameJoin[{location, "Resources", "Data", "AnalyzableMessages.wl"}]]
+WolframLanguageSyntax`Generate`$badSymbols = Get[FileNameJoin[{location, "Resources", "Data", "BadSymbols.wl"}]]
+WolframLanguageSyntax`Generate`$sessionSymbols = Get[FileNameJoin[{location, "Resources", "Data", "SessionSymbols.wl"}]]
+WolframLanguageSyntax`Generate`$undocumentedSymbols = Get[FileNameJoin[{location, "Resources", "Data", "UndocumentedSymbols.wl"}]]
+
+
 
 CodeInspector::old = "The old Lint paclet has been renamed to CodeInspector. Uninstall Lint paclet from your system."
 

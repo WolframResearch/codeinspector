@@ -11,55 +11,67 @@ Needs["CodeParser`"]
 Needs["CodeParser`Utils`"]
 
 
-(*
-"The objective function `1` is not convex so the minimization cannot be solved by convex methods."
-*)
-codeWithMessageStackInspectAST[ast_, {HoldForm[Message[General::ctwcmin, args___]], ___}] :=
+codeWithMessageStackInspectAST[ast_, {HoldForm[Message[MessageName[sym_, tag_], args___]], rest___}] :=
 Catch[
-Module[{case},
+Module[{case, name, tryGeneral, namePat, poss, issues},
 
-	case = FirstCase[ast, CallNode[LeafNode[Symbol, "ParametricConvexOptimization", _], {first_, ___}, _] :> first, $Failed, Infinity];
-	
-	If[FailureQ[case],
-		Throw[{}]
-	];
+  tryGeneral = False;
 
-	{InspectionObject["General", ToString[StringForm[General::ctwcmin, args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]}
-]]
-
-(*
-"The Import element \"`1`\" is not present when importing as `2`."
-*)
-codeWithMessageStackInspectAST[ast_, {HoldForm[Message[Import::noelem, args___]], ___}] :=
-Catch[
-Module[{case},
-
-	case = FirstCase[ast, CallNode[LeafNode[Symbol, "ImportString", _], {_, second_, ___}, _] :> second, $Failed, Infinity];
-	
-	If[FailureQ[case],
-		Throw[{}]
-	];
-
-	{InspectionObject["Import", ToString[StringForm[Import::noelem, args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]}
-]]
-
-(*
-"The only allowed DistanceFunction specifications for GeoPosition are Automatic or GeoDistance."
-*)
-codeWithMessageStackInspectAST[ast_, {HoldForm[Message[SpatialMedian::geodist, args___]], ___}] :=
-Catch[
-Module[{case},
-
-  case = FirstCase[ast, CallNode[LeafNode[Symbol, "SpatialMedian", _], {___, CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, "DistanceFunction", _], opt_}, _], ___}, _] :> opt, $Failed, Infinity];
-  
-  If[FailureQ[case],
-    Throw[{}]
+  Which[
+    KeyExistsQ[WolframLanguageSyntax`Generate`$analyzableMessagePositions, HoldForm[MessageName[sym, tag]]],
+      poss = WolframLanguageSyntax`Generate`$analyzableMessagePositions[HoldForm[MessageName[sym, tag]]];
+    ,
+    KeyExistsQ[WolframLanguageSyntax`Generate`$analyzableMessagePositions, HoldForm[MessageName[General, tag]]],
+      tryGeneral = True;
+      poss = WolframLanguageSyntax`Generate`$analyzableMessagePositions[HoldForm[MessageName[General, tag]]];
+    ,
+    True,
+      Throw[{}]
   ];
 
-  {InspectionObject["SpatialMedian", ToString[StringForm[SpatialMedian::geodist, args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]}
-]]
+  name = SymbolName[Unevaluated[sym]];
 
-codeWithMessageStackInspectAST[ast_, stack_] = {}
+  Which[
+    name == "Import",
+      namePat = "Import" | "ImportString"
+    ,
+    True,
+      namePat = name
+  ];
+
+
+  issues = {};
+
+  Function[{pos},
+
+    Switch[pos,
+      _Integer,
+        case = FirstCase[ast, CallNode[LeafNode[Symbol, namePat, _], children_, _] :> children, $Failed, Infinity];
+        If[FailureQ[case],
+          Throw[{}]
+        ];
+        If[Length[case] < pos,
+          Throw[{}]
+        ];
+        case = case[[pos]];
+        AppendTo[issues, InspectionObject[name, ToString[StringForm[If[tryGeneral, MessageName[General, tag], MessageName[sym, tag]], args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+      ,
+      _Symbol,
+        case = FirstCase[ast, CallNode[LeafNode[Symbol, namePat, _], children_, _] :> children, $Failed, Infinity];
+        If[FailureQ[case],
+          Throw[{}]
+        ];
+        case = FirstCase[case, CallNode[LeafNode[Symbol, "Rule", _], {LeafNode[Symbol, ToString[pos], _], value_}, _] :> value, $Failed, Infinity];
+        If[FailureQ[case],
+          Throw[{}]
+        ];
+        AppendTo[issues, InspectionObject[name, ToString[StringForm[If[tryGeneral, MessageName[General, tag], MessageName[sym, tag]], args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+    ];
+
+  ] /@ poss;
+
+  issues
+]]
 
 
 
