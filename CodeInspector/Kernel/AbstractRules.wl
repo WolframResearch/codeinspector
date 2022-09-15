@@ -1296,7 +1296,7 @@ Module[{ast, node, parentPos, parent, s},
       CodeAction["Add []", ReplaceNode, <|
         Source -> node[[3, Key[Source]]],
         (* node is a Symbol, so it is ok to insert here *)
-        "ReplacementNode" -> CallNode[{node}, {LeafNode[Token`OpenSquare, "[", <||>], LeafNode[Token`CloseSquare, "]", <||>]}, <||>] |>] },
+        "ReplacementNode" -> CallNode[{node}, GroupNode[GroupSquare, {LeafNode[Token`OpenSquare, "[", <||>], LeafNode[Token`CloseSquare, "]", <||>]}, <||>], <||>] |>] },
     ConfidenceLevel -> 0.85 |>]}
 ]]
 
@@ -2172,7 +2172,7 @@ Module[{ast, node, var, data},
     CodeActions -> {
       CodeAction["Replace with ``LoadJavaClass[\"java.lang.System\", AllowShortContext->False]``", ReplaceNode, <|
         "ReplacementNode" ->
-          CallNode[{LeafNode[Symbol, "LoadJavaClass", <||>]}, {
+          CallNode[{LeafNode[Symbol, "LoadJavaClass", <||>]},
             GroupNode[GroupSquare, {
               LeafNode[Token`OpenSquare, "[", <||>],
               InfixNode[Comma, {
@@ -2183,7 +2183,7 @@ Module[{ast, node, var, data},
                   LeafNode[Symbol, "AllowShortContext", <||>],
                   LeafNode[Token`MinusGreater, "->", <||>],
                   LeafNode[Symbol, "False", <||>]}, <||>]}, <||>],
-                LeafNode[Token`CloseSquare, "]", <||>]}, <||>]}, <||>],
+                LeafNode[Token`CloseSquare, "]", <||>]}, <||>], <||>],
         Source -> data[[Key[Source]]]
       |>]
     } |>]}

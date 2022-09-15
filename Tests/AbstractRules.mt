@@ -808,14 +808,34 @@ TestMatch[
 
 
 
+lints = CodeInspect["Break"]
+
+actions = lints[[1, 4, Key[CodeActions]]]
+
+node = actions[[1, 3, "ReplacementNode"]]
+
+Test[
+	ToSourceCharacterString[node]
+	,
+	"Break[]"
+	,
+	TestID->"AbstractRules-20220915-O6D9M7"
+]
 
 
+lints = CodeInspect["LoadJavaClass[\"java.lang.System\"]"]
 
+actions = lints[[1, 4, Key[CodeActions]]]
 
+node = actions[[1, 3, "ReplacementNode"]]
 
-
-
-
+Test[
+	ToSourceCharacterString[node]
+	,
+	"LoadJavaClass[\"java.lang.System\", AllowShortContext->False]"
+	,
+	TestID->"AbstractRules-20220915-S6J0M3"
+]
 
 
 
