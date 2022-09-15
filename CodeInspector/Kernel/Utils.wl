@@ -54,12 +54,12 @@ conventionAgnosticSourceOrdering
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Scoping`"] (* for scopingDataObject *)
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`SuppressedRegions`"] (* for suppressedRegion *)
+Needs["CodeParser`"]
+Needs["CodeParser`Scoping`"] (* for scopingDataObject *)
+Needs["CodeParser`Utils`"]
 
 
 $shortenLimit = 100

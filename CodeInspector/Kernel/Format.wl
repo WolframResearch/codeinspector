@@ -67,11 +67,11 @@ $LintGridFontWeight
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`External`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
 
 
 

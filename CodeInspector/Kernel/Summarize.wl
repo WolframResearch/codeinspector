@@ -21,8 +21,6 @@ $LineTruncationLimit
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`AbstractRules`"]
 Needs["CodeInspector`AggregateRules`"]
@@ -30,6 +28,8 @@ Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`TokenRules`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
 
 
 $DefaultTagExclusions = {}

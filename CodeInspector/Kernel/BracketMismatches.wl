@@ -15,13 +15,13 @@ CodeInspectBracketMismatchesAgg
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Abstract`"]
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Abstract`"]
+Needs["CodeParser`Utils`"]
 
 
 

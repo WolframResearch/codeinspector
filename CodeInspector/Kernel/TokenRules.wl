@@ -8,11 +8,11 @@ $ScanSessionTokens
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Utils`"]
 
 Needs["PacletManager`"] (* for PacletInformation *)
 

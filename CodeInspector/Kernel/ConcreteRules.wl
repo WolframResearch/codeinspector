@@ -5,12 +5,12 @@ $DefaultConcreteRules
 
 Begin["`Private`"]
 
-Needs["CodeParser`"]
-Needs["CodeParser`Folds`"]
-Needs["CodeParser`Utils`"]
 Needs["CodeInspector`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`Utils`"]
+Needs["CodeParser`"]
+Needs["CodeParser`Folds`"]
+Needs["CodeParser`Utils`"]
 
 
 
