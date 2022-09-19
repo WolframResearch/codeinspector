@@ -1097,17 +1097,16 @@ will also scan for:
 *)
 scanPatternTestCalls[pos_List, aggIn_] :=
 Catch[
-Module[{agg, node, data, children, patternTest, args, patternTestChildren, patternTestArg1, patternTestArg2, issues,
+Module[{agg, node, data, child, patternTest, patternTestChildren, patternTestArg1, patternTestArg2, issues,
   parent, parentPos, src, replacementNode1, replacementNode2, replacementNode},
   agg = aggIn;
   node = Extract[agg, {pos}][[1]];
   patternTest = node[[1]];
-  children = node[[2]];
+  child = node[[2]];
 
   patternTestChildren = patternTest[[2]];
   patternTestArg1 = patternTestChildren[[1]];
   patternTestArg2 = patternTestChildren[[3]];
-  args = children[[1]];
   data = node[[3]];
 
   If[Length[pos] >= 2,
@@ -1142,7 +1141,7 @@ Module[{agg, node, data, children, patternTest, args, patternTestChildren, patte
                                           LeafNode[Token`Question, "?", <||>],
                                           GroupNode[GroupParen, {
                                             LeafNode[Token`OpenParen, "(", <||>],
-                                            CallNode[patternTestArg2, args, <||>],
+                                            CallNode[patternTestArg2, child, <||>],
                                             LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
 
       src = data[Source];
@@ -1167,13 +1166,13 @@ Module[{agg, node, data, children, patternTest, args, patternTestChildren, patte
                                         LeafNode[Token`Question, "?", <||>],
                                         GroupNode[GroupParen, {
                                           LeafNode[Token`OpenParen, "(", <||>],
-                                          CallNode[patternTestArg2, args, <||>],
+                                          CallNode[patternTestArg2, child, <||>],
                                           LeafNode[Token`CloseParen, ")", <||>] }, <||>]}, <||>];
 
   replacementNode2 = CallNode[GroupNode[GroupParen, {
                                                     LeafNode[Token`OpenParen, "(", <||>],
                                                     patternTest,
-                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], children, <||>];
+                                                    LeafNode[Token`CloseParen, ")", <||>] }, <||>], child, <||>];
 
   AppendTo[issues, InspectionObject["SuspiciousPatternTestCall", "Suspicious use of ``?``.", "Remark", <| Source -> src, ConfidenceLevel -> 0.55, CodeActions -> {
           CodeAction["Wrap parens around RHS", ReplaceNode, <| Source -> src, "ReplacementNode" -> replacementNode1 |>],
