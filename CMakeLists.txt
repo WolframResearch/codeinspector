@@ -100,6 +100,7 @@ set(PROCESSED_SYMBOLS_DATA_FILES
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ExperimentalSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/FreeCharacters.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/FreeLongNames.wl
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/Options.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ObsoleteSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SessionSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/SpecialCharacters.wl

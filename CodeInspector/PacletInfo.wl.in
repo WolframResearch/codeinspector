@@ -19,6 +19,7 @@ Paclet[
         
         {"BadSymbols", "Data/BadSymbols.wl"},
         {"BuiltinFunctions", "Data/BuiltinFunctions.wl"},
+        {"Options", "Data/Options.wl"},
         {"Constants", "Data/Constants.wl"},
         {"ExperimentalSymbols", "Data/ExperimentalSymbols.wl"},
         {"FreeCharacters", "Data/FreeCharacters.wl"},
