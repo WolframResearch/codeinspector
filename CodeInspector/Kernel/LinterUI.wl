@@ -2386,9 +2386,15 @@ Module[
       Except[_CellObject]];
   If[cells =!= {}, NotebookDelete[cells]];
 
-  With[{notebook = notebookObj}, (* At this point we assume we have a consistent NotebookObject so use it everywhere *)
+  With[
+    {
+      (* At this point we assume we have a consistent NotebookObject so use it everywhere *)
+      notebook = notebookObj,
+      cellsToAnalyze = If[ListQ[notebookOrCells], notebookOrCells, Cells[notebookObj]]}, 
 
   varSet[{notebook, "AnalysisInProgressQ"}, True];
+  (* Flag, with cellular granularity, that analysis is underway. *)
+  varSet[{notebook, #, "AnalysisInProgressQ"}, True]& /@ cellsToAnalyze;
 
   (* If analyzing a notebook object, and the docked cell isn't attached, attach the docked cell. *)
   If[Head[notebookOrCells] === NotebookObject && !TrueQ[varValue[notebook, "DockedCellPresentQ"]],
@@ -2397,10 +2403,10 @@ Module[
       Append[
         Flatten[{CurrentValue[notebook, DockedCells]}],
         FEPrivate`FrontEndResource["CodeInspectorExpressions", "DockedCell"]]];
-  
+
   (* Analyze the notebook / cells. *)
   (* cells are the cells that produced lints, and cleanCells are the input/code cells that didn't produce lints. We'll attach bracket markers to the clean ones. *)
-  {cells, cleanCells} = analyzeAction[notebook, If[ListQ[notebookOrCells], notebookOrCells, Cells[notebookOrCells]]];
+  {cells, cleanCells} = analyzeAction[notebook, cellsToAnalyze];
 
   (* Create the boxes for the lint-pods and cell-bracket-buttons. *)
   cellAssoc = 
@@ -2417,7 +2423,9 @@ Module[
             "LintPodBoxes" -> Cell[BoxData @ ToBoxes @
               cellManagement @ lintPod[notebook, cell, varValue[notebook, cell, "Type"]],
               LineBreakWithin -> Automatic,
-              CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins}],
+              CellMargins -> {hMargins + hMarginsFudgeFactor, vMargins},
+              (* Flag that analysis has finished once the lint pod is attached. *)
+              Initialization :> varSet[{notebook, cell, "AnalysisInProgressQ"}, False]],
 
             "CellBracketButtonBoxes" -> cellBracketButton[cell]|>]],
       cells];
