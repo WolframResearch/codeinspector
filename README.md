@@ -67,6 +67,10 @@ Summarize the problems found in a source code file:
 
 The input to `CodeInspect` and `CodeInspectSummarize` may be a string, a `File`, or a list of bytes.
 
+See this tutorial in the Wolfram System help browser:
+
+* CodeInspector/tutorial/CodeInspectorTutorial
+
 
 ## Troubleshooting
 
