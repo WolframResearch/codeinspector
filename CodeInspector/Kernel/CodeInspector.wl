@@ -28,6 +28,8 @@ CodeInspectBoxSummarize
 
 AttachAnalysis
 
+$IncludeMessageStacks
+
 
 (*
 Objects
@@ -67,6 +69,7 @@ Needs["CodeInspector`Boxes`"]
 Needs["CodeInspector`ConcreteRules`"]
 Needs["CodeInspector`Format`"]
 Needs["CodeInspector`LinterUI`"]
+Needs["CodeInspector`MessageStack`"]
 Needs["CodeInspector`Summarize`"]
 Needs["CodeInspector`SuppressedRegions`"]
 Needs["CodeInspector`TokenRules`"]
@@ -376,7 +379,8 @@ Catch[
 Module[{cst, data, agg, aggregateRules, abstractRules, ast, poss, lints,
   prog, concreteRules, performanceGoal, start,
   scopingData, scopingLints, suppressedRegions, tokenRules, isActive, inheritedProperties, batchMode, keepLowlevelScopingLints,
-  tagExclusions, severityExclusions, confidence, lintLimit},
+  tagExclusions, severityExclusions, confidence, lintLimit,
+  stacks},
 
   If[$Debug,
     Print["CodeInspectCST"];
@@ -593,6 +597,21 @@ Module[{cst, data, agg, aggregateRules, abstractRules, ast, poss, lints,
   ];
 
   lints = lints ~Join~ scopingLints;
+
+
+  If[$IncludeMessageStacks,
+
+    (*
+    assume this is running after the user clicked "Analyze input for issues" after an evaluation and use $Line - 1
+    *)
+
+    stacks =
+      With[{line = $Line - 1, session = $SessionID},
+        ReleaseHold /@ Cases[DownValues[MessageMenu`MessageStackList][[All, 1]], Verbatim[HoldPattern][HoldPattern[MessageMenu`MessageStackList[line, _, session]]]]
+      ];
+
+    lints = lints ~Join~ Flatten[CodeInspector`MessageStack`codeWithMessageStackInspectAST[ast, #]& /@ stacks];
+  ];
 
 
   lints = Flatten[lints];
