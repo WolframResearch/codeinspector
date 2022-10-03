@@ -93,7 +93,8 @@ set(STATIC_WL_PACLET_FRONTEND_SOURCES
 	${PROJECT_SOURCE_DIR}/CodeInspector/FrontEnd/TextResources/CodeInspector.tr
 )
 
-set(PROCESSED_SYMBOLS_DATA_FILES
+set(PROCESSED_DATA_FILES
+	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/AnalyzableMessages.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BadSymbols.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/BuiltinFunctions.wl
 	${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/Constants.wl
@@ -123,9 +124,8 @@ set(PACLETINFO_IN_SOURCE
 )
 
 set(GENERATED_WL_PACLET_FRONTEND_SOURCES
-	${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/CodeAnalysisOptions.nb
+	${PROJECT_BINARY_DIR}/paclet/CodeInspector/FrontEnd/Palettes/CodeAnalysisOptions.nb
 )
-
 
 
 #
@@ -218,7 +218,7 @@ endforeach()
 #
 # processed Data sources
 #
-foreach(SRC ${PROCESSED_SYMBOLS_DATA_FILES})
+foreach(SRC ${PROCESSED_DATA_FILES})
 	file(RELATIVE_PATH REL ${PROJECT_SOURCE_DIR}/WolframLanguageSyntax/Data/ ${SRC})
 	add_custom_command(
 		OUTPUT
@@ -250,35 +250,17 @@ foreach(SRC ${STATIC_WL_PACLET_RESOURCES_SOURCES})
 	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/Resources/${REL})
 endforeach()
 
-#
-# generated FrontEnd sources
-#
-foreach(SRC ${GENERATED_WL_PACLET_FRONTEND_SOURCES})
-	file(RELATIVE_PATH REL ${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/ ${SRC})
-	add_custom_command(
-		OUTPUT
-			${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL}
-		COMMAND
-			${CMAKE_COMMAND} -E copy ${SRC} ${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL}
-		DEPENDS
-			${SRC}
-	)
-	list(APPEND COPIED_WL_PACLET_SOURCES ${PROJECT_BINARY_DIR}/paclet/${PACLET}/FrontEnd/${REL})
-endforeach()
-
-
 
 #
 # generated srcs
 #
-
 
 #
 # CodeAnalysisOptions.nb
 #
 add_custom_command(
 	OUTPUT
-		${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/CodeAnalysisOptions.nb
+		${PROJECT_BINARY_DIR}/paclet/CodeInspector/FrontEnd/Palettes/CodeAnalysisOptions.nb
 	COMMAND
 		${CMAKE_COMMAND} -DSCRIPT=${PROJECT_SOURCE_DIR}/CodeInspector/Generate/MakeCodeAnalysisOptionsPalette.wl -DSRCDIR=${PROJECT_SOURCE_DIR} -DBUILDDIR=${PROJECT_BINARY_DIR} -DWOLFRAMKERNEL=${WOLFRAMKERNEL} -DKERNEL_TIMEOUT=${KERNEL_TIMEOUT} -P ${PROJECT_SOURCE_DIR}/cmake/WolframScript.cmake
 	DEPENDS
@@ -298,6 +280,7 @@ add_custom_command(
 set(PACLET_SOURCES
 	${REPLACED_PACLETINFO}
 	${COPIED_WL_PACLET_SOURCES}
+	${GENERATED_WL_PACLET_FRONTEND_SOURCES}
 )
 
 

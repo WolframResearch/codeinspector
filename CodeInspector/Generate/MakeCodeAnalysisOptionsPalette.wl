@@ -351,7 +351,7 @@ Module[{togglerPalette, res},
   ];
 
   Print["saving CodeAnalysisOptions.nb"];
-  res = NotebookSave[togglerPalette, FileNameJoin[{generatedWLDir, "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]];
+  res = NotebookSave[togglerPalette, FileNameJoin[{buildDir, "paclet", "CodeInspector", "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]];
 
   Print[res];
 

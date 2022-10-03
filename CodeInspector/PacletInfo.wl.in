@@ -17,6 +17,7 @@ Paclet[
       Resources -> {
         {"Collatz","Examples/Collatz.m"},
         
+        {"AnalyzableMessages", "Data/AnalyzableMessages.wl"},
         {"BadSymbols", "Data/BadSymbols.wl"},
         {"BuiltinFunctions", "Data/BuiltinFunctions.wl"},
         {"Options", "Data/Options.wl"},
