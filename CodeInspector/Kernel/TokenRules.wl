@@ -66,7 +66,12 @@ $badSymbolsWithSuggestions = <|
   "Cloudbase" -> {0.95, "CloudBase"},
   "ExpandFilename" -> {0.95, "ExpandFileName"},
   "$PathNameSeparator" -> {0.95, "$PathnameSeparator"},
-  "$RegisteredUsername" -> {0.95, "$RegisteredUserName"}
+  "$RegisteredUsername" -> {0.95, "$RegisteredUserName"},
+  (*
+  technically, ExportPacket IS in System`, but should stop using it
+  https://mail-archive.wolfram.com/archive/l-frontend/2022/Oct00/0002.html
+  *)
+  "ExportPacket" -> {0.95, "FrontEnd`ExportPacket"}
 |>
 
 $badSymbolsNoSuggestions = <|
