@@ -1,5 +1,11 @@
 
-## 1.8 - XX Sep, 2022
+## 1.8 - 10 Oct, 2022
+
+Update some lints.
+
+Add warning for `\[Pi]_`.
+
+First draft of using message stacks to attach more information during Code Analysis.
 
 
 ## 1.7 - 4 July, 2022
