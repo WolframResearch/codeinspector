@@ -1,6 +1,6 @@
 (* AUTO GENERATED FILE *)
 (* DO NOT MODIFY *)
-(* GENERATED WITH: 13.1.0 for Mac OS X x86 (64-bit) (June 16, 2022) *)
+(* GENERATED WITH: 13.2.0 for Mac OS X x86 (64-bit) (November 18, 2022) *)
 <|HoldForm[AbsArgPlot::cfun] -> {ColorFunction}, 
  HoldForm[Accumulate::bdmtd] -> {Method}, 
  HoldForm[AffineStateSpaceModel::desopt] -> {DescriptorStateSpace}, 
@@ -134,8 +134,8 @@
  HoldForm[DateListStepPlot::opttf] -> {Joined}, 
  HoldForm[DatePlus::bdmtd] -> {Method}, HoldForm[DeBruijnSequence::lsim] -> 
   {"`2`"}, HoldForm[DefaultFont::font] -> {DefaultFont}, 
- HoldForm[DensityGraphics::meshr] -> {MeshRange}, 
- HoldForm[DensityPlot::pptt] -> {PlotPoints}, 
+ HoldForm[DefaultValues::sym] -> {"`2`"}, HoldForm[DensityGraphics::meshr] -> 
+  {MeshRange}, HoldForm[DensityPlot::pptt] -> {PlotPoints}, 
  HoldForm[DensityPlot3D::invlvar] -> {1 + "`1`"}, 
  HoldForm[DesignMatrix::fitd] -> {1}, 
  HoldForm[DeviceFramework`DeviceClassRegister::ndrts] -> 
@@ -163,9 +163,9 @@
  HoldForm[DocumentGenerator::optx] -> {"`1`"}, 
  HoldForm[DominantColors::clcvrg] -> {ColorCoverage}, 
  HoldForm[DominantColors::mindist] -> {MinColorDistance}, 
- HoldForm[Dot::dotsh] -> {1, 2}, HoldForm[DSolve::deqn] -> {1}, 
- HoldForm[DSolve::dsvar] -> {3}, HoldForm[DSolve::ivhead] -> {3}, 
- HoldForm[DSolveValue::deqn] -> {1}, 
+ HoldForm[Dot::dotsh] -> {1, 2}, HoldForm[DownValues::sym] -> {"`2`"}, 
+ HoldForm[DSolve::deqn] -> {1}, HoldForm[DSolve::dsvar] -> {3}, 
+ HoldForm[DSolve::ivhead] -> {3}, HoldForm[DSolveValue::deqn] -> {1}, 
  HoldForm[DualLinearProgramming::lpdinf] -> {Method}, 
  HoldForm[DualLinearProgramming::lpdinfp] -> {Method}, 
  HoldForm[DualLinearProgramming::lpipcv] -> {Method}, 
@@ -340,8 +340,9 @@
  HoldForm[FittedModel::cvfun] -> {CovarianceEstimatorFunction}, 
  HoldForm[FittedModel::varfun] -> {VarianceEstimatorFunction}, 
  HoldForm[Format::fttp] -> {2}, HoldForm[FormatType::ftype] -> {FormatType}, 
- HoldForm[FormulaLookup::pqlst] -> {"`1`"}, HoldForm[Fourier::fpopt] -> 
-  {FourierParameters}, HoldForm[FourierMatrix::fpopt] -> {FourierParameters}, 
+ HoldForm[FormatValues::sym] -> {"`2`"}, HoldForm[FormulaLookup::pqlst] -> 
+  {"`1`"}, HoldForm[Fourier::fpopt] -> {FourierParameters}, 
+ HoldForm[FourierMatrix::fpopt] -> {FourierParameters}, 
  HoldForm[FrameLabel::fmlab] -> {FrameLabel}, 
  HoldForm[FrequencySamplingFilterKernel::prec] -> {WorkingPrecision}, 
  HoldForm[FrobeniusNumber::coef] -> {1}, HoldForm[FrobeniusSolve::coef] -> 
@@ -999,7 +1000,6 @@
  HoldForm[Developer`LinearExpressionToMatrix::lexp] -> {1}, 
  HoldForm[Developer`LinearExpressionToSparseMatrix::lexp] -> {1}, 
  HoldForm[LinearFilter::arg2] -> {1}, 
- HoldForm[LinearFractionalOptimizaion::mnval] -> {"`3`"}, 
  HoldForm[LinearFractionalOptimization::bdspec] -> {"`3`"}, 
  HoldForm[LinearFractionalOptimization::lcxlen] -> {1}, 
  HoldForm[LinearFractionalOptimization::lecxlen] -> {1}, 
@@ -1013,6 +1013,7 @@
  HoldForm[LinearFractionalOptimization::lpsnfp] -> {Method}, 
  HoldForm[LinearFractionalOptimization::lptol] -> {Tolerance}, 
  HoldForm[LinearFractionalOptimization::mlen] -> {1}, 
+ HoldForm[LinearFractionalOptimization::mnval] -> {"`3`"}, 
  HoldForm[LinearFractionalOptimization::mnvec] -> {"`3`"}, 
  HoldForm[LinearGradientImage::bdrng] -> {DataRange}, 
  HoldForm[LinearGradientImage::padding] -> {Padding}, 
@@ -1096,16 +1097,16 @@
  HoldForm[MeanShift::iters] -> {MaxIterations}, 
  HoldForm[MeanShiftFilter::arg1] -> {1}, HoldForm[MeanShiftFilter::dist] -> 
   {DistanceFunction}, HoldForm[MeanShiftFilter::iters] -> {MaxIterations}, 
- HoldForm[MedianFilter::arg1] -> {1}, HoldForm[Method::maxmem] -> 
-  {Failure["UnrecognizedPositionSpec", <|"Spec" -> "MaxMemory"|>]}, 
- HoldForm[MinDetect::arg1] -> {1}, HoldForm[MinFilter::arg1] -> {1}, 
- HoldForm[MinimalBy::arg1] -> {1}, HoldForm[MixtureDistribution::nnegw] -> 
-  {1}, HoldForm[Random`MKL::bdmtd] -> {Method}, 
- HoldForm[Module::lvlist] -> {1}, HoldForm[Molecule::coord] -> {"`1`"}, 
- HoldForm[MoleculeModify::atchpt] -> {"`1`"}, HoldForm[Moment::arg1] -> {1}, 
- HoldForm[Moment::matarg2] -> {1}, HoldForm[Moment::vectarg2] -> {1}, 
- HoldForm[MovingAverage::arg2] -> {1}, HoldForm[MovingMedian::arg1] -> {1}, 
- HoldForm[MovingMedian::arg2] -> {1}, 
+ HoldForm[MedianFilter::arg1] -> {1}, HoldForm[Messages::sym] -> {"`2`"}, 
+ HoldForm[Method::maxmem] -> {Failure["UnrecognizedPositionSpec", 
+    <|"Spec" -> "MaxMemory"|>]}, HoldForm[MinDetect::arg1] -> {1}, 
+ HoldForm[MinFilter::arg1] -> {1}, HoldForm[MinimalBy::arg1] -> {1}, 
+ HoldForm[MixtureDistribution::nnegw] -> {1}, HoldForm[Random`MKL::bdmtd] -> 
+  {Method}, HoldForm[Module::lvlist] -> {1}, HoldForm[Molecule::coord] -> 
+  {"`1`"}, HoldForm[MoleculeModify::atchpt] -> {"`1`"}, 
+ HoldForm[Moment::arg1] -> {1}, HoldForm[Moment::matarg2] -> {1}, 
+ HoldForm[Moment::vectarg2] -> {1}, HoldForm[MovingAverage::arg2] -> {1}, 
+ HoldForm[MovingMedian::arg1] -> {1}, HoldForm[MovingMedian::arg2] -> {1}, 
  HoldForm[NIntegrate`MultiDimensionalRuleData::mdgen] -> {1}, 
  HoldForm[NArgMax::bdmtd] -> {Method}, HoldForm[NArgMin::bdmtd] -> {Method}, 
  HoldForm[NBodySimulation::datat] -> {1}, HoldForm[NDEigensystem::deqn] -> 
@@ -1165,12 +1166,12 @@
   {"`1`"}, HoldForm[NDSolveValue::tvar] -> {"`1`"}, 
  HoldForm[NDSolveValue::tvic] -> {TemporalVariable}, 
  HoldForm[NDSolveValue::uniss] -> {MinStepSize, MaxStepSize}, 
- HoldForm[NIntegrate::mdgen] -> {"`2`"}, HoldForm[NIntegrate::ploss] -> 
-  {Method}, HoldForm[NMaximize::bdmtd] -> {Method}, 
- HoldForm[NMaximize::maxit] -> {MaxIterations}, 
- HoldForm[NMaxValue::bdmtd] -> {Method}, HoldForm[NMinimize::bdmtd] -> 
-  {Method}, HoldForm[NMinimize::maxit] -> {MaxIterations}, 
- HoldForm[NMinValue::bdmtd] -> {Method}, 
+ HoldForm[NFractionalD::bdmtd] -> {Method}, HoldForm[NIntegrate::mdgen] -> 
+  {"`2`"}, HoldForm[NIntegrate::ploss] -> {Method}, 
+ HoldForm[NMaximize::bdmtd] -> {Method}, HoldForm[NMaximize::maxit] -> 
+  {MaxIterations}, HoldForm[NMaxValue::bdmtd] -> {Method}, 
+ HoldForm[NMinimize::bdmtd] -> {Method}, HoldForm[NMinimize::maxit] -> 
+  {MaxIterations}, HoldForm[NMinValue::bdmtd] -> {Method}, 
  HoldForm[Optimization`NonlinearInteriorPoint::badspt] -> 
   {Failure["UnrecognizedPositionSpec", <|"Spec" -> "StartingPoint"|>]}, 
  HoldForm[NonlinearModelFit::bdcl] -> {ConfidenceLevel}, 
@@ -1188,7 +1189,7 @@
  HoldForm[NProduct::itfn] -> {2}, HoldForm[NSum::itfn] -> {2}, 
  HoldForm[NullSpace::rmeth] -> {Method}, HoldForm[NumberDigit::badspec] -> 
   {"`2`"}, HoldForm[NumberLinePlot::nondom] -> {1 + "`1`"}, 
- HoldForm[NumericArray::lend] -> {"`1`"}, 
+ HoldForm[NumericArray::lend] -> {"`1`"}, HoldForm[NValues::sym] -> {"`2`"}, 
  HoldForm[System`Private`OldReduce::ibool] -> {InverseFunctions}, 
  HoldForm[System`Private`OldReduce::method] -> {Method}, 
  HoldForm[System`Private`OldReduce::mode] -> {Mode}, 
@@ -1207,10 +1208,11 @@
  HoldForm[Orthogonalize::ornhsl] -> {Method}, 
  HoldForm[Orthogonalize::ornt] -> {1}, HoldForm[Orthogonalize::ornvm] -> {1}, 
  HoldForm[Orthogonalize::orsym] -> {Method}, 
- HoldForm[Orthogonalize::orwdt] -> {1}, HoldForm[PadLeft::level] -> {2}, 
- HoldForm[PadLeft::margin] -> {4}, HoldForm[PadRight::level] -> {2}, 
- HoldForm[PadRight::margin] -> {4}, HoldForm[PairedBarChart::chorn] -> 
-  {BarOrigin}, HoldForm[PairedBarChart::chspc] -> {BarSpacing}, 
+ HoldForm[Orthogonalize::orwdt] -> {1}, HoldForm[OwnValues::sym] -> {"`2`"}, 
+ HoldForm[PadLeft::level] -> {2}, HoldForm[PadLeft::margin] -> {4}, 
+ HoldForm[PadRight::level] -> {2}, HoldForm[PadRight::margin] -> {4}, 
+ HoldForm[PairedBarChart::chorn] -> {BarOrigin}, 
+ HoldForm[PairedBarChart::chspc] -> {BarSpacing}, 
  HoldForm[PairedHistogram::chorn] -> {BarOrigin}, 
  HoldForm[ParametricNDSolve::bddo] -> {DifferenceOrder}, 
  HoldForm[ParametricNDSolve::bdmtd] -> {Method}, 
@@ -1376,8 +1378,9 @@
  HoldForm[QuantityForm::notunit] -> {1}, HoldForm[QueueProperties::nque] -> 
   {1}, HoldForm[RadialGradientImage::bdrng] -> {DataRange}, 
  HoldForm[RadialGradientImage::padding] -> {Padding}, 
- HoldForm[RandomPrime::prmrng] -> {1}, HoldForm[RandomVariate::unsdst] -> 
-  {1}, HoldForm[Raster::rsval] -> {1}, HoldForm[RasterArray::rscol] -> {1}, 
+ HoldForm[RandomDate::unifr] -> {1}, HoldForm[RandomPrime::prmrng] -> {1}, 
+ HoldForm[RandomTime::unifr] -> {1}, HoldForm[RandomVariate::unsdst] -> {1}, 
+ HoldForm[Raster::rsval] -> {1}, HoldForm[RasterArray::rscol] -> {1}, 
  HoldForm[Internal`RasterGraphics::nonopt] -> {2}, 
  HoldForm[Internal`RasterGraphics::optx] -> {"`1`"}, 
  HoldForm[Internal`RasterGraphics::zval] -> {1}, 
@@ -1498,10 +1501,9 @@
  HoldForm[SparseArray`SparseMatrixILU::kryptol] -> 
   {Failure["UnrecognizedPositionSpec", 
     <|"Spec" -> "PermutationTolerance"|>]}, HoldForm[SpatialEstimate::vfn] -> 
-  {Failure["UnrecognizedPositionSpec", <|"Spec" -> "VariogamFunction"|>]}, 
- HoldForm[SpatialMedian::geodist] -> {DistanceFunction}, 
- HoldForm[SpectrogramArray::fpopt] -> {FourierParameters}, 
- HoldForm[StandardDeviationFilter::arg1] -> {1}, 
+  {VariogramFunction}, HoldForm[SpatialMedian::geodist] -> 
+  {DistanceFunction}, HoldForm[SpectrogramArray::fpopt] -> 
+  {FourierParameters}, HoldForm[StandardDeviationFilter::arg1] -> {1}, 
  HoldForm[Standardize::vectmat] -> {1}, 
  HoldForm[StateOutputEstimator::invgn] -> {"`2`"}, 
  HoldForm[StateSpaceModel::desopt] -> {DescriptorStateSpace}, 
@@ -1519,8 +1521,9 @@
  HoldForm[StringReplace::meta] -> {MetaCharacters}, 
  HoldForm[StringReplaceList::meta] -> {MetaCharacters}, 
  HoldForm[StringSplit::meta] -> {MetaCharacters}, 
- HoldForm[SurfaceColor::albedo] -> {1}, HoldForm[SurfaceGraphics::clip] -> 
-  {ClippingStyle}, HoldForm[SurfaceGraphics::meshr] -> {MeshRange}, 
+ HoldForm[SubValues::sym] -> {"`2`"}, HoldForm[SurfaceColor::albedo] -> {1}, 
+ HoldForm[SurfaceGraphics::clip] -> {ClippingStyle}, 
+ HoldForm[SurfaceGraphics::meshr] -> {MeshRange}, 
  HoldForm[SurvivalDistribution::espc] -> {"`2`"}, 
  HoldForm[SurvivalDistribution::trnc] -> {2}, 
  HoldForm[SparseArray`SVDArnoldi::arb2] -> 
@@ -1593,8 +1596,8 @@
  HoldForm[TruncatedDistribution::invarg1] -> {1}, 
  HoldForm[UniformDistribution::arg1] -> {1}, HoldForm[UpSet::setraw] -> {1}, 
  HoldForm[UpSet::setrpt] -> {1}, HoldForm[UpSetDelayed::setraw] -> {1}, 
- HoldForm[UpSetDelayed::setrpt] -> {1}, HoldForm[ValueQ::bdmtd] -> {Method}, 
- HoldForm[VectorAround::vec1] -> {1}, 
+ HoldForm[UpSetDelayed::setrpt] -> {1}, HoldForm[UpValues::sym] -> {"`2`"}, 
+ HoldForm[ValueQ::bdmtd] -> {Method}, HoldForm[VectorAround::vec1] -> {1}, 
  HoldForm[Control`VectorRelativeOrderCompensator::iters] -> {MaxIterations}, 
  HoldForm[Vectors::dimsl] -> {1}, HoldForm[VerticalGauge::gaugesty] -> 
   {"`1`"}, HoldForm[VerticalGauge::gfacespec] -> {GaugeFaceElementFunction}, 

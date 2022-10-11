@@ -1,6 +1,6 @@
 (* AUTO GENERATED FILE *)
 (* DO NOT MODIFY *)
-(* GENERATED WITH: 13.1.0 for Mac OS X x86 (64-bit) (June 16, 2022) *)
+(* GENERATED WITH: 13.2.0 for Mac OS X x86 (64-bit) (November 18, 2022) *)
 {"Constant", "Flat", "HoldAll", "HoldAllComplete", "HoldFirst", "HoldRest", 
  "Listable", "Locked", "NHoldAll", "NHoldFirst", "NHoldRest", 
  "NumericFunction", "OneIdentity", "Orderless", "Protected", "ReadProtected", 
@@ -75,14 +75,14 @@
  "$PathnameSeparator", "$PerformanceGoal", "$Permissions", "$PlotTheme", 
  "$Printout3DPreviewer", "$ProcessID", "$ProcessorCount", "$ProcessorType", 
  "$ProgressReporting", "$RandomGeneratorState", "$RecursionLimit", 
- "$ReleaseNumber", "$RequesterAddress", "$RequesterWolframID", 
- "$RequesterWolframUUID", "$RootDirectory", "$ScriptCommandLine", 
- "$ScriptInputString", "$Services", "$SessionID", "$SharedFunctions", 
- "$SharedVariables", "$SoundDisplayFunction", "$SynchronousEvaluation", 
- "$System", "$SystemCharacterEncoding", "$SystemID", "$SystemShell", 
- "$SystemTimeZone", "$SystemWordLength", "$TemplatePath", 
- "$TemporaryDirectory", "$TimedOut", "$TimeUnit", "$TimeZone", 
- "$TimeZoneEntity", "$UnitSystem", "$Urgent", "$UserAgentString", 
- "$UserBaseDirectory", "$UserBasePacletsDirectory", 
+ "$ReleaseNumber", "$RequesterAddress", "$RequesterCloudUserID", 
+ "$RequesterCloudUserUUID", "$RequesterWolframID", "$RequesterWolframUUID", 
+ "$RootDirectory", "$ScriptCommandLine", "$ScriptInputString", "$Services", 
+ "$SessionID", "$SharedFunctions", "$SharedVariables", 
+ "$SoundDisplayFunction", "$SynchronousEvaluation", "$System", 
+ "$SystemCharacterEncoding", "$SystemID", "$SystemShell", "$SystemTimeZone", 
+ "$SystemWordLength", "$TemplatePath", "$TemporaryDirectory", "$TimedOut", 
+ "$TimeUnit", "$TimeZone", "$TimeZoneEntity", "$UnitSystem", "$Urgent", 
+ "$UserAgentString", "$UserBaseDirectory", "$UserBasePacletsDirectory", 
  "$UserDocumentsDirectory", "$Username", "$UserURLBase", "$Version", 
  "$VersionNumber", "$WolframDocumentsDirectory", "$WolframID", "$WolframUUID"}
