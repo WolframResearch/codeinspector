@@ -35,11 +35,15 @@ etc.
 $ScanSessionTokens = True
 
 
-badSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$badSymbols
-sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessionSymbols
-undocumentedSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$undocumentedSymbols
+(*
+memoize here because WolframLanguageSyntax`Generate`$badSymbols may not be set yet
+*)
+badSymbolsStringPat := badSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$badSymbols
+sessionSymbolsStringPat := sessionSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$sessionSymbols
+undocumentedSymbolsStringPat := undocumentedSymbolsStringPat = Alternatives @@ WolframLanguageSyntax`Generate`$undocumentedSymbols
 
-allSymbolsPat = Alternatives @@ Join[
+allSymbolsPat := allSymbolsPat =
+  Alternatives @@ Join[
     WolframLanguageSyntax`Generate`$badSymbols,
     WolframLanguageSyntax`Generate`$sessionSymbols,
     WolframLanguageSyntax`Generate`$undocumentedSymbols
@@ -93,8 +97,10 @@ $undocumentedSymbolsWithSuggestions = <|
 |>
 
 
-
-$DefaultTokenRules = <|
+(*
+memoize because allSymbolsPat depends on WolframLanguageSyntax`Generate`$badSymbols which may not be set yet
+*)
+$DefaultTokenRules := $DefaultTokenRules = <|
 
 LeafNode[Symbol, allSymbolsPat, _] -> scanSymbols,
 
