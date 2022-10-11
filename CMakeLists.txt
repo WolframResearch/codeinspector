@@ -155,7 +155,6 @@ endif()
 
 file(MAKE_DIRECTORY
 	${PROJECT_BINARY_DIR}/paclet/${PACLET}
-	${PROJECT_BINARY_DIR}/generated/wl/FrontEnd/Palettes/
 )
 
 
