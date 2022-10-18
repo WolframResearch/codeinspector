@@ -350,6 +350,8 @@ Module[{togglerPalette, res},
     Quit[1]
   ];
 
+  Quiet[DeleteFile[FileNameJoin[{buildDir, "paclet", "CodeInspector", "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]], DeleteFile::fdnfnd];
+
   Print["saving CodeAnalysisOptions.nb"];
   res = NotebookSave[togglerPalette, FileNameJoin[{buildDir, "paclet", "CodeInspector", "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]];
 
@@ -358,6 +360,15 @@ Module[{togglerPalette, res},
   If[res =!= Null,
     Quit[1]
   ];
+  ];
+
+  (*
+  NotebookSave may fail, but give no indication,
+  so need to explicitly check that file was created
+  bug 429251
+  *)
+  If[!FileExistsQ[FileNameJoin[{buildDir, "paclet", "CodeInspector", "FrontEnd", "Palettes", "CodeAnalysisOptions.nb"}]],
+    Quit[1]
   ];
 
   Print["Done UsingFrontEnd"];
