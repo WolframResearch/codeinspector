@@ -118,8 +118,8 @@
  HoldForm[ConstrainedMin::lptol] -> {Tolerance}, 
  HoldForm[Continue::nofunc] -> {2}, HoldForm[ContinuousWaveletData::wrule] -> 
   {1}, HoldForm[ContourGraphics::meshr] -> {MeshRange}, 
- HoldForm[ContourPlot::pllim] -> {2}, HoldForm[ContourPlot::pptt] -> 
-  {PlotPoints}, HoldForm[ContourPlot3D::ppts] -> {PlotPoints}, 
+ HoldForm[ContourPlot::pptt] -> {PlotPoints}, 
+ HoldForm[ContourPlot3D::ppts] -> {PlotPoints}, 
  HoldForm[Contours::ctnl] -> {Contours}, HoldForm[ContourSmoothing::ctnsm] -> 
   {ContourSmoothing}, HoldForm[Correlation::arg1] -> {1}, 
  HoldForm[Covariance::arg1] -> {1}, HoldForm[CreateArchive::chtype] -> 
@@ -135,8 +135,9 @@
  HoldForm[DatePlus::bdmtd] -> {Method}, HoldForm[DeBruijnSequence::lsim] -> 
   {"`2`"}, HoldForm[DefaultFont::font] -> {DefaultFont}, 
  HoldForm[DensityGraphics::meshr] -> {MeshRange}, 
- HoldForm[DensityPlot::pllim] -> {2}, HoldForm[DensityPlot::pptt] -> 
-  {PlotPoints}, HoldForm[DesignMatrix::fitd] -> {1}, 
+ HoldForm[DensityPlot::pptt] -> {PlotPoints}, 
+ HoldForm[DensityPlot3D::invlvar] -> {1 + "`1`"}, 
+ HoldForm[DesignMatrix::fitd] -> {1}, 
  HoldForm[DeviceFramework`DeviceClassRegister::ndrts] -> 
   {Failure["UnrecognizedPositionSpec", 
     <|"Spec" -> "ReadTimeSeriesFunction"|>]}, HoldForm[Dialog::lvlist] -> 
@@ -398,7 +399,8 @@
   {Multiplicity}, HoldForm[General::nd] -> {DistanceFunction}, 
  HoldForm[General::nmod] -> {1}, HoldForm[General::nmthd] -> {Method}, 
  HoldForm[General::nodobj] -> {1}, HoldForm[General::nonasync] -> {"`2`"}, 
- HoldForm[General::notdtf] -> {DateTicksFormat}, 
+ HoldForm[General::nonopt] -> {1 + "`2`"}, HoldForm[General::nonopt1] -> 
+  {1 + "`2`"}, HoldForm[General::notdtf] -> {DateTicksFormat}, 
  HoldForm[General::npad] -> {NumberPadding}, HoldForm[General::npt] -> 
   {"`1`"}, HoldForm[General::nptg] -> {"`1`"}, 
  HoldForm[General::nptn] -> {"`1`"}, HoldForm[General::npyrop] -> {1}, 
@@ -411,7 +413,7 @@
  HoldForm[General::optv] -> {"`1`"}, HoldForm[General::optvg] -> {"`1`"}, 
  HoldForm[General::optvp1] -> {"`1`"}, HoldForm[General::optx] -> {"`1`"}, 
  HoldForm[General::ostype] -> {OperatingSystem}, 
- HoldForm[General::ovls] -> {Overlaps}, HoldForm[General::partw] -> {1}, 
+ HoldForm[General::ovls] -> {Overlaps}, HoldForm[General::pllim] -> {2}, 
  HoldForm[General::ppts] -> {PlotPoints}, HoldForm[General::precg] -> 
   {PrecisionGoal}, HoldForm[General::prng] -> {PlotRange}, 
  HoldForm[General::qvprm] -> {"`2`"}, HoldForm[General::rctndm] -> {"`2`"}, 
@@ -1185,7 +1187,8 @@
  HoldForm[Normalize::nlnmat] -> {1}, HoldForm[Normalize::nlnmt2] -> {1}, 
  HoldForm[NProduct::itfn] -> {2}, HoldForm[NSum::itfn] -> {2}, 
  HoldForm[NullSpace::rmeth] -> {Method}, HoldForm[NumberDigit::badspec] -> 
-  {"`2`"}, HoldForm[NumericArray::lend] -> {"`1`"}, 
+  {"`2`"}, HoldForm[NumberLinePlot::nondom] -> {1 + "`1`"}, 
+ HoldForm[NumericArray::lend] -> {"`1`"}, 
  HoldForm[System`Private`OldReduce::ibool] -> {InverseFunctions}, 
  HoldForm[System`Private`OldReduce::method] -> {Method}, 
  HoldForm[System`Private`OldReduce::mode] -> {Mode}, 
@@ -1295,8 +1298,7 @@
  HoldForm[ParametricNDSolveValue::tvar] -> {"`1`"}, 
  HoldForm[ParametricNDSolveValue::tvic] -> {TemporalVariable}, 
  HoldForm[ParametricNDSolveValue::uniss] -> {MinStepSize, MaxStepSize}, 
- HoldForm[ParametricPlot::pllim] -> {2}, HoldForm[ParametricPlot3D::pllim] -> 
-  {2}, HoldForm[ParametricPlot3D::ppta] -> {PlotPoints}, 
+ HoldForm[ParametricPlot3D::ppta] -> {PlotPoints}, 
  HoldForm[ParentDirectory::argsf] -> {1}, 
  HoldForm[NDSolve`FEM`PDESolve::mtd] -> {Method}, 
  HoldForm[PeakDetect::arg] -> {1}, HoldForm[Periodogram::fpopt] -> 
@@ -1308,11 +1310,9 @@
   {SectorOrigin}, HoldForm[PieChart::chspc] -> {SectorSpacing}, 
  HoldForm[PieChart3D::chorn] -> {SectorOrigin}, 
  HoldForm[PieChart3D::chspc] -> {SectorSpacing}, 
- HoldForm[PitchRecognize::opt] -> {"`1`"}, HoldForm[Play::pllim] -> {2}, 
- HoldForm[Play::plx] -> {1}, HoldForm[Plot::pllim] -> {2}, 
- HoldForm[Plot3D::pllim] -> {2}, HoldForm[Plot3D::pptt] -> {PlotPoints}, 
- HoldForm[PlotRange::prng] -> {PlotRange}, 
- HoldForm[PointProcessFitTest::invpproc] -> {2}, 
+ HoldForm[PitchRecognize::opt] -> {"`1`"}, HoldForm[Play::plx] -> {1}, 
+ HoldForm[Plot3D::pptt] -> {PlotPoints}, HoldForm[PlotRange::prng] -> 
+  {PlotRange}, HoldForm[PointProcessFitTest::invpproc] -> {2}, 
  HoldForm[PolarAxes::polaraxes] -> {PolarAxes}, 
  HoldForm[PolarAxes::polaraxorg] -> {PolarAxesOrigin}, 
  HoldForm[PolynomialExtendedGCD::method] -> {Method}, 
@@ -1378,6 +1378,7 @@
  HoldForm[RadialGradientImage::padding] -> {Padding}, 
  HoldForm[RandomPrime::prmrng] -> {1}, HoldForm[RandomVariate::unsdst] -> 
   {1}, HoldForm[Raster::rsval] -> {1}, HoldForm[RasterArray::rscol] -> {1}, 
+ HoldForm[Internal`RasterGraphics::nonopt] -> {2}, 
  HoldForm[Internal`RasterGraphics::optx] -> {"`1`"}, 
  HoldForm[Internal`RasterGraphics::zval] -> {1}, 
  HoldForm[Rationalize::tolnn] -> {2}, HoldForm[Read::opstlnone] -> {"`1`"}, 
@@ -1404,8 +1405,10 @@
  HoldForm[ResidueSum::fcon] -> {1}, HoldForm[Resultant::method] -> {Method}, 
  HoldForm[Return::nofunc] -> {2}, HoldForm[RevolutionPlot3D::axis] -> 
   {RevolutionAxis}, HoldForm[Internal`RiccatiSolve::exopt] -> {"`2`"}, 
- HoldForm[RiccatiSolve::exopt] -> {"`2`"}, HoldForm[RootApproximant::mnni] -> 
-  {"`1`"}, HoldForm[RootApproximant::mppi] -> {"`1`"}, 
+ HoldForm[RiccatiSolve::exopt] -> {"`2`"}, 
+ HoldForm[RobustConvexOptimization::fanonopt] -> {1 + "`2`"}, 
+ HoldForm[RootApproximant::mnni] -> {"`1`"}, 
+ HoldForm[RootApproximant::mppi] -> {"`1`"}, 
  HoldForm[RootApproximant::mppn] -> {"`1`"}, 
  HoldForm[RootLocusPlot::bdmtd] -> {Method}, 
  HoldForm[RotationTransform::inpf12] -> {1}, HoldForm[RowReduce::rmeth] -> 
@@ -1476,18 +1479,22 @@
  HoldForm[SingularValueList::svecnm] -> 
   {Failure["UnrecognizedPositionSpec", <|"Spec" -> "StartingVector"|>]}, 
  HoldForm[SkeletonTransform::mtdinv] -> {Method}, 
- HoldForm[Skip::opstlnone] -> {"`1`"}, HoldForm[SnDispersion::arg1] -> {1}, 
- HoldForm[Solve::ibool] -> {InverseFunctions}, 
- HoldForm[Solve::mdom] -> {Modulus}, HoldForm[Solve::mec] -> 
-  {MaxExtraConditions}, HoldForm[Solve::melem] -> {Modulus}, 
- HoldForm[Solve::mineq] -> {Modulus}, HoldForm[Solve::mode] -> {Mode}, 
- HoldForm[SolveAlways::ibool] -> {InverseFunctions}, 
- HoldForm[SolveAlways::method] -> {Method}, HoldForm[SolveAlways::mode] -> 
-  {Mode}, HoldForm[SolveValues::ibool] -> {InverseFunctions}, 
- HoldForm[SolveValues::mdom] -> {Modulus}, HoldForm[SolveValues::mec] -> 
-  {MaxExtraConditions}, HoldForm[SolveValues::melem] -> {Modulus}, 
- HoldForm[SolveValues::mineq] -> {Modulus}, HoldForm[SolveValues::mode] -> 
-  {Mode}, HoldForm[SparseArray`SparseArraySort::bdmtd] -> {Method}, 
+ HoldForm[Skip::opstlnone] -> {"`1`"}, 
+ HoldForm[SliceContourPlot3D::invlvar] -> {1 + "`1`"}, 
+ HoldForm[SliceDensityPlot3D::invlvar] -> {1 + "`1`"}, 
+ HoldForm[SliceVectorPlot3D::invlvar] -> {1 + "`1`"}, 
+ HoldForm[SnDispersion::arg1] -> {1}, HoldForm[Solve::ibool] -> 
+  {InverseFunctions}, HoldForm[Solve::mdom] -> {Modulus}, 
+ HoldForm[Solve::mec] -> {MaxExtraConditions}, 
+ HoldForm[Solve::melem] -> {Modulus}, HoldForm[Solve::mineq] -> {Modulus}, 
+ HoldForm[Solve::mode] -> {Mode}, HoldForm[SolveAlways::ibool] -> 
+  {InverseFunctions}, HoldForm[SolveAlways::method] -> {Method}, 
+ HoldForm[SolveAlways::mode] -> {Mode}, HoldForm[SolveValues::ibool] -> 
+  {InverseFunctions}, HoldForm[SolveValues::mdom] -> {Modulus}, 
+ HoldForm[SolveValues::mec] -> {MaxExtraConditions}, 
+ HoldForm[SolveValues::melem] -> {Modulus}, HoldForm[SolveValues::mineq] -> 
+  {Modulus}, HoldForm[SolveValues::mode] -> {Mode}, 
+ HoldForm[SparseArray`SparseArraySort::bdmtd] -> {Method}, 
  HoldForm[SparseArray`SparseMatrixILU::kryptol] -> 
   {Failure["UnrecognizedPositionSpec", 
     <|"Spec" -> "PermutationTolerance"|>]}, HoldForm[SpatialEstimate::vfn] -> 
