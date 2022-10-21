@@ -656,3 +656,20 @@ TestMatch[
 
 
 
+
+TestMatch[
+	CodeInspect["x = 1y == 2z == 3"]
+	,
+	{InspectionObject["SetInfixInequality", _, "Error", _]}
+	,
+	TestID->"AggregateRules-20221023-D6J1D0"
+]
+
+
+
+
+
+
+
+
+

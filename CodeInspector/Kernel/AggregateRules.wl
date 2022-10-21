@@ -90,7 +90,7 @@ Aggregate lints
 *)
 
 BinaryNode[
-  Optional | PatternTest | Span
+  Optional | PatternTest | Set | Span
   , _, _] -> scanBinaryDispatch,
 
 TernaryNode[
@@ -185,6 +185,15 @@ Module[{agg, node, tag},
     ,
     PatternTest,
       scanPatternTestDispatch[pos, agg]
+    ,
+    Set,
+      Switch[node,
+        BinaryNode[Set, {___, InfixNode[InfixInequality, children_ /; !FreeQ[children, LeafNode[Token`EqualEqual, _,  _], {1}], _], ___}, _],
+          scanSetInfixInequality[pos, agg]
+        ,
+        _,
+          {}
+      ]
     ,
     Span,
       scanSpans[pos, agg]
@@ -2479,6 +2488,45 @@ Module[{cst, node, children, issues, cases},
       InspectionObject["AlternativesOr", "Suspicious ``||`` inside ``Alternatives``.", "Error", <|
         Source -> case[[3, Key[Source]]],
         ConfidenceLevel -> 0.95
+      |>]
+    ]
+    ,
+    {case, cases}
+  ];
+
+  issues
+]
+
+
+Attributes[scanSetInfixInequality] = {HoldRest}
+
+scanSetInfixInequality[pos_List, cstIn_] :=
+Module[{cst, node, children, issues, cases, rator},
+  cst = cstIn;
+  node = Extract[cst, {pos}][[1]];
+  children = node[[2]];
+  rator = children[[2]];
+
+  issues = {};
+
+  cases = Cases[children, InfixNode[InfixInequality, children1_ /; !FreeQ[children1, LeafNode[Token`EqualEqual, _,  _], {1}], _]];
+
+  Do[
+    AppendTo[issues,
+      InspectionObject["SetInfixInequality", "Suspicious ``==`` inside ``Set``.", "Error", <|
+        Source -> case[[3, Key[Source]]],
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Replace ``=`` with ``==``", ReplaceNode, <|
+            "ReplacementNode" -> LeafNode[Token`EqualEqual, "==", <||>],
+            Source -> rator[[3, Key[Source]]]
+          |>](*,
+          when Agg -> CST is working
+          CodeAction["Surround with ``()``", ReplaceNode, <|
+            "ReplacementNode" -> replacementNode,
+            Source -> case[[3, Key[Source]]]
+          |>]*)
+        }
       |>]
     ]
     ,
