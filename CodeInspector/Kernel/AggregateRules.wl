@@ -100,7 +100,9 @@ TernaryNode[
 LeafNode[Token`Fake`ImplicitTimes, _, _] -> scanImplicitTimesDispatch,
 
 InfixNode[
-  Alternatives | CompoundExpression | Dot | MessageName | NonCommutativeMultiply | Plus | StringExpression | StringJoin
+  Alternatives | CompoundExpression | Dot | MessageName |
+  NonCommutativeMultiply | Plus | StringExpression | StringJoin |
+  Times
   , _, _] -> scanInfixDispatch,
 
 PostfixNode[
@@ -280,6 +282,15 @@ Module[{agg, node, tag},
         ,
         InfixNode[StringJoin, {___, patPat, ___}, _],
           scanPatStringJoin[pos, agg]
+        ,
+        _,
+          {}
+      ]
+    ,
+    Times,
+      Switch[node,
+        InfixNode[Times, {___, LeafNode[String, _, _], ___}, _],
+          scanTimesString[pos, agg]
         ,
         _,
           {}
@@ -2547,6 +2558,40 @@ Module[{cst, node, children, issues, cases, rator},
 
   issues
 ]
+
+
+
+Attributes[scanTimesString] = {HoldRest}
+
+scanTimesString[pos_List, aggIn_] :=
+Module[{agg, node, data, issues, children, head, implicitTimess,
+  src},
+  agg = aggIn;
+  node = Extract[agg, {pos}][[1]];
+  head = node[[1]];
+  children = node[[2]];
+  data = node[[3]];
+
+  strings = Cases[children, LeafNode[String, _, _]];
+
+  issues = {};
+
+  Do[
+    src = string[[3, Key[Source]]];
+    AppendTo[issues, InspectionObject["TimesString", "Unexpected ``String`` inside ``Times``.", "Error",
+      <| Source -> src,
+        ConfidenceLevel -> 0.55
+      |>
+    ]
+  ];
+    ,
+    {string, strings}
+  ];
+
+  issues
+]
+
+
 
 
 concretify[node:CallNode[_List, _, _]] :=

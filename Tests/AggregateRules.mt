@@ -412,7 +412,7 @@ TestMatch[
 TestMatch[
 	CodeInspect["8 Pi*\"M\""]
 	,
-	{}
+	{InspectionObject["TimesString", _, _, _]}
 	,
 	TestID->"AggregateRules-20191121-L0N6E3"
 ]
@@ -663,6 +663,19 @@ TestMatch[
 	{InspectionObject["SetInfixInequality", _, "Error", _]}
 	,
 	TestID->"AggregateRules-20221023-D6J1D0"
+]
+
+
+
+
+TestMatch[
+	CodeInspect["\"a\" * \"b\""]
+	,
+	{
+		InspectionObject["TimesString", _, _, _],
+		InspectionObject["TimesString", _, _, _]}
+	,
+	TestID->"AggregateRules-20221023-V0H2W4"
 ]
 
 
