@@ -2474,10 +2474,11 @@ Module[{cst, node, children, issues, rators},
 Attributes[scanAlternativesOr] = {HoldRest}
 
 scanAlternativesOr[pos_List, cstIn_] :=
-Module[{cst, node, children, issues, cases},
+Module[{cst, node, children, issues, cases, firstRator},
   cst = cstIn;
   node = Extract[cst, {pos}][[1]];
   children = node[[2]];
+  firstRator = children[[2]];
 
   issues = {};
 
@@ -2487,7 +2488,18 @@ Module[{cst, node, children, issues, cases},
     AppendTo[issues,
       InspectionObject["AlternativesOr", "Suspicious ``||`` inside ``Alternatives``.", "Error", <|
         Source -> case[[3, Key[Source]]],
-        ConfidenceLevel -> 0.95
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Replace ``|`` with ``||``", ReplaceNode, <|
+            "ReplacementNode" -> LeafNode[Token`BarBar, "||", <||>],
+            Source -> firstRator[[3, Key[Source]]]
+          |>](*,
+          when Agg -> CST is working
+          CodeAction["Surround with ``()``", ReplaceNode, <|
+            "ReplacementNode" -> replacementNode,
+            Source -> case[[3, Key[Source]]]
+          |>]*)
+        }
       |>]
     ]
     ,
