@@ -811,7 +811,7 @@ Module[{agg, node, data, issues, children, head, implicitTimess,
 Attributes[scanImplicitTimesFunction] = {HoldRest}
 
 scanImplicitTimesFunction[pos_List, aggIn_] :=
-Module[{agg, node, data, issues, children, head, implicitTimess,
+Module[{agg, node, data, issues, children, head, functions,
   src},
 
   agg = aggIn;
@@ -820,20 +820,26 @@ Module[{agg, node, data, issues, children, head, implicitTimess,
   children = node[[2]];
   data = node[[3]];
 
-  implicitTimess = Cases[children, LeafNode[Token`Fake`ImplicitTimes, _, _]];
+  functions = Cases[children, PostfixNode[Function, _, _]];
 
   issues = {};
 
   Do[
-    src = implicitTimes[[3, Key[Source]]];
+    src = function[[3, Key[Source]]];
     AppendTo[issues, InspectionObject["ImplicitTimesFunction", "Unexpected implicit ``Times`` after ``Function``.", "Error",
       <| Source -> src,
-        ConfidenceLevel -> 0.95
+        ConfidenceLevel -> 0.95,
+        CodeActions -> {
+          CodeAction["Replace ``&`` with ``&&``", ReplaceNode,
+            <| Source -> function[[2, 2, 3, Key[Source]]],
+              "ReplacementNode" -> LeafNode[Token`AndAnd, "&&", <||>]
+            |>
+          ]
+        }
       |>
-    ]
-  ];
+    ]];
     ,
-    {implicitTimes, implicitTimess}
+    {function, functions}
   ];
 
   issues
