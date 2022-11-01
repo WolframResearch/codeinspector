@@ -40,7 +40,11 @@ Module[{partCase, children, issues, replacementNode, f, r},
   issues = {};
 
   AppendTo[issues,
-    InspectionObject["Part", ToString[StringForm[MessageName[General, "partw"], arg1, arg2]], "Error", <|
+    (*
+    remember to do ToString[..., StandardForm]
+    bug 429482
+    *)
+    InspectionObject["Part", ToString[StringForm[MessageName[General, "partw"], arg1, arg2], StandardForm], "Error", <|
       Source -> children[[2, 3, Key[Source]]],
       ConfidenceLevel -> 0.95,
       CodeActions -> {
@@ -102,7 +106,13 @@ Module[{case, name, tryGeneral, namePat, poss, issues},
             Throw[{}]
           ];
           case = case[[posReplaced]];
-          AppendTo[issues, InspectionObject[name, ToString[StringForm[If[tryGeneral, MessageName[General, tag], MessageName[sym, tag]], args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+          AppendTo[issues,
+            (*
+            remember to do ToString[..., StandardForm]
+            bug 429482
+            *)
+            InspectionObject[name, ToString[StringForm[If[tryGeneral, MessageName[General, tag], MessageName[sym, tag]], args], StandardForm], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]
+          ]
         ,
         _Symbol,
           case = FirstCase[ast, CallNode[LeafNode[Symbol, namePat, _], children_, _] :> children, $Failed, Infinity];
@@ -113,7 +123,13 @@ Module[{case, name, tryGeneral, namePat, poss, issues},
           If[FailureQ[case],
             Throw[{}]
           ];
-          AppendTo[issues, InspectionObject[name, ToString[StringForm[If[tryGeneral, MessageName[General, tag], MessageName[sym, tag]], args]], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]]
+          AppendTo[issues,
+            (*
+            remember to do ToString[..., StandardForm]
+            bug 429482
+            *)
+            InspectionObject[name, ToString[StringForm[If[tryGeneral, MessageName[General, tag], MessageName[sym, tag]], args], StandardForm], "Error", <|Source -> case[[3, Key[Source]]], ConfidenceLevel -> 0.95|>]
+          ]
         ,
         _,
           Message[codeWithMessageStackInspectAST::unhandled, posReplaced //InputForm];
